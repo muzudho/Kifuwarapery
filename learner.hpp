@@ -1,9 +1,9 @@
 #pragma once
 
 #include "stdafx.h"
-#include "position.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 #include "thread.hpp"
-#include "evaluate.hpp"
+#include "n240_250_evaluate.hpp"
 
 #if defined LEARN
 

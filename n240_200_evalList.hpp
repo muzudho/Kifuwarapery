@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "header/n120_brdEntry/n120_150_square.hpp"
-#include "piece.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
 
 class Position;
 

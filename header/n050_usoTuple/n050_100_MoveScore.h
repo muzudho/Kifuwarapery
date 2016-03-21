@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../stdafx.h"
-#include "../../move.hpp"
-#include "../../score.hpp"
+#include "../../n240_150_move.hpp"
+#include "../n200_score___/n200_100_score.hpp"
 
 class MoveScore {
 public:

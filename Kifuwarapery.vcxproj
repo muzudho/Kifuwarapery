@@ -146,27 +146,28 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="benchmark.hpp" />
-    <ClInclude Include="bitboard.hpp" />
     <ClInclude Include="book.hpp" />
-    <ClInclude Include="evalList.hpp" />
-    <ClInclude Include="evaluate.hpp" />
+    <ClInclude Include="n240_200_evalList.hpp" />
+    <ClInclude Include="n240_250_evaluate.hpp" />
     <ClInclude Include="generateMoves.hpp" />
-    <ClInclude Include="hand.hpp" />
+    <ClInclude Include="header\n240_position\n240_100_position.hpp" />
+    <ClInclude Include="n120_250_hand.hpp" />
     <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h" />
     <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp" />
+    <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp" />
+    <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp" />
+    <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
+    <ClInclude Include="header\n200_score___\n200_100_score.hpp" />
+    <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp" />
     <ClInclude Include="init.hpp" />
     <ClInclude Include="learner.hpp" />
-    <ClInclude Include="move.hpp" />
     <ClInclude Include="movePicker.hpp" />
     <ClInclude Include="mt64bit.hpp" />
-    <ClInclude Include="piece.hpp" />
-    <ClInclude Include="pieceScore.hpp" />
-    <ClInclude Include="position.hpp" />
-    <ClInclude Include="score.hpp" />
+    <ClInclude Include="n240_150_move.hpp" />
     <ClInclude Include="search.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -177,20 +178,20 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="benchmark.cpp" />
-    <ClCompile Include="bitboard.cpp" />
     <ClCompile Include="book.cpp" />
     <ClCompile Include="evalList.cpp" />
     <ClCompile Include="evaluate.cpp" />
     <ClCompile Include="generateMoves.cpp" />
-    <ClCompile Include="hand.cpp" />
+    <ClCompile Include="n120_250_hand.cpp" />
     <ClCompile Include="init.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="move.cpp" />
     <ClCompile Include="movePicker.cpp" />
     <ClCompile Include="mt64bit.cpp" />
     <ClCompile Include="n120_150_square.cpp" />
-    <ClCompile Include="pieceScore.cpp" />
-    <ClCompile Include="position.cpp" />
+    <ClCompile Include="n160_100_bitboard.cpp" />
+    <ClCompile Include="n200_200_pieceScore.cpp" />
+    <ClCompile Include="n240_100_position.cpp" />
     <ClCompile Include="search.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp" />

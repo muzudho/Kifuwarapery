@@ -1,8 +1,8 @@
 #pragma once
 
 #include "stdafx.h"
-#include "move.hpp"
-#include "position.hpp"
+#include "n240_150_move.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 #include "search.hpp"
 
 enum GenerateMovePhase {

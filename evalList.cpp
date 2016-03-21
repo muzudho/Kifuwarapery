@@ -1,7 +1,7 @@
 ﻿#include "stdafx.h"
-#include "evalList.hpp"
-#include "position.hpp"
-#include "evaluate.hpp"
+#include "n240_200_evalList.hpp"
+#include "header/n240_position/n240_100_position.hpp"
+#include "n240_250_evaluate.hpp"
 
 const Square HandPieceToSquareHand[ColorNum][HandPieceNum] = {
 	{B_hand_pawn, B_hand_lance, B_hand_knight, B_hand_silver, B_hand_gold, B_hand_bishop, B_hand_rook},

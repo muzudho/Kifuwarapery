@@ -1,6 +1,6 @@
 ﻿#include "stdafx.h"
-#include "piece.hpp"
-#include "pieceScore.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
+#include "header/n200_score___/n200_200_pieceScore.hpp"
 
 const Score PieceScore[PieceNone] = {
 	ScoreZero,

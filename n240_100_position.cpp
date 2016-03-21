@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "position.hpp"
-#include "move.hpp"
+#include "header/n240_position/n240_100_position.hpp"
+#include "n240_150_move.hpp"
 #include "mt64bit.hpp"
 #include "generateMoves.hpp"
 #include "tt.hpp"

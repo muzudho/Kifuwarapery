@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "stdafx.h"
-#include "score.hpp"
-#include "piece.hpp"
+#include "../../stdafx.h"
+#include "../n120_brdEntry/n120_200_piece.hpp"
+#include "../n200_score___/n200_100_score.hpp"
 
 const Score PawnScore             = static_cast<Score>( 100 * 9 / 10);
 const Score LanceScore            = static_cast<Score>( 350 * 9 / 10);

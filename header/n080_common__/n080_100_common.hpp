@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n080_common__/n080_050_ifdef.hpp"
+#include "n080_050_ifdef.hpp"
 #include <cinttypes>
 #include <iostream>
 #include <iomanip>
@@ -19,7 +19,6 @@
 #include <condition_variable>
 #include <chrono>
 #include <array>
-//#include <tuple>
 #include <atomic>
 #include <cstdio>
 #include <cstdlib>

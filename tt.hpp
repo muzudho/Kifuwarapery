@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "move.hpp"
+#include "n240_150_move.hpp"
 
 enum Depth {
 	OnePly                 = 2,

@@ -2,8 +2,8 @@
 
 #include "stdafx.h"
 #include "header\n050_usoTuple\n050_100_MoveScore.h"
-#include "move.hpp"
-#include "pieceScore.hpp"
+#include "n240_150_move.hpp"
+#include "header/n200_score___/n200_200_pieceScore.hpp"
 #include "timeManager.hpp"
 #include "tt.hpp"
 #include "thread.hpp"

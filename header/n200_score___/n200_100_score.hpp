@@ -1,8 +1,8 @@
 #pragma once
 
-#include "stdafx.h"
-#include "header/n080_common__/n080_100_common.hpp"
-#include "header/n080_common__/n080_150_overloadEnumOperators.hpp"
+#include "../../stdafx.h"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
 using Ply = int;
 

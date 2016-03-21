@@ -31,6 +31,24 @@
     <Filter Include="Source Files\n120_brdEntry">
       <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n160_board___">
+      <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n160_board___">
+      <UniqueIdentifier>{7ca6996e-3e41-4079-bff6-634b0fa58752}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n200_score___">
+      <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n200_score___">
+      <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n240_position">
+      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n240_position">
+      <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -45,22 +63,10 @@
     <ClInclude Include="benchmark.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="bitboard.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="book.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="evalList.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="evaluate.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="generateMoves.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="hand.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="init.hpp">
@@ -69,25 +75,10 @@
     <ClInclude Include="learner.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="move.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="movePicker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="mt64bit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="piece.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="pieceScore.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="position.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="score.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="search.hpp">
@@ -123,15 +114,42 @@
     <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp">
       <Filter>Header Files\n120_brdEntry</Filter>
     </ClInclude>
+    <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp">
+      <Filter>Header Files\n120_brdEntry</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
+      <Filter>Header Files\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp">
+      <Filter>Header Files\n120_brdEntry</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_100_score.hpp">
+      <Filter>Header Files\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
+      <Filter>Header Files\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="n120_250_hand.hpp">
+      <Filter>Header Files\n120_brdEntry</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_position\n240_100_position.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="n240_150_move.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n240_200_evalList.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n240_250_evaluate.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="benchmark.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="bitboard.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="book.cpp">
@@ -144,9 +162,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="generateMoves.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="hand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="init.cpp">
@@ -162,12 +177,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="mt64bit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="pieceScore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="search.cpp">
@@ -195,6 +204,18 @@
       <Filter>Source Files\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="n120_150_square.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n160_100_bitboard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n200_200_pieceScore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n120_250_hand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_100_position.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

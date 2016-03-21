@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "piece.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
 
 // 手駒
 // 手駒の状態 (32bit に pack する)

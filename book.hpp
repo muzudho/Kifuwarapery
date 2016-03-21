@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "header\n050_usoTuple\n050_100_MoveScore.h"
-#include "position.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 #include "mt64bit.hpp"
 
 struct BookEntry {

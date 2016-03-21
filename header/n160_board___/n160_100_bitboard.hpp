@@ -1,9 +1,9 @@
 #pragma once
 
-#include "stdafx.h"
-#include "header/n080_common__/n080_100_common.hpp"
-#include "header/n120_brdEntry/n120_100_color.hpp"
-#include "header/n120_brdEntry/n120_150_square.hpp"
+#include "../../stdafx.h"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n120_brdEntry/n120_100_color.hpp"
+#include "../n120_brdEntry/n120_150_square.hpp"
 
 class Bitboard;
 extern const Bitboard SetMaskBB[SquareNum];

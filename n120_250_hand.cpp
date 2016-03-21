@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "piece.hpp"
-#include "hand.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
+#include "header/n120_brdEntry/n120_250_hand.hpp"
 
 const int Hand::HandPieceShiftBits[HandPieceNum] = {
 	HPawnShiftBits,

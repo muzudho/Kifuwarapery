@@ -5,9 +5,9 @@
 #include "header/n080_common__/n080_100_common.hpp"
 #include "header/n080_common__/n080_150_overloadEnumOperators.hpp"
 #include "header/n120_brdEntry/n120_150_square.hpp"
-#include "piece.hpp"
-#include "pieceScore.hpp"
-#include "position.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
+#include "header/n200_score___/n200_200_pieceScore.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 
 // 評価関数テーブルのオフセット。
 // f_xxx が味方の駒、e_xxx が敵の駒

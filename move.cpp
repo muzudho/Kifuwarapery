@@ -1,5 +1,5 @@
 ﻿#include "stdafx.h"
-#include "move.hpp"
+#include "n240_150_move.hpp"
 
 namespace {
 	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};

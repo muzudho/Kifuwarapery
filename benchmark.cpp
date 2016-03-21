@@ -2,7 +2,7 @@
 #include "benchmark.hpp"
 #include "header/n080_common__/n080_100_common.hpp"
 #include "usi.hpp"
-#include "position.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 #include "search.hpp"
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。

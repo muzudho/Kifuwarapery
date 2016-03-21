@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "evaluate.hpp"
-#include "position.hpp"
+#include "n240_250_evaluate.hpp"
+#include "header/n240_position/n240_100_position.hpp"
 #include "search.hpp"
 #include "thread.hpp"
 

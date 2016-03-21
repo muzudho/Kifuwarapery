@@ -2,8 +2,8 @@
 
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "piece.hpp"
-#include "move.hpp"
+#include "header/n120_brdEntry/n120_200_piece.hpp"
+#include "n240_150_move.hpp"
 
 // 指し手の種類
 enum MoveType {
