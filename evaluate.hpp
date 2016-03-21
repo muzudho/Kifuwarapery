@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "overloadEnumOperators.hpp"
 #include "header\n050_usoTuple\n050_120_ColorFileRank.h"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 #include "square.hpp"
 #include "piece.hpp"
 #include "pieceScore.hpp"
@@ -835,8 +835,14 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				return;
 		}
 		clear();
+
+		SYNCCOUT << "(^q^)readSomeSynthesized!" << SYNCENDL;
 		readSomeSynthesized(dirName);
+
+		SYNCCOUT << "(^q^)read!" << SYNCENDL;
 		read(dirName);
+
+		SYNCCOUT << "(^q^)setEvaluate!" << SYNCENDL;
 		setEvaluate();
 	}
 
@@ -977,7 +983,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef WRITE_BASE_EVAL
 	void setEvaluate() {
 #if !defined LEARN
-		SYNCCOUT << "info string start setting eval table" << SYNCENDL;
+		SYNCCOUT << "info string START setting eval table" << SYNCENDL;
 #endif
 #define FOO(indices, oneArray, sum)										\
 		for (auto indexAndWeight : indices) {							\
@@ -997,6 +1003,8 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #if defined _OPENMP
 #pragma omp parallel
 #endif
+
+		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
 		// KPP
 		{
 #ifdef _OPENMP
@@ -1004,24 +1012,40 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #endif
 			// OpenMP対応したら何故か ksq を Square 型にすると ++ksq が定義されていなくてコンパイルエラーになる。
 			for (int ksq = I9; ksq < SquareNum; ++ksq) {
+				SYNCCOUT << "(^q^)KPP: ksq=" << ksq << "/" << SquareNum << SYNCENDL;
+
 				// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
 				std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
 				for (int i = 0; i < fe_end; ++i) {
+					//SYNCCOUT << "(^q^)KPP: i=" << i << "/" << fe_end << SYNCENDL;
+
 					for (int j = 0; j < fe_end; ++j) {
+						//SYNCCOUT << "(^q^)KPP: j=" << j << SYNCENDL;
+
 						kppIndices(indices, static_cast<Square>(ksq), i, j);
+
+						//SYNCCOUT << "(^q^)KPP: a" << SYNCENDL;
 						std::array<s64, 2> sum = {{}};
+
+						//SYNCCOUT << "(^q^)KPP: b" << SYNCENDL;
 						FOO(indices, oneArrayKPP, sum);
+
+						//SYNCCOUT << "(^q^)KPP: c" << SYNCENDL;
 						KPP[ksq][i][j] += sum;
 					}
 				}
 			}
 		}
+
+		SYNCCOUT << "(^q^)KKP!" << SYNCENDL;
 		// KKP
 		{
 #ifdef _OPENMP
 #pragma omp for
 #endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+
 				std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 					for (int i = 0; i < fe_end; ++i) {
@@ -1033,12 +1057,16 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				}
 			}
 		}
+
+		SYNCCOUT << "(^q^)KK!" << SYNCENDL;
 		// KK
 		{
 #ifdef _OPENMP
 #pragma omp for
 #endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+
 				std::pair<ptrdiff_t, int> indices[KKIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 					kkIndices(indices, static_cast<Square>(ksq0), ksq1);
@@ -1055,7 +1083,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef FOO
 
 #if !defined LEARN
-		SYNCCOUT << "info string end setting eval table" << SYNCENDL;
+		SYNCCOUT << "info string END setting eval table" << SYNCENDL;
 #endif
 	}
 };

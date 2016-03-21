@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 #include "piece.hpp"
 
 // 手駒

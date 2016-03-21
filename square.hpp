@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "overloadEnumOperators.hpp"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 #include "color.hpp"
 
 // 盤面を [0, 80] の整数の index で表す

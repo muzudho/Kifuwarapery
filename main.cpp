@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 #include "bitboard.hpp"
 #include "init.hpp"
 #include "position.hpp"
@@ -39,7 +39,11 @@ int main(int argc, char* argv[]) {
 	auto s = std::unique_ptr<Searcher>(new Searcher);
 	s->init();
 	// 一時オブジェクトの生成と破棄
+
+	SYNCCOUT << "(^q^)start init!" << SYNCENDL;
 	std::unique_ptr<Evaluater>(new Evaluater)->init(s->options["Eval_Dir"], true);
+	SYNCCOUT << "(^q^)end init!" << SYNCENDL;
+
 	s->doUSICommandLoop(argc, argv);
 	s->threads.exit();
 }

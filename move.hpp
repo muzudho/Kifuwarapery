@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 //#include "header\n050_usoTuple\n050_100_MoveScore.h"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 #include "square.hpp"
 #include "piece.hpp"
 #include "position.hpp"

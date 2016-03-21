@@ -19,6 +19,12 @@
     <Filter Include="Source Files\n050_usoTuple">
       <UniqueIdentifier>{377c1f7b-6c16-40a4-9f62-3332d5686c44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n080_common">
+      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n080_common">
+      <UniqueIdentifier>{402fcfcc-1379-4ee1-93c7-83438a227775}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -40,9 +46,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="color.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="common.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="evalList.hpp">
@@ -114,12 +117,12 @@
     <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h">
       <Filter>Header Files\n050_usoTuple</Filter>
     </ClInclude>
+    <ClInclude Include="header\n080_common\n080_100_common.hpp">
+      <Filter>Header Files\n080_common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Kifuwarapery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="benchmark.cpp">
@@ -129,9 +132,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="book.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="common.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="evalList.cpp">
@@ -190,6 +190,9 @@
     </ClCompile>
     <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp">
       <Filter>Source Files\n050_usoTuple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common\n80_100_common.cpp">
+      <Filter>Source Files\n080_common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

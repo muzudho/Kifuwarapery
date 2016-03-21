@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "common.hpp"
+#include "header/n080_common/n080_100_common.hpp"
 
 // 64bit のランダムな値を返す為のクラス
 class MT64bit : public std::mt19937_64 {
