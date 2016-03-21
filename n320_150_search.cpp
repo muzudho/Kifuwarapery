@@ -1,15 +1,15 @@
 #include "stdafx.h"
 #include "header\n050_usoTuple\n050_100_MoveScore.h"
-#include "search.hpp"
+#include "n320_150_search.hpp"
 #include "header/n240_position/n240_100_position.hpp"
-#include "usi.hpp"
+#include "n320_250_usi.hpp"
 #include "n240_250_evaluate.hpp"
-#include "movePicker.hpp"
-#include "tt.hpp"
-#include "generateMoves.hpp"
-#include "thread.hpp"
-#include "timeManager.hpp"
-#include "book.hpp"
+#include "n280_150_movePicker.hpp"
+#include "n240_300_tt.hpp"
+#include "n280_100_generateMoves.hpp"
+#include "n320_350_thread.hpp"
+#include "n240_350_timeManager.hpp"
+#include "n320_100_book.hpp"
 
 // 一箇所でしか呼ばないので、FORCE_INLINE
 FORCE_INLINE void ThreadPool::wakeUp(Searcher* s) {

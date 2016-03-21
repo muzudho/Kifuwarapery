@@ -3,7 +3,7 @@
 #include "stdafx.h"
 #include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "header/n240_position/n240_100_position.hpp"
-#include "mt64bit.hpp"
+#include "n280_200_mt64bit.hpp"
 
 struct BookEntry {
 	Key key;

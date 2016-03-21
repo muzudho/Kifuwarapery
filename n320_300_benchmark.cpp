@@ -1,9 +1,9 @@
 #include "stdafx.h"
-#include "benchmark.hpp"
+#include "n320_300_benchmark.hpp"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "usi.hpp"
+#include "n320_250_usi.hpp"
 #include "header/n240_position/n240_100_position.hpp"
-#include "search.hpp"
+#include "n320_150_search.hpp"
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。
 void benchmark(Position& pos) {

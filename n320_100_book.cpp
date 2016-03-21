@@ -1,10 +1,10 @@
 #include "stdafx.h"
-#include "book.hpp"
+#include "n320_100_book.hpp"
 #include "header/n240_position/n240_100_position.hpp"
 #include "n240_150_move.hpp"
-#include "usi.hpp"
-#include "thread.hpp"
-#include "search.hpp"
+#include "n320_250_usi.hpp"
+#include "n320_350_thread.hpp"
+#include "n320_150_search.hpp"
 
 MT64bit Book::mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
 Key Book::ZobPiece[PieceNone][SquareNum];

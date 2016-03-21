@@ -145,11 +145,11 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="benchmark.hpp" />
-    <ClInclude Include="book.hpp" />
+    <ClInclude Include="n320_300_benchmark.hpp" />
+    <ClInclude Include="n320_100_book.hpp" />
     <ClInclude Include="n240_200_evalList.hpp" />
     <ClInclude Include="n240_250_evaluate.hpp" />
-    <ClInclude Include="generateMoves.hpp" />
+    <ClInclude Include="n280_100_generateMoves.hpp" />
     <ClInclude Include="header\n240_position\n240_100_position.hpp" />
     <ClInclude Include="n120_250_hand.hpp" />
     <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h" />
@@ -163,36 +163,36 @@
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
     <ClInclude Include="header\n200_score___\n200_100_score.hpp" />
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp" />
-    <ClInclude Include="init.hpp" />
-    <ClInclude Include="learner.hpp" />
-    <ClInclude Include="movePicker.hpp" />
-    <ClInclude Include="mt64bit.hpp" />
+    <ClInclude Include="n320_200_init.hpp" />
+    <ClInclude Include="n320_400_learner.hpp" />
+    <ClInclude Include="n280_150_movePicker.hpp" />
+    <ClInclude Include="n280_200_mt64bit.hpp" />
     <ClInclude Include="n240_150_move.hpp" />
-    <ClInclude Include="search.hpp" />
+    <ClInclude Include="n320_150_search.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
-    <ClInclude Include="thread.hpp" />
-    <ClInclude Include="timeManager.hpp" />
-    <ClInclude Include="tt.hpp" />
-    <ClInclude Include="usi.hpp" />
+    <ClInclude Include="n320_350_thread.hpp" />
+    <ClInclude Include="n240_350_timeManager.hpp" />
+    <ClInclude Include="n240_300_tt.hpp" />
+    <ClInclude Include="n320_250_usi.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="benchmark.cpp" />
-    <ClCompile Include="book.cpp" />
-    <ClCompile Include="evalList.cpp" />
-    <ClCompile Include="evaluate.cpp" />
-    <ClCompile Include="generateMoves.cpp" />
+    <ClCompile Include="n320_300_benchmark.cpp" />
+    <ClCompile Include="n320_100_book.cpp" />
+    <ClCompile Include="n240_200_evalList.cpp" />
+    <ClCompile Include="n240_250_evaluate.cpp" />
+    <ClCompile Include="n280_100_generateMoves.cpp" />
     <ClCompile Include="n120_250_hand.cpp" />
-    <ClCompile Include="init.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="move.cpp" />
-    <ClCompile Include="movePicker.cpp" />
-    <ClCompile Include="mt64bit.cpp" />
+    <ClCompile Include="n320_200_init.cpp" />
+    <ClCompile Include="n900_100_main.cpp" />
+    <ClCompile Include="n240_150_move.cpp" />
+    <ClCompile Include="n280_150_movePicker.cpp" />
+    <ClCompile Include="n280_200_mt64bit.cpp" />
     <ClCompile Include="n120_150_square.cpp" />
     <ClCompile Include="n160_100_bitboard.cpp" />
     <ClCompile Include="n200_200_pieceScore.cpp" />
     <ClCompile Include="n240_100_position.cpp" />
-    <ClCompile Include="search.cpp" />
+    <ClCompile Include="n320_150_search.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp" />
     <ClCompile Include="source\n080_common__\n80_100_common.cpp" />
@@ -202,10 +202,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="thread.cpp" />
-    <ClCompile Include="timeManager.cpp" />
-    <ClCompile Include="tt.cpp" />
-    <ClCompile Include="usi.cpp" />
+    <ClCompile Include="n320_350_thread.cpp" />
+    <ClCompile Include="n240_350_timeManager.cpp" />
+    <ClCompile Include="n240_300_tt.cpp" />
+    <ClCompile Include="n320_250_usi.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

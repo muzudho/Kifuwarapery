@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "n240_250_evaluate.hpp"
 #include "header/n240_position/n240_100_position.hpp"
-#include "search.hpp"
-#include "thread.hpp"
+#include "n320_150_search.hpp"
+#include "n320_350_thread.hpp"
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;
 

@@ -4,9 +4,9 @@
 #include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "n240_150_move.hpp"
 #include "header/n200_score___/n200_200_pieceScore.hpp"
-#include "timeManager.hpp"
-#include "tt.hpp"
-#include "thread.hpp"
+#include "n240_350_timeManager.hpp"
+#include "n240_300_tt.hpp"
+#include "n320_350_thread.hpp"
 
 class Position;
 struct SplitPoint;

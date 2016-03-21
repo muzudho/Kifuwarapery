@@ -1,7 +1,7 @@
 #include "stdafx.h"
-#include "movePicker.hpp"
-#include "generateMoves.hpp"
-#include "thread.hpp"
+#include "n280_150_movePicker.hpp"
+#include "n280_100_generateMoves.hpp"
+#include "n320_350_thread.hpp"
 
 MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 					   const History& history, SearchStack* searchStack, const Score beta)

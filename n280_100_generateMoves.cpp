@@ -1,6 +1,6 @@
 #include "stdafx.h"
-#include "generateMoves.hpp"
-#include "usi.hpp"
+#include "n280_100_generateMoves.hpp"
+#include "n320_250_usi.hpp"
 
 namespace {
 	// 角, 飛車の場合

@@ -60,42 +60,6 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="benchmark.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="book.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="generateMoves.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="init.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="learner.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="movePicker.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="mt64bit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="search.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="thread.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="timeManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="tt.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="usi.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h">
       <Filter>Header Files\n050_usoTuple</Filter>
     </ClInclude>
@@ -144,54 +108,45 @@
     <ClInclude Include="n240_250_evaluate.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="n240_300_tt.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n240_350_timeManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n280_100_generateMoves.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n280_150_movePicker.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n280_200_mt64bit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_100_book.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_150_search.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_200_init.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_250_usi.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_300_benchmark.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_350_thread.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="n320_400_learner.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="benchmark.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="book.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="evalList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="evaluate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="generateMoves.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="init.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="move.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="movePicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="mt64bit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="search.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="timeManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="tt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="usi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp">
@@ -216,6 +171,51 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="n240_100_position.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_200_evalList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_250_evaluate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_300_tt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_350_timeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n240_150_move.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n280_100_generateMoves.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n280_150_movePicker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n280_200_mt64bit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_100_book.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_150_search.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_200_init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_250_usi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_300_benchmark.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n320_350_thread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="n900_100_main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

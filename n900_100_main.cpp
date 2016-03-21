@@ -1,12 +1,12 @@
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
 #include "header/n160_board___/n160_100_bitboard.hpp"
-#include "init.hpp"
+#include "n320_200_init.hpp"
 #include "header/n240_position/n240_100_position.hpp"
-#include "usi.hpp"
-#include "thread.hpp"
-#include "tt.hpp"
-#include "search.hpp"
+#include "n320_250_usi.hpp"
+#include "n320_350_thread.hpp"
+#include "n240_300_tt.hpp"
+#include "n320_150_search.hpp"
 
 #if defined FIND_MAGIC
 // Magic Bitboard の Magic Number を求める為のソフト

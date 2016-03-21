@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "search.hpp"
-#include "usi.hpp"
-#include "timeManager.hpp"
+#include "n320_150_search.hpp"
+#include "n320_250_usi.hpp"
+#include "n240_350_timeManager.hpp"
 
 namespace {
 #if 1

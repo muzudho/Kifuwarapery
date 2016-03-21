@@ -3,8 +3,8 @@
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
 #include "n240_250_evaluate.hpp"
-#include "usi.hpp"
-#include "tt.hpp"
+#include "n320_250_usi.hpp"
+#include "n240_300_tt.hpp"
 
 const int MaxThreads = 64;
 const int MaxSplitPointsPerThread = 8;

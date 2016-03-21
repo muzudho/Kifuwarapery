@@ -1,8 +1,8 @@
 #include "stdafx.h"
-#include "generateMoves.hpp"
-#include "search.hpp"
-#include "thread.hpp"
-#include "usi.hpp"
+#include "n280_100_generateMoves.hpp"
+#include "n320_150_search.hpp"
+#include "n320_350_thread.hpp"
+#include "n320_250_usi.hpp"
 
 namespace {
 	template <typename T> T* newThread(Searcher* s) {

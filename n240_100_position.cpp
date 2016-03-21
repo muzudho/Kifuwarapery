@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "header/n240_position/n240_100_position.hpp"
 #include "n240_150_move.hpp"
-#include "mt64bit.hpp"
-#include "generateMoves.hpp"
-#include "tt.hpp"
-#include "search.hpp"
+#include "n280_200_mt64bit.hpp"
+#include "n280_100_generateMoves.hpp"
+#include "n240_300_tt.hpp"
+#include "n320_150_search.hpp"
 
 Key Position::zobrist_[PieceTypeNum][SquareNum][ColorNum];
 Key Position::zobHand_[HandPieceNum][ColorNum];

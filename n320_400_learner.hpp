@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 #include "header/n240_position/n240_100_position.hpp"
-#include "thread.hpp"
+#include "n320_350_thread.hpp"
 #include "n240_250_evaluate.hpp"
 
 #if defined LEARN

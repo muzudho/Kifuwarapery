@@ -1,10 +1,10 @@
 #include "stdafx.h"
 #include "header/n080_common__/n080_100_common.hpp"
-#include "init.hpp"
-#include "mt64bit.hpp"
+#include "n320_200_init.hpp"
+#include "n280_200_mt64bit.hpp"
 #include "n240_250_evaluate.hpp"
-#include "book.hpp"
-#include "search.hpp"
+#include "n320_100_book.hpp"
+#include "n320_150_search.hpp"
 
 namespace {
 	// square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
