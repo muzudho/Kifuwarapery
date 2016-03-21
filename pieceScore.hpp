@@ -1,6 +1,6 @@
-#ifndef APERY_PIECESCORE_HPP
-#define APERY_PIECESCORE_HPP
+﻿#pragma once
 
+#include "stdafx.h"
 #include "score.hpp"
 #include "piece.hpp"
 
@@ -48,4 +48,3 @@ extern const Score PieceScore[PieceNone];
 extern const Score CapturePieceScore[PieceNone];
 extern const Score PromotePieceScore[7];
 
-#endif // #ifndef APERY_PIECESCORE_HPP

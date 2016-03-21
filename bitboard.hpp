@@ -1,6 +1,6 @@
-#ifndef APERY_BITBOARD_HPP
-#define APERY_BITBOARD_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "square.hpp"
 #include "color.hpp"
@@ -507,5 +507,3 @@ template <typename T> FORCE_INLINE void foreachBB(Bitboard& bb, Square& sq, T t)
 		t(1);
 	}
 }
-
-#endif // #ifndef APERY_BITBOARD_HPP

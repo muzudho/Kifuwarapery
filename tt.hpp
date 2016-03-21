@@ -1,6 +1,6 @@
-#ifndef APERY_TT_HPP
-#define APERY_TT_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "move.hpp"
 
@@ -109,4 +109,3 @@ inline void TranspositionTable::newSearch() {
 	++generation_;
 }
 
-#endif // #ifndef APERY_TT_HPP

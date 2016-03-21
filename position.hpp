@@ -1,6 +1,6 @@
-#ifndef APERY_POSITION_HPP
-#define APERY_POSITION_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "piece.hpp"
 #include "common.hpp"
 #include "hand.hpp"
@@ -417,4 +417,3 @@ public:
 };
 extern const CharToPieceUSI g_charToPieceUSI;
 
-#endif // #ifndef APERY_POSITION_HPP

@@ -1,6 +1,6 @@
-#ifndef APERY_PIECE_HPP
-#define APERY_PIECE_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "overloadEnumOperators.hpp"
 #include "color.hpp"
@@ -64,4 +64,3 @@ const HandPiece PieceTypeToHandPieceTable[PieceTypeNum] = {
 };
 inline HandPiece pieceTypeToHandPiece(const PieceType pt) { return PieceTypeToHandPieceTable[pt]; }
 
-#endif // #ifndef APERY_PIECE_HPP

@@ -1,3 +1,4 @@
+﻿#include "stdafx.h"
 #include "evalList.hpp"
 #include "position.hpp"
 #include "evaluate.hpp"

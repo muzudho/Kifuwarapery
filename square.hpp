@@ -1,6 +1,6 @@
-#ifndef APERY_SQUARE_HPP
-#define APERY_SQUARE_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "overloadEnumOperators.hpp"
 #include "common.hpp"
 #include "color.hpp"
@@ -227,5 +227,3 @@ inline bool canPromote(const Color c, const Rank fromOrToRank) {
 	return (c == Black ? isInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : isInFrontOf<White, Rank6, Rank4>(fromOrToRank));
 #endif
 }
-
-#endif // #ifndef APERY_SQUARE_HPP

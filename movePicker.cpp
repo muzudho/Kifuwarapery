@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "movePicker.hpp"
 #include "generateMoves.hpp"
 #include "thread.hpp"

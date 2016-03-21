@@ -1,6 +1,6 @@
-#ifndef APERY_EVALLIST_HPP
-#define APERY_EVALLIST_HPP
+﻿#pragma once
 
+#include "stdafx.h"
 #include "square.hpp"
 #include "piece.hpp"
 
@@ -19,4 +19,3 @@ struct EvalList {
 
 extern const Square HandPieceToSquareHand[ColorNum][HandPieceNum];
 
-#endif // #ifndef APERY_EVALLIST_HPP

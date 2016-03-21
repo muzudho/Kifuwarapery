@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "tt.hpp"
 
 void TranspositionTable::setSize(const size_t mbSize) { // Mega Byte 指定

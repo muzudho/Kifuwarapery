@@ -1,6 +1,6 @@
-#ifndef APERY_BOOK_HPP
-#define APERY_BOOK_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "position.hpp"
 #include "mt64bit.hpp"
 
@@ -34,4 +34,3 @@ private:
 
 void makeBook(Position& pos, std::istringstream& ssCmd);
 
-#endif // #ifndef APERY_BOOK_HPP

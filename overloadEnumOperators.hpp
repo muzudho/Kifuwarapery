@@ -1,5 +1,6 @@
-#ifndef APERY_OVERLOADENUMOPERATORS_HPP
-#define APERY_OVERLOADENUMOPERATORS_HPP
+#pragma once
+
+#include "stdafx.h"
 
 #define OverloadEnumOperators(T)										\
 	inline void operator += (T& lhs, const int rhs) { lhs  = static_cast<T>(static_cast<int>(lhs) + rhs); } \
@@ -22,4 +23,3 @@
 	inline T operator ++ (T& lhs, int) { const T temp = lhs; lhs += 1; return temp; } /* 後置 */ \
 	/* inline T operator -- (T& lhs, int) { const T temp = lhs; lhs -= 1; return temp; } */ /* 後置 */
 
-#endif // #ifndef APERY_OVERLOADENUMOPERATORS_HPP

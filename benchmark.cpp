@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "benchmark.hpp"
 #include "common.hpp"
 #include "usi.hpp"

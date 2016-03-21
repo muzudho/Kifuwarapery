@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "position.hpp"
 #include "move.hpp"
 #include "mt64bit.hpp"

@@ -1,6 +1,6 @@
-#ifndef APERY_MT64BIT_HPP
-#define APERY_MT64BIT_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 
 // 64bit のランダムな値を返す為のクラス
@@ -18,4 +18,3 @@ public:
 
 extern MT64bit g_mt64bit;
 
-#endif // #ifndef APERY_MT64BIT_HPP

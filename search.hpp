@@ -1,6 +1,6 @@
-#ifndef APERY_SEARCH_HPP
-#define APERY_SEARCH_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "move.hpp"
 #include "pieceScore.hpp"
 #include "timeManager.hpp"
@@ -161,4 +161,3 @@ struct Searcher {
 
 void initSearchTable();
 
-#endif // #ifndef APERY_SEARCH_HPP

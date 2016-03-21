@@ -1,3 +1,4 @@
+﻿#include "stdafx.h"
 #include "move.hpp"
 
 namespace {

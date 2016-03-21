@@ -1,6 +1,6 @@
-#ifndef APERY_LEARNER_HPP
-#define APERY_LEARNER_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "position.hpp"
 #include "thread.hpp"
 #include "evaluate.hpp"
@@ -592,4 +592,3 @@ private:
 
 #endif
 
-#endif // #ifndef APERY_LEARNER_HPP

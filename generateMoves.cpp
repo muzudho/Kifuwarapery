@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "generateMoves.hpp"
 #include "usi.hpp"
 

@@ -1,6 +1,6 @@
-#ifndef APERY_HAND_HPP
-#define APERY_HAND_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "piece.hpp"
 
@@ -101,4 +101,3 @@ private:
 	u32 value_;
 };
 
-#endif // #ifndef APERY_HAND_HPP

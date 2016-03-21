@@ -1,6 +1,6 @@
-#ifndef APERY_EVALUATE_HPP
-#define APERY_EVALUATE_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "overloadEnumOperators.hpp"
 #include "common.hpp"
 #include "square.hpp"
@@ -1163,4 +1163,3 @@ extern EvaluateHashTable g_evalTable;
 Score evaluateUnUseDiff(const Position& pos);
 Score evaluate(Position& pos, SearchStack* ss);
 
-#endif // #ifndef APERY_EVALUATE_HPP

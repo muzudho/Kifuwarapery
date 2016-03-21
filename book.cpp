@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "book.hpp"
 #include "position.hpp"
 #include "move.hpp"

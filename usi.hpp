@@ -1,5 +1,4 @@
-#ifndef APERY_USI_HPP
-#define APERY_USI_HPP
+﻿#pragma once
 
 #include "common.hpp"
 #include "move.hpp"
@@ -60,4 +59,3 @@ void setPosition(Position& pos, std::istringstream& ssCmd);
 Move csaToMove(const Position& pos, const std::string& moveStr);
 Move usiToMove(const Position& pos, const std::string& moveStr);
 
-#endif // #ifndef APERY_USI_HPP

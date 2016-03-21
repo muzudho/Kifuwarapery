@@ -1,6 +1,6 @@
-#ifndef APERY_TIMEMANAGER_HPP
-#define APERY_TIMEMANAGER_HPP
+﻿#pragma once
 
+#include "stdafx.h"
 #include "evaluate.hpp"
 
 struct LimitsType;
@@ -18,4 +18,3 @@ private:
 	int unstablePVExtraTime_;
 };
 
-#endif // #ifndef APERY_TIMEMANAGER_HPP

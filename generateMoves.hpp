@@ -1,6 +1,6 @@
-#ifndef APERY_GENERATEMOVES_HPP
-#define APERY_GENERATEMOVES_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "piece.hpp"
 #include "move.hpp"
@@ -79,4 +79,3 @@ inline Move makeNonPromoteMove(const PieceType pt, const Square from, const Squa
 	return selectedMakeMove<MT, NonPromote>(pt, from, to, pos);
 }
 
-#endif // #ifndef APERY_GENERATEMOVES_HPP

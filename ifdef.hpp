@@ -1,5 +1,4 @@
-#ifndef APERY_IFDEF_HPP
-#define APERY_IFDEF_HPP
+#pragma once
 
 #if 0
 // 機械学習を行う際に使う。
@@ -80,5 +79,3 @@
 // Magic Bitboard で必要となるマジックナンバーを求める。
 #define FIND_MAGIC
 #endif
-
-#endif // #ifndef APERY_IFDEF_HPP

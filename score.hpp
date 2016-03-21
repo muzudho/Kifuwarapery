@@ -1,6 +1,6 @@
-#ifndef APERY_SCORE_HPP
-#define APERY_SCORE_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "overloadEnumOperators.hpp"
 #include "common.hpp"
 
@@ -46,4 +46,3 @@ inline Score matedIn(const Ply ply) {
 	return -ScoreMate0Ply + static_cast<Score>(ply);
 }
 
-#endif // #ifndef APERY_SCORE_HPP

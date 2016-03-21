@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "mt64bit.hpp"
 
 //MT64bit g_mt64bit(std::chrono::system_clock::now().time_since_epoch().count());

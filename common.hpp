@@ -1,5 +1,4 @@
-#ifndef APERY_COMMON_HPP
-#define APERY_COMMON_HPP
+#pragma once
 
 #include "ifdef.hpp"
 #include <cinttypes>
@@ -321,4 +320,3 @@ template <typename T> inline void reverseEndian(T& r) {
 }
 #endif
 
-#endif // #ifndef APERY_COMMON_HPP

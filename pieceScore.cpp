@@ -1,3 +1,4 @@
+﻿#include "stdafx.h"
 #include "piece.hpp"
 #include "pieceScore.hpp"
 

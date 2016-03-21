@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "square.hpp"
 
 Direction SquareRelation[SquareNum][SquareNum];

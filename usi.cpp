@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "usi.hpp"
 #include "position.hpp"
 #include "move.hpp"

@@ -1,6 +1,6 @@
-#ifndef APERY_THREAD_HPP
-#define APERY_THREAD_HPP
+#pragma once
 
+#include "stdafx.h"
 #include "common.hpp"
 #include "evaluate.hpp"
 #include "usi.hpp"
@@ -123,4 +123,3 @@ private:
 	Depth minimumSplitDepth_;
 };
 
-#endif // #ifndef APERY_THREAD_HPP
