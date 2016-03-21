@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../../stdafx.h"
-#include "../../color.hpp"
-#include "../../square.hpp"
+#include "../n120_brdEntry/n120_100_color.hpp"
+#include "../n120_brdEntry/n120_150_square.hpp"
 
 class ColorFileRank {
 public:

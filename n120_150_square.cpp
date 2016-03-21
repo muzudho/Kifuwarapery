@@ -1,5 +1,6 @@
+
 #include "stdafx.h"
-#include "square.hpp"
+#include "header/n120_brdEntry/n120_150_square.hpp"
 
 Direction SquareRelation[SquareNum][SquareNum];
 

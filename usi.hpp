@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "header/n080_common/n080_100_common.hpp"
+#include "header/n080_common__/n080_100_common.hpp"
 #include "move.hpp"
 
 const std::string DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

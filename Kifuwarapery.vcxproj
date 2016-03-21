@@ -148,27 +148,26 @@
     <ClInclude Include="benchmark.hpp" />
     <ClInclude Include="bitboard.hpp" />
     <ClInclude Include="book.hpp" />
-    <ClInclude Include="color.hpp" />
     <ClInclude Include="evalList.hpp" />
     <ClInclude Include="evaluate.hpp" />
     <ClInclude Include="generateMoves.hpp" />
     <ClInclude Include="hand.hpp" />
     <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h" />
     <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h" />
-    <ClInclude Include="header\n080_common\n080_100_common.hpp" />
-    <ClInclude Include="ifdef.hpp" />
+    <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
+    <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
+    <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
+    <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp" />
     <ClInclude Include="init.hpp" />
     <ClInclude Include="learner.hpp" />
     <ClInclude Include="move.hpp" />
     <ClInclude Include="movePicker.hpp" />
     <ClInclude Include="mt64bit.hpp" />
-    <ClInclude Include="overloadEnumOperators.hpp" />
     <ClInclude Include="piece.hpp" />
     <ClInclude Include="pieceScore.hpp" />
     <ClInclude Include="position.hpp" />
     <ClInclude Include="score.hpp" />
     <ClInclude Include="search.hpp" />
-    <ClInclude Include="square.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="thread.hpp" />
@@ -189,13 +188,13 @@
     <ClCompile Include="move.cpp" />
     <ClCompile Include="movePicker.cpp" />
     <ClCompile Include="mt64bit.cpp" />
+    <ClCompile Include="n120_150_square.cpp" />
     <ClCompile Include="pieceScore.cpp" />
     <ClCompile Include="position.cpp" />
     <ClCompile Include="search.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp" />
     <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp" />
-    <ClCompile Include="source\n080_common\n80_100_common.cpp" />
-    <ClCompile Include="square.cpp" />
+    <ClCompile Include="source\n080_common__\n80_100_common.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

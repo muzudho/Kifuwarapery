@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "stdafx.h"
-#include "square.hpp"
+#include "header/n120_brdEntry/n120_150_square.hpp"
 #include "piece.hpp"
 
 class Position;

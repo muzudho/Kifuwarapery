@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "header/n080_common/n080_100_common.hpp"
+#include "header/n080_common__/n080_100_common.hpp"
 #include "bitboard.hpp"
 
 const Bitboard SetMaskBB[SquareNum] = {

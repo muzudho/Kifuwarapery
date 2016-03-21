@@ -19,11 +19,17 @@
     <Filter Include="Source Files\n050_usoTuple">
       <UniqueIdentifier>{377c1f7b-6c16-40a4-9f62-3332d5686c44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n080_common">
-      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\n080_common">
       <UniqueIdentifier>{402fcfcc-1379-4ee1-93c7-83438a227775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n080_common__">
+      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n120_brdEntry">
+      <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n120_brdEntry">
+      <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,9 +51,6 @@
     <ClInclude Include="book.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="color.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="evalList.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -58,9 +61,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hand.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ifdef.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="init.hpp">
@@ -78,9 +78,6 @@
     <ClInclude Include="mt64bit.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="overloadEnumOperators.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="piece.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -94,9 +91,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="search.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="square.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="thread.hpp">
@@ -117,8 +111,17 @@
     <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h">
       <Filter>Header Files\n050_usoTuple</Filter>
     </ClInclude>
-    <ClInclude Include="header\n080_common\n080_100_common.hpp">
-      <Filter>Header Files\n080_common</Filter>
+    <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp">
+      <Filter>Header Files\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_100_common.hpp">
+      <Filter>Header Files\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
+      <Filter>Header Files\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp">
+      <Filter>Header Files\n120_brdEntry</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +173,6 @@
     <ClCompile Include="search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="square.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="thread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -191,8 +191,11 @@
     <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp">
       <Filter>Source Files\n050_usoTuple</Filter>
     </ClCompile>
-    <ClCompile Include="source\n080_common\n80_100_common.cpp">
+    <ClCompile Include="source\n080_common__\n80_100_common.cpp">
       <Filter>Source Files\n080_common</Filter>
+    </ClCompile>
+    <ClCompile Include="n120_150_square.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

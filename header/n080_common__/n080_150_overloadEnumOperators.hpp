@@ -1,6 +1,6 @@
 #pragma once
 
-#include "stdafx.h"
+#include "../../stdafx.h"
 
 #define OverloadEnumOperators(T)										\
 	inline void operator += (T& lhs, const int rhs) { lhs  = static_cast<T>(static_cast<int>(lhs) + rhs); } \

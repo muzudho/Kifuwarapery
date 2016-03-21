@@ -1,9 +1,9 @@
 #pragma once
 
-#include "stdafx.h"
-#include "overloadEnumOperators.hpp"
-#include "header/n080_common/n080_100_common.hpp"
-#include "color.hpp"
+#include "../../stdafx.h"
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n120_brdEntry/n120_100_color.hpp"
 
 // 盤面を [0, 80] の整数の index で表す
 // I9 = 1一, I1 = 1九, A1 = 9九

@@ -1,12 +1,12 @@
 #pragma once
 
-#include "stdafx.h"
-#include "header/n080_common/n080_100_common.hpp"
-#include "overloadEnumOperators.hpp"
-#include "color.hpp"
 #include <iostream>
 #include <string>
 #include <cassert>
+#include "stdafx.h"
+#include "header/n080_common__/n080_100_common.hpp"
+#include "header/n080_common__/n080_150_overloadEnumOperators.hpp"
+#include "header/n120_brdEntry/n120_100_color.hpp"
 
 enum PieceType {
 	// Pro* は 元の 駒の種類に 8 を加算したもの。

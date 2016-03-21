@@ -1,10 +1,10 @@
 #pragma once
 
 #include "stdafx.h"
-#include "overloadEnumOperators.hpp"
 #include "header\n050_usoTuple\n050_120_ColorFileRank.h"
-#include "header/n080_common/n080_100_common.hpp"
-#include "square.hpp"
+#include "header/n080_common__/n080_100_common.hpp"
+#include "header/n080_common__/n080_150_overloadEnumOperators.hpp"
+#include "header/n120_brdEntry/n120_150_square.hpp"
 #include "piece.hpp"
 #include "pieceScore.hpp"
 #include "position.hpp"

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "stdafx.h"
-#include "ifdef.hpp"
-#include "header/n080_common/n080_100_common.hpp"
+#include "header/n080_common__/n080_050_ifdef.hpp"
+#include "header/n080_common__/n080_100_common.hpp"
 #include "bitboard.hpp"
 
 void initTable();
