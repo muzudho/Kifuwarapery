@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\n050_usoTuple">
+      <UniqueIdentifier>{1ddbb963-c93f-46f8-8ee8-baf17d191685}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n050_usoTuple">
+      <UniqueIdentifier>{377c1f7b-6c16-40a4-9f62-3332d5686c44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -102,6 +108,12 @@
     <ClInclude Include="usi.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h">
+      <Filter>Header Files\n050_usoTuple</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h">
+      <Filter>Header Files\n050_usoTuple</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -172,6 +184,12 @@
     </ClCompile>
     <ClCompile Include="usi.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp">
+      <Filter>Source Files\n050_usoTuple</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp">
+      <Filter>Source Files\n050_usoTuple</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "move.hpp"
 #include "pieceScore.hpp"
 #include "timeManager.hpp"
@@ -54,8 +55,8 @@ public:
 		pv_.push_back(m);
 		pv_.push_back(Move::moveNone());
 	}
-	explicit RootMove(const std::tuple<Move, Score> m) : score_(std::get<1>(m)), prevScore_(-ScoreInfinite) {
-		pv_.push_back(std::get<0>(m));
+	explicit RootMove(const MoveScore m) : score_(m.score), prevScore_(-ScoreInfinite) {
+		pv_.push_back(m.move);
 		pv_.push_back(Move::moveNone());
 	}
 

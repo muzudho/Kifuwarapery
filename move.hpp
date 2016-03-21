@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+//#include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "common.hpp"
 #include "square.hpp"
 #include "piece.hpp"

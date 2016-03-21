@@ -1,6 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
+#include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "position.hpp"
 #include "mt64bit.hpp"
 
@@ -14,7 +15,7 @@ struct BookEntry {
 class Book : private std::ifstream {
 public:
 	Book() : random_(std::chrono::system_clock::now().time_since_epoch().count()) {}
-	std::tuple<Move, Score> probe(const Position& pos, const std::string& fName, const bool pickBest);
+	MoveScore probe(const Position& pos, const std::string& fName, const bool pickBest);
 	static void init();
 	static Key bookKey(const Position& pos);
 

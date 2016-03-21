@@ -96,7 +96,7 @@ Key Book::bookKey(const Position& pos) {
 	return key;
 }
 
-std::tuple<Move, Score> Book::probe(const Position& pos, const std::string& fName, const bool pickBest) {
+MoveScore Book::probe(const Position& pos, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
@@ -106,7 +106,7 @@ std::tuple<Move, Score> Book::probe(const Position& pos, const std::string& fNam
 	Score score = ScoreZero;
 
 	if (fileName_ != fName && !open(fName.c_str())) {
-		return std::make_tuple(Move::moveNone(), ScoreNone);
+		return MoveScore(Move::moveNone(), ScoreNone);
 	}
 
 	binary_search(key);
@@ -143,7 +143,7 @@ std::tuple<Move, Score> Book::probe(const Position& pos, const std::string& fNam
 		}
 	}
 
-	return std::make_tuple(move, score);
+	return MoveScore(move, score);
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {

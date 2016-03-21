@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "header\n050_usoTuple\n050_100_MoveScore.h"
 #include "search.hpp"
 #include "position.hpp"
 #include "usi.hpp"
@@ -1581,17 +1582,23 @@ void Searcher::think() {
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (options["OwnBook"] && pos.gamePly() <= book_ply) {
-		const std::tuple<Move, Score> bookMoveScore = book.probe(pos, options["Book_File"], options["Best_Book_Move"]);
-		if (!std::get<0>(bookMoveScore).isNone() && std::find(rootMoves.begin(),
-															  rootMoves.end(),
-															  std::get<0>(bookMoveScore)) != rootMoves.end())
+		const MoveScore bookMoveScore = book.probe(pos, options["Book_File"], options["Best_Book_Move"]);
+		if (
+			!bookMoveScore.move.isNone()
+			&&
+			std::find(
+				rootMoves.begin(),
+				rootMoves.end(),
+				bookMoveScore.move
+			) != rootMoves.end()
+		)
 		{
 			std::swap(rootMoves[0], *std::find(rootMoves.begin(),
 											   rootMoves.end(),
-											   std::get<0>(bookMoveScore)));
+											   bookMoveScore.move));
 			SYNCCOUT << "info"
-					 << " score " << scoreToUSI(std::get<1>(bookMoveScore))
-					 << " pv " << std::get<0>(bookMoveScore).toUSI()
+					 << " score " << scoreToUSI(bookMoveScore.score)
+					 << " pv " << bookMoveScore.move.toUSI()
 					 << SYNCENDL;
 
 			goto finalize;

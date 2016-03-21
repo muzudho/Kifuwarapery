@@ -154,6 +154,8 @@
     <ClInclude Include="evaluate.hpp" />
     <ClInclude Include="generateMoves.hpp" />
     <ClInclude Include="hand.hpp" />
+    <ClInclude Include="header\n050_usoTuple\n050_100_MoveScore.h" />
+    <ClInclude Include="header\n050_usoTuple\n050_120_ColorFileRank.h" />
     <ClInclude Include="ifdef.hpp" />
     <ClInclude Include="init.hpp" />
     <ClInclude Include="learner.hpp" />
@@ -192,6 +194,8 @@
     <ClCompile Include="pieceScore.cpp" />
     <ClCompile Include="position.cpp" />
     <ClCompile Include="search.cpp" />
+    <ClCompile Include="source\n050_usoTuple\n050_100_MoveScore.cpp" />
+    <ClCompile Include="source\n050_usoTuple\n050_120_ColorFileRank.cpp" />
     <ClCompile Include="square.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
