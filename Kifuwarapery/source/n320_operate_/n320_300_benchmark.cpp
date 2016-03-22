@@ -2,6 +2,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n320_operate_/n320_250_usi.hpp"
+#include "../../header/n320_operate_/n320_260_usiOperation.hpp"
 #include "../../header/n320_operate_/n320_300_benchmark.hpp"
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。
@@ -20,12 +21,15 @@ void benchmark(Position& pos) {
 
 	std::ifstream ifs("benchmark.sfen");
 	std::string sfen;
+	UsiOperation usiOperation;
 	while (std::getline(ifs, sfen)) {
 		std::cout << sfen << std::endl;
 		std::istringstream ss_sfen(sfen);
-		setPosition(pos, ss_sfen);
+
+		usiOperation.setPosition(pos, ss_sfen);
+
 		std::istringstream ss_go("byoyomi 10000");
-		go(pos, ss_go);
+		usiOperation.go(pos, ss_go);
 		pos.searcher()->threads.waitForThinkFinished();
 	}
 }

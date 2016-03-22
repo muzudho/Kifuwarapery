@@ -156,6 +156,9 @@
     <ClInclude Include="header\n320_operate_\n320_230_usiOption.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -231,6 +234,9 @@
       <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_230_usiOption.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n320_operate_/n320_250_usi.hpp"
+#include "../../header/n320_operate_/n320_260_usiOperation.hpp"
 #include "../../header/n320_operate_/n320_350_thread.hpp"
 
 MT64bit Book::mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
@@ -194,9 +195,10 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 		}
 		pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
+		UsiOperation usiOperation;
 		while (!line.empty()) {
 			const std::string moveStrCSA = line.substr(0, 6);
-			const Move move = csaToMove(pos, moveStrCSA);
+			const Move move = usiOperation.csaToMove(pos, moveStrCSA);
 			if (move.isNone()) {
 				pos.print();
 				std::cout << "!!! Illegal move = " << moveStrCSA << " !!!" << std::endl;
@@ -228,7 +230,8 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 					pos.doMove(move, SetUpStates->top());
 
 					std::istringstream ssCmd("byoyomi 1000");
-					go(pos, ssCmd);
+					UsiOperation usiOperation;
+					usiOperation.go(pos, ssCmd);
 					pos.searcher()->threads.waitForThinkFinished();
 
 					pos.undoMove(move);

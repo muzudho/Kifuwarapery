@@ -172,6 +172,7 @@
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp" />
     <ClInclude Include="header\n320_operate_\n320_230_usiOption.hpp" />
     <ClInclude Include="header\n320_operate_\n320_250_usi.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp" />
     <ClInclude Include="header\n320_operate_\n320_300_benchmark.hpp" />
     <ClInclude Include="header\n320_operate_\n320_350_thread.hpp" />
     <ClInclude Include="header\n320_operate_\n320_400_learner.hpp" />
@@ -200,6 +201,7 @@
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp" />
     <ClCompile Include="source\n320_operate_\n320_230_usiOption.cpp" />
     <ClCompile Include="source\n320_operate_\n320_250_usi.cpp" />
+    <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp" />
     <ClCompile Include="source\n320_operate_\n320_300_benchmark.cpp" />
     <ClCompile Include="source\n320_operate_\n320_350_thread.cpp" />
     <ClCompile Include="source\n900_main____\n900_100_main.cpp" />

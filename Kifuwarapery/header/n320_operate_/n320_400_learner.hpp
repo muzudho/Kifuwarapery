@@ -259,9 +259,10 @@ private:
 		bmdBase[White].winner = (elem == "2");
 		pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
+		UsiOperation usiOperation;
 		while (true) {
 			const std::string moveStrCSA = s1.substr(0, 6);
-			const Move move = csaToMove(pos, moveStrCSA);
+			const Move move = usiOperation::csaToMove(pos, moveStrCSA);
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
 			if (move.isNone())
 				break;

@@ -43,6 +43,8 @@ struct CaseInsensitiveLess {
 	bool operator() (const std::string&, const std::string&) const;
 };
 
+
+
 struct OptionsMap : public std::map<std::string, USIOption, CaseInsensitiveLess> {
 public:
 	void init(Searcher* s);
@@ -51,11 +53,7 @@ public:
 	}
 };
 
-void go(const Position& pos, std::istringstream& ssCmd);
-#if defined LEARN
-void go(const Position& pos, const Ply depth, const Move move);
-#endif
-void setPosition(Position& pos, std::istringstream& ssCmd);
-Move csaToMove(const Position& pos, const std::string& moveStr);
-Move usiToMove(const Position& pos, const std::string& moveStr);
+
+
+
 
