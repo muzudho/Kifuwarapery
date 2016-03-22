@@ -231,6 +231,7 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 	static const int KPPIndicesMax = 3000;
 	static const int KKPIndicesMax = 130;
 	static const int KKIndicesMax = 7;
+
 	// KPP に関する相対位置などの次元を落とした位置などのインデックスを全て返す。
 	// 負のインデックスは、正のインデックスに変換した位置の点数を引く事を意味する。
 	// 0 の時だけは正負が不明だが、0 は歩の持ち駒 0 枚を意味していて無効な値なので問題なし。
@@ -1188,6 +1189,24 @@ using EvaluateHashEntry = EvalSum;
 struct EvaluateHashTable : HashTable<EvaluateHashEntry, EvaluateTableSize> {};
 extern EvaluateHashTable g_evalTable;
 
-Score evaluateUnUseDiff(const Position& pos);
-Score evaluate(Position& pos, SearchStack* ss);
+
+class Evaluation {
+public:
+	Score evaluateUnUseDiff(const Position& pos);
+	Score evaluate(Position& pos, SearchStack* ss);
+private:
+
+	EvalSum doapc(const Position& pos, const int index[2]);
+	std::array<s32, 2> doablack(const Position& pos, const int index[2]);
+	std::array<s32, 2> doawhite(const Position& pos, const int index[2]);
+
+#if defined INANIWA_SHIFT
+	Score inaniwaScoreBody(const Position& pos);
+	inline Score inaniwaScore(const Position& pos);
+#endif
+
+	bool calcDifference(Position& pos, SearchStack* ss);
+	int make_list_unUseDiff(const Position& pos, int list0[EvalList::ListSize], int list1[EvalList::ListSize], int nlist);
+	void evaluateBody(Position& pos, SearchStack* ss);
+};
 

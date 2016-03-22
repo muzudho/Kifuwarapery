@@ -39,18 +39,18 @@ int main(int argc, char* argv[]) {
 
 	Position::initZobrist();
 
-	auto s = std::unique_ptr<Searcher>(new Searcher);
+	auto searcher = std::unique_ptr<Searcher>(new Searcher);
 
-	s->init();
+	searcher->init();
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)start init!" << SYNCENDL;
-	std::unique_ptr<Evaluater>(new Evaluater)->init(s->options["Eval_Dir"], true);
+	std::unique_ptr<Evaluater>(new Evaluater)->init(searcher->options["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)end init!" << SYNCENDL;
 
-	s->doUSICommandLoop(argc, argv);
+	searcher->doUSICommandLoop(argc, argv);
 
-	s->threads.exit();
+	searcher->threads.exit();
 }
 
 #endif

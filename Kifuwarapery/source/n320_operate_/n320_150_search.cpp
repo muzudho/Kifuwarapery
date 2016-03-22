@@ -370,11 +370,13 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 		if (tte != nullptr) {
 			if ((ss->staticEval = bestScore = tte->evalScore()) == ScoreNone) {
-				ss->staticEval = bestScore = evaluate(pos, ss);
+				Evaluation evaluation;
+				ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
 			}
 		}
 		else {
-			ss->staticEval = bestScore = evaluate(pos, ss);
+			Evaluation evaluation;
+			ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
 		}
 
 		if (beta <= bestScore) {
@@ -393,7 +395,8 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		futilityBase = bestScore + 128; // todo: 128 より大きくて良いと思う。
 	}
 
-	evaluate(pos, ss);
+	Evaluation evaluation;
+	evaluation.evaluate(pos, ss);
 
 	MovePicker mp(pos, ttMove, depth, history, (ss-1)->currentMove.to());
 	const CheckInfo ci(pos);
@@ -843,7 +846,8 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		ttMove = excludedMove = Move::moveNone();
 		ttScore = ScoreNone;
 
-		evaluate(pos, ss);
+		Evaluation evaluation;
+		evaluation.evaluate(pos, ss);
 
 		assert(-ScoreInfinite < splitPoint->bestScore && 0 < splitPoint->moveCount);
 
@@ -937,7 +941,8 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 
 	// step5
 	// evaluate the position statically
-	eval = ss->staticEval = evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
+	Evaluation evaluation;
+	eval = ss->staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
 	if (inCheck) {
 		eval = ss->staticEval = ScoreNone;
 		goto iid_start;
