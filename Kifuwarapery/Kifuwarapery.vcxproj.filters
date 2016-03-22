@@ -43,6 +43,21 @@
     <Filter Include="Source Files\n240_position">
       <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n280_move____">
+      <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n280_move____">
+      <UniqueIdentifier>{d3ae253d-2733-4e83-8e46-5bba8d5f1097}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n320_operate_">
+      <UniqueIdentifier>{17002e9f-d660-4980-981b-350ec2dda0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n320_operate_">
+      <UniqueIdentifier>{fbec7d50-ce6b-4a2b-9ae9-e436b220ea44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n900_main____">
+      <UniqueIdentifier>{e740a81a-9ed3-4c4b-8cd4-0e85d49331d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -84,51 +99,6 @@
     <ClInclude Include="header\n240_position\n240_100_position.hpp">
       <Filter>Header Files\n240_position</Filter>
     </ClInclude>
-    <ClInclude Include="n240_200_evalList.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n240_250_evaluate.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n240_300_tt.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n240_350_timeManager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n280_100_generateMoves.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n280_150_movePicker.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n280_200_mt64bit.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_100_book.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_150_search.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_200_init.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_250_usi.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_300_benchmark.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_350_thread.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n320_400_learner.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="n240_400_MoveScore.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h">
       <Filter>Header Files\n120_brdEntry</Filter>
     </ClInclude>
@@ -138,6 +108,51 @@
     <ClInclude Include="header\n240_position\n240_150_move.hpp">
       <Filter>Header Files\n240_position</Filter>
     </ClInclude>
+    <ClInclude Include="header\n240_position\n240_250_evaluate.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_position\n240_300_tt.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_position\n240_350_timeManager.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_100_generateMoves.hpp">
+      <Filter>Header Files\n280_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
+      <Filter>Header Files\n280_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp">
+      <Filter>Header Files\n280_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_position\n240_200_evalList.hpp">
+      <Filter>Header Files\n240_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_100_book.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_150_search.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_200_init.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_250_usi.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_300_benchmark.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_350_thread.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_400_learner.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -146,71 +161,71 @@
     <ClCompile Include="source\n080_common__\n80_100_common.cpp">
       <Filter>Source Files\n080_common</Filter>
     </ClCompile>
-    <ClCompile Include="n160_100_bitboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n200_200_pieceScore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n120_250_hand.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_100_position.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_200_evalList.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_250_evaluate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_300_tt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_350_timeManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_150_move.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n280_100_generateMoves.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n280_150_movePicker.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n280_200_mt64bit.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_100_book.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_150_search.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_200_init.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_250_usi.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_300_benchmark.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n320_350_thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n900_100_main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n240_400_MoveScore.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="n120_300_ColorFileRank.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp">
       <Filter>Source Files\n120_brdEntry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_200_evalList.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n280_move____\n280_100_generateMoves.cpp">
+      <Filter>Source Files\n280_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp">
+      <Filter>Source Files\n280_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp">
+      <Filter>Source Files\n280_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
+      <Filter>Source Files\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp">
+      <Filter>Source Files\n120_brdEntry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n120_brdEntry\n120_300_ColorFileRank.cpp">
+      <Filter>Source Files\n120_brdEntry</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
+      <Filter>Source Files\n200_score___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_100_position.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_150_move.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_250_evaluate.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_300_tt.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_350_timeManager.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
+      <Filter>Source Files\n240_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_100_book.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_150_search.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_200_init.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_250_usi.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_300_benchmark.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_350_thread.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_100_main.cpp">
+      <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

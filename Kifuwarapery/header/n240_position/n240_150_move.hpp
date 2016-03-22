@@ -1,8 +1,8 @@
 #pragma once
 
-#include "header/n120_brdEntry/n120_150_square.hpp"
-#include "header/n120_brdEntry/n120_200_piece.hpp"
-#include "header/n240_position/n240_100_position.hpp"
+#include "../../header/n120_brdEntry/n120_150_square.hpp"
+#include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n240_position/n240_100_position.hpp"
 
 // xxxxxxxx xxxxxxxx xxxxxxxx x1111111  移動先
 // xxxxxxxx xxxxxxxx xx111111 1xxxxxxx  移動元。駒打ちの際には、PieceType + SquareNum - 1
