@@ -1,6 +1,6 @@
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
-#include "../../header/n320_operate_/n320_350_thread.hpp"
+#include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 					   const History& history, SearchStack* searchStack, const Score beta)

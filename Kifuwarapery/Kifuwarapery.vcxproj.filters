@@ -58,6 +58,18 @@
     <Filter Include="Source Files\n900_main____">
       <UniqueIdentifier>{e740a81a-9ed3-4c4b-8cd4-0e85d49331d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n400_usi_____">
+      <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n400_usi_____">
+      <UniqueIdentifier>{65666d01-0eb5-44dc-8663-a4c71889e1a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n360_egOption">
+      <UniqueIdentifier>{03559da1-325e-40b3-86e8-cea32f1da61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n360_egOption">
+      <UniqueIdentifier>{33c05404-3b57-44c4-9228-d6d3c8baf0bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -141,26 +153,29 @@
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_250_usi.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_300_benchmark.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_350_thread.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_400_learner.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_230_usiOptionable.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_240_usiOptionsMap.hpp">
       <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_245_usiOption.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
+      <Filter>Header Files\n400_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp">
+      <Filter>Header Files\n400_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp">
+      <Filter>Header Files\n400_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp">
+      <Filter>Header Files\n400_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp">
+      <Filter>Header Files\n400_usi_____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -224,26 +239,29 @@
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_250_usi.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_300_benchmark.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_350_thread.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n900_main____\n900_100_main.cpp">
       <Filter>Source Files\n900_main____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_230_usiOptionable.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_240_usiOptionsMap.cpp">
       <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_245_usiOption.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
+      <Filter>Source Files\n400_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp">
+      <Filter>Source Files\n400_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n400_usi_____\n400_250_usi.cpp">
+      <Filter>Source Files\n400_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
+      <Filter>Source Files\n400_usi_____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

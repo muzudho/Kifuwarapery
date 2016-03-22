@@ -1,5 +1,5 @@
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
-#include "../../header/n320_operate_/n320_250_usi.hpp"
+#include "../../header/n400_usi_____/n400_250_usi.hpp"
 
 namespace {
 	// 角, 飛車の場合

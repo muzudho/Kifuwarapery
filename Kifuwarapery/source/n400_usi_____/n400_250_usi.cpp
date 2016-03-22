@@ -6,10 +6,11 @@
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
-#include "../../header/n320_operate_/n320_250_usi.hpp"
-#include "../../header/n320_operate_/n320_260_usiOperation.hpp"
-#include "../../header/n320_operate_/n320_300_benchmark.hpp"
-#include "../../header/n320_operate_/n320_400_learner.hpp"
+#include "../../header/n320_operate_/n320_245_usiOption.hpp"
+#include "../../header/n400_usi_____/n400_250_usi.hpp"
+#include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
+#include "../../header/n400_usi_____/n400_300_benchmark.hpp"
+#include "../../header/n400_usi_____/n400_400_learner.hpp"
 
 namespace {
 	void onThreads  (Searcher* s, const UsiOptionable&    ) { s->threads.readUSIOptions(s); }
@@ -18,21 +19,7 @@ namespace {
 	void onEvalDir  (Searcher*  , const UsiOptionable& opt) {
 		std::unique_ptr<Evaluater>(new Evaluater)->init(opt, true);
 	}
-}
 
-bool CaseInsensitiveLess::operator () (const std::string& s1, const std::string& s2) const {
-	for (size_t i = 0; i < s1.size() && i < s2.size(); ++i) {
-		const int c1 = tolower(s1[i]);
-		const int c2 = tolower(s2[i]);
-
-		if (c1 != c2) {
-			return c1 < c2;
-		}
-	}
-	return s1.size() < s2.size();
-}
-
-namespace {
 	// 論理的なコア数の取得
 	inline int cpuCoreCount() {
         // todo: boost::thread::physical_concurrency() を使うこと。
@@ -70,38 +57,6 @@ void OptionsMap::initOptions(Searcher* s) {
 #if defined BISHOP_IN_DANGER
 	(*this)["Danger_Demerit_Score"]        = USIOption(700, SHRT_MIN, SHRT_MAX);
 #endif
-}
-
-USIOption::USIOption(const char* v, Fn* f, Searcher* s) : UsiOptionable(v,f,s)
-{
-}
-
-USIOption::USIOption(const bool v, Fn* f, Searcher* s) : UsiOptionable(v,f,s)
-{
-}
-
-USIOption::USIOption(Fn* f, Searcher* s) : UsiOptionable(f,s)
-{
-}
-
-USIOption::USIOption(const int v, const int min, const int max, Fn* f, Searcher* s) : UsiOptionable(v,min,max,f,s)
-{
-}
-
-
-std::ostream& operator << (std::ostream& os, const OptionsMap& om) {
-	for (auto& elem : om) {
-		const UsiOptionable& o = elem.second;
-		os << "\noption name " << elem.first << " type " << o.GetType();
-		if (o.GetType() != "button") {
-			os << " default " << o.GetDefaultValue();
-		}
-
-		if (o.GetType() == "spin") {
-			os << " min " << o.GetMin() << " max " << o.GetMax();
-		}
-	}
-	return os;
 }
 
 

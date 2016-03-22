@@ -3,9 +3,9 @@
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
-#include "../../header/n320_operate_/n320_250_usi.hpp"
-#include "../../header/n320_operate_/n320_260_usiOperation.hpp"
-#include "../../header/n320_operate_/n320_350_thread.hpp"
+#include "../../header/n400_usi_____/n400_250_usi.hpp"
+#include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
+#include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 MT64bit Book::mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
 Key Book::ZobPiece[PieceNone][SquareNum];

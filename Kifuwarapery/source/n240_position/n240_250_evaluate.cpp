@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_250_evaluate.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_350_thread.hpp"
+#include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;
 

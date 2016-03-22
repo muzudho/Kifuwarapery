@@ -3,7 +3,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n240_position/n240_250_evaluate.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n320_operate_/n320_250_usi.hpp"
+#include "../../header/n400_usi_____/n400_250_usi.hpp"
 
 const int MaxThreads = 64;
 const int MaxSplitPointsPerThread = 8;

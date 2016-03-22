@@ -172,11 +172,12 @@
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp" />
     <ClInclude Include="header\n320_operate_\n320_240_usiOptionsMap.hpp" />
     <ClInclude Include="header\n320_operate_\n320_230_usiOptionable.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_250_usi.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_300_benchmark.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_350_thread.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_400_learner.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_245_usiOption.hpp" />
+    <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp" />
+    <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp" />
+    <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
+    <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp" />
+    <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -202,10 +203,11 @@
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp" />
     <ClCompile Include="source\n320_operate_\n320_240_usiOptionsMap.cpp" />
     <ClCompile Include="source\n320_operate_\n320_230_usiOptionable.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_250_usi.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_300_benchmark.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_350_thread.cpp" />
+    <ClCompile Include="source\n320_operate_\n320_245_usiOption.cpp" />
+    <ClCompile Include="source\n400_usi_____\n400_250_usi.cpp" />
+    <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp" />
+    <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp" />
+    <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp" />
     <ClCompile Include="source\n900_main____\n900_100_main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

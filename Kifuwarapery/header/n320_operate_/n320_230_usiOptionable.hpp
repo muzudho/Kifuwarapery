@@ -9,10 +9,10 @@ class UsiOptionable {
 protected:
 	using Fn = void(Searcher*, const UsiOptionable&);
 public:
-	UsiOptionable(Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const char* v, Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const bool  v, Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const int   v, const int min, const int max, Fn* = nullptr, Searcher* s = nullptr);
+	UsiOptionable(												Fn* = nullptr, Searcher* s = nullptr);
+	UsiOptionable(const char* v,								Fn* = nullptr, Searcher* s = nullptr);
+	UsiOptionable(const bool  v,								Fn* = nullptr, Searcher* s = nullptr);
+	UsiOptionable(const int   v, const int min, const int max,	Fn* = nullptr, Searcher* s = nullptr);
 
 	UsiOptionable& operator = (const std::string& v);
 
