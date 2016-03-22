@@ -7,6 +7,7 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
 #include "../../header/n320_operate_/n320_250_usi.hpp"
 #include "../../header/n320_operate_/n320_350_thread.hpp"
 
@@ -53,7 +54,7 @@ void Searcher::init() {
 #else
 	thisptr = this;
 #endif
-	options.init(thisptr);
+	options.initOptions(thisptr);
 	threads.init(thisptr);
 	tt.setSize(options["USI_Hash"]);
 }
@@ -1504,7 +1505,7 @@ void initSearchTable() {
 		}
 	}
 
-	// init futility move counts
+	// initOptions futility move counts
 	for (d = 0; d < 32; ++d) {
 		FutilityMoveCounts[d] = static_cast<int>(3.001 + 0.3 * pow(static_cast<double>(d), 1.8));
 	}
@@ -1774,5 +1775,34 @@ void Thread::idleLoop() {
 				return;
 			}
 		}
+	}
+}
+
+
+
+void Searcher::setOption(std::istringstream& ssCmd) {
+	std::string token;
+	std::string name;
+	std::string value;
+
+	ssCmd >> token; // "name" が入力されるはず。
+
+	ssCmd >> name;
+	// " " が含まれた名前も扱う。
+	while (ssCmd >> token && token != "value") {
+		name += " " + token;
+	}
+
+	ssCmd >> value;
+	// " " が含まれた値も扱う。
+	while (ssCmd >> token) {
+		value += " " + token;
+	}
+
+	if (!options.isLegalOption(name)) {
+		std::cout << "No such option: " << name << std::endl;
+	}
+	else {
+		options[name] = value;
 	}
 }

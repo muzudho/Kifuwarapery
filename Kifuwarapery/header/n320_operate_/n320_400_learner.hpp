@@ -168,7 +168,7 @@ struct BookMoveData {
 class Learner {
 public:
 	void learn(Position& pos, std::istringstream& ssCmd) {
-		eval_.init(pos.searcher()->options["Eval_Dir"], false);
+		eval_.initOptions(pos.searcher()->options["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -217,7 +217,7 @@ public:
 		threadNum = std::max<size_t>(0, threadNum - 1);
 		std::vector<Searcher> searchers(threadNum);
 		for (auto& s : searchers) {
-			s.init();
+			s.initOptions();
 			setLearnOptions(s);
 			positions_.push_back(Position(DefaultStartPositionSFEN, s.threads.mainThread(), s.thisptr));
 			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().count()));
@@ -434,7 +434,7 @@ private:
 		// 学習しないパラメータがある時は、一旦 write() で学習しているパラメータだけ書きこんで、再度読み込む事で、
 		// updateFV()で学習しないパラメータに入ったノイズを無くす。
 		eval_.write(dirName);
-		eval_.init(dirName, false);
+		eval_.initOptions(dirName, false);
 		g_evalTable.clear();
 	}
 	double sigmoid(const double x) const {

@@ -5,6 +5,7 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
 #include "../../header/n320_operate_/n320_250_usi.hpp"
 #include "../../header/n320_operate_/n320_260_usiOperation.hpp"
 #include "../../header/n320_operate_/n320_300_benchmark.hpp"
@@ -41,7 +42,7 @@ namespace {
 
 }
 
-void OptionsMap::init(Searcher* s) {
+void OptionsMap::initOptions(Searcher* s) {
 	(*this)["USI_Hash"]                    = USIOption(256, 1, 65536, onHashSize , s);
 	(*this)["Clear_Hash"]                  = USIOption(               onClearHash, s);
 	(*this)["Book_File"]                   = USIOption("book/20150503/book.bin");
@@ -71,29 +72,6 @@ void OptionsMap::init(Searcher* s) {
 #endif
 }
 
-UsiOptionable::UsiOptionable(const char* v, Fn* f, Searcher* s) :
-	type_("string"), min_(0), max_(0), onChange_(f), searcher_(s)
-{
-	defaultValue_ = currentValue_ = v;
-}
-
-UsiOptionable::UsiOptionable(const bool v, Fn* f, Searcher* s) :
-	type_("check"), min_(0), max_(0), onChange_(f), searcher_(s)
-{
-	defaultValue_ = currentValue_ = (v ? "true" : "false");
-}
-
-UsiOptionable::UsiOptionable(Fn* f, Searcher* s) :
-	type_("button"), min_(0), max_(0), onChange_(f), searcher_(s) {}
-
-UsiOptionable::UsiOptionable(const int v, const int min, const int max, Fn* f, Searcher* s)
-	: type_("spin"), min_(min), max_(max), onChange_(f), searcher_(s)
-{
-	std::ostringstream ss;
-	ss << v;
-	defaultValue_ = currentValue_ = ss.str();
-}
-
 USIOption::USIOption(const char* v, Fn* f, Searcher* s) : UsiOptionable(v,f,s)
 {
 }
@@ -111,27 +89,6 @@ USIOption::USIOption(const int v, const int min, const int max, Fn* f, Searcher*
 }
 
 
-UsiOptionable& UsiOptionable::operator = (const std::string& v) {
-	assert(!type_.empty());
-
-	if ((type_ != "button" && v.empty())
-		|| (type_ == "check" && v != "true" && v != "false")
-		|| (type_ == "spin" && (atoi(v.c_str()) < min_ || max_ < atoi(v.c_str()))))
-	{
-		return *this;
-	}
-
-	if (type_ != "button") {
-		currentValue_ = v;
-	}
-
-	if (onChange_ != nullptr) {
-		(*onChange_)(searcher_, *this);
-	}
-
-	return *this;
-}
-
 std::ostream& operator << (std::ostream& os, const OptionsMap& om) {
 	for (auto& elem : om) {
 		const UsiOptionable& o = elem.second;
@@ -148,32 +105,6 @@ std::ostream& operator << (std::ostream& os, const OptionsMap& om) {
 }
 
 
-void Searcher::setOption(std::istringstream& ssCmd) {
-	std::string token;
-	std::string name;
-	std::string value;
-
-	ssCmd >> token; // "name" が入力されるはず。
-
-	ssCmd >> name;
-	// " " が含まれた名前も扱う。
-	while (ssCmd >> token && token != "value") {
-		name += " " + token;
-	}
-
-	ssCmd >> value;
-	// " " が含まれた値も扱う。
-	while (ssCmd >> token) {
-		value += " " + token;
-	}
-
-	if (!options.isLegalOption(name)) {
-		std::cout << "No such option: " << name << std::endl;
-	}
-	else {
-		options[name] = value;
-	}
-}
 
 #if !defined MINIMUL
 // for debug

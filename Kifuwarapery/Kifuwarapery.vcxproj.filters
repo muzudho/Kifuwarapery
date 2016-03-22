@@ -153,13 +153,13 @@
     <ClInclude Include="header\n320_operate_\n320_400_learner.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_230_usiOption.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_220_usiOptionsMap.hpp">
+    <ClInclude Include="header\n320_operate_\n320_230_usiOptionable.hpp">
+      <Filter>Header Files\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_240_usiOptionsMap.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,13 +236,13 @@
     <ClCompile Include="source\n900_main____\n900_100_main.cpp">
       <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_230_usiOption.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_220_usiOptionsMap.cpp">
+    <ClCompile Include="source\n320_operate_\n320_230_usiOptionable.cpp">
+      <Filter>Source Files\n320_operate_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_operate_\n320_240_usiOptionsMap.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
   </ItemGroup>

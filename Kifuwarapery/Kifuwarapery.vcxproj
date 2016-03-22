@@ -170,8 +170,8 @@
     <ClInclude Include="header\n320_operate_\n320_100_book.hpp" />
     <ClInclude Include="header\n320_operate_\n320_150_search.hpp" />
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_220_usiOptionsMap.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_230_usiOption.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_240_usiOptionsMap.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_230_usiOptionable.hpp" />
     <ClInclude Include="header\n320_operate_\n320_250_usi.hpp" />
     <ClInclude Include="header\n320_operate_\n320_260_usiOperation.hpp" />
     <ClInclude Include="header\n320_operate_\n320_300_benchmark.hpp" />
@@ -200,8 +200,8 @@
     <ClCompile Include="source\n320_operate_\n320_100_book.cpp" />
     <ClCompile Include="source\n320_operate_\n320_150_search.cpp" />
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_220_usiOptionsMap.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_230_usiOption.cpp" />
+    <ClCompile Include="source\n320_operate_\n320_240_usiOptionsMap.cpp" />
+    <ClCompile Include="source\n320_operate_\n320_230_usiOptionable.cpp" />
     <ClCompile Include="source\n320_operate_\n320_250_usi.cpp" />
     <ClCompile Include="source\n320_operate_\n320_260_usiOperation.cpp" />
     <ClCompile Include="source\n320_operate_\n320_300_benchmark.cpp" />

@@ -2,6 +2,7 @@
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
 #include "../../header/n320_operate_/n320_250_usi.hpp"
 #include "../../header/n320_operate_/n320_260_usiOperation.hpp"
 #include "../../header/n320_operate_/n320_350_thread.hpp"
