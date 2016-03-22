@@ -5,10 +5,8 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
-#include "../../header/n400_usi_____/n400_300_benchmark.hpp"
-#include "../../header/n400_usi_____/n400_400_learner.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 
 

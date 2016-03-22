@@ -137,7 +137,7 @@ struct Searcher {
 #endif
 	STATIC Position rootPosition;
 	STATIC ThreadPool threads;
-	STATIC OptionsMap options;
+	STATIC EngineOptionsMap options;
 
 	STATIC void init();
 	STATIC void idLoop(Position& pos);

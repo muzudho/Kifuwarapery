@@ -3,11 +3,11 @@
 
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
-#include "../../header/n320_operate_/n320_230_usiOptionable.hpp"
-#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 
 
-struct OptionsMap;
+struct EngineOptionsMap;
 
 
 struct CaseInsensitiveLess {
@@ -15,10 +15,12 @@ struct CaseInsensitiveLess {
 };
 
 
-struct OptionsMap : public std::map<std::string, UsiOptionable, CaseInsensitiveLess> {
+struct EngineOptionsMap : public std::map<std::string, EngineOptionable, CaseInsensitiveLess> {
 public:
-	void initOptions(Searcher* s);
+
 	bool isLegalOption(const std::string name) {
 		return this->find(name) != std::end(*this);
 	}
+
+	void Put(const std::string key, EngineOptionable value);
 };

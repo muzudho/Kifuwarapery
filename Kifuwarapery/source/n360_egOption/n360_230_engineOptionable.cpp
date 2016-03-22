@@ -5,27 +5,27 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_230_usiOptionable.hpp"
+#include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 
 
-UsiOptionable::UsiOptionable(const char* v, Fn* f, Searcher* s) :
+EngineOptionable::EngineOptionable(const char* v, Fn* f, Searcher* s) :
 	type_("string"), min_(0), max_(0), onChange_(f), searcher_(s)
 {
 	defaultValue_ = currentValue_ = v;
 }
 
 
-UsiOptionable::UsiOptionable(const bool v, Fn* f, Searcher* s) :
+EngineOptionable::EngineOptionable(const bool v, Fn* f, Searcher* s) :
 	type_("check"), min_(0), max_(0), onChange_(f), searcher_(s)
 {
 	defaultValue_ = currentValue_ = (v ? "true" : "false");
 }
 
 
-UsiOptionable::UsiOptionable(Fn* f, Searcher* s) :
+EngineOptionable::EngineOptionable(Fn* f, Searcher* s) :
 	type_("button"), min_(0), max_(0), onChange_(f), searcher_(s) {}
 
-UsiOptionable::UsiOptionable(const int v, const int min, const int max, Fn* f, Searcher* s)
+EngineOptionable::EngineOptionable(const int v, const int min, const int max, Fn* f, Searcher* s)
 	: type_("spin"), min_(min), max_(max), onChange_(f), searcher_(s)
 {
 	std::ostringstream ss;
@@ -34,7 +34,7 @@ UsiOptionable::UsiOptionable(const int v, const int min, const int max, Fn* f, S
 }
 
 
-UsiOptionable& UsiOptionable::operator = (const std::string& v) {
+EngineOptionable& EngineOptionable::operator = (const std::string& v) {
 	assert(!type_.empty());
 
 	if ((type_ != "button" && v.empty())

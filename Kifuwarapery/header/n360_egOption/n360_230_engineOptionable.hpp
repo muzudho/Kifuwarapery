@@ -5,16 +5,16 @@
 #include "../../header/n240_position/n240_150_move.hpp"
 
 
-class UsiOptionable {
+class EngineOptionable {
 protected:
-	using Fn = void(Searcher*, const UsiOptionable&);
+	using Fn = void(Searcher*, const EngineOptionable&);
 public:
-	UsiOptionable(												Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const char* v,								Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const bool  v,								Fn* = nullptr, Searcher* s = nullptr);
-	UsiOptionable(const int   v, const int min, const int max,	Fn* = nullptr, Searcher* s = nullptr);
+	EngineOptionable(												Fn* = nullptr, Searcher* s = nullptr);
+	EngineOptionable(const char* v,								Fn* = nullptr, Searcher* s = nullptr);
+	EngineOptionable(const bool  v,								Fn* = nullptr, Searcher* s = nullptr);
+	EngineOptionable(const int   v, const int min, const int max,	Fn* = nullptr, Searcher* s = nullptr);
 
-	UsiOptionable& operator = (const std::string& v);
+	EngineOptionable& operator = (const std::string& v);
 
 	operator int() const {
 		assert(type_ == "check" || type_ == "spin");

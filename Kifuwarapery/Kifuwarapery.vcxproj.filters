@@ -153,15 +153,6 @@
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp">
       <Filter>Header Files\n320_operate_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_230_usiOptionable.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_240_usiOptionsMap.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_245_usiOption.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
       <Filter>Header Files\n400_usi_____</Filter>
     </ClInclude>
@@ -176,6 +167,18 @@
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp">
       <Filter>Header Files\n400_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp">
+      <Filter>Header Files\n360_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp">
+      <Filter>Header Files\n360_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp">
+      <Filter>Header Files\n360_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp">
+      <Filter>Header Files\n360_egOption</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -242,15 +245,6 @@
     <ClCompile Include="source\n900_main____\n900_100_main.cpp">
       <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_230_usiOptionable.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_240_usiOptionsMap.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_245_usiOption.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
       <Filter>Source Files\n400_usi_____</Filter>
     </ClCompile>
@@ -262,6 +256,18 @@
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
       <Filter>Source Files\n400_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp">
+      <Filter>Source Files\n360_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp">
+      <Filter>Source Files\n360_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp">
+      <Filter>Source Files\n360_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n360_egOption\n360_300_engineOptionSetup.cpp">
+      <Filter>Source Files\n360_egOption</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

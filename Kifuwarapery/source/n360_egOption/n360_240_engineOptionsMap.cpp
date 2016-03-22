@@ -5,7 +5,7 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 
 
 
@@ -19,4 +19,10 @@ bool CaseInsensitiveLess::operator () (const std::string& s1, const std::string&
 		}
 	}
 	return s1.size() < s2.size();
+}
+
+
+void EngineOptionsMap::Put(const std::string key, EngineOptionable value)
+{
+	(*this)[key] = value;
 }

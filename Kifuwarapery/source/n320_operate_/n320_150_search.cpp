@@ -7,7 +7,8 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
@@ -45,7 +46,7 @@ BishopInDangerFlag Searcher::bishopInDangerFlag;
 #endif
 Position Searcher::rootPosition(nullptr);
 ThreadPool Searcher::threads;
-OptionsMap Searcher::options;
+EngineOptionsMap Searcher::options;
 Searcher* Searcher::thisptr;
 #endif
 
@@ -54,7 +55,10 @@ void Searcher::init() {
 #else
 	thisptr = this;
 #endif
-	options.initOptions(thisptr);
+
+	EngineOptionSetup engineOptionSetup;
+	engineOptionSetup.Initialize( &options, thisptr);
+
 	threads.init(thisptr);
 	tt.setSize(options["USI_Hash"]);
 }

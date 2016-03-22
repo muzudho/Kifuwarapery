@@ -5,60 +5,12 @@
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_240_usiOptionsMap.hpp"
-#include "../../header/n320_operate_/n320_245_usiOption.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
+#include "../../header/n360_egOption/n360_245_engineOption.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
 #include "../../header/n400_usi_____/n400_400_learner.hpp"
-
-namespace {
-	void onThreads  (Searcher* s, const UsiOptionable&    ) { s->threads.readUSIOptions(s); }
-	void onHashSize (Searcher* s, const UsiOptionable& opt) { s->tt.setSize(opt); }
-	void onClearHash(Searcher* s, const UsiOptionable&    ) { s->tt.clear(); }
-	void onEvalDir  (Searcher*  , const UsiOptionable& opt) {
-		std::unique_ptr<Evaluater>(new Evaluater)->init(opt, true);
-	}
-
-	// 論理的なコア数の取得
-	inline int cpuCoreCount() {
-        // todo: boost::thread::physical_concurrency() を使うこと。
-		// std::thread::hardware_concurrency() は 0 を返す可能性がある。
-		return std::max(static_cast<int>(std::thread::hardware_concurrency()/2), 1);
-	}
-
-}
-
-void OptionsMap::initOptions(Searcher* s) {
-	(*this)["USI_Hash"]                    = USIOption(256, 1, 65536, onHashSize , s);
-	(*this)["Clear_Hash"]                  = USIOption(               onClearHash, s);
-	(*this)["Book_File"]                   = USIOption("book/20150503/book.bin");
-	(*this)["Best_Book_Move"]              = USIOption(false);
-	(*this)["OwnBook"]                     = USIOption(true);
-	(*this)["Min_Book_Ply"]                = USIOption(SHRT_MAX, 0, SHRT_MAX);
-	(*this)["Max_Book_Ply"]                = USIOption(SHRT_MAX, 0, SHRT_MAX);
-	(*this)["Min_Book_Score"]              = USIOption(-180, -ScoreInfinite, ScoreInfinite);
-	(*this)["Eval_Dir"]                    = USIOption("20151105", onEvalDir);
-	(*this)["Write_Synthesized_Eval"]      = USIOption(false);
-	(*this)["USI_Ponder"]                  = USIOption(true);
-	(*this)["Byoyomi_Margin"]              = USIOption(500, 0, INT_MAX);
-	(*this)["MultiPV"]                     = USIOption(1, 1, MaxLegalMoves);
-	(*this)["Skill_Level"]                 = USIOption(20, 0, 20);
-	(*this)["Max_Random_Score_Diff"]       = USIOption(0, 0, ScoreMate0Ply);
-	(*this)["Max_Random_Score_Diff_Ply"]   = USIOption(40, 0, SHRT_MAX);
-	(*this)["Emergency_Move_Horizon"]      = USIOption(40, 0, 50);
-	(*this)["Emergency_Base_Time"]         = USIOption(200, 0, 30000);
-	(*this)["Emergency_Move_Time"]         = USIOption(70, 0, 5000);
-	(*this)["Slow_Mover"]                  = USIOption(100, 10, 1000);
-	(*this)["Minimum_Thinking_Time"]       = USIOption(1500, 0, INT_MAX);
-	(*this)["Max_Threads_per_Split_Point"] = USIOption(5, 4, 8, onThreads, s);
-	(*this)["Threads"]                     = USIOption(cpuCoreCount(), 1, MaxThreads, onThreads, s);
-	(*this)["Use_Sleeping_Threads"]        = USIOption(false);
-#if defined BISHOP_IN_DANGER
-	(*this)["Danger_Demerit_Score"]        = USIOption(700, SHRT_MIN, SHRT_MAX);
-#endif
-}
-
 
 
 #if !defined MINIMUL
