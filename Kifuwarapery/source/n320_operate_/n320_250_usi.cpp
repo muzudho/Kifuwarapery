@@ -11,10 +11,10 @@
 #include "../../header/n320_operate_/n320_400_learner.hpp"
 
 namespace {
-	void onThreads(Searcher* s, const USIOption&)      { s->threads.readUSIOptions(s); }
-	void onHashSize(Searcher* s, const USIOption& opt) { s->tt.setSize(opt); }
-	void onClearHash(Searcher* s, const USIOption&)    { s->tt.clear(); }
-	void onEvalDir(Searcher*, const USIOption& opt)    {
+	void onThreads  (Searcher* s, const UsiOptionable&    ) { s->threads.readUSIOptions(s); }
+	void onHashSize (Searcher* s, const UsiOptionable& opt) { s->tt.setSize(opt); }
+	void onClearHash(Searcher* s, const UsiOptionable&    ) { s->tt.clear(); }
+	void onEvalDir  (Searcher*  , const UsiOptionable& opt) {
 		std::unique_ptr<Evaluater>(new Evaluater)->init(opt, true);
 	}
 }
@@ -42,8 +42,8 @@ namespace {
 }
 
 void OptionsMap::init(Searcher* s) {
-	(*this)["USI_Hash"]                    = USIOption(256, 1, 65536, onHashSize, s);
-	(*this)["Clear_Hash"]                  = USIOption(onClearHash, s);
+	(*this)["USI_Hash"]                    = USIOption(256, 1, 65536, onHashSize , s);
+	(*this)["Clear_Hash"]                  = USIOption(               onClearHash, s);
 	(*this)["Book_File"]                   = USIOption("book/20150503/book.bin");
 	(*this)["Best_Book_Move"]              = USIOption(false);
 	(*this)["OwnBook"]                     = USIOption(true);
@@ -71,22 +71,22 @@ void OptionsMap::init(Searcher* s) {
 #endif
 }
 
-USIOption::USIOption(const char* v, Fn* f, Searcher* s) :
+UsiOptionable::UsiOptionable(const char* v, Fn* f, Searcher* s) :
 	type_("string"), min_(0), max_(0), onChange_(f), searcher_(s)
 {
 	defaultValue_ = currentValue_ = v;
 }
 
-USIOption::USIOption(const bool v, Fn* f, Searcher* s) :
+UsiOptionable::UsiOptionable(const bool v, Fn* f, Searcher* s) :
 	type_("check"), min_(0), max_(0), onChange_(f), searcher_(s)
 {
 	defaultValue_ = currentValue_ = (v ? "true" : "false");
 }
 
-USIOption::USIOption(Fn* f, Searcher* s) :
+UsiOptionable::UsiOptionable(Fn* f, Searcher* s) :
 	type_("button"), min_(0), max_(0), onChange_(f), searcher_(s) {}
 
-USIOption::USIOption(const int v, const int min, const int max, Fn* f, Searcher* s)
+UsiOptionable::UsiOptionable(const int v, const int min, const int max, Fn* f, Searcher* s)
 	: type_("spin"), min_(min), max_(max), onChange_(f), searcher_(s)
 {
 	std::ostringstream ss;
@@ -94,7 +94,24 @@ USIOption::USIOption(const int v, const int min, const int max, Fn* f, Searcher*
 	defaultValue_ = currentValue_ = ss.str();
 }
 
-USIOption& USIOption::operator = (const std::string& v) {
+USIOption::USIOption(const char* v, Fn* f, Searcher* s) : UsiOptionable(v,f,s)
+{
+}
+
+USIOption::USIOption(const bool v, Fn* f, Searcher* s) : UsiOptionable(v,f,s)
+{
+}
+
+USIOption::USIOption(Fn* f, Searcher* s) : UsiOptionable(f,s)
+{
+}
+
+USIOption::USIOption(const int v, const int min, const int max, Fn* f, Searcher* s) : UsiOptionable(v,min,max,f,s)
+{
+}
+
+
+UsiOptionable& UsiOptionable::operator = (const std::string& v) {
 	assert(!type_.empty());
 
 	if ((type_ != "button" && v.empty())
@@ -117,14 +134,14 @@ USIOption& USIOption::operator = (const std::string& v) {
 
 std::ostream& operator << (std::ostream& os, const OptionsMap& om) {
 	for (auto& elem : om) {
-		const USIOption& o = elem.second;
-		os << "\noption name " << elem.first << " type " << o.type_;
-		if (o.type_ != "button") {
-			os << " default " << o.defaultValue_;
+		const UsiOptionable& o = elem.second;
+		os << "\noption name " << elem.first << " type " << o.GetType();
+		if (o.GetType() != "button") {
+			os << " default " << o.GetDefaultValue();
 		}
 
-		if (o.type_ == "spin") {
-			os << " min " << o.min_ << " max " << o.max_;
+		if (o.GetType() == "spin") {
+			os << " min " << o.GetMin() << " max " << o.GetMax();
 		}
 	}
 	return os;
@@ -165,7 +182,10 @@ void measureGenerateMoves(const Position& pos) {
 	pos.print();
 
 	MoveStack legalMoves[MaxLegalMoves];
-	for (int i = 0; i < MaxLegalMoves; ++i) legalMoves[i].move = moveNone();
+	for (int i = 0; i < MaxLegalMoves; ++i)
+	{
+		legalMoves[i].move = moveNone();
+	}
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;
 	Time t = Time::currentTime();
@@ -221,11 +241,15 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 #endif
 
 	for (int i = 1; i < argc; ++i)
+	{
 		cmd += std::string(argv[i]) + " ";
+	}
 
 	do {
 		if (argc == 1)
+		{
 			std::getline(std::cin, cmd);
+		}
 
 		std::istringstream ssCmd(cmd);
 
@@ -241,6 +265,7 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 			else {
 				limits.ponder = false;
 			}
+
 			if (token == "ponderhit" && limits.moveTime != 0) {
 				limits.moveTime += searchTimer.elapsed();
 			}
@@ -253,7 +278,10 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 #if defined BISHOP_IN_DANGER
 			bishopInDangerFlag = NotBishopInDanger;
 #endif
-			for (int i = 0; i < 100; ++i) g_randomTimeSeed(); // 最初は乱数に偏りがあるかも。少し回しておく。
+			for (int i = 0; i < 100; ++i)
+			{
+				g_randomTimeSeed(); // 最初は乱数に偏りがあるかも。少し回しておく。
+			}
 		}
 		else if (token == "usi"      ) { SYNCCOUT << "id name " << MyName
 												  << "\nid author Hiraoka Takuya"
@@ -285,7 +313,10 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 	} while (token != "quit" && argc == 1);
 
 	if (options["Write_Synthesized_Eval"])
+	{
+		// シンセサイズド評価を書き出します。
 		Evaluater::writeSynthesized(options["Eval_Dir"]);
+	}
 
 	threads.waitForThinkFinished();
 }

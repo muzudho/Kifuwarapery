@@ -810,6 +810,8 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 	void clear() { memset(this, 0, sizeof(*this)); } // float 型とかだと規格的に 0 は保証されなかった気がするが実用上問題ないだろう。
 };
 
+
+
 struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
 	// 探索時に参照する評価関数テーブル
 	static std::array<s16, 2> KPP[SquareNum][fe_end][fe_end];
@@ -818,6 +820,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #if defined USE_K_FIX_OFFSET
 	static const s32 K_Fix_Offset[SquareNum];
 #endif
+
 
 	void clear() { memset(this, 0, sizeof(*this)); }
 	static std::string addSlashIfNone(const std::string& str) {
@@ -828,6 +831,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 			ret += "/";
 		return ret;
 	}
+
 	void init(const std::string& dirName, const bool Synthesized) {
 		// 合成された評価関数バイナリがあればそちらを使う。
 		if (Synthesized) {
@@ -837,7 +841,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		clear();
 
 		SYNCCOUT << "(^q^)readSomeSynthesized!" << SYNCENDL;
-		readSomeSynthesized(dirName);
+		Evaluater::readSomeSynthesized(dirName);
 
 		SYNCCOUT << "(^q^)read!" << SYNCENDL;
 		read(dirName);
@@ -851,6 +855,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		FOO(KKP);												\
 		FOO(KK);												\
 	}
+
 	static bool readSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ifstream ifs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
@@ -861,6 +866,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef FOO
 		return true;
 	}
+
 	static void writeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
@@ -869,6 +875,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		ALL_SYNTHESIZED_EVAL;
 #undef FOO
 	}
+
 	static void readSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ifstream ifs((addSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
@@ -878,6 +885,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		ALL_SYNTHESIZED_EVAL;
 #undef FOO
 	}
+
 	static void writeSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
@@ -886,6 +894,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		ALL_SYNTHESIZED_EVAL;
 #undef FOO
 	}
+
 #undef ALL_SYNTHESIZED_EVAL
 
 #if defined EVAL_PHASE1
