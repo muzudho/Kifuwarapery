@@ -8,6 +8,8 @@
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n240_position/n240_100_position.hpp"
 
+
+
 // 評価関数テーブルのオフセット。
 // f_xxx が味方の駒、e_xxx が敵の駒
 // Bonanza の影響で持ち駒 0 の場合のインデックスが存在するが、参照する事は無い。
@@ -50,7 +52,9 @@ enum {
 	fe_end        = e_dragon      + 81
 };
 
+
 const int FVScale = 32;
+
 
 const int KPPIndexArray[] = {
 	f_hand_pawn, e_hand_pawn, f_hand_lance, e_hand_lance, f_hand_knight,
@@ -61,31 +65,45 @@ const int KPPIndexArray[] = {
 	f_dragon, e_dragon, fe_end
 };
 
+
 inline Square kppIndexToSquare(const int i) {
 	const auto it = std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i);
 	return static_cast<Square>(i - *(it - 1));
 }
+
+
 inline int kppIndexBegin(const int i) {
 	return *(std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i) - 1);
 }
+
+
 inline bool kppIndexIsBlack(const int i) {
 	// f_xxx と e_xxx が交互に配列に格納されているので、インデックスが偶数の時は Black
 	return !((std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i) - 1) - std::begin(KPPIndexArray) & 1);
 }
+
+
 inline int kppBlackIndexToWhiteBegin(const int i) {
 	assert(kppIndexIsBlack(i));
 	return *std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i);
 }
+
+
 inline int kppWhiteIndexToBlackBegin(const int i) {
 	return *(std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i) - 2);
 }
+
+
 inline int kppIndexToOpponentBegin(const int i, const bool isBlack) {
 	return *(std::upper_bound(std::begin(KPPIndexArray), std::end(KPPIndexArray), i) - static_cast<int>(!isBlack) * 2);
 }
+
+
 inline int kppIndexToOpponentBegin(const int i) {
 	// todo: 高速化
 	return kppIndexToOpponentBegin(i, kppIndexIsBlack(i));
 }
+
 
 inline int inverseFileIndexIfLefterThanMiddle(const int index) {
 	if (index < fe_hand_end) return index;
@@ -94,18 +112,23 @@ inline int inverseFileIndexIfLefterThanMiddle(const int index) {
 	if (sq <= E1) return index;
 	return static_cast<int>(begin + inverseFile(sq));
 };
+
+
 inline int inverseFileIndexIfOnBoard(const int index) {
 	if (index < fe_hand_end) return index;
 	const int begin = kppIndexBegin(index);
 	const Square sq = static_cast<Square>(index - begin);
 	return static_cast<int>(begin + inverseFile(sq));
 };
+
+
 inline int inverseFileIndexOnBoard(const int index) {
 	assert(f_pawn <= index);
 	const int begin = kppIndexBegin(index);
 	const Square sq = static_cast<Square>(index - begin);
 	return static_cast<int>(begin + inverseFile(sq));
 };
+
 
 struct KPPBoardIndexStartToPiece : public std::unordered_map<int, Piece> {
 	KPPBoardIndexStartToPiece() {
@@ -137,18 +160,22 @@ struct KPPBoardIndexStartToPiece : public std::unordered_map<int, Piece> {
 };
 extern KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;
 
+
 template <typename Tl, typename Tr>
 inline std::array<Tl, 2> operator += (std::array<Tl, 2>& lhs, const std::array<Tr, 2>& rhs) {
 	lhs[0] += rhs[0];
 	lhs[1] += rhs[1];
 	return lhs;
 }
+
+
 template <typename Tl, typename Tr>
 inline std::array<Tl, 2> operator -= (std::array<Tl, 2>& lhs, const std::array<Tr, 2>& rhs) {
 	lhs[0] -= rhs[0];
 	lhs[1] -= rhs[1];
 	return lhs;
 }
+
 
 template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterBase {
 	static const int R_Mid = 8; // 相対位置の中心のindex
@@ -161,65 +188,65 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 	// ただし、kkp に関する項目 (kkp, r_kkp_b, r_kkp_h) のみ、p は味方の駒として扱うので、k0 < k1 となるとは限らない。
 	struct KPPElements {
 		KPPType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
-		KPPType kpp[SquareNoLeftNum][fe_end][fe_end];
+		KPPType kpp		[SquareNoLeftNum][fe_end	][fe_end];
 		// 相対位置は[file][rank]の順
-		KPPType r_kpp_bb[PieceNone][17][17][PieceNone][17][17];
-		KPPType r_kpp_hb[fe_hand_end][PieceNone][17][17];
-		KPPType xpp[FileNoLeftNum][fe_end][fe_end];
-		KPPType ypp[RankNum][fe_end][fe_end];
-		KPPType pp[fe_end][fe_end];
-		KPPType r_pp_bb[PieceNone][PieceNone][17][17];
-		KPPType r_pp_hb[fe_hand_end][PieceNone];
+		KPPType r_kpp_bb[PieceNone		][17		][17	][PieceNone	][17][17];
+		KPPType r_kpp_hb[fe_hand_end	][PieceNone	][17	][17		];
+		KPPType xpp		[FileNoLeftNum	][fe_end	][fe_end];
+		KPPType ypp		[RankNum		][fe_end	][fe_end];
+		KPPType pp		[fe_end			][fe_end	];
+		KPPType r_pp_bb	[PieceNone		][PieceNone	][17	][17		];
+		KPPType r_pp_hb	[fe_hand_end	][PieceNone	];
 
 		// e は Effect の頭文字で利きを表す。(Control = 利き という説もあり。)
 		// todo: 玉の利きは全く無視しているけれど、それで良いのか？
-		KPPType kpe[SquareNoLeftNum][fe_end][ColorNum][SquareNum];
-		KPPType kee[SquareNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_kpe_b[PieceNone][17][17][ColorNum][17][17];
-		KPPType r_kpe_h[fe_hand_end][ColorNum][17][17];
-		KPPType r_kee[ColorNum][17][17][ColorNum][17][17];
-		KPPType xpe[FileNoLeftNum][fe_end][ColorNum][SquareNum];
-		KPPType xee[FileNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType ype[RankNum][fe_end][ColorNum][SquareNum];
-		KPPType yee[RankNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType pe[fe_end][ColorNum][SquareNum];
-		KPPType ee[ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_pe_b[PieceNone][ColorNum][17][17];
-		KPPType r_pe_h[fe_hand_end][ColorNum];
-		KPPType r_ee[ColorNum][ColorNum][17][17];
+		KPPType kpe		[SquareNoLeftNum][fe_end	][ColorNum	][SquareNum	];
+		KPPType kee		[SquareNoLeftNum][ColorNum	][SquareNum	][ColorNum	][SquareNum	];
+		KPPType r_kpe_b	[PieceNone		][17		][17		][ColorNum	][17		][17];
+		KPPType r_kpe_h	[fe_hand_end	][ColorNum	][17		][17		];
+		KPPType r_kee	[ColorNum		][17		][17		][ColorNum	][17		][17];
+		KPPType xpe		[FileNoLeftNum	][fe_end	][ColorNum	][SquareNum	];
+		KPPType xee		[FileNoLeftNum	][ColorNum	][SquareNum	][ColorNum	][SquareNum	];
+		KPPType ype		[RankNum		][fe_end	][ColorNum	][SquareNum	];
+		KPPType yee		[RankNum		][ColorNum	][SquareNum	][ColorNum	][SquareNum	];
+		KPPType pe		[fe_end			][ColorNum	][SquareNum	];
+		KPPType ee		[ColorNum		][SquareNum	][ColorNum	][SquareNum	];
+		KPPType r_pe_b	[PieceNone		][ColorNum	][17		][17		];
+		KPPType r_pe_h	[fe_hand_end	][ColorNum	];
+		KPPType r_ee	[ColorNum		][ColorNum	][17		][17		];
 	};
 	KPPElements kpps;
 
 	struct KKPElements {
 		KKPType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
-		KKPType kkp[SquareNoLeftNum][SquareNum][fe_end];
-		KKPType kp[SquareNoLeftNum][fe_end];
-		KKPType r_kkp_b[17][17][PieceNone][17][17];
-		KKPType r_kkp_h[17][17][fe_hand_end];
-		KKPType r_kp_b[PieceNone][17][17];
-		KKPType r_kp_h[fe_hand_end];
+		KKPType kkp		[SquareNoLeftNum][SquareNum	][fe_end		];
+		KKPType kp		[SquareNoLeftNum][fe_end	];
+		KKPType r_kkp_b	[17				][17		][PieceNone		][17][17];
+		KKPType r_kkp_h	[17				][17		][fe_hand_end	];
+		KKPType r_kp_b	[PieceNone		][17		][17			];
+		KKPType r_kp_h	[fe_hand_end	];
 
-		KKPType kke[SquareNoLeftNum][SquareNum][ColorNum][SquareNum];
-		KKPType ke[SquareNoLeftNum][ColorNum][SquareNum];
-		KKPType r_kke[17][17][ColorNum][17][17];
-		KKPType r_ke[ColorNum][17][17];
+		KKPType kke		[SquareNoLeftNum][SquareNum	][ColorNum	][SquareNum	];
+		KKPType ke		[SquareNoLeftNum][ColorNum	][SquareNum	];
+		KKPType r_kke	[17				][17		][ColorNum	][17		][17];
+		KKPType r_ke	[ColorNum		][17		][17		];
 	};
 	KKPElements kkps;
 
 	struct KKElements {
 		KKType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
-		KKType kk[SquareNoLeftNum][SquareNum];
-		KKType k[SquareNoLeftNum];
-		KKType r_kk[17][17];
+		KKType kk		[SquareNoLeftNum][SquareNum	];
+		KKType k		[SquareNoLeftNum];
+		KKType r_kk		[17				][17		];
 	};
 	KKElements kks;
 
 	// これらは↑のメンバ変数に一次元配列としてアクセスする為のもの。
 	// 配列の要素数は上のstructのサイズから分かるはずだが無名structなのでsizeof()使いにくいから使わない。
 	// 先頭さえ分かれば良いので要素数1で良い。
-	KPPType* oneArrayKPP(const u64 i) { return reinterpret_cast<KPPType*>(&kpps) + i; }
-	KKPType* oneArrayKKP(const u64 i) { return reinterpret_cast<KKPType*>(&kkps) + i; }
-	KKType* oneArrayKK(const u64 i) { return reinterpret_cast<KKType*>(&kks) + i; }
+	KPPType*	oneArrayKPP	(const u64 i) { return reinterpret_cast<KPPType*>(&kpps) + i; }
+	KKPType*	oneArrayKKP	(const u64 i) { return reinterpret_cast<KKPType*>(&kkps) + i; }
+	KKType*		oneArrayKK	(const u64 i) { return reinterpret_cast<KKType*>(&kks) + i; }
 
 	// todo: これらややこしいし汚いので使わないようにする。
 	//       型によっては kkps_begin_index などの値が異なる。
@@ -603,6 +630,8 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 		ret[retIdx++] = std::make_pair(std::numeric_limits<ptrdiff_t>::max(), MaxWeight());
 		assert(retIdx <= KPPIndicesMax);
 	}
+
+
 	void kkpIndices(std::pair<ptrdiff_t, int> ret[KKPIndicesMax], Square ksq0, Square ksq1, int i) {
 		int retIdx = 0;
 		if (ksq0 == ksq1) {
@@ -759,6 +788,8 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 		ret[retIdx++] = std::make_pair(std::numeric_limits<ptrdiff_t>::max(), MaxWeight());
 		assert(retIdx <= KKPIndicesMax);
 	}
+
+
 	void kkIndices(std::pair<ptrdiff_t, int> ret[KKIndicesMax], Square ksq0, Square ksq1) {
 		int retIdx = 0;
 #if defined EVAL_PHASE1
@@ -807,7 +838,11 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 		ret[retIdx++] = std::make_pair(std::numeric_limits<ptrdiff_t>::max(), MaxWeight());
 		assert(retIdx <= KKIndicesMax);
 	}
+
+
 	void clear() { memset(this, 0, sizeof(*this)); } // float 型とかだと規格的に 0 は保証されなかった気がするが実用上問題ないだろう。
+
+
 };
 
 
@@ -823,6 +858,8 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 
 
 	void clear() { memset(this, 0, sizeof(*this)); }
+
+
 	static std::string addSlashIfNone(const std::string& str) {
 		std::string ret = str;
 		if (ret == "")
@@ -832,6 +869,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		return ret;
 	}
 
+
 	void init(const std::string& dirName, const bool Synthesized) {
 		// 合成された評価関数バイナリがあればそちらを使う。
 		if (Synthesized) {
@@ -840,21 +878,23 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		}
 		clear();
 
-		SYNCCOUT << "(^q^)readSomeSynthesized!" << SYNCENDL;
+		SYNCCOUT << "(^q^)B: readSomeSynthesized!" << SYNCENDL;
 		Evaluater::readSomeSynthesized(dirName);
 
-		SYNCCOUT << "(^q^)read!" << SYNCENDL;
+		SYNCCOUT << "(^q^)C: (long time)read! dir=" << dirName << SYNCENDL;
 		read(dirName);
 
-		SYNCCOUT << "(^q^)setEvaluate!" << SYNCENDL;
+		SYNCCOUT << "(^q^)D: (long time)setEvaluate!" << SYNCENDL;
 		setEvaluate();
 	}
+
 
 #define ALL_SYNTHESIZED_EVAL {									\
 		FOO(KPP);												\
 		FOO(KKP);												\
 		FOO(KK);												\
 	}
+
 
 	static bool readSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
@@ -867,6 +907,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		return true;
 	}
 
+
 	static void writeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
@@ -875,6 +916,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		ALL_SYNTHESIZED_EVAL;
 #undef FOO
 	}
+
 
 	static void readSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
@@ -886,6 +928,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef FOO
 	}
 
+
 	static void writeSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
@@ -895,9 +938,12 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef FOO
 	}
 
+
 #undef ALL_SYNTHESIZED_EVAL
 
+
 #if defined EVAL_PHASE1
+	// フェーズ１の定義ここから
 #define BASE_PHASE1 {								\
 		FOO(kpps.kee);								\
 		FOO(kpps.r_kpe_b);							\
@@ -915,9 +961,11 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		FOO(kkps.r_ke);								\
 		FOO(kks.k);									\
 	}
+	// フェーズ１の定義ここまで
 #else
 #define BASE_PHASE1
 #endif
+
 
 #if defined EVAL_PHASE2
 #define BASE_PHASE2 {								\
@@ -930,6 +978,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #else
 #define BASE_PHASE2
 #endif
+
 
 #if defined EVAL_PHASE3
 #define BASE_PHASE3 {								\
@@ -949,6 +998,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #define BASE_PHASE3
 #endif
 
+
 #if defined EVAL_PHASE4
 #define BASE_PHASE4 {								\
 		FOO(kpps.kpp);								\
@@ -960,26 +1010,40 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #define BASE_PHASE4
 #endif
 
+
+// フェーズ１～４に展開されます。
 #define READ_BASE_EVAL {						\
 		BASE_PHASE1;							\
 		BASE_PHASE2;							\
 		BASE_PHASE3;							\
 		BASE_PHASE4;							\
 	}
+
 #define WRITE_BASE_EVAL {						\
 		BASE_PHASE1;							\
 		BASE_PHASE2;							\
 		BASE_PHASE3;							\
 		BASE_PHASE4;							\
 	}
+
+
 	void read(const std::string& dirName) {
+
+		// 関数定義ここから
 #define FOO(x) {														\
 			std::ifstream ifs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ifs.read(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
+		// 関数定義ここまで
+
+		// フェーズ１～４に展開されます。
 		READ_BASE_EVAL;
+
+		// 関数定義を廃棄
 #undef FOO
 	}
+
+
 	void write(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
@@ -988,8 +1052,12 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		WRITE_BASE_EVAL;
 #undef FOO
 	}
+
+
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
+
+
 	void setEvaluate() {
 #if !defined LEARN
 		SYNCCOUT << "info string START setting eval table" << SYNCENDL;
@@ -1013,6 +1081,8 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #pragma omp parallel
 #endif
 
+		SYNCCOUT << "(^q^)Learn Skip!" << SYNCENDL;
+		/*
 		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
 		// KPP
 		{
@@ -1090,6 +1160,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 			}
 		}
 #undef FOO
+		*/
 
 #if !defined LEARN
 		SYNCCOUT << "info string END setting eval table" << SYNCENDL;

@@ -316,21 +316,50 @@ void Initializer::initSquareDistance() {
 }
 
 void Initializer::initTable() {
-	initAttacks(false);
-	initAttacks(true);
-	initKingAttacks();
-	initGoldAttacks();
-	initSilverAttacks();
-	initPawnAttacks();
-	initKnightAttacks();
-	initLanceAttacks();
-	initSquareRelation();
-	initAttackToEdge();
-	initBetweenBB();
-	initCheckTable();
-	initSquareDistance();
 
+	SYNCCOUT << "(^q^)I1: SKIP! (long time)initAttacks!" << SYNCENDL;
+	this->initAttacks(false);
+
+	SYNCCOUT << "(^q^)I2: initAttacks!" << SYNCENDL;
+	this->initAttacks(true);
+
+	SYNCCOUT << "(^q^)I3: initKingAttacks!" << SYNCENDL;
+	this->initKingAttacks();
+
+	SYNCCOUT << "(^q^)I4: initGoldAttacks!" << SYNCENDL;
+	this->initGoldAttacks();
+
+	SYNCCOUT << "(^q^)I5: initSilverAttacks!" << SYNCENDL;
+	this->initSilverAttacks();
+
+	SYNCCOUT << "(^q^)I6: initPawnAttacks!" << SYNCENDL;
+	this->initPawnAttacks();
+
+	SYNCCOUT << "(^q^)I7: initKnightAttacks!" << SYNCENDL;
+	this->initKnightAttacks();
+
+	SYNCCOUT << "(^q^)I8: initLanceAttacks!" << SYNCENDL;
+	this->initLanceAttacks();
+
+	SYNCCOUT << "(^q^)I9: initSquareRelation!" << SYNCENDL;
+	this->initSquareRelation();
+
+	SYNCCOUT << "(^q^)I10: initAttackToEdge!" << SYNCENDL;
+	this->initAttackToEdge();
+
+	SYNCCOUT << "(^q^)I11: initBetweenBB!" << SYNCENDL;
+	this->initBetweenBB();
+
+	SYNCCOUT << "(^q^)I12: initCheckTable!" << SYNCENDL;
+	this->initCheckTable();
+
+	SYNCCOUT << "(^q^)I13: initSquareDistance!" << SYNCENDL;
+	this->initSquareDistance();
+
+	SYNCCOUT << "(^q^)I14: Book::init!" << SYNCENDL;
 	Book::init();
+
+	SYNCCOUT << "(^q^)I15: initSearchTable!" << SYNCENDL;
 	initSearchTable();
 }
 

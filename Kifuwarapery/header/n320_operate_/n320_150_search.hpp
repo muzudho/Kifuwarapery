@@ -105,58 +105,59 @@ using Gains   = Stats<true>;
 
 class TranspositionTable;
 
+// 検索のための構造体？
 struct Searcher {
 	// static メンバ関数からだとthis呼べないので代わりに thisptr を使う。
 	// static じゃないときは this を入れることにする。
-	STATIC Searcher* thisptr;
-	STATIC volatile SignalsType signals;
-	STATIC LimitsType limits;
-	STATIC std::vector<Move> searchMoves;
-	STATIC Time searchTimer;
-	STATIC StateStackPtr setUpStates;
-	STATIC std::vector<RootMove> rootMoves;
+	STATIC Searcher*				thisptr;
+	STATIC volatile SignalsType		signals;
+	STATIC LimitsType				limits;
+	STATIC std::vector<Move>		searchMoves;
+	STATIC Time						searchTimer;
+	STATIC StateStackPtr			setUpStates;
+	STATIC std::vector<RootMove>	rootMoves;
 
 #if defined LEARN
-	STATIC Score alpha;
-	STATIC Score beta;
+	STATIC Score					alpha;
+	STATIC Score					beta;
 #endif
 
-	STATIC size_t pvSize;
-	STATIC size_t pvIdx;
-	STATIC TimeManager timeManager;
-	STATIC Ply bestMoveChanges;
-	STATIC History history;
-	STATIC Gains gains;
-	STATIC TranspositionTable tt;
+	STATIC size_t					pvSize;
+	STATIC size_t					pvIdx;
+	STATIC TimeManager				timeManager;
+	STATIC Ply						bestMoveChanges;
+	STATIC History					history;
+	STATIC Gains					gains;
+	STATIC TranspositionTable		tt;
 
 #if defined INANIWA_SHIFT
-	STATIC InaniwaFlag inaniwaFlag;
+	STATIC InaniwaFlag				inaniwaFlag;
 #endif
 #if defined BISHOP_IN_DANGER
-	STATIC BishopInDangerFlag bishopInDangerFlag;
+	STATIC BishopInDangerFlag		bishopInDangerFlag;
 #endif
-	STATIC Position rootPosition;
-	STATIC ThreadPool threads;
-	STATIC EngineOptionsMap options;
+	STATIC Position					rootPosition;
+	STATIC ThreadPool				threads;
+	STATIC EngineOptionsMap			options;
 
-	STATIC void init();
-	STATIC void idLoop(Position& pos);
-	STATIC std::string pvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
+	STATIC void						init();
+	STATIC void						idLoop(Position& pos);
+	STATIC std::string				pvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
 	template <NodeType NT, bool INCHECK>
-	STATIC Score qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
+	STATIC Score					qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
 #if defined INANIWA_SHIFT
-	STATIC void detectInaniwa(const Position& pos);
+	STATIC void						detectInaniwa(const Position& pos);
 #endif
 #if defined BISHOP_IN_DANGER
-	STATIC void detectBishopInDanger(const Position& pos);
+	STATIC void						detectBishopInDanger(const Position& pos);
 #endif
 	template <NodeType NT>
-	STATIC Score search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
-	STATIC void think();
-	STATIC void checkTime();
+	STATIC Score					search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
+	STATIC void						think();
+	STATIC void						checkTime();
 
-	STATIC void doUSICommandLoop(int argc, char* argv[]);
-	STATIC void setOption(std::istringstream& ssCmd);
+	STATIC void						doUSICommandLoop(int argc, char* argv[]);
+	STATIC void						setOption(std::istringstream& ssCmd);
 };
 
 void initSearchTable();

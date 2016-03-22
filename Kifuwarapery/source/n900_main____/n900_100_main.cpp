@@ -34,22 +34,26 @@ int main() {
 // 将棋を指すソフト
 int main(int argc, char* argv[]) {
 
+	SYNCCOUT << "(^q^)A1: (long time)initTable!" << SYNCENDL;
 	Initializer initializer;
 	initializer.initTable();
 
+	SYNCCOUT << "(^q^)A2: initZobrist!" << SYNCENDL;
 	Position::initZobrist();
 
 	auto searcher = std::unique_ptr<Searcher>(new Searcher);
 
+	SYNCCOUT << "(^q^)A3: searcher->init!" << SYNCENDL;
 	searcher->init();
 	// 一時オブジェクトの生成と破棄
 
-	SYNCCOUT << "(^q^)start init!" << SYNCENDL;
+	SYNCCOUT << "(^q^)A4: start Evaluater init!" << SYNCENDL;
 	std::unique_ptr<Evaluater>(new Evaluater)->init(searcher->options["Eval_Dir"], true);
-	SYNCCOUT << "(^q^)end init!" << SYNCENDL;
+	SYNCCOUT << "(^q^)Y: end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 	searcher->doUSICommandLoop(argc, argv);
 
+	SYNCCOUT << "(^q^)Z: threads.exit! ----> doUSICommandLoop" << SYNCENDL;
 	searcher->threads.exit();
 }
 

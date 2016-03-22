@@ -46,17 +46,18 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 	std::string token;
 
 	while (ssCmd >> token) {
-		if (token == "ponder") { limits.ponder = true; }
-		else if (token == "btime") { ssCmd >> limits.time[Black]; }
-		else if (token == "wtime") { ssCmd >> limits.time[White]; }
-		else if (token == "infinite") { limits.infinite = true; }
-		else if (token == "byoyomi" || token == "movetime") {
+		if      (token == "ponder"     ) { limits.ponder = true; }
+		else if (token == "btime"      ) { ssCmd >> limits.time[Black]; }
+		else if (token == "wtime"      ) { ssCmd >> limits.time[White]; }
+		else if (token == "infinite"   ) { limits.infinite = true; }
+		else if (token == "byoyomi" ||
+				 token == "movetime"   ) {
 			// btime wtime ‚ÌŒã‚É byoyomi ‚ª—ˆ‚é‘O’ñ‚É‚È‚Á‚Ä‚¢‚é‚Ì‚Å—Ç‚­‚È‚¢B
 			ssCmd >> limits.moveTime;
 			if (limits.moveTime != 0) { limits.moveTime -= pos.searcher()->options["Byoyomi_Margin"]; }
 		}
-		else if (token == "depth") { ssCmd >> limits.depth; }
-		else if (token == "nodes") { ssCmd >> limits.nodes; }
+		else if (token == "depth"      ) { ssCmd >> limits.depth; }
+		else if (token == "nodes"      ) { ssCmd >> limits.nodes; }
 		else if (token == "searchmoves") {
 			UsiOperation usiOperation;
 			while (ssCmd >> token)
