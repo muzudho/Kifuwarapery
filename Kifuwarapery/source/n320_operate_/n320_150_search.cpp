@@ -156,7 +156,7 @@ namespace {
 
 		const PieceType m1pt = first.pieceTypeFromOrDropped();
 		const Color us = pos.turn();
-		const Bitboard occ = (second.isDrop() ? pos.occupiedBB() : pos.occupiedBB() ^ setMaskBB(m2from));
+		const Bitboard occ = (second.isDrop() ? pos.occupiedBB() : pos.occupiedBB() ^ Bitboard::setMaskBB(m2from));
 		const Bitboard m1att = pos.attacksFrom(m1pt, us, m1to, occ);
 		if (m1att.isSet(m2to)) {
 			return true;
@@ -206,7 +206,7 @@ namespace {
 			const Color us = pos.turn();
 			const Square m1to = first.to();
 			const Square m2from = second.from();
-			Bitboard occ = pos.occupiedBB() ^ setMaskBB(m2from) ^ setMaskBB(m1to);
+			Bitboard occ = pos.occupiedBB() ^ Bitboard::setMaskBB(m2from) ^ Bitboard::setMaskBB(m1to);
 			PieceType m1ptTo;
 
 			if (first.isDrop()) {
@@ -214,7 +214,7 @@ namespace {
 			}
 			else {
 				m1ptTo = first.pieceTypeTo();
-				occ ^= setMaskBB(m1from);
+				occ ^= Bitboard::setMaskBB(m1from);
 			}
 
 			if (pos.attacksFrom(m1ptTo, us, m1to, occ).isSet(m2to)) {

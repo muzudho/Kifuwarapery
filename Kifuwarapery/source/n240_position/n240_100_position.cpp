@@ -35,7 +35,7 @@ CheckInfo::CheckInfo(const Position& pos) {
 	checkBB[Bishop   ] = pos.attacksFrom<Bishop>(ksq);
 	checkBB[Rook     ] = pos.attacksFrom<Rook  >(ksq);
 	checkBB[Gold     ] = pos.attacksFrom<Gold  >(them, ksq);
-	checkBB[King     ] = allZeroBB();
+	checkBB[King     ] = Bitboard::allZeroBB();
 	// todo: ここで AVX2 使えそう。
 	//       checkBB のreadアクセスは switch (pt) で場合分けして、余計なコピー減らした方が良いかも。
 	checkBB[ProPawn  ] = checkBB[Gold];
@@ -48,7 +48,7 @@ CheckInfo::CheckInfo(const Position& pos) {
 
 Bitboard Position::attacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) {
 	switch (pt) {
-	case Occupied:  return allZeroBB();
+	case Occupied:  return Bitboard::allZeroBB();
 	case Pawn:      return pawnAttack(c, sq);
 	case Lance:     return lanceAttack(c, sq, occupied);
 	case Knight:    return knightAttack(c, sq);
@@ -66,7 +66,7 @@ Bitboard Position::attacksFrom(const PieceType pt, const Color c, const Square s
 	default:        UNREACHABLE;
 	}
 	UNREACHABLE;
-	return allOneBB();
+	return Bitboard::allOneBB();
 }
 
 // 実際に指し手が合法手かどうか判定
@@ -276,11 +276,11 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		if (moveIsCheck) {
 			// Direct checks
-			st_->checkersBB = setMaskBB(to);
+			st_->checkersBB = Bitboard::setMaskBB(to);
 			st_->continuousCheck[us] += 2;
 		}
 		else {
-			st_->checkersBB = allZeroBB();
+			st_->checkersBB = Bitboard::allZeroBB();
 			st_->continuousCheck[us] = 0;
 		}
 	}
@@ -360,7 +360,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		if (moveIsCheck) {
 			// Direct checks
-			st_->checkersBB = ci.checkBB[ptTo] & setMaskBB(to);
+			st_->checkersBB = ci.checkBB[ptTo] & Bitboard::setMaskBB(to);
 
 			// Discovery checks
 			const Square ksq = kingSquare(oppositeColor(us));
@@ -383,7 +383,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			st_->continuousCheck[us] += 2;
 		}
 		else {
-			st_->checkersBB = allZeroBB();
+			st_->checkersBB = Bitboard::allZeroBB();
 			st_->continuousCheck[us] = 0;
 		}
 	}
@@ -719,7 +719,7 @@ bool Position::isPawnDropCheckMate(const Color us, const Square sq) const {
 	// 利きを求める際に、occupied の歩を打った位置の bit を立てた Bitboard を使用する。
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
-	const Bitboard tempOccupied = occupiedBB() | setMaskBB(sq);
+	const Bitboard tempOccupied = occupiedBB() | Bitboard::setMaskBB(sq);
 	Bitboard kingMoveBB = bbOf(them).notThisAnd(kingAttack(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
@@ -869,7 +869,7 @@ silver_drop_end:
 			const Square to = toBB.firstOneFromI9();
 			// 桂馬は紐が付いている必要はない。
 			// よって、このcanKingEscape() 内での to の位置に逃げられないようにする処理は無駄。
-			if (!canKingEscape(*this, US, to, allZeroBB())
+			if (!canKingEscape(*this, US, to, Bitboard::allZeroBB())
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
 				return makeDropMove(Knight, to);
@@ -904,7 +904,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、王手した駒が pin されていない
-						if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ setMaskBB(ksq)))
+						if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::setMaskBB(ksq)))
 							&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -940,7 +940,7 @@ silver_drop_end:
 					do {
 						const Square to = toBB.firstOneFromI9();
 						if (unDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ setMaskBB(ksq)))
+							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::setMaskBB(ksq)))
 								&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -970,7 +970,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.firstOneFromI9();
 						if (unDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ setMaskBB(ksq)))
+							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::setMaskBB(ksq)))
 								&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -1333,7 +1333,7 @@ silver_drop_end:
 						const Square to = toBB.firstOneFromI9();
 						// 桂馬は紐が付いてなくて良いので、紐が付いているかは調べない。
 						// 不成
-						if (!canKingEscape(*this, US, to, allZeroBB())
+						if (!canKingEscape(*this, US, to, Bitboard::allZeroBB())
 							&& (isDiscoveredCheck<true>(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !isPinnedIllegal<true>(from, to, kingSquare(US), pinned))
@@ -1463,7 +1463,7 @@ silver_drop_end:
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					if (unDropCheckIsSupported(US, to)) {
 						// 不成
-						if (!canKingEscape(*this, US, to, allZeroBB())
+						if (!canKingEscape(*this, US, to, Bitboard::allZeroBB())
 							&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !isPinnedIllegal(from, to, kingSquare(US), pinned))

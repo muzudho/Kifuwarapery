@@ -5,7 +5,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n120_brdEntry/n120_200_piece.hpp"
 #include "../../header/n120_brdEntry/n120_250_hand.hpp"
-#include "../../header/n160_board___/n160_100_bitboard.hpp"
+#include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n240_position/n240_200_evalList.hpp"
 
@@ -101,7 +101,7 @@ public:
 	// の bit が 1 になっても構わないとき、こちらを使う。
 	// todo: SSEにビット反転が無いので実はそんなに速くないはず。不要。
 	Bitboard nOccupiedBB() const          { return ~occupiedBB(); }
-	Bitboard emptyBB() const              { return occupiedBB() ^ allOneBB(); }
+	Bitboard emptyBB() const              { return occupiedBB() ^ Bitboard::allOneBB(); }
 	// 金、成り金 の Bitboard
 	Bitboard goldsBB() const              { return goldsBB_; }
 	Bitboard goldsBB(const Color c) const { return goldsBB() & bbOf(c); }
@@ -303,7 +303,7 @@ private:
 	// BetweenIsUs == true  : 間の駒が自駒。
 	// BetweenIsUs == false : 間の駒が敵駒。
 	template <bool FindPinned, bool BetweenIsUs> Bitboard hiddenCheckers() const {
-		Bitboard result = allZeroBB();
+		Bitboard result = Bitboard::allZeroBB();
 		const Color us = turn();
 		const Color them = oppositeColor(us);
 		// pin する遠隔駒

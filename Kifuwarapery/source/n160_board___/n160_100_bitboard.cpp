@@ -1,6 +1,6 @@
 // (^q^)外部に公開されているメソッドあり。
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n160_board___/n160_100_bitboard.hpp"
+#include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 
 const Bitboard SetMaskBB[SquareNum] = {
 	Bitboard(UINT64_C(1) <<  0,                 0),  // 0 , I9

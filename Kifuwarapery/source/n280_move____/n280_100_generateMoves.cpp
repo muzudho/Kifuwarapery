@@ -334,13 +334,13 @@ namespace {
 				(MT == NonCapture        ) ? pos.emptyBB()                                                           :
 				(MT == CapturePlusPro    ) ? pos.bbOf(oppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
 				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB)                                 :
-				allOneBB(); // error
+				Bitboard::allOneBB(); // error
 			const Bitboard targetOther =
 				(MT == Capture           ) ? pos.bbOf(oppositeColor(US)) :
 				(MT == NonCapture        ) ? pos.emptyBB()               :
 				(MT == CapturePlusPro    ) ? pos.bbOf(oppositeColor(US)) :
 				(MT == NonCaptureMinusPro) ? pos.emptyBB()               :
-				allOneBB(); // error
+				Bitboard::allOneBB(); // error
 			const Square ksq = pos.kingSquare(oppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<MT, Pawn           , US, ALL>()(moveStackList, pos, targetPawn, ksq);
@@ -436,7 +436,7 @@ namespace {
 			const Color Them = oppositeColor(US);
 			const Bitboard checkers = pos.checkersBB();
 			Bitboard bb = checkers;
-			Bitboard bannedKingToBB = allZeroBB();
+			Bitboard bannedKingToBB = Bitboard::allZeroBB();
 			int checkersNum = 0;
 			Square checkSq;
 
