@@ -207,9 +207,6 @@
     <ClInclude Include="header\n260_evaluate\h260_100_evaluateEnum.hpp">
       <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_300_bitboardAttack.hpp">
-      <Filter>Header Files\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_200_bitboardMask.hpp">
       <Filter>Header Files\n160_board___</Filter>
     </ClInclude>

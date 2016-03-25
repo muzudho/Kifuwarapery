@@ -44,7 +44,10 @@ Bitboard Initializer::lanceBlockMask(const Square square) {
 // Rook or Bishop の利きの範囲を調べて bitboard で返す。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, const bool isBishop) {
-	const SquareDelta deltaArray[2][4] = { { DeltaN, DeltaS, DeltaE, DeltaW },{ DeltaNE, DeltaSE, DeltaSW, DeltaNW } };
+	const SquareDelta deltaArray[2][4] = {
+		{ DeltaN, DeltaS, DeltaE, DeltaW },// 飛車
+		{ DeltaNE, DeltaSE, DeltaSW, DeltaNW }// 角
+	};
 	Bitboard result = Bitboard::allZeroBB();
 	for (SquareDelta delta : deltaArray[isBishop]) {
 		for (Square sq = square + delta;
@@ -53,7 +56,9 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 		{
 			result.setBit(sq);
 			if (occupied.isSet(sq))
+			{
 				break;
+			}
 		}
 	}
 
@@ -84,6 +89,7 @@ Bitboard Initializer::indexToOccupied(const int index, const int bits, const Bit
 	return result;
 }
 
+// 角か、飛車かで分かれている？
 void Initializer::initAttacks(const bool isBishop)
 {
 	auto* attacks = (isBishop ? BishopAttack : RookAttack);

@@ -431,9 +431,9 @@ private:
 		for (size_t i = 0; i < eval_.kks_end_index(); ++i)
 			updateFV<UsePenalty>(*eval_.oneArrayKK(i), *parse2EvalBase_.oneArrayKK(i));
 
-		// 学習しないパラメータがある時は、一旦 write() で学習しているパラメータだけ書きこんで、再度読み込む事で、
+		// 学習しないパラメータがある時は、一旦 writeEval() で学習しているパラメータだけ書きこんで、再度読み込む事で、
 		// updateFV()で学習しないパラメータに入ったノイズを無くす。
-		eval_.write(dirName);
+		eval_.writeEval(dirName);
 		eval_.initOptions(dirName, false);
 		g_evalTable.clear();
 	}

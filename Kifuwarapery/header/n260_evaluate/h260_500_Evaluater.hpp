@@ -37,11 +37,12 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		SYNCCOUT << "(^q^)B: readSomeSynthesized!" << SYNCENDL;
 		Evaluater::readSomeSynthesized(dirName);
 
+		Evaluater evaluater;
 		SYNCCOUT << "(^q^)C: (long time)read! dir=" << dirName << SYNCENDL;
-		read(dirName);
+		evaluater.readEval(dirName);
 
 		SYNCCOUT << "(^q^)D: (long time)setEvaluate!" << SYNCENDL;
-		setEvaluate();
+		evaluater.setEval();
 	}
 
 
@@ -63,7 +64,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		return true;
 	}
 
-
+	// シンセサイズド.binの書き出し
 	static void writeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
@@ -183,7 +184,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 	}
 
 
-	void read(const std::string& dirName) {
+	void readEval(const std::string& dirName) {
 
 		// 関数定義ここから
 #define FOO(x) {														\
@@ -200,7 +201,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 	}
 
 
-	void write(const std::string& dirName) {
+	void writeEval(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
@@ -214,7 +215,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef WRITE_BASE_EVAL
 
 
-	void setEvaluate() {
+	void setEval() {
 #if !defined LEARN
 		SYNCCOUT << "info string START setting eval table" << SYNCENDL;
 #endif
@@ -238,85 +239,96 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #endif
 
 		SYNCCOUT << "(^q^)Learn Skip!" << SYNCENDL;
-		/*
+
+#ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
+
 		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
 		// KPP
 		{
-		#ifdef _OPENMP
-		#pragma omp for
-		#endif
-		// OpenMP対応したら何故か ksq を Square 型にすると ++ksq が定義されていなくてコンパイルエラーになる。
-		for (int ksq = I9; ksq < SquareNum; ++ksq) {
-		SYNCCOUT << "(^q^)KPP: ksq=" << ksq << "/" << SquareNum << SYNCENDL;
+			#ifdef _OPENMP
+			#pragma omp for
+			#endif
+			// OpenMP対応したら何故か ksq を Square 型にすると ++ksq が定義されていなくてコンパイルエラーになる。
+			for (int ksq = I9; ksq < SquareNum; ++ksq) {
+				SYNCCOUT << "(^q^)KPP: ksq=" << ksq << "/" << SquareNum << SYNCENDL;
 
-		// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
-		std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
-		for (int i = 0; i < fe_end; ++i) {
-		//SYNCCOUT << "(^q^)KPP: i=" << i << "/" << fe_end << SYNCENDL;
+				// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
+				std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
+				for (int i = 0; i < fe_end; ++i) {
+					SYNCCOUT << "(^q^)KPP: i=" << i << "/" << fe_end << SYNCENDL;
 
-		for (int j = 0; j < fe_end; ++j) {
-		//SYNCCOUT << "(^q^)KPP: j=" << j << SYNCENDL;
+					for (int j = 0; j < fe_end; ++j) {
+						//SYNCCOUT << "(^q^)KPP: j=" << j << SYNCENDL;
 
-		kppIndices(indices, static_cast<Square>(ksq), i, j);
+						kppIndices(indices, static_cast<Square>(ksq), i, j);
 
-		//SYNCCOUT << "(^q^)KPP: a" << SYNCENDL;
-		std::array<s64, 2> sum = {{}};
+						//SYNCCOUT << "(^q^)KPP: a" << SYNCENDL;
+						std::array<s64, 2> sum = {{}};
 
-		//SYNCCOUT << "(^q^)KPP: b" << SYNCENDL;
-		FOO(indices, oneArrayKPP, sum);
+						//SYNCCOUT << "(^q^)KPP: b" << SYNCENDL;
+						FOO(indices, oneArrayKPP, sum);
 
-		//SYNCCOUT << "(^q^)KPP: c" << SYNCENDL;
-		KPP[ksq][i][j] += sum;
+						//SYNCCOUT << "(^q^)KPP: c" << SYNCENDL;
+						KPP[ksq][i][j] += sum;
+					}
+				}
+			}
 		}
-		}
-		}
-		}
+#endif
 
+#ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
 		SYNCCOUT << "(^q^)KKP!" << SYNCENDL;
 		// KKP
 		{
-		#ifdef _OPENMP
-		#pragma omp for
-		#endif
-		for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-		SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+			#ifdef _OPENMP
+			#pragma omp for
+			#endif
+			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
 
-		std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
-		for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
-		for (int i = 0; i < fe_end; ++i) {
-		kkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
-		std::array<s64, 2> sum = {{}};
-		FOO(indices, oneArrayKKP, sum);
-		KKP[ksq0][ksq1][i] += sum;
-		}
-		}
-		}
-		}
+				std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
+				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
+					for (int i = 0; i < fe_end; ++i) {
+						//SYNCCOUT << "(^q^)KKP: i=" << i << "/" << fe_end << SYNCENDL;
 
+						kkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
+						std::array<s64, 2> sum = {{}};
+						FOO(indices, oneArrayKKP, sum);
+						KKP[ksq0][ksq1][i] += sum;
+					}
+				}
+			}
+		}
+#endif
+
+#ifndef SKIP_LONG_LONG_TIME_EVAL_KK
 		SYNCCOUT << "(^q^)KK!" << SYNCENDL;
 		// KK
 		{
-		#ifdef _OPENMP
-		#pragma omp for
-		#endif
-		for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-		SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+			#ifdef _OPENMP
+			#pragma omp for
+			#endif
+			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
 
-		std::pair<ptrdiff_t, int> indices[KKIndicesMax];
-		for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
-		kkIndices(indices, static_cast<Square>(ksq0), ksq1);
-		std::array<s64, 2> sum = {{}};
-		FOO(indices, oneArrayKK, sum);
-		KK[ksq0][ksq1][0] += sum[0] / 2;
-		KK[ksq0][ksq1][1] += sum[1] / 2;
-		#if defined USE_K_FIX_OFFSET
-		KK[ksq0][ksq1][0] += K_Fix_Offset[ksq0] - K_Fix_Offset[inverse(ksq1)];
-		#endif
+				std::pair<ptrdiff_t, int> indices[KKIndicesMax];
+				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
+					//SYNCCOUT << "(^q^)KKP: ksq1=" << ksq1 << "/" << fe_end << SYNCENDL;
+
+					kkIndices(indices, static_cast<Square>(ksq0), ksq1);
+					std::array<s64, 2> sum = {{}};
+					FOO(indices, oneArrayKK, sum);
+					KK[ksq0][ksq1][0] += sum[0] / 2;
+					KK[ksq0][ksq1][1] += sum[1] / 2;
+					#if defined USE_K_FIX_OFFSET
+					KK[ksq0][ksq1][0] += K_Fix_Offset[ksq0] - K_Fix_Offset[inverse(ksq1)];
+					#endif
+				}
+			}
 		}
-		}
-		}
+#endif //KK
 		#undef FOO
-		*/
+
 
 #if !defined LEARN
 		SYNCCOUT << "info string END setting eval table" << SYNCENDL;
