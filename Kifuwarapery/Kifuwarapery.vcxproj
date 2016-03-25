@@ -152,7 +152,13 @@
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp" />
     <ClInclude Include="header\n240_position\n240_300_tt.hpp" />
     <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp" />
-    <ClInclude Include="header\n260_evaluate\n260_100_evaluate.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_100_evaluateEnum.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_200_evaluate01.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_300_KPPBoardIndexStartToPiece.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_400_EvaluaterBase.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp" />
+    <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp" />
+    <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp" />
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp" />
     <ClInclude Include="header\n280_move____\n280_100_generateMoves.hpp" />
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp" />

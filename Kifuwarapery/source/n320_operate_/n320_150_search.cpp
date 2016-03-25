@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n240_position/n240_400_MoveScore.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluate.hpp"
+#include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
@@ -375,12 +375,12 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 		if (tte != nullptr) {
 			if ((ss->staticEval = bestScore = tte->evalScore()) == ScoreNone) {
-				Evaluation evaluation;
+				Evaluation09 evaluation;
 				ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
 			}
 		}
 		else {
-			Evaluation evaluation;
+			Evaluation09 evaluation;
 			ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
 		}
 
@@ -400,7 +400,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		futilityBase = bestScore + 128; // todo: 128 より大きくて良いと思う。
 	}
 
-	Evaluation evaluation;
+	Evaluation09 evaluation;
 	evaluation.evaluate(pos, ss);
 
 	MovePicker mp(pos, ttMove, depth, history, (ss-1)->currentMove.to());
@@ -851,7 +851,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		ttMove = excludedMove = Move::moveNone();
 		ttScore = ScoreNone;
 
-		Evaluation evaluation;
+		Evaluation09 evaluation;
 		evaluation.evaluate(pos, ss);
 
 		assert(-ScoreInfinite < splitPoint->bestScore && 0 < splitPoint->moveCount);
@@ -946,7 +946,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 
 	// step5
 	// evaluate the position statically
-	Evaluation evaluation;
+	Evaluation09 evaluation;
 	eval = ss->staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
 	if (inCheck) {
 		eval = ss->staticEval = ScoreNone;

@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluate.hpp"
+#include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
@@ -100,12 +100,14 @@ void Initializer::initAttacks(const bool isBishop)
 		attackIndex[sq] = index;
 
 		const int num1s = (isBishop ? BishopBlockBits[sq] : RookBlockBits[sq]);
-		for (int i = 0; i < (1 << num1s); ++i) {
-			const Bitboard occupied = indexToOccupied(i, num1s, blockMask[sq]);
+		for (int i = 0; i < (1 << num1s); ++i)
+		{
+			const Bitboard occupied = this->indexToOccupied(i, num1s, blockMask[sq]);
 #if defined HAVE_BMI2
 			attacks[index + occupiedToIndex(occupied & blockMask[sq], blockMask[sq])] = attackCalc(sq, occupied, isBishop);
 #else
-			attacks[index + occupiedToIndex(occupied, magic[sq], shift[sq])] = attackCalc(sq, occupied, isBishop);
+			attacks[index + occupiedToIndex(occupied, magic[sq], shift[sq])] =
+				this->attackCalc(sq, occupied, isBishop);
 #endif
 		}
 		index += 1 << (64 - shift[sq]);

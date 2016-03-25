@@ -1,5 +1,5 @@
 #include "../../header/n240_position/n240_100_position.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluate.hpp"
+#include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
@@ -46,7 +46,7 @@ const int kppHandArray[ColorNum][HandPieceNum] = {
 
 
 
-EvalSum Evaluation::doapc(const Position& pos, const int index[2]) {
+EvalSum Evaluation09::doapc(const Position& pos, const int index[2]) {
 	const Square sq_bk = pos.kingSquare(Black);
 	const Square sq_wk = pos.kingSquare(White);
 	const int* list0 = pos.cplist0();
@@ -82,7 +82,7 @@ EvalSum Evaluation::doapc(const Position& pos, const int index[2]) {
 
 
 
-std::array<s32, 2> Evaluation::doablack(const Position& pos, const int index[2]) {
+std::array<s32, 2> Evaluation09::doablack(const Position& pos, const int index[2]) {
 	const Square sq_bk = pos.kingSquare(Black);
 	const int* list0 = pos.cplist0();
 
@@ -97,7 +97,7 @@ std::array<s32, 2> Evaluation::doablack(const Position& pos, const int index[2])
 
 
 
-std::array<s32, 2> Evaluation::doawhite(const Position& pos, const int index[2]) {
+std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2]) {
 	const Square sq_wk = pos.kingSquare(White);
 	const int* list1 = pos.cplist1();
 
@@ -113,7 +113,7 @@ std::array<s32, 2> Evaluation::doawhite(const Position& pos, const int index[2])
 
 
 #if defined INANIWA_SHIFT
-Score Evaluation::inaniwaScoreBody(const Position& pos) {
+Score Evaluation09::inaniwaScoreBody(const Position& pos) {
 	Score score = ScoreZero;
 	if (pos.csearcher()->inaniwaFlag == InaniwaIsBlack) {
 		if (pos.piece(B9) == WKnight) { score += 700 * FVScale; }
@@ -148,7 +148,7 @@ Score Evaluation::inaniwaScoreBody(const Position& pos) {
 	}
 	return score;
 }
-inline Score Evaluation::inaniwaScore(const Position& pos) {
+inline Score Evaluation09::inaniwaScore(const Position& pos) {
 	if (pos.csearcher()->inaniwaFlag == NotInaniwa) return ScoreZero;
 	return inaniwaScoreBody(pos);
 }
@@ -156,7 +156,7 @@ inline Score Evaluation::inaniwaScore(const Position& pos) {
 
 
 
-bool Evaluation::calcDifference(Position& pos, SearchStack* ss) {
+bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 #if defined INANIWA_SHIFT
 	if (pos.csearcher()->inaniwaFlag != NotInaniwa) return false;
 #endif
@@ -261,7 +261,7 @@ bool Evaluation::calcDifference(Position& pos, SearchStack* ss) {
 
 
 
-int Evaluation::make_list_unUseDiff(const Position& pos, int list0[EvalList::ListSize], int list1[EvalList::ListSize], int nlist) {
+int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::ListSize], int list1[EvalList::ListSize], int nlist) {
 	auto func = [&](const Bitboard& posBB, const int f_pt, const int e_pt) {
 		Square sq;
 		Bitboard bb;
@@ -293,7 +293,7 @@ int Evaluation::make_list_unUseDiff(const Position& pos, int list0[EvalList::Lis
 }
 
 
-void Evaluation::evaluateBody(Position& pos, SearchStack* ss) {
+void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 	if (this->calcDifference(pos, ss)) {
 		assert([&] {
 			const auto score = ss->staticEvalRaw.sum(pos.turn());
@@ -357,12 +357,12 @@ void Evaluation::evaluateBody(Position& pos, SearchStack* ss) {
 #endif
 	ss->staticEvalRaw = sum;
 
-	Evaluation evaluation;
+	Evaluation09 evaluation;
 	assert(this->evaluateUnUseDiff(pos) == sum.sum(pos.turn()));
 }
 
 // todo: 無名名前空間に入れる。
-Score Evaluation::evaluateUnUseDiff(const Position& pos) {
+Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	int list0[EvalList::ListSize];
 	int list1[EvalList::ListSize];
 
@@ -430,7 +430,7 @@ Score Evaluation::evaluateUnUseDiff(const Position& pos) {
 	return static_cast<Score>(score.sum(pos.turn()));
 }
 
-Score Evaluation::evaluate(Position& pos, SearchStack* ss) {
+Score Evaluation09::evaluate(Position& pos, SearchStack* ss) {
 	if (ss->staticEvalRaw.p[0][0] != ScoreNotEvaluated) {
 		const Score score = static_cast<Score>(ss->staticEvalRaw.sum(pos.turn()));
 		assert(score == evaluateUnUseDiff(pos));

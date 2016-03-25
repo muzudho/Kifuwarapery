@@ -2,7 +2,7 @@
 
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluate.hpp"
+#include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 
 const int MaxThreads = 64;

@@ -189,7 +189,25 @@
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp">
       <Filter>Header Files\n270_timeMng_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_100_evaluate.hpp">
+    <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_400_EvaluaterBase.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_300_KPPBoardIndexStartToPiece.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_200_evaluate01.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_100_evaluateEnum.hpp">
       <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
