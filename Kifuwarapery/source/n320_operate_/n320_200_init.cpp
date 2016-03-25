@@ -64,7 +64,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard Initializer::lanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return rookAttack(square, occupied) & inFrontMask(c, makeRank(square));
+	return occupied.rookAttack(square) & inFrontMask(c, makeRank(square));
 }
 
 // index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
@@ -104,9 +104,9 @@ void Initializer::initAttacks(const bool isBishop)
 		{
 			const Bitboard occupied = this->indexToOccupied(i, num1s, blockMask[sq]);
 #if defined HAVE_BMI2
-			attacks[index + occupiedToIndex(occupied & blockMask[sq], blockMask[sq])] = attackCalc(sq, occupied, isBishop);
+			attacks[index + (occupied & blockMask[sq]).occupiedToIndex( blockMask[sq])] = attackCalc(sq, occupied, isBishop);
 #else
-			attacks[index + occupiedToIndex(occupied, magic[sq], shift[sq])] =
+			attacks[index + occupied.occupiedToIndex( magic[sq], shift[sq])] =
 				this->attackCalc(sq, occupied, isBishop);
 #endif
 		}
@@ -132,19 +132,19 @@ void Initializer::initLanceAttacks() {
 
 void Initializer::initKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
-		KingAttack[sq] = rookAttack(sq, Bitboard::allOneBB()) | bishopAttack(sq, Bitboard::allOneBB());
+		KingAttack[sq] = Bitboard::allOneBB().rookAttack(sq) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			GoldAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | rookAttack(sq, Bitboard::allOneBB());
+			GoldAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
 }
 
 void Initializer::initSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			SilverAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | bishopAttack(sq, Bitboard::allOneBB());
+			SilverAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initKnightAttacks() {
@@ -161,7 +161,7 @@ void Initializer::initKnightAttacks() {
 void Initializer::initPawnAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			PawnAttack[c][sq] = silverAttack(c, sq) ^ bishopAttack(sq, Bitboard::allOneBB());
+			PawnAttack[c][sq] = silverAttack(c, sq) ^ Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initSquareRelation() {
@@ -190,10 +190,10 @@ void Initializer::initSquareRelation() {
 // RookAttack, BishopAttack, LanceAttack を設定してから、この関数を呼ぶこと。
 void Initializer::initAttackToEdge() {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		RookAttackToEdge[sq] = rookAttack(sq, Bitboard::allZeroBB());
-		BishopAttackToEdge[sq] = bishopAttack(sq, Bitboard::allZeroBB());
-		LanceAttackToEdge[Black][sq] = lanceAttack(Black, sq, Bitboard::allZeroBB());
-		LanceAttackToEdge[White][sq] = lanceAttack(White, sq, Bitboard::allZeroBB());
+		RookAttackToEdge[sq] = Bitboard::allZeroBB().rookAttack(sq);
+		BishopAttackToEdge[sq] = Bitboard::allZeroBB().bishopAttack(sq);
+		LanceAttackToEdge[Black][sq] = Bitboard::allZeroBB().lanceAttack(Black, sq);
+		LanceAttackToEdge[White][sq] = Bitboard::allZeroBB().lanceAttack(White, sq);
 	}
 }
 
@@ -204,9 +204,9 @@ void Initializer::initBetweenBB() {
 			if (sq1 == sq2) continue;
 			const Direction direc = squareRelation(sq1, sq2);
 			if (direc & DirecCross)
-				BetweenBB[sq1][sq2] = rookAttack(sq1, Bitboard::setMaskBB(sq2)) & rookAttack(sq2, Bitboard::setMaskBB(sq1));
+				BetweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).rookAttack(sq1) & Bitboard::setMaskBB(sq1).rookAttack(sq2);
 			else if (direc & DirecDiag)
-				BetweenBB[sq1][sq2] = bishopAttack(sq1, Bitboard::setMaskBB(sq2)) & bishopAttack(sq2, Bitboard::setMaskBB(sq1));
+				BetweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).bishopAttack(sq1) & Bitboard::setMaskBB(sq1).bishopAttack(sq2);
 		}
 	}
 }

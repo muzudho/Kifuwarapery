@@ -5,29 +5,7 @@
 #include "../n120_brdEntry/n120_100_color.hpp"
 
 
-extern const int RookBlockBits[SquareNum];
-extern const int BishopBlockBits[SquareNum];
-extern const int RookShiftBits[SquareNum];
-extern const int BishopShiftBits[SquareNum];
-#if defined HAVE_BMI2
-#else
-extern const u64 RookMagic[SquareNum];
-extern const u64 BishopMagic[SquareNum];
-#endif
 
-// 指定した位置の属する file の bit を shift し、
-// index を求める為に使用する。
-const int Slide[SquareNum] = {
-	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
-	10, 10, 10, 10, 10, 10, 10, 10, 10,
-	19, 19, 19, 19, 19, 19, 19, 19, 19,
-	28, 28, 28, 28, 28, 28, 28, 28, 28,
-	37, 37, 37, 37, 37, 37, 37, 37, 37,
-	46, 46, 46, 46, 46, 46, 46, 46, 46,
-	55, 55, 55, 55, 55, 55, 55, 55, 55,
-	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
-	10, 10, 10, 10, 10, 10, 10, 10, 10
-};
 
 const Bitboard FileIMask = Bitboard(UINT64_C(0x1ff) << (9 * 0), 0);
 const Bitboard FileHMask = Bitboard(UINT64_C(0x1ff) << (9 * 1), 0);

@@ -3,81 +3,8 @@
 #include "../n160_board___/n160_200_bitboardMask.hpp"
 
 
-// メモリ節約の為、1次元配列にして無駄が無いようにしている。
-#if defined HAVE_BMI2
-extern Bitboard RookAttack[495616];
-#else
-extern Bitboard RookAttack[512000];
-#endif
-extern int RookAttackIndex[SquareNum];
-// メモリ節約の為、1次元配列にして無駄が無いようにしている。
-extern Bitboard BishopAttack[20224];
-extern int BishopAttackIndex[SquareNum];
-extern Bitboard RookBlockMask[SquareNum];
-extern Bitboard BishopBlockMask[SquareNum];
-// メモリ節約をせず、無駄なメモリを持っている。
-extern Bitboard LanceAttack[ColorNum][SquareNum][128];
-
-extern Bitboard KingAttack[SquareNum];
-extern Bitboard GoldAttack[ColorNum][SquareNum];
-extern Bitboard SilverAttack[ColorNum][SquareNum];
-extern Bitboard KnightAttack[ColorNum][SquareNum];
-extern Bitboard PawnAttack[ColorNum][SquareNum];
-
-extern Bitboard BetweenBB[SquareNum][SquareNum];
-
-extern Bitboard RookAttackToEdge[SquareNum];
-extern Bitboard BishopAttackToEdge[SquareNum];
-extern Bitboard LanceAttackToEdge[ColorNum][SquareNum];
-
-extern Bitboard GoldCheckTable[ColorNum][SquareNum];
-extern Bitboard SilverCheckTable[ColorNum][SquareNum];
-extern Bitboard KnightCheckTable[ColorNum][SquareNum];
-extern Bitboard LanceCheckTable[ColorNum][SquareNum];
 
 
-#if defined HAVE_BMI2
-// PEXT bitboard.
-inline u64 occupiedToIndex(const Bitboard& block, const Bitboard& mask) {
-	return _pext_u64(block.merge(), mask.merge());
-}
-
-inline Bitboard rookAttack(const Square sq, const Bitboard& occupied) {
-	const Bitboard block(occupied & RookBlockMask[sq]);
-	return RookAttack[RookAttackIndex[sq] + occupiedToIndex(block, RookBlockMask[sq])];
-}
-inline Bitboard bishopAttack(const Square sq, const Bitboard& occupied) {
-	const Bitboard block(occupied & BishopBlockMask[sq]);
-	return BishopAttack[BishopAttackIndex[sq] + occupiedToIndex(block, BishopBlockMask[sq])];
-}
-#else
-// magic bitboard.
-// magic number を使って block の模様から利きのテーブルへのインデックスを算出
-inline u64 occupiedToIndex(const Bitboard& block, const u64 magic, const int shiftBits) {
-	return (block.merge() * magic) >> shiftBits;
-}
-
-inline Bitboard rookAttack(const Square sq, const Bitboard& occupied) {
-	const Bitboard block(occupied & RookBlockMask[sq]);
-	return RookAttack[RookAttackIndex[sq] + occupiedToIndex(block, RookMagic[sq], RookShiftBits[sq])];
-}
-inline Bitboard bishopAttack(const Square sq, const Bitboard& occupied) {
-	const Bitboard block(occupied & BishopBlockMask[sq]);
-	return BishopAttack[BishopAttackIndex[sq] + occupiedToIndex(block, BishopMagic[sq], BishopShiftBits[sq])];
-}
-#endif
-// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
-inline Bitboard lanceAttack(const Color c, const Square sq, const Bitboard& occupied) {
-	const int part = Bitboard::part(sq);
-	const int index = (occupied.p(part) >> Slide[sq]) & 127;
-	return LanceAttack[c][sq][index];
-}
-// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
-inline Bitboard rookAttackFile(const Square sq, const Bitboard& occupied) {
-	const int part = Bitboard::part(sq);
-	const int index = (occupied.p(part) >> Slide[sq]) & 127;
-	return LanceAttack[Black][sq][index] | LanceAttack[White][sq][index];
-}
 inline Bitboard goldAttack(const Color c, const Square sq) { return GoldAttack[c][sq]; }
 inline Bitboard silverAttack(const Color c, const Square sq) { return SilverAttack[c][sq]; }
 inline Bitboard knightAttack(const Color c, const Square sq) { return KnightAttack[c][sq]; }
@@ -89,9 +16,9 @@ inline Bitboard pawnAttack(const Color c, const Square sq) { return PawnAttack[c
 // 別の筋のビットが立たないか、立っても問題ないかを確認して使用すること。
 template <Color US> inline Bitboard pawnAttack(const Bitboard& from) { return (US == Black ? (from >> 1) : (from << 1)); }
 inline Bitboard kingAttack(const Square sq) { return KingAttack[sq]; }
-inline Bitboard dragonAttack(const Square sq, const Bitboard& occupied) { return rookAttack(sq, occupied) | kingAttack(sq); }
-inline Bitboard horseAttack(const Square sq, const Bitboard& occupied) { return bishopAttack(sq, occupied) | kingAttack(sq); }
-inline Bitboard queenAttack(const Square sq, const Bitboard& occupied) { return rookAttack(sq, occupied) | bishopAttack(sq, occupied); }
+inline Bitboard dragonAttack(const Square sq, const Bitboard& occupied) { return occupied.rookAttack(sq) | kingAttack(sq); }
+inline Bitboard horseAttack(const Square sq, const Bitboard& occupied) { return occupied.bishopAttack(sq) | kingAttack(sq); }
+inline Bitboard queenAttack(const Square sq, const Bitboard& occupied) { return occupied.rookAttack(sq) | occupied.bishopAttack(sq); }
 
 // sq1, sq2 の間(sq1, sq2 は含まない)のビットが立った Bitboard
 inline Bitboard betweenBB(const Square sq1, const Square sq2) { return BetweenBB[sq1][sq2]; }

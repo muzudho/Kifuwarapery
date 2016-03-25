@@ -3,8 +3,70 @@
 
 #include "../n120_brdEntry/n120_150_square.hpp"
 
-
 class Bitboard;
+
+
+extern const int RookBlockBits[SquareNum];
+extern const int BishopBlockBits[SquareNum];
+extern const int RookShiftBits[SquareNum];
+extern const int BishopShiftBits[SquareNum];
+#if defined HAVE_BMI2
+#else
+extern const u64 RookMagic[SquareNum];
+extern const u64 BishopMagic[SquareNum];
+#endif
+
+// 指定した位置の属する file の bit を shift し、
+// index を求める為に使用する。
+const int Slide[SquareNum] = {
+	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
+	10, 10, 10, 10, 10, 10, 10, 10, 10,
+	19, 19, 19, 19, 19, 19, 19, 19, 19,
+	28, 28, 28, 28, 28, 28, 28, 28, 28,
+	37, 37, 37, 37, 37, 37, 37, 37, 37,
+	46, 46, 46, 46, 46, 46, 46, 46, 46,
+	55, 55, 55, 55, 55, 55, 55, 55, 55,
+	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
+	10, 10, 10, 10, 10, 10, 10, 10, 10
+};
+
+// メモリ節約の為、1次元配列にして無駄が無いようにしている。
+#if defined HAVE_BMI2
+extern Bitboard RookAttack[495616];
+#else
+extern Bitboard RookAttack[512000];
+#endif
+extern int RookAttackIndex[SquareNum];
+// メモリ節約の為、1次元配列にして無駄が無いようにしている。
+extern Bitboard BishopAttack[20224];
+extern int BishopAttackIndex[SquareNum];
+extern Bitboard RookBlockMask[SquareNum];
+extern Bitboard BishopBlockMask[SquareNum];
+// メモリ節約をせず、無駄なメモリを持っている。
+extern Bitboard LanceAttack[ColorNum][SquareNum][128];
+
+extern Bitboard KingAttack[SquareNum];
+extern Bitboard GoldAttack[ColorNum][SquareNum];
+extern Bitboard SilverAttack[ColorNum][SquareNum];
+extern Bitboard KnightAttack[ColorNum][SquareNum];
+extern Bitboard PawnAttack[ColorNum][SquareNum];
+
+extern Bitboard BetweenBB[SquareNum][SquareNum];
+
+extern Bitboard RookAttackToEdge[SquareNum];
+extern Bitboard BishopAttackToEdge[SquareNum];
+extern Bitboard LanceAttackToEdge[ColorNum][SquareNum];
+
+extern Bitboard GoldCheckTable[ColorNum][SquareNum];
+extern Bitboard SilverCheckTable[ColorNum][SquareNum];
+extern Bitboard KnightCheckTable[ColorNum][SquareNum];
+extern Bitboard LanceCheckTable[ColorNum][SquareNum];
+
+
+
+
+
+
 extern const Bitboard SetMaskBB[SquareNum];
 
 class Bitboard {
@@ -237,6 +299,57 @@ public://(^q^)
 	// 実際に使用する部分の全て bit が立っている Bitboard
 	inline static Bitboard allOneBB() { return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff)); }
 	inline static Bitboard allZeroBB() { return Bitboard(0, 0); }
+
+public://(^q^)
+
+#if defined HAVE_BMI2
+	// PEXT bitboard.
+	inline u64 occupiedToIndex( const Bitboard& mask) const {
+		return _pext_u64(this->merge(), mask.merge());
+	}
+
+	inline Bitboard rookAttack(const Square sq) const {
+		const Bitboard block((*this) & RookBlockMask[sq]);
+		return RookAttack[RookAttackIndex[sq] + occupiedToIndex(block, RookBlockMask[sq])];
+	}
+
+	inline Bitboard bishopAttack(const Square sq) const {
+		const Bitboard block((*this) & BishopBlockMask[sq]);
+		return BishopAttack[BishopAttackIndex[sq] + occupiedToIndex(block, BishopBlockMask[sq])];
+	}
+
+#else
+	// magic bitboard.
+	// magic number を使って block の模様から利きのテーブルへのインデックスを算出
+	inline u64 occupiedToIndex( const u64 magic, const int shiftBits) const {
+		return (this->merge() * magic) >> shiftBits;
+	}
+
+	inline Bitboard rookAttack(const Square sq) const {
+		const Bitboard block((*this) & RookBlockMask[sq]);
+		return RookAttack[RookAttackIndex[sq] + block.occupiedToIndex(RookMagic[sq], RookShiftBits[sq])];
+	}
+
+	inline Bitboard bishopAttack(const Square sq) const {
+		const Bitboard block((*this) & BishopBlockMask[sq]);
+		return BishopAttack[BishopAttackIndex[sq] + block.occupiedToIndex(BishopMagic[sq], BishopShiftBits[sq])];
+	}
+#endif
+
+	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
+	inline Bitboard lanceAttack(const Color c, const Square sq) const {
+		const int part = Bitboard::part(sq);
+		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		return LanceAttack[c][sq][index];
+	}
+
+	// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
+	inline Bitboard rookAttackFile(const Square sq) const {
+		const int part = Bitboard::part(sq);
+		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		return LanceAttack[Black][sq][index] | LanceAttack[White][sq][index];
+	}
+
 };
 
 

@@ -50,11 +50,11 @@ Bitboard Position::attacksFrom(const PieceType pt, const Color c, const Square s
 	switch (pt) {
 	case Occupied:  return Bitboard::allZeroBB();
 	case Pawn:      return pawnAttack(c, sq);
-	case Lance:     return lanceAttack(c, sq, occupied);
+	case Lance:     return occupied.lanceAttack(c, sq);
 	case Knight:    return knightAttack(c, sq);
 	case Silver:    return silverAttack(c, sq);
-	case Bishop:    return bishopAttack(sq, occupied);
-	case Rook:      return rookAttack(sq, occupied);
+	case Bishop:    return occupied.bishopAttack(sq);
+	case Rook:      return occupied.rookAttack(sq);
 	case Gold:
 	case ProPawn:
 	case ProLance:
@@ -369,7 +369,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
-					st_->checkersBB |= rookAttackFile(from, occupiedBB()) & bbOf(us);
+					st_->checkersBB |= occupiedBB().rookAttackFile(from) & bbOf(us);
 					break;
 				case DirecRank:
 					st_->checkersBB |= attacksFrom<Rook>(ksq) & bbOf(Rook, Dragon, us);
@@ -509,26 +509,26 @@ namespace {
 			// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
 			//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
 			if (PT == Pawn || PT == Lance) {
-				attackers |= (lanceAttack(oppositeColor(turn), to, occupied) & (pos.bbOf(Rook, Dragon) | pos.bbOf(Lance, turn)));
+				attackers |= (occupied.lanceAttack(oppositeColor(turn), to) & (pos.bbOf(Rook, Dragon) | pos.bbOf(Lance, turn)));
 			}
 			if (PT == Gold || PT == ProPawn || PT == ProLance || PT == ProKnight || PT == ProSilver || PT == Horse || PT == Dragon) {
-				attackers |= (lanceAttack(oppositeColor(turn), to, occupied) & pos.bbOf(Lance, turn))
-					| (lanceAttack(turn, to, occupied) & pos.bbOf(Lance, oppositeColor(turn)))
-					| (rookAttack(to, occupied) & pos.bbOf(Rook, Dragon))
-					| (bishopAttack(to, occupied) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.lanceAttack(oppositeColor(turn), to) & pos.bbOf(Lance, turn))
+					| (occupied.lanceAttack(turn, to) & pos.bbOf(Lance, oppositeColor(turn)))
+					| (occupied.rookAttack(to) & pos.bbOf(Rook, Dragon))
+					| (occupied.bishopAttack(to) & pos.bbOf(Bishop, Horse));
 			}
 			if (PT == Silver) {
-				attackers |= (lanceAttack(oppositeColor(turn), to, occupied) & pos.bbOf(Lance, turn))
-					| (rookAttack(to, occupied) & pos.bbOf(Rook, Dragon))
-					| (bishopAttack(to, occupied) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.lanceAttack(oppositeColor(turn), to) & pos.bbOf(Lance, turn))
+					| (occupied.rookAttack(to) & pos.bbOf(Rook, Dragon))
+					| (occupied.bishopAttack(to) & pos.bbOf(Bishop, Horse));
 			}
 			if (PT == Bishop) {
-				attackers |= (bishopAttack(to, occupied) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.bishopAttack(to) & pos.bbOf(Bishop, Horse));
 			}
 			if (PT == Rook) {
-				attackers |= (lanceAttack(oppositeColor(turn), to, occupied) & pos.bbOf(Lance, turn))
-					| (lanceAttack(turn, to, occupied) & pos.bbOf(Lance, oppositeColor(turn)))
-					| (rookAttack(to, occupied) & pos.bbOf(Rook, Dragon));
+				attackers |= (occupied.lanceAttack(oppositeColor(turn), to) & pos.bbOf(Lance, turn))
+					| (occupied.lanceAttack(turn, to) & pos.bbOf(Lance, oppositeColor(turn)))
+					| (occupied.rookAttack(to) & pos.bbOf(Rook, Dragon));
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {
