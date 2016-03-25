@@ -229,7 +229,7 @@ namespace {
 				| (pos.attacksFrom<Bishop>(m2to, occ) & pos.bbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.isNot0() && (xray ^ (xray & queenAttack(m2to, pos.occupiedBB()))).isNot0()) {
+			if (xray.isNot0() && (xray ^ (xray & pos.occupiedBB().queenAttack(m2to))).isNot0()) {
 				return true;
 			}
 		}

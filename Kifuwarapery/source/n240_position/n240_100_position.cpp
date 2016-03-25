@@ -60,9 +60,9 @@ Bitboard Position::attacksFrom(const PieceType pt, const Color c, const Square s
 	case ProLance:
 	case ProKnight:
 	case ProSilver: return goldAttack(c, sq);
-	case King:      return kingAttack(sq);
-	case Horse:     return horseAttack(sq, occupied);
-	case Dragon:    return dragonAttack(sq, occupied);
+	case King:      return Bitboard::kingAttack(sq);
+	case Horse:     return occupied.horseAttack(sq);
+	case Dragon:    return occupied.dragonAttack(sq);
 	default:        UNREACHABLE;
 	}
 	UNREACHABLE;
@@ -645,7 +645,7 @@ namespace {
 	bool canKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
 		const Color them = oppositeColor(us);
 		const Square ksq = pos.kingSquare(them);
-		Bitboard kingMoveBB = bb.notThisAnd(pos.bbOf(them).notThisAnd(kingAttack(ksq)));
+		Bitboard kingMoveBB = bb.notThisAnd(pos.bbOf(them).notThisAnd(Bitboard::kingAttack(ksq)));
 		kingMoveBB.clearBit(sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
 
 		if (kingMoveBB.isNot0()) {
@@ -720,7 +720,7 @@ bool Position::isPawnDropCheckMate(const Color us, const Square sq) const {
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
 	const Bitboard tempOccupied = occupiedBB() | Bitboard::setMaskBB(sq);
-	Bitboard kingMoveBB = bbOf(them).notThisAnd(kingAttack(ksq));
+	Bitboard kingMoveBB = bbOf(them).notThisAnd(Bitboard::kingAttack(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
 	assert(kingMoveBB.isNot0());
@@ -881,7 +881,7 @@ silver_drop_end:
 
 	// 駒を移動する場合
 	// moveTarget は桂馬以外の移動先の大まかな位置。飛角香の遠隔王手は含まない。
-	const Bitboard moveTarget = bbOf(US).notThisAnd(kingAttack(ksq));
+	const Bitboard moveTarget = bbOf(US).notThisAnd(Bitboard::kingAttack(ksq));
 	const Bitboard pinned = pinnedBB();
 	const Bitboard dcBB_betweenIsUs = discoveredCheckBB<true>();
 
@@ -1426,7 +1426,7 @@ silver_drop_end:
 			if (isInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
 				const Bitboard toBB_promo = moveTarget & attacksFrom<Gold>(Them, ksq) & TRank789BB;
-				Bitboard fromBB_promo = fromBB & pawnAttack<Them>(toBB_promo);
+				Bitboard fromBB_promo = fromBB & toBB_promo.pawnAttack<Them>();
 				while (fromBB_promo.isNot0()) {
 					const Square from = fromBB_promo.firstOneFromI9();
 					const Square to = from + TDeltaN;

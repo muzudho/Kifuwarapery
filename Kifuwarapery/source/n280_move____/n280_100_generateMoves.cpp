@@ -162,7 +162,7 @@ namespace {
 			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-			Bitboard toBB = pawnAttack<US>(pos.bbOf(Pawn, US)) & target;
+			Bitboard toBB = pos.bbOf(Pawn, US).pawnAttack<US>() & target;
 
 			// 成り
 			if (MT != NonCaptureMinusPro) {
@@ -450,7 +450,7 @@ namespace {
 			} while (bb.isNot0());
 
 			// 玉が移動出来る移動先を格納。
-			bb = bannedKingToBB.notThisAnd(pos.bbOf(US).notThisAnd(kingAttack(ksq)));
+			bb = bannedKingToBB.notThisAnd(pos.bbOf(US).notThisAnd(Bitboard::kingAttack(ksq)));
 			while (bb.isNot0()) {
 				const Square to = bb.firstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。

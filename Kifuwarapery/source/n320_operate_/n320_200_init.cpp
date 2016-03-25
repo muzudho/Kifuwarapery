@@ -138,13 +138,13 @@ void Initializer::initKingAttacks() {
 void Initializer::initGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			GoldAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
+			GoldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
 }
 
 void Initializer::initSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			SilverAttack[c][sq] = (kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
+			SilverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initKnightAttacks() {
