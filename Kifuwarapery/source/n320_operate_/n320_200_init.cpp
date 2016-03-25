@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
-#include "../../header/n240_position/n240_250_evaluate.hpp"
+#include "../../header/n260_evaluate/n260_100_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_operate_/n320_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
@@ -317,8 +317,10 @@ void Initializer::initSquareDistance() {
 
 void Initializer::initTable() {
 
+#ifndef SKIP_LONG_TIME_EVAL
 	SYNCCOUT << "(^q^)I1: SKIP! (long time)initAttacks!" << SYNCENDL;
 	this->initAttacks(false);
+#endif
 
 	SYNCCOUT << "(^q^)I2: initAttacks!" << SYNCENDL;
 	this->initAttacks(true);

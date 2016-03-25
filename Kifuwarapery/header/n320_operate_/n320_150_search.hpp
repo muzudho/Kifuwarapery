@@ -3,8 +3,8 @@
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n240_position/n240_350_timeManager.hpp"
 #include "../../header/n240_position/n240_400_MoveScore.hpp"
+#include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 class Position;

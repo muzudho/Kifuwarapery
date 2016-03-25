@@ -70,6 +70,18 @@
     <Filter Include="Source Files\n360_egOption">
       <UniqueIdentifier>{33c05404-3b57-44c4-9228-d6d3c8baf0bb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n270_timeMng_">
+      <UniqueIdentifier>{d17405d0-df1b-41eb-8c04-83a2914943fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n270_timeMng_">
+      <UniqueIdentifier>{21b60163-171b-446b-a8ee-bfb0adf7b02c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\n260_evaluate">
+      <UniqueIdentifier>{e910259a-f02f-4ce7-87bf-60338c2c47b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\n260_evaluate">
+      <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -120,13 +132,7 @@
     <ClInclude Include="header\n240_position\n240_150_move.hpp">
       <Filter>Header Files\n240_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n240_position\n240_250_evaluate.hpp">
-      <Filter>Header Files\n240_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n240_position\n240_300_tt.hpp">
-      <Filter>Header Files\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_350_timeManager.hpp">
       <Filter>Header Files\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp">
@@ -180,6 +186,12 @@
     <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp">
       <Filter>Header Files\n360_egOption</Filter>
     </ClInclude>
+    <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp">
+      <Filter>Header Files\n270_timeMng_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_100_evaluate.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -221,13 +233,7 @@
     <ClCompile Include="source\n240_position\n240_150_move.cpp">
       <Filter>Source Files\n240_position</Filter>
     </ClCompile>
-    <ClCompile Include="source\n240_position\n240_250_evaluate.cpp">
-      <Filter>Source Files\n240_position</Filter>
-    </ClCompile>
     <ClCompile Include="source\n240_position\n240_300_tt.cpp">
-      <Filter>Source Files\n240_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_position\n240_350_timeManager.cpp">
       <Filter>Source Files\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
@@ -268,6 +274,12 @@
     </ClCompile>
     <ClCompile Include="source\n360_egOption\n360_300_engineOptionSetup.cpp">
       <Filter>Source Files\n360_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp">
+      <Filter>Source Files\n270_timeMng_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp">
+      <Filter>Source Files\n260_evaluate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

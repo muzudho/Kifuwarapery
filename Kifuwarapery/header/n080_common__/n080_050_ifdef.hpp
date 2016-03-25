@@ -11,12 +11,20 @@
 #endif
 
 //----------------------------------------
+// (^q^)学習に時間のかかる評価値をスキップするか？
+//----------------------------------------
+// ただし、これでコンパイルした場合、abort()で落ちるんだぜ☆（＾～＾）
+//#define SKIP_LONG_TIME_EVAL
+
+//----------------------------------------
 // 使う評価値（４種類）
 //----------------------------------------
 #define EVAL_PHASE1
-//#define EVAL_PHASE2
-//#define EVAL_PHASE3
-//#define EVAL_PHASE4
+#ifndef SKIP_LONG_TIME_EVAL
+	#define EVAL_PHASE2
+	#define EVAL_PHASE3
+	#define EVAL_PHASE4
+#endif
 
 #if 1 && !defined LEARN
 // 対局時は1つの局面に対してしか探索を実行しないので、置換表などのデータをグローバルに置いて高速化する。
