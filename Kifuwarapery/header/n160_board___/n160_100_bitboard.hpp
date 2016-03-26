@@ -6,19 +6,19 @@
 class Bitboard;
 
 
-extern const int g_arrRookBlockBits[SquareNum];
-extern const int g_arrBishopBlockBits[SquareNum];
-extern const int g_arrRookShiftBits[SquareNum];
-extern const int g_arrBishopShiftBits[SquareNum];
+extern const int RookBlockBits[SquareNum];
+extern const int BishopBlockBits[SquareNum];
+extern const int RookShiftBits[SquareNum];
+extern const int BishopShiftBits[SquareNum];
 #if defined HAVE_BMI2
 #else
-extern const u64 g_arrRookMagic[SquareNum];
-extern const u64 g_arrBishopMagic[SquareNum];
+extern const u64 RookMagic[SquareNum];
+extern const u64 BishopMagic[SquareNum];
 #endif
 
 // 指定した位置の属する file の bit を shift し、
 // index を求める為に使用する。
-const int g_arrSlide[SquareNum] = {
+const int Slide[SquareNum] = {
 	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
 	10, 10, 10, 10, 10, 10, 10, 10, 10,
 	19, 19, 19, 19, 19, 19, 19, 19, 19,
@@ -32,37 +32,35 @@ const int g_arrSlide[SquareNum] = {
 
 // メモリ節約の為、1次元配列にして無駄が無いようにしている。
 #if defined HAVE_BMI2
-extern Bitboard g_arrRookAttack[495616];
+extern Bitboard RookAttack[495616];
 #else
-extern Bitboard g_arrRookAttack[512000];
+extern Bitboard RookAttack[512000];
 #endif
-extern int g_arrRookAttackIndex[SquareNum];
+extern int RookAttackIndex[SquareNum];
 // メモリ節約の為、1次元配列にして無駄が無いようにしている。
-extern Bitboard g_arrBishopAttack[20224];
-extern int g_arrBishopAttackIndex[SquareNum];
-extern Bitboard g_arrRookBlockMask[SquareNum];
-extern Bitboard g_arrBishopBlockMask[SquareNum];
+extern Bitboard BishopAttack[20224];
+extern int BishopAttackIndex[SquareNum];
+extern Bitboard RookBlockMask[SquareNum];
+extern Bitboard BishopBlockMask[SquareNum];
 // メモリ節約をせず、無駄なメモリを持っている。
-extern Bitboard g_arrLanceAttack[ColorNum][SquareNum][128];
+extern Bitboard LanceAttack[ColorNum][SquareNum][128];
 
-extern Bitboard g_arrKingAttack[SquareNum];
-extern Bitboard g_arrGoldAttack[ColorNum][SquareNum];
-extern Bitboard g_arrSilverAttack[ColorNum][SquareNum];
-extern Bitboard g_arrKnightAttack[ColorNum][SquareNum];
-extern Bitboard g_arrPawnAttack[ColorNum][SquareNum];
+extern Bitboard KingAttack[SquareNum];
+extern Bitboard GoldAttack[ColorNum][SquareNum];
+extern Bitboard SilverAttack[ColorNum][SquareNum];
+extern Bitboard KnightAttack[ColorNum][SquareNum];
+extern Bitboard PawnAttack[ColorNum][SquareNum];
 
-extern Bitboard g_arrBetweenBB[SquareNum][SquareNum];
+extern Bitboard BetweenBB[SquareNum][SquareNum];
 
-extern Bitboard g_arrRookAttackToEdge[SquareNum];
-extern Bitboard g_arrBishopAttackToEdge[SquareNum];
-extern Bitboard g_arrLanceAttackToEdge[ColorNum][SquareNum];
+extern Bitboard RookAttackToEdge[SquareNum];
+extern Bitboard BishopAttackToEdge[SquareNum];
+extern Bitboard LanceAttackToEdge[ColorNum][SquareNum];
 
-extern Bitboard g_arrGoldCheckTable[ColorNum][SquareNum];
-extern Bitboard g_arrSilverCheckTable[ColorNum][SquareNum];
-extern Bitboard g_arrKnightCheckTable[ColorNum][SquareNum];
-extern Bitboard g_arrLanceCheckTable[ColorNum][SquareNum];
-
-
+extern Bitboard GoldCheckTable[ColorNum][SquareNum];
+extern Bitboard SilverCheckTable[ColorNum][SquareNum];
+extern Bitboard KnightCheckTable[ColorNum][SquareNum];
+extern Bitboard LanceCheckTable[ColorNum][SquareNum];
 
 
 
@@ -71,7 +69,9 @@ extern Bitboard g_arrLanceCheckTable[ColorNum][SquareNum];
 
 
 
-extern const Bitboard g_arrSetMaskBB[SquareNum];
+
+
+extern const Bitboard SetMaskBB[SquareNum];
 
 class Bitboard {
 public:
@@ -194,13 +194,13 @@ public:
 #endif
 	}
 	bool isSet(const Square sq) const {
-		assert(Util_Square::IsInSquare(sq));
-		return andIsNot0(g_arrSetMaskBB[sq]);
+		assert(isInSquare(sq));
+		return andIsNot0(SetMaskBB[sq]);
 	}
-	void setBit(const Square sq) { *this |= g_arrSetMaskBB[sq]; }
-	void clearBit(const Square sq) { andEqualNot(g_arrSetMaskBB[sq]); }
-	void xorBit(const Square sq) { (*this) ^= g_arrSetMaskBB[sq]; }
-	void xorBit(const Square sq1, const Square sq2) { (*this) ^= (g_arrSetMaskBB[sq1] | g_arrSetMaskBB[sq2]); }
+	void setBit(const Square sq) { *this |= SetMaskBB[sq]; }
+	void clearBit(const Square sq) { andEqualNot(SetMaskBB[sq]); }
+	void xorBit(const Square sq) { (*this) ^= SetMaskBB[sq]; }
+	void xorBit(const Square sq1, const Square sq2) { (*this) ^= (SetMaskBB[sq1] | SetMaskBB[sq2]); }
 	// Bitboard の right 側だけの要素を調べて、最初に 1 であるマスの index を返す。
 	// そのマスを 0 にする。
 	// Bitboard の right 側が 0 でないことを前提にしている。
@@ -266,7 +266,7 @@ public:
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			std::cout << (9 - r);
 			for (File f = FileA; FileI <= f; --f) {
-				std::cout << (this->isSet(Util_Square::MakeSquare(f, r)) ? "  X" : "  .");
+				std::cout << (this->isSet(makeSquare(f, r)) ? "  X" : "  .");
 			}
 			std::cout << "\n";
 		}
@@ -277,7 +277,7 @@ public:
 	void printTable(const int part) const {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileC; FileI <= f; --f) {
-				std::cout << (UINT64_C(1) & (this->p(part) >> Util_Square::MakeSquare(f, r)));
+				std::cout << (UINT64_C(1) & (this->p(part) >> makeSquare(f, r)));
 			}
 			std::cout << std::endl;
 		}
@@ -299,7 +299,7 @@ private:
 #endif
 
 public://(^q^)
-	inline static Bitboard setMaskBB(const Square sq) { return g_arrSetMaskBB[sq]; }
+	inline static Bitboard setMaskBB(const Square sq) { return SetMaskBB[sq]; }
 	// 実際に使用する部分の全て bit が立っている Bitboard
 	inline static Bitboard allOneBB() { return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff)); }
 	inline static Bitboard allZeroBB() { return Bitboard(0, 0); }
@@ -313,13 +313,13 @@ public://(^q^)
 	}
 
 	inline Bitboard rookAttack(const Square sq) const {
-		const Bitboard block((*this) & g_arrRookBlockMask[sq]);
-		return g_arrRookAttack[g_arrRookAttackIndex[sq] + occupiedToIndex(block, g_arrRookBlockMask[sq])];
+		const Bitboard block((*this) & RookBlockMask[sq]);
+		return RookAttack[RookAttackIndex[sq] + occupiedToIndex(block, RookBlockMask[sq])];
 	}
 
 	inline Bitboard bishopAttack(const Square sq) const {
-		const Bitboard block((*this) & g_arrBishopBlockMask[sq]);
-		return g_arrBishopAttack[g_arrBishopAttackIndex[sq] + occupiedToIndex(block, g_arrBishopBlockMask[sq])];
+		const Bitboard block((*this) & BishopBlockMask[sq]);
+		return BishopAttack[BishopAttackIndex[sq] + occupiedToIndex(block, BishopBlockMask[sq])];
 	}
 
 #else
@@ -330,28 +330,28 @@ public://(^q^)
 	}
 
 	inline Bitboard rookAttack(const Square sq) const {
-		const Bitboard block((*this) & g_arrRookBlockMask[sq]);
-		return g_arrRookAttack[g_arrRookAttackIndex[sq] + block.occupiedToIndex(g_arrRookMagic[sq], g_arrRookShiftBits[sq])];
+		const Bitboard block((*this) & RookBlockMask[sq]);
+		return RookAttack[RookAttackIndex[sq] + block.occupiedToIndex(RookMagic[sq], RookShiftBits[sq])];
 	}
 
 	inline Bitboard bishopAttack(const Square sq) const {
-		const Bitboard block((*this) & g_arrBishopBlockMask[sq]);
-		return g_arrBishopAttack[g_arrBishopAttackIndex[sq] + block.occupiedToIndex(g_arrBishopMagic[sq], g_arrBishopShiftBits[sq])];
+		const Bitboard block((*this) & BishopBlockMask[sq]);
+		return BishopAttack[BishopAttackIndex[sq] + block.occupiedToIndex(BishopMagic[sq], BishopShiftBits[sq])];
 	}
 #endif
 
 	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
 	inline Bitboard lanceAttack(const Color c, const Square sq) const {
 		const int part = Bitboard::part(sq);
-		const int index = ((*this).p(part) >> g_arrSlide[sq]) & 127;
-		return g_arrLanceAttack[c][sq][index];
+		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		return LanceAttack[c][sq][index];
 	}
 
 	// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
 	inline Bitboard rookAttackFile(const Square sq) const {
 		const int part = Bitboard::part(sq);
-		const int index = ((*this).p(part) >> g_arrSlide[sq]) & 127;
-		return g_arrLanceAttack[Black][sq][index] | g_arrLanceAttack[White][sq][index];
+		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		return LanceAttack[Black][sq][index] | LanceAttack[White][sq][index];
 	}
 
 	// Bitboard で直接利きを返す関数。
@@ -364,7 +364,7 @@ public://(^q^)
 
 	// Bitboard で直接利きを返す関数。
 	inline static Bitboard kingAttack(const Square sq) {
-		return g_arrKingAttack[sq];
+		return KingAttack[sq];
 	}
 
 	inline Bitboard dragonAttack(const Square sq) const
@@ -387,22 +387,22 @@ public://(^q^)
 
 
 
-inline Bitboard goldAttack(const Color c, const Square sq) { return g_arrGoldAttack[c][sq]; }
-inline Bitboard silverAttack(const Color c, const Square sq) { return g_arrSilverAttack[c][sq]; }
-inline Bitboard knightAttack(const Color c, const Square sq) { return g_arrKnightAttack[c][sq]; }
-inline Bitboard pawnAttack(const Color c, const Square sq) { return g_arrPawnAttack[c][sq]; }
+inline Bitboard goldAttack(const Color c, const Square sq) { return GoldAttack[c][sq]; }
+inline Bitboard silverAttack(const Color c, const Square sq) { return SilverAttack[c][sq]; }
+inline Bitboard knightAttack(const Color c, const Square sq) { return KnightAttack[c][sq]; }
+inline Bitboard pawnAttack(const Color c, const Square sq) { return PawnAttack[c][sq]; }
 
 // sq1, sq2 の間(sq1, sq2 は含まない)のビットが立った Bitboard
-inline Bitboard betweenBB(const Square sq1, const Square sq2) { return g_arrBetweenBB[sq1][sq2]; }
-inline Bitboard rookAttackToEdge(const Square sq) { return g_arrRookAttackToEdge[sq]; }
-inline Bitboard bishopAttackToEdge(const Square sq) { return g_arrBishopAttackToEdge[sq]; }
-inline Bitboard lanceAttackToEdge(const Color c, const Square sq) { return g_arrLanceAttackToEdge[c][sq]; }
+inline Bitboard betweenBB(const Square sq1, const Square sq2) { return BetweenBB[sq1][sq2]; }
+inline Bitboard rookAttackToEdge(const Square sq) { return RookAttackToEdge[sq]; }
+inline Bitboard bishopAttackToEdge(const Square sq) { return BishopAttackToEdge[sq]; }
+inline Bitboard lanceAttackToEdge(const Color c, const Square sq) { return LanceAttackToEdge[c][sq]; }
 inline Bitboard dragonAttackToEdge(const Square sq) { return rookAttackToEdge(sq) | Bitboard::kingAttack(sq); }
 inline Bitboard horseAttackToEdge(const Square sq) { return bishopAttackToEdge(sq) | Bitboard::kingAttack(sq); }
-inline Bitboard goldCheckTable(const Color c, const Square sq) { return g_arrGoldCheckTable[c][sq]; }
-inline Bitboard silverCheckTable(const Color c, const Square sq) { return g_arrSilverCheckTable[c][sq]; }
-inline Bitboard knightCheckTable(const Color c, const Square sq) { return g_arrKnightCheckTable[c][sq]; }
-inline Bitboard lanceCheckTable(const Color c, const Square sq) { return g_arrLanceCheckTable[c][sq]; }
+inline Bitboard goldCheckTable(const Color c, const Square sq) { return GoldCheckTable[c][sq]; }
+inline Bitboard silverCheckTable(const Color c, const Square sq) { return SilverCheckTable[c][sq]; }
+inline Bitboard knightCheckTable(const Color c, const Square sq) { return KnightCheckTable[c][sq]; }
+inline Bitboard lanceCheckTable(const Color c, const Square sq) { return LanceCheckTable[c][sq]; }
 // todo: テーブル引きを検討
 inline Bitboard rookStepAttacks(const Square sq) { return goldAttack(Black, sq) & goldAttack(White, sq); }
 // todo: テーブル引きを検討

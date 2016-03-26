@@ -159,27 +159,27 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		if (moveStr[1] != '*') {
 			return Move::moveNone();
 		}
-		const File toFile = Util_Square::CharUSIToFile(moveStr[2]);
-		const Rank toRank = Util_Square::CharUSIToRank(moveStr[3]);
-		if (!Util_Square::IsInSquare(toFile, toRank)) {
+		const File toFile = charUSIToFile(moveStr[2]);
+		const Rank toRank = charUSIToRank(moveStr[3]);
+		if (!isInSquare(toFile, toRank)) {
 			return Move::moveNone();
 		}
-		const Square to = Util_Square::MakeSquare(toFile, toRank);
+		const Square to = makeSquare(toFile, toRank);
 		move = makeDropMove(ptTo, to);
 	}
 	else {
-		const File fromFile = Util_Square::CharUSIToFile(moveStr[0]);
-		const Rank fromRank = Util_Square::CharUSIToRank(moveStr[1]);
-		if (!Util_Square::IsInSquare(fromFile, fromRank)) {
+		const File fromFile = charUSIToFile(moveStr[0]);
+		const Rank fromRank = charUSIToRank(moveStr[1]);
+		if (!isInSquare(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
-		const Square from = Util_Square::MakeSquare(fromFile, fromRank);
-		const File toFile = Util_Square::CharUSIToFile(moveStr[2]);
-		const Rank toRank = Util_Square::CharUSIToRank(moveStr[3]);
-		if (!Util_Square::IsInSquare(toFile, toRank)) {
+		const Square from = makeSquare(fromFile, fromRank);
+		const File toFile = charUSIToFile(moveStr[2]);
+		const Rank toRank = charUSIToRank(moveStr[3]);
+		if (!isInSquare(toFile, toRank)) {
 			return Move::moveNone();
 		}
-		const Square to = Util_Square::MakeSquare(toFile, toRank);
+		const Square to = makeSquare(toFile, toRank);
 		if (moveStr[4] == '\0') {
 			move = makeNonPromoteMove<Capture>(pieceToPieceType(pos.piece(from)), from, to, pos);
 		}
@@ -206,12 +206,12 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 	if (moveStr.size() != 6) {
 		return Move::moveNone();
 	}
-	const File toFile = Util_Square::CharCSAToFile(moveStr[2]);
-	const Rank toRank = Util_Square::CharCSAToRank(moveStr[3]);
-	if (!Util_Square::IsInSquare(toFile, toRank)) {
+	const File toFile = charCSAToFile(moveStr[2]);
+	const Rank toRank = charCSAToRank(moveStr[3]);
+	if (!isInSquare(toFile, toRank)) {
 		return Move::moveNone();
 	}
-	const Square to = Util_Square::MakeSquare(toFile, toRank);
+	const Square to = makeSquare(toFile, toRank);
 	const std::string ptToString(moveStr.begin() + 4, moveStr.end());
 	if (!g_stringToPieceTypeCSA.isLegalString(ptToString)) {
 		return Move::moveNone();
@@ -223,12 +223,12 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 		move = makeDropMove(ptTo, to);
 	}
 	else {
-		const File fromFile = Util_Square::CharCSAToFile(moveStr[0]);
-		const Rank fromRank = Util_Square::CharCSAToRank(moveStr[1]);
-		if (!Util_Square::IsInSquare(fromFile, fromRank)) {
+		const File fromFile = charCSAToFile(moveStr[0]);
+		const Rank fromRank = charCSAToRank(moveStr[1]);
+		if (!isInSquare(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
-		const Square from = Util_Square::MakeSquare(fromFile, fromRank);
+		const Square from = makeSquare(fromFile, fromRank);
 		PieceType ptFrom = pieceToPieceType(pos.piece(from));
 		if (ptFrom == ptTo) {
 			// non promote

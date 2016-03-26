@@ -60,6 +60,47 @@ enum Rank {
 };
 OverloadEnumOperators(Rank);
 
+// 先手のときは BRANK, 後手のときは WRANK より target が前の段にあるなら true を返す。
+template <Color US, Rank BRANK, Rank WRANK>
+inline bool isInFrontOf(const Rank target) { return (US == Black ? (target < BRANK) : (WRANK < target)); }
+
+template <Color US, Rank BRANK, Rank WRANK>
+inline bool isBehind(const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
+
+template <Color US, File BFILE, File WFILE>
+inline bool isLeftOf(const File target) { return (US == Black ? (BFILE < target) : (target < WFILE)); }
+
+template <Color US, File BFILE, File WFILE>
+inline bool isRightOf(const File target) { return (US == Black ? (target < BFILE) : (WFILE < target)); }
+
+enum SquareDelta {
+	DeltaNothing = 0, // 同一の Square にあるとき
+	DeltaN = -1, DeltaE = -9, DeltaS = 1, DeltaW = 9,
+	DeltaNE = DeltaN + DeltaE,
+	DeltaSE = DeltaS + DeltaE,
+	DeltaSW = DeltaS + DeltaW,
+	DeltaNW = DeltaN + DeltaW
+};
+OverloadEnumOperators(SquareDelta);
+
+inline Square operator + (const Square lhs, const SquareDelta rhs) { return lhs + static_cast<Square>(rhs); }
+inline void operator += (Square& lhs, const SquareDelta rhs) { lhs = lhs + static_cast<Square>(rhs); }
+inline Square operator - (const Square lhs, const SquareDelta rhs) { return lhs - static_cast<Square>(rhs); }
+inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs - static_cast<Square>(rhs); }
+
+inline bool isInFile(const File f) { return (0 <= f) && (f < FileNum); }
+inline bool isInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
+// s が Square の中に含まれているか判定
+inline bool isInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
+// File, Rank のどちらかがおかしいかも知れない時は、
+// こちらを使う。
+// こちらの方が遅いが、どんな File, Rank にも対応している。
+inline bool isInSquare(const File f, const Rank r) { return isInFile(f) && isInRank(r); }
+
+// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
+inline constexpr Square makeSquare(const File f, const Rank r) {
+	return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
+}
 
 const Rank SquareToRank[SquareNum] = {
 	Rank9, Rank8, Rank7, Rank6, Rank5, Rank4, Rank3, Rank2, Rank1,
@@ -85,41 +126,29 @@ const File SquareToFile[SquareNum] = {
 	FileA, FileA, FileA, FileA, FileA, FileA, FileA, FileA, FileA
 };
 
-
-
-enum SquareDelta {
-	DeltaNothing = 0, // 同一の Square にあるとき
-	DeltaN = -1, DeltaE = -9, DeltaS = 1, DeltaW = 9,
-	DeltaNE = DeltaN + DeltaE,
-	DeltaSE = DeltaS + DeltaE,
-	DeltaSW = DeltaS + DeltaW,
-	DeltaNW = DeltaN + DeltaW
-};
-OverloadEnumOperators(SquareDelta);
-
-inline Square operator + (const Square lhs, const SquareDelta rhs) { return lhs + static_cast<Square>(rhs); }
-inline void operator += (Square& lhs, const SquareDelta rhs) { lhs = lhs + static_cast<Square>(rhs); }
-inline Square operator - (const Square lhs, const SquareDelta rhs) { return lhs - static_cast<Square>(rhs); }
-inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs - static_cast<Square>(rhs); }
-
-
+// 速度が必要な場面で使用する。
+inline Rank makeRank(const Square s) {
+	assert(isInSquare(s));
+	return SquareToRank[s];
+}
+inline File makeFile(const Square s) {
+	assert(isInSquare(s));
+	return SquareToFile[s];
+}
 
 // 位置関係、方向
 // ボナンザそのまま
 // でもあまり使わないので普通の enum と同様に 0 から順に値を付けて行けば良いと思う。
 enum Direction {
-	DirecMisc = Binary<  0>::value, // 縦、横、斜めの位置に無い場合
-	DirecFile = Binary< 10>::value, // 縦
-	DirecRank = Binary< 11>::value, // 横
+	DirecMisc     = Binary<  0>::value, // 縦、横、斜めの位置に無い場合
+	DirecFile     = Binary< 10>::value, // 縦
+	DirecRank     = Binary< 11>::value, // 横
 	DirecDiagNESW = Binary<100>::value, // 右上から左下
 	DirecDiagNWSE = Binary<101>::value, // 左上から右下
-	DirecCross = Binary< 10>::value, // 縦、横
-	DirecDiag = Binary<100>::value, // 斜め
+	DirecCross    = Binary< 10>::value, // 縦、横
+	DirecDiag     = Binary<100>::value, // 斜め
 };
 OverloadEnumOperators(Direction);
-
-
-
 
 // 2つの位置関係のテーブル
 extern Direction SquareRelation[SquareNum][SquareNum];
@@ -129,125 +158,71 @@ inline Direction squareRelation(const Square sq1, const Square sq2) { return Squ
 extern int SquareDistance[SquareNum][SquareNum];
 inline int squareDistance(const Square sq1, const Square sq2) { return SquareDistance[sq1][sq2]; }
 
-
-
-
-class Util_Square {
-public:
-	// 先手のときは BRANK, 後手のときは WRANK より target が前の段にあるなら true を返す。
-	template <Color US, Rank BRANK, Rank WRANK>
-	inline static bool IsInFrontOf(const Rank target) { return (US == Black ? (target < BRANK) : (WRANK < target)); }
-
-	template <Color US, Rank BRANK, Rank WRANK>
-	inline static bool IsBehind(const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
-
-	template <Color US, File BFILE, File WFILE>
-	inline static bool IsLeftOf(const File target) { return (US == Black ? (BFILE < target) : (target < WFILE)); }
-
-	template <Color US, File BFILE, File WFILE>
-	inline static bool IsRightOf(const File target) { return (US == Black ? (target < BFILE) : (WFILE < target)); }
-
-	inline static bool IsInFile(const File f) { return (0 <= f) && (f < FileNum); }
-	inline static bool IsInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
-	// s が Square の中に含まれているか判定
-	inline static bool IsInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
-	// File, Rank のどちらかがおかしいかも知れない時は、
-	// こちらを使う。
-	// こちらの方が遅いが、どんな File, Rank にも対応している。
-	inline static bool IsInSquare(const File f, const Rank r) { return Util_Square::IsInFile(f) && Util_Square::IsInRank(r); }
-
-	// 速度が必要な場面で使用する。
-	inline static Rank MakeRank(const Square s) {
-		assert(Util_Square::IsInSquare(s));
-		return SquareToRank[s];
+// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
+template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
+inline bool isAligned(const Square from, const Square to, const Square ksq) {
+	const Direction direc = squareRelation(from, ksq);
+	if (FROM_KSQ_NEVER_BE_DIRECMISC) {
+		assert(direc != DirecMisc);
+		return (direc == squareRelation(from, to));
 	}
-	inline static File MakeFile(const Square s) {
-		assert(Util_Square::IsInSquare(s));
-		return SquareToFile[s];
+	else {
+		return (direc != DirecMisc && direc == squareRelation(from, to));
 	}
+}
 
-	// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
-	inline static constexpr Square MakeSquare(const File f, const Rank r) {
-		return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
-	}
+inline char fileToCharUSI(const File f) { return '1' + f; }
+// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
+inline char rankToCharUSI(const Rank r) {
+	static_assert('a' + 1 == 'b', "");
+	static_assert('a' + 2 == 'c', "");
+	static_assert('a' + 3 == 'd', "");
+	static_assert('a' + 4 == 'e', "");
+	static_assert('a' + 5 == 'f', "");
+	static_assert('a' + 6 == 'g', "");
+	static_assert('a' + 7 == 'h', "");
+	static_assert('a' + 8 == 'i', "");
+	return 'a' + r;
+}
+inline std::string squareToStringUSI(const Square sq) {
+	const Rank r = makeRank(sq);
+	const File f = makeFile(sq);
+	const char ch[] = {fileToCharUSI(f), rankToCharUSI(r), '\0'};
+	return std::string(ch);
+}
 
+inline char fileToCharCSA(const File f) { return '1' + f; }
+inline char rankToCharCSA(const Rank r) { return '1' + r; }
+inline std::string squareToStringCSA(const Square sq) {
+	const Rank r = makeRank(sq);
+	const File f = makeFile(sq);
+	const char ch[] = {fileToCharCSA(f), rankToCharCSA(r), '\0'};
+	return std::string(ch);
+}
 
-	// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
-	template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
-	inline static bool IsAligned(const Square from, const Square to, const Square ksq) {
-		const Direction direc = squareRelation(from, ksq);
-		if (FROM_KSQ_NEVER_BE_DIRECMISC) {
-			assert(direc != DirecMisc);
-			return (direc == squareRelation(from, to));
-		}
-		else {
-			return (direc != DirecMisc && direc == squareRelation(from, to));
-		}
-	}
+inline File charCSAToFile(const char c) { return static_cast<File>(c - '1'); }
+inline Rank charCSAToRank(const char c) { return static_cast<Rank>(c - '1'); }
+inline File charUSIToFile(const char c) { return static_cast<File>(c - '1'); }
+inline Rank charUSIToRank(const char c) { return static_cast<Rank>(c - 'a'); }
 
-	inline static char FileToCharUSI(const File f) { return '1' + f; }
+// 後手の位置を先手の位置へ変換
+inline constexpr Square inverse(const Square sq) { return SquareNum - 1 - sq; }
+// 左右変換
+inline constexpr File inverse(const File f) { return FileNum - 1 - f; }
+// 上下変換
+inline constexpr Rank inverse(const Rank r) { return RankNum - 1 - r; }
+// Square の左右だけ変換
+inline Square inverseFile(const Square sq) { return makeSquare(inverse(makeFile(sq)), makeRank(sq)); }
 
-	// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
-	inline static char RankToCharUSI(const Rank r) {
-		static_assert('a' + 1 == 'b', "");
-		static_assert('a' + 2 == 'c', "");
-		static_assert('a' + 3 == 'd', "");
-		static_assert('a' + 4 == 'e', "");
-		static_assert('a' + 5 == 'f', "");
-		static_assert('a' + 6 == 'g', "");
-		static_assert('a' + 7 == 'h', "");
-		static_assert('a' + 8 == 'i', "");
-		return 'a' + r;
-	}
+inline constexpr Square inverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : inverse(sq)); }
 
-	inline static std::string SquareToStringUSI(const Square sq) {
-		const Rank r = Util_Square::MakeRank(sq);
-		const File f = Util_Square::MakeFile(sq);
-		const char ch[] = { Util_Square::FileToCharUSI(f), Util_Square::RankToCharUSI(r), '\0' };
-		return std::string(ch);
-	}
-
-	inline static char FileToCharCSA(const File f) { return '1' + f; }
-	inline static char RankToCharCSA(const Rank r) { return '1' + r; }
-	inline static std::string SquareToStringCSA(const Square sq) {
-		const Rank r = Util_Square::MakeRank(sq);
-		const File f = Util_Square::MakeFile(sq);
-		const char ch[] = { Util_Square::FileToCharCSA(f), Util_Square::RankToCharCSA(r), '\0' };
-		return std::string(ch);
-	}
-
-	inline static File CharCSAToFile(const char c) { return static_cast<File>(c - '1'); }
-	inline static Rank CharCSAToRank(const char c) { return static_cast<Rank>(c - '1'); }
-	inline static File CharUSIToFile(const char c) { return static_cast<File>(c - '1'); }
-	inline static Rank CharUSIToRank(const char c) { return static_cast<Rank>(c - 'a'); }
-
-
-	// 後手の位置を先手の位置へ変換
-	inline static constexpr Square Inverse(const Square sq) { return SquareNum - 1 - sq; }
-	// 左右変換
-	inline static constexpr File Inverse(const File f) { return FileNum - 1 - f; }
-	// 上下変換
-	inline static constexpr Rank Inverse(const Rank r) { return RankNum - 1 - r; }
-	// Square の左右だけ変換
-	inline static Square InverseFile(const Square sq) {
-		return Util_Square::MakeSquare(Util_Square::Inverse(Util_Square::MakeFile(sq)), Util_Square::MakeRank(sq)); }
-
-	inline static constexpr Square InverseIfWhite(const Color c, const Square sq) {
-		return (c == Black ? sq : Util_Square::Inverse(sq)); }
-
-	inline static bool CanPromote(const Color c, const Rank fromOrToRank) {
+inline bool canPromote(const Color c, const Rank fromOrToRank) {
 #if 1
-		static_assert(Black == 0, "");
-		static_assert(Rank9 == 0, "");
-		return static_cast<bool>(0x1c00007u & (1u << ((c << 4) + fromOrToRank)));
+	static_assert(Black == 0, "");
+	static_assert(Rank9 == 0, "");
+	return static_cast<bool>(0x1c00007u & (1u << ((c << 4) + fromOrToRank)));
 #else
-		// 同じ意味。
-		return (c == Black ? isInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : isInFrontOf<White, Rank6, Rank4>(fromOrToRank));
+	// 同じ意味。
+	return (c == Black ? isInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : isInFrontOf<White, Rank6, Rank4>(fromOrToRank));
 #endif
-	}
-};
-
-
-
-
-
+}

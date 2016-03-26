@@ -159,7 +159,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 
 		if (ptFrom == Pawn && checkPawnDrop) {
-			if ((bbOf(Pawn, us) & fileMask(Util_Square::MakeFile(to))).isNot0()) {
+			if ((bbOf(Pawn, us) & fileMask(makeFile(to))).isNot0()) {
 				// 二歩
 				return false;
 			}
@@ -263,7 +263,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		st_->cl.clistpair[0].oldlist[1] = evalList_.list1[listIndex];
 
 		evalList_.list0[listIndex] = kppArray[pcTo         ] + to;
-		evalList_.list1[listIndex] = kppArray[inverse(pcTo)] + Util_Square::Inverse(to);
+		evalList_.list1[listIndex] = kppArray[inverse(pcTo)] + inverse(to);
 		evalList_.listToSquareHand[listIndex] = to;
 		evalList_.squareHandToList[to] = listIndex;
 
@@ -344,7 +344,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			st_->cl.clistpair[0].oldlist[1] = evalList_.list1[fromListIndex];
 
 			evalList_.list0[fromListIndex] = kppArray[pcTo         ] + to;
-			evalList_.list1[fromListIndex] = kppArray[inverse(pcTo)] + Util_Square::Inverse(to);
+			evalList_.list1[fromListIndex] = kppArray[inverse(pcTo)] + inverse(to);
 			evalList_.listToSquareHand[fromListIndex] = to;
 			evalList_.squareHandToList[to] = fromListIndex;
 
@@ -438,7 +438,7 @@ void Position::undoMove(const Move move) {
 			const Piece pcFrom = colorAndPieceTypeToPiece(us, ptFrom);
 			const int toListIndex = evalList_.squareHandToList[to];
 			evalList_.list0[toListIndex] = kppArray[pcFrom         ] + from;
-			evalList_.list1[toListIndex] = kppArray[inverse(pcFrom)] + Util_Square::Inverse(from);
+			evalList_.list1[toListIndex] = kppArray[inverse(pcFrom)] + inverse(from);
 			evalList_.listToSquareHand[toListIndex] = from;
 			evalList_.squareHandToList[from] = toListIndex;
 		}
@@ -454,7 +454,7 @@ void Position::undoMove(const Move move) {
 			const int handnum = hand(us).numOf(hpCaptured);
 			const int toListIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
 			evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
-			evalList_.list1[toListIndex] = kppArray[inverse(pcCaptured)] + Util_Square::Inverse(to);
+			evalList_.list1[toListIndex] = kppArray[inverse(pcCaptured)] + inverse(to);
 			evalList_.listToSquareHand[toListIndex] = to;
 			evalList_.squareHandToList[to] = toListIndex;
 
@@ -532,12 +532,12 @@ namespace {
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {
-				if (Util_Square::CanPromote(turn, Util_Square::MakeRank(to))) {
+				if (canPromote(turn, makeRank(to))) {
 					return PT + PTPromote;
 				}
 			}
 			if (PT == Silver || PT == Bishop || PT == Rook) {
-				if (Util_Square::CanPromote(turn, Util_Square::MakeRank(to)) || Util_Square::CanPromote(turn, Util_Square::MakeRank(from))) {
+				if (canPromote(turn, makeRank(to)) || canPromote(turn, makeRank(from))) {
 					return PT + PTPromote;
 				}
 			}
@@ -781,7 +781,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	// 香車打ち
 	// 飛車で詰まなければ香車でも詰まないので、else if を使用。
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
-	else if (ourHand.exists<HLance>() && Util_Square::IsInFrontOf<US, Rank1, Rank9>(Util_Square::MakeRank(ksq))) {
+	else if (ourHand.exists<HLance>() && isInFrontOf<US, Rank1, Rank9>(makeRank(ksq))) {
 		const Square to = ksq + TDeltaS;
 		if (piece(to) == Empty && attackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, lanceAttackToEdge(US, to))
@@ -839,7 +839,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 				goto silver_drop_end;
 			}
 			// 斜め後ろから打つ場合を調べる必要がある。
-			toBB = dropTarget & (silverAttack(Them, ksq) & inFrontMask(US, Util_Square::MakeRank(ksq)));
+			toBB = dropTarget & (silverAttack(Them, ksq) & inFrontMask(US, makeRank(ksq)));
 		}
 		else {
 			if (ourHand.exists<HBishop>()) {
@@ -1194,7 +1194,7 @@ silver_drop_end:
 
 						// 玉の前方に移動する場合、成で詰まなかったら不成でも詰まないので、ここで省く。
 						// sakurapyon の作者が言ってたので実装。
-						toBB.andEqualNot(inFrontMask(Them, Util_Square::MakeRank(ksq)));
+						toBB.andEqualNot(inFrontMask(Them, makeRank(ksq)));
 						while (toBB.isNot0()) {
 							const Square to = toBB.firstOneFromI9();
 							if (unDropCheckIsSupported(US, to)) {
@@ -1414,16 +1414,16 @@ silver_drop_end:
 		// 歩による移動
 		// 成れる場合は必ずなる。
 		// todo: PawnCheckBB 作って簡略化する。
-		const Rank krank = Util_Square::MakeRank(ksq);
+		const Rank krank = makeRank(ksq);
 		// 歩が移動して王手になるのは、相手玉が1~7段目の時のみ。
-		if (Util_Square::IsInFrontOf<US, Rank2, Rank8>(krank)) {
+		if (isInFrontOf<US, Rank2, Rank8>(krank)) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 			const SquareDelta TDeltaN = (US == Black ? DeltaN : DeltaS);
 
 			Bitboard fromBB = bbOf(Pawn, US);
 			// 玉が敵陣にいないと成で王手になることはない。
-			if (Util_Square::IsInFrontOf<US, Rank6, Rank4>(krank)) {
+			if (isInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
 				const Bitboard toBB_promo = moveTarget & attacksFrom<Gold>(Them, ksq) & TRank789BB;
 				Bitboard fromBB_promo = fromBB & toBB_promo.pawnAttack<Them>();
@@ -1456,7 +1456,7 @@ silver_drop_end:
 			const Square from = to + TDeltaS;
 			if (fromBB.isSet(from) && !bbOf(US).isSet(to)) {
 				// 玉が 1, 2 段目にいるなら、成りで王手出来るので不成は調べない。
-				if (Util_Square::IsBehind<US, Rank8, Rank2>(krank)) {
+				if (isBehind<US, Rank8, Rank2>(krank)) {
 					xorBBs(Pawn, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
@@ -1510,7 +1510,7 @@ void Position::print() const {
 		++i;
 		std::cout << "P" << i;
 		for (File f = FileA; FileI <= f; --f) {
-			std::cout << pieceToCharCSA(piece(Util_Square::MakeSquare(f, r)));
+			std::cout << pieceToCharCSA(piece(makeSquare(f, r)));
 		}
 		std::cout << std::endl;
 	}
@@ -1789,7 +1789,7 @@ void Position::set(const std::string& sfen, Thread* th) {
 			promoteFlag = Promoted;
 		}
 		else if (g_charToPieceUSI.isLegalChar(token)) {
-			if (Util_Square::IsInSquare(sq)) {
+			if (isInSquare(sq)) {
 				setPiece(g_charToPieceUSI.value(token) + promoteFlag, sq);
 				promoteFlag = UnPromoted;
 				sq += DeltaE;
