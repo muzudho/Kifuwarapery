@@ -127,13 +127,13 @@ public:
 	template <bool IsKnight = false>
 	bool isPinnedIllegal(const Square from, const Square to, const Square ksq, const Bitboard& pinned) const {
 		// 桂馬ならどこに動いても駄目。
-		return pinned.isSet(from) && (IsKnight || !isAligned<true>(from, to, ksq));
+		return pinned.isSet(from) && (IsKnight || !Util_Square::IsAligned<true>(from, to, ksq));
 	}
 	// 空き王手かどうか。
 	template <bool IsKnight = false>
 	bool isDiscoveredCheck(const Square from, const Square to, const Square ksq, const Bitboard& dcBB) const {
 		// 桂馬ならどこに動いても空き王手になる。
-		return dcBB.isSet(from) && (IsKnight || !isAligned<true>(from, to, ksq));
+		return dcBB.isSet(from) && (IsKnight || !Util_Square::IsAligned<true>(from, to, ksq));
 	}
 
 	Bitboard checkersBB() const     { return st_->checkersBB; }

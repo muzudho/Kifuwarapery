@@ -44,6 +44,6 @@ void EvalList::set(const Position& pos) {
 		listToSquareHand[nlist] = sq;
 		squareHandToList[sq] = nlist;
 		list0[nlist  ] = kppArray[pc         ] + sq;
-		list1[nlist++] = kppArray[inverse(pc)] + inverse(sq);
+		list1[nlist++] = kppArray[inverse(pc)] + Util_Square::Inverse(sq);
 	}
 }
