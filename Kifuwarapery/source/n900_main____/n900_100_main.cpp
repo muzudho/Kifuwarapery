@@ -10,20 +10,20 @@
 #if defined FIND_MAGIC
 // Magic Bitboard の Magic Number を求める為のソフト
 int main() {
-	u64 RookMagic[SquareNum];
-	u64 BishopMagic[SquareNum];
+	u64 g_arrRookMagic[SquareNum];
+	u64 g_arrBishopMagic[SquareNum];
 
 	std::cout << "const u64 RookMagic[81] = {" << std::endl;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		RookMagic[sq] = findMagic(sq, false);
-		std::cout << "\tUINT64_C(0x" << std::hex << RookMagic[sq] << ")," << std::endl;
+		g_arrRookMagic[sq] = findMagic(sq, false);
+		std::cout << "\tUINT64_C(0x" << std::hex << g_arrRookMagic[sq] << ")," << std::endl;
 	}
 	std::cout << "};\n" << std::endl;
 
 	std::cout << "const u64 BishopMagic[81] = {" << std::endl;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		BishopMagic[sq] = findMagic(sq, true);
-		std::cout << "\tUINT64_C(0x" << std::hex << BishopMagic[sq] << ")," << std::endl;
+		g_arrBishopMagic[sq] = findMagic(sq, true);
+		std::cout << "\tUINT64_C(0x" << std::hex << g_arrBishopMagic[sq] << ")," << std::endl;
 	}
 	std::cout << "};\n" << std::endl;
 
