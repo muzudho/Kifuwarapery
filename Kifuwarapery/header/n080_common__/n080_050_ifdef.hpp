@@ -17,10 +17,11 @@
 //#define SKIP_LONG_TIME_EVAL
 
 // これでスキップしてコンパイルしても abort()では落ちないぜ☆（＾～＾）
-#define SKIP_LONG_LONG_TIME_EVAL_KPP
-//#define SKIP_LONG_LONG_TIME_EVAL_KKP
+//#define SKIP_LONG_LONG_TIME_EVAL_KPP
+// KKPも数十分で終わるぜ☆（＾ｑ＾）
+#define SKIP_LONG_LONG_TIME_EVAL_KKP
 // KK は比較的早く終わるぜ☆（^q^）
-//#define SKIP_LONG_LONG_TIME_EVAL_KK
+#define SKIP_LONG_LONG_TIME_EVAL_KK
 
 //----------------------------------------
 // 使う評価値（４種類）
