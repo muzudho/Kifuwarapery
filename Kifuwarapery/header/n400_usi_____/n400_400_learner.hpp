@@ -101,7 +101,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 			std::pair<ptrdiff_t, int> indices[base.KPPIndicesMax];
 			for (int i = 0; i < fe_end; ++i) {
 				for (int j = 0; j < fe_end; ++j) {
-					base.kppIndices(indices, static_cast<Square>(ksq), i, j);
+					base.CreateKppIndices(indices, static_cast<Square>(ksq), i, j);
 					FOO(indices, base.oneArrayKPP, raw.kpp_raw[ksq][i][j]);
 				}
 			}
@@ -116,7 +116,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 			std::pair<ptrdiff_t, int> indices[base.KKPIndicesMax];
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 				for (int i = 0; i < fe_end; ++i) {
-					base.kkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
+					base.CreateKkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
 					FOO(indices, base.oneArrayKKP, raw.kkp_raw[ksq0][ksq1][i]);
 				}
 			}
@@ -130,7 +130,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 		for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
 			std::pair<ptrdiff_t, int> indices[base.KKIndicesMax];
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
-				base.kkIndices(indices, static_cast<Square>(ksq0), ksq1);
+				base.CreateKkIndices(indices, static_cast<Square>(ksq0), ksq1);
 				FOO(indices, base.oneArrayKK, raw.kk_raw[ksq0][ksq1]);
 			}
 		}

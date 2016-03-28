@@ -38,10 +38,10 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		Evaluater::readSomeSynthesized(dirName);
 
 		SYNCCOUT << "(^q^)C: (long time)read! dir=" << dirName << SYNCENDL;
-		read(dirName);
+		Evaluater::ReadBins(dirName);
 
 		SYNCCOUT << "(^q^)D: (long time)setEvaluate!" << SYNCENDL;
-		setEvaluate();
+		Evaluater::setEvaluate();
 	}
 
 
@@ -216,8 +216,8 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		BASE_PHASE4;							\
 	}
 
-
-	void read(const std::string& dirName) {
+	// .bin ファイルを読み込む。
+	void ReadBins(const std::string& dirName) {
 
 		// 関数定義ここから
 #define FOO(x) {														\
@@ -288,17 +288,10 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 					SYNCCOUT << "(^q^)KPP: i=" << i << "/" << fe_end << SYNCENDL;
 
 					for (int j = 0; j < fe_end; ++j) {
-						//SYNCCOUT << "(^q^)KPP: j=" << j << SYNCENDL;
 
-						kppIndices(indices, static_cast<Square>(ksq), i, j);
-
-						//SYNCCOUT << "(^q^)KPP: a" << SYNCENDL;
+						this->CreateKppIndices(indices, static_cast<Square>(ksq), i, j);
 						std::array<s64, 2> sum = {{}};
-
-						//SYNCCOUT << "(^q^)KPP: b" << SYNCENDL;
 						FOO(indices, oneArrayKPP, sum);
-
-						//SYNCCOUT << "(^q^)KPP: c" << SYNCENDL;
 						KPP[ksq][i][j] += sum;
 					}
 				}
@@ -321,7 +314,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 					for (int i = 0; i < fe_end; ++i) {
 						//SYNCCOUT << "(^q^)KKP: i=" << i << "/" << fe_end << SYNCENDL;
 
-						kkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
+						this->CreateKkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
 						std::array<s64, 2> sum = {{}};
 						FOO(indices, oneArrayKKP, sum);
 						KKP[ksq0][ksq1][i] += sum;
@@ -345,7 +338,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 					//SYNCCOUT << "(^q^)KKP: ksq1=" << ksq1 << "/" << fe_end << SYNCENDL;
 
-					kkIndices(indices, static_cast<Square>(ksq0), ksq1);
+					this->CreateKkIndices(indices, static_cast<Square>(ksq0), ksq1);
 					std::array<s64, 2> sum = {{}};
 					FOO(indices, oneArrayKK, sum);
 					KK[ksq0][ksq1][0] += sum[0] / 2;

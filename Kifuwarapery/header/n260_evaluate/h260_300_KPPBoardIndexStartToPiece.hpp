@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "../../header/n260_evaluate/h260_200_evaluate01.hpp"
 #include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n260_evaluate/h260_200_evaluate01.hpp"
 
 
 struct KPPBoardIndexStartToPiece : public std::unordered_map<int, Piece> {
