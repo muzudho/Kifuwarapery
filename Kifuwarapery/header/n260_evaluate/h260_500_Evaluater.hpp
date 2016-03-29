@@ -246,9 +246,9 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
 
-	void WriteKppPartFile2(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	void WriteKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
-	bool ReadKppPartFile2(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	bool ReadKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
 
 
@@ -295,7 +295,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				for (int p1 = 0; p1 < fe_end; ++p1) {
 
 					//SYNCCOUT << "(^q^)ReadKppPartFile!" << SYNCENDL;
-					if (this->ReadKppPartFile2(dirName, k1, p1, KPP))
+					if (this->ReadKppPartFile(dirName, k1, p1, KPP))
 					{
 						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
 						// 中間ファイルから読込完了。
@@ -316,7 +316,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 						// short型(2byte?) 要素数 2 の配列。
 						// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
 						// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
-						this->WriteKppPartFile2(dirName, k1, p1, KPP);
+						this->WriteKppPartFile(dirName, k1, p1, KPP);
 						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
 					}
 				}
