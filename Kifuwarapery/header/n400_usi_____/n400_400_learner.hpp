@@ -102,7 +102,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 			for (int i = 0; i < fe_end; ++i) {
 				for (int j = 0; j < fe_end; ++j) {
 					base.CreateKppIndices(indices, static_cast<Square>(ksq), i, j);
-					FOO(indices, base.oneArrayKPP, raw.kpp_raw[ksq][i][j]);
+					FOO(indices, base.GetKppOneArrayFirst, raw.kpp_raw[ksq][i][j]);
 				}
 			}
 		}
@@ -117,7 +117,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 				for (int i = 0; i < fe_end; ++i) {
 					base.CreateKkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
-					FOO(indices, base.oneArrayKKP, raw.kkp_raw[ksq0][ksq1][i]);
+					FOO(indices, base.GetKkpOneArrayFirst, raw.kkp_raw[ksq0][ksq1][i]);
 				}
 			}
 		}
@@ -131,7 +131,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 			std::pair<ptrdiff_t, int> indices[base.KKIndicesMax];
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 				base.CreateKkIndices(indices, static_cast<Square>(ksq0), ksq1);
-				FOO(indices, base.oneArrayKK, raw.kk_raw[ksq0][ksq1]);
+				FOO(indices, base.GetKkOneArrayFirst, raw.kk_raw[ksq0][ksq1]);
 			}
 		}
 	}
@@ -425,11 +425,11 @@ private:
 	template <bool UsePenalty>
 	void updateEval(const std::string& dirName) {
 		for (size_t i = 0; i < eval_.kpps_end_index(); ++i)
-			updateFV<UsePenalty>(*eval_.oneArrayKPP(i), *parse2EvalBase_.oneArrayKPP(i));
+			updateFV<UsePenalty>(*eval_.GetKppOneArrayFirst(i), *parse2EvalBase_.GetKppOneArrayFirst(i));
 		for (size_t i = 0; i < eval_.kkps_end_index(); ++i)
-			updateFV<UsePenalty>(*eval_.oneArrayKKP(i), *parse2EvalBase_.oneArrayKKP(i));
+			updateFV<UsePenalty>(*eval_.GetKkpOneArrayFirst(i), *parse2EvalBase_.GetKkpOneArrayFirst(i));
 		for (size_t i = 0; i < eval_.kks_end_index(); ++i)
-			updateFV<UsePenalty>(*eval_.oneArrayKK(i), *parse2EvalBase_.oneArrayKK(i));
+			updateFV<UsePenalty>(*eval_.GetKkOneArrayFirst(i), *parse2EvalBase_.GetKkOneArrayFirst(i));
 
 		// 学習しないパラメータがある時は、一旦 write() で学習しているパラメータだけ書きこんで、再度読み込む事で、
 		// updateFV()で学習しないパラメータに入ったノイズを無くす。
