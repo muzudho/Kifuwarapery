@@ -12,6 +12,10 @@
 #include <tchar.h>
 
 
+//#include <direct.h>	// _mkdirを使いたかったんだぜ☆（＾ｑ＾）
+//#include <Windows.h>	// ファイル／ディレクトリ操作用
+//#include "shlwapi.h"	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
+
 
 // TODO: reference additional headers your program requires here
 #include <cinttypes>

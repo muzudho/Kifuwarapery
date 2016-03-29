@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
+#include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n260_evaluate/h260_200_evaluate01.hpp"
 #include "../../header/n260_evaluate/h260_300_KPPBoardIndexStartToPiece.hpp"
 

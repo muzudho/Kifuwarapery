@@ -192,9 +192,6 @@
     <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp">
       <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
-    </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_400_EvaluaterBase.hpp">
       <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
@@ -218,6 +215,9 @@
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp">
       <Filter>Header Files\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
+      <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -307,6 +307,9 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp">
       <Filter>Source Files\n260_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="header\n260_evaluate\h260_500_Evaluater.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

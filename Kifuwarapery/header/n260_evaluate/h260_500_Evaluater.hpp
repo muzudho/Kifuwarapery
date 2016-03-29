@@ -246,40 +246,9 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
 
+	void WriteKppPartFile2(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
-	void WriteKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]) {
-		std::ofstream ofs((addSlashIfNone(dirName) + "obj/Kpp[" + std::to_string( k1) + "]/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj").c_str(), std::ios::binary);
-
-		for (int p2 = 0; p2 < fe_end; ++p2) {
-			for (int z = 0; z < 2; ++z) {
-				ofs << kppArray[k1][p1][p2][z];
-			}
-		}
-	}
-
-	bool ReadKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]) {
-		std::string path = addSlashIfNone(dirName) + "obj/Kpp[" + std::to_string( k1) + "]/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
-		//SYNCCOUT << "File Search: [" << path << "]" << SYNCENDL;
-
-		std::ifstream ifs(path.c_str(), std::ios::binary);
-		if (ifs.fail()) {
-			std::cerr << "Error : Could not open" << std::endl;
-			//なんか終了処理を入れる
-			return false;
-		}
-
-		//読み込むファイル格納用配列
-		short buffer[fe_end][fe_end][2];
-		ifs.read((char*)buffer, fe_end*fe_end * 2 * sizeof(short));
-
-		for (int p2 = 0; p2 < fe_end; ++p2) {
-			for (int z = 0; z < 2; ++z) {
-				kppArray[k1][p1][p2][z] = buffer[p1][p2][z];
-			}
-		}
-
-		return true;
-	}
+	bool ReadKppPartFile2(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
 
 
@@ -326,7 +295,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				for (int p1 = 0; p1 < fe_end; ++p1) {
 
 					//SYNCCOUT << "(^q^)ReadKppPartFile!" << SYNCENDL;
-					if (this->ReadKppPartFile(dirName, k1, p1, KPP))
+					if (this->ReadKppPartFile2(dirName, k1, p1, KPP))
 					{
 						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
 						// 中間ファイルから読込完了。
@@ -347,7 +316,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 						// short型(2byte?) 要素数 2 の配列。
 						// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
 						// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
-						this->WriteKppPartFile(dirName, k1, p1, KPP);
+						this->WriteKppPartFile2(dirName, k1, p1, KPP);
 						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
 					}
 				}

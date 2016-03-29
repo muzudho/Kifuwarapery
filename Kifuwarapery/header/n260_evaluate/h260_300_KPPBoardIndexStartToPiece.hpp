@@ -2,6 +2,7 @@
 
 
 #include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 #include "../../header/n260_evaluate/h260_200_evaluate01.hpp"
 
 
