@@ -219,13 +219,13 @@
     <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
       <Filter>Header Files\n260_evaluate</Filter>
     </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
+      <Filter>Header Files\n080_common__</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n080_common__\n80_100_common.cpp">
-      <Filter>Source Files\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp">
       <Filter>Source Files\n120_brdEntry</Filter>
@@ -310,6 +310,12 @@
     </ClCompile>
     <ClCompile Include="header\n260_evaluate\h260_500_Evaluater.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common__\n080_100_common.cpp">
+      <Filter>Source Files\n080_common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp">
+      <Filter>Source Files\n080_common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

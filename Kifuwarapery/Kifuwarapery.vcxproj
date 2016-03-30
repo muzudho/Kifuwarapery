@@ -149,6 +149,7 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
@@ -196,7 +197,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="header\n260_evaluate\h260_500_Evaluater.cpp" />
-    <ClCompile Include="source\n080_common__\n80_100_common.cpp" />
+    <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
+    <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_300_ColorFileRank.cpp" />

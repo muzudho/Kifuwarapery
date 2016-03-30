@@ -30,17 +30,26 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		// 合成された評価関数バイナリがあればそちらを使う。
 		if (Synthesized) {
 			if (readSynthesized(dirName))
+			{
+				SYNCCOUT << "(init 1/4)Use synthesized file!" << SYNCENDL;
 				return;
+			}
 		}
 		clear();
 
-		SYNCCOUT << "(^q^)B: readSomeSynthesized!" << SYNCENDL;
+#if defined(MODE_EVAL)
+		SYNCCOUT << "(init 2/4) readSomeSynthesized!" << SYNCENDL;
+#endif
 		Evaluater::readSomeSynthesized(dirName);
 
-		SYNCCOUT << "(^q^)C: (long time)read! dir=" << dirName << SYNCENDL;
+#if defined(MODE_EVAL)
+		SYNCCOUT << "(init 3/4) (long time)read bins! dir=" << dirName << SYNCENDL;
+#endif
 		Evaluater::ReadBins(dirName);
 
-		SYNCCOUT << "(^q^)D: (long time)setEvaluate!" << SYNCENDL;
+#if defined(MODE_EVAL)
+		SYNCCOUT << "(init 4/4) (long time)setEvaluate!" << SYNCENDL;
+#endif
 		Evaluater::SetEvaluate(dirName);
 	}
 
@@ -246,7 +255,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
 
-	void WriteKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	bool WriteKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
 	bool ReadKppCache2Files(const std::string& dirName, int k1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 	bool ReadKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
@@ -256,6 +265,10 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 	std::string GetKppCache2FilePath(const std::string& dirName, int k1);
 	std::string GetKppCache3FilePath(const std::string& dirName, int k1, int p1);
 
+private:
+	void WriteKppCache3FilesBody(const std::string& cache3Filepath, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+
+public:
 
 	void SetEvaluate(const std::string& dirName) {
 #if !defined LEARN
@@ -281,7 +294,9 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
+#if defined(MODE_EVAL)
 		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
+#endif
 		// KPP
 		{
 			#ifdef _OPENMP
@@ -344,14 +359,22 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 				// できれば、Cache3 を、Cache2 に統合します。
 				this->SynthesizeKppCache3ToCache2(dirName, k1);
 
+#if defined(MODE_EVAL)
+				SYNCCOUT << "(^q^)Go Cache2!" << SYNCENDL;
+#endif
+
 				if (this->ReadKppCache2Files(dirName, k1, KPP))
 				{
+#if defined(MODE_EVAL)
 					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << " loaded." << SYNCENDL;
+#endif
 					// 中間ファイルから読込完了。
 				}
 				else
 				{
+#if defined(MODE_EVAL)
 					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << SYNCENDL;
+#endif
 
 					// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
 					std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
@@ -360,7 +383,9 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 						//SYNCCOUT << "(^q^)ReadKppCache3Files!" << SYNCENDL;
 						if (this->ReadKppCache3Files(dirName, k1, p1, KPP))
 						{
+#if defined(MODE_EVAL)
 							SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
+#endif
 							// 中間ファイルから読込完了。
 						}
 						else
@@ -380,25 +405,40 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 							// short型(2byte?) 要素数 2 の配列。
 							// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
 							// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
-							this->WriteKppCache3Files(dirName, k1, p1, KPP);
-							SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
+							if (this->WriteKppCache3Files(dirName, k1, p1, KPP))
+							{
+#if defined(MODE_EVAL)
+								SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
+#endif
+							}
+							else
+							{
+								// エラー
+								goto gt_EndKPP;
+							}
 #endif
 						}
 					}
 				}
 			}
+		gt_EndKPP:
+			;
 		}
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
+#if defined(MODE_EVAL)
 		SYNCCOUT << "(^q^)KKP!" << SYNCENDL;
+#endif
 		// KKP
 		{
 			#ifdef _OPENMP
 			#pragma omp for
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+#if defined(MODE_EVAL)
 				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+#endif
 
 				std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
@@ -416,14 +456,18 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
+#if defined(MODE_EVAL)
 		SYNCCOUT << "(^q^)KK!" << SYNCENDL;
+#endif
 		// KK
 		{
 			#ifdef _OPENMP
 			#pragma omp for
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
+#if defined(MODE_EVAL)
 				SYNCCOUT << "(^q^)KK: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+#endif
 
 				std::pair<ptrdiff_t, int> indices[KKIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {

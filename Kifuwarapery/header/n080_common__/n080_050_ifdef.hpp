@@ -13,6 +13,10 @@
 //----------------------------------------
 // (^q^)学習に時間のかかる評価値をスキップするか？
 //----------------------------------------
+// 評価値ファイル作成モード時の文字出力
+#define MODE_EVAL
+
+#if !defined(MODE_EVAL) // 評価値ファイル作成モード以外で使用できる設定
 // ただし、これでスキップしてコンパイルした場合、abort()で落ちるんだぜ☆（＾～＾）
 //#define SKIP_LONG_TIME_EVAL
 
@@ -22,12 +26,12 @@
 //#define SKIP_LONG_LONG_TIME_EVAL_KKP
 // KK は比較的早く終わるぜ☆（^q^）
 //#define SKIP_LONG_LONG_TIME_EVAL_KK
-
-// KPP評価値キャッシュを利用するか。
-#define USE_KPP_CACHE
-
 // 評価値ファイルが無ければスキップするか。
-//#define SKIP_NOT_EXIST_EVAL_FILE
+#define SKIP_NOT_EXIST_EVAL_FILE
+// KPP評価値キャッシュを利用するか。
+#define SKIP_USE_KPP_CACHE
+#endif
+
 
 //----------------------------------------
 // 使う評価値（４種類）

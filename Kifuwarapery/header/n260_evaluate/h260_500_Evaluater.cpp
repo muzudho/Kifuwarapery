@@ -1,12 +1,15 @@
-//#include "stdafx.h"
+#include "../n080_common__/n080_200_utilProgram.hpp"
 #include "h260_500_Evaluater.hpp"
 #include <Windows.h>	// ファイル／ディレクトリ操作用
 #include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 
+
 // KPPのファイル分割
-void Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
+bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
-#if defined(USE_KPP_CACHE)
+	bool isError = false;
+
+#if !defined(SKIP_USE_KPP_CACHE)
 	//SYNCCOUT << "(Write) File Search: dirName=[" << dirName << "]" << SYNCENDL;
 
 	std::string dir1 = addSlashIfNone(dirName) + "obj";
@@ -17,56 +20,87 @@ void Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
-	//std::string file3 = this->GetKppCache3FilePath(dirName, k1, p1);
-	SYNCCOUT << "(Write) File Search: path3=[" << file3 << "]" << SYNCENDL;
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(WriteKppCache3Files 1/9) File Search: path3=[" << file3 << "]" << SYNCENDL;
+#endif
 
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
 	{
-		//SYNCCOUT << "Not found directory : path1=[" << dir1 << "]" << SYNCENDL;
-		if (CreateDirectoryA((LPCSTR)dir1.c_str(), NULL))
+#if defined(MODE_EVAL)
+		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory : dir1=[" << dir1 << "]" << SYNCENDL;
+#endif
+		UtilProgram utilProgram;
+		utilProgram.ErrorBegin();
+		SetLastError(NO_ERROR);		//エラー情報をクリアする
+		int result = CreateDirectoryA((LPCSTR)dir1.c_str(), NULL);
+		utilProgram.ErrorEnd();
+
+		if (result !=0)
 		{
-			SYNCCOUT << "Create directory : dir1=[" << dir1 << "]" << SYNCENDL;
+#if defined(MODE_EVAL)
+			SYNCCOUT << "(WriteKppCache3Files 3/9)Create directory : dir1=[" << dir1 << "]" << SYNCENDL;
+#endif
 		}
 		else
 		{
-			SYNCCOUT << "Can not create directory : dir1=[" << dir1 << "]" << SYNCENDL;
+			// エラー
+			isError = true;
+			std::cerr << "(WriteKppCache3Files 4/9): Can not create directory : dir1=[" << dir1 << "]" << SYNCENDL;
 		}
 	}
 
-	if (!PathIsDirectoryA((LPCSTR)dir2.c_str()))
+	if (!isError && !PathIsDirectoryA((LPCSTR)dir2.c_str()))
 	{
 		//SYNCCOUT << "Not found directory : path2=[" << dir2 << "]" << SYNCENDL;
 		if (CreateDirectoryA((LPCSTR)dir2.c_str(), NULL))
 		{
-			SYNCCOUT << "Create directory : dir2=[" << dir2 << "]" << SYNCENDL;
+#if defined(MODE_EVAL)
+			SYNCCOUT << "(WriteKppCache3Files 5/9)Create directory : dir2=[" << dir2 << "]" << SYNCENDL;
+#endif
 		}
 		else
 		{
-			SYNCCOUT << "Can not create directory : dir2=[" << dir2 << "]" << SYNCENDL;
+			// エラー
+			isError = true;
+			std::cerr << "(WriteKppCache3Files 6/9)error: Can not create directory : dir2=[" << dir2 << "]" << SYNCENDL;
 		}
 	}
 
-	// ファイルは無いはず。
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(WriteKppCache3Files 7/9)" << SYNCENDL;
+#endif
 
-	std::ofstream output(file3.c_str(), std::ios::binary);
-	//SYNCCOUT << "(^q^)Go! KPP!" << SYNCENDL;
+	// ファイルは無いはず。
+	if (!isError)
+	{
+		this->WriteKppCache3FilesBody(dirName, k1, p1, kppArray);
+#if defined(MODE_EVAL)
+		SYNCCOUT << "(WriteKppCache3Files 8/9)" << SYNCENDL;
+#endif
+	}
+#endif
+
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(WriteKppCache3Files 9/9)" << SYNCENDL;
+#endif
+	return !isError;
+}
+
+void Evaluater::WriteKppCache3FilesBody(const std::string & cache3Filepath, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
+{
+	std::ofstream output(cache3Filepath, std::ios::binary);
 
 	//書き込むファイル格納用配列
 	char buffer[2];
 	int p2 = 0;
 	int z = 0;
-	for (;;) {//while (!output.eof()) {
+	for (;;) {
 
-		////output << kppArray[k1][p1][p2][z];
-		//output << (short)kppArray[k1][p1][p2][z];
 		buffer[0] = kppArray[k1][p1][p2][0];// 2byte * 1548element = 3096byte
 		buffer[1] = kppArray[k1][p1][p2][1];// 2byte * 1548element = 3096byte
-		//output.write((char *)buffer, sizeof(short));// 2element * 2byte * 1548element = 6192byte
 		output.write((char *)buffer, sizeof(s16));// 2element * 2byte * 1548element = 6192byte
-
-		// インクリメント。z++にするとなぜか強制終了する。
-		z++;
-
+												  
+		z++;// インクリメント。
 		if (z == 2) {
 			z = 0;
 			p2++;// 繰り上がり
@@ -76,28 +110,26 @@ void Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 		}
 	}
 	//SYNCCOUT << "(^q^)Outputed!" << SYNCENDL;
-#endif
 }
 
 bool Evaluater::ReadKppCache2Files(const std::string & dirName, int k1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
-#if defined(USE_KPP_CACHE)
-	std::string path = this->GetKppCache2FilePath(dirName, k1);
-	SYNCCOUT << "(Read) Cache2 Search: [" << path << "]" << SYNCENDL;
+#if !defined(SKIP_USE_KPP_CACHE)
+	std::string cache2Path = this->GetKppCache2FilePath(dirName, k1);
 
-	if (!PathFileExistsA((LPCSTR)path.c_str()))
+	if (!PathFileExistsA((LPCSTR)cache2Path.c_str()))
 	{
 		// ファイルが見つからないのは OK です。falseを返して正常終了します。
 		return false;
 	}
 
-	std::ifstream ifs(path.c_str(), std::ios::binary);
+	std::ifstream ifs(cache2Path.c_str(), std::ios::binary);
 	if (ifs.fail()) {
 		std::cerr << "Error : Could not open" << std::endl;
 		//なんか終了処理を入れる
 		return false;
 	}
-	//std::cerr << "(^q^)File opened." << std::endl;
+	//SYNCCOUT << "(^q^)File opened." << std::endl;
 
 	//読み込むファイル格納用配列
 	int p1 = 0;
@@ -124,7 +156,6 @@ bool Evaluater::ReadKppCache2Files(const std::string & dirName, int k1, std::arr
 			}
 		}
 	}
-	std::cerr << "(^q^)File loaded!" << std::endl;
 
 	return true;
 #else
@@ -134,35 +165,29 @@ bool Evaluater::ReadKppCache2Files(const std::string & dirName, int k1, std::arr
 
 bool Evaluater::ReadKppCache3Files(const std::string & dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
-#if defined(USE_KPP_CACHE)
-	std::string path = this->GetKppCache3FilePath(dirName, k1, p1);// addSlashIfNone(dirName) + "obj/Kpp[" + std::to_string(k1) + "]/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
-	SYNCCOUT << "(Read) File Search: [" << path << "]" << SYNCENDL;
+#if !defined(SKIP_USE_KPP_CACHE)
+	std::string catch3Path = this->GetKppCache3FilePath(dirName, k1, p1);// addSlashIfNone(dirName) + "obj/Kpp[" + std::to_string(k1) + "]/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
-	if (!PathFileExistsA((LPCSTR)path.c_str()))
+	if (!PathFileExistsA((LPCSTR)catch3Path.c_str()))
 	{
 		// ファイルが見つからないのは OK です。falseを返して正常終了します。
-		//std::cerr << "File not found (ok)." << std::endl;
 		return false;
 	}
-	//std::cerr << "(^q^)File found." << std::endl;
 
-	std::ifstream ifs(path.c_str(), std::ios::binary);
+	std::ifstream ifs(catch3Path.c_str(), std::ios::binary);
 	if (ifs.fail()) {
 		std::cerr << "Error : Could not open" << std::endl;
 		//なんか終了処理を入れる
 		return false;
 	}
-	//std::cerr << "(^q^)File opened." << std::endl;
 
 	//読み込むファイル格納用配列
 	int p2 = 0;
 	int z = 0;
-	char buffer[2]; //s16 *buffer = 0;
+	char buffer[2];
 	while (!ifs.eof()) {
 
 		ifs.read((char*)buffer, sizeof(s16));//2byte
-
-		//std::cerr << "(^q^)Skip! k1=[" << std::to_string(k1) << "] p1=[" << std::to_string(p1) << "] p2=[" << std::to_string(p2) << "] z=[" << std::to_string(z) << "]" << std::endl;
 
 		kppArray[k1][p1][p2][z] = *buffer;
 
@@ -175,9 +200,7 @@ bool Evaluater::ReadKppCache3Files(const std::string & dirName, int k1, int p1, 
 				break;
 			}
 		}
-
 	}
-	std::cerr << "(^q^)File loaded!" << std::endl;
 
 	return true;
 #else
@@ -187,7 +210,8 @@ bool Evaluater::ReadKppCache3Files(const std::string & dirName, int k1, int p1, 
 
 bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 {
-#if defined(USE_KPP_CACHE)
+#if !defined(SKIP_NOT_EXIST_EVAL_FILE) // 評価値ファイルが無かった場合スキップする設定なら、この関数は実行しません。
+#if !defined(SKIP_USE_KPP_CACHE)
 	// Cache2ファイルの有無を調べます。
 	std::string cache2Path = this->GetKppCache2FilePath(dirName, k1);
 	if (PathFileExistsA((LPCSTR)cache2Path.c_str()))
@@ -195,7 +219,9 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 		// ファイルが見つかった場合は OK です。falseを返して正常終了します。
 		return false;
 	}
-	SYNCCOUT << "(Synthesize) Go KPP!: [" << cache2Path << "]" << SYNCENDL;
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(Synthesize 1/3) Go KPP!: [" << cache2Path << "]" << SYNCENDL;
+#endif
 
 	// Cache3ファイルが 1548個あるか調べます。
 	for (int p1 = 0; p1 < fe_end; ++p1) {
@@ -207,7 +233,9 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 			return false;
 		}
 	}
-	SYNCCOUT << "(Synthesize) [" << fe_end << "] files exist. ok." << SYNCENDL;
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(Synthesize 2/3) [" << fe_end << "] files exist. ok." << SYNCENDL;
+#endif
 
 	// 書き出し先
 	std::ofstream output(cache2Path.c_str(), std::ios::binary);
@@ -218,7 +246,8 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 
 		if (!PathFileExistsA((LPCSTR)cache3Path.c_str()))
 		{
-			// ファイルが見つからないのは OK です。falseを返して正常終了します。
+			std::cerr << "Error : File not found. " << cache3Path << std::endl;
+			//なんか終了処理を入れる
 			return false;
 		}
 
@@ -232,13 +261,13 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 		int p2 = 0;
 		int z = 0;
 		char buffer[2];
-		while (!input.eof()) {
+		for (;;){// while (!input.eof()) {
 
 			// 読込
 			input.read((char*)buffer, sizeof(s16));// 2bytes
 
 			// 書出
-			output.write((char *)buffer, sizeof(s16));// 2bytes
+			output.write((char*)buffer, sizeof(s16));// 2bytes
 
 			// インクリメント。
 			z++;
@@ -250,10 +279,21 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 				}
 			}
 		}
+
+		// よく強制終了するので、明示的に閉じて見ます。
+		//input.close();
 	}
-	std::cerr << "(^q^)File synthesized!" << std::endl;
+#if defined(MODE_EVAL)
+	SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << std::endl;
+#endif
+
+	// よく強制終了するので、明示的に閉じて見ます。
+	//output.close();
 
 	return true;
+#else
+	return false;
+#endif
 #else
 	return false;
 #endif
