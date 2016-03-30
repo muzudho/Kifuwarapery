@@ -1,3 +1,4 @@
+#include "../../header/n080_common__/n080_100_common.hpp"
 #include "..\..\header\n080_common__\n080_200_utilProgram.hpp"
 #include <windows.h> // ヘッダー・ファイルに書くとエラーになる。
 
@@ -19,4 +20,17 @@ void UtilProgram::ErrorEnd()
 	//MessageBox(NULL, (const char*)lpMsgBuf, NULL, MB_OK);	//メッセージ表示
 	MessageBox(NULL, (LPCTSTR)lpMsgBuf, NULL, MB_OK);	//メッセージ表示
 	LocalFree(lpMsgBuf);
+}
+
+void UtilProgram::ShowCurrentDirectory()
+{
+	TCHAR crDir[MAX_PATH + 1];
+	GetCurrentDirectory(MAX_PATH + 1, crDir);
+	crDir[MAX_PATH] = '\0';
+	SYNCCOUT << "Current directory=[" << SYNCENDL;
+	for (int i = 0; crDir[i] != '\0'; i++)
+	{
+		SYNCCOUT << ((char)crDir[i]) << SYNCENDL;
+	}
+	SYNCCOUT << "]" << SYNCENDL;
 }

@@ -365,15 +365,15 @@ public:
 
 				if (this->ReadKppCache2Files(dirName, k1, KPP))
 				{
-#if defined(MODE_EVAL)
-					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << " loaded." << SYNCENDL;
-#endif
 					// 中間ファイルから読込完了。
+#if defined(MODE_EVAL)
+					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "(" << std::to_string(o) << "/" << std::to_string(SquareNum) << ") loaded." << SYNCENDL;
+#endif
 				}
 				else
 				{
 #if defined(MODE_EVAL)
-					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << SYNCENDL;
+					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
 					// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
@@ -384,7 +384,7 @@ public:
 						if (this->ReadKppCache3Files(dirName, k1, p1, KPP))
 						{
 #if defined(MODE_EVAL)
-							SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
+							SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " loaded." << SYNCENDL;
 #endif
 							// 中間ファイルから読込完了。
 						}
@@ -408,7 +408,7 @@ public:
 							if (this->WriteKppCache3Files(dirName, k1, p1, KPP))
 							{
 #if defined(MODE_EVAL)
-								SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
+								SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " writed!" << SYNCENDL;
 #endif
 							}
 							else
@@ -437,7 +437,7 @@ public:
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
 #if defined(MODE_EVAL)
-				SYNCCOUT << "(^q^)KKP: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+				SYNCCOUT << "(^q^)KKP: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
 				std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
@@ -466,7 +466,7 @@ public:
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
 #if defined(MODE_EVAL)
-				SYNCCOUT << "(^q^)KK: ksq0=" << ksq0 << "/" << SquareNum << SYNCENDL;
+				SYNCCOUT << "(^q^)KK: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
 				std::pair<ptrdiff_t, int> indices[KKIndicesMax];
