@@ -61,7 +61,8 @@ void Evaluater::WriteKppPartFile(const std::string & dirName, int k1, int p1, st
 		//ofs << (short)kppArray[k1][p1][p2][z];
 		buffer[0] = kppArray[k1][p1][p2][0];// 2byte * 1548element = 3096byte
 		buffer[1] = kppArray[k1][p1][p2][1];// 2byte * 1548element = 3096byte
-		ofs.write((char *)buffer, sizeof(short));// 2element * 2byte * 1548element = 6192byte
+		//ofs.write((char *)buffer, sizeof(short));// 2element * 2byte * 1548element = 6192byte
+		ofs.write((char *)buffer, sizeof(s16));// 2element * 2byte * 1548element = 6192byte
 
 		// インクリメント。z++にするとなぜか強制終了する。
 		z++;
@@ -85,10 +86,11 @@ bool Evaluater::ReadKppPartFile(const std::string & dirName, int k1, int p1, std
 
 	if (!PathFileExistsA((LPCSTR)path.c_str()))
 	{
-		std::cerr << "File not found (ok)." << std::endl;
+		// ファイルが見つからないのは OK です。falseを返して正常終了します。
+		//std::cerr << "File not found (ok)." << std::endl;
 		return false;
 	}
-	std::cerr << "(^q^)File found." << std::endl;
+	//std::cerr << "(^q^)File found." << std::endl;
 
 	std::ifstream ifs(path.c_str(), std::ios::binary);
 	if (ifs.fail()) {
@@ -96,17 +98,17 @@ bool Evaluater::ReadKppPartFile(const std::string & dirName, int k1, int p1, std
 		//なんか終了処理を入れる
 		return false;
 	}
-	std::cerr << "(^q^)File opened." << std::endl;
+	//std::cerr << "(^q^)File opened." << std::endl;
 
 	//読み込むファイル格納用配列
 	int p2 = 0;
 	int z = 0;
-	s16 *buffer = 0;
+	char buffer[2]; //s16 *buffer = 0;
 	while (!ifs.eof()) {
 
-		ifs.read((char*)buffer, sizeof(short));
+		ifs.read((char*)buffer, sizeof(s16));//2byte
 
-		std::cerr << "(^q^)Skip! k1=[" << std::to_string(k1) << "] p1=[" << std::to_string(p1) << "] p2=[" << std::to_string(p2) << "] z=[" << std::to_string(z) << "]" << std::endl;
+		//std::cerr << "(^q^)Skip! k1=[" << std::to_string(k1) << "] p1=[" << std::to_string(p1) << "] p2=[" << std::to_string(p2) << "] z=[" << std::to_string(z) << "]" << std::endl;
 
 		kppArray[k1][p1][p2][z] = *buffer;
 
