@@ -52,12 +52,16 @@ void Evaluater::WriteKppPartFile(const std::string & dirName, int k1, int p1, st
 	//SYNCCOUT << "(^q^)Go! KPP!" << SYNCENDL;
 
 	//書き込むファイル格納用配列
+	char buffer[2];
 	int p2 = 0;
 	int z = 0;
 	for (;;) {//while (!ofs.eof()) {
 
-		//ofs << kppArray[k1][p1][p2][z];
-		ofs << (short)kppArray[k1][p1][p2][z];
+		////ofs << kppArray[k1][p1][p2][z];
+		//ofs << (short)kppArray[k1][p1][p2][z];
+		buffer[0] = kppArray[k1][p1][p2][0];// 2byte * 1548element = 3096byte
+		buffer[1] = kppArray[k1][p1][p2][1];// 2byte * 1548element = 3096byte
+		ofs.write((char *)buffer, sizeof(short));// 2element * 2byte * 1548element = 6192byte
 
 		// インクリメント。z++にするとなぜか強制終了する。
 		z++;
