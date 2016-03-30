@@ -24,7 +24,7 @@
 #define SKIP_LONG_LONG_TIME_EVAL_KK
 
 // KPPのファイル分割をしないか。
-#define SKIP_KPP_PART_WRITE
+//#define SKIP_KPP_PART_WRITE
 
 //----------------------------------------
 // 使う評価値（４種類）

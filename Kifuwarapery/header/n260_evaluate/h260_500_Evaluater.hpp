@@ -286,8 +286,56 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 
 			// 81 x 1548 x 1548 のループ。
 
+			// 盤面を [0, 80] の整数の index で表す
+			// I9 = 1一, I1 = 1九, A1 = 9九
+			//
+			// A9, B9, C9, D9, E9, F9, G9, H9, I9,
+			// A8, B8, C8, D8, E8, F8, G8, H8, I8,
+			// A7, B7, C7, D7, E7, F7, G7, H7, I7,
+			// A6, B6, C6, D6, E6, F6, G6, H6, I6,
+			// A5, B5, C5, D5, E5, F5, G5, H5, I5,
+			// A4, B4, C4, D4, E4, F4, G4, H4, I4,
+			// A3, B3, C3, D3, E3, F3, G3, H3, I3,
+			// A2, B2, C2, D2, E2, F2, G2, H2, I2,
+			// A1, B1, C1, D1, E1, F1, G1, H1, I1,
+
+			// よく使う玉の位置から順に KPP を設定していく（＾ｑ＾）
+			enum Square squares[] = {
+				A5, // ５九
+				B8, // ８八
+				B2, // ２八
+				A9, // ９九
+				A1, // １九
+				A6, // ６九
+				B4, // ４八
+				A7, // ７九
+				B3, // ３八
+				B6, // ６八
+				B7, // ７八
+				B5, // ５八
+				A3, // ３九
+				C8, // ８七 天守閣美濃
+				B1, // １八
+				A4, // ４九
+				B9, // ９八
+				A8, // ８九
+				A2, // ２九
+				C9,	    C7, C6, C5, C4, C3, C2, C1,// 3段目
+				D9,	D8, D7, D6, D5, D4, D3, D2, D1,
+				E9,	E8, E7, E6, E5, E4, E3, E2, E1,
+				F9,	F8, F7, F6, F5, F4, F3, F2, F1,
+				G9,	G8, G7, G6, G5, G4, G3, G2, G1,
+				H9,	H8, H7, H6, H5, H4, H3, H2, H1,
+				I9, I8, I7, I6, I5, I4, I3, I2, I1,
+			};
+
 			// OpenMP対応したら何故か k1 を Square 型にすると ++k1 が定義されていなくてコンパイルエラーになる。
-			for (int k1 = I9; k1 < SquareNum; ++k1) {
+			//for (int k1 = I9; k1 < SquareNum; ++k1) {
+			//}
+			int size = sizeof(squares) / sizeof(squares[0]);
+			for (int o = 0; o < size; o++)//order
+			{
+				int k1 = squares[o];//玉の位置
 				SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << SYNCENDL;
 
 				// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
