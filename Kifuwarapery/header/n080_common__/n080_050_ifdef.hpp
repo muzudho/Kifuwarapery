@@ -19,12 +19,15 @@
 // これでスキップしてコンパイルしても abort()では落ちないぜ☆（＾～＾）
 //#define SKIP_LONG_LONG_TIME_EVAL_KPP
 // KKPも数十分で終わるぜ☆（＾ｑ＾）
-#define SKIP_LONG_LONG_TIME_EVAL_KKP
+//#define SKIP_LONG_LONG_TIME_EVAL_KKP
 // KK は比較的早く終わるぜ☆（^q^）
-#define SKIP_LONG_LONG_TIME_EVAL_KK
+//#define SKIP_LONG_LONG_TIME_EVAL_KK
 
-// KPPのファイル分割をしないか。
-//#define SKIP_KPP_PART_WRITE
+// KPP評価値キャッシュを利用するか。
+#define USE_KPP_CACHE
+
+// 評価値ファイルが無ければスキップするか。
+//#define SKIP_NOT_EXIST_EVAL_FILE
 
 //----------------------------------------
 // 使う評価値（４種類）

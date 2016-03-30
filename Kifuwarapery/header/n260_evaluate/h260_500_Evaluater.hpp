@@ -246,11 +246,15 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
 
-	void WriteKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	void WriteKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
-	bool ReadKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	bool ReadKppCache2Files(const std::string& dirName, int k1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
+	bool ReadKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
-	std::string GetKppPartFilePath(const std::string& dirName, int k1, int p1);
+	bool SynthesizeKppCache3ToCache2(const std::string& dirName, int k1);
+
+	std::string GetKppCache2FilePath(const std::string& dirName, int k1);
+	std::string GetKppCache3FilePath(const std::string& dirName, int k1, int p1);
 
 
 	void SetEvaluate(const std::string& dirName) {
@@ -336,36 +340,50 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 			for (int o = 0; o < size; o++)//order
 			{
 				int k1 = squares[o];//玉の位置
-				SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << SYNCENDL;
 
-				// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
-				std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
-				for (int p1 = 0; p1 < fe_end; ++p1) {
+				// できれば、Cache3 を、Cache2 に統合します。
+				this->SynthesizeKppCache3ToCache2(dirName, k1);
 
-					//SYNCCOUT << "(^q^)ReadKppPartFile!" << SYNCENDL;
-					if (this->ReadKppPartFile(dirName, k1, p1, KPP))
-					{
-						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
-						// 中間ファイルから読込完了。
-					}
-					else
-					{
-						// 集計開始。
+				if (this->ReadKppCache2Files(dirName, k1, KPP))
+				{
+					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << " loaded." << SYNCENDL;
+					// 中間ファイルから読込完了。
+				}
+				else
+				{
+					SYNCCOUT << "(^q^)KPP: k1=" << k1 << "/" << SquareNum << SYNCENDL;
 
-						for (int p2 = 0; p2 < fe_end; ++p2) {
+					// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
+					std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
+					for (int p1 = 0; p1 < fe_end; ++p1) {
 
-							this->CreateKppIndices(indices, static_cast<Square>(k1), p1, p2);
-							std::array<s64, 2> sum = { {} };
-							FOO(indices, GetKppOneArrayFirst, sum);
-							KPP[k1][p1][p2] += sum;
+						//SYNCCOUT << "(^q^)ReadKppCache3Files!" << SYNCENDL;
+						if (this->ReadKppCache3Files(dirName, k1, p1, KPP))
+						{
+							SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " loaded." << SYNCENDL;
+							// 中間ファイルから読込完了。
 						}
-						// （＾ｑ＾）ここでファイルを作成したいと思うんだぜ☆
-						// 型は std::array<s16, 2> Evaluater::KPP[81][1548][1548];
-						// short型(2byte?) 要素数 2 の配列。
-						// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
-						// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
-						this->WriteKppPartFile(dirName, k1, p1, KPP);
-						SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
+						else
+						{
+#if !defined(SKIP_NOT_EXIST_EVAL_FILE)
+							// 集計開始。
+
+							for (int p2 = 0; p2 < fe_end; ++p2) {
+
+								this->CreateKppIndices(indices, static_cast<Square>(k1), p1, p2);
+								std::array<s64, 2> sum = { {} };
+								FOO(indices, GetKppOneArrayFirst, sum);
+								KPP[k1][p1][p2] += sum;
+							}
+							// （＾ｑ＾）ここでファイルを作成したいと思うんだぜ☆
+							// 型は std::array<s16, 2> Evaluater::KPP[81][1548][1548];
+							// short型(2byte?) 要素数 2 の配列。
+							// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
+							// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
+							this->WriteKppCache3Files(dirName, k1, p1, KPP);
+							SYNCCOUT << "(^q^)KPP: p1=" << p1 << "/" << fe_end << " writed!" << SYNCENDL;
+#endif
+						}
 					}
 				}
 			}

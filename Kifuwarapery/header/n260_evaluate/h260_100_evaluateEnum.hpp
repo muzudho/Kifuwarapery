@@ -1,5 +1,7 @@
 #pragma once
 
+//#include "../../stdafx.h"
+
 
 // 評価関数テーブルのオフセット。
 // f_xxx が味方の駒、e_xxx が敵の駒
