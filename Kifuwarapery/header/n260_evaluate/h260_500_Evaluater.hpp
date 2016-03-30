@@ -250,6 +250,7 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 
 	bool ReadKppPartFile(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
 
+	std::string GetKppPartFilePath(const std::string& dirName, int k1, int p1);
 
 
 	void SetEvaluate(const std::string& dirName) {
@@ -278,7 +279,6 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
 		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
 		// KPP
-		//KPP[SquareNum][fe_end][fe_end] = { 0 };
 		{
 			#ifdef _OPENMP
 			#pragma omp for
