@@ -37,17 +37,17 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 		}
 		clear();
 
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 2/4) readSomeSynthesized!" << SYNCENDL;
 #endif
 		Evaluater::readSomeSynthesized(dirName);
 
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 3/4) (long time)read bins! dir=" << dirName << SYNCENDL;
 #endif
 		Evaluater::ReadBins(dirName);
 
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 4/4) (long time)setEvaluate!" << SYNCENDL;
 #endif
 		Evaluater::SetEvaluate(dirName);
@@ -294,7 +294,7 @@ public:
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(^q^)KPP!" << SYNCENDL;
 #endif
 		// KPP
@@ -305,6 +305,8 @@ public:
 
 			// 81 x 1548 x 1548 のループ。
 
+
+#if defined(MODE_CACHE_EVAL)
 			// 盤面を [0, 80] の整数の index で表す
 			// I9 = 1一, I1 = 1九, A1 = 9九
 			//
@@ -347,32 +349,30 @@ public:
 				H9,	H8, H7, H6, H5, H4, H3, H2, H1,
 				I9, I8, I7, I6, I5, I4, I3, I2, I1,
 			};
-
-			// OpenMP対応したら何故か k1 を Square 型にすると ++k1 が定義されていなくてコンパイルエラーになる。
-			//for (int k1 = I9; k1 < SquareNum; ++k1) {
-			//}
 			int size = sizeof(squares) / sizeof(squares[0]);
 			for (int o = 0; o < size; o++)//order
 			{
 				int k1 = squares[o];//玉の位置
+#else
+			// OpenMP対応したら何故か k1 を Square 型にすると ++k1 が定義されていなくてコンパイルエラーになる。
+			for (int k1 = I9; k1 < SquareNum; ++k1) {
+#endif
 
 				// できれば、Cache3 を、Cache2 に統合します。
 				this->SynthesizeKppCache3ToCache2(dirName, k1);
 
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 				SYNCCOUT << "(^q^)Go Cache2!" << SYNCENDL;
 #endif
 
+#if defined(MODE_CACHE_EVAL)
 				if (this->ReadKppCache2Files(dirName, k1, KPP))
 				{
 					// 中間ファイルから読込完了。
-#if defined(MODE_EVAL)
 					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "(" << std::to_string(o) << "/" << std::to_string(SquareNum) << ") loaded." << SYNCENDL;
-#endif
 				}
 				else
 				{
-#if defined(MODE_EVAL)
 					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
@@ -383,14 +383,14 @@ public:
 						//SYNCCOUT << "(^q^)ReadKppCache3Files!" << SYNCENDL;
 						if (this->ReadKppCache3Files(dirName, k1, p1, KPP))
 						{
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 							SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " loaded." << SYNCENDL;
 #endif
 							// 中間ファイルから読込完了。
 						}
 						else
 						{
-#if !defined(SKIP_NOT_EXIST_EVAL_FILE)
+#if !defined(SKIP_KPP_EVAL_LOOP)
 							// 集計開始。
 
 							for (int p2 = 0; p2 < fe_end; ++p2) {
@@ -407,7 +407,7 @@ public:
 							// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
 							if (this->WriteKppCache3Files(dirName, k1, p1, KPP))
 							{
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 								SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " writed!" << SYNCENDL;
 #endif
 							}
@@ -419,7 +419,9 @@ public:
 #endif
 						}
 					}
+#if defined(MODE_CACHE_EVAL)
 				}
+#endif
 			}
 		gt_EndKPP:
 			;
@@ -427,7 +429,7 @@ public:
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(^q^)KKP!" << SYNCENDL;
 #endif
 		// KKP
@@ -436,7 +438,7 @@ public:
 			#pragma omp for
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 				SYNCCOUT << "(^q^)KKP: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
@@ -456,7 +458,7 @@ public:
 #endif
 
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(^q^)KK!" << SYNCENDL;
 #endif
 		// KK
@@ -465,7 +467,7 @@ public:
 			#pragma omp for
 			#endif
 			for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-#if defined(MODE_EVAL)
+#if defined(MODE_CACHE_EVAL)
 				SYNCCOUT << "(^q^)KK: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 

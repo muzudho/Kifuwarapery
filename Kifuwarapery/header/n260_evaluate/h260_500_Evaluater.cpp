@@ -9,32 +9,26 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 {
 	bool isError = false;
 
-#if !defined(SKIP_USE_KPP_CACHE)
+#if defined(MODE_CACHE_EVAL)
 
 	std::string dir1 = addSlashIfNone(dirName) + "obj";
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
-#if defined(MODE_EVAL)
 	SYNCCOUT << "(WriteKppCache3Files 1/9) File Search: path3=[" << file3.c_str() << "]" << SYNCENDL;
-#endif
 
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
 	{
 		UtilProgram utilProgram;
-#if defined(MODE_EVAL)
 		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
 		utilProgram.ShowCurrentDirectory();
-#endif
 		utilProgram.ErrorBegin();
 		int result = CreateDirectoryA((LPCSTR)dir1.c_str(), NULL);
 		utilProgram.ErrorEnd();
 
 		if (result !=0)
 		{
-#if defined(MODE_EVAL)
 			SYNCCOUT << "(WriteKppCache3Files 3/9)Create directory : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
-#endif
 		}
 		else
 		{
@@ -51,9 +45,7 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 		//SYNCCOUT << "Not found directory : path2=[" << dir2 << "]" << SYNCENDL;
 		if (CreateDirectoryA((LPCSTR)dir2.c_str(), NULL))
 		{
-#if defined(MODE_EVAL)
 			SYNCCOUT << "(WriteKppCache3Files 5/9)Create directory : dir2=[" << dir2.c_str() << "]" << SYNCENDL;
-#endif
 		}
 		else
 		{
@@ -63,21 +55,14 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 		}
 	}
 
-#if defined(MODE_EVAL)
 	SYNCCOUT << "(WriteKppCache3Files 7/9)" << SYNCENDL;
-#endif
 
 	// ファイルは無いはず。
 	if (!isError)
 	{
 		this->WriteKppCache3FilesBody(dirName, k1, p1, kppArray);
-#if defined(MODE_EVAL)
 		SYNCCOUT << "(WriteKppCache3Files 8/9)" << SYNCENDL;
-#endif
 	}
-#endif
-
-#if defined(MODE_EVAL)
 	SYNCCOUT << "(WriteKppCache3Files 9/9)" << SYNCENDL;
 #endif
 	return !isError;
@@ -111,7 +96,7 @@ void Evaluater::WriteKppCache3FilesBody(const std::string & cache3Filepath, int 
 
 bool Evaluater::ReadKppCache2Files(const std::string & dirName, int k1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
-#if !defined(SKIP_USE_KPP_CACHE)
+#if defined(MODE_CACHE_EVAL)
 	std::string cache2Path = this->GetKppCache2FilePath(dirName, k1);
 
 	if (!PathFileExistsA((LPCSTR)cache2Path.c_str()))
@@ -162,7 +147,7 @@ bool Evaluater::ReadKppCache2Files(const std::string & dirName, int k1, std::arr
 
 bool Evaluater::ReadKppCache3Files(const std::string & dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
-#if !defined(SKIP_USE_KPP_CACHE)
+#if defined(MODE_CACHE_EVAL)
 	std::string catch3Path = this->GetKppCache3FilePath(dirName, k1, p1);
 
 	if (!PathFileExistsA((LPCSTR)catch3Path.c_str()))
@@ -207,8 +192,8 @@ bool Evaluater::ReadKppCache3Files(const std::string & dirName, int k1, int p1, 
 
 bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 {
-#if !defined(SKIP_NOT_EXIST_EVAL_FILE) // 評価値ファイルが無かった場合スキップする設定なら、この関数は実行しません。
-#if !defined(SKIP_USE_KPP_CACHE)
+#if !defined(SKIP_KPP_EVAL_LOOP) // KPP評価値ファイルの作成をスキップする設定なら、この関数は実行しません。
+#if defined(MODE_CACHE_EVAL)
 	// Cache2ファイルの有無を調べます。
 	std::string cache2Path = this->GetKppCache2FilePath(dirName, k1);
 	if (PathFileExistsA((LPCSTR)cache2Path.c_str()))
@@ -216,9 +201,7 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 		// ファイルが見つかった場合は OK です。falseを返して正常終了します。
 		return false;
 	}
-#if defined(MODE_EVAL)
 	SYNCCOUT << "(Synthesize 1/3) Go KPP!: [" << cache2Path.c_str() << "]" << SYNCENDL;
-#endif
 
 	// Cache3ファイルが 1548個あるか調べます。
 	for (int p1 = 0; p1 < fe_end; ++p1) {
@@ -230,9 +213,7 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 			return false;
 		}
 	}
-#if defined(MODE_EVAL)
 	SYNCCOUT << "(Synthesize 2/3) [" << std::to_string(fe_end) << "] files exist. ok." << SYNCENDL;
-#endif
 
 	// 書き出し先
 	std::ofstream output(cache2Path.c_str(), std::ios::binary);
@@ -276,18 +257,10 @@ bool Evaluater::SynthesizeKppCache3ToCache2(const std::string & dirName, int k1)
 				}
 			}
 		}
-
-		// よく強制終了するので、明示的に閉じて見ます。
-		//input.close();
 	}
-#if defined(MODE_EVAL)
 	// (^q^)SYNCCOUT で始めたら、SYNCENDL で終わること。
 	SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << SYNCENDL;
-	//SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << std::endl;
-#endif
-
-	// よく強制終了するので、明示的に閉じて見ます。
-	//output.close();
+	//× SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << std::endl;
 
 	return true;
 #else
