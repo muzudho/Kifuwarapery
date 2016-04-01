@@ -6,11 +6,11 @@
 #include "../../header/n320_operate_/n320_200_init.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
-#include "..\..\header\n900_main____\n900_400_main.h"
+#include "..\..\header\n900_main____\n900_400_main01.h"
 
 #if defined FIND_MAGIC
 // Magic Bitboard の Magic Number を求める為のソフト
-int main() {
+int main01() {
 	u64 RookMagic[SquareNum];
 	u64 BishopMagic[SquareNum];
 
@@ -35,10 +35,10 @@ int main() {
 // 将棋を指すソフト
 int main(int argc, char* argv[]) {
 	std::unique_ptr<Searcher> searcher = std::unique_ptr<Searcher>(new Searcher);
-	Main main;
-	main.Initialize(searcher);
-	main.Body(argc, argv, searcher);
-	main.Finalize(searcher);
+	Main01 main01;
+	main01.Initialize(searcher);
+	main01.Body(argc, argv, searcher);
+	main01.Finalize(searcher);
 }
 
 #endif

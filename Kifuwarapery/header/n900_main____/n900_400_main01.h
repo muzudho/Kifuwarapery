@@ -8,10 +8,9 @@
 #include "../../header/n320_operate_/n320_200_init.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
-#include "..\..\header\n900_main____\n900_400_main.h"
 
 
-class Main {
+class Main01 {
 public:
 	void Initialize(std::unique_ptr<Searcher>& searcher);
 	void Body(int argc, char* argv[], std::unique_ptr<Searcher>& searcher);

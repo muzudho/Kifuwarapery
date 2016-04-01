@@ -1,5 +1,5 @@
-#include "../n080_common__/n080_200_utilProgram.hpp"
-#include "h260_500_Evaluater.hpp"
+#include "../../header/n080_common__/n080_200_utilProgram.hpp"
+#include "../../header/n260_evaluate/h260_500_Evaluater.hpp"
 #include <Windows.h>	// ファイル／ディレクトリ操作用
 #include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 

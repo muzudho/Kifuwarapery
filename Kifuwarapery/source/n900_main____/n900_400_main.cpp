@@ -6,10 +6,10 @@
 #include "../../header/n320_operate_/n320_200_init.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
-#include "..\..\header\n900_main____\n900_400_main.h"
+#include "..\..\header\n900_main____\n900_400_main01.h"
 
 
-void Main::Initialize(std::unique_ptr<Searcher>& searcher)
+void Main01::Initialize(std::unique_ptr<Searcher>& searcher)
 {
 	SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
 	Initializer initializer;
@@ -28,12 +28,12 @@ void Main::Initialize(std::unique_ptr<Searcher>& searcher)
 
 }
 
-void Main::Body(int argc, char* argv[], std::unique_ptr<Searcher>& searcher)
+void Main01::Body(int argc, char* argv[], std::unique_ptr<Searcher>& searcher)
 {
 	searcher->doUSICommandLoop(argc, argv);
 }
 
-void Main::Finalize(std::unique_ptr<Searcher>& searcher)
+void Main01::Finalize(std::unique_ptr<Searcher>& searcher)
 {
 	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
 	searcher->threads.exit();

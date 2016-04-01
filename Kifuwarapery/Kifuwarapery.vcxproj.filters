@@ -1,330 +1,327 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
+    <Filter Include="header">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
+    <Filter Include="header\n080_common__">
+      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n120_brdEntry">
+      <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n160_board___">
+      <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n200_score___">
+      <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n240_position">
+      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n280_move____">
+      <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n320_operate_">
+      <UniqueIdentifier>{17002e9f-d660-4980-981b-350ec2dda0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n400_usi_____">
+      <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n360_egOption">
+      <UniqueIdentifier>{03559da1-325e-40b3-86e8-cea32f1da61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n270_timeMng_">
+      <UniqueIdentifier>{d17405d0-df1b-41eb-8c04-83a2914943fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n260_evaluate">
+      <UniqueIdentifier>{e910259a-f02f-4ce7-87bf-60338c2c47b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n900_main____">
+      <UniqueIdentifier>{dd42631b-4183-489a-a416-f3388e205141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Source Files\n080_common">
+    <Filter Include="source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="source\n080_common">
       <UniqueIdentifier>{402fcfcc-1379-4ee1-93c7-83438a227775}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n080_common__">
-      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\n120_brdEntry">
-      <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n120_brdEntry">
+    <Filter Include="source\n120_brdEntry">
       <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n160_board___">
-      <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n160_board___">
+    <Filter Include="source\n160_board___">
       <UniqueIdentifier>{7ca6996e-3e41-4079-bff6-634b0fa58752}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n200_score___">
-      <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n200_score___">
+    <Filter Include="source\n200_score___">
       <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n240_position">
-      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n240_position">
+    <Filter Include="source\n240_position">
       <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n280_move____">
-      <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n280_move____">
+    <Filter Include="source\n280_move____">
       <UniqueIdentifier>{d3ae253d-2733-4e83-8e46-5bba8d5f1097}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n320_operate_">
-      <UniqueIdentifier>{17002e9f-d660-4980-981b-350ec2dda0a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n320_operate_">
+    <Filter Include="source\n320_operate_">
       <UniqueIdentifier>{fbec7d50-ce6b-4a2b-9ae9-e436b220ea44}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\n900_main____">
+    <Filter Include="source\n900_main____">
       <UniqueIdentifier>{e740a81a-9ed3-4c4b-8cd4-0e85d49331d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n400_usi_____">
-      <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n400_usi_____">
+    <Filter Include="source\n400_usi_____">
       <UniqueIdentifier>{65666d01-0eb5-44dc-8663-a4c71889e1a1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n360_egOption">
-      <UniqueIdentifier>{03559da1-325e-40b3-86e8-cea32f1da61b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n360_egOption">
+    <Filter Include="source\n360_egOption">
       <UniqueIdentifier>{33c05404-3b57-44c4-9228-d6d3c8baf0bb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n270_timeMng_">
-      <UniqueIdentifier>{d17405d0-df1b-41eb-8c04-83a2914943fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n270_timeMng_">
+    <Filter Include="source\n270_timeMng_">
       <UniqueIdentifier>{21b60163-171b-446b-a8ee-bfb0adf7b02c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n260_evaluate">
-      <UniqueIdentifier>{e910259a-f02f-4ce7-87bf-60338c2c47b8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\n260_evaluate">
+    <Filter Include="source\n260_evaluate">
       <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\n900_main____">
-      <UniqueIdentifier>{dd42631b-4183-489a-a416-f3388e205141}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+      <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
+      <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp">
-      <Filter>Header Files\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_100_common.hpp">
-      <Filter>Header Files\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
-      <Filter>Header Files\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp">
-      <Filter>Header Files\n120_brdEntry</Filter>
+      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp">
-      <Filter>Header Files\n120_brdEntry</Filter>
+      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp">
-      <Filter>Header Files\n120_brdEntry</Filter>
+      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_100_score.hpp">
-      <Filter>Header Files\n200_score___</Filter>
+      <Filter>header\n200_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
-      <Filter>Header Files\n200_score___</Filter>
+      <Filter>header\n200_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_100_position.hpp">
-      <Filter>Header Files\n240_position</Filter>
+      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h">
-      <Filter>Header Files\n120_brdEntry</Filter>
+      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp">
-      <Filter>Header Files\n120_brdEntry</Filter>
+      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_150_move.hpp">
-      <Filter>Header Files\n240_position</Filter>
+      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_300_tt.hpp">
-      <Filter>Header Files\n240_position</Filter>
+      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp">
-      <Filter>Header Files\n240_position</Filter>
+      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_100_generateMoves.hpp">
-      <Filter>Header Files\n280_move____</Filter>
+      <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
-      <Filter>Header Files\n280_move____</Filter>
+      <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp">
-      <Filter>Header Files\n280_move____</Filter>
+      <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp">
-      <Filter>Header Files\n240_position</Filter>
+      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_100_book.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
+      <Filter>header\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_150_search.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
+      <Filter>header\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_200_init.hpp">
-      <Filter>Header Files\n320_operate_</Filter>
+      <Filter>header\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
-      <Filter>Header Files\n400_usi_____</Filter>
+      <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp">
-      <Filter>Header Files\n400_usi_____</Filter>
+      <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp">
-      <Filter>Header Files\n400_usi_____</Filter>
+      <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp">
-      <Filter>Header Files\n400_usi_____</Filter>
+      <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp">
-      <Filter>Header Files\n400_usi_____</Filter>
+      <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp">
-      <Filter>Header Files\n360_egOption</Filter>
+      <Filter>header\n360_egOption</Filter>
     </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp">
-      <Filter>Header Files\n360_egOption</Filter>
+      <Filter>header\n360_egOption</Filter>
     </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp">
-      <Filter>Header Files\n360_egOption</Filter>
+      <Filter>header\n360_egOption</Filter>
     </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp">
-      <Filter>Header Files\n360_egOption</Filter>
+      <Filter>header\n360_egOption</Filter>
     </ClInclude>
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp">
-      <Filter>Header Files\n270_timeMng_</Filter>
+      <Filter>header\n270_timeMng_</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_400_EvaluaterBase.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_300_KPPBoardIndexStartToPiece.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_200_evaluate01.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_100_evaluateEnum.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_300_bitboardAttack.hpp">
-      <Filter>Header Files\n160_board___</Filter>
+      <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_200_bitboardMask.hpp">
-      <Filter>Header Files\n160_board___</Filter>
+      <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
-      <Filter>Header Files\n160_board___</Filter>
+      <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp">
-      <Filter>Header Files\n160_board___</Filter>
+      <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
-      <Filter>Header Files\n260_evaluate</Filter>
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
-      <Filter>Header Files\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n900_main____\n900_400_main.h">
-      <Filter>Header Files\n900_main____</Filter>
+    <ClInclude Include="header\n900_main____\n900_400_main01.h">
+      <Filter>header\n900_main____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp">
-      <Filter>Source Files\n120_brdEntry</Filter>
+      <Filter>source\n120_brdEntry</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp">
-      <Filter>Source Files\n240_position</Filter>
+      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n280_move____\n280_100_generateMoves.cpp">
-      <Filter>Source Files\n280_move____</Filter>
+      <Filter>source\n280_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp">
-      <Filter>Source Files\n280_move____</Filter>
+      <Filter>source\n280_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp">
-      <Filter>Source Files\n280_move____</Filter>
+      <Filter>source\n280_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
-      <Filter>Source Files\n160_board___</Filter>
+      <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp">
-      <Filter>Source Files\n120_brdEntry</Filter>
+      <Filter>source\n120_brdEntry</Filter>
     </ClCompile>
     <ClCompile Include="source\n120_brdEntry\n120_300_ColorFileRank.cpp">
-      <Filter>Source Files\n120_brdEntry</Filter>
+      <Filter>source\n120_brdEntry</Filter>
     </ClCompile>
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
-      <Filter>Source Files\n200_score___</Filter>
+      <Filter>source\n200_score___</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_100_position.cpp">
-      <Filter>Source Files\n240_position</Filter>
+      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_150_move.cpp">
-      <Filter>Source Files\n240_position</Filter>
+      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_300_tt.cpp">
-      <Filter>Source Files\n240_position</Filter>
+      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
-      <Filter>Source Files\n240_position</Filter>
+      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_100_book.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
+      <Filter>source\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_150_search.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
+      <Filter>source\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp">
-      <Filter>Source Files\n320_operate_</Filter>
+      <Filter>source\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
-      <Filter>Source Files\n400_usi_____</Filter>
+      <Filter>source\n400_usi_____</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp">
-      <Filter>Source Files\n400_usi_____</Filter>
+      <Filter>source\n400_usi_____</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_250_usi.cpp">
-      <Filter>Source Files\n400_usi_____</Filter>
+      <Filter>source\n400_usi_____</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
-      <Filter>Source Files\n400_usi_____</Filter>
+      <Filter>source\n400_usi_____</Filter>
     </ClCompile>
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp">
-      <Filter>Source Files\n360_egOption</Filter>
+      <Filter>source\n360_egOption</Filter>
     </ClCompile>
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp">
-      <Filter>Source Files\n360_egOption</Filter>
+      <Filter>source\n360_egOption</Filter>
     </ClCompile>
     <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp">
-      <Filter>Source Files\n360_egOption</Filter>
+      <Filter>source\n360_egOption</Filter>
     </ClCompile>
     <ClCompile Include="source\n360_egOption\n360_300_engineOptionSetup.cpp">
-      <Filter>Source Files\n360_egOption</Filter>
+      <Filter>source\n360_egOption</Filter>
     </ClCompile>
     <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp">
-      <Filter>Source Files\n270_timeMng_</Filter>
+      <Filter>source\n270_timeMng_</Filter>
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp">
-      <Filter>Source Files\n260_evaluate</Filter>
-    </ClCompile>
-    <ClCompile Include="header\n260_evaluate\h260_500_Evaluater.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>source\n260_evaluate</Filter>
     </ClCompile>
     <ClCompile Include="source\n080_common__\n080_100_common.cpp">
-      <Filter>Source Files\n080_common</Filter>
+      <Filter>source\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp">
-      <Filter>Source Files\n080_common</Filter>
+      <Filter>source\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_500_main.cpp">
-      <Filter>Source Files\n900_main____</Filter>
+      <Filter>source\n900_main____</Filter>
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_400_main.cpp">
-      <Filter>Source Files\n900_main____</Filter>
+      <Filter>source\n900_main____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n260_evaluate\h260_500_Evaluater.cpp">
+      <Filter>source\n260_evaluate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
