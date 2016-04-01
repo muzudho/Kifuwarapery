@@ -80,6 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>..\KifuwaraperyEngine\</OutDir>
+    <IntDir>..\KifuwaraperyEngine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -225,7 +227,7 @@
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp" />
-    <ClCompile Include="source\n900_main____\n900_100_main.cpp" />
+    <ClCompile Include="source\n900_main____\n900_500_main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

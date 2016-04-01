@@ -275,9 +275,6 @@
     <ClCompile Include="source\n320_operate_\n320_200_init.cpp">
       <Filter>Source Files\n320_operate_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n900_main____\n900_100_main.cpp">
-      <Filter>Source Files\n900_main____</Filter>
-    </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
       <Filter>Source Files\n400_usi_____</Filter>
     </ClCompile>
@@ -316,6 +313,9 @@
     </ClCompile>
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp">
       <Filter>Source Files\n080_common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_500_main.cpp">
+      <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
