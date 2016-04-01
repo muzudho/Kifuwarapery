@@ -148,6 +148,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="header\n080_common__\n080_105_time.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h" />
@@ -197,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
+    <ClCompile Include="source\n080_common__\n080_105_time.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp" />

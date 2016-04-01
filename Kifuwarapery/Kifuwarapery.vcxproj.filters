@@ -225,6 +225,9 @@
     <ClInclude Include="header\n900_main____\n900_400_main01.h">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_105_time.hpp">
+      <Filter>header\n080_common__</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\h260_500_Evaluater.cpp">
       <Filter>source\n260_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common__\n080_105_time.cpp">
+      <Filter>source\n080_common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

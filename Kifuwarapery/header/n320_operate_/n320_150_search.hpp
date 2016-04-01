@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"

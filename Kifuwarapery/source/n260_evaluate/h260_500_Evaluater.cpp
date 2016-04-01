@@ -17,11 +17,13 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 
 	SYNCCOUT << "(WriteKppCache3Files 1/9) File Search: path3=[" << file3.c_str() << "]" << SYNCENDL;
 
+	// obj ディレクトリがなければ作ります。
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
 	{
+		// ディレクトリーがないというのは正常動作です。
+		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory. ok. : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
+
 		UtilProgram utilProgram;
-		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
-		utilProgram.ShowCurrentDirectory();
 		utilProgram.ErrorBegin();
 		int result = CreateDirectoryA((LPCSTR)dir1.c_str(), NULL);
 		utilProgram.ErrorEnd();
@@ -35,11 +37,12 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 			// エラー
 			isError = true;
 
-			std::cerr << "(WriteKppCache3Files 4/9): Can not create directory : dir1=[" << dir1.c_str() << "]" << std::endl;
+			std::cerr << "(WriteKppCache3Files 4/9 error): Can not create directory : dir1=[" << dir1.c_str() << "]" << std::endl;
 			utilProgram.ShowCurrentDirectory();
 		}
 	}
 
+	// Kpp[数字]ディレクトリがなければ作ります。
 	if (!isError && !PathIsDirectoryA((LPCSTR)dir2.c_str()))
 	{
 		//SYNCCOUT << "Not found directory : path2=[" << dir2 << "]" << SYNCENDL;
@@ -51,7 +54,7 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 		{
 			// エラー
 			isError = true;
-			std::cerr << "(WriteKppCache3Files 6/9)error: Can not create directory : dir2=[" << dir2.c_str() << "]" << std::endl;
+			std::cerr << "(WriteKppCache3Files 6/9 error) Can not create directory : dir2=[" << dir2.c_str() << "]" << std::endl;
 		}
 	}
 
@@ -60,7 +63,8 @@ bool Evaluater::WriteKppCache3Files(const std::string & dirName, int k1, int p1,
 	// ファイルは無いはず。
 	if (!isError)
 	{
-		this->WriteKppCache3FilesBody(dirName, k1, p1, kppArray);
+		this->WriteKppCache3FilesBody(file3, k1, p1, kppArray);
+		//this->WriteKppCache3FilesBody(dirName, k1, p1, kppArray);
 		SYNCCOUT << "(WriteKppCache3Files 8/9)" << SYNCENDL;
 	}
 	SYNCCOUT << "(WriteKppCache3Files 9/9)" << SYNCENDL;
@@ -73,14 +77,21 @@ void Evaluater::WriteKppCache3FilesBody(const std::string & cache3Filepath, int 
 	std::ofstream output(cache3Filepath, std::ios::binary);
 
 	//書き込むファイル格納用配列
+	// 2byte * 1548element = 3096byte
+	// 2element * 2byte * 1548element = 6192byte
 	char buffer[2];
 	int p2 = 0;
 	int z = 0;
 	for (;;) {
 
-		buffer[0] = kppArray[k1][p1][p2][0];// 2byte * 1548element = 3096byte
-		buffer[1] = kppArray[k1][p1][p2][1];// 2byte * 1548element = 3096byte
-		output.write((char *)buffer, sizeof(s16));// 2element * 2byte * 1548element = 6192byte
+		// short型を、char型２つに分割します。
+		/*
+		buffer[0] = (char)(kppArray[k1][p1][p2][z] & 0xff);// 8bits
+		buffer[1] = (char)(kppArray[k1][p1][p2][z] >> 8 & 0xff);// 8bits
+		 */
+		buffer[0] = (char)(kppArray[k1][p1][p2][z] >> 8 & 0xff);// 8bits
+		buffer[1] = (char)(kppArray[k1][p1][p2][z] & 0xff);// 8bits
+		output.write((char *)buffer, sizeof(s16));// 16bits
 												  
 		z++;// インクリメント。
 		if (z == 2) {

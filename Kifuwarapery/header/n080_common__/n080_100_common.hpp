@@ -234,24 +234,9 @@ private:
 	T entries_[Size];
 };
 
-// ミリ秒単位の時間を表すクラス
-class Time {
-public:
-	void restart() { t_ = std::chrono::system_clock::now(); }
-	int elapsed() const {
-		using std::chrono::duration_cast;
-		using std::chrono::milliseconds;
-		return static_cast<int>(duration_cast<milliseconds>(std::chrono::system_clock::now() - t_).count());
-	}
-	static Time currentTime() {
-		Time t;
-		t.restart();
-		return t;
-	}
 
-private:
-	std::chrono::time_point<std::chrono::system_clock> t_;
-};
+
+
 
 extern std::mt19937_64 g_randomTimeSeed;
 
