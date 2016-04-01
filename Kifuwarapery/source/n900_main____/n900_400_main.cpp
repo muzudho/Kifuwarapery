@@ -4,9 +4,9 @@
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n320_operate_/n320_200_init.hpp"
-#include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
-#include "..\..\header\n900_main____\n900_400_main01.h"
+#include "..\..\header\n900_main____/n900_300_usiLoop.hpp"
+#include "..\..\header\n900_main____\n900_400_main01.hpp"
 
 
 Main01::Main01()
@@ -40,7 +40,8 @@ void Main01::Initialize()
 
 void Main01::Body(int argc, char* argv[])
 {
-	this->searcher->doUSICommandLoop(argc, argv);
+	UsiLoop usiLoop;
+	usiLoop.Mainloop(argc, argv);
 }
 
 void Main01::Finalize()

@@ -168,9 +168,6 @@
     <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp">
       <Filter>header\n400_usi_____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp">
-      <Filter>header\n400_usi_____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp">
       <Filter>header\n360_egOption</Filter>
     </ClInclude>
@@ -222,11 +219,14 @@
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n900_main____\n900_400_main01.h">
-      <Filter>header\n900_main____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n080_common__\n080_105_time.hpp">
       <Filter>header\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp">
+      <Filter>header\n900_main____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
+      <Filter>header\n900_main____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -287,9 +287,6 @@
     <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp">
       <Filter>source\n400_usi_____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n400_usi_____\n400_250_usi.cpp">
-      <Filter>source\n400_usi_____</Filter>
-    </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
       <Filter>source\n400_usi_____</Filter>
     </ClCompile>
@@ -328,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="source\n080_common__\n080_105_time.cpp">
       <Filter>source\n080_common</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp">
+      <Filter>source\n900_main____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

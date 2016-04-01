@@ -10,7 +10,6 @@
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
-#include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 // 一箇所でしか呼ばないので、FORCE_INLINE

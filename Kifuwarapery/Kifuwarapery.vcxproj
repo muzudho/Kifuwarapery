@@ -187,12 +187,12 @@
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
     <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp" />
     <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp" />
-    <ClInclude Include="header\n400_usi_____\n400_250_usi.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp" />
-    <ClInclude Include="header\n900_main____\n900_400_main01.h" />
+    <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
+    <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -223,10 +223,10 @@
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />
     <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp" />
     <ClCompile Include="source\n360_egOption\n360_300_engineOptionSetup.cpp" />
-    <ClCompile Include="source\n400_usi_____\n400_250_usi.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp" />
+    <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp" />
     <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
     <ClCompile Include="source\n900_main____\n900_500_main.cpp" />
     <ClCompile Include="stdafx.cpp">

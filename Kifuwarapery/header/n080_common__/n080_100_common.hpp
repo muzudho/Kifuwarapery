@@ -2,6 +2,9 @@
 
 #include "n080_050_ifdef.hpp"
 
+using namespace std;
+
+
 #if defined HAVE_BMI2
 #include <immintrin.h>
 #endif

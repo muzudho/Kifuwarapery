@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../../header/n400_usi_____/n400_250_usi.hpp"
-
 
 class UsiOperation {
 public:

@@ -7,15 +7,14 @@
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_245_engineOption.hpp"
-#include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
 #include "../../header/n400_usi_____/n400_400_learner.hpp"
-
+#include "..\..\header\n900_main____\n900_300_usiLoop.hpp"
 
 #if !defined MINIMUL
 // for debug
-// æŒ‡ã—æ‰‹ç”Ÿæˆã®é€Ÿåº¦ã‚’è¨ˆæ¸¬
+// w‚µè¶¬‚Ì‘¬“x‚ğŒv‘ª
 void measureGenerateMoves(const Position& pos) {
 	pos.print();
 
@@ -39,8 +38,8 @@ void measureGenerateMoves(const Position& pos) {
 			pms = generateMoves<CapturePlusPro>(pms, pos);
 			pms = generateMoves<NonCaptureMinusPro>(pms, pos);
 			pms = generateMoves<Drop>(pms, pos);
-//			pms = generateMoves<PseudoLegal>(pms, pos);
-//			pms = generateMoves<Legal>(pms, pos);
+			//			pms = generateMoves<PseudoLegal>(pms, pos);
+			//			pms = generateMoves<Legal>(pms, pos);
 		}
 	}
 	const int elapsed = t.elapsed();
@@ -63,8 +62,14 @@ const std::string MyName = "Kifuwarapery(Apery_Twig_SDT3)";
 const std::string MyName = "Kifuwarapery(Apery) Debug Build";
 #endif
 
-void Searcher::doUSICommandLoop(int argc, char* argv[]) {
-	Position pos(DefaultStartPositionSFEN, threads.mainThread(), thisptr);
+
+UsiLoop::UsiLoop()
+{
+}
+
+void UsiLoop::Mainloop(int argc, char* argv[])
+{
+	Position pos(DefaultStartPositionSFEN, Searcher::threads.mainThread(), Searcher::thisptr);
 
 	std::string cmd;
 	std::string token;
@@ -96,20 +101,20 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 		UsiOperation usiOperation;
 
 		if (token == "quit" || token == "stop" || token == "ponderhit" || token == "gameover") {
-			if (token != "ponderhit" || signals.stopOnPonderHit) {
-				signals.stop = true;
-				threads.mainThread()->notifyOne();
+			if (token != "ponderhit" || Searcher::signals.stopOnPonderHit) {
+				Searcher::signals.stop = true;
+				Searcher::threads.mainThread()->notifyOne();
 			}
 			else {
-				limits.ponder = false;
+				Searcher::limits.ponder = false;
 			}
 
-			if (token == "ponderhit" && limits.moveTime != 0) {
-				limits.moveTime += searchTimer.elapsed();
+			if (token == "ponderhit" && Searcher::limits.moveTime != 0) {
+				Searcher::limits.moveTime += Searcher::searchTimer.elapsed();
 			}
 		}
 		else if (token == "usinewgame") {
-			tt.clear();
+			Searcher::tt.clear();
 #if defined INANIWA_SHIFT
 			inaniwaFlag = NotInaniwa;
 #endif
@@ -118,19 +123,21 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 #endif
 			for (int i = 0; i < 100; ++i)
 			{
-				g_randomTimeSeed(); // æœ€åˆã¯ä¹±æ•°ã«åã‚ŠãŒã‚ã‚‹ã‹ã‚‚ã€‚å°‘ã—å›ã—ã¦ãŠãã€‚
+				g_randomTimeSeed(); // Å‰‚Í—”‚É•Î‚è‚ª‚ ‚é‚©‚àB­‚µ‰ñ‚µ‚Ä‚¨‚­B
 			}
 		}
-		else if (token == "usi"      ) { SYNCCOUT << "id name " << MyName
-												  << "\nid author Hiraoka Takuya"
-												  << "\n" << options
-												  << "\nusiok" << SYNCENDL; }
-		else if (token == "go"       ) { usiOperation.go(pos, ssCmd); }
-		else if (token == "isready"  ) { SYNCCOUT << "readyok" << SYNCENDL; }
-		else if (token == "position" ) { usiOperation.setPosition(pos, ssCmd); }
-		else if (token == "setoption") { setOption(ssCmd); }
+		else if (token == "usi") {
+			SYNCCOUT << "id name " << MyName
+				<< "\nid author Hiraoka Takuya"
+				<< "\n" << Searcher::options
+				<< "\nusiok" << SYNCENDL;
+		}
+		else if (token == "go") { usiOperation.go(pos, ssCmd); }
+		else if (token == "isready") { SYNCCOUT << "readyok" << SYNCENDL; }
+		else if (token == "position") { usiOperation.setPosition(pos, ssCmd); }
+		else if (token == "setoption") { Searcher::setOption(ssCmd); }
 #if defined LEARN
-		else if (token == "l"        ) {
+		else if (token == "l") {
 			auto learner = std::unique_ptr<Learner>(new Learner);
 #if defined MPI_LEARN
 			learner->learn(pos, env, world);
@@ -140,21 +147,21 @@ void Searcher::doUSICommandLoop(int argc, char* argv[]) {
 		}
 #endif
 #if !defined MINIMUL
-		// ä»¥ä¸‹ã€ãƒ‡ãƒãƒƒã‚°ç”¨
-		else if (token == "bench"    ) { benchmark(pos); }
-		else if (token == "d"        ) { pos.print(); }
-		else if (token == "s"        ) { measureGenerateMoves(pos); }
-		else if (token == "t"        ) { std::cout << pos.mateMoveIn1Ply().toCSA() << std::endl; }
-		else if (token == "b"        ) { makeBook(pos, ssCmd); }
+		// ˆÈ‰ºAƒfƒoƒbƒO—p
+		else if (token == "bench") { benchmark(pos); }
+		else if (token == "d") { pos.print(); }
+		else if (token == "s") { measureGenerateMoves(pos); }
+		else if (token == "t") { std::cout << pos.mateMoveIn1Ply().toCSA() << std::endl; }
+		else if (token == "b") { makeBook(pos, ssCmd); }
 #endif
-		else                           { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
+		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
 	} while (token != "quit" && argc == 1);
 
-	if (options["Write_Synthesized_Eval"])
+	if (Searcher::options["Write_Synthesized_Eval"])
 	{
-		// ã‚·ãƒ³ã‚»ã‚µã‚¤ã‚ºãƒ‰è©•ä¾¡ã‚’æ›¸ãå‡ºã—ã¾ã™ã€‚
-		Evaluater::writeSynthesized(options["Eval_Dir"]);
+		// ƒVƒ“ƒZƒTƒCƒYƒh•]‰¿‚ğ‘‚«o‚µ‚Ü‚·B
+		Evaluater::writeSynthesized(Searcher::options["Eval_Dir"]);
 	}
 
-	threads.waitForThinkFinished();
+	Searcher::threads.waitForThinkFinished();
 }
