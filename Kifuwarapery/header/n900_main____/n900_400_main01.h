@@ -12,7 +12,12 @@
 
 class Main01 {
 public:
-	void Initialize(std::unique_ptr<Searcher>& searcher);
-	void Body(int argc, char* argv[], std::unique_ptr<Searcher>& searcher);
-	void Finalize(std::unique_ptr<Searcher>& searcher);
+	std::unique_ptr<Searcher> searcher;
+
+public:
+	Main01();
+	~Main01();
+	void Initialize();
+	void Body(int argc, char* argv[]);
+	void Finalize();
 };

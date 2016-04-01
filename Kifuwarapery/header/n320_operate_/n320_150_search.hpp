@@ -106,7 +106,8 @@ using Gains   = Stats<true>;
 class TranspositionTable;
 
 // 検索のための構造体？
-struct Searcher {
+class Searcher {
+public:
 	// static メンバ関数からだとthis呼べないので代わりに thisptr を使う。
 	// static じゃないときは this を入れることにする。
 	STATIC Searcher*				thisptr;

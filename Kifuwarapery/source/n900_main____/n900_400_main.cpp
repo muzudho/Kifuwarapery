@@ -9,7 +9,17 @@
 #include "..\..\header\n900_main____\n900_400_main01.h"
 
 
-void Main01::Initialize(std::unique_ptr<Searcher>& searcher)
+Main01::Main01()
+{
+	this->searcher = std::unique_ptr<Searcher>(new Searcher);
+}
+
+Main01::~Main01()
+{
+	this->searcher.reset();
+}
+
+void Main01::Initialize()
 {
 	SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
 	Initializer initializer;
@@ -19,22 +29,22 @@ void Main01::Initialize(std::unique_ptr<Searcher>& searcher)
 	Position::initZobrist();
 
 	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
-	searcher->init();
+	this->searcher->init();
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<Evaluater>(new Evaluater)->init(searcher->options["Eval_Dir"], true);
+	std::unique_ptr<Evaluater>(new Evaluater)->init(this->searcher->options["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 }
 
-void Main01::Body(int argc, char* argv[], std::unique_ptr<Searcher>& searcher)
+void Main01::Body(int argc, char* argv[])
 {
-	searcher->doUSICommandLoop(argc, argv);
+	this->searcher->doUSICommandLoop(argc, argv);
 }
 
-void Main01::Finalize(std::unique_ptr<Searcher>& searcher)
+void Main01::Finalize()
 {
 	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
-	searcher->threads.exit();
+	this->searcher->threads.exit();
 }

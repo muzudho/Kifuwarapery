@@ -34,11 +34,10 @@ int main01() {
 #else
 // 将棋を指すソフト
 int main(int argc, char* argv[]) {
-	std::unique_ptr<Searcher> searcher = std::unique_ptr<Searcher>(new Searcher);
 	Main01 main01;
-	main01.Initialize(searcher);
-	main01.Body(argc, argv, searcher);
-	main01.Finalize(searcher);
+	main01.Initialize();
+	main01.Body(argc, argv);
+	main01.Finalize();
 }
 
 #endif
