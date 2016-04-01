@@ -194,6 +194,7 @@
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp" />
+    <ClInclude Include="header\n900_main____\n900_400_main.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -227,6 +228,7 @@
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp" />
     <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp" />
+    <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
     <ClCompile Include="source\n900_main____\n900_500_main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

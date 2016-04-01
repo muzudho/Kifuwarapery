@@ -6,6 +6,7 @@
 #include "../../header/n320_operate_/n320_200_init.hpp"
 #include "../../header/n400_usi_____/n400_250_usi.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
+#include "..\..\header\n900_main____\n900_400_main.h"
 
 #if defined FIND_MAGIC
 // Magic Bitboard の Magic Number を求める為のソフト
@@ -33,28 +34,12 @@ int main() {
 #else
 // 将棋を指すソフト
 int main(int argc, char* argv[]) {
-
-	SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
-	Initializer initializer;
-	initializer.initTable();
-
-	SYNCCOUT << "(^q^)main(2/6): initZobrist!" << SYNCENDL;
-	Position::initZobrist();
-
-	auto searcher = std::unique_ptr<Searcher>(new Searcher);
-
-	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
-	searcher->init();
-	// 一時オブジェクトの生成と破棄
-
-	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<Evaluater>(new Evaluater)->init(searcher->options["Eval_Dir"], true);
-	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
-
-	searcher->doUSICommandLoop(argc, argv);
-
-	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
-	searcher->threads.exit();
+	std::unique_ptr<Searcher> searcher = std::unique_ptr<Searcher>(new Searcher);
+	Main main;
+	main.Initialize(searcher);
+	main.Body(argc, argv, searcher);
+	main.Finalize(searcher);
 }
 
 #endif
+

@@ -82,6 +82,9 @@
     <Filter Include="Source Files\n260_evaluate">
       <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\n900_main____">
+      <UniqueIdentifier>{dd42631b-4183-489a-a416-f3388e205141}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -222,6 +225,9 @@
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
       <Filter>Header Files\n080_common__</Filter>
     </ClInclude>
+    <ClInclude Include="header\n900_main____\n900_400_main.h">
+      <Filter>Header Files\n900_main____</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -315,6 +321,9 @@
       <Filter>Source Files\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_500_main.cpp">
+      <Filter>Source Files\n900_main____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_400_main.cpp">
       <Filter>Source Files\n900_main____</Filter>
     </ClCompile>
   </ItemGroup>
