@@ -97,6 +97,12 @@
     <Filter Include="source\n320_searcher">
       <UniqueIdentifier>{7a2abed9-850d-4f93-b902-3aeb6a75648a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n276_genMove_">
+      <UniqueIdentifier>{2310143e-4ceb-409e-ad1e-b27c7e780302}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n276_genMove_">
+      <UniqueIdentifier>{af043c7c-3557-4655-9b9e-62012adf618d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -146,9 +152,6 @@
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp">
       <Filter>header\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_100_generateMoves.hpp">
-      <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
       <Filter>header\n280_move____</Filter>
@@ -258,6 +261,18 @@
     <ClInclude Include="header\n320_searcher\n320_150_search.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_100_moveType.hpp">
+      <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp">
+      <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_200_promoteMode.hpp">
+      <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp">
+      <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -268,9 +283,6 @@
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp">
       <Filter>source\n240_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n280_move____\n280_100_generateMoves.cpp">
-      <Filter>source\n280_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp">
       <Filter>source\n280_move____</Filter>
@@ -358,6 +370,12 @@
     </ClCompile>
     <ClCompile Include="source\n320_searcher\n320_150_search.cpp">
       <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n276_genMove_\n276_500_generateMoves.cpp">
+      <Filter>source\n276_genMove_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n276_genMove_\n276_150_moveList.cpp">
+      <Filter>source\n276_genMove_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

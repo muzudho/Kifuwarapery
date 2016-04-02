@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n280_move____/n280_100_generateMoves.hpp"
+#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
@@ -100,8 +100,15 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 
 		UsiOperation usiOperation;
 
-		if (token == "quit" || token == "stop" || token == "ponderhit" || token == "gameover") {
-			if (token != "ponderhit" || searcher.signals.stopOnPonderHit) {
+		if (
+			token == "quit" ||
+			token == "stop" ||
+			token == "ponderhit" ||
+			token == "gameover"
+		) {
+			if (token != "ponderhit" ||
+				searcher.signals.stopOnPonderHit
+			) {
 				searcher.signals.stop = true;
 				searcher.threads.mainThread()->notifyOne();
 			}
@@ -132,10 +139,18 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 				<< "\n" << searcher.options
 				<< "\nusiok" << SYNCENDL;
 		}
-		else if (token == "go") { usiOperation.go(pos, ssCmd); }
-		else if (token == "isready") { SYNCCOUT << "readyok" << SYNCENDL; }
-		else if (token == "position") { usiOperation.setPosition(pos, ssCmd); }
-		else if (token == "setoption") { searcher.setOption(ssCmd); }
+		else if (token == "go") {
+			usiOperation.go(pos, ssCmd);
+		}
+		else if (token == "isready") {
+			SYNCCOUT << "readyok" << SYNCENDL;
+		}
+		else if (token == "position") {
+			usiOperation.setPosition(pos, ssCmd);
+		}
+		else if (token == "setoption") {
+			searcher.setOption(ssCmd);
+		}
 #if defined LEARN
 		else if (token == "l") {
 			auto learner = std::unique_ptr<Learner>(new Learner);
@@ -157,11 +172,16 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
 	} while (token != "quit" && argc == 1);
 
+	//────────────────────────────────────────────────────────────────────────────────
+
+	// 評価値ファイルを書き出す指定なら
 	if (searcher.options["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
 		Evaluater::writeSynthesized(searcher.options["Eval_Dir"]);
 	}
+
+	//────────────────────────────────────────────────────────────────────────────────
 
 	searcher.threads.waitForThinkFinished();
 }

@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n280_move____/n280_100_generateMoves.hpp"
+#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 

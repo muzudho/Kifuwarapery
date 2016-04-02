@@ -4,7 +4,7 @@
 #include "../../header/n240_position/n240_400_MoveScore.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n280_move____/n280_100_generateMoves.hpp"
+#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"

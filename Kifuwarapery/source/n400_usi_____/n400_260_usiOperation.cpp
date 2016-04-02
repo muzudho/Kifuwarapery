@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n280_move____/n280_100_generateMoves.hpp"
+#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
@@ -38,12 +38,13 @@ public:
 const StringToPieceTypeCSA g_stringToPieceTypeCSA;
 
 
-
+// 考え始めるのはここ。
 void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 	LimitsType limits;
 	std::vector<Move> moves;
 	std::string token;
 
+	// go にも種類がある☆
 	while (ssCmd >> token) {
 		if      (token == "ponder"     ) { limits.ponder = true; }
 		else if (token == "btime"      ) { ssCmd >> limits.time[Black]; }
@@ -66,6 +67,8 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 		}
 	}
 	pos.searcher()->searchMoves = moves;
+
+	// 思考を開始☆
 	pos.searcher()->threads.startThinking(pos, limits, moves);
 }
 

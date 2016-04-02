@@ -1,10 +1,11 @@
-#include "../../header/n280_move____/n280_100_generateMoves.hpp"
+#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
+
 
 namespace {
 	// 角, 飛車の場合
 	template <MoveType MT, PieceType PT, Color US, bool ALL>
 	FORCE_INLINE MoveStack* generateBishopOrRookMoves(MoveStack* moveStackList, const Position& pos,
-													  const Bitboard& target, const Square /*ksq*/)
+		const Bitboard& target, const Square /*ksq*/)
 	{
 		Bitboard fromBB = pos.bbOf(PT, US);
 		while (fromBB.isNot0()) {
@@ -44,8 +45,8 @@ namespace {
 			Bitboard pawnsBB = pos.bbOf(Pawn, US);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
-					toBB.set(part, toBB.p(part) & ~squareFileMask(pawnsSquare).p(part));
-				});
+				toBB.set(part, toBB.p(part) & ~squareFileMask(pawnsSquare).p(part));
+			});
 
 			// 打ち歩詰めの回避
 			const Rank TRank1 = (US == Black ? Rank1 : Rank9);
@@ -68,8 +69,8 @@ namespace {
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-					(*moveStackList++).move = makeDropMove(Pawn, to);
-				});
+				(*moveStackList++).move = makeDropMove(Pawn, to);
+			});
 		}
 
 		// 歩 以外の駒を持っているか
@@ -77,15 +78,15 @@ namespace {
 			PieceType haveHand[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
 			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
-			// 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
+								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
 			if (hand.exists<HKnight>()) { haveHand[haveHandNum++] = Knight; }
-			const int noKnightIdx      = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
-			if (hand.exists<HLance >()) { haveHand[haveHandNum++] = Lance;  }
+			const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
+			if (hand.exists<HLance >()) { haveHand[haveHandNum++] = Lance; }
 			const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
 			if (hand.exists<HSilver>()) { haveHand[haveHandNum++] = Silver; }
-			if (hand.exists<HGold  >()) { haveHand[haveHandNum++] = Gold;   }
+			if (hand.exists<HGold  >()) { haveHand[haveHandNum++] = Gold; }
 			if (hand.exists<HBishop>()) { haveHand[haveHandNum++] = Bishop; }
-			if (hand.exists<HRook  >()) { haveHand[haveHandNum++] = Rook;   }
+			if (hand.exists<HRook  >()) { haveHand[haveHandNum++] = Rook; }
 
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
@@ -170,15 +171,15 @@ namespace {
 					toBB.andEqualNot(TRank789BB);
 					Square to;
 					FOREACH_BB(toOn789BB, to, {
-							const Square from = to + TDeltaS;
-							(*moveStackList++).move = makePromoteMove<MT>(Pawn, from, to, pos);
-							if (MT == NonEvasion || ALL) {
-								const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-								if (makeRank(to) != TRank9) {
-									(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
-								}
-							}
-						});
+						const Square from = to + TDeltaS;
+					(*moveStackList++).move = makePromoteMove<MT>(Pawn, from, to, pos);
+					if (MT == NonEvasion || ALL) {
+						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
+						if (makeRank(to) != TRank9) {
+							(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
+						}
+					}
+					});
 				}
 			}
 			else {
@@ -189,9 +190,9 @@ namespace {
 			// toBB は 8~4 段目まで。
 			Square to;
 			FOREACH_BB(toBB, to, {
-					const Square from = to + TDeltaS;
-					(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
-				});
+				const Square from = to + TDeltaS;
+			(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
+			});
 			return moveStackList;
 		}
 	};
@@ -299,16 +300,16 @@ namespace {
 			const Square from = fromBB.firstOneFromI9();
 			const PieceType pt = pieceToPieceType(pos.piece(from));
 			switch (pt) {
-			case Empty    : assert(false); break; // 最適化の為のダミー
-			case Pawn     : case Lance    : case Knight   : case Silver   : case Bishop   : case Rook     :
+			case Empty: assert(false); break; // 最適化の為のダミー
+			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
 				(*moveStackList++).move = ((canPromote(us, makeRank(to)) | canPromote(us, makeRank(from))) ?
-										   makePromoteMove<Capture>(pt, from, to, pos) :
-										   makeNonPromoteMove<Capture>(pt, from, to, pos));
+					makePromoteMove<Capture>(pt, from, to, pos) :
+					makeNonPromoteMove<Capture>(pt, from, to, pos));
 				break;
-			case Gold     : case King     : case ProPawn  : case ProLance : case ProKnight: case ProSilver: case Horse    : case Dragon   :
+			case Gold: case King: case ProPawn: case ProLance: case ProKnight: case ProSilver: case Horse: case Dragon:
 				(*moveStackList++).move = makeNonPromoteMove<Capture>(pt, from, to, pos);
 				break;
-			default       : UNREACHABLE;
+			default: UNREACHABLE;
 			}
 		}
 		return moveStackList;
@@ -329,27 +330,27 @@ namespace {
 			const Bitboard TRank1_7BB = inFrontMask<oppositeColor(US), TRank8>();
 
 			const Bitboard targetPawn =
-				(MT == Capture           ) ? pos.bbOf(oppositeColor(US))                                             :
-				(MT == NonCapture        ) ? pos.emptyBB()                                                           :
-				(MT == CapturePlusPro    ) ? pos.bbOf(oppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
-				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB)                                 :
+				(MT == Capture) ? pos.bbOf(oppositeColor(US)) :
+				(MT == NonCapture) ? pos.emptyBB() :
+				(MT == CapturePlusPro) ? pos.bbOf(oppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
+				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB) :
 				Bitboard::allOneBB(); // error
 			const Bitboard targetOther =
-				(MT == Capture           ) ? pos.bbOf(oppositeColor(US)) :
-				(MT == NonCapture        ) ? pos.emptyBB()               :
-				(MT == CapturePlusPro    ) ? pos.bbOf(oppositeColor(US)) :
-				(MT == NonCaptureMinusPro) ? pos.emptyBB()               :
+				(MT == Capture) ? pos.bbOf(oppositeColor(US)) :
+				(MT == NonCapture) ? pos.emptyBB() :
+				(MT == CapturePlusPro) ? pos.bbOf(oppositeColor(US)) :
+				(MT == NonCaptureMinusPro) ? pos.emptyBB() :
 				Bitboard::allOneBB(); // error
 			const Square ksq = pos.kingSquare(oppositeColor(US));
 
-			moveStackList = GeneratePieceMoves<MT, Pawn           , US, ALL>()(moveStackList, pos, targetPawn, ksq);
-			moveStackList = GeneratePieceMoves<MT, Lance          , US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, Knight         , US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, Silver         , US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, Bishop         , US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, Rook           , US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, Pawn, US, ALL>()(moveStackList, pos, targetPawn, ksq);
+			moveStackList = GeneratePieceMoves<MT, Lance, US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, Knight, US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, Silver, US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, Bishop, US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, Rook, US, ALL>()(moveStackList, pos, targetOther, ksq);
 			moveStackList = GeneratePieceMoves<MT, GoldHorseDragon, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, King           , US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, King, US, ALL>()(moveStackList, pos, targetOther, ksq);
 
 			return moveStackList;
 		}
@@ -371,42 +372,42 @@ namespace {
 	// todo: FOECE_INLINE と template 省いてNPS比較
 	template <Color THEM>
 	FORCE_INLINE void makeBannedKingTo(Bitboard& bannedKingToBB, const Position& pos,
-									   const Square checkSq, const Square ksq)
+		const Square checkSq, const Square ksq)
 	{
 		switch (pos.piece(checkSq)) {
-//		case Empty: assert(false); break; // 最適化の為のダミー
-		case (THEM == Black ? BPawn      : WPawn):
-		case (THEM == Black ? BKnight    : WKnight):
+			//		case Empty: assert(false); break; // 最適化の為のダミー
+		case (THEM == Black ? BPawn : WPawn) :
+		case (THEM == Black ? BKnight : WKnight) :
 			// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 			// よって、ここでは何もしない。
 			assert(
-				pos.piece(checkSq) == (THEM == Black ? BPawn   : WPawn) ||
+				pos.piece(checkSq) == (THEM == Black ? BPawn : WPawn) ||
 				pos.piece(checkSq) == (THEM == Black ? BKnight : WKnight)
 				);
-		break;
-		case (THEM == Black ? BLance     : WLance):
+			break;
+		case (THEM == Black ? BLance : WLance) :
 			bannedKingToBB |= lanceAttackToEdge(THEM, checkSq);
 			break;
-		case (THEM == Black ? BSilver    : WSilver):
+		case (THEM == Black ? BSilver : WSilver) :
 			bannedKingToBB |= silverAttack(THEM, checkSq);
 			break;
-		case (THEM == Black ? BGold      : WGold):
-		case (THEM == Black ? BProPawn   : WProPawn):
-		case (THEM == Black ? BProLance  : WProLance):
-		case (THEM == Black ? BProKnight : WProKnight):
-		case (THEM == Black ? BProSilver : WProSilver):
+		case (THEM == Black ? BGold : WGold) :
+		case (THEM == Black ? BProPawn : WProPawn) :
+		case (THEM == Black ? BProLance : WProLance) :
+		case (THEM == Black ? BProKnight : WProKnight) :
+		case (THEM == Black ? BProSilver : WProSilver) :
 			bannedKingToBB |= goldAttack(THEM, checkSq);
-		break;
-		case (THEM == Black ? BBishop    : WBishop):
+			break;
+		case (THEM == Black ? BBishop : WBishop) :
 			bannedKingToBB |= bishopAttackToEdge(checkSq);
 			break;
-		case (THEM == Black ? BHorse     : WHorse):
+		case (THEM == Black ? BHorse : WHorse) :
 			bannedKingToBB |= horseAttackToEdge(checkSq);
 			break;
-		case (THEM == Black ? BRook      : WRook):
+		case (THEM == Black ? BRook : WRook) :
 			bannedKingToBB |= rookAttackToEdge(checkSq);
 			break;
-		case (THEM == Black ? BDragon    : WDragon):
+		case (THEM == Black ? BDragon : WDragon) :
 			if (squareRelation(checkSq, ksq) & DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
@@ -467,13 +468,13 @@ namespace {
 			// pin されているかどうかは movePicker か search で調べる。
 			const Bitboard target1 = betweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
-			moveStackList = GeneratePieceMoves<Evasion, Pawn,   US, ALL>()(moveStackList, pos, target2, ksq);
-			moveStackList = GeneratePieceMoves<Evasion, Lance,  US, ALL>()(moveStackList, pos, target2, ksq);
+			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
+			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Knight, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Silver, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Bishop, US, ALL>()(moveStackList, pos, target2, ksq);
-			moveStackList = GeneratePieceMoves<Evasion, Rook,   US, ALL>()(moveStackList, pos, target2, ksq);
-			moveStackList = GeneratePieceMoves<Evasion, GoldHorseDragon,   US, ALL>()(moveStackList, pos, target2, ksq);
+			moveStackList = GeneratePieceMoves<Evasion, Rook, US, ALL>()(moveStackList, pos, target2, ksq);
+			moveStackList = GeneratePieceMoves<Evasion, GoldHorseDragon, US, ALL>()(moveStackList, pos, target2, ksq);
 
 			if (target1.isNot0()) {
 				moveStackList = generateDropMoves<US>(moveStackList, pos, target1);
@@ -495,14 +496,14 @@ namespace {
 			target |= pos.bbOf(oppositeColor(US));
 			const Square ksq = pos.kingSquare(oppositeColor(US));
 
-			moveStackList = GeneratePieceMoves<NonEvasion, Pawn           , US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, Lance          , US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, Knight         , US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, Silver         , US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, Bishop         , US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, Rook           , US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Pawn, US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Lance, US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Knight, US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Silver, US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Bishop, US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, Rook, US, false>()(moveStackList, pos, target, ksq);
 			moveStackList = GeneratePieceMoves<NonEvasion, GoldHorseDragon, US, false>()(moveStackList, pos, target, ksq);
-			moveStackList = GeneratePieceMoves<NonEvasion, King           , US, false>()(moveStackList, pos, target, ksq);
+			moveStackList = GeneratePieceMoves<NonEvasion, King, US, false>()(moveStackList, pos, target, ksq);
 
 			return moveStackList;
 		}
@@ -557,16 +558,16 @@ namespace {
 		}
 	};
 }
-
 template <MoveType MT>
 MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos) {
 	return (pos.turn() == Black ?
-			GenerateMoves<MT, Black>()(moveStackList, pos) : GenerateMoves<MT, White>()(moveStackList, pos));
+		GenerateMoves<MT, Black>()(moveStackList, pos) : GenerateMoves<MT, White>()(moveStackList, pos));
 }
 template <MoveType MT>
 MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos, const Square to) {
 	return generateRecaptureMoves(moveStackList, pos, to, pos.turn());
 }
+
 
 // 明示的なインスタンス化
 // これが無いと、他のファイルから呼んだ時に、

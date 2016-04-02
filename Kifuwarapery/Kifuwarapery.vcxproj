@@ -167,7 +167,10 @@
     <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp" />
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp" />
-    <ClInclude Include="header\n280_move____\n280_100_generateMoves.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_100_moveType.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_200_promoteMode.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp" />
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp" />
     <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp" />
     <ClInclude Include="header\n240_position\n240_100_position.hpp" />
@@ -219,7 +222,8 @@
     <ClCompile Include="source\n260_evaluate\h260_500_Evaluater.cpp" />
     <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp" />
     <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp" />
-    <ClCompile Include="source\n280_move____\n280_100_generateMoves.cpp" />
+    <ClCompile Include="source\n276_genMove_\n276_150_moveList.cpp" />
+    <ClCompile Include="source\n276_genMove_\n276_500_generateMoves.cpp" />
     <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp" />
     <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp" />
     <ClCompile Include="source\n300_book____\n300_100_book.cpp" />
