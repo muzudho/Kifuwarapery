@@ -5,7 +5,8 @@
 
 class Position;
 
-struct EvalList {
+class EvalList {
+public:
 	static const int ListSize = 38;
 
 	int list0[ListSize];
