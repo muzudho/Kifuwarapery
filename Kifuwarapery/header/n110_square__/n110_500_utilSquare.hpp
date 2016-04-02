@@ -21,39 +21,40 @@ public:
 	template <Color US, File BFILE, File WFILE>
 	static inline bool IsRightOf(const File target) { return (US == Black ? (target < BFILE) : (WFILE < target)); }
 
+	static inline bool isInFile(const File f) { return (0 <= f) && (f < FileNum); }
+	static inline bool isInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
+	// s が Square の中に含まれているか判定
+	static inline bool isInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
+	// File, Rank のどちらかがおかしいかも知れない時は、
+	// こちらを使う。
+	// こちらの方が遅いが、どんな File, Rank にも対応している。
+	static inline bool isInSquare(const File f, const Rank r) { return isInFile(f) && isInRank(r); }
+
+	// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
+	static inline constexpr Square makeSquare(const File f, const Rank r) {
+		return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
+	}
+
+	// 速度が必要な場面で使用する。
+	static inline Rank makeRank(const Square s) {
+		assert(isInSquare(s));
+		return SquareToRank[s];
+	}
+	static inline File makeFile(const Square s) {
+		assert(isInSquare(s));
+		return SquareToFile[s];
+	}
+
 };
 
+static inline Square operator + (const Square lhs, const SquareDelta rhs) { return lhs + static_cast<Square>(rhs); }
+static inline void operator += (Square& lhs, const SquareDelta rhs) { lhs = lhs + static_cast<Square>(rhs); }
+static inline Square operator - (const Square lhs, const SquareDelta rhs) { return lhs - static_cast<Square>(rhs); }
+static inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs - static_cast<Square>(rhs); }
 
 
 
-inline Square operator + (const Square lhs, const SquareDelta rhs) { return lhs + static_cast<Square>(rhs); }
-inline void operator += (Square& lhs, const SquareDelta rhs) { lhs = lhs + static_cast<Square>(rhs); }
-inline Square operator - (const Square lhs, const SquareDelta rhs) { return lhs - static_cast<Square>(rhs); }
-inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs - static_cast<Square>(rhs); }
 
-inline bool isInFile(const File f) { return (0 <= f) && (f < FileNum); }
-inline bool isInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
-// s が Square の中に含まれているか判定
-inline bool isInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
-// File, Rank のどちらかがおかしいかも知れない時は、
-// こちらを使う。
-// こちらの方が遅いが、どんな File, Rank にも対応している。
-inline bool isInSquare(const File f, const Rank r) { return isInFile(f) && isInRank(r); }
-
-// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
-inline constexpr Square makeSquare(const File f, const Rank r) {
-	return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
-}
-
-// 速度が必要な場面で使用する。
-inline Rank makeRank(const Square s) {
-	assert(isInSquare(s));
-	return SquareToRank[s];
-}
-inline File makeFile(const Square s) {
-	assert(isInSquare(s));
-	return SquareToFile[s];
-}
 
 // 2つの位置関係のテーブル
 extern Direction SquareRelation[SquareNum][SquareNum];
@@ -90,8 +91,8 @@ inline char rankToCharUSI(const Rank r) {
 	return 'a' + r;
 }
 inline std::string squareToStringUSI(const Square sq) {
-	const Rank r = makeRank(sq);
-	const File f = makeFile(sq);
+	const Rank r = UtilSquare::makeRank(sq);
+	const File f = UtilSquare::makeFile(sq);
 	const char ch[] = {fileToCharUSI(f), rankToCharUSI(r), '\0'};
 	return std::string(ch);
 }
@@ -99,8 +100,8 @@ inline std::string squareToStringUSI(const Square sq) {
 inline char fileToCharCSA(const File f) { return '1' + f; }
 inline char rankToCharCSA(const Rank r) { return '1' + r; }
 inline std::string squareToStringCSA(const Square sq) {
-	const Rank r = makeRank(sq);
-	const File f = makeFile(sq);
+	const Rank r = UtilSquare::makeRank(sq);
+	const File f = UtilSquare::makeFile(sq);
 	const char ch[] = {fileToCharCSA(f), rankToCharCSA(r), '\0'};
 	return std::string(ch);
 }
@@ -117,7 +118,7 @@ inline constexpr File inverse(const File f) { return FileNum - 1 - f; }
 // 上下変換
 inline constexpr Rank inverse(const Rank r) { return RankNum - 1 - r; }
 // Square の左右だけ変換
-inline Square inverseFile(const Square sq) { return makeSquare(inverse(makeFile(sq)), makeRank(sq)); }
+inline Square inverseFile(const Square sq) { return UtilSquare::makeSquare(inverse(UtilSquare::makeFile(sq)), UtilSquare::makeRank(sq)); }
 
 inline constexpr Square inverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : inverse(sq)); }
 

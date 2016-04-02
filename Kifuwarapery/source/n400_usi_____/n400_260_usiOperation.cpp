@@ -163,25 +163,25 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const File toFile = charUSIToFile(moveStr[2]);
 		const Rank toRank = charUSIToRank(moveStr[3]);
-		if (!isInSquare(toFile, toRank)) {
+		if (!UtilSquare::isInSquare(toFile, toRank)) {
 			return Move::moveNone();
 		}
-		const Square to = makeSquare(toFile, toRank);
+		const Square to = UtilSquare::makeSquare(toFile, toRank);
 		move = makeDropMove(ptTo, to);
 	}
 	else {
 		const File fromFile = charUSIToFile(moveStr[0]);
 		const Rank fromRank = charUSIToRank(moveStr[1]);
-		if (!isInSquare(fromFile, fromRank)) {
+		if (!UtilSquare::isInSquare(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
-		const Square from = makeSquare(fromFile, fromRank);
+		const Square from = UtilSquare::makeSquare(fromFile, fromRank);
 		const File toFile = charUSIToFile(moveStr[2]);
 		const Rank toRank = charUSIToRank(moveStr[3]);
-		if (!isInSquare(toFile, toRank)) {
+		if (!UtilSquare::isInSquare(toFile, toRank)) {
 			return Move::moveNone();
 		}
-		const Square to = makeSquare(toFile, toRank);
+		const Square to = UtilSquare::makeSquare(toFile, toRank);
 		if (moveStr[4] == '\0') {
 			move = makeNonPromoteMove<Capture>(pieceToPieceType(pos.piece(from)), from, to, pos);
 		}
@@ -210,10 +210,10 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 	}
 	const File toFile = charCSAToFile(moveStr[2]);
 	const Rank toRank = charCSAToRank(moveStr[3]);
-	if (!isInSquare(toFile, toRank)) {
+	if (!UtilSquare::isInSquare(toFile, toRank)) {
 		return Move::moveNone();
 	}
-	const Square to = makeSquare(toFile, toRank);
+	const Square to = UtilSquare::makeSquare(toFile, toRank);
 	const std::string ptToString(moveStr.begin() + 4, moveStr.end());
 	if (!g_stringToPieceTypeCSA.isLegalString(ptToString)) {
 		return Move::moveNone();
@@ -227,10 +227,10 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 	else {
 		const File fromFile = charCSAToFile(moveStr[0]);
 		const Rank fromRank = charCSAToRank(moveStr[1]);
-		if (!isInSquare(fromFile, fromRank)) {
+		if (!UtilSquare::isInSquare(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
-		const Square from = makeSquare(fromFile, fromRank);
+		const Square from = UtilSquare::makeSquare(fromFile, fromRank);
 		PieceType ptFrom = pieceToPieceType(pos.piece(from));
 		if (ptFrom == ptTo) {
 			// non promote

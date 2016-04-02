@@ -159,7 +159,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 
 		if (ptFrom == Pawn && checkPawnDrop) {
-			if ((bbOf(Pawn, us) & fileMask(makeFile(to))).isNot0()) {
+			if ((bbOf(Pawn, us) & fileMask(UtilSquare::makeFile(to))).isNot0()) {
 				// 二歩
 				return false;
 			}
@@ -532,12 +532,12 @@ namespace {
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {
-				if (canPromote(turn, makeRank(to))) {
+				if (canPromote(turn, UtilSquare::makeRank(to))) {
 					return PT + PTPromote;
 				}
 			}
 			if (PT == Silver || PT == Bishop || PT == Rook) {
-				if (canPromote(turn, makeRank(to)) || canPromote(turn, makeRank(from))) {
+				if (canPromote(turn, UtilSquare::makeRank(to)) || canPromote(turn, UtilSquare::makeRank(from))) {
 					return PT + PTPromote;
 				}
 			}
@@ -781,7 +781,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	// 香車打ち
 	// 飛車で詰まなければ香車でも詰まないので、else if を使用。
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
-	else if (ourHand.exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(makeRank(ksq))) {
+	else if (ourHand.exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::makeRank(ksq))) {
 		const Square to = ksq + TDeltaS;
 		if (piece(to) == Empty && attackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, lanceAttackToEdge(US, to))
@@ -839,7 +839,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 				goto silver_drop_end;
 			}
 			// 斜め後ろから打つ場合を調べる必要がある。
-			toBB = dropTarget & (silverAttack(Them, ksq) & inFrontMask(US, makeRank(ksq)));
+			toBB = dropTarget & (silverAttack(Them, ksq) & inFrontMask(US, UtilSquare::makeRank(ksq)));
 		}
 		else {
 			if (ourHand.exists<HBishop>()) {
@@ -1194,7 +1194,7 @@ silver_drop_end:
 
 						// 玉の前方に移動する場合、成で詰まなかったら不成でも詰まないので、ここで省く。
 						// sakurapyon の作者が言ってたので実装。
-						toBB.andEqualNot(inFrontMask(Them, makeRank(ksq)));
+						toBB.andEqualNot(inFrontMask(Them, UtilSquare::makeRank(ksq)));
 						while (toBB.isNot0()) {
 							const Square to = toBB.firstOneFromI9();
 							if (unDropCheckIsSupported(US, to)) {
@@ -1414,7 +1414,7 @@ silver_drop_end:
 		// 歩による移動
 		// 成れる場合は必ずなる。
 		// todo: PawnCheckBB 作って簡略化する。
-		const Rank krank = makeRank(ksq);
+		const Rank krank = UtilSquare::makeRank(ksq);
 		// 歩が移動して王手になるのは、相手玉が1~7段目の時のみ。
 		if (UtilSquare::IsInFrontOf<US, Rank2, Rank8>(krank)) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
@@ -1510,7 +1510,7 @@ void Position::print() const {
 		++i;
 		std::cout << "P" << i;
 		for (File f = FileA; FileI <= f; --f) {
-			std::cout << pieceToCharCSA(piece(makeSquare(f, r)));
+			std::cout << pieceToCharCSA(piece(UtilSquare::makeSquare(f, r)));
 		}
 		std::cout << std::endl;
 	}
@@ -1789,7 +1789,7 @@ void Position::set(const std::string& sfen, Thread* th) {
 			promoteFlag = Promoted;
 		}
 		else if (g_charToPieceUSI.isLegalChar(token)) {
-			if (isInSquare(sq)) {
+			if (UtilSquare::isInSquare(sq)) {
 				setPiece(g_charToPieceUSI.value(token) + promoteFlag, sq);
 				promoteFlag = UnPromoted;
 				sq += DeltaE;
