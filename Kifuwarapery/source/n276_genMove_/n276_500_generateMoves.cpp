@@ -12,11 +12,11 @@ namespace {
 		Bitboard fromBB = pos.bbOf(PT, US);
 		while (fromBB.isNot0()) {
 			const Square from = fromBB.firstOneFromI9();
-			const bool fromCanPromote = canPromote(US, UtilSquare::MakeRank(from));
+			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(from));
 			Bitboard toBB = pos.attacksFrom<PT>(US, from) & target;
 			while (toBB.isNot0()) {
 				const Square to = toBB.firstOneFromI9();
-				const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(to));
 				if (fromCanPromote | toCanPromote) {
 					(*moveStackList++).move = makePromoteMove<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)
@@ -217,7 +217,7 @@ namespace {
 					if (toBB.isNot0()) {
 						// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.constFirstOneFromI9() : toBB.firstOneFromI9());
-						const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
+						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(to));
 						if (toCanPromote) {
 							(*moveStackList++).move = makePromoteMove<MT>(Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
@@ -249,7 +249,7 @@ namespace {
 				Bitboard toBB = pos.attacksFrom<Knight>(US, from) & target;
 				while (toBB.isNot0()) {
 					const Square to = toBB.firstOneFromI9();
-					const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
+					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).move = makePromoteMove<MT>(Knight, from, to, pos);
 						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::MakeRank(to))) // 1, 2段目の不成は省く
@@ -270,11 +270,11 @@ namespace {
 			Bitboard fromBB = pos.bbOf(Silver, US);
 			while (fromBB.isNot0()) {
 				const Square from = fromBB.firstOneFromI9();
-				const bool fromCanPromote = canPromote(US, UtilSquare::MakeRank(from));
+				const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(from));
 				Bitboard toBB = pos.attacksFrom<Silver>(US, from) & target;
 				while (toBB.isNot0()) {
 					const Square to = toBB.firstOneFromI9();
-					const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
+					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::MakeRank(to));
 					if (fromCanPromote | toCanPromote)
 						(*moveStackList++).move = makePromoteMove<MT>(Silver, from, to, pos);
 					(*moveStackList++).move = makeNonPromoteMove<MT>(Silver, from, to, pos);
@@ -324,7 +324,7 @@ namespace {
 			switch (pt) {
 			case Empty: assert(false); break; // 最適化の為のダミー
 			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
-				(*moveStackList++).move = ((canPromote(us, UtilSquare::MakeRank(to)) | canPromote(us, UtilSquare::MakeRank(from))) ?
+				(*moveStackList++).move = ((UtilSquare::CanPromote(us, UtilSquare::MakeRank(to)) | UtilSquare::CanPromote(us, UtilSquare::MakeRank(from))) ?
 					makePromoteMove<Capture>(pt, from, to, pos) :
 					makeNonPromoteMove<Capture>(pt, from, to, pos));
 				break;

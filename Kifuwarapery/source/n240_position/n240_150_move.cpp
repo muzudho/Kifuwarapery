@@ -153,8 +153,8 @@ std::string Move::toUSI() const {
 std::string Move::toCSA() const {
 	if (this->isNone()) { return "None"; }
 
-	std::string s = (this->isDrop() ? std::string("00") : squareToStringCSA(this->from()));
-	s += squareToStringCSA(this->to()) + pieceTypeToString(this->pieceTypeTo());
+	std::string s = (this->isDrop() ? std::string("00") : UtilSquare::squareToStringCSA(this->from()));
+	s += UtilSquare::squareToStringCSA(this->to()) + pieceTypeToString(this->pieceTypeTo());
 	return s;
 }
 

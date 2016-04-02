@@ -32,8 +32,8 @@ struct RawEvaluater {
 				const int l0 = list0[j];
 				const int l1 = list1[j];
 				kpp_raw[sq_bk         ][k0][l0] += f;
-				kpp_raw[inverse(sq_wk)][k1][l1][0] -= f[0];
-				kpp_raw[inverse(sq_wk)][k1][l1][1] += f[1];
+				kpp_raw[Inverse(sq_wk)][k1][l1][0] -= f[0];
+				kpp_raw[Inverse(sq_wk)][k1][l1][1] += f[1];
 			}
 			kkp_raw[sq_bk][sq_wk][k0] += f;
 		}

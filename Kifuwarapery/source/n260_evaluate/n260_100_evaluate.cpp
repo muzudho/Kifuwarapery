@@ -56,7 +56,7 @@ EvalSum Evaluation09::doapc(const Position& pos, const int index[2]) {
 	sum.p[2][0] = EvalStorage::KKP[sq_bk][sq_wk][index[0]][0];
 	sum.p[2][1] = EvalStorage::KKP[sq_bk][sq_wk][index[0]][1];
 	const auto* pkppb = EvalStorage::KPP[sq_bk][index[0]];
-	const auto* pkppw = EvalStorage::KPP[inverse(sq_wk)][index[1]];
+	const auto* pkppw = EvalStorage::KPP[UtilSquare::Inverse(sq_wk)][index[1]];
 #if defined USE_AVX2_EVAL || defined USE_SSE_EVAL
 	sum.m[0] = _mm_set_epi32(0, 0, *reinterpret_cast<const s32*>(&pkppw[list1[0]][0]), *reinterpret_cast<const s32*>(&pkppb[list0[0]][0]));
 	sum.m[0] = _mm_cvtepi16_epi32(sum.m[0]);
@@ -101,7 +101,7 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 	const Square sq_wk = pos.kingSquare(White);
 	const int* list1 = pos.cplist1();
 
-	const auto* pkppw = EvalStorage::KPP[inverse(sq_wk)][index[1]];
+	const auto* pkppw = EvalStorage::KPP[UtilSquare::Inverse(sq_wk)][index[1]];
 	std::array<s32, 2> sum = { { pkppw[list1[0]][0], pkppw[list1[0]][1] } };
 	for (int i = 1; i < pos.nlist(); ++i) {
 		sum[0] += pkppw[list1[i]][0];
@@ -173,7 +173,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 		diff.p[2] = EvalStorage::KK[sq_bk][sq_wk];
 		diff.p[2][0] += pos.material() * FVScale;
 		if (pos.turn() == Black) {
-			const auto* ppkppw = EvalStorage::KPP[inverse(sq_wk)];
+			const auto* ppkppw = EvalStorage::KPP[UtilSquare::Inverse(sq_wk)];
 			const int* list1 = pos.plist1();
 			diff.p[1][0] = 0;
 			diff.p[1][1] = 0;
@@ -184,8 +184,8 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 					const int l1 = list1[j];
 					diff.p[1] += pkppw[l1];
 				}
-				diff.p[2][0] -= EvalStorage::KKP[inverse(sq_wk)][inverse(sq_bk)][k1][0];
-				diff.p[2][1] += EvalStorage::KKP[inverse(sq_wk)][inverse(sq_bk)][k1][1];
+				diff.p[2][0] -= EvalStorage::KKP[UtilSquare::Inverse(sq_wk)][UtilSquare::Inverse(sq_bk)][k1][0];
+				diff.p[2][1] += EvalStorage::KKP[UtilSquare::Inverse(sq_wk)][UtilSquare::Inverse(sq_bk)][k1][1];
 			}
 
 			if (pos.cl().size == 2) {
@@ -233,7 +233,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 			assert(pos.cl().size == 2);
 			diff += this->doapc(pos, pos.cl().clistpair[1].newlist);
 			diff.p[0] -= EvalStorage::KPP[pos.kingSquare(Black)][pos.cl().clistpair[0].newlist[0]][pos.cl().clistpair[1].newlist[0]];
-			diff.p[1] -= EvalStorage::KPP[inverse(pos.kingSquare(White))][pos.cl().clistpair[0].newlist[1]][pos.cl().clistpair[1].newlist[1]];
+			diff.p[1] -= EvalStorage::KPP[UtilSquare::Inverse(pos.kingSquare(White))][pos.cl().clistpair[0].newlist[1]][pos.cl().clistpair[1].newlist[1]];
 			const int listIndex_cap = pos.cl().listindex[1];
 			pos.plist0()[listIndex_cap] = pos.cl().clistpair[1].oldlist[0];
 			pos.plist1()[listIndex_cap] = pos.cl().clistpair[1].oldlist[1];
@@ -244,7 +244,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 
 			diff -= this->doapc(pos, pos.cl().clistpair[1].oldlist);
 			diff.p[0] += EvalStorage::KPP[pos.kingSquare(Black)][pos.cl().clistpair[0].oldlist[0]][pos.cl().clistpair[1].oldlist[0]];
-			diff.p[1] += EvalStorage::KPP[inverse(pos.kingSquare(White))][pos.cl().clistpair[0].oldlist[1]][pos.cl().clistpair[1].oldlist[1]];
+			diff.p[1] += EvalStorage::KPP[UtilSquare::Inverse(pos.kingSquare(White))][pos.cl().clistpair[0].oldlist[1]][pos.cl().clistpair[1].oldlist[1]];
 			pos.plist0()[listIndex_cap] = pos.cl().clistpair[1].newlist[0];
 			pos.plist1()[listIndex_cap] = pos.cl().clistpair[1].newlist[1];
 		}
@@ -268,13 +268,13 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::L
 		bb = (posBB)& pos.bbOf(Black);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (f_pt)+sq;
-		list1[nlist] = (e_pt)+inverse(sq);
+		list1[nlist] = (e_pt)+UtilSquare::Inverse(sq);
 		nlist += 1;
 		});
 		bb = (posBB)& pos.bbOf(White);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (e_pt)+sq;
-		list1[nlist] = (f_pt)+inverse(sq);
+		list1[nlist] = (f_pt)+UtilSquare::Inverse(sq);
 		nlist += 1;
 		});
 	};
@@ -308,7 +308,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 	const int* list1 = pos.plist1();
 
 	const auto* ppkppb = EvalStorage::KPP[sq_bk];
-	const auto* ppkppw = EvalStorage::KPP[inverse(sq_wk)];
+	const auto* ppkppw = EvalStorage::KPP[UtilSquare::Inverse(sq_wk)];
 
 	EvalSum sum;
 	sum.p[2] = EvalStorage::KK[sq_bk][sq_wk];
@@ -398,7 +398,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	nlist = this->make_list_unUseDiff(pos, list0, list1, nlist);
 
 	const auto* ppkppb = EvalStorage::KPP[sq_bk         ];
-	const auto* ppkppw = EvalStorage::KPP[inverse(sq_wk)];
+	const auto* ppkppw = EvalStorage::KPP[UtilSquare::Inverse(sq_wk)];
 
 	EvalSum score;
 	score.p[2] = EvalStorage::KK[sq_bk][sq_wk];

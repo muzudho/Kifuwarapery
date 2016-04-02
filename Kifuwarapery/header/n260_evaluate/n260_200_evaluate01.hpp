@@ -45,7 +45,7 @@ public:
 		const int begin = kppIndexBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
 		if (sq <= Square::E1) return index;
-		return static_cast<int>(begin + inverseFile(sq));
+		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
 	};
 
 
@@ -53,13 +53,13 @@ public:
 		if (index < fe_hand_end) return index;
 		const int begin = kppIndexBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
-		return static_cast<int>(begin + inverseFile(sq));
+		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
 	};
 
 	inline static int inverseFileIndexOnBoard(const int index) {
 		assert(f_pawn <= index);
 		const int begin = kppIndexBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
-		return static_cast<int>(begin + inverseFile(sq));
+		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
 	};
 };

@@ -712,32 +712,32 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(pos.turn());
 		if (pos.hand(pos.turn()).exists<HBishop>()
-			&& pos.bbOf(Silver, them).isSet(inverseIfWhite(them, H3))
-			&& (pos.bbOf(King  , them).isSet(inverseIfWhite(them, F2))
-				|| pos.bbOf(King  , them).isSet(inverseIfWhite(them, F3))
-				|| pos.bbOf(King  , them).isSet(inverseIfWhite(them, E1)))
-			&& pos.bbOf(Pawn  , them).isSet(inverseIfWhite(them, G3))
-			&& pos.piece(inverseIfWhite(them, H2)) == Empty
-			&& pos.piece(inverseIfWhite(them, G2)) == Empty
-			&& pos.piece(inverseIfWhite(them, G1)) == Empty)
+			&& pos.bbOf(Silver, them).isSet(InverseIfWhite(them, H3))
+			&& (pos.bbOf(King  , them).isSet(InverseIfWhite(them, F2))
+				|| pos.bbOf(King  , them).isSet(InverseIfWhite(them, F3))
+				|| pos.bbOf(King  , them).isSet(InverseIfWhite(them, E1)))
+			&& pos.bbOf(Pawn  , them).isSet(InverseIfWhite(them, G3))
+			&& pos.piece(InverseIfWhite(them, H2)) == Empty
+			&& pos.piece(InverseIfWhite(them, G2)) == Empty
+			&& pos.piece(InverseIfWhite(them, G1)) == Empty)
 		{
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
 		else if (pos.hand(pos.turn()).exists<HBishop>()
 				 && pos.hand(them).exists<HBishop>()
-				 && pos.piece(inverseIfWhite(them, C2)) == Empty
-				 && pos.piece(inverseIfWhite(them, C1)) == Empty
-				 && pos.piece(inverseIfWhite(them, D2)) == Empty
-				 && pos.piece(inverseIfWhite(them, D1)) == Empty
-				 && pos.piece(inverseIfWhite(them, A2)) == Empty
-				 && (pieceToPieceType(pos.piece(inverseIfWhite(them, C3))) == Silver
-					 || pieceToPieceType(pos.piece(inverseIfWhite(them, B2))) == Silver)
-				 && (pieceToPieceType(pos.piece(inverseIfWhite(them, C3))) == Knight
-					 || pieceToPieceType(pos.piece(inverseIfWhite(them, B1))) == Knight)
-				 && ((pieceToPieceType(pos.piece(inverseIfWhite(them, E2))) == Gold
-					  && pieceToPieceType(pos.piece(inverseIfWhite(them, E1))) == King)
-					 || pieceToPieceType(pos.piece(inverseIfWhite(them, E1))) == Gold))
+				 && pos.piece(InverseIfWhite(them, C2)) == Empty
+				 && pos.piece(InverseIfWhite(them, C1)) == Empty
+				 && pos.piece(InverseIfWhite(them, D2)) == Empty
+				 && pos.piece(InverseIfWhite(them, D1)) == Empty
+				 && pos.piece(InverseIfWhite(them, A2)) == Empty
+				 && (pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Silver
+					 || pieceToPieceType(pos.piece(InverseIfWhite(them, B2))) == Silver)
+				 && (pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Knight
+					 || pieceToPieceType(pos.piece(InverseIfWhite(them, B1))) == Knight)
+				 && ((pieceToPieceType(pos.piece(InverseIfWhite(them, E2))) == Gold
+					  && pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == King)
+					 || pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == Gold))
 		{
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();

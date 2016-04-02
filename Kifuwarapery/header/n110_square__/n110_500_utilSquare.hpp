@@ -87,6 +87,43 @@ public:
 		return std::string(ch);
 	}
 
+
+	static inline char FileToCharCSA(const File f) { return '1' + f; }
+	static inline char RankToCharCSA(const Rank r) { return '1' + r; }
+	static inline std::string squareToStringCSA(const Square sq) {
+		const Rank r = UtilSquare::MakeRank(sq);
+		const File f = UtilSquare::MakeFile(sq);
+		const char ch[] = { FileToCharCSA(f), RankToCharCSA(r), '\0' };
+		return std::string(ch);
+	}
+
+	static inline File CharCSAToFile(const char c) { return static_cast<File>(c - '1'); }
+	static inline Rank CharCSAToRank(const char c) { return static_cast<Rank>(c - '1'); }
+	static inline File CharUSIToFile(const char c) { return static_cast<File>(c - '1'); }
+	static inline Rank CharUSIToRank(const char c) { return static_cast<Rank>(c - 'a'); }
+
+	// 後手の位置を先手の位置へ変換
+	static inline constexpr Square Inverse(const Square sq) { return SquareNum - 1 - sq; }
+	// 左右変換
+	static inline constexpr File Inverse(const File f) { return FileNum - 1 - f; }
+	// 上下変換
+	static inline constexpr Rank Inverse(const Rank r) { return RankNum - 1 - r; }
+	// Square の左右だけ変換
+	static inline Square InverseFile(const Square sq) { return UtilSquare::MakeSquare(Inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
+
+	static inline constexpr Square InverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : Inverse(sq)); }
+
+	static inline bool CanPromote(const Color c, const Rank fromOrToRank) {
+#if 1
+		static_assert(Black == 0, "");
+		static_assert(Rank9 == 0, "");
+		return static_cast<bool>(0x1c00007u & (1u << ((c << 4) + fromOrToRank)));
+#else
+		// 同じ意味。
+		return (c == Black ? IsInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : IsInFrontOf<White, Rank6, Rank4>(fromOrToRank));
+#endif
+	}
+
 };
 
 static inline Square operator + (const Square lhs, const SquareDelta rhs) { return lhs + static_cast<Square>(rhs); }
@@ -96,39 +133,3 @@ static inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs 
 
 
 
-
-inline char fileToCharCSA(const File f) { return '1' + f; }
-inline char rankToCharCSA(const Rank r) { return '1' + r; }
-inline std::string squareToStringCSA(const Square sq) {
-	const Rank r = UtilSquare::MakeRank(sq);
-	const File f = UtilSquare::MakeFile(sq);
-	const char ch[] = {fileToCharCSA(f), rankToCharCSA(r), '\0'};
-	return std::string(ch);
-}
-
-inline File charCSAToFile(const char c) { return static_cast<File>(c - '1'); }
-inline Rank charCSAToRank(const char c) { return static_cast<Rank>(c - '1'); }
-inline File charUSIToFile(const char c) { return static_cast<File>(c - '1'); }
-inline Rank charUSIToRank(const char c) { return static_cast<Rank>(c - 'a'); }
-
-// 後手の位置を先手の位置へ変換
-inline constexpr Square inverse(const Square sq) { return SquareNum - 1 - sq; }
-// 左右変換
-inline constexpr File inverse(const File f) { return FileNum - 1 - f; }
-// 上下変換
-inline constexpr Rank inverse(const Rank r) { return RankNum - 1 - r; }
-// Square の左右だけ変換
-inline Square inverseFile(const Square sq) { return UtilSquare::MakeSquare(inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
-
-inline constexpr Square inverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : inverse(sq)); }
-
-inline bool canPromote(const Color c, const Rank fromOrToRank) {
-#if 1
-	static_assert(Black == 0, "");
-	static_assert(Rank9 == 0, "");
-	return static_cast<bool>(0x1c00007u & (1u << ((c << 4) + fromOrToRank)));
-#else
-	// 同じ意味。
-	return (c == Black ? IsInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : IsInFrontOf<White, Rank6, Rank4>(fromOrToRank));
-#endif
-}
