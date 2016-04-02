@@ -10,21 +10,21 @@
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard Initializer::rookBlockMaskCalc(const Square square) {
 	Bitboard result = squareFileMask(square) ^ squareRankMask(square);
-	if (UtilSquare::MakeFile(square) != FileA) { result &= ~fileMask<FileA>(); }
-	if (UtilSquare::MakeFile(square) != FileI) { result &= ~fileMask<FileI>(); }
-	if (UtilSquare::MakeRank(square) != Rank1) { result &= ~rankMask<Rank1>(); }
-	if (UtilSquare::MakeRank(square) != Rank9) { result &= ~rankMask<Rank9>(); }
+	if (UtilSquare::ToFile(square) != FileA) { result &= ~fileMask<FileA>(); }
+	if (UtilSquare::ToFile(square) != FileI) { result &= ~fileMask<FileI>(); }
+	if (UtilSquare::ToRank(square) != Rank1) { result &= ~rankMask<Rank1>(); }
+	if (UtilSquare::ToRank(square) != Rank9) { result &= ~rankMask<Rank9>(); }
 	return result;
 }
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard Initializer::bishopBlockMaskCalc(const Square square) {
-	const Rank rank = UtilSquare::MakeRank(square);
-	const File file = UtilSquare::MakeFile(square);
+	const Rank rank = UtilSquare::ToRank(square);
+	const File file = UtilSquare::ToFile(square);
 	Bitboard result = Bitboard::allZeroBB();
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		const Rank r = UtilSquare::MakeRank(sq);
-		const File f = UtilSquare::MakeFile(sq);
+		const Rank r = UtilSquare::ToRank(sq);
+		const File f = UtilSquare::ToFile(sq);
 		if (abs(rank - r) == abs(file - f))
 			result.setBit(sq);
 	}
@@ -48,7 +48,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 	Bitboard result = Bitboard::allZeroBB();
 	for (SquareDelta delta : deltaArray[isBishop]) {
 		for (Square sq = square + delta;
-		UtilSquare::ContainsOf(sq) && abs(UtilSquare::MakeRank(sq - delta) - UtilSquare::MakeRank(sq)) <= 1;
+		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
 			sq += delta)
 		{
 			result.setBit(sq);
@@ -64,7 +64,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard Initializer::lanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return occupied.rookAttack(square) & inFrontMask(c, UtilSquare::MakeRank(square));
+	return occupied.rookAttack(square) & inFrontMask(c, UtilSquare::ToRank(square));
 }
 
 // index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
@@ -138,13 +138,13 @@ void Initializer::initKingAttacks() {
 void Initializer::initGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_goldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::MakeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
+			g_goldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
 }
 
 void Initializer::initSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_silverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::MakeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
+			g_silverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initKnightAttacks() {
@@ -153,7 +153,7 @@ void Initializer::initKnightAttacks() {
 			g_knightAttack[c][sq] = Bitboard::allZeroBB();
 			const Bitboard bb = pawnAttack(c, sq);
 			if (bb.isNot0())
-				g_knightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, UtilSquare::MakeRank(sq));
+				g_knightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, UtilSquare::ToRank(sq));
 		}
 	}
 }
@@ -166,11 +166,11 @@ void Initializer::initPawnAttacks() {
 
 void Initializer::initSquareRelation() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-		const File file1 = UtilSquare::MakeFile(sq1);
-		const Rank rank1 = UtilSquare::MakeRank(sq1);
+		const File file1 = UtilSquare::ToFile(sq1);
+		const Rank rank1 = UtilSquare::ToRank(sq1);
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			const File file2 = UtilSquare::MakeFile(sq2);
-			const Rank rank2 = UtilSquare::MakeRank(sq2);
+			const File file2 = UtilSquare::ToFile(sq2);
+			const Rank rank2 = UtilSquare::ToRank(sq2);
 			g_squareRelation[sq1][sq2] = DirecMisc;
 			if (sq1 == sq2) continue;
 

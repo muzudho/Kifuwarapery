@@ -143,9 +143,9 @@ std::string Move::toUSI() const {
 	const Square from = this->from();
 	const Square to = this->to();
 	if (this->isDrop()) {
-		return handPieceToString(this->handPieceDropped()) + UtilSquare::SquareToStringUSI(to);
+		return handPieceToString(this->handPieceDropped()) + UtilSquare::ToStringUSI(to);
 	}
-	std::string usi = UtilSquare::SquareToStringUSI(from) + UtilSquare::SquareToStringUSI(to);
+	std::string usi = UtilSquare::ToStringUSI(from) + UtilSquare::ToStringUSI(to);
 	if (this->isPromotion()) { usi += "+"; }
 	return usi;
 }
@@ -153,8 +153,8 @@ std::string Move::toUSI() const {
 std::string Move::toCSA() const {
 	if (this->isNone()) { return "None"; }
 
-	std::string s = (this->isDrop() ? std::string("00") : UtilSquare::SquareToStringCSA(this->from()));
-	s += UtilSquare::SquareToStringCSA(this->to()) + pieceTypeToString(this->pieceTypeTo());
+	std::string s = (this->isDrop() ? std::string("00") : UtilSquare::ToStringCSA(this->from()));
+	s += UtilSquare::ToStringCSA(this->to()) + pieceTypeToString(this->pieceTypeTo());
 	return s;
 }
 

@@ -61,13 +61,13 @@ template <Rank R> inline Bitboard rankMask() {
 
 // 直接テーブル引きすべきだと思う。
 inline Bitboard squareFileMask(const Square sq) {
-	const File f = UtilSquare::MakeFile(sq);
+	const File f = UtilSquare::ToFile(sq);
 	return fileMask(f);
 }
 
 // 直接テーブル引きすべきだと思う。
 inline Bitboard squareRankMask(const Square sq) {
-	const Rank r = UtilSquare::MakeRank(sq);
+	const Rank r = UtilSquare::ToRank(sq);
 	return rankMask(r);
 }
 

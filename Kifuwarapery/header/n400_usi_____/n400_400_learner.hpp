@@ -553,7 +553,7 @@ private:
 	void print() {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileA; FileI <= f; --f) {
-				const Square sq = MakeSquare(f, r);
+				const Square sq = FromFileRank(f, r);
 				printf("%5d", EvalStorage::KPP[B2][f_gold + C2][f_gold + sq][0]);
 			}
 			printf("\n");

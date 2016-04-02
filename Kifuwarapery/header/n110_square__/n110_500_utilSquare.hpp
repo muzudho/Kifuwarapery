@@ -33,17 +33,17 @@ public:
 	static inline bool ContainsOf(const File f, const Rank r) { return UtilFile::ContainsOf(f) && UtilRank::ContainsOf(r); }
 
 	// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
-	static inline constexpr Square MakeSquare(const File f, const Rank r) {
+	static inline constexpr Square FromFileRank(const File f, const Rank r) {
 		return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
 	}
 
 	// 速度が必要な場面で使用する。
-	static inline Rank MakeRank(const Square s) {
-		assert(UtilSquare::IsInSquare(s));
+	static inline Rank ToRank(const Square s) {
+		assert(UtilSquare::ContainsOf(s));
 		return SquareToRank[s];
 	}
-	static inline File MakeFile(const Square s) {
-		assert(UtilSquare::IsInSquare(s));
+	static inline File ToFile(const Square s) {
+		assert(UtilSquare::ContainsOf(s));
 		return SquareToFile[s];
 	}
 
@@ -65,18 +65,18 @@ public:
 	}
 
 
-	static inline std::string SquareToStringUSI(const Square sq) {
-		const Rank r = UtilSquare::MakeRank(sq);
-		const File f = UtilSquare::MakeFile(sq);
+	static inline std::string ToStringUSI(const Square sq) {
+		const Rank r = UtilSquare::ToRank(sq);
+		const File f = UtilSquare::ToFile(sq);
 		const char ch[] = { UtilFile::ToCharUSI(f), UtilRank::ToCharUSI(r), '\0' };
 		return std::string(ch);
 	}
 
 
 
-	static inline std::string SquareToStringCSA(const Square sq) {
-		const Rank r = UtilSquare::MakeRank(sq);
-		const File f = UtilSquare::MakeFile(sq);
+	static inline std::string ToStringCSA(const Square sq) {
+		const Rank r = UtilSquare::ToRank(sq);
+		const File f = UtilSquare::ToFile(sq);
 		const char ch[] = { UtilFile::ToCharCSA(f), UtilRank::ToCharCSA(r), '\0' };
 		return std::string(ch);
 	}
@@ -85,7 +85,7 @@ public:
 	// 後手の位置を先手の位置へ変換
 	static inline constexpr Square Inverse(const Square sq) { return SquareNum - 1 - sq; }
 	// Square の左右だけ変換
-	static inline Square InverseFile(const Square sq) { return UtilSquare::MakeSquare(UtilFile::Inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
+	static inline Square InverseFile(const Square sq) { return UtilSquare::FromFileRank(UtilFile::Inverse(UtilSquare::ToFile(sq)), UtilSquare::ToRank(sq)); }
 
 	static inline constexpr Square InverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : Inverse(sq)); }
 
