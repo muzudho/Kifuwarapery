@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../header/n240_position/n240_100_position.hpp"
+#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 

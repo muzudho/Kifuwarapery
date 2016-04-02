@@ -1,4 +1,4 @@
-#include "../../header/n240_position/n240_100_position.hpp"
+#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"

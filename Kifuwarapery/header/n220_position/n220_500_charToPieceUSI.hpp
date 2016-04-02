@@ -1,0 +1,54 @@
+#pragma once
+
+#include <stack>
+#include <memory>
+#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n120_brdEntry/n120_250_hand.hpp"
+#include "../../header/n160_board___/n160_400_bitboardAll.hpp"
+#include "../../header/n200_score___/n200_200_pieceScore.hpp"
+#include "../../header/n220_position/n220_400_position.hpp"
+#include "../../header/n240_position/n240_200_evalList.hpp"
+
+
+const std::string DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
+
+
+
+template <> inline Bitboard Position::attacksFrom<Lance >(const Color c, const Square sq, const Bitboard& occupied) { return  occupied.lanceAttack(c, sq); }
+template <> inline Bitboard Position::attacksFrom<Bishop>(const Color  , const Square sq, const Bitboard& occupied) { return occupied.bishopAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<Rook  >(const Color  , const Square sq, const Bitboard& occupied) { return   occupied.rookAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<Horse >(const Color  , const Square sq, const Bitboard& occupied) { return  occupied.horseAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return occupied.dragonAttack(   sq); }
+
+template <> inline Bitboard Position::attacksFrom<Pawn  >(const Color c, const Square sq) const { return   pawnAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Lance >(const Color c, const Square sq) const { return  occupiedBB().lanceAttack(c, sq); }
+template <> inline Bitboard Position::attacksFrom<Knight>(const Color c, const Square sq) const { return knightAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Silver>(const Color c, const Square sq) const { return silverAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Bishop>(const Color  , const Square sq) const { return occupiedBB().bishopAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<Rook  >(const Color  , const Square sq) const { return   occupiedBB().rookAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<King  >(const Color  , const Square sq) const { return   Bitboard::kingAttack(   sq              ); }
+template <> inline Bitboard Position::attacksFrom<Horse >(const Color  , const Square sq) const { return  occupiedBB().horseAttack(   sq); }
+template <> inline Bitboard Position::attacksFrom<Dragon>(const Color  , const Square sq) const { return occupiedBB().dragonAttack(   sq); }
+
+// position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
+// の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。
+const int MaxLegalMoves = 593 + 1;
+
+class CharToPieceUSI : public std::map<char, Piece> {
+public:
+	CharToPieceUSI() {
+		(*this)['P'] = BPawn;   (*this)['p'] = WPawn;
+		(*this)['L'] = BLance;  (*this)['l'] = WLance;
+		(*this)['N'] = BKnight; (*this)['n'] = WKnight;
+		(*this)['S'] = BSilver; (*this)['s'] = WSilver;
+		(*this)['B'] = BBishop; (*this)['b'] = WBishop;
+		(*this)['R'] = BRook;   (*this)['r'] = WRook;
+		(*this)['G'] = BGold;   (*this)['g'] = WGold;
+		(*this)['K'] = BKing;   (*this)['k'] = WKing;
+	}
+	Piece value(char c) const      { return this->find(c)->second; }
+	bool isLegalChar(char c) const { return (this->find(c) != this->end()); }
+};
+extern const CharToPieceUSI g_charToPieceUSI;
+
