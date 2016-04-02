@@ -8,7 +8,7 @@ public:
 	void clear() { memset(table_, 0, sizeof(table_)); }
 	Score value(const bool isDrop, const Piece pc, const Square to) const {
 		assert(0 < pc && pc < PieceNone);
-		assert(isInSquare(to));
+		assert(UtilSquare::IsInSquare(to));
 		return table_[isDrop][pc][to];
 	}
 	void update(const bool isDrop, const Piece pc, const Square to, const Score s) {

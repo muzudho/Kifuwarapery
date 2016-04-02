@@ -4,6 +4,10 @@
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n110_square__/n110_300_direction.hpp"
 
+// 2つの位置関係のテーブル
+extern Direction g_squareRelation[SquareNum][SquareNum];
+// 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
+extern int g_squareDistance[SquareNum][SquareNum];
 
 class UtilSquare {
 public:
@@ -21,28 +25,66 @@ public:
 	template <Color US, File BFILE, File WFILE>
 	static inline bool IsRightOf(const File target) { return (US == Black ? (target < BFILE) : (WFILE < target)); }
 
-	static inline bool isInFile(const File f) { return (0 <= f) && (f < FileNum); }
-	static inline bool isInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
+	static inline bool IsInFile(const File f) { return (0 <= f) && (f < FileNum); }
+	static inline bool IsInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
 	// s が Square の中に含まれているか判定
-	static inline bool isInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
+	static inline bool IsInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
 	// File, Rank のどちらかがおかしいかも知れない時は、
 	// こちらを使う。
 	// こちらの方が遅いが、どんな File, Rank にも対応している。
-	static inline bool isInSquare(const File f, const Rank r) { return isInFile(f) && isInRank(r); }
+	static inline bool IsInSquare(const File f, const Rank r) { return IsInFile(f) && IsInRank(r); }
 
 	// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
-	static inline constexpr Square makeSquare(const File f, const Rank r) {
+	static inline constexpr Square MakeSquare(const File f, const Rank r) {
 		return static_cast<Square>(static_cast<int>(f) * 9 + static_cast<int>(r));
 	}
 
 	// 速度が必要な場面で使用する。
-	static inline Rank makeRank(const Square s) {
-		assert(isInSquare(s));
+	static inline Rank MakeRank(const Square s) {
+		assert(UtilSquare::IsInSquare(s));
 		return SquareToRank[s];
 	}
-	static inline File makeFile(const Square s) {
-		assert(isInSquare(s));
+	static inline File MakeFile(const Square s) {
+		assert(UtilSquare::IsInSquare(s));
 		return SquareToFile[s];
+	}
+
+	static inline Direction GetSquareRelation(const Square sq1, const Square sq2) { return g_squareRelation[sq1][sq2]; }
+
+	static inline int GetSquareDistance(const Square sq1, const Square sq2) { return g_squareDistance[sq1][sq2]; }
+
+	// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
+	template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
+	static inline bool IsAligned(const Square from, const Square to, const Square ksq) {
+		const Direction direc = UtilSquare::GetSquareRelation(from, ksq);
+		if (FROM_KSQ_NEVER_BE_DIRECMISC) {
+			assert(direc != DirecMisc);
+			return (direc == UtilSquare::GetSquareRelation(from, to));
+		}
+		else {
+			return (direc != DirecMisc && direc == UtilSquare::GetSquareRelation(from, to));
+		}
+	}
+
+	static inline char FileToCharUSI(const File f) { return '1' + f; }
+
+	// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
+	static inline char RankToCharUSI(const Rank r) {
+		static_assert('a' + 1 == 'b', "");
+		static_assert('a' + 2 == 'c', "");
+		static_assert('a' + 3 == 'd', "");
+		static_assert('a' + 4 == 'e', "");
+		static_assert('a' + 5 == 'f', "");
+		static_assert('a' + 6 == 'g', "");
+		static_assert('a' + 7 == 'h', "");
+		static_assert('a' + 8 == 'i', "");
+		return 'a' + r;
+	}
+	static inline std::string SquareToStringUSI(const Square sq) {
+		const Rank r = UtilSquare::MakeRank(sq);
+		const File f = UtilSquare::MakeFile(sq);
+		const char ch[] = { UtilSquare::FileToCharUSI(f), UtilSquare::RankToCharUSI(r), '\0' };
+		return std::string(ch);
 	}
 
 };
@@ -55,53 +97,11 @@ static inline void operator -= (Square& lhs, const SquareDelta rhs) { lhs = lhs 
 
 
 
-
-// 2つの位置関係のテーブル
-extern Direction SquareRelation[SquareNum][SquareNum];
-inline Direction squareRelation(const Square sq1, const Square sq2) { return SquareRelation[sq1][sq2]; }
-
-// 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
-extern int SquareDistance[SquareNum][SquareNum];
-inline int squareDistance(const Square sq1, const Square sq2) { return SquareDistance[sq1][sq2]; }
-
-// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
-template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
-inline bool isAligned(const Square from, const Square to, const Square ksq) {
-	const Direction direc = squareRelation(from, ksq);
-	if (FROM_KSQ_NEVER_BE_DIRECMISC) {
-		assert(direc != DirecMisc);
-		return (direc == squareRelation(from, to));
-	}
-	else {
-		return (direc != DirecMisc && direc == squareRelation(from, to));
-	}
-}
-
-inline char fileToCharUSI(const File f) { return '1' + f; }
-// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
-inline char rankToCharUSI(const Rank r) {
-	static_assert('a' + 1 == 'b', "");
-	static_assert('a' + 2 == 'c', "");
-	static_assert('a' + 3 == 'd', "");
-	static_assert('a' + 4 == 'e', "");
-	static_assert('a' + 5 == 'f', "");
-	static_assert('a' + 6 == 'g', "");
-	static_assert('a' + 7 == 'h', "");
-	static_assert('a' + 8 == 'i', "");
-	return 'a' + r;
-}
-inline std::string squareToStringUSI(const Square sq) {
-	const Rank r = UtilSquare::makeRank(sq);
-	const File f = UtilSquare::makeFile(sq);
-	const char ch[] = {fileToCharUSI(f), rankToCharUSI(r), '\0'};
-	return std::string(ch);
-}
-
 inline char fileToCharCSA(const File f) { return '1' + f; }
 inline char rankToCharCSA(const Rank r) { return '1' + r; }
 inline std::string squareToStringCSA(const Square sq) {
-	const Rank r = UtilSquare::makeRank(sq);
-	const File f = UtilSquare::makeFile(sq);
+	const Rank r = UtilSquare::MakeRank(sq);
+	const File f = UtilSquare::MakeFile(sq);
 	const char ch[] = {fileToCharCSA(f), rankToCharCSA(r), '\0'};
 	return std::string(ch);
 }
@@ -118,7 +118,7 @@ inline constexpr File inverse(const File f) { return FileNum - 1 - f; }
 // 上下変換
 inline constexpr Rank inverse(const Rank r) { return RankNum - 1 - r; }
 // Square の左右だけ変換
-inline Square inverseFile(const Square sq) { return UtilSquare::makeSquare(inverse(UtilSquare::makeFile(sq)), UtilSquare::makeRank(sq)); }
+inline Square inverseFile(const Square sq) { return UtilSquare::MakeSquare(inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
 
 inline constexpr Square inverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : inverse(sq)); }
 

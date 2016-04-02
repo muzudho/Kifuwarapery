@@ -143,9 +143,9 @@ std::string Move::toUSI() const {
 	const Square from = this->from();
 	const Square to = this->to();
 	if (this->isDrop()) {
-		return handPieceToString(this->handPieceDropped()) + squareToStringUSI(to);
+		return handPieceToString(this->handPieceDropped()) + UtilSquare::SquareToStringUSI(to);
 	}
-	std::string usi = squareToStringUSI(from) + squareToStringUSI(to);
+	std::string usi = UtilSquare::SquareToStringUSI(from) + UtilSquare::SquareToStringUSI(to);
 	if (this->isPromotion()) { usi += "+"; }
 	return usi;
 }

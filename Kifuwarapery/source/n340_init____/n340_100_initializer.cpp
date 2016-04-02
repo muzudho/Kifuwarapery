@@ -10,21 +10,21 @@
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard Initializer::rookBlockMaskCalc(const Square square) {
 	Bitboard result = squareFileMask(square) ^ squareRankMask(square);
-	if (UtilSquare::makeFile(square) != FileA) { result &= ~fileMask<FileA>(); }
-	if (UtilSquare::makeFile(square) != FileI) { result &= ~fileMask<FileI>(); }
-	if (UtilSquare::makeRank(square) != Rank1) { result &= ~rankMask<Rank1>(); }
-	if (UtilSquare::makeRank(square) != Rank9) { result &= ~rankMask<Rank9>(); }
+	if (UtilSquare::MakeFile(square) != FileA) { result &= ~fileMask<FileA>(); }
+	if (UtilSquare::MakeFile(square) != FileI) { result &= ~fileMask<FileI>(); }
+	if (UtilSquare::MakeRank(square) != Rank1) { result &= ~rankMask<Rank1>(); }
+	if (UtilSquare::MakeRank(square) != Rank9) { result &= ~rankMask<Rank9>(); }
 	return result;
 }
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard Initializer::bishopBlockMaskCalc(const Square square) {
-	const Rank rank = UtilSquare::makeRank(square);
-	const File file = UtilSquare::makeFile(square);
+	const Rank rank = UtilSquare::MakeRank(square);
+	const File file = UtilSquare::MakeFile(square);
 	Bitboard result = Bitboard::allZeroBB();
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		const Rank r = UtilSquare::makeRank(sq);
-		const File f = UtilSquare::makeFile(sq);
+		const Rank r = UtilSquare::MakeRank(sq);
+		const File f = UtilSquare::MakeFile(sq);
 		if (abs(rank - r) == abs(file - f))
 			result.setBit(sq);
 	}
@@ -48,7 +48,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 	Bitboard result = Bitboard::allZeroBB();
 	for (SquareDelta delta : deltaArray[isBishop]) {
 		for (Square sq = square + delta;
-		UtilSquare::isInSquare(sq) && abs(UtilSquare::makeRank(sq - delta) - UtilSquare::makeRank(sq)) <= 1;
+		UtilSquare::IsInSquare(sq) && abs(UtilSquare::MakeRank(sq - delta) - UtilSquare::MakeRank(sq)) <= 1;
 			sq += delta)
 		{
 			result.setBit(sq);
@@ -64,7 +64,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard Initializer::lanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return occupied.rookAttack(square) & inFrontMask(c, UtilSquare::makeRank(square));
+	return occupied.rookAttack(square) & inFrontMask(c, UtilSquare::MakeRank(square));
 }
 
 // index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
@@ -138,13 +138,13 @@ void Initializer::initKingAttacks() {
 void Initializer::initGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_goldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
+			g_goldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::MakeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
 }
 
 void Initializer::initSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_silverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
+			g_silverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, UtilSquare::MakeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initKnightAttacks() {
@@ -153,7 +153,7 @@ void Initializer::initKnightAttacks() {
 			g_knightAttack[c][sq] = Bitboard::allZeroBB();
 			const Bitboard bb = pawnAttack(c, sq);
 			if (bb.isNot0())
-				g_knightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, UtilSquare::makeRank(sq));
+				g_knightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, UtilSquare::MakeRank(sq));
 		}
 	}
 }
@@ -166,22 +166,22 @@ void Initializer::initPawnAttacks() {
 
 void Initializer::initSquareRelation() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-		const File file1 = UtilSquare::makeFile(sq1);
-		const Rank rank1 = UtilSquare::makeRank(sq1);
+		const File file1 = UtilSquare::MakeFile(sq1);
+		const Rank rank1 = UtilSquare::MakeRank(sq1);
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			const File file2 = UtilSquare::makeFile(sq2);
-			const Rank rank2 = UtilSquare::makeRank(sq2);
-			SquareRelation[sq1][sq2] = DirecMisc;
+			const File file2 = UtilSquare::MakeFile(sq2);
+			const Rank rank2 = UtilSquare::MakeRank(sq2);
+			g_squareRelation[sq1][sq2] = DirecMisc;
 			if (sq1 == sq2) continue;
 
 			if (file1 == file2)
-				SquareRelation[sq1][sq2] = DirecFile;
+				g_squareRelation[sq1][sq2] = DirecFile;
 			else if (rank1 == rank2)
-				SquareRelation[sq1][sq2] = DirecRank;
+				g_squareRelation[sq1][sq2] = DirecRank;
 			else if (static_cast<int>(rank1 - rank2) == static_cast<int>(file1 - file2))
-				SquareRelation[sq1][sq2] = DirecDiagNESW;
+				g_squareRelation[sq1][sq2] = DirecDiagNESW;
 			else if (static_cast<int>(rank1 - rank2) == static_cast<int>(file2 - file1))
-				SquareRelation[sq1][sq2] = DirecDiagNWSE;
+				g_squareRelation[sq1][sq2] = DirecDiagNWSE;
 		}
 	}
 }
@@ -202,7 +202,7 @@ void Initializer::initBetweenBB() {
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
 			g_betweenBB[sq1][sq2] = Bitboard::allZeroBB();
 			if (sq1 == sq2) continue;
-			const Direction direc = squareRelation(sq1, sq2);
+			const Direction direc = UtilSquare::GetSquareRelation(sq1, sq2);
 			if (direc & DirecCross)
 				g_betweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).rookAttack(sq1) & Bitboard::setMaskBB(sq1).rookAttack(sq2);
 			else if (direc & DirecDiag)
@@ -292,24 +292,24 @@ void Initializer::initCheckTable() {
 void Initializer::initSquareDistance() {
 	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-			switch (squareRelation(sq0, sq1)) {
+			switch (UtilSquare::GetSquareRelation(sq0, sq1)) {
 			case DirecMisc:
 				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
-				SquareDistance[sq0][sq1] = 0;
+				g_squareDistance[sq0][sq1] = 0;
 				if (knightAttack(Black, sq0).isSet(sq1) || knightAttack(White, sq0).isSet(sq1))
-					SquareDistance[sq0][sq1] = 1;
+					g_squareDistance[sq0][sq1] = 1;
 				break;
 			case DirecFile:
-				SquareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
+				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
 				break;
 			case DirecRank:
-				SquareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
+				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
 				break;
 			case DirecDiagNESW:
-				SquareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
+				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
 				break;
 			case DirecDiagNWSE:
-				SquareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
+				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
 				break;
 			default: UNREACHABLE;
 			}

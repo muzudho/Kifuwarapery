@@ -205,7 +205,7 @@ public:
 #endif
 	}
 	bool isSet(const Square sq) const {
-		assert(isInSquare(sq));
+		assert(UtilSquare::IsInSquare(sq));
 		return andIsNot0(g_setMaskBB[sq]);
 	}
 	void setBit(const Square sq) { *this |= g_setMaskBB[sq]; }
@@ -277,7 +277,7 @@ public:
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			std::cout << (9 - r);
 			for (File f = FileA; FileI <= f; --f) {
-				std::cout << (this->isSet(UtilSquare::makeSquare(f, r)) ? "  X" : "  .");
+				std::cout << (this->isSet(UtilSquare::MakeSquare(f, r)) ? "  X" : "  .");
 			}
 			std::cout << "\n";
 		}
@@ -288,7 +288,7 @@ public:
 	void printTable(const int part) const {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileC; FileI <= f; --f) {
-				std::cout << (UINT64_C(1) & (this->GetP(part) >> UtilSquare::makeSquare(f, r)));
+				std::cout << (UINT64_C(1) & (this->GetP(part) >> UtilSquare::MakeSquare(f, r)));
 			}
 			std::cout << std::endl;
 		}

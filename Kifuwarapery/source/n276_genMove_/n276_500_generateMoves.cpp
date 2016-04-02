@@ -12,11 +12,11 @@ namespace {
 		Bitboard fromBB = pos.bbOf(PT, US);
 		while (fromBB.isNot0()) {
 			const Square from = fromBB.firstOneFromI9();
-			const bool fromCanPromote = canPromote(US, UtilSquare::makeRank(from));
+			const bool fromCanPromote = canPromote(US, UtilSquare::MakeRank(from));
 			Bitboard toBB = pos.attacksFrom<PT>(US, from) & target;
 			while (toBB.isNot0()) {
 				const Square to = toBB.firstOneFromI9();
-				const bool toCanPromote = canPromote(US, UtilSquare::makeRank(to));
+				const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
 				if (fromCanPromote | toCanPromote) {
 					(*moveStackList++).move = makePromoteMove<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)
@@ -58,9 +58,9 @@ namespace {
 
 			const Square ksq = pos.kingSquare(UtilColor::OppositeColor(US));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
-			if (UtilSquare::makeRank(ksq) != TRank1) {
+			if (UtilSquare::MakeRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
-				assert(isInSquare(pawnDropCheckSquare));
+				assert(UtilSquare::IsInSquare(pawnDropCheckSquare));
 				if (toBB.isSet(pawnDropCheckSquare) && pos.piece(pawnDropCheckSquare) == Empty) {
 					if (!pos.isPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
@@ -183,7 +183,7 @@ namespace {
 					(*moveStackList++).move = makePromoteMove<MT>(Pawn, from, to, pos);
 					if (MT == NonEvasion || ALL) {
 						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-						if (UtilSquare::makeRank(to) != TRank9) {
+						if (UtilSquare::MakeRank(to) != TRank9) {
 							(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
 						}
 					}
@@ -217,15 +217,15 @@ namespace {
 					if (toBB.isNot0()) {
 						// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.constFirstOneFromI9() : toBB.firstOneFromI9());
-						const bool toCanPromote = canPromote(US, UtilSquare::makeRank(to));
+						const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
 						if (toCanPromote) {
 							(*moveStackList++).move = makePromoteMove<MT>(Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
-								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::makeRank(to))) // 1段目の不成は省く
+								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::MakeRank(to))) // 1段目の不成は省く
 									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
-								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::makeRank(to))) // 2段目の不成を省く
+								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::MakeRank(to))) // 2段目の不成を省く
 									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 						}
@@ -249,10 +249,10 @@ namespace {
 				Bitboard toBB = pos.attacksFrom<Knight>(US, from) & target;
 				while (toBB.isNot0()) {
 					const Square to = toBB.firstOneFromI9();
-					const bool toCanPromote = canPromote(US, UtilSquare::makeRank(to));
+					const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).move = makePromoteMove<MT>(Knight, from, to, pos);
-						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::makeRank(to))) // 1, 2段目の不成は省く
+						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::MakeRank(to))) // 1, 2段目の不成は省く
 							(*moveStackList++).move = makeNonPromoteMove<MT>(Knight, from, to, pos);
 					}
 					else
@@ -270,11 +270,11 @@ namespace {
 			Bitboard fromBB = pos.bbOf(Silver, US);
 			while (fromBB.isNot0()) {
 				const Square from = fromBB.firstOneFromI9();
-				const bool fromCanPromote = canPromote(US, UtilSquare::makeRank(from));
+				const bool fromCanPromote = canPromote(US, UtilSquare::MakeRank(from));
 				Bitboard toBB = pos.attacksFrom<Silver>(US, from) & target;
 				while (toBB.isNot0()) {
 					const Square to = toBB.firstOneFromI9();
-					const bool toCanPromote = canPromote(US, UtilSquare::makeRank(to));
+					const bool toCanPromote = canPromote(US, UtilSquare::MakeRank(to));
 					if (fromCanPromote | toCanPromote)
 						(*moveStackList++).move = makePromoteMove<MT>(Silver, from, to, pos);
 					(*moveStackList++).move = makeNonPromoteMove<MT>(Silver, from, to, pos);
@@ -324,7 +324,7 @@ namespace {
 			switch (pt) {
 			case Empty: assert(false); break; // 最適化の為のダミー
 			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
-				(*moveStackList++).move = ((canPromote(us, UtilSquare::makeRank(to)) | canPromote(us, UtilSquare::makeRank(from))) ?
+				(*moveStackList++).move = ((canPromote(us, UtilSquare::MakeRank(to)) | canPromote(us, UtilSquare::MakeRank(from))) ?
 					makePromoteMove<Capture>(pt, from, to, pos) :
 					makeNonPromoteMove<Capture>(pt, from, to, pos));
 				break;
@@ -434,7 +434,7 @@ namespace {
 			bannedKingToBB |= rookAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
-			if (squareRelation(checkSq, ksq) & DirecDiag) {
+			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
 				bannedKingToBB |= pos.attacksFrom<Dragon>(checkSq);
