@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../header/n120_brdEntry/n120_150_square.hpp"
+#include "../../header/n110_square__/n110_500_utilSquare.hpp"
 #include "../../header/n120_brdEntry/n120_200_piece.hpp"
 
 class Position;

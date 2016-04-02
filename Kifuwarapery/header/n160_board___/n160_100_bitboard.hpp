@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "../n120_brdEntry/n120_150_square.hpp"
+#include "../n110_square__/n110_500_utilSquare.hpp"
 
 class Bitboard;
 

@@ -150,7 +150,14 @@
   <ItemGroup>
     <ClInclude Include="header\n080_common__\n080_105_time.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
-    <ClInclude Include="header\n105_color___\n105_500_color.hpp" />
+    <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
+    <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp" />
+    <ClInclude Include="header\n110_square__\n110_250_squareDelta.hpp" />
+    <ClInclude Include="header\n110_square__\n110_100_square.hpp" />
+    <ClInclude Include="header\n110_square__\n110_150_file.hpp" />
+    <ClInclude Include="header\n110_square__\n110_200_rank.hpp" />
+    <ClInclude Include="header\n110_square__\n110_300_direction.hpp" />
+    <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
@@ -189,7 +196,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
-    <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp" />
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp" />
     <ClInclude Include="header\n200_score___\n200_100_score.hpp" />
@@ -220,7 +226,7 @@
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
     <ClCompile Include="source\n080_common__\n080_105_time.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
-    <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp" />
+    <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp" />
     <ClCompile Include="source\n120_brdEntry\n120_300_ColorFileRank.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />

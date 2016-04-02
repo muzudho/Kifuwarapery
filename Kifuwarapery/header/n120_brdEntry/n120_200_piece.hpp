@@ -5,7 +5,7 @@
 #include <cassert>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
-#include "../n105_color___/n105_500_color.hpp"
+#include "../n105_color___/n105_500_utilColor.hpp"
 
 enum PieceType {
 	// Pro* は 元の 駒の種類に 8 を加算したもの。

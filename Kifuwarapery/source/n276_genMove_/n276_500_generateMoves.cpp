@@ -1,4 +1,4 @@
-#include "../../header/n105_color___/n105_500_color.hpp"
+#include "../../header/n105_color___/n105_500_utilColor.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 
 
@@ -56,7 +56,7 @@ namespace {
 			const Rank TRank1 = (US == Black ? Rank1 : Rank9);
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.kingSquare(OppositeColor(US));
+			const Square ksq = pos.kingSquare(UtilColor::OppositeColor(US));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (makeRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
@@ -221,11 +221,11 @@ namespace {
 						if (toCanPromote) {
 							(*moveStackList++).move = makePromoteMove<MT>(Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
-								if (isBehind<US, Rank9, Rank1>(makeRank(to))) // 1段目の不成は省く
+								if (UtilSquare::IsBehind<US, Rank9, Rank1>(makeRank(to))) // 1段目の不成は省く
 									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
-								if (isBehind<US, Rank8, Rank2>(makeRank(to))) // 2段目の不成を省く
+								if (UtilSquare::IsBehind<US, Rank8, Rank2>(makeRank(to))) // 2段目の不成を省く
 									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 						}
@@ -252,7 +252,7 @@ namespace {
 					const bool toCanPromote = canPromote(US, makeRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).move = makePromoteMove<MT>(Knight, from, to, pos);
-						if (isBehind<US, Rank8, Rank2>(makeRank(to))) // 1, 2段目の不成は省く
+						if (UtilSquare::IsBehind<US, Rank8, Rank2>(makeRank(to))) // 1, 2段目の不成は省く
 							(*moveStackList++).move = makeNonPromoteMove<MT>(Knight, from, to, pos);
 					}
 					else
@@ -350,22 +350,22 @@ namespace {
 			const Rank TRank7 = (US == Black ? Rank7 : Rank3);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
-			const Bitboard TRank1_6BB = inFrontMask<OppositeColor(US), TRank7>();
-			const Bitboard TRank1_7BB = inFrontMask<OppositeColor(US), TRank8>();
+			const Bitboard TRank1_6BB = inFrontMask<UtilColor::OppositeColor(US), TRank7>();
+			const Bitboard TRank1_7BB = inFrontMask<UtilColor::OppositeColor(US), TRank8>();
 
 			const Bitboard targetPawn =
-				(MT == Capture) ? pos.bbOf(OppositeColor(US)) :
+				(MT == Capture) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
-				(MT == CapturePlusPro) ? pos.bbOf(OppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
+				(MT == CapturePlusPro) ? pos.bbOf(UtilColor::OppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
 				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB) :
 				Bitboard::allOneBB(); // error
 			const Bitboard targetOther =
-				(MT == Capture) ? pos.bbOf(OppositeColor(US)) :
+				(MT == Capture) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
-				(MT == CapturePlusPro) ? pos.bbOf(OppositeColor(US)) :
+				(MT == CapturePlusPro) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCaptureMinusPro) ? pos.emptyBB() :
 				Bitboard::allOneBB(); // error
-			const Square ksq = pos.kingSquare(OppositeColor(US));
+			const Square ksq = pos.kingSquare(UtilColor::OppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<MT, Pawn, US, ALL>()(moveStackList, pos, targetPawn, ksq);
 			moveStackList = GeneratePieceMoves<MT, Lance, US, ALL>()(moveStackList, pos, targetOther, ksq);
@@ -461,7 +461,7 @@ namespace {
 			assert(pos.inCheck());
 
 			const Square ksq = pos.kingSquare(US);
-			const Color Them = OppositeColor(US);
+			const Color Them = UtilColor::OppositeColor(US);
 			const Bitboard checkers = pos.checkersBB();
 			Bitboard bb = checkers;
 			Bitboard bannedKingToBB = Bitboard::allZeroBB();
@@ -523,8 +523,8 @@ namespace {
 			Bitboard target = pos.emptyBB();
 
 			moveStackList = generateDropMoves<US>(moveStackList, pos, target);
-			target |= pos.bbOf(OppositeColor(US));
-			const Square ksq = pos.kingSquare(OppositeColor(US));
+			target |= pos.bbOf(UtilColor::OppositeColor(US));
+			const Square ksq = pos.kingSquare(UtilColor::OppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<NonEvasion, Pawn, US, false>()(moveStackList, pos, target, ksq);
 			moveStackList = GeneratePieceMoves<NonEvasion, Lance, US, false>()(moveStackList, pos, target, ksq);

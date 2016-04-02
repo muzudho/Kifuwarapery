@@ -112,6 +112,12 @@
     <Filter Include="header\n105_color___">
       <UniqueIdentifier>{2433db83-ede4-4e53-9bd9-82f69d2a7141}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n110_square__">
+      <UniqueIdentifier>{7d880f53-b182-46fe-82c2-e24174f26675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n110_square___">
+      <UniqueIdentifier>{e91d9c8d-fc9c-47cd-817b-fd0c84ce0af6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -130,9 +136,6 @@
       <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp">
-      <Filter>header\n120_brdEntry</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp">
       <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_100_score.hpp">
@@ -312,16 +315,34 @@
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n105_color___\n105_500_color.hpp">
+    <ClInclude Include="header\n105_color___\n105_100_color.hpp">
       <Filter>header\n105_color___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp">
+      <Filter>header\n105_color___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_100_square.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_150_file.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_200_rank.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_250_squareDelta.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_300_direction.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp">
+      <Filter>header\n110_square__</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n120_brdEntry\n120_150_square.cpp">
-      <Filter>source\n120_brdEntry</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp">
       <Filter>source\n240_position</Filter>
@@ -421,6 +442,9 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp">
       <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp">
+      <Filter>source\n110_square___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

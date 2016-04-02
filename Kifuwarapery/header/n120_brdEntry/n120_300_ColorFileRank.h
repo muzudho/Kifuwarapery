@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../n105_color___/n105_500_color.hpp"
-#include "../n120_brdEntry/n120_150_square.hpp"
+#include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n110_square__/n110_500_utilSquare.hpp"
 
 class ColorFileRank {
 public:

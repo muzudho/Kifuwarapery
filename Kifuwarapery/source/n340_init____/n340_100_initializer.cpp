@@ -213,7 +213,7 @@ void Initializer::initBetweenBB() {
 
 void Initializer::initCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = OppositeColor(c);
+		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_goldCheckTable[c][sq] = Bitboard::allZeroBB();
 			Bitboard checkBB = goldAttack(opp, sq);
@@ -226,7 +226,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = OppositeColor(c);
+		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_silverCheckTable[c][sq] = Bitboard::allZeroBB();
 
@@ -255,7 +255,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = OppositeColor(c);
+		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_knightCheckTable[c][sq] = Bitboard::allZeroBB();
 
@@ -274,7 +274,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = OppositeColor(c);
+		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_lanceCheckTable[c][sq] = lanceAttackToEdge(opp, sq);
 

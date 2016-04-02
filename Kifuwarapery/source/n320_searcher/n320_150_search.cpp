@@ -190,7 +190,7 @@ namespace {
 				return true;
 			}
 
-			const Color them = OppositeColor(us);
+			const Color them = UtilColor::OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
 				(pos.attacksFrom<Lance>(them, m2to, occ) & pos.bbOf(Lance, us))
@@ -700,7 +700,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= pos.gamePly()) {
 		const Rank TRank7 = (pos.turn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = rankMask(TRank7) & ~fileMask<FileA>() & ~fileMask<FileI>();
-		if ((pos.bbOf(Pawn, OppositeColor(pos.turn())) & mask) == mask) {
+		if ((pos.bbOf(Pawn, UtilColor::OppositeColor(pos.turn())) & mask) == mask) {
 			inaniwaFlag = (pos.turn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			tt.clear();
 		}
@@ -710,7 +710,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 #if defined BISHOP_IN_DANGER
 void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
-		const Color them = OppositeColor(pos.turn());
+		const Color them = UtilColor::OppositeColor(pos.turn());
 		if (pos.hand(pos.turn()).exists<HBishop>()
 			&& pos.bbOf(Silver, them).isSet(inverseIfWhite(them, H3))
 			&& (pos.bbOf(King  , them).isSet(inverseIfWhite(them, F2))
@@ -755,7 +755,7 @@ template <bool DO> void Position::doNullMove(StateInfo& backUpSt) {
 	dst->handKey       = src->handKey;
 	dst->pliesFromNull = src->pliesFromNull;
 	dst->hand = hand(turn());
-	turn_ = OppositeColor(turn());
+	turn_ = UtilColor::OppositeColor(turn());
 
 	if (DO) {
 		st_->boardKey ^= zobTurn();
