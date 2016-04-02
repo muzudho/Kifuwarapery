@@ -238,7 +238,7 @@ private:
 
 	// Žè”Ô‘¤‚Ì‹Ê‚Ö check ‚µ‚Ä‚¢‚é‹î‚ð‘S‚Ä’T‚µ‚Ä checkersBB_ ‚ÉƒZƒbƒg‚·‚éB
 	// ÅŒã‚ÌŽè‚ª‰½‚©Šo‚¦‚Ä‚¨‚¯‚ÎAattackersTo() ‚ðŽg—p‚µ‚È‚­‚Ä‚à—Ç‚¢‚Í‚¸‚ÅAˆ—‚ªŒy‚­‚È‚éB
-	void findCheckers() { st_->checkersBB = attackersToExceptKing(oppositeColor(turn()), kingSquare(turn())); }
+	void findCheckers() { st_->checkersBB = attackersToExceptKing(OppositeColor(turn()), kingSquare(turn())); }
 
 	Score computeMaterial() const;
 
@@ -250,7 +250,7 @@ private:
 	template <bool FindPinned, bool BetweenIsUs> Bitboard hiddenCheckers() const {
 		Bitboard result = Bitboard::allZeroBB();
 		const Color us = turn();
-		const Color them = oppositeColor(us);
+		const Color them = OppositeColor(us);
 		// pin ‚·‚é‰“Šu‹î
 		// ‚Ü‚¸‚ÍŽ©‹î‚©“G‹î‚©‚Å‘åŽG”c‚É”»•Ê
 		Bitboard pinners = bbOf(FindPinned ? them : us);

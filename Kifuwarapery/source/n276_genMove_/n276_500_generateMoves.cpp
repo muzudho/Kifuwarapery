@@ -1,3 +1,4 @@
+#include "../../header/n105_color___/n105_500_color.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 
 
@@ -48,14 +49,14 @@ namespace {
 			Bitboard pawnsBB = pos.bbOf(Pawn, US);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
-				toBB.set(part, toBB.p(part) & ~squareFileMask(pawnsSquare).p(part));
+				toBB.SetP(part, toBB.GetP(part) & ~squareFileMask(pawnsSquare).GetP(part));
 			});
 
 			// 打ち歩詰めの回避
 			const Rank TRank1 = (US == Black ? Rank1 : Rank9);
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.kingSquare(oppositeColor(US));
+			const Square ksq = pos.kingSquare(OppositeColor(US));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (makeRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
@@ -349,22 +350,22 @@ namespace {
 			const Rank TRank7 = (US == Black ? Rank7 : Rank3);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
-			const Bitboard TRank1_6BB = inFrontMask<oppositeColor(US), TRank7>();
-			const Bitboard TRank1_7BB = inFrontMask<oppositeColor(US), TRank8>();
+			const Bitboard TRank1_6BB = inFrontMask<OppositeColor(US), TRank7>();
+			const Bitboard TRank1_7BB = inFrontMask<OppositeColor(US), TRank8>();
 
 			const Bitboard targetPawn =
-				(MT == Capture) ? pos.bbOf(oppositeColor(US)) :
+				(MT == Capture) ? pos.bbOf(OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
-				(MT == CapturePlusPro) ? pos.bbOf(oppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
+				(MT == CapturePlusPro) ? pos.bbOf(OppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
 				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB) :
 				Bitboard::allOneBB(); // error
 			const Bitboard targetOther =
-				(MT == Capture) ? pos.bbOf(oppositeColor(US)) :
+				(MT == Capture) ? pos.bbOf(OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
-				(MT == CapturePlusPro) ? pos.bbOf(oppositeColor(US)) :
+				(MT == CapturePlusPro) ? pos.bbOf(OppositeColor(US)) :
 				(MT == NonCaptureMinusPro) ? pos.emptyBB() :
 				Bitboard::allOneBB(); // error
-			const Square ksq = pos.kingSquare(oppositeColor(US));
+			const Square ksq = pos.kingSquare(OppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<MT, Pawn, US, ALL>()(moveStackList, pos, targetPawn, ksq);
 			moveStackList = GeneratePieceMoves<MT, Lance, US, ALL>()(moveStackList, pos, targetOther, ksq);
@@ -460,7 +461,7 @@ namespace {
 			assert(pos.inCheck());
 
 			const Square ksq = pos.kingSquare(US);
-			const Color Them = oppositeColor(US);
+			const Color Them = OppositeColor(US);
 			const Bitboard checkers = pos.checkersBB();
 			Bitboard bb = checkers;
 			Bitboard bannedKingToBB = Bitboard::allZeroBB();
@@ -522,8 +523,8 @@ namespace {
 			Bitboard target = pos.emptyBB();
 
 			moveStackList = generateDropMoves<US>(moveStackList, pos, target);
-			target |= pos.bbOf(oppositeColor(US));
-			const Square ksq = pos.kingSquare(oppositeColor(US));
+			target |= pos.bbOf(OppositeColor(US));
+			const Square ksq = pos.kingSquare(OppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<NonEvasion, Pawn, US, false>()(moveStackList, pos, target, ksq);
 			moveStackList = GeneratePieceMoves<NonEvasion, Lance, US, false>()(moveStackList, pos, target, ksq);

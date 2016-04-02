@@ -1,4 +1,4 @@
-﻿#include "../../header/n120_brdEntry/n120_100_color.hpp"
+﻿#include "../../header/n105_color___/n105_500_color.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 
 const Score PieceScore[PieceNone] = {

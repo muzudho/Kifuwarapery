@@ -2,7 +2,7 @@
 
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n120_brdEntry/n120_100_color.hpp"
+#include "../n105_color___/n105_500_color.hpp"
 
 // 盤面を [0, 80] の整数の index で表す
 // I9 = 1一, I1 = 1九, A1 = 9九

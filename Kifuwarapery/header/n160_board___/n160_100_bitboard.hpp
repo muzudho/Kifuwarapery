@@ -18,7 +18,7 @@ extern const u64 g_bishopMagic[SquareNum];
 
 // 指定した位置の属する file の bit を shift し、
 // index を求める為に使用する。
-const int Slide[SquareNum] = {
+const int g_slide[SquareNum] = {
 	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
 	10, 10, 10, 10, 10, 10, 10, 10, 10,
 	19, 19, 19, 19, 19, 19, 19, 19, 19,
@@ -100,14 +100,14 @@ public:
 		this->m_p_[0] = v0;
 		this->m_p_[1] = v1;
 	}
-	u64 p(const int index) const { return this->m_p_[index]; }
-	void set(const int index, const u64 val) { this->m_p_[index] = val; }
-	u64 merge() const { return this->p(0) | this->p(1); }
+	u64 GetP(const int index) const { return this->m_p_[index]; }
+	void SetP(const int index, const u64 val) { this->m_p_[index] = val; }
+	u64 MergeP() const { return this->GetP(0) | this->GetP(1); }
 	bool isNot0() const {
 #ifdef HAVE_SSE4
 		return !(_mm_testz_si128(this->m_m_, _mm_set1_epi8(static_cast<char>(0xffu))));
 #else
-		return (this->merge() ? true : false);
+		return (this->MergeP() ? true : false);
 #endif
 	}
 	// これはコードが見難くなるけど仕方ない。
@@ -124,15 +124,15 @@ public:
 		_mm_store_si128(&tmp.m_m_, _mm_andnot_si128(this->m_m_, _mm_set1_epi8(static_cast<char>(0xffu))));
 		return tmp;
 #else
-		return Bitboard(~this->p(0), ~this->p(1));
+		return Bitboard(~this->GetP(0), ~this->GetP(1));
 #endif
 	}
 	Bitboard operator &= (const Bitboard& rhs) {
 #if defined (HAVE_SSE2) || defined (HAVE_SSE4)
 		_mm_store_si128(&this->m_m_, _mm_and_si128(this->m_m_, rhs.m_m_));
 #else
-		this->m_p_[0] &= rhs.p(0);
-		this->m_p_[1] &= rhs.p(1);
+		this->m_p_[0] &= rhs.GetP(0);
+		this->m_p_[1] &= rhs.GetP(1);
 #endif
 		return *this;
 	}
@@ -140,8 +140,8 @@ public:
 #if defined (HAVE_SSE2) || defined (HAVE_SSE4)
 		_mm_store_si128(&this->m_m_, _mm_or_si128(this->m_m_, rhs.m_m_));
 #else
-		this->m_p_[0] |= rhs.p(0);
-		this->m_p_[1] |= rhs.p(1);
+		this->m_p_[0] |= rhs.GetP(0);
+		this->m_p_[1] |= rhs.GetP(1);
 #endif
 		return *this;
 	}
@@ -149,8 +149,8 @@ public:
 #if defined (HAVE_SSE2) || defined (HAVE_SSE4)
 		_mm_store_si128(&this->m_m_, _mm_xor_si128(this->m_m_, rhs.m_m_));
 #else
-		this->m_p_[0] ^= rhs.p(0);
-		this->m_p_[1] ^= rhs.p(1);
+		this->m_p_[0] ^= rhs.GetP(0);
+		this->m_p_[1] ^= rhs.GetP(1);
 #endif
 		return *this;
 	}
@@ -181,7 +181,7 @@ public:
 #ifdef HAVE_SSE4
 		return (_mm_testc_si128(_mm_cmpeq_epi8(this->m_m_, rhs.m_m_), _mm_set1_epi8(static_cast<char>(0xffu))) ? true : false);
 #else
-		return (this->p(0) == rhs.p(0)) && (this->p(1) == rhs.p(1));
+		return (this->GetP(0) == rhs.GetP(0)) && (this->GetP(1) == rhs.GetP(1));
 #endif
 	}
 	bool operator != (const Bitboard& rhs) const { return !(*this == rhs); }
@@ -216,18 +216,18 @@ public:
 	// そのマスを 0 にする。
 	// Bitboard の right 側が 0 でないことを前提にしている。
 	FORCE_INLINE Square firstOneRightFromI9() {
-		const Square sq = static_cast<Square>(firstOneFromLSB(this->p(0)));
+		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(0)));
 		// LSB 側の最初の 1 の bit を 0 にする
-		this->m_p_[0] &= this->p(0) - 1;
+		this->m_p_[0] &= this->GetP(0) - 1;
 		return sq;
 	}
 	// Bitboard の left 側だけの要素を調べて、最初に 1 であるマスの index を返す。
 	// そのマスを 0 にする。
 	// Bitboard の left 側が 0 でないことを前提にしている。
 	FORCE_INLINE Square firstOneLeftFromB9() {
-		const Square sq = static_cast<Square>(firstOneFromLSB(this->p(1)) + 63);
+		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(1)) + 63);
 		// LSB 側の最初の 1 の bit を 0 にする
-		this->m_p_[1] &= this->p(1) - 1;
+		this->m_p_[1] &= this->GetP(1) - 1;
 		return sq;
 	}
 	// Bitboard を I9 から A1 まで調べて、最初に 1 であるマスの index を返す。
@@ -236,26 +236,26 @@ public:
 	// VC++ の _BitScanForward() は入力が 0 のときに 0 を返す仕様なので、
 	// 最初に 0 でないか判定するのは少し損。
 	FORCE_INLINE Square firstOneFromI9() {
-		if (this->p(0)) {
+		if (this->GetP(0)) {
 			return firstOneRightFromI9();
 		}
 		return firstOneLeftFromB9();
 	}
 	// 返す位置を 0 にしないバージョン。
-	FORCE_INLINE Square constFirstOneRightFromI9() const { return static_cast<Square>(firstOneFromLSB(this->p(0))); }
-	FORCE_INLINE Square constFirstOneLeftFromB9() const { return static_cast<Square>(firstOneFromLSB(this->p(1)) + 63); }
+	FORCE_INLINE Square constFirstOneRightFromI9() const { return static_cast<Square>(firstOneFromLSB(this->GetP(0))); }
+	FORCE_INLINE Square constFirstOneLeftFromB9() const { return static_cast<Square>(firstOneFromLSB(this->GetP(1)) + 63); }
 	FORCE_INLINE Square constFirstOneFromI9() const {
-		if (this->p(0)) {
+		if (this->GetP(0)) {
 			return constFirstOneRightFromI9();
 		}
 		return constFirstOneLeftFromB9();
 	}
 	// Bitboard の 1 の bit を数える。
-	// Crossover は、merge() すると 1 である bit が重なる可能性があるなら true
+	// Crossover は、MergeP() すると 1 である bit が重なる可能性があるなら true
 	template <bool Crossover = true>
-	int popCount() const { return (Crossover ? count1s(p(0)) + count1s(p(1)) : count1s(merge())); }
+	int popCount() const { return (Crossover ? count1s(GetP(0)) + count1s(GetP(1)) : count1s(MergeP())); }
 	// bit が 1 つだけ立っているかどうかを判定する。
-	// Crossover は、merge() すると 1 である bit が重なる可能性があるなら true
+	// Crossover は、MergeP() すると 1 である bit が重なる可能性があるなら true
 	template <bool Crossover = true>
 	bool isOneBit() const {
 #if defined (HAVE_SSE42)
@@ -264,10 +264,10 @@ public:
 		if (!this->isNot0()) {
 			return false;
 		}
-		else if (this->p(0)) {
-			return !((this->p(0) & (this->p(0) - 1)) | this->p(1));
+		else if (this->GetP(0)) {
+			return !((this->GetP(0) & (this->GetP(0) - 1)) | this->GetP(1));
 		}
-		return !(this->p(1) & (this->p(1) - 1));
+		return !(this->GetP(1) & (this->GetP(1) - 1));
 #endif
 	}
 
@@ -288,7 +288,7 @@ public:
 	void printTable(const int part) const {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileC; FileI <= f; --f) {
-				std::cout << (UINT64_C(1) & (this->p(part) >> makeSquare(f, r)));
+				std::cout << (UINT64_C(1) & (this->GetP(part) >> makeSquare(f, r)));
 			}
 			std::cout << std::endl;
 		}
@@ -309,7 +309,7 @@ public://(^q^)
 #if defined HAVE_BMI2
 	// PEXT bitboard.
 	inline u64 occupiedToIndex( const Bitboard& mask) const {
-		return _pext_u64(this->merge(), mask.merge());
+		return _pext_u64(this->MergeP(), mask.MergeP());
 	}
 
 	inline Bitboard rookAttack(const Square sq) const {
@@ -326,7 +326,7 @@ public://(^q^)
 	// magic bitboard.
 	// magic number を使って block の模様から利きのテーブルへのインデックスを算出
 	inline u64 occupiedToIndex( const u64 magic, const int shiftBits) const {
-		return (this->merge() * magic) >> shiftBits;
+		return (this->MergeP() * magic) >> shiftBits;
 	}
 
 	inline Bitboard rookAttack(const Square sq) const {
@@ -343,14 +343,14 @@ public://(^q^)
 	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
 	inline Bitboard lanceAttack(const Color c, const Square sq) const {
 		const int part = Bitboard::part(sq);
-		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		const int index = ((*this).GetP(part) >> g_slide[sq]) & 127;
 		return g_lanceAttack[c][sq][index];
 	}
 
 	// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
 	inline Bitboard rookAttackFile(const Square sq) const {
 		const int part = Bitboard::part(sq);
-		const int index = ((*this).p(part) >> Slide[sq]) & 127;
+		const int index = ((*this).GetP(part) >> g_slide[sq]) & 127;
 		return g_lanceAttack[Black][sq][index] | g_lanceAttack[White][sq][index];
 	}
 

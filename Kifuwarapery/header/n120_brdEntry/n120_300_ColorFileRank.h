@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n120_brdEntry/n120_100_color.hpp"
+#include "../n105_color___/n105_500_color.hpp"
 #include "../n120_brdEntry/n120_150_square.hpp"
 
 class ColorFileRank {

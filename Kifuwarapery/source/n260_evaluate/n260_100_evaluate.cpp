@@ -327,7 +327,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 			tmp = _mm_cvtepi16_epi32(tmp);
 			sum.m[0] = _mm_add_epi32(sum.m[0], tmp);
 }
-		sum.p[2] += EvalStorage::KKP[sq_bk][sq_wk][k0];
+		sum.GetP[2] += EvalStorage::KKP[sq_bk][sq_wk][k0];
 		}
 #else
 	// loop 開始を i = 1 からにして、i = 0 の分のKKPを先に足す。
@@ -353,7 +353,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 
 	sum.p[2][0] += pos.material() * FVScale;
 #if defined INANIWA_SHIFT
-	sum.p[2][0] += inaniwaScore(pos);
+	sum.GetP[2][0] += inaniwaScore(pos);
 #endif
 	ss->staticEvalRaw = sum;
 
@@ -424,7 +424,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	score.p[2][0] += pos.material() * FVScale;
 
 #if defined INANIWA_SHIFT
-	score.p[2][0] += inaniwaScore(pos);
+	score.GetP[2][0] += inaniwaScore(pos);
 #endif
 
 	return static_cast<Score>(score.sum(pos.turn()));

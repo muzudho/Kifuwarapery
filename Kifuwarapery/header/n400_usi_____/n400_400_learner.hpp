@@ -239,7 +239,7 @@ public:
 private:
 	// 学習に使う棋譜から、手と手に対する補助的な情報を付けでデータ保持する。
 	// 50000局程度に対して10秒程度で終わるからシングルコアで良い。
-	void setLearnMoves(Position& pos, std::set<std::pair<Key, Move> >& dict, std::string& s0, std::string& s1,
+	void setLearnMoves(Position& pos, std::SetP<std::pair<Key, Move> >& dict, std::string& s0, std::string& s1,
 					   const std::array<bool, ColorNum>& useTurnMove)
 	{
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
@@ -257,7 +257,7 @@ private:
 		ss >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+		pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
@@ -283,7 +283,7 @@ private:
 			pos.doMove(move, setUpStates->top());
 		}
 	}
-	void readBookBody(std::set<std::pair<Key, Move> >& dict, Position& pos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
+	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& pos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
 	{
 		if (record == "-") // "-" なら棋譜ファイルを読み込まない。
 			return;
@@ -309,7 +309,7 @@ private:
 				  const std::string& blackRecordFileName,
 				  const std::string& whiteRecordFileName, const s64 gameNum)
 	{
-		std::set<std::pair<Key, Move> > dict;
+		std::SetP<std::pair<Key, Move> > dict;
 		readBookBody(dict, pos,      recordFileName, {true , true }, gameNum);
 		readBookBody(dict, pos, blackRecordFileName, {true , false}, gameNum);
 		readBookBody(dict, pos, whiteRecordFileName, {false, true }, gameNum);
@@ -339,7 +339,7 @@ private:
 		pos.searcher()->tt.clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+			pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
@@ -380,10 +380,10 @@ private:
 		}
 	}
 	void learnParse1(Position& pos) {
-		Time t = Time::currentTime();
+		Time t = Time::CurrentTime();
 		// 棋譜をシャッフルすることで、先頭 gameNum_ 個の学習に使うデータをランダムに選ぶ。
 		std::shuffle(std::begin(bookMovesDatum_), std::end(bookMovesDatum_), mt_);
-		std::cout << "shuffle elapsed: " << t.elapsed() / 1000 << "[sec]" << std::endl;
+		std::cout << "shuffle elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 		index_ = 0;
 		moveCount_.store(0);
 		for (auto& pred : predictions_)
@@ -401,7 +401,7 @@ private:
 		for (auto& pred : predictions_)
 			std::cout << static_cast<double>(pred.load()*100) / moveCount_.load() << ", ";
 		std::cout << std::endl;
-		std::cout << "parse1 elapsed: " << t.elapsed() / 1000 << "[sec]" << std::endl;
+		std::cout << "parse1 elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 	}
 	static constexpr double FVPenalty() { return (0.2/static_cast<double>(FVScale)); }
 	template <bool UsePenalty, typename T>
@@ -464,7 +464,7 @@ private:
 		SearchStack ss[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+			pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				PRINT_PV(pos.print());
@@ -478,7 +478,7 @@ private:
 						pos.doMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
 					}
 					// evaluate() の差分計算を無効化する。
-					ss[0].staticEvalRaw.p[0][0] = ss[1].staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+					ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
 					const Score recordScore = (rootColor == pos.turn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
@@ -493,7 +493,7 @@ private:
 							setUpStates->push(StateInfo());
 							pos.doMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
 						}
-						ss[0].staticEvalRaw.p[0][0] = ss[1].staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+						ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
 						const Score score = (rootColor == pos.turn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
 						const auto diff = score - recordScore;
 						const double dsig = dsigmoid(diff);
@@ -526,7 +526,7 @@ private:
 	void learnParse2(Position& pos) {
 		Time t;
 		for (int step = 1; step <= stepNum_; ++step) {
-			t.restart();
+			t.Restart();
 			std::cout << "step " << step << "/" << stepNum_ << " " << std::flush;
 			index_ = 0;
 			std::vector<std::thread> threads(positions_.size());
@@ -546,7 +546,7 @@ private:
 			if (usePenalty_) updateEval<true >(pos.searcher()->options["Eval_Dir"]);
 			else             updateEval<false>(pos.searcher()->options["Eval_Dir"]);
 			std::cout << "done" << std::endl;
-			std::cout << "parse2 1 step elapsed: " << t.elapsed() / 1000 << "[sec]" << std::endl;
+			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 			print();
 		}
 	}

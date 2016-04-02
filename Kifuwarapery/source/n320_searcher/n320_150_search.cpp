@@ -190,7 +190,7 @@ namespace {
 				return true;
 			}
 
-			const Color them = oppositeColor(us);
+			const Color them = OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
 				(pos.attacksFrom<Lance>(them, m2to, occ) & pos.bbOf(Lance, us))
@@ -237,7 +237,7 @@ namespace {
 }
 
 std::string Searcher::pvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
-	const int t = searchTimer.elapsed();
+	const int t = searchTimer.Elapsed();
 	const size_t usiPVSize = pvSize;
 	Ply selDepth = 0; // 選択的に読んでいる部分の探索深さ。
 	std::stringstream ss;
@@ -598,11 +598,11 @@ void Searcher::idLoop(Position& pos) {
 					break;
 				}
 
-				if (3000 < searchTimer.elapsed()
+				if (3000 < searchTimer.Elapsed()
 					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < searchTimer.elapsed()))
+					&& (depth < 10 || lastInfoTime + 200 < searchTimer.Elapsed()))
 				{
-					lastInfoTime = searchTimer.elapsed();
+					lastInfoTime = searchTimer.Elapsed();
 					SYNCCOUT << pvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 				}
 
@@ -628,11 +628,11 @@ void Searcher::idLoop(Position& pos) {
 			}
 
 			insertionSort(rootMoves.begin(), rootMoves.begin() + pvIdx + 1);
-			if ((pvIdx + 1 == pvSize || 3000 < searchTimer.elapsed())
+			if ((pvIdx + 1 == pvSize || 3000 < searchTimer.Elapsed())
 				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < searchTimer.elapsed()))
+				&& (depth < 10 || lastInfoTime + 200 < searchTimer.Elapsed()))
 			{
-				lastInfoTime = searchTimer.elapsed();
+				lastInfoTime = searchTimer.Elapsed();
 				SYNCCOUT << pvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 			}
 		}
@@ -649,7 +649,7 @@ void Searcher::idLoop(Position& pos) {
 			}
 
 			// 次のイテレーションを回す時間が無いなら、ストップ
-			if ((timeManager.availableTime() * 62) / 100 < searchTimer.elapsed()) {
+			if ((timeManager.availableTime() * 62) / 100 < searchTimer.Elapsed()) {
 				stop = true;
 			}
 
@@ -665,7 +665,7 @@ void Searcher::idLoop(Position& pos) {
 				// ここは確実にバグらせないようにする。
 				&& -ScoreInfinite + 2 * CapturePawnScore <= bestScore
 				&& (rootMoves.size() == 1
-					|| timeManager.availableTime() * 40 / 100 < searchTimer.elapsed()))
+					|| timeManager.availableTime() * 40 / 100 < searchTimer.Elapsed()))
 			{
 				const Score rBeta = bestScore - 2 * CapturePawnScore;
 				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
@@ -700,7 +700,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= pos.gamePly()) {
 		const Rank TRank7 = (pos.turn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = rankMask(TRank7) & ~fileMask<FileA>() & ~fileMask<FileI>();
-		if ((pos.bbOf(Pawn, oppositeColor(pos.turn())) & mask) == mask) {
+		if ((pos.bbOf(Pawn, OppositeColor(pos.turn())) & mask) == mask) {
 			inaniwaFlag = (pos.turn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			tt.clear();
 		}
@@ -710,7 +710,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 #if defined BISHOP_IN_DANGER
 void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
-		const Color them = oppositeColor(pos.turn());
+		const Color them = OppositeColor(pos.turn());
 		if (pos.hand(pos.turn()).exists<HBishop>()
 			&& pos.bbOf(Silver, them).isSet(inverseIfWhite(them, H3))
 			&& (pos.bbOf(King  , them).isSet(inverseIfWhite(them, F2))
@@ -755,7 +755,7 @@ template <bool DO> void Position::doNullMove(StateInfo& backUpSt) {
 	dst->handKey       = src->handKey;
 	dst->pliesFromNull = src->pliesFromNull;
 	dst->hand = hand(turn());
-	turn_ = oppositeColor(turn());
+	turn_ = OppositeColor(turn());
 
 	if (DO) {
 		st_->boardKey ^= zobTurn();
@@ -1122,7 +1122,7 @@ split_point_start:
 		if (RootNode) {
 			signals.firstRootMove = (moveCount == 1);
 #if 0
-			if (thisThread == threads.mainThread() && 3000 < searchTimer.elapsed()) {
+			if (thisThread == threads.mainThread() && 3000 < searchTimer.Elapsed()) {
 				SYNCCOUT << "info depth " << depth / OnePly
 						 << " currmove " << move.toUSI()
 						 << " currmovenumber " << moveCount + pvIdx << SYNCENDL;
@@ -1608,7 +1608,7 @@ void Searcher::think() {
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.nodesSearched()
-			 << " time " << searchTimer.elapsed() << SYNCENDL;
+			 << " time " << searchTimer.Elapsed() << SYNCENDL;
 
 	if (!signals.stop && (limits.ponder || limits.infinite)) {
 		signals.stopOnPonderHit = true;
@@ -1656,7 +1656,7 @@ void Searcher::checkTime() {
 		}
 	}
 
-	const int e = searchTimer.elapsed();
+	const int e = searchTimer.Elapsed();
 	const bool stillAtFirstMove =
 		signals.firstRootMove
 		&& !signals.failedLowAtRoot

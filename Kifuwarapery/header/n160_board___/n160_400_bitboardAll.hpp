@@ -11,22 +11,22 @@
 // その為、あまり多用すべきでないかも知れない。
 #define FOREACH_BB(bb, sq, xxx)					\
 	do {										\
-		while (bb.p(0)) {						\
+		while (bb.GetP(0)) {					\
 			sq = bb.firstOneRightFromI9();		\
 			xxx;								\
 		}										\
-		while (bb.p(1)) {						\
+		while (bb.GetP(1)) {					\
 			sq = bb.firstOneLeftFromB9();		\
 			xxx;								\
 		}										\
 	} while (false)
 
 template <typename T> FORCE_INLINE void foreachBB(Bitboard& bb, Square& sq, T t) {
-	while (bb.p(0)) {
+	while (bb.GetP(0)) {
 		sq = bb.firstOneRightFromI9();
 		t(0);
 	}
-	while (bb.p(1)) {
+	while (bb.GetP(1)) {
 		sq = bb.firstOneLeftFromB9();
 		t(1);
 	}

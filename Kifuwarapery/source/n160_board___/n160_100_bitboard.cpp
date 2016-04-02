@@ -233,10 +233,10 @@ Bitboard g_rookAttack[495616];
 #else
 Bitboard g_rookAttack[512000];
 #endif
-int g_rookAttackIndex[SquareNum];
+int			g_rookAttackIndex[SquareNum];
 Bitboard g_rookBlockMask[SquareNum];
 Bitboard g_bishopAttack[20224];
-int g_bishopAttackIndex[SquareNum];
+int			g_bishopAttackIndex[SquareNum];
 Bitboard g_bishopBlockMask[SquareNum];
 Bitboard g_lanceAttack[ColorNum][SquareNum][128];
 

@@ -2,6 +2,8 @@
 
 #include "n080_050_ifdef.hpp"
 
+#include <random>				// std::mt19937_64
+#include <condition_variable>	// std::mutex, std::condition_variable
 using namespace std;
 
 

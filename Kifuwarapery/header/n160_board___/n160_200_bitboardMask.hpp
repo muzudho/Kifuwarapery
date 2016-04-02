@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n120_brdEntry/n120_100_color.hpp"
+#include "../n105_color___/n105_500_color.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
 
 
 

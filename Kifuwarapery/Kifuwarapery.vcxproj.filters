@@ -109,6 +109,9 @@
     <Filter Include="source\n220_position">
       <UniqueIdentifier>{84cc517c-90ba-43d5-8ca0-a31ef4a63817}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n105_color___">
+      <UniqueIdentifier>{2433db83-ede4-4e53-9bd9-82f69d2a7141}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -125,9 +128,6 @@
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp">
-      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp">
       <Filter>header\n120_brdEntry</Filter>
@@ -311,6 +311,9 @@
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp">
       <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n105_color___\n105_500_color.hpp">
+      <Filter>header\n105_color___</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

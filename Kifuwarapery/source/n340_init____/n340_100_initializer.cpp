@@ -213,7 +213,7 @@ void Initializer::initBetweenBB() {
 
 void Initializer::initCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = oppositeColor(c);
+		const Color opp = OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_goldCheckTable[c][sq] = Bitboard::allZeroBB();
 			Bitboard checkBB = goldAttack(opp, sq);
@@ -226,7 +226,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = oppositeColor(c);
+		const Color opp = OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_silverCheckTable[c][sq] = Bitboard::allZeroBB();
 
@@ -255,7 +255,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = oppositeColor(c);
+		const Color opp = OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_knightCheckTable[c][sq] = Bitboard::allZeroBB();
 
@@ -274,7 +274,7 @@ void Initializer::initCheckTable() {
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = oppositeColor(c);
+		const Color opp = OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_lanceCheckTable[c][sq] = lanceAttackToEdge(opp, sq);
 
@@ -388,7 +388,7 @@ u64 Initializer::findMagic(const Square square, const bool isBishop) {
 		bool fail = false;
 
 		// これは無くても良いけど、少しマジックナンバーが見つかるのが早くなるはず。
-		if (count1s((mask.merge() * magic) & UINT64_C(0xfff0000000000000)) < 6)
+		if (count1s((mask.MergeP() * magic) & UINT64_C(0xfff0000000000000)) < 6)
 			continue;
 
 		std::fill(std::begin(attackUsed), std::end(attackUsed), allZeroBB());

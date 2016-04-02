@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="header\n080_common__\n080_105_time.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
+    <ClInclude Include="header\n105_color___\n105_500_color.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
@@ -188,7 +189,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
-    <ClInclude Include="header\n120_brdEntry\n120_100_color.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_150_square.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp" />
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp" />

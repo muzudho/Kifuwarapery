@@ -5,7 +5,7 @@
 #include <cassert>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
-#include "n120_100_color.hpp"
+#include "../n105_color___/n105_500_color.hpp"
 
 enum PieceType {
 	// Pro* は 元の 駒の種類に 8 を加算したもの。
@@ -40,8 +40,8 @@ enum HandPiece {
 };
 OverloadEnumOperators(HandPiece);
 
-// p == Empty のとき、PieceType は OccuPied になってしまうので、
-// Position::bbOf(pieceToPieceType(p)) とすると、
+// GetP == Empty のとき、PieceType は OccuPied になってしまうので、
+// Position::bbOf(pieceToPieceType(GetP)) とすると、
 // Position::emptyBB() ではなく Position::occupiedBB() になってしまうので、
 // 注意すること。出来れば修正したい。
 inline PieceType pieceToPieceType(const Piece p) { return static_cast<PieceType>(p & 15); }

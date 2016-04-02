@@ -159,7 +159,7 @@ void ThreadPool::startThinking(const Position& pos, const LimitsType& limits,
 #else
 	waitForThinkFinished();
 #endif
-	pos.searcher()->searchTimer.restart();
+	pos.searcher()->searchTimer.Restart();
 
 	pos.searcher()->signals.stopOnPonderHit = pos.searcher()->signals.firstRootMove = false;
 	pos.searcher()->signals.stop = pos.searcher()->signals.failedLowAtRoot = false;
