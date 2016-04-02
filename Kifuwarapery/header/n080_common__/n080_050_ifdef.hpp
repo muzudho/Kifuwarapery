@@ -43,16 +43,6 @@
 	#define EVAL_PHASE4
 #endif
 
-#if 1 && !defined LEARN
-// 対局時は1つの局面に対してしか探索を実行しないので、置換表などのデータをグローバルに置いて高速化する。
-// 機械学習を行う時は、複数の局面に対して同時に探索を実行する為に、
-// クラスで持つようにする。
-#define USE_GLOBAL
-#define STATIC static
-#else
-#define STATIC
-#endif
-
 #if 1
 // 評価関数の SIMD 化
 #if defined HAVE_AVX2

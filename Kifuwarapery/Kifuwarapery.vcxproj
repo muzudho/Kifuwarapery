@@ -80,8 +80,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>..\KifuwaraperyEngine\</OutDir>
-    <IntDir>..\KifuwaraperyEngine\$(Platform)\$(Configuration)\</IntDir>
+    <OutDir>..\bin\KifuwaraperyEngine\</OutDir>
+    <IntDir>..\bin\KifuwaraperyEngine\$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

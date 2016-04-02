@@ -69,7 +69,7 @@ UsiLoop::UsiLoop()
 
 void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 {
-	Position pos(DefaultStartPositionSFEN, searcher.threads.mainThread(), searcher.thisptr);
+	Position pos(DefaultStartPositionSFEN, searcher.threads.mainThread(), &searcher);
 
 	std::string cmd;
 	std::string token;

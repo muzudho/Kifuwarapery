@@ -24,46 +24,12 @@ FORCE_INLINE void ThreadPool::sleep() {
 	sleepWhileIdle_ = true;
 }
 
-/*
-// 対局時はグローバル変数になる☆（＾ｑ＾）学習時はクラスになる☆（＾ｑ＾）；；
-#if defined USE_GLOBAL
-	volatile SignalsType	Searcher::signals;
-	LimitsType				Searcher::limits;
-	std::vector<Move>		Searcher::searchMoves;
-	Time					Searcher::searchTimer;
-	StateStackPtr			Searcher::setUpStates;
-	std::vector<RootMove>	Searcher::rootMoves;
-	size_t					Searcher::pvSize;
-	size_t					Searcher::pvIdx;
-	TimeManager				Searcher::timeManager;
-	Ply						Searcher::bestMoveChanges;
-	History					Searcher::history;
-	Gains					Searcher::gains;
-	TranspositionTable		Searcher::tt;
-	#if defined INANIWA_SHIFT
-		InaniwaFlag			Searcher::inaniwaFlag;
-	#endif
-	#if defined BISHOP_IN_DANGER
-		BishopInDangerFlag	Searcher::bishopInDangerFlag;
-	#endif
-	Position				Searcher::rootPosition(nullptr);
-	ThreadPool				Searcher::threads;
-	EngineOptionsMap		Searcher::options;
-	Searcher*				Searcher::thisptr;
-#endif
-*/
-
 void Searcher::init() {
-	#if defined USE_GLOBAL
-	#else
-		thisptr = this;
-	#endif
-
 	EngineOptionSetup engineOptionSetup;
-	engineOptionSetup.Initialize( &options, Searcher::thisptr);
+	engineOptionSetup.Initialize( &options, this);
 
-	Searcher::threads.init(Searcher::thisptr);
-	Searcher::tt.setSize(Searcher::options["USI_Hash"]);
+	this->threads.init(this);
+	this->tt.setSize(this->options["USI_Hash"]);
 }
 
 namespace {
@@ -724,7 +690,7 @@ void Searcher::idLoop(Position& pos) {
 			}
 		}
 	}
-	skill.swapIfEnabled(Searcher::thisptr);
+	skill.swapIfEnabled(this);
 	SYNCCOUT << pvInfoToUSI(pos, depth-1, alpha, beta) << SYNCENDL;
 }
 
@@ -1573,7 +1539,7 @@ bool nyugyoku(const Position& pos) {
 void Searcher::think() {
 	static Book book;
 	Position& pos = rootPosition;
-	timeManager.init(limits, pos.gamePly(), pos.turn(), Searcher::thisptr);
+	timeManager.init(limits, pos.gamePly(), pos.turn(), this);
 	std::uniform_int_distribution<int> dist(options["Min_Book_Ply"], options["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
@@ -1617,7 +1583,7 @@ void Searcher::think() {
 		}
 	}
 
-	Searcher::threads.wakeUp(Searcher::thisptr);
+	Searcher::threads.wakeUp(this);
 
 	Searcher::threads.timerThread()->msec =
 		(limits.useTimeManagement() ? std::min(100, std::max(timeManager.availableTime() / 16, TimerResolution)) :

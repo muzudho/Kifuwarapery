@@ -29,9 +29,6 @@ class TranspositionTable;
 // 検索のための構造体？
 class Searcher {
 public:
-	// static メンバ関数からだとthis呼べないので代わりに thisptr を使う。
-	// static じゃないときは this を入れることにする。
-	Searcher*				thisptr;
 	volatile SignalsType	signals;
 	LimitsType				limits;
 	std::vector<Move>		searchMoves;
