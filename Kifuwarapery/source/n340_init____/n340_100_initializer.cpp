@@ -48,7 +48,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 	Bitboard result = Bitboard::allZeroBB();
 	for (SquareDelta delta : deltaArray[isBishop]) {
 		for (Square sq = square + delta;
-		UtilSquare::IsInSquare(sq) && abs(UtilSquare::MakeRank(sq - delta) - UtilSquare::MakeRank(sq)) <= 1;
+		UtilSquare::ContainsOf(sq) && abs(UtilSquare::MakeRank(sq - delta) - UtilSquare::MakeRank(sq)) <= 1;
 			sq += delta)
 		{
 			result.setBit(sq);

@@ -339,6 +339,12 @@
     <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_155_utilFile.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_205_utilRank.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

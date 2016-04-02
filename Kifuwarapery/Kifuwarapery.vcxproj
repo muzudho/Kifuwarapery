@@ -152,6 +152,8 @@
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
     <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp" />
+    <ClInclude Include="header\n110_square__\n110_155_utilFile.hpp" />
+    <ClInclude Include="header\n110_square__\n110_205_utilRank.hpp" />
     <ClInclude Include="header\n110_square__\n110_250_squareDelta.hpp" />
     <ClInclude Include="header\n110_square__\n110_100_square.hpp" />
     <ClInclude Include="header\n110_square__\n110_150_file.hpp" />

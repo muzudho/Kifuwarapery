@@ -1789,7 +1789,7 @@ void Position::set(const std::string& sfen, Thread* th) {
 			promoteFlag = Promoted;
 		}
 		else if (g_charToPieceUSI.isLegalChar(token)) {
-			if (UtilSquare::IsInSquare(sq)) {
+			if (UtilSquare::ContainsOf(sq)) {
 				setPiece(g_charToPieceUSI.value(token) + promoteFlag, sq);
 				promoteFlag = UnPromoted;
 				sq += DeltaE;

@@ -60,7 +60,7 @@ namespace {
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (UtilSquare::MakeRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
-				assert(UtilSquare::IsInSquare(pawnDropCheckSquare));
+				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
 				if (toBB.isSet(pawnDropCheckSquare) && pos.piece(pawnDropCheckSquare) == Empty) {
 					if (!pos.isPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。

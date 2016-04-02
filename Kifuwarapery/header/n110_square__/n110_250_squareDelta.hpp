@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n110_square__/n110_200_rank.hpp"
+#include "../n110_square__/n110_205_utilRank.hpp"
 
 enum SquareDelta {
 	DeltaNothing = 0, // “¯ˆê‚Ì Square ‚É‚ ‚é‚Æ‚«

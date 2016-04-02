@@ -161,24 +161,24 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		if (moveStr[1] != '*') {
 			return Move::moveNone();
 		}
-		const File toFile = UtilSquare::CharUSIToFile(moveStr[2]);
-		const Rank toRank = UtilSquare::CharUSIToRank(moveStr[3]);
-		if (!UtilSquare::IsInSquare(toFile, toRank)) {
+		const File toFile = UtilFile::FromCharUSI(moveStr[2]);
+		const Rank toRank = UtilRank::FromCharUSI(moveStr[3]);
+		if (!UtilSquare::ContainsOf(toFile, toRank)) {
 			return Move::moveNone();
 		}
 		const Square to = UtilSquare::MakeSquare(toFile, toRank);
 		move = makeDropMove(ptTo, to);
 	}
 	else {
-		const File fromFile = UtilSquare::CharUSIToFile(moveStr[0]);
-		const Rank fromRank = UtilSquare::CharUSIToRank(moveStr[1]);
-		if (!UtilSquare::IsInSquare(fromFile, fromRank)) {
+		const File fromFile = UtilFile::FromCharUSI(moveStr[0]);
+		const Rank fromRank = UtilRank::FromCharUSI(moveStr[1]);
+		if (!UtilSquare::ContainsOf(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
 		const Square from = UtilSquare::MakeSquare(fromFile, fromRank);
-		const File toFile = UtilSquare::CharUSIToFile(moveStr[2]);
-		const Rank toRank = UtilSquare::CharUSIToRank(moveStr[3]);
-		if (!UtilSquare::IsInSquare(toFile, toRank)) {
+		const File toFile = UtilFile::FromCharUSI(moveStr[2]);
+		const Rank toRank = UtilRank::FromCharUSI(moveStr[3]);
+		if (!UtilSquare::ContainsOf(toFile, toRank)) {
 			return Move::moveNone();
 		}
 		const Square to = UtilSquare::MakeSquare(toFile, toRank);
@@ -208,9 +208,9 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 	if (moveStr.size() != 6) {
 		return Move::moveNone();
 	}
-	const File toFile = UtilSquare::CharCSAToFile(moveStr[2]);
-	const Rank toRank = UtilSquare::CharCSAToRank(moveStr[3]);
-	if (!UtilSquare::IsInSquare(toFile, toRank)) {
+	const File toFile = UtilFile::FromCharCSA(moveStr[2]);
+	const Rank toRank = UtilRank::FromCharCSA(moveStr[3]);
+	if (!UtilSquare::ContainsOf(toFile, toRank)) {
 		return Move::moveNone();
 	}
 	const Square to = UtilSquare::MakeSquare(toFile, toRank);
@@ -225,9 +225,9 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 		move = makeDropMove(ptTo, to);
 	}
 	else {
-		const File fromFile = UtilSquare::CharCSAToFile(moveStr[0]);
-		const Rank fromRank = UtilSquare::CharCSAToRank(moveStr[1]);
-		if (!UtilSquare::IsInSquare(fromFile, fromRank)) {
+		const File fromFile = UtilFile::FromCharCSA(moveStr[0]);
+		const Rank fromRank = UtilRank::FromCharCSA(moveStr[1]);
+		if (!UtilSquare::ContainsOf(fromFile, fromRank)) {
 			return Move::moveNone();
 		}
 		const Square from = UtilSquare::MakeSquare(fromFile, fromRank);

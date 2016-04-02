@@ -25,14 +25,12 @@ public:
 	template <Color US, File BFILE, File WFILE>
 	static inline bool IsRightOf(const File target) { return (US == Black ? (target < BFILE) : (WFILE < target)); }
 
-	static inline bool IsInFile(const File f) { return (0 <= f) && (f < FileNum); }
-	static inline bool IsInRank(const Rank r) { return (0 <= r) && (r < RankNum); }
 	// s が Square の中に含まれているか判定
-	static inline bool IsInSquare(const Square s) { return (0 <= s) && (s < SquareNum); }
+	static inline bool ContainsOf(const Square s) { return (0 <= s) && (s < SquareNum); }
 	// File, Rank のどちらかがおかしいかも知れない時は、
 	// こちらを使う。
 	// こちらの方が遅いが、どんな File, Rank にも対応している。
-	static inline bool IsInSquare(const File f, const Rank r) { return IsInFile(f) && IsInRank(r); }
+	static inline bool ContainsOf(const File f, const Rank r) { return UtilFile::ContainsOf(f) && UtilRank::ContainsOf(r); }
 
 	// 速度が必要な場面で使用するなら、テーブル引きの方が有効だと思う。
 	static inline constexpr Square MakeSquare(const File f, const Rank r) {
@@ -66,50 +64,28 @@ public:
 		}
 	}
 
-	static inline char FileToCharUSI(const File f) { return '1' + f; }
 
-	// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
-	static inline char RankToCharUSI(const Rank r) {
-		static_assert('a' + 1 == 'b', "");
-		static_assert('a' + 2 == 'c', "");
-		static_assert('a' + 3 == 'd', "");
-		static_assert('a' + 4 == 'e', "");
-		static_assert('a' + 5 == 'f', "");
-		static_assert('a' + 6 == 'g', "");
-		static_assert('a' + 7 == 'h', "");
-		static_assert('a' + 8 == 'i', "");
-		return 'a' + r;
-	}
 	static inline std::string SquareToStringUSI(const Square sq) {
 		const Rank r = UtilSquare::MakeRank(sq);
 		const File f = UtilSquare::MakeFile(sq);
-		const char ch[] = { UtilSquare::FileToCharUSI(f), UtilSquare::RankToCharUSI(r), '\0' };
+		const char ch[] = { UtilFile::ToCharUSI(f), UtilRank::ToCharUSI(r), '\0' };
 		return std::string(ch);
 	}
 
 
-	static inline char FileToCharCSA(const File f) { return '1' + f; }
-	static inline char RankToCharCSA(const Rank r) { return '1' + r; }
-	static inline std::string squareToStringCSA(const Square sq) {
+
+	static inline std::string SquareToStringCSA(const Square sq) {
 		const Rank r = UtilSquare::MakeRank(sq);
 		const File f = UtilSquare::MakeFile(sq);
-		const char ch[] = { FileToCharCSA(f), RankToCharCSA(r), '\0' };
+		const char ch[] = { UtilFile::ToCharCSA(f), UtilRank::ToCharCSA(r), '\0' };
 		return std::string(ch);
 	}
 
-	static inline File CharCSAToFile(const char c) { return static_cast<File>(c - '1'); }
-	static inline Rank CharCSAToRank(const char c) { return static_cast<Rank>(c - '1'); }
-	static inline File CharUSIToFile(const char c) { return static_cast<File>(c - '1'); }
-	static inline Rank CharUSIToRank(const char c) { return static_cast<Rank>(c - 'a'); }
 
 	// 後手の位置を先手の位置へ変換
 	static inline constexpr Square Inverse(const Square sq) { return SquareNum - 1 - sq; }
-	// 左右変換
-	static inline constexpr File Inverse(const File f) { return FileNum - 1 - f; }
-	// 上下変換
-	static inline constexpr Rank Inverse(const Rank r) { return RankNum - 1 - r; }
 	// Square の左右だけ変換
-	static inline Square InverseFile(const Square sq) { return UtilSquare::MakeSquare(Inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
+	static inline Square InverseFile(const Square sq) { return UtilSquare::MakeSquare(UtilFile::Inverse(UtilSquare::MakeFile(sq)), UtilSquare::MakeRank(sq)); }
 
 	static inline constexpr Square InverseIfWhite(const Color c, const Square sq) { return (c == Black ? sq : Inverse(sq)); }
 

@@ -205,7 +205,7 @@ public:
 #endif
 	}
 	bool isSet(const Square sq) const {
-		assert(UtilSquare::IsInSquare(sq));
+		assert(UtilSquare::ContainsOf(sq));
 		return andIsNot0(g_setMaskBB[sq]);
 	}
 	void setBit(const Square sq) { *this |= g_setMaskBB[sq]; }
