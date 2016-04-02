@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n240_position/n240_150_move.hpp"
+#include "../n240_position/n240_160_moveStack.hpp"
 #include "../n276_genMove_/n276_100_moveType.hpp"
 #include "../n276_genMove_/n276_250_makePromoteMove.hpp"
 

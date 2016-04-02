@@ -14,76 +14,91 @@
 //       from, to , promo だけだったら、16bit で済む。
 class Move {
 public:
+
 	Move() {}
+
 	explicit Move(const u32 u) : value_(u) {}
+
 	Move& operator = (const Move& m) { value_ = m.value_; return *this; }
+
 	Move& operator = (const volatile Move& m) { value_ = m.value_; return *this; }
+
 	// volatile Move& 型の *this を返すとなぜか警告が出るので、const Move& 型の m を返すことにする。
 	const Move& operator = (const Move& m) volatile { value_ = m.value_; return m; }
+
 	Move(const Move& m) { value_ = m.value_; }
+
 	Move(const volatile Move& m) { value_ = m.value_; }
 
 	// 移動先
-	Square to() const { return static_cast<Square>((value() >> 0) & 0x7f); }
+	Square to() const;
+
 	// 移動元
-	Square from() const { return static_cast<Square>((value() >> 7) & 0x7f); }
+	Square from() const;
+
 	// 移動元、移動先
-	u32 fromAndTo() const { return (value() >> 0) & 0x3fff; }
+	u32 fromAndTo() const;
+
 	// 成り、移動元、移動先
-	u32 proFromAndTo() const { return (value() >> 0) & 0x7fff; }
+	u32 proFromAndTo() const;
+
 	// 取った駒の種類
-	PieceType cap() const { return static_cast<PieceType>((value() >> 20) & 0xf); }
+	PieceType cap() const;
+
 	// 成るかどうか
-	u32 isPromotion() const { return value() & PromoteFlag; }
+	u32 isPromotion() const;
+
 	// 移動する駒の種類
-	PieceType pieceTypeFrom() const { return static_cast<PieceType>((value() >> 16) & 0xf); }
+	PieceType pieceTypeFrom() const;
+
 	// 移動した後の駒の種類
-	PieceType pieceTypeTo() const { return (isDrop() ? pieceTypeDropped() : pieceTypeTo(pieceTypeFrom())); }
+	PieceType pieceTypeTo() const;
+
 	// 移動前の PieceType を引数に取り、移動後の PieceType を返す。
 	// 高速化の為、ptFrom が確定しているときに使用する。
-	PieceType pieceTypeTo(const PieceType ptFrom) const {
-		// これらは同じ意味。
-#if 1
-		return (ptFrom + static_cast<PieceType>((value() & PromoteFlag) >> 11));
-#else
-		return (isPromotion()) ? ptFrom + PTPromote : ptFrom;
-#endif
-	}
-	bool isDrop() const { return this->from() >= 81; }
+	PieceType pieceTypeTo(const PieceType ptFrom) const;
+
+	bool isDrop() const;
+
 	// 0xf00000 は 取られる駒のマスク
-	bool isCapture() const { return (value() & 0xf00000) ? true : false; }
+	bool isCapture() const;
+
 	// 0xf04000 は 取られる駒と成のマスク
-	bool isCaptureOrPromotion() const { return (value() & 0xf04000) ? true : false; }
-	bool isCaptureOrPawnPromotion() const { return isCapture() || (isPromotion() && pieceTypeFrom() == Pawn); }
+	bool isCaptureOrPromotion() const;
+
+	bool isCaptureOrPawnPromotion() const;
+
 	// 打つ駒の種類
-	PieceType pieceTypeDropped() const { return static_cast<PieceType>(this->from() - SquareNum + 1); }
-	PieceType pieceTypeFromOrDropped() const { return (isDrop() ? pieceTypeDropped() : pieceTypeFrom()); }
-	HandPiece handPieceDropped() const {
-		assert(this->isDrop());
-		return pieceTypeToHandPiece(pieceTypeDropped());
-	}
+	PieceType pieceTypeDropped() const;
+
+	PieceType pieceTypeFromOrDropped() const;
+
+	HandPiece handPieceDropped() const;
+
 	// 値が入っているか。
-	bool isNone() const { return (value() == MoveNone); }
+	bool isNone() const;
+
 	// メンバ変数 value_ の取得
-	u32 value() const { return value_; }
-	Move operator |= (const Move rhs) {
-		this->value_ |= rhs.value();
-		return *this;
-	}
-	Move operator | (const Move rhs) const { return Move(*this) |= rhs; }
-	bool operator == (const Move rhs) const { return this->value() == rhs.value(); }
-	bool operator != (const Move rhs) const { return !(*this == rhs); }
-	bool operator < (const Move rhs) const { return this->value() < rhs.value(); } // for learn
-	std::string promoteFlagToStringUSI() const { return (this->isPromotion() ? "+" : ""); }
+	u32 value() const;
+
+	Move operator |= (const Move rhs);
+
+	Move operator | (const Move rhs) const;
+
+	bool operator == (const Move rhs) const;
+	bool operator != (const Move rhs) const;
+	bool operator < (const Move rhs) const;
+	std::string promoteFlagToStringUSI() const;
 	std::string toUSI() const;
 	std::string toCSA() const;
 
-	static Move moveNone() { return Move(MoveNone); }
-	static Move moveNull() { return Move(MoveNull); }
+	static Move moveNone();
+	static Move moveNull();
+
 	// 学習時に、正解の手のPV、その他の手のPVを MoveNone で区切りながら 1 次元配列に格納していく。
 	// 格納するその他のPVの最後に MovePVsEnd を格納する。それをフラグに次の指し手に遷移する。
 	// 正解のPV, MoveNone, その他0のPV, MoveNone, その他1のPV, MoveNone, MovePVsEnd という感じに並ぶ。
-	static Move movePVsEnd() { return Move(MovePVsEnd); }
+	static Move movePVsEnd();
 
 	static const u32 PromoteFlag = 1 << 14;
 	static const u32 MoveNone    = 0;
@@ -144,56 +159,4 @@ inline Move makeCapturePromoteMove(const PieceType pt, const Square from, const 
 // 駒打ちの makeMove()
 // todo: PieceType を HandPiece に変更
 inline Move makeDropMove(const PieceType pt, const Square to) { return from2Move(drop2From(pt)) | to2Move(to); }
-
-struct MoveStack {
-	Move move;
-	int score;
-};
-
-// insertionSort() や std::sort() で必要
-inline bool operator < (const MoveStack& f, const MoveStack& s) { return f.score < s.score; }
-inline bool operator > (const MoveStack& f, const MoveStack& s) { return f.score > s.score; }
-
-// 汎用的な insertion sort. 要素数が少ない時、高速にソートできる。
-// 降順(大きいものが先頭付近に集まる)
-// *(first - 1) に 番兵(sentinel) として MAX 値が入っていると仮定して高速化してある。
-// T には ポインタかイテレータを使用出来る。
-template <typename T, bool UseSentinel = false> inline void insertionSort(T first, T last) {
-	if (UseSentinel) {
-		assert(std::max_element(first - 1, last) == first - 1); // 番兵が最大値となることを確認
-	}
-	if (first != last) {
-		for (T curr = first + 1; curr != last; ++curr) {
-			if (*(curr - 1) < *curr) {
-				const auto tmp = std::move(*curr);
-				do {
-					*curr = *(curr - 1);
-					--curr;
-				} while ((UseSentinel || curr != first)
-						 && *(curr - 1) < tmp);
-				*curr = std::move(tmp);
-			}
-		}
-	}
-}
-
-// 最も score の高い moveStack のポインタを返す。
-// MoveStack の数が多いとかなり時間がかかるので、
-// 駒打ちを含むときに使用してはならない。
-inline MoveStack* pickBest(MoveStack* currMove, MoveStack* lastMove) {
-	std::swap(*currMove, *std::max_element(currMove, lastMove));
-	return currMove;
-}
-
-inline Move move16toMove(const Move move, const Position& pos) {
-	if (move.isNone()) {
-		return Move::moveNone();
-	}
-	if (move.isDrop()) {
-		return move;
-	}
-	const Square from = move.from();
-	const PieceType ptFrom = pieceToPieceType(pos.piece(from));
-	return move | pieceType2Move(ptFrom) | capturedPieceType2Move(move.to(), pos);
-}
 

@@ -156,6 +156,7 @@
     <ClInclude Include="header\n160_board___\n160_200_bitboardMask.hpp" />
     <ClInclude Include="header\n160_board___\n160_300_bitboardAttack.hpp" />
     <ClInclude Include="header\n240_position\n240_150_move.hpp" />
+    <ClInclude Include="header\n240_position\n240_160_moveStack.hpp" />
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp" />
     <ClInclude Include="header\n240_position\n240_275_depth.hpp" />
     <ClInclude Include="header\n240_position\n240_280_tTEntry.hpp" />
@@ -221,6 +222,7 @@
     <ClCompile Include="source\n240_position\n240_100_position.cpp" />
     <ClCompile Include="source\n240_position\n240_150_move.cpp" />
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp" />
+    <ClCompile Include="source\n240_position\n240_280_tTEntry.cpp" />
     <ClCompile Include="source\n240_position\n240_300_tt.cpp" />
     <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp" />
     <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp" />
