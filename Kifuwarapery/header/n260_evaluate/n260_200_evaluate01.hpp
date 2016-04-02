@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../header/n120_brdEntry/n120_150_square.hpp"
-#include "../../header/n260_evaluate/h260_100_evaluateEnum.hpp"
+#include "../../header/n260_evaluate/n260_100_evaluateEnum.hpp"
 
 
 class Evaluation01 {

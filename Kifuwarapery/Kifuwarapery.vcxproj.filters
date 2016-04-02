@@ -192,21 +192,6 @@
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_600_EvalSum.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_400_EvaluaterBase.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_300_KPPBoardIndexStartToPiece.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_200_evaluate01.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_100_evaluateEnum.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_300_bitboardAttack.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -218,9 +203,6 @@
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp">
       <Filter>header\n160_board___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\h260_500_Evaluater.hpp">
-      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
       <Filter>header\n080_common__</Filter>
@@ -272,6 +254,27 @@
     </ClInclude>
     <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp">
       <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_200_evaluate01.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_400_EvaluaterBase.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_600_EvalSum.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_500_evalStorage.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp">
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -353,9 +356,6 @@
     <ClCompile Include="source\n900_main____\n900_400_main.cpp">
       <Filter>source\n900_main____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n260_evaluate\h260_500_Evaluater.cpp">
-      <Filter>source\n260_evaluate</Filter>
-    </ClCompile>
     <ClCompile Include="source\n080_common__\n080_105_time.cpp">
       <Filter>source\n080_common</Filter>
     </ClCompile>
@@ -376,6 +376,9 @@
     </ClCompile>
     <ClCompile Include="source\n276_genMove_\n276_150_moveList.cpp">
       <Filter>source\n276_genMove_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp">
+      <Filter>source\n260_evaluate</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

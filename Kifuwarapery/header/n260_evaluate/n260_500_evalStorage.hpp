@@ -1,9 +1,10 @@
 #pragma once
 
-#include "../../header/n260_evaluate/h260_400_EvaluaterBase.hpp"
+#include "../../header/n260_evaluate/n260_490_KppCacheIo.hpp"
+#include "../../header/n260_evaluate/n260_400_EvaluaterBase.hpp"
 
 
-struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
+struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
 	// 探索時に参照する評価関数テーブル
 	static std::array<s16, 2> KPP[SquareNum][fe_end][fe_end];
 	static std::array<s32, 2> KKP[SquareNum][SquareNum][fe_end];
@@ -40,17 +41,17 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 2/4) readSomeSynthesized!" << SYNCENDL;
 #endif
-		Evaluater::readSomeSynthesized(dirName);
+		EvalStorage::readSomeSynthesized(dirName);
 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 3/4) (long time)read bins! dir=" << dirName << SYNCENDL;
 #endif
-		Evaluater::ReadBins(dirName);
+		EvalStorage::ReadBins(dirName);
 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 4/4) (long time)setEvaluate!" << SYNCENDL;
 #endif
-		Evaluater::SetEvaluate(dirName);
+		EvalStorage::SetEvaluate(dirName);
 	}
 
 
@@ -255,22 +256,11 @@ struct Evaluater : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, 
 #undef READ_BASE_EVAL
 #undef WRITE_BASE_EVAL
 
-	bool WriteKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
-
-	bool ReadKppCache2Files(const std::string& dirName, int k1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
-	bool ReadKppCache3Files(const std::string& dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
-
-	bool SynthesizeKppCache3ToCache2(const std::string& dirName, int k1);
-
-	std::string GetKppCache2FilePath(const std::string& dirName, int k1);
-	std::string GetKppCache3FilePath(const std::string& dirName, int k1, int p1);
-
-private:
-	void WriteKppCache3FilesBody(const std::string& cache3Filepath, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end]);
-
 public:
 
 	void SetEvaluate(const std::string& dirName) {
+		KppCacheIo kppCacheIo;
+
 #if !defined LEARN
 		SYNCCOUT << "info string START setting eval table" << SYNCENDL;
 #endif
@@ -359,14 +349,14 @@ public:
 #endif
 
 				// できれば、Cache3 を、Cache2 に統合します。
-				this->SynthesizeKppCache3ToCache2(dirName, k1);
+				kppCacheIo.SynthesizeLv3To2(dirName, k1);
 
 #if defined(MODE_CACHE_EVAL)
 				SYNCCOUT << "(^q^)Go Cache2!" << SYNCENDL;
 #endif
 
 #if defined(MODE_CACHE_EVAL)
-				if (this->ReadKppCache2Files(dirName, k1, KPP))
+				if (kppCacheIo.ReadLv2Files(dirName, k1, KPP))
 				{
 					// 中間ファイルから読込完了。
 					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "(" << std::to_string(o) << "/" << std::to_string(SquareNum) << ") loaded." << SYNCENDL;
@@ -380,8 +370,8 @@ public:
 					std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
 					for (int p1 = 0; p1 < fe_end; ++p1) {
 
-						//SYNCCOUT << "(^q^)ReadKppCache3Files!" << SYNCENDL;
-						if (this->ReadKppCache3Files(dirName, k1, p1, KPP))
+						//SYNCCOUT << "(^q^)ReadLv3Files!" << SYNCENDL;
+						if (kppCacheIo.ReadLv3Files(dirName, k1, p1, KPP))
 						{
 #if defined(MODE_CACHE_EVAL)
 							SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " loaded." << SYNCENDL;
@@ -401,11 +391,11 @@ public:
 								KPP[k1][p1][p2] += sum;
 							}
 							// （＾ｑ＾）ここでファイルを作成したいと思うんだぜ☆
-							// 型は std::array<s16, 2> Evaluater::KPP[81][1548][1548];
+							// 型は std::array<s16, 2> EvalStorage::KPP[81][1548][1548];
 							// short型(2byte?) 要素数 2 の配列。
 							// 1548 x 1548 x 2byte サイズのバイナリ・ファイルが 81 個で KPP 配列になるはず☆（＾ｑ＾）
 							// ファイル名は 「KKP[数字].obj」でどうだぜ☆？（＾ｑ＾）
-							if (this->WriteKppCache3Files(dirName, k1, p1, KPP))
+							if (kppCacheIo.WriteLv3Files(dirName, k1, p1, KPP))
 							{
 #if defined(MODE_CACHE_EVAL)
 								SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " writed!" << SYNCENDL;

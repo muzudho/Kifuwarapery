@@ -178,7 +178,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 	if (searcher.options["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
-		Evaluater::writeSynthesized(searcher.options["Eval_Dir"]);
+		EvalStorage::writeSynthesized(searcher.options["Eval_Dir"]);
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────

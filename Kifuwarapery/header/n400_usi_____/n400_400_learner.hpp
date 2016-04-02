@@ -554,7 +554,7 @@ private:
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileA; FileI <= f; --f) {
 				const Square sq = makeSquare(f, r);
-				printf("%5d", Evaluater::KPP[B2][f_gold + C2][f_gold + sq][0]);
+				printf("%5d", EvalStorage::KPP[B2][f_gold + C2][f_gold + sq][0]);
 			}
 			printf("\n");
 		}
@@ -582,7 +582,7 @@ private:
 	EvaluaterBase<std::array<std::atomic<float>, 2>,
 				  std::array<std::atomic<float>, 2>,
 				  std::array<std::atomic<float>, 2> > parse2EvalBase_;
-	Evaluater eval_;
+	EvalStorage eval_;
 	int stepNum_;
 	size_t gameNumForIteration_;
 	u64 updateMaxMask_;

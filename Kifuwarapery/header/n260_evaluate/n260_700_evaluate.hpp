@@ -1,12 +1,11 @@
 #pragma once
 
-#include "../../header/n260_evaluate/h260_600_EvalSum.hpp"
-
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n080_common__/n080_150_overloadEnumOperators.hpp"
 #include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n240_position/n240_100_position.hpp"
+#include "../../header/n260_evaluate/n260_600_EvalSum.hpp"
 
 
 

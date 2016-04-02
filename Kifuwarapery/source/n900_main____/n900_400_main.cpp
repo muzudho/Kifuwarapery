@@ -33,7 +33,7 @@ void Main01::Initialize()
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<Evaluater>(new Evaluater)->init(this->searcher->options["Eval_Dir"], true);
+	std::unique_ptr<EvalStorage>(new EvalStorage)->init(this->searcher->options["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 }

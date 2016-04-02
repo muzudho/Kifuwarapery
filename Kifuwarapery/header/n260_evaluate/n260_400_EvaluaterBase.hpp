@@ -2,8 +2,8 @@
 
 #include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
 #include "../../header/n240_position/n240_100_position.hpp"
-#include "../../header/n260_evaluate/h260_200_evaluate01.hpp"
-#include "../../header/n260_evaluate/h260_300_KPPBoardIndexStartToPiece.hpp"
+#include "../../header/n260_evaluate/n260_200_evaluate01.hpp"
+#include "../../header/n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
 
 
 template <typename Tl, typename Tr>
@@ -22,12 +22,17 @@ inline std::array<Tl, 2> operator -= (std::array<Tl, 2>& lhs, const std::array<T
 }
 
 
-template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterBase {
+template <typename KPPType, typename KKPType, typename KKType>
+struct EvaluaterBase {
 	static const int R_Mid = 8; // 相対位置の中心のindex
 	constexpr int MaxWeight() const { return 1 << 22; } // KPE自体が1/32の寄与。更にKPEの遠隔駒の利きが1マスごとに1/2に減衰する分(最大でKEEの際に8マス離れが2枚)
 														// 更に重みを下げる場合、MaxWeightを更に大きくしておく必要がある。
 														// なぜか clang で static const int MaxWeight を使っても Undefined symbols for architecture x86_64 と言われる。
 	constexpr int TurnWeight() const { return 8; }
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// KPP
+	//────────────────────────────────────────────────────────────────────────────────
 	// 冗長に配列を確保しているが、対称な関係にある時は常に若いindexの方にアクセスすることにする。
 	// 例えば kpp だったら、k が優先的に小さくなるようする。左右の対称も含めてアクセス位置を決める。
 	// ただし、kkp に関する項目 (kkp, r_kkp_b, r_kkp_h) のみ、p は味方の駒として扱うので、k0 < k1 となるとは限らない。
@@ -62,6 +67,9 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 	};
 	KPPElements kpps;
 
+	//────────────────────────────────────────────────────────────────────────────────
+	// KKP
+	//────────────────────────────────────────────────────────────────────────────────
 	struct KKPElements {
 		KKPType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
 		KKPType kkp[SquareNoLeftNum][SquareNum][fe_end];
@@ -78,6 +86,9 @@ template <typename KPPType, typename KKPType, typename KKType> struct EvaluaterB
 	};
 	KKPElements kkps;
 
+	//────────────────────────────────────────────────────────────────────────────────
+	// KKE
+	//────────────────────────────────────────────────────────────────────────────────
 	struct KKElements {
 		KKType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
 		KKType kk[SquareNoLeftNum][SquareNum];

@@ -18,7 +18,7 @@ namespace {
 	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->tt.setSize(opt); }
 	void onClearHash(Searcher* s, const EngineOptionable&) { s->tt.clear(); }
 	void onEvalDir(Searcher*, const EngineOptionable& opt) {
-		std::unique_ptr<Evaluater>(new Evaluater)->init(opt, true);
+		std::unique_ptr<EvalStorage>(new EvalStorage)->init(opt, true);
 	}
 	void onThreads(Searcher* s, const EngineOptionable&) { s->threads.readUSIOptions(s); }
 	// 論理的なコア数の取得
