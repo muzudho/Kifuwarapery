@@ -6,7 +6,8 @@
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n240_position/n240_400_MoveScore.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_operate_/n320_125_searchStack.hpp"
+#include "../../header/n320_operate_/n320_128_signalsType.hpp"
 #include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
@@ -17,26 +18,6 @@ using namespace std;
 class Position;
 struct SplitPoint;
 
-struct SearchStack {
-	SplitPoint* splitPoint;
-	Ply ply;
-	Move currentMove;
-	Move excludedMove; // todo: これは必要？
-	Move killers[2];
-	Depth reduction;
-	Score staticEval;
-	bool skipNullMove;
-	EvalSum staticEvalRaw; // 評価関数の差分計算用、値が入っていないときは [0] を ScoreNotEvaluated にしておく。
-						   // 常に Black 側から見た評価値を入れておく。
-						   // 0: 双玉に対する評価値, 1: 先手玉に対する評価値, 2: 後手玉に対する評価値
-};
-
-struct SignalsType {
-	bool stopOnPonderHit;
-	bool firstRootMove;
-	bool stop;
-	bool failedLowAtRoot;
-};
 
 enum InaniwaFlag {
 	NotInaniwa,

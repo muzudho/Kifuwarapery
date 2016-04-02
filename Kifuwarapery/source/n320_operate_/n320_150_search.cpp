@@ -6,7 +6,7 @@
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
-#include "../../header/n320_operate_/n320_100_book.hpp"
+#include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
@@ -24,43 +24,44 @@ FORCE_INLINE void ThreadPool::sleep() {
 	sleepWhileIdle_ = true;
 }
 
+// 対局時はグローバル変数になる☆（＾ｑ＾）学習時はクラスになる☆（＾ｑ＾）；；
 #if defined USE_GLOBAL
-volatile SignalsType Searcher::signals;
-LimitsType Searcher::limits;
-std::vector<Move> Searcher::searchMoves;
-Time Searcher::searchTimer;
-StateStackPtr Searcher::setUpStates;
-std::vector<RootMove> Searcher::rootMoves;
-size_t Searcher::pvSize;
-size_t Searcher::pvIdx;
-TimeManager Searcher::timeManager;
-Ply Searcher::bestMoveChanges;
-History Searcher::history;
-Gains Searcher::gains;
-TranspositionTable Searcher::tt;
-#if defined INANIWA_SHIFT
-InaniwaFlag Searcher::inaniwaFlag;
-#endif
-#if defined BISHOP_IN_DANGER
-BishopInDangerFlag Searcher::bishopInDangerFlag;
-#endif
-Position Searcher::rootPosition(nullptr);
-ThreadPool Searcher::threads;
-EngineOptionsMap Searcher::options;
-Searcher* Searcher::thisptr;
+	volatile SignalsType	Searcher::signals;
+	LimitsType				Searcher::limits;
+	std::vector<Move>		Searcher::searchMoves;
+	Time					Searcher::searchTimer;
+	StateStackPtr			Searcher::setUpStates;
+	std::vector<RootMove>	Searcher::rootMoves;
+	size_t					Searcher::pvSize;
+	size_t					Searcher::pvIdx;
+	TimeManager				Searcher::timeManager;
+	Ply						Searcher::bestMoveChanges;
+	History					Searcher::history;
+	Gains					Searcher::gains;
+	TranspositionTable		Searcher::tt;
+	#if defined INANIWA_SHIFT
+		InaniwaFlag			Searcher::inaniwaFlag;
+	#endif
+	#if defined BISHOP_IN_DANGER
+		BishopInDangerFlag	Searcher::bishopInDangerFlag;
+	#endif
+	Position				Searcher::rootPosition(nullptr);
+	ThreadPool				Searcher::threads;
+	EngineOptionsMap		Searcher::options;
+	Searcher*				Searcher::thisptr;
 #endif
 
 void Searcher::init() {
-#if defined USE_GLOBAL
-#else
-	thisptr = this;
-#endif
+	#if defined USE_GLOBAL
+	#else
+		thisptr = this;
+	#endif
 
 	EngineOptionSetup engineOptionSetup;
-	engineOptionSetup.Initialize( &options, thisptr);
+	engineOptionSetup.Initialize( &options, Searcher::thisptr);
 
-	threads.init(thisptr);
-	tt.setSize(options["USI_Hash"]);
+	Searcher::threads.init(Searcher::thisptr);
+	Searcher::tt.setSize(Searcher::options["USI_Hash"]);
 }
 
 namespace {
@@ -721,7 +722,7 @@ void Searcher::idLoop(Position& pos) {
 			}
 		}
 	}
-	skill.swapIfEnabled(thisptr);
+	skill.swapIfEnabled(Searcher::thisptr);
 	SYNCCOUT << pvInfoToUSI(pos, depth-1, alpha, beta) << SYNCENDL;
 }
 
@@ -1570,7 +1571,7 @@ bool nyugyoku(const Position& pos) {
 void Searcher::think() {
 	static Book book;
 	Position& pos = rootPosition;
-	timeManager.init(limits, pos.gamePly(), pos.turn(), thisptr);
+	timeManager.init(limits, pos.gamePly(), pos.turn(), Searcher::thisptr);
 	std::uniform_int_distribution<int> dist(options["Min_Book_Ply"], options["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
@@ -1614,13 +1615,13 @@ void Searcher::think() {
 		}
 	}
 
-	threads.wakeUp(thisptr);
+	Searcher::threads.wakeUp(Searcher::thisptr);
 
-	threads.timerThread()->msec =
+	Searcher::threads.timerThread()->msec =
 		(limits.useTimeManagement() ? std::min(100, std::max(timeManager.availableTime() / 16, TimerResolution)) :
 		 limits.nodes               ? 2 * TimerResolution :
 		 100);
-	threads.timerThread()->notifyOne();
+	Searcher::threads.timerThread()->notifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(pos);

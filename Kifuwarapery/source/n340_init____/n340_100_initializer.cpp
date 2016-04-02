@@ -2,9 +2,9 @@
 #include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
-#include "../../header/n320_operate_/n320_100_book.hpp"
+#include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_200_init.hpp"
+#include "../../header/n340_init____/n340_100_initializer.hpp"
 
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。

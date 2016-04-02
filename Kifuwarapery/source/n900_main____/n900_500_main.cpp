@@ -3,7 +3,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n320_operate_/n320_150_search.hpp"
-#include "../../header/n320_operate_/n320_200_init.hpp"
+#include "../../header/n340_init____/n340_100_initializer.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
 

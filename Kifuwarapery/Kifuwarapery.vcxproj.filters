@@ -85,6 +85,18 @@
     <Filter Include="source\n260_evaluate">
       <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n300_book____">
+      <UniqueIdentifier>{9398154d-0646-456d-8741-9bdd8a09d72c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n340_init____">
+      <UniqueIdentifier>{d79c9798-80c3-4e97-8697-f76059c62da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n340_init____">
+      <UniqueIdentifier>{9d44b0a6-ae75-4eed-81a2-40fba23c30a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_book____">
+      <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -147,13 +159,7 @@
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp">
       <Filter>header\n240_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_100_book.hpp">
-      <Filter>header\n320_operate_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_operate_\n320_150_search.hpp">
-      <Filter>header\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_200_init.hpp">
       <Filter>header\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
@@ -228,6 +234,18 @@
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_125_searchStack.hpp">
+      <Filter>header\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_operate_\n320_128_signalsType.hpp">
+      <Filter>header\n320_operate_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_book____\n300_100_book.hpp">
+      <Filter>header\n300_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n340_init____\n340_100_initializer.hpp">
+      <Filter>header\n340_init____</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -272,13 +290,7 @@
     <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
       <Filter>source\n240_position</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_100_book.cpp">
-      <Filter>source\n320_operate_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n320_operate_\n320_150_search.cpp">
-      <Filter>source\n320_operate_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_200_init.cpp">
       <Filter>source\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
@@ -328,6 +340,12 @@
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp">
       <Filter>source\n900_main____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n340_init____\n340_100_initializer.cpp">
+      <Filter>source\n340_init____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_book____\n300_100_book.cpp">
+      <Filter>source\n300_book____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

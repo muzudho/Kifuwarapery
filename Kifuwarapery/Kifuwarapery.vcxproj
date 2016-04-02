@@ -180,9 +180,11 @@
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp" />
     <ClInclude Include="header\n200_score___\n200_100_score.hpp" />
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_100_book.hpp" />
+    <ClInclude Include="header\n300_book____\n300_100_book.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_125_searchStack.hpp" />
+    <ClInclude Include="header\n320_operate_\n320_128_signalsType.hpp" />
     <ClInclude Include="header\n320_operate_\n320_150_search.hpp" />
-    <ClInclude Include="header\n320_operate_\n320_200_init.hpp" />
+    <ClInclude Include="header\n340_init____\n340_100_initializer.hpp" />
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp" />
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
     <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp" />
@@ -216,9 +218,9 @@
     <ClCompile Include="source\n280_move____\n280_100_generateMoves.cpp" />
     <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp" />
     <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_100_book.cpp" />
+    <ClCompile Include="source\n300_book____\n300_100_book.cpp" />
     <ClCompile Include="source\n320_operate_\n320_150_search.cpp" />
-    <ClCompile Include="source\n320_operate_\n320_200_init.cpp" />
+    <ClCompile Include="source\n340_init____\n340_100_initializer.cpp" />
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp" />
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />
     <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp" />
