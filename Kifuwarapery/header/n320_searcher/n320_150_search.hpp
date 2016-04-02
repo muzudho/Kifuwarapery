@@ -6,8 +6,12 @@
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n240_position/n240_400_MoveScore.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n320_operate_/n320_125_searchStack.hpp"
-#include "../../header/n320_operate_/n320_128_signalsType.hpp"
+#include "../../header/n320_searcher/n320_125_searchStack.hpp"
+#include "../../header/n320_searcher/n320_128_signalsType.hpp"
+#include "../../header/n320_searcher/n320_131_inaniwaFlag.hpp"
+#include "../../header/n320_searcher/n320_134_bishopInDangerFlag.hpp"
+#include "../../header/n320_searcher/n320_137_rootMove.hpp"
+#include "../../header/n320_searcher/n320_140_stats.hpp"
 #include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
@@ -19,74 +23,7 @@ class Position;
 struct SplitPoint;
 
 
-enum InaniwaFlag {
-	NotInaniwa,
-	InaniwaIsBlack,
-	InaniwaIsWhite,
-	InaniwaFlagNum
-};
 
-enum BishopInDangerFlag {
-	NotBishopInDanger,
-	BlackBishopInDangerIn28,
-	WhiteBishopInDangerIn28,
-	BlackBishopInDangerIn78,
-	WhiteBishopInDangerIn78,
-	BishopInDangerFlagNum
-};
-
-class RootMove {
-public:
-	RootMove() {}
-	explicit RootMove(const Move m) : score_(-ScoreInfinite), prevScore_(-ScoreInfinite) {
-		pv_.push_back(m);
-		pv_.push_back(Move::moveNone());
-	}
-	explicit RootMove(const MoveScore m) : score_(m.score), prevScore_(-ScoreInfinite) {
-		pv_.push_back(m.move);
-		pv_.push_back(Move::moveNone());
-	}
-
-	bool operator < (const RootMove& m) const {
-		return score_ < m.score_;
-	}
-	bool operator == (const Move& m) const {
-		return pv_[0] == m;
-	}
-
-	void extractPvFromTT(Position& pos);
-	void insertPvInTT(Position& pos);
-
-public:
-	Score score_;
-	Score prevScore_;
-	std::vector<Move> pv_;
-};
-
-template <bool Gain>
-class Stats {
-public:
-	static const Score MaxScore = static_cast<Score>(2000);
-
-	void clear() { memset(table_, 0, sizeof(table_)); }
-	Score value(const bool isDrop, const Piece pc, const Square to) const {
-		assert(0 < pc && pc < PieceNone);
-		assert(isInSquare(to));
-		return table_[isDrop][pc][to];
-	}
-	void update(const bool isDrop, const Piece pc, const Square to, const Score s) {
-		if (Gain) {
-			table_[isDrop][pc][to] = std::max(s, value(isDrop, pc, to) - 1);
-		}
-		else if (abs(value(isDrop, pc, to) + s) < MaxScore) {
-			table_[isDrop][pc][to] += s;
-		}
-	}
-
-private:
-	// [isDrop][piece][square] とする。
-	Score table_[2][PieceNone][SquareNum];
-};
 
 using History = Stats<false>;
 using Gains   = Stats<true>;

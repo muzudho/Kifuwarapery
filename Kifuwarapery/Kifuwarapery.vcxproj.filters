@@ -23,9 +23,6 @@
     <Filter Include="header\n280_move____">
       <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n320_operate_">
-      <UniqueIdentifier>{17002e9f-d660-4980-981b-350ec2dda0a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n400_usi_____">
       <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
     </Filter>
@@ -67,9 +64,6 @@
     <Filter Include="source\n280_move____">
       <UniqueIdentifier>{d3ae253d-2733-4e83-8e46-5bba8d5f1097}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n320_operate_">
-      <UniqueIdentifier>{fbec7d50-ce6b-4a2b-9ae9-e436b220ea44}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\n900_main____">
       <UniqueIdentifier>{e740a81a-9ed3-4c4b-8cd4-0e85d49331d4}</UniqueIdentifier>
     </Filter>
@@ -96,6 +90,12 @@
     </Filter>
     <Filter Include="source\n300_book____">
       <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n320_searcher">
+      <UniqueIdentifier>{0587b6a8-4775-4004-915f-f3f1e17b09a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n320_searcher">
+      <UniqueIdentifier>{7a2abed9-850d-4f93-b902-3aeb6a75648a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -158,9 +158,6 @@
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp">
       <Filter>header\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_150_search.hpp">
-      <Filter>header\n320_operate_</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
       <Filter>header\n400_usi_____</Filter>
@@ -234,17 +231,32 @@
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_125_searchStack.hpp">
-      <Filter>header\n320_operate_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_operate_\n320_128_signalsType.hpp">
-      <Filter>header\n320_operate_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n300_book____\n300_100_book.hpp">
       <Filter>header\n300_book____</Filter>
     </ClInclude>
     <ClInclude Include="header\n340_init____\n340_100_initializer.hpp">
       <Filter>header\n340_init____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_125_searchStack.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_128_signalsType.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_131_inaniwaFlag.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_134_bishopInDangerFlag.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_137_rootMove.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_140_stats.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_150_search.hpp">
+      <Filter>header\n320_searcher</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -289,9 +301,6 @@
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
       <Filter>source\n240_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_operate_\n320_150_search.cpp">
-      <Filter>source\n320_operate_</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
       <Filter>source\n400_usi_____</Filter>
@@ -346,6 +355,9 @@
     </ClCompile>
     <ClCompile Include="source\n300_book____\n300_100_book.cpp">
       <Filter>source\n300_book____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_searcher\n320_150_search.cpp">
+      <Filter>source\n320_searcher</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

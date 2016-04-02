@@ -3,7 +3,7 @@
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 
 Key Position::zobrist_[PieceTypeNum][SquareNum][ColorNum];
 Key Position::zobHand_[HandPieceNum][ColorNum];

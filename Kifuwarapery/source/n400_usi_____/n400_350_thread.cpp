@@ -1,5 +1,5 @@
 #include "../../header/n280_move____/n280_100_generateMoves.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 namespace {

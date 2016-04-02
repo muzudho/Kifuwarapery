@@ -4,7 +4,7 @@
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n340_init____/n340_100_initializer.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 

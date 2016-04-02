@@ -3,7 +3,7 @@
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n340_init____/n340_100_initializer.hpp"
 
 

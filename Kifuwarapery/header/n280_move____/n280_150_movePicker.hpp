@@ -2,7 +2,7 @@
 
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 
 enum GenerateMovePhase {
 	MainSearch, PH_TacticalMoves0, PH_Killers, PH_NonTacticalMoves0, PH_NonTacticalMoves1, PH_BadCaptures,

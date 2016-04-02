@@ -1,7 +1,7 @@
 #include "../../header/n240_position/n240_100_position.hpp"
 #include "../../header/n240_position/n240_150_move.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_operate_/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
