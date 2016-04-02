@@ -67,9 +67,9 @@ UsiLoop::UsiLoop()
 {
 }
 
-void UsiLoop::Mainloop(int argc, char* argv[])
+void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 {
-	Position pos(DefaultStartPositionSFEN, Searcher::threads.mainThread(), Searcher::thisptr);
+	Position pos(DefaultStartPositionSFEN, searcher.threads.mainThread(), searcher.thisptr);
 
 	std::string cmd;
 	std::string token;
@@ -101,20 +101,20 @@ void UsiLoop::Mainloop(int argc, char* argv[])
 		UsiOperation usiOperation;
 
 		if (token == "quit" || token == "stop" || token == "ponderhit" || token == "gameover") {
-			if (token != "ponderhit" || Searcher::signals.stopOnPonderHit) {
-				Searcher::signals.stop = true;
-				Searcher::threads.mainThread()->notifyOne();
+			if (token != "ponderhit" || searcher.signals.stopOnPonderHit) {
+				searcher.signals.stop = true;
+				searcher.threads.mainThread()->notifyOne();
 			}
 			else {
-				Searcher::limits.ponder = false;
+				searcher.limits.ponder = false;
 			}
 
-			if (token == "ponderhit" && Searcher::limits.moveTime != 0) {
-				Searcher::limits.moveTime += Searcher::searchTimer.elapsed();
+			if (token == "ponderhit" && searcher.limits.moveTime != 0) {
+				searcher.limits.moveTime += searcher.searchTimer.elapsed();
 			}
 		}
 		else if (token == "usinewgame") {
-			Searcher::tt.clear();
+			searcher.tt.clear();
 #if defined INANIWA_SHIFT
 			inaniwaFlag = NotInaniwa;
 #endif
@@ -129,13 +129,13 @@ void UsiLoop::Mainloop(int argc, char* argv[])
 		else if (token == "usi") {
 			SYNCCOUT << "id name " << MyName
 				<< "\nid author Hiraoka Takuya"
-				<< "\n" << Searcher::options
+				<< "\n" << searcher.options
 				<< "\nusiok" << SYNCENDL;
 		}
 		else if (token == "go") { usiOperation.go(pos, ssCmd); }
 		else if (token == "isready") { SYNCCOUT << "readyok" << SYNCENDL; }
 		else if (token == "position") { usiOperation.setPosition(pos, ssCmd); }
-		else if (token == "setoption") { Searcher::setOption(ssCmd); }
+		else if (token == "setoption") { searcher.setOption(ssCmd); }
 #if defined LEARN
 		else if (token == "l") {
 			auto learner = std::unique_ptr<Learner>(new Learner);
@@ -157,11 +157,11 @@ void UsiLoop::Mainloop(int argc, char* argv[])
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
 	} while (token != "quit" && argc == 1);
 
-	if (Searcher::options["Write_Synthesized_Eval"])
+	if (searcher.options["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
-		Evaluater::writeSynthesized(Searcher::options["Eval_Dir"]);
+		Evaluater::writeSynthesized(searcher.options["Eval_Dir"]);
 	}
 
-	Searcher::threads.waitForThinkFinished();
+	searcher.threads.waitForThinkFinished();
 }

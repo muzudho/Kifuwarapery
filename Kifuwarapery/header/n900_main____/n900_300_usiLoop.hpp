@@ -12,5 +12,5 @@ class UsiLoop {
 public:
 	UsiLoop();
 
-	void Mainloop(int argc, char* argv[]);
+	void Mainloop(int argc, char* argv[], Searcher& searcher);
 };

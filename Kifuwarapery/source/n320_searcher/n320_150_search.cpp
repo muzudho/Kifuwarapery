@@ -24,6 +24,7 @@ FORCE_INLINE void ThreadPool::sleep() {
 	sleepWhileIdle_ = true;
 }
 
+/*
 // 対局時はグローバル変数になる☆（＾ｑ＾）学習時はクラスになる☆（＾ｑ＾）；；
 #if defined USE_GLOBAL
 	volatile SignalsType	Searcher::signals;
@@ -50,6 +51,7 @@ FORCE_INLINE void ThreadPool::sleep() {
 	EngineOptionsMap		Searcher::options;
 	Searcher*				Searcher::thisptr;
 #endif
+*/
 
 void Searcher::init() {
 	#if defined USE_GLOBAL

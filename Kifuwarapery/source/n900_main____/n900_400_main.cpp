@@ -41,7 +41,7 @@ void Main01::Initialize()
 void Main01::Body(int argc, char* argv[])
 {
 	UsiLoop usiLoop;
-	usiLoop.Mainloop(argc, argv);
+	usiLoop.Mainloop(argc, argv, *this->searcher);
 }
 
 void Main01::Finalize()
