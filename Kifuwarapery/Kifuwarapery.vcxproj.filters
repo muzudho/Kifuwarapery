@@ -195,9 +195,6 @@
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_300_bitboardAttack.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_200_bitboardMask.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>

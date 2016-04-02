@@ -27,11 +27,11 @@ const Bitboard Rank3Mask = Bitboard(UINT64_C(0x40201008040201) << 6, 0x201 << 6)
 const Bitboard Rank2Mask = Bitboard(UINT64_C(0x40201008040201) << 7, 0x201 << 7);
 const Bitboard Rank1Mask = Bitboard(UINT64_C(0x40201008040201) << 8, 0x201 << 8);
 
-extern const Bitboard FileMask[FileNum];
-extern const Bitboard RankMask[RankNum];
-extern const Bitboard InFrontMask[ColorNum][RankNum];
+extern const Bitboard g_fileMask[FileNum];
+extern const Bitboard g_rankMask[RankNum];
+extern const Bitboard g_inFrontMask[ColorNum][RankNum];
 
-inline Bitboard fileMask(const File f) { return FileMask[f]; }
+inline Bitboard fileMask(const File f) { return g_fileMask[f]; }
 template <File F> inline Bitboard fileMask() {
 	static_assert(FileI <= F && F <= FileA, "");
 	return (F == FileI ? FileIMask
@@ -45,7 +45,7 @@ template <File F> inline Bitboard fileMask() {
 		: /*F == FileA ?*/ FileAMask);
 }
 
-inline Bitboard rankMask(const Rank r) { return RankMask[r]; }
+inline Bitboard rankMask(const Rank r) { return g_rankMask[r]; }
 template <Rank R> inline Bitboard rankMask() {
 	static_assert(Rank9 <= R && R <= Rank1, "");
 	return (R == Rank9 ? Rank9Mask
@@ -91,7 +91,7 @@ const Bitboard InFrontOfRank7White = InFrontOfRank6White | rankMask<Rank6>();
 const Bitboard InFrontOfRank8White = InFrontOfRank7White | rankMask<Rank7>();
 const Bitboard InFrontOfRank9White = InFrontOfRank8White | rankMask<Rank8>();
 
-inline Bitboard inFrontMask(const Color c, const Rank r) { return InFrontMask[c][r]; }
+inline Bitboard inFrontMask(const Color c, const Rank r) { return g_inFrontMask[c][r]; }
 template <Color C, Rank R> inline Bitboard inFrontMask() {
 	static_assert(C == Black || C == White, "");
 	static_assert(Rank9 <= R && R <= Rank1, "");

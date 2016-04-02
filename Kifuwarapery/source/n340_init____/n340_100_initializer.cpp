@@ -86,20 +86,20 @@ Bitboard Initializer::indexToOccupied(const int index, const int bits, const Bit
 
 void Initializer::initAttacks(const bool isBishop)
 {
-	auto* attacks = (isBishop ? BishopAttack : RookAttack);
-	auto* attackIndex = (isBishop ? BishopAttackIndex : RookAttackIndex);
-	auto* blockMask = (isBishop ? BishopBlockMask : RookBlockMask);
-	auto* shift = (isBishop ? BishopShiftBits : RookShiftBits);
+	auto* attacks = (isBishop ? g_bishopAttack : g_rookAttack);
+	auto* attackIndex = (isBishop ? g_bishopAttackIndex : g_rookAttackIndex);
+	auto* blockMask = (isBishop ? g_bishopBlockMask : g_rookBlockMask);
+	auto* shift = (isBishop ? g_bishopShiftBits : g_rookShiftBits);
 #if defined HAVE_BMI2
 #else
-	auto* magic = (isBishop ? BishopMagic : RookMagic);
+	auto* magic = (isBishop ? g_bishopMagic : g_rookMagic);
 #endif
 	int index = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		blockMask[sq] = (isBishop ? bishopBlockMaskCalc(sq) : rookBlockMaskCalc(sq));
 		attackIndex[sq] = index;
 
-		const int num1s = (isBishop ? BishopBlockBits[sq] : RookBlockBits[sq]);
+		const int num1s = (isBishop ? g_bishopBlockBits[sq] : g_rookBlockBits[sq]);
 		for (int i = 0; i < (1 << num1s); ++i)
 		{
 			const Bitboard occupied = this->indexToOccupied(i, num1s, blockMask[sq]);
@@ -114,7 +114,7 @@ void Initializer::initAttacks(const bool isBishop)
 	}
 }
 
-// LanceBlockMask, LanceAttack の値を設定する。
+// LanceBlockMask, g_lanceAttack の値を設定する。
 void Initializer::initLanceAttacks() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
@@ -124,7 +124,7 @@ void Initializer::initLanceAttacks() {
 			assert(num1s == blockMask.popCount());
 			for (int i = 0; i < (1 << num1s); ++i) {
 				Bitboard occupied = indexToOccupied(i, num1s, blockMask);
-				LanceAttack[c][sq][i] = lanceAttackCalc(c, sq, occupied);
+				g_lanceAttack[c][sq][i] = lanceAttackCalc(c, sq, occupied);
 			}
 		}
 	}
@@ -132,28 +132,28 @@ void Initializer::initLanceAttacks() {
 
 void Initializer::initKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
-		KingAttack[sq] = Bitboard::allOneBB().rookAttack(sq) | Bitboard::allOneBB().bishopAttack(sq);
+		g_kingAttack[sq] = Bitboard::allOneBB().rookAttack(sq) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			GoldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
+			g_goldAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().rookAttack(sq);
 }
 
 void Initializer::initSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			SilverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
+			g_silverAttack[c][sq] = (Bitboard::kingAttack(sq) & inFrontMask(c, makeRank(sq))) | Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initKnightAttacks() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			KnightAttack[c][sq] = Bitboard::allZeroBB();
+			g_knightAttack[c][sq] = Bitboard::allZeroBB();
 			const Bitboard bb = pawnAttack(c, sq);
 			if (bb.isNot0())
-				KnightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, makeRank(sq));
+				g_knightAttack[c][sq] = bishopStepAttacks(bb.constFirstOneFromI9()) & inFrontMask(c, makeRank(sq));
 		}
 	}
 }
@@ -161,7 +161,7 @@ void Initializer::initKnightAttacks() {
 void Initializer::initPawnAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			PawnAttack[c][sq] = silverAttack(c, sq) ^ Bitboard::allOneBB().bishopAttack(sq);
+			g_pawnAttack[c][sq] = silverAttack(c, sq) ^ Bitboard::allOneBB().bishopAttack(sq);
 }
 
 void Initializer::initSquareRelation() {
@@ -187,26 +187,26 @@ void Initializer::initSquareRelation() {
 }
 
 // 障害物が無いときの利きの Bitboard
-// RookAttack, BishopAttack, LanceAttack を設定してから、この関数を呼ぶこと。
+// g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
 void Initializer::initAttackToEdge() {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		RookAttackToEdge[sq] = Bitboard::allZeroBB().rookAttack(sq);
-		BishopAttackToEdge[sq] = Bitboard::allZeroBB().bishopAttack(sq);
-		LanceAttackToEdge[Black][sq] = Bitboard::allZeroBB().lanceAttack(Black, sq);
-		LanceAttackToEdge[White][sq] = Bitboard::allZeroBB().lanceAttack(White, sq);
+		g_rookAttackToEdge[sq] = Bitboard::allZeroBB().rookAttack(sq);
+		g_bishopAttackToEdge[sq] = Bitboard::allZeroBB().bishopAttack(sq);
+		g_lanceAttackToEdge[Black][sq] = Bitboard::allZeroBB().lanceAttack(Black, sq);
+		g_lanceAttackToEdge[White][sq] = Bitboard::allZeroBB().lanceAttack(White, sq);
 	}
 }
 
 void Initializer::initBetweenBB() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			BetweenBB[sq1][sq2] = Bitboard::allZeroBB();
+			g_betweenBB[sq1][sq2] = Bitboard::allZeroBB();
 			if (sq1 == sq2) continue;
 			const Direction direc = squareRelation(sq1, sq2);
 			if (direc & DirecCross)
-				BetweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).rookAttack(sq1) & Bitboard::setMaskBB(sq1).rookAttack(sq2);
+				g_betweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).rookAttack(sq1) & Bitboard::setMaskBB(sq1).rookAttack(sq2);
 			else if (direc & DirecDiag)
-				BetweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).bishopAttack(sq1) & Bitboard::setMaskBB(sq1).bishopAttack(sq2);
+				g_betweenBB[sq1][sq2] = Bitboard::setMaskBB(sq2).bishopAttack(sq1) & Bitboard::setMaskBB(sq1).bishopAttack(sq2);
 		}
 	}
 }
@@ -215,32 +215,32 @@ void Initializer::initCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = oppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			GoldCheckTable[c][sq] = Bitboard::allZeroBB();
+			g_goldCheckTable[c][sq] = Bitboard::allZeroBB();
 			Bitboard checkBB = goldAttack(opp, sq);
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				GoldCheckTable[c][sq] |= goldAttack(opp, checkSq);
+				g_goldCheckTable[c][sq] |= goldAttack(opp, checkSq);
 			}
-			GoldCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | goldAttack(opp, sq));
+			g_goldCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | goldAttack(opp, sq));
 		}
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = oppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			SilverCheckTable[c][sq] = Bitboard::allZeroBB();
+			g_silverCheckTable[c][sq] = Bitboard::allZeroBB();
 
 			Bitboard checkBB = silverAttack(opp, sq);
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				SilverCheckTable[c][sq] |= silverAttack(opp, checkSq);
+				g_silverCheckTable[c][sq] |= silverAttack(opp, checkSq);
 			}
 			const Bitboard TRank789BB = (c == Black ? inFrontMask<Black, Rank6>() : inFrontMask<White, Rank4>());
 			checkBB = goldAttack(opp, sq);
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
 				// 移動元が敵陣である位置なら、金に成って王手出来る。
-				SilverCheckTable[c][sq] |= (silverAttack(opp, checkSq) & TRank789BB);
+				g_silverCheckTable[c][sq] |= (silverAttack(opp, checkSq) & TRank789BB);
 			}
 
 			const Bitboard TRank6BB = (c == Black ? rankMask<Rank6>() : rankMask<Rank4>());
@@ -248,27 +248,27 @@ void Initializer::initCheckTable() {
 			checkBB = goldAttack(opp, sq) & TRank789BB;
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				SilverCheckTable[c][sq] |= (silverAttack(opp, checkSq) & TRank6BB);
+				g_silverCheckTable[c][sq] |= (silverAttack(opp, checkSq) & TRank6BB);
 			}
-			SilverCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | silverAttack(opp, sq));
+			g_silverCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | silverAttack(opp, sq));
 		}
 	}
 
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = oppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			KnightCheckTable[c][sq] = Bitboard::allZeroBB();
+			g_knightCheckTable[c][sq] = Bitboard::allZeroBB();
 
 			Bitboard checkBB = knightAttack(opp, sq);
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				KnightCheckTable[c][sq] |= knightAttack(opp, checkSq);
+				g_knightCheckTable[c][sq] |= knightAttack(opp, checkSq);
 			}
 			const Bitboard TRank789BB = (c == Black ? inFrontMask<Black, Rank6>() : inFrontMask<White, Rank4>());
 			checkBB = goldAttack(opp, sq) & TRank789BB;
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				KnightCheckTable[c][sq] |= knightAttack(opp, checkSq);
+				g_knightCheckTable[c][sq] |= knightAttack(opp, checkSq);
 			}
 		}
 	}
@@ -276,15 +276,15 @@ void Initializer::initCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = oppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			LanceCheckTable[c][sq] = lanceAttackToEdge(opp, sq);
+			g_lanceCheckTable[c][sq] = lanceAttackToEdge(opp, sq);
 
 			const Bitboard TRank789BB = (c == Black ? inFrontMask<Black, Rank6>() : inFrontMask<White, Rank4>());
 			Bitboard checkBB = goldAttack(opp, sq) & TRank789BB;
 			while (checkBB.isNot0()) {
 				const Square checkSq = checkBB.firstOneFromI9();
-				LanceCheckTable[c][sq] |= lanceAttackToEdge(opp, checkSq);
+				g_lanceCheckTable[c][sq] |= lanceAttackToEdge(opp, checkSq);
 			}
-			LanceCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | pawnAttack(opp, sq));
+			g_lanceCheckTable[c][sq].andEqualNot(Bitboard::setMaskBB(sq) | pawnAttack(opp, sq));
 		}
 	}
 }
@@ -375,7 +375,7 @@ u64 Initializer::findMagic(const Square square, const bool isBishop) {
 	Bitboard attack[1<<14];
 	Bitboard attackUsed[1<<14];
 	Bitboard mask = (isBishop ? bishopBlockMaskCalc(square) : rookBlockMaskCalc(square));
-	int num1s = (isBishop ? BishopBlockBits[square] : RookBlockBits[square]);
+	int num1s = (isBishop ? g_bishopBlockBits[square] : g_rookBlockBits[square]);
 
 	// n bit の全ての数字 (利きのあるマスの全ての 0 or 1 の組み合わせ)
 	for (int i = 0; i < (1 << num1s); ++i) {
@@ -394,7 +394,7 @@ u64 Initializer::findMagic(const Square square, const bool isBishop) {
 		std::fill(std::begin(attackUsed), std::end(attackUsed), allZeroBB());
 
 		for (int i = 0; !fail && i < (1 << num1s); ++i) {
-			const int shiftBits = (isBishop ? BishopShiftBits[square] : RookShiftBits[square]);
+			const int shiftBits = (isBishop ? g_bishopShiftBits[square] : g_rookShiftBits[square]);
 			const u64 index = occupiedToIndex(occupied[i], magic, shiftBits);
 			if      (attackUsed[index] == allZeroBB())
 				attackUsed[index] = attack[i];

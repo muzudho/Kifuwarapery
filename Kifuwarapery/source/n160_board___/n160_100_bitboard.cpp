@@ -2,7 +2,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 
-const Bitboard SetMaskBB[SquareNum] = {
+const Bitboard g_setMaskBB[SquareNum] = {
 	Bitboard(UINT64_C(1) <<  0,                 0),  // 0 , I9
 	Bitboard(UINT64_C(1) <<  1,                 0),  // 1 , I8
 	Bitboard(UINT64_C(1) <<  2,                 0),  // 2 , I7
@@ -87,7 +87,7 @@ const Bitboard SetMaskBB[SquareNum] = {
 };
 
 // 各マスのrookが利きを調べる必要があるマスの数
-const int RookBlockBits[SquareNum] = {
+const int g_rookBlockBits[SquareNum] = {
 	14, 13, 13, 13, 13, 13, 13, 13, 14,
 	13, 12, 12, 12, 12, 12, 12, 12, 13,
 	13, 12, 12, 12, 12, 12, 12, 12, 13,
@@ -100,7 +100,7 @@ const int RookBlockBits[SquareNum] = {
 };
 
 // 各マスのbishopが利きを調べる必要があるマスの数
-const int BishopBlockBits[SquareNum] = {
+const int g_bishopBlockBits[SquareNum] = {
 	7,  6,  6,  6,  6,  6,  6,  6,  7,
 	6,  6,  6,  6,  6,  6,  6,  6,  6,
 	6,  6,  8,  8,  8,  8,  8,  6,  6,
@@ -113,11 +113,11 @@ const int BishopBlockBits[SquareNum] = {
 };
 
 // Magic Bitboard で利きを求める際のシフト量
-// RookShiftBits[17], RookShiftBits[53] はマジックナンバーが見つからなかったため、
+// g_rookShiftBits[17], g_rookShiftBits[53] はマジックナンバーが見つからなかったため、
 // シフト量を 1 つ減らす。(テーブルサイズを 2 倍にする。)
 // この方法は issei_y さんに相談したところ、教えて頂いた方法。
 // PEXT Bitboardを使用する際はシフト量を減らす必要が無い。
-const int RookShiftBits[SquareNum] = {
+const int g_rookShiftBits[SquareNum] = {
 	50, 51, 51, 51, 51, 51, 51, 51, 50,
 #if defined HAVE_BMI2
 	51, 52, 52, 52, 52, 52, 52, 52, 51,
@@ -138,7 +138,7 @@ const int RookShiftBits[SquareNum] = {
 };
 
 // Magic Bitboard で利きを求める際のシフト量
-const int BishopShiftBits[SquareNum] = {
+const int g_bishopShiftBits[SquareNum] = {
 	57, 58, 58, 58, 58, 58, 58, 58, 57,
 	58, 58, 58, 58, 58, 58, 58, 58, 58,
 	58, 58, 56, 56, 56, 56, 56, 58, 58,
@@ -152,7 +152,7 @@ const int BishopShiftBits[SquareNum] = {
 
 #if defined HAVE_BMI2
 #else
-const u64 RookMagic[SquareNum] = {
+const u64 g_rookMagic[SquareNum] = {
 	UINT64_C(0x140000400809300),  UINT64_C(0x1320000902000240), UINT64_C(0x8001910c008180),
 	UINT64_C(0x40020004401040),   UINT64_C(0x40010000d01120),   UINT64_C(0x80048020084050),
 	UINT64_C(0x40004000080228),   UINT64_C(0x400440000a2a0a),   UINT64_C(0x40003101010102),
@@ -182,7 +182,7 @@ const u64 RookMagic[SquareNum] = {
 	UINT64_C(0x1000200060030c18), UINT64_C(0x4004200020010102), UINT64_C(0x140600021010302)
 };
 
-const u64 BishopMagic[SquareNum] = {
+const u64 g_bishopMagic[SquareNum] = {
 	UINT64_C(0x20101042c8200428), UINT64_C(0x840240380102),     UINT64_C(0x800800c018108251),
 	UINT64_C(0x82428010301000),   UINT64_C(0x481008201000040),  UINT64_C(0x8081020420880800),
 	UINT64_C(0x804222110000),     UINT64_C(0xe28301400850),     UINT64_C(0x2010221420800810),
@@ -213,15 +213,15 @@ const u64 BishopMagic[SquareNum] = {
 };
 #endif
 
-const Bitboard FileMask[FileNum] = {
+const Bitboard g_fileMask[FileNum] = {
 	FileIMask, FileHMask, FileGMask, FileFMask, FileEMask, FileDMask, FileCMask, FileBMask, FileAMask
 };
 
-const Bitboard RankMask[RankNum] = {
+const Bitboard g_rankMask[RankNum] = {
 	Rank9Mask, Rank8Mask, Rank7Mask, Rank6Mask, Rank5Mask, Rank4Mask, Rank3Mask, Rank2Mask, Rank1Mask
 };
 
-const Bitboard InFrontMask[ColorNum][RankNum] = {
+const Bitboard g_inFrontMask[ColorNum][RankNum] = {
 	{ InFrontOfRank9Black, InFrontOfRank8Black, InFrontOfRank7Black, InFrontOfRank6Black, InFrontOfRank5Black, InFrontOfRank4Black, InFrontOfRank3Black, InFrontOfRank2Black, InFrontOfRank1Black },
 	{ InFrontOfRank9White, InFrontOfRank8White, InFrontOfRank7White, InFrontOfRank6White, InFrontOfRank5White, InFrontOfRank4White, InFrontOfRank3White, InFrontOfRank2White, InFrontOfRank1White }
 };
@@ -229,30 +229,30 @@ const Bitboard InFrontMask[ColorNum][RankNum] = {
 // これらは一度値を設定したら二度と変更しない。
 // 本当は const 化したい。
 #if defined HAVE_BMI2
-Bitboard RookAttack[495616];
+Bitboard g_rookAttack[495616];
 #else
-Bitboard RookAttack[512000];
+Bitboard g_rookAttack[512000];
 #endif
-int RookAttackIndex[SquareNum];
-Bitboard RookBlockMask[SquareNum];
-Bitboard BishopAttack[20224];
-int BishopAttackIndex[SquareNum];
-Bitboard BishopBlockMask[SquareNum];
-Bitboard LanceAttack[ColorNum][SquareNum][128];
+int g_rookAttackIndex[SquareNum];
+Bitboard g_rookBlockMask[SquareNum];
+Bitboard g_bishopAttack[20224];
+int g_bishopAttackIndex[SquareNum];
+Bitboard g_bishopBlockMask[SquareNum];
+Bitboard g_lanceAttack[ColorNum][SquareNum][128];
 
-Bitboard KingAttack[SquareNum];
-Bitboard GoldAttack[ColorNum][SquareNum];
-Bitboard SilverAttack[ColorNum][SquareNum];
-Bitboard KnightAttack[ColorNum][SquareNum];
-Bitboard PawnAttack[ColorNum][SquareNum];
+Bitboard g_kingAttack[SquareNum];
+Bitboard g_goldAttack[ColorNum][SquareNum];
+Bitboard g_silverAttack[ColorNum][SquareNum];
+Bitboard g_knightAttack[ColorNum][SquareNum];
+Bitboard g_pawnAttack[ColorNum][SquareNum];
 
-Bitboard BetweenBB[SquareNum][SquareNum];
+Bitboard g_betweenBB[SquareNum][SquareNum];
 
-Bitboard RookAttackToEdge[SquareNum];
-Bitboard BishopAttackToEdge[SquareNum];
-Bitboard LanceAttackToEdge[ColorNum][SquareNum];
+Bitboard g_rookAttackToEdge[SquareNum];
+Bitboard g_bishopAttackToEdge[SquareNum];
+Bitboard g_lanceAttackToEdge[ColorNum][SquareNum];
 
-Bitboard GoldCheckTable[ColorNum][SquareNum];
-Bitboard SilverCheckTable[ColorNum][SquareNum];
-Bitboard KnightCheckTable[ColorNum][SquareNum];
-Bitboard LanceCheckTable[ColorNum][SquareNum];
+Bitboard g_goldCheckTable[ColorNum][SquareNum];
+Bitboard g_silverCheckTable[ColorNum][SquareNum];
+Bitboard g_knightCheckTable[ColorNum][SquareNum];
+Bitboard g_lanceCheckTable[ColorNum][SquareNum];
