@@ -10,12 +10,12 @@ namespace {
 	)
 	{
 		Bitboard fromBB = pos.bbOf(PT, US);
-		while (fromBB.isNot0()) {
-			const Square from = fromBB.firstOneFromI9();
+		while (fromBB.IsNot0()) {
+			const Square from = fromBB.FirstOneFromI9();
 			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
 			Bitboard toBB = pos.attacksFrom<PT>(US, from) & target;
-			while (toBB.isNot0()) {
-				const Square to = toBB.firstOneFromI9();
+			while (toBB.IsNot0()) {
+				const Square to = toBB.FirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
 					(*moveStackList++).move = makePromoteMove<MT>(PT, from, to, pos);
@@ -43,7 +43,7 @@ namespace {
 			Bitboard toBB = target;
 			// 一段目には打てない
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			toBB.andEqualNot(rankMask<TRank9>());
+			toBB.AndEqualNot(rankMask<TRank9>());
 
 			// 二歩の回避
 			Bitboard pawnsBB = pos.bbOf(Pawn, US);
@@ -61,13 +61,13 @@ namespace {
 			if (UtilSquare::ToRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (toBB.isSet(pawnDropCheckSquare) && pos.piece(pawnDropCheckSquare) == Empty) {
+				if (toBB.IsSet(pawnDropCheckSquare) && pos.piece(pawnDropCheckSquare) == Empty) {
 					if (!pos.isPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*moveStackList++).move = makeDropMove(Pawn, pawnDropCheckSquare);
 					}
-					toBB.xorBit(pawnDropCheckSquare);
+					toBB.XorBit(pawnDropCheckSquare);
 				}
 			}
 
@@ -147,13 +147,13 @@ namespace {
 			static_assert(PT == GoldHorseDragon, "");
 			// 金、成金、馬、竜のbitboardをまとめて扱う。
 			Bitboard fromBB = (pos.goldsBB() | pos.bbOf(Horse, Dragon)) & pos.bbOf(US);
-			while (fromBB.isNot0()) {
-				const Square from = fromBB.firstOneFromI9();
+			while (fromBB.IsNot0()) {
+				const Square from = fromBB.FirstOneFromI9();
 				// from にある駒の種類を判別
 				const PieceType pt = UtilPiece::ToPieceType(pos.piece(from));
 				Bitboard toBB = pos.attacksFrom(pt, US, from) & target;
-				while (toBB.isNot0()) {
-					const Square to = toBB.firstOneFromI9();
+				while (toBB.IsNot0()) {
+					const Square to = toBB.FirstOneFromI9();
 					(*moveStackList++).move = makeNonPromoteMove<MT>(pt, from, to, pos);
 				}
 			}
@@ -170,13 +170,13 @@ namespace {
 			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-			Bitboard toBB = pos.bbOf(Pawn, US).pawnAttack<US>() & target;
+			Bitboard toBB = pos.bbOf(Pawn, US).PawnAttack<US>() & target;
 
 			// 成り
 			if (MT != NonCaptureMinusPro) {
 				Bitboard toOn789BB = toBB & TRank789BB;
-				if (toOn789BB.isNot0()) {
-					toBB.andEqualNot(TRank789BB);
+				if (toOn789BB.IsNot0()) {
+					toBB.AndEqualNot(TRank789BB);
 					Square to;
 					FOREACH_BB(toOn789BB, to, {
 						const Square from = to + TDeltaS;
@@ -191,7 +191,7 @@ namespace {
 				}
 			}
 			else {
-				assert(!(target & TRank789BB).isNot0());
+				assert(!(target & TRank789BB).IsNot0());
 			}
 
 			// 残り(不成)
@@ -210,13 +210,13 @@ namespace {
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
 			Bitboard fromBB = pos.bbOf(Lance, US);
-			while (fromBB.isNot0()) {
-				const Square from = fromBB.firstOneFromI9();
+			while (fromBB.IsNot0()) {
+				const Square from = fromBB.FirstOneFromI9();
 				Bitboard toBB = pos.attacksFrom<Lance>(US, from) & target;
 				do {
-					if (toBB.isNot0()) {
+					if (toBB.IsNot0()) {
 						// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
-						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.constFirstOneFromI9() : toBB.firstOneFromI9());
+						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.ConstFirstOneFromI9() : toBB.FirstOneFromI9());
 						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 						if (toCanPromote) {
 							(*moveStackList++).move = makePromoteMove<MT>(Lance, from, to, pos);
@@ -233,7 +233,7 @@ namespace {
 							(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
 					}
 					// 駒取り対象は必ず一つ以下なので、loop は不要。最適化で do while が無くなると良い。
-				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.isNot0());
+				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.IsNot0());
 			}
 			return moveStackList;
 		}
@@ -244,11 +244,11 @@ namespace {
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
 			Bitboard fromBB = pos.bbOf(Knight, US);
-			while (fromBB.isNot0()) {
-				const Square from = fromBB.firstOneFromI9();
+			while (fromBB.IsNot0()) {
+				const Square from = fromBB.FirstOneFromI9();
 				Bitboard toBB = pos.attacksFrom<Knight>(US, from) & target;
-				while (toBB.isNot0()) {
-					const Square to = toBB.firstOneFromI9();
+				while (toBB.IsNot0()) {
+					const Square to = toBB.FirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).move = makePromoteMove<MT>(Knight, from, to, pos);
@@ -268,12 +268,12 @@ namespace {
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
 			Bitboard fromBB = pos.bbOf(Silver, US);
-			while (fromBB.isNot0()) {
-				const Square from = fromBB.firstOneFromI9();
+			while (fromBB.IsNot0()) {
+				const Square from = fromBB.FirstOneFromI9();
 				const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
 				Bitboard toBB = pos.attacksFrom<Silver>(US, from) & target;
-				while (toBB.isNot0()) {
-					const Square to = toBB.firstOneFromI9();
+				while (toBB.IsNot0()) {
+					const Square to = toBB.FirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (fromCanPromote | toCanPromote)
 						(*moveStackList++).move = makePromoteMove<MT>(Silver, from, to, pos);
@@ -305,8 +305,8 @@ namespace {
 		) {
 			const Square from = pos.kingSquare(US);
 			Bitboard toBB = pos.attacksFrom<King>(US, from) & target;
-			while (toBB.isNot0()) {
-				const Square to = toBB.firstOneFromI9();
+			while (toBB.IsNot0()) {
+				const Square to = toBB.FirstOneFromI9();
 				(*moveStackList++).move = makeNonPromoteMove<MT>(King, from, to, pos);
 			}
 			return moveStackList;
@@ -318,8 +318,8 @@ namespace {
 		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
 	) {
 		Bitboard fromBB = pos.attackersTo(us, to);
-		while (fromBB.isNot0()) {
-			const Square from = fromBB.firstOneFromI9();
+		while (fromBB.IsNot0()) {
+			const Square from = fromBB.FirstOneFromI9();
 			const PieceType pt = UtilPiece::ToPieceType(pos.piece(from));
 			switch (pt) {
 			case Empty: assert(false); break; // 最適化の為のダミー
@@ -356,15 +356,15 @@ namespace {
 			const Bitboard targetPawn =
 				(MT == Capture) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
-				(MT == CapturePlusPro) ? pos.bbOf(UtilColor::OppositeColor(US)) | (pos.occupiedBB().notThisAnd(TRank789BB)) :
-				(MT == NonCaptureMinusPro) ? pos.occupiedBB().notThisAnd(TRank1_6BB) :
-				Bitboard::allOneBB(); // error
+				(MT == CapturePlusPro) ? pos.bbOf(UtilColor::OppositeColor(US)) | (pos.occupiedBB().NotThisAnd(TRank789BB)) :
+				(MT == NonCaptureMinusPro) ? pos.occupiedBB().NotThisAnd(TRank1_6BB) :
+				Bitboard::AllOneBB(); // error
 			const Bitboard targetOther =
 				(MT == Capture) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCapture) ? pos.emptyBB() :
 				(MT == CapturePlusPro) ? pos.bbOf(UtilColor::OppositeColor(US)) :
 				(MT == NonCaptureMinusPro) ? pos.emptyBB() :
-				Bitboard::allOneBB(); // error
+				Bitboard::AllOneBB(); // error
 			const Square ksq = pos.kingSquare(UtilColor::OppositeColor(US));
 
 			moveStackList = GeneratePieceMoves<MT, Pawn, US, ALL>()(moveStackList, pos, targetPawn, ksq);
@@ -412,26 +412,26 @@ namespace {
 				);
 			break;
 		case (THEM == Black ? BLance : WLance) :
-			bannedKingToBB |= lanceAttackToEdge(THEM, checkSq);
+			bannedKingToBB |= Bitboard::lanceAttackToEdge(THEM, checkSq);
 			break;
 		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= silverAttack(THEM, checkSq);
+			bannedKingToBB |= Bitboard::silverAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BGold : WGold) :
 		case (THEM == Black ? BProPawn : WProPawn) :
 		case (THEM == Black ? BProLance : WProLance) :
 		case (THEM == Black ? BProKnight : WProKnight) :
 		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= goldAttack(THEM, checkSq);
+			bannedKingToBB |= Bitboard::goldAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BBishop : WBishop) :
-			bannedKingToBB |= bishopAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::bishopAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
-			bannedKingToBB |= horseAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::horseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
-			bannedKingToBB |= rookAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::rookAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
 			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
@@ -440,7 +440,7 @@ namespace {
 				bannedKingToBB |= pos.attacksFrom<Dragon>(checkSq);
 			}
 			else {
-				bannedKingToBB |= dragonAttackToEdge(checkSq);
+				bannedKingToBB |= Bitboard::dragonAttackToEdge(checkSq);
 			}
 			break;
 		default:
@@ -464,23 +464,23 @@ namespace {
 			const Color Them = UtilColor::OppositeColor(US);
 			const Bitboard checkers = pos.checkersBB();
 			Bitboard bb = checkers;
-			Bitboard bannedKingToBB = Bitboard::allZeroBB();
+			Bitboard bannedKingToBB = Bitboard::AllZeroBB();
 			int checkersNum = 0;
 			Square checkSq;
 
 			// 玉が逃げられない位置の bitboard を生成する。
 			// 絶対に王手が掛かっているので、while ではなく、do while
 			do {
-				checkSq = bb.firstOneFromI9();
+				checkSq = bb.FirstOneFromI9();
 				assert(UtilPiece::ToColor(pos.piece(checkSq)) == Them);
 				++checkersNum;
 				makeBannedKingTo<Them>(bannedKingToBB, pos, checkSq, ksq);
-			} while (bb.isNot0());
+			} while (bb.IsNot0());
 
 			// 玉が移動出来る移動先を格納。
-			bb = bannedKingToBB.notThisAnd(pos.bbOf(US).notThisAnd(Bitboard::kingAttack(ksq)));
-			while (bb.isNot0()) {
-				const Square to = bb.firstOneFromI9();
+			bb = bannedKingToBB.NotThisAnd(pos.bbOf(US).NotThisAnd(Bitboard::KingAttack(ksq)));
+			while (bb.IsNot0()) {
+				const Square to = bb.FirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 				// attackersTo() が重いので、movePicker か search で合法手か調べる。
 				(*moveStackList++).move = makeNonPromoteMove<Capture>(King, ksq, to, pos);
@@ -494,7 +494,7 @@ namespace {
 
 			// 王手している駒を玉以外で取る手の生成。
 			// pin されているかどうかは movePicker か search で調べる。
-			const Bitboard target1 = betweenBB(checkSq, ksq);
+			const Bitboard target1 = Bitboard::betweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);
@@ -504,7 +504,7 @@ namespace {
 			moveStackList = GeneratePieceMoves<Evasion, Rook, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, GoldHorseDragon, US, ALL>()(moveStackList, pos, target2, ksq);
 
-			if (target1.isNot0()) {
+			if (target1.IsNot0()) {
 				moveStackList = generateDropMoves<US>(moveStackList, pos, target1);
 			}
 

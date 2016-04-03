@@ -46,7 +46,7 @@ public:
 	// の bit が 1 になっても構わないとき、こちらを使う。
 	// todo: SSEにビット反転が無いので実はそんなに速くないはず。不要。
 	Bitboard nOccupiedBB() const { return ~occupiedBB(); }
-	Bitboard emptyBB() const { return occupiedBB() ^ Bitboard::allOneBB(); }
+	Bitboard emptyBB() const { return occupiedBB() ^ Bitboard::AllOneBB(); }
 	// 金、成り金 の Bitboard
 	Bitboard goldsBB() const { return goldsBB_; }
 	Bitboard goldsBB(const Color c) const { return goldsBB() & bbOf(c); }
@@ -66,31 +66,31 @@ public:
 	template <bool BetweenIsUs = true> Bitboard discoveredCheckBB() const { return hiddenCheckers<false, BetweenIsUs>(); }
 
 	// toFile と同じ筋に us の歩がないなら true
-	bool noPawns(const Color us, const File toFile) const { return !bbOf(Pawn, us).andIsNot0(fileMask(toFile)); }
+	bool noPawns(const Color us, const File toFile) const { return !bbOf(Pawn, us).AndIsNot0(fileMask(toFile)); }
 	bool isPawnDropCheckMate(const Color us, const Square sq) const;
 	// Pinされているfromの駒がtoに移動出来なければtrueを返す。
 	template <bool IsKnight = false>
 	bool isPinnedIllegal(const Square from, const Square to, const Square ksq, const Bitboard& pinned) const {
 		// 桂馬ならどこに動いても駄目。
-		return pinned.isSet(from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
+		return pinned.IsSet(from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
 	}
 	// 空き王手かどうか。
 	template <bool IsKnight = false>
 	bool isDiscoveredCheck(const Square from, const Square to, const Square ksq, const Bitboard& dcBB) const {
 		// 桂馬ならどこに動いても空き王手になる。
-		return dcBB.isSet(from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
+		return dcBB.IsSet(from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
 	}
 
 	Bitboard checkersBB() const { return st_->checkersBB; }
 	Bitboard prevCheckersBB() const { return st_->previous->checkersBB; }
 	// 王手が掛かっているか。
-	bool inCheck() const { return checkersBB().isNot0(); }
+	bool inCheck() const { return checkersBB().IsNot0(); }
 
 	Score material() const { return st_->material; }
 	Score materialDiff() const { return st_->material - st_->previous->material; }
 
 	FORCE_INLINE Square kingSquare(const Color c) const {
-		assert(kingSquare_[c] == bbOf(King, c).constFirstOneFromI9());
+		assert(kingSquare_[c] == bbOf(King, c).ConstFirstOneFromI9());
 		return kingSquare_[c];
 	}
 
@@ -103,12 +103,12 @@ public:
 	Bitboard attackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
 	Bitboard attackersToExceptKing(const Color c, const Square sq) const;
 	// todo: 利きをデータとして持ったとき、attackersToIsNot0() を高速化すること。
-	bool attackersToIsNot0(const Color c, const Square sq) const { return attackersTo(c, sq).isNot0(); }
+	bool attackersToIsNot0(const Color c, const Square sq) const { return attackersTo(c, sq).IsNot0(); }
 	bool attackersToIsNot0(const Color c, const Square sq, const Bitboard& occupied) const {
-		return attackersTo(c, sq, occupied).isNot0();
+		return attackersTo(c, sq, occupied).IsNot0();
 	}
 	// 移動王手が味方の利きに支えられているか。false なら相手玉で取れば詰まない。
-	bool unDropCheckIsSupported(const Color c, const Square sq) const { return attackersTo(c, sq).isNot0(); }
+	bool unDropCheckIsSupported(const Color c, const Square sq) const { return attackersTo(c, sq).IsNot0(); }
 	// 利きの生成
 
 	// 任意の occupied に対する利きを生成する。
@@ -122,7 +122,7 @@ public:
 
 	template <PieceType PT> Bitboard attacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
-		return goldAttack(c, sq);
+		return Bitboard::goldAttack(c, sq);
 	}
 	template <PieceType PT> Bitboard attacksFrom(const Square sq) const {
 		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "");
@@ -224,9 +224,9 @@ private:
 
 		piece_[sq] = piece;
 
-		byTypeBB_[pt].setBit(sq);
-		byColorBB_[c].setBit(sq);
-		byTypeBB_[Occupied].setBit(sq);
+		byTypeBB_[pt].SetBit(sq);
+		byColorBB_[c].SetBit(sq);
+		byTypeBB_[Occupied].SetBit(sq);
 	}
 	void setHand(const HandPiece hp, const Color c, const int num) { hand_[c].OrEqual(num, hp); }
 	void setHand(const Piece piece, const int num) {
@@ -248,7 +248,7 @@ private:
 	// BetweenIsUs == true  : 間の駒が自駒。
 	// BetweenIsUs == false : 間の駒が敵駒。
 	template <bool FindPinned, bool BetweenIsUs> Bitboard hiddenCheckers() const {
-		Bitboard result = Bitboard::allZeroBB();
+		Bitboard result = Bitboard::AllZeroBB();
 		const Color us = turn();
 		const Color them = UtilColor::OppositeColor(us);
 		// pin する遠隔駒
@@ -258,18 +258,18 @@ private:
 		const Square ksq = kingSquare(FindPinned ? us : them);
 
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
-		pinners &= (bbOf(Lance) & lanceAttackToEdge((FindPinned ? us : them), ksq)) |
-			(bbOf(Rook, Dragon) & rookAttackToEdge(ksq)) | (bbOf(Bishop, Horse) & bishopAttackToEdge(ksq));
+		pinners &= (bbOf(Lance) & Bitboard::lanceAttackToEdge((FindPinned ? us : them), ksq)) |
+			(bbOf(Rook, Dragon) & Bitboard::rookAttackToEdge(ksq)) | (bbOf(Bishop, Horse) & Bitboard::bishopAttackToEdge(ksq));
 
-		while (pinners.isNot0()) {
-			const Square sq = pinners.firstOneFromI9();
+		while (pinners.IsNot0()) {
+			const Square sq = pinners.FirstOneFromI9();
 			// pin する遠隔駒と玉の間にある駒の位置の Bitboard
-			const Bitboard between = betweenBB(sq, ksq) & occupiedBB();
+			const Bitboard between = Bitboard::betweenBB(sq, ksq) & occupiedBB();
 
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
-			if (between.isNot0()
-				&& between.isOneBit<false>()
-				&& between.andIsNot0(bbOf(BetweenIsUs ? us : them)))
+			if (between.IsNot0()
+				&& between.IsOneBit<false>()
+				&& between.AndIsNot0(bbOf(BetweenIsUs ? us : them)))
 			{
 				result |= between;
 			}

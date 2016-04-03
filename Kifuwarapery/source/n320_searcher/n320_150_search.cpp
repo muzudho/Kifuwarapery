@@ -118,20 +118,20 @@ namespace {
 		}
 
 		if (!second.isDrop() && !first.isDrop()) {
-			if (betweenBB(m2from, m2to).isSet(m1from)) {
+			if (Bitboard::betweenBB(m2from, m2to).IsSet(m1from)) {
 				return true;
 			}
 		}
 
 		const PieceType m1pt = first.pieceTypeFromOrDropped();
 		const Color us = pos.turn();
-		const Bitboard occ = (second.isDrop() ? pos.occupiedBB() : pos.occupiedBB() ^ Bitboard::setMaskBB(m2from));
+		const Bitboard occ = (second.isDrop() ? pos.occupiedBB() : pos.occupiedBB() ^ Bitboard::SetMaskBB(m2from));
 		const Bitboard m1att = pos.attacksFrom(m1pt, us, m1to, occ);
-		if (m1att.isSet(m2to)) {
+		if (m1att.IsSet(m2to)) {
 			return true;
 		}
 
-		if (m1att.isSet(pos.kingSquare(us))) {
+		if (m1att.IsSet(pos.kingSquare(us))) {
 			return true;
 		}
 
@@ -175,7 +175,7 @@ namespace {
 			const Color us = pos.turn();
 			const Square m1to = first.to();
 			const Square m2from = second.from();
-			Bitboard occ = pos.occupiedBB() ^ Bitboard::setMaskBB(m2from) ^ Bitboard::setMaskBB(m1to);
+			Bitboard occ = pos.occupiedBB() ^ Bitboard::SetMaskBB(m2from) ^ Bitboard::SetMaskBB(m1to);
 			PieceType m1ptTo;
 
 			if (first.isDrop()) {
@@ -183,10 +183,10 @@ namespace {
 			}
 			else {
 				m1ptTo = first.pieceTypeTo();
-				occ ^= Bitboard::setMaskBB(m1from);
+				occ ^= Bitboard::SetMaskBB(m1from);
 			}
 
-			if (pos.attacksFrom(m1ptTo, us, m1to, occ).isSet(m2to)) {
+			if (pos.attacksFrom(m1ptTo, us, m1to, occ).IsSet(m2to)) {
 				return true;
 			}
 
@@ -198,14 +198,14 @@ namespace {
 				| (pos.attacksFrom<Bishop>(m2to, occ) & pos.bbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.isNot0() && (xray ^ (xray & pos.occupiedBB().queenAttack(m2to))).isNot0()) {
+			if (xray.IsNot0() && (xray ^ (xray & pos.occupiedBB().QueenAttack(m2to))).IsNot0()) {
 				return true;
 			}
 		}
 
 		if (!second.isDrop()
 			&& UtilPieceType::IsSlider(m2ptFrom)
-			&& betweenBB(second.from(), m2to).isSet(first.to())
+			&& Bitboard::betweenBB(second.from(), m2to).IsSet(first.to())
 			&& ScoreZero <= pos.seeSign(first))
 		{
 			return true;
@@ -712,11 +712,11 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(pos.turn());
 		if (pos.hand(pos.turn()).Exists<HBishop>()
-			&& pos.bbOf(Silver, them).isSet(InverseIfWhite(them, H3))
-			&& (pos.bbOf(King  , them).isSet(InverseIfWhite(them, F2))
-				|| pos.bbOf(King  , them).isSet(InverseIfWhite(them, F3))
-				|| pos.bbOf(King  , them).isSet(InverseIfWhite(them, E1)))
-			&& pos.bbOf(Pawn  , them).isSet(InverseIfWhite(them, G3))
+			&& pos.bbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
+			&& (pos.bbOf(King  , them).IsSet(InverseIfWhite(them, F2))
+				|| pos.bbOf(King  , them).IsSet(InverseIfWhite(them, F3))
+				|| pos.bbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
+			&& pos.bbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
 			&& pos.piece(InverseIfWhite(them, H2)) == Empty
 			&& pos.piece(InverseIfWhite(them, G2)) == Empty
 			&& pos.piece(InverseIfWhite(them, G1)) == Empty)
@@ -1497,7 +1497,7 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard opponentsField = (us == Black ? inFrontMask<Black, Rank6>() : inFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
-	if (!pos.bbOf(King, us).andIsNot0(opponentsField))
+	if (!pos.bbOf(King, us).AndIsNot0(opponentsField))
 		return false;
 
 	// 三 宣言側が、大駒5点小駒1点で計算して
@@ -1507,8 +1507,8 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard bigBB = pos.bbOf(Rook, Dragon, Bishop, Horse) & opponentsField & pos.bbOf(us);
 	const Bitboard smallBB = (pos.bbOf(Pawn, Lance, Knight, Silver) | pos.goldsBB()) & opponentsField & pos.bbOf(us);
 	const Hand hand = pos.hand(us);
-	const int val = (bigBB.popCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
-		+ smallBB.popCount()
+	const int val = (bigBB.PopCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
+		+ smallBB.PopCount()
 		+ hand.NumOf<HPawn>() + hand.NumOf<HLance>() + hand.NumOf<HKnight>()
 		+ hand.NumOf<HSilver>() + hand.NumOf<HGold>();
 #if defined LAW_24
@@ -1522,7 +1522,7 @@ bool nyugyoku(const Position& pos) {
 	// 四 宣言側の敵陣三段目以内の駒は、玉を除いて10枚以上存在する。
 
 	// 玉は敵陣にいるので、自駒が敵陣に11枚以上あればよい。
-	if ((pos.bbOf(us) & opponentsField).popCount() < 11)
+	if ((pos.bbOf(us) & opponentsField).PopCount() < 11)
 		return false;
 
 	// 五 宣言側の玉に王手がかかっていない。

@@ -71,7 +71,7 @@ inline Bitboard squareRankMask(const Square sq) {
 	return rankMask(r);
 }
 
-const Bitboard InFrontOfRank9Black = Bitboard::allZeroBB();
+const Bitboard InFrontOfRank9Black = Bitboard::AllZeroBB();
 const Bitboard InFrontOfRank8Black = rankMask<Rank9>();
 const Bitboard InFrontOfRank7Black = InFrontOfRank8Black | rankMask<Rank8>();
 const Bitboard InFrontOfRank6Black = InFrontOfRank7Black | rankMask<Rank7>();
@@ -81,7 +81,7 @@ const Bitboard InFrontOfRank3Black = InFrontOfRank4Black | rankMask<Rank4>();
 const Bitboard InFrontOfRank2Black = InFrontOfRank3Black | rankMask<Rank3>();
 const Bitboard InFrontOfRank1Black = InFrontOfRank2Black | rankMask<Rank2>();
 
-const Bitboard InFrontOfRank1White = Bitboard::allZeroBB();
+const Bitboard InFrontOfRank1White = Bitboard::AllZeroBB();
 const Bitboard InFrontOfRank2White = rankMask<Rank1>();
 const Bitboard InFrontOfRank3White = InFrontOfRank2White | rankMask<Rank2>();
 const Bitboard InFrontOfRank4White = InFrontOfRank3White | rankMask<Rank3>();

@@ -37,9 +37,9 @@ void EvalList::set(const Position& pos) {
 	func(handB, HRook  , f_hand_rook  , e_hand_rook  , Black);
 	func(handW, HRook  , e_hand_rook  , f_hand_rook  , White);
 
-	Bitboard bb = pos.bbOf(King).notThisAnd(pos.occupiedBB());
-	while (bb.isNot0()) {
-		const Square sq = bb.firstOneFromI9();
+	Bitboard bb = pos.bbOf(King).NotThisAnd(pos.occupiedBB());
+	while (bb.IsNot0()) {
+		const Square sq = bb.FirstOneFromI9();
 		const Piece pc = pos.piece(sq);
 		listToSquareHand[nlist] = sq;
 		squareHandToList[sq] = nlist;

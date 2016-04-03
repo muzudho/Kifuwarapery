@@ -82,8 +82,8 @@ Key Book::bookKey(const Position& pos) {
 	Key key = 0;
 	Bitboard bb = pos.occupiedBB();
 
-	while (bb.isNot0()) {
-		const Square sq = bb.firstOneFromI9();
+	while (bb.IsNot0()) {
+		const Square sq = bb.FirstOneFromI9();
 		key ^= ZobPiece[pos.piece(sq)][sq];
 	}
 	const Hand hand = pos.hand(pos.turn());
