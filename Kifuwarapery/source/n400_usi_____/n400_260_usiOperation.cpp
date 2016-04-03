@@ -157,7 +157,7 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 	Move move;
 	if (g_charToPieceUSI.isLegalChar(moveStr[0])) {
 		// drop
-		const PieceType ptTo = pieceToPieceType(g_charToPieceUSI.value(moveStr[0]));
+		const PieceType ptTo = UtilPiece::pieceToPieceType(g_charToPieceUSI.value(moveStr[0]));
 		if (moveStr[1] != '*') {
 			return Move::moveNone();
 		}
@@ -183,13 +183,13 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = makeNonPromoteMove<Capture>(pieceToPieceType(pos.piece(from)), from, to, pos);
+			move = makeNonPromoteMove<Capture>(UtilPiece::pieceToPieceType(pos.piece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return Move::moveNone();
 			}
-			move = makePromoteMove<Capture>(pieceToPieceType(pos.piece(from)), from, to, pos);
+			move = makePromoteMove<Capture>(UtilPiece::pieceToPieceType(pos.piece(from)), from, to, pos);
 		}
 		else {
 			return Move::moveNone();
@@ -231,7 +231,7 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 			return Move::moveNone();
 		}
 		const Square from = UtilSquare::FromFileRank(fromFile, fromRank);
-		PieceType ptFrom = pieceToPieceType(pos.piece(from));
+		PieceType ptFrom = UtilPiece::pieceToPieceType(pos.piece(from));
 		if (ptFrom == ptTo) {
 			// non promote
 			move = makeNonPromoteMove<Capture>(ptFrom, from, to, pos);

@@ -3,7 +3,7 @@
 #include <stack>
 #include <memory>
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../../header/n120_brdEntry/n120_250_hand.hpp"
 #include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"

@@ -162,6 +162,12 @@
     <ClInclude Include="header\n110_square__\n110_200_rank.hpp" />
     <ClInclude Include="header\n110_square__\n110_300_direction.hpp" />
     <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_100_pieceType.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_105_utilPieceType.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_150_piece.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_155_utilPiece.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_200_handPiece.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp" />
     <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
@@ -200,7 +206,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
-    <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp" />
     <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp" />
     <ClInclude Include="header\n200_score___\n200_100_score.hpp" />
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp" />

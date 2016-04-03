@@ -118,6 +118,9 @@
     <Filter Include="source\n110_square___">
       <UniqueIdentifier>{e91d9c8d-fc9c-47cd-817b-fd0c84ce0af6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n113_piece___">
+      <UniqueIdentifier>{888784f3-27a1-44c9-975c-141d36552a64}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -134,9 +137,6 @@
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n120_brdEntry\n120_200_piece.hpp">
-      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_100_score.hpp">
       <Filter>header\n200_score___</Filter>
@@ -344,6 +344,24 @@
     </ClInclude>
     <ClInclude Include="header\n110_square__\n110_205_utilRank.hpp">
       <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_100_pieceType.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_150_piece.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_155_utilPiece.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_105_utilPieceType.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_200_handPiece.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp">
+      <Filter>header\n113_piece___</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

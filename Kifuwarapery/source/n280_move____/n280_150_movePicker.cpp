@@ -184,7 +184,7 @@ template <bool IsDrop> void MovePicker::scoreNonCapturesMinusPro() {
 		const Move move = curr->move;
 		curr->score =
 			history().value(IsDrop,
-							colorAndPieceTypeToPiece(pos().turn(),
+				UtilPiece::colorAndPieceTypeToPiece(pos().turn(),
 													 (IsDrop ? move.pieceTypeDropped() : move.pieceTypeFrom())),
 							move.to());
 	}
@@ -200,12 +200,12 @@ void MovePicker::scoreEvasions() {
 		else if (move.isCaptureOrPromotion()) {
 			curr->score = pos().capturePieceScore(pos().piece(move.to())) + History::MaxScore;
 			if (move.isPromotion()) {
-				const PieceType pt = pieceToPieceType(pos().piece(move.from()));
+				const PieceType pt = UtilPiece::pieceToPieceType(pos().piece(move.from()));
 				curr->score += pos().promotePieceScore(pt);
 			}
 		}
 		else {
-			curr->score = history().value(move.isDrop(), colorAndPieceTypeToPiece(pos().turn(), move.pieceTypeFromOrDropped()), move.to());
+			curr->score = history().value(move.isDrop(), UtilPiece::colorAndPieceTypeToPiece(pos().turn(), move.pieceTypeFromOrDropped()), move.to());
 		}
 	}
 }

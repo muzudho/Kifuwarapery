@@ -150,7 +150,7 @@ namespace {
 			while (fromBB.isNot0()) {
 				const Square from = fromBB.firstOneFromI9();
 				// from にある駒の種類を判別
-				const PieceType pt = pieceToPieceType(pos.piece(from));
+				const PieceType pt = UtilPiece::pieceToPieceType(pos.piece(from));
 				Bitboard toBB = pos.attacksFrom(pt, US, from) & target;
 				while (toBB.isNot0()) {
 					const Square to = toBB.firstOneFromI9();
@@ -320,7 +320,7 @@ namespace {
 		Bitboard fromBB = pos.attackersTo(us, to);
 		while (fromBB.isNot0()) {
 			const Square from = fromBB.firstOneFromI9();
-			const PieceType pt = pieceToPieceType(pos.piece(from));
+			const PieceType pt = UtilPiece::pieceToPieceType(pos.piece(from));
 			switch (pt) {
 			case Empty: assert(false); break; // 最適化の為のダミー
 			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
@@ -472,7 +472,7 @@ namespace {
 			// 絶対に王手が掛かっているので、while ではなく、do while
 			do {
 				checkSq = bb.firstOneFromI9();
-				assert(pieceToColor(pos.piece(checkSq)) == Them);
+				assert(UtilPiece::pieceToColor(pos.piece(checkSq)) == Them);
 				++checkersNum;
 				makeBannedKingTo<Them>(bannedKingToBB, pos, checkSq, ksq);
 			} while (bb.isNot0());

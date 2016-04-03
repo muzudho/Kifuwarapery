@@ -204,7 +204,7 @@ namespace {
 		}
 
 		if (!second.isDrop()
-			&& isSlider(m2ptFrom)
+			&& UtilPieceType::IsSlider(m2ptFrom)
 			&& betweenBB(second.from(), m2to).isSet(first.to())
 			&& ScoreZero <= pos.seeSign(first))
 		{
@@ -731,13 +731,13 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 				 && pos.piece(InverseIfWhite(them, D2)) == Empty
 				 && pos.piece(InverseIfWhite(them, D1)) == Empty
 				 && pos.piece(InverseIfWhite(them, A2)) == Empty
-				 && (pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Silver
-					 || pieceToPieceType(pos.piece(InverseIfWhite(them, B2))) == Silver)
-				 && (pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Knight
-					 || pieceToPieceType(pos.piece(InverseIfWhite(them, B1))) == Knight)
-				 && ((pieceToPieceType(pos.piece(InverseIfWhite(them, E2))) == Gold
-					  && pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == King)
-					 || pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == Gold))
+				 && (UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Silver
+					 || UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, B2))) == Silver)
+				 && (UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, C3))) == Knight
+					 || UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, B1))) == Knight)
+				 && ((UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, E2))) == Gold
+					  && UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == King)
+					 || UtilPiece::pieceToPieceType(pos.piece(InverseIfWhite(them, E1))) == Gold))
 		{
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
@@ -1190,7 +1190,7 @@ split_point_start:
 			const Depth predictedDepth = newDepth - reduction<PVNode>(depth, moveCount);
 			// gain を 2倍にする。
 			const Score futilityScore = ss->staticEval + futilityMargin(predictedDepth, moveCount)
-				+ 2 * gains.value(move.isDrop(), colorAndPieceTypeToPiece(pos.turn(), move.pieceTypeFromOrDropped()), move.to());
+				+ 2 * gains.value(move.isDrop(), UtilPiece::colorAndPieceTypeToPiece(pos.turn(), move.pieceTypeFromOrDropped()), move.to());
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
@@ -1378,12 +1378,12 @@ split_point_start:
 			}
 
 			const Score bonus = static_cast<Score>(depth * depth);
-			const Piece pc1 = colorAndPieceTypeToPiece(pos.turn(), bestMove.pieceTypeFromOrDropped());
+			const Piece pc1 = UtilPiece::colorAndPieceTypeToPiece(pos.turn(), bestMove.pieceTypeFromOrDropped());
 			history.update(bestMove.isDrop(), pc1, bestMove.to(), bonus);
 
 			for (int i = 0; i < playedMoveCount - 1; ++i) {
 				const Move m = movesSearched[i];
-				const Piece pc2 = colorAndPieceTypeToPiece(pos.turn(), m.pieceTypeFromOrDropped());
+				const Piece pc2 = UtilPiece::colorAndPieceTypeToPiece(pos.turn(), m.pieceTypeFromOrDropped());
 				history.update(m.isDrop(), pc2, m.to(), -bonus);
 			}
 		}

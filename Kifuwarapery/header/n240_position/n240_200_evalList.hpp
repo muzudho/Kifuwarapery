@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
-#include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 
 class Position;
 

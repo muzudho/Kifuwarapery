@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
-#include "../../header/n120_brdEntry/n120_200_piece.hpp"
+#include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 
 // xxxxxxxx xxxxxxxx xxxxxxxx x1111111  移動先
@@ -136,7 +136,7 @@ inline Move capturedPieceType2Move(const PieceType captured) { return static_cas
 // 移動先と、Position から 取った駒の種類を判別し、指し手に変換
 // 駒を取らないときは、0 (MoveNone) を返す。
 inline Move capturedPieceType2Move(const Square to, const Position& pos) {
-	const PieceType captured = pieceToPieceType( pos.piece(to) );
+	const PieceType captured = UtilPiece::pieceToPieceType( pos.piece(to) );
 	return capturedPieceType2Move(captured);
 }
 

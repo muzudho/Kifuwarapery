@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../n120_brdEntry/n120_200_piece.hpp"
+#include "../n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../n200_score___/n200_100_score.hpp"
 
 const Score PawnScore             = static_cast<Score>( 100 * 9 / 10);

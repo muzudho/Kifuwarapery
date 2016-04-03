@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n120_brdEntry/n120_200_piece.hpp"
+#include "../n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../n240_position/n240_150_move.hpp"
 #include "../n276_genMove_/n276_200_promoteMode.hpp"
 
