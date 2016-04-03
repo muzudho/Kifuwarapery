@@ -193,7 +193,7 @@ struct EvaluaterBase {
 			const Color jcolor = UtilPiece::ToColor(jpiece);
 			const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 			Bitboard jtoBB = Bitboard::SetMaskBB(ksq).NotThisAnd(
-				Position::attacksFrom(jpt, jcolor, jsq, Bitboard::SetMaskBB(ksq)));
+				Position::GetAttacksFrom(jpt, jcolor, jsq, Bitboard::SetMaskBB(ksq)));
 			while (jtoBB.IsNot0()) {
 				Square jto = jtoBB.FirstOneFromI9();
 				if (kfile == FileE && E1 < jto)
@@ -276,7 +276,7 @@ struct EvaluaterBase {
 				const Color jicolor = UtilPiece::ToColor(jipiece);
 				const PieceType jipt = UtilPiece::ToPieceType(jipiece);
 				const Bitboard mask = Bitboard::SetMaskBB(ksq) | Bitboard::SetMaskBB(ijsq);
-				Bitboard jitoBB = mask.NotThisAnd(Position::attacksFrom(jipt, jicolor, jisq, mask));
+				Bitboard jitoBB = mask.NotThisAnd(Position::GetAttacksFrom(jipt, jicolor, jisq, mask));
 				while (jitoBB.IsNot0()) {
 					Square jito = jitoBB.FirstOneFromI9();
 					Square ijsq_tmp = ijsq;
@@ -372,8 +372,8 @@ struct EvaluaterBase {
 				const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 				const Bitboard imask = Bitboard::SetMaskBB(ksq) | Bitboard::SetMaskBB(jsq);
 				const Bitboard jmask = Bitboard::SetMaskBB(ksq) | Bitboard::SetMaskBB(isq);
-				Bitboard itoBB = imask.NotThisAnd(Position::attacksFrom(jpt, icolor, isq, imask));
-				Bitboard jtoBB = jmask.NotThisAnd(Position::attacksFrom(jpt, jcolor, jsq, jmask));
+				Bitboard itoBB = imask.NotThisAnd(Position::GetAttacksFrom(jpt, icolor, isq, imask));
+				Bitboard jtoBB = jmask.NotThisAnd(Position::GetAttacksFrom(jpt, jcolor, jsq, jmask));
 				while (itoBB.IsNot0()) {
 					const Square ito = itoBB.FirstOneFromI9();
 					const int itodistance = UtilSquare::GetSquareDistance(isq, ito);
@@ -526,7 +526,7 @@ struct EvaluaterBase {
 					const PieceType ipt = UtilPiece::ToPieceType(ipiece);
 					const Color icolor = UtilPiece::ToColor(ipiece);
 					Bitboard itoBB = Bitboard::SetMaskBB(ksq).NotThisAnd(
-						Position::attacksFrom(ipt, icolor, isq, Bitboard::SetMaskBB(ksq)));
+						Position::GetAttacksFrom(ipt, icolor, isq, Bitboard::SetMaskBB(ksq)));
 					while (itoBB.IsNot0()) {
 						Square ito = itoBB.FirstOneFromI9();
 						const int distance = UtilSquare::GetSquareDistance(isq, ito);
@@ -545,7 +545,7 @@ struct EvaluaterBase {
 				const Color icolor = UtilPiece::ToColor(ipiece);
 
 				Bitboard itoBB = Bitboard::SetMaskBB(ksq).NotThisAnd(
-					Position::attacksFrom(ipt, icolor, isq, Bitboard::SetMaskBB(ksq)));
+					Position::GetAttacksFrom(ipt, icolor, isq, Bitboard::SetMaskBB(ksq)));
 				while (itoBB.IsNot0()) {
 					Square ito = itoBB.FirstOneFromI9();
 					const int distance = UtilSquare::GetSquareDistance(isq, ito);
@@ -611,7 +611,7 @@ struct EvaluaterBase {
 			const Color icolor = UtilPiece::ToColor(ipiece);
 			const PieceType ipt = UtilPiece::ToPieceType(ipiece);
 			const Bitboard mask = Bitboard::SetMaskBB(ksq0) | Bitboard::SetMaskBB(ksq1);
-			Bitboard itoBB = mask.NotThisAnd(Position::attacksFrom(ipt, icolor, isq, mask));
+			Bitboard itoBB = mask.NotThisAnd(Position::GetAttacksFrom(ipt, icolor, isq, mask));
 			while (itoBB.IsNot0()) {
 				Square ito = itoBB.FirstOneFromI9();
 				const int distance = UtilSquare::GetSquareDistance(isq, ito);

@@ -86,11 +86,11 @@ Key Book::bookKey(const Position& pos) {
 		const Square sq = bb.FirstOneFromI9();
 		key ^= ZobPiece[pos.GetPiece(sq)][sq];
 	}
-	const Hand hand = pos.GetHand(pos.turn());
+	const Hand hand = pos.GetHand(pos.GetTurn());
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
 		key ^= ZobHand[hp][hand.NumOf(hp)];
 	}
-	if (pos.turn() == White) {
+	if (pos.GetTurn() == White) {
 		key ^= ZobTurn;
 	}
 	return key;
@@ -102,7 +102,7 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 	u32 sum = 0;
 	Move move = Move::moveNone();
 	const Key key = bookKey(pos);
-	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.searcher()->options["Min_Book_Score"]));
+	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->options["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (fileName_ != fName && !open(fName.c_str())) {
@@ -193,19 +193,19 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.Set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+		pos.Set(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {
 			const std::string moveStrCSA = line.substr(0, 6);
 			const Move move = usiOperation.csaToMove(pos, moveStrCSA);
 			if (move.isNone()) {
-				pos.print();
+				pos.Print();
 				std::cout << "!!! Illegal move = " << moveStrCSA << " !!!" << std::endl;
 				break;
 			}
 			line.erase(0, 6); // 先頭から6文字削除
-			if (pos.turn() == saveColor) {
+			if (pos.GetTurn() == saveColor) {
 				// 先手、後手の内、片方だけを記録する。
 				const Key key = Book::bookKey(pos);
 				bool isFind = false;
@@ -227,18 +227,18 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 				if (isFind == false) {
 #if defined MAKE_SEARCHED_BOOK
 					SetUpStates->push(StateInfo());
-					pos.doMove(move, SetUpStates->top());
+					pos.DoMove(move, SetUpStates->top());
 
 					std::istringstream ssCmd("byoyomi 1000");
 					UsiOperation usiOperation;
 					usiOperation.go(pos, ssCmd);
-					pos.searcher()->threads.waitForThinkFinished();
+					pos.GetSearcher()->threads.waitForThinkFinished();
 
-					pos.undoMove(move);
+					pos.UndoMove(move);
 					SetUpStates->pop();
 
 					// doMove してから search してるので点数が反転しているので直す。
-					const Score score = -pos.csearcher()->rootMoves[0].score_;
+					const Score score = -pos.GetCsearcher()->rootMoves[0].score_;
 #else
 					const Score score = ScoreZero;
 #endif
@@ -252,7 +252,7 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 				}
 			}
 			SetUpStates->push(StateInfo());
-			pos.doMove(move, SetUpStates->top());
+			pos.DoMove(move, SetUpStates->top());
 		}
 	}
 

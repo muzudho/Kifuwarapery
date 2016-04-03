@@ -54,7 +54,7 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 				 token == "movetime"   ) {
 			// btime wtime の後に byoyomi が来る前提になっているので良くない。
 			ssCmd >> limits.moveTime;
-			if (limits.moveTime != 0) { limits.moveTime -= pos.searcher()->options["Byoyomi_Margin"]; }
+			if (limits.moveTime != 0) { limits.moveTime -= pos.GetSearcher()->options["Byoyomi_Margin"]; }
 		}
 		else if (token == "depth"      ) { ssCmd >> limits.depth; }
 		else if (token == "nodes"      ) { ssCmd >> limits.nodes; }
@@ -66,10 +66,10 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 			}
 		}
 	}
-	pos.searcher()->searchMoves = moves;
+	pos.GetSearcher()->searchMoves = moves;
 
 	// 思考を開始☆
-	pos.searcher()->threads.startThinking(pos, limits, moves);
+	pos.GetSearcher()->threads.startThinking(pos, limits, moves);
 }
 
 #if defined LEARN
@@ -79,7 +79,7 @@ void UsiOperation::go(const Position& pos, const Ply depth, const Move move) {
 	std::vector<Move> moves;
 	limits.depth = depth;
 	moves.push_back(move);
-	pos.searcher()->threads.startThinking(pos, limits, moves);
+	pos.GetSearcher()->threads.startThinking(pos, limits, moves);
 }
 #endif
 
@@ -139,18 +139,18 @@ void UsiOperation::setPosition(Position& pos, std::istringstream& ssCmd) {
 		return;
 	}
 
-	pos.Set(sfen, pos.searcher()->threads.mainThread());
-	pos.searcher()->setUpStates = StateStackPtr(new std::stack<StateInfo>());
+	pos.Set(sfen, pos.GetSearcher()->threads.mainThread());
+	pos.GetSearcher()->setUpStates = StateStackPtr(new std::stack<StateInfo>());
 
-	Ply currentPly = pos.gamePly();
+	Ply currentPly = pos.GetGamePly();
 	while (ssCmd >> token) {
 		const Move move = this->usiToMove(pos, token);
 		if (move.isNone()) break;
-		pos.searcher()->setUpStates->push(StateInfo());
-		pos.doMove(move, pos.searcher()->setUpStates->top());
+		pos.GetSearcher()->setUpStates->push(StateInfo());
+		pos.DoMove(move, pos.GetSearcher()->setUpStates->top());
 		++currentPly;
 	}
-	pos.setStartPosPly(currentPly);
+	pos.SetStartPosPly(currentPly);
 }
 
 Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr) {
@@ -196,8 +196,8 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 	}
 
-	if (pos.moveIsPseudoLegal(move, true)
-		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
+	if (pos.MoveIsPseudoLegal(move, true)
+		&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
 	{
 		return move;
 	}
@@ -245,8 +245,8 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 		}
 	}
 
-	if (pos.moveIsPseudoLegal(move, true)
-		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
+	if (pos.MoveIsPseudoLegal(move, true)
+		&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
 	{
 		return move;
 	}

@@ -26,7 +26,7 @@ void Main01::Initialize()
 	initializer.initTable();
 
 	SYNCCOUT << "(^q^)main(2/6): initZobrist!" << SYNCENDL;
-	Position::initZobrist();
+	Position::InitZobrist();
 
 	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
 	this->searcher->init();

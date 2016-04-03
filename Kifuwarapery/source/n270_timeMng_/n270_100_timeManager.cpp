@@ -1,3 +1,4 @@
+#include <algorithm> // std::min
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
@@ -59,7 +60,9 @@ namespace {
 		MaxTime
 	};
 
-	template <TimeType T> int remaining(const int myTime, const int movesToGo, const Ply currentPly, const int slowMover) {
+	template <TimeType T> int remaining(
+		const int myTime, const int movesToGo, const Ply currentPly, const int slowMover
+	) {
 		const float TMaxRatio   = (T == OptimumTime ? 1 : MaxRatio);
 		const float TStealRatio = (T == OptimumTime ? 0 : StealRatio);
 
@@ -81,7 +84,9 @@ namespace {
 
 void TimeManager::pvInstability(const int currChanges, const int prevChanges) {
 	unstablePVExtraTime_ =
-		currChanges * (optimumSearchTime_ / 2) + prevChanges * (optimumSearchTime_ / 3);
+		currChanges * (optimumSearchTime_ / 2)
+		+
+		prevChanges * (optimumSearchTime_ / 3);
 }
 
 void TimeManager::init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
@@ -94,7 +99,11 @@ void TimeManager::init(LimitsType& limits, const Ply currentPly, const Color us,
 	unstablePVExtraTime_ = 0;
 	optimumSearchTime_ = maximumSearchTime_ = limits.time[us];
 
-	for (int hypMTG = 1; hypMTG <= (limits.movesToGo ? std::min(limits.movesToGo, MoveHorizon) : MoveHorizon); ++hypMTG) {
+	for (
+		int hypMTG = 1;
+		hypMTG <= (limits.movesToGo ? std::min(limits.movesToGo, MoveHorizon) : MoveHorizon);
+		++hypMTG
+	) {
 		int hypMyTime =
 			limits.time[us]
 			+ limits.increment[us] * (hypMTG - 1)

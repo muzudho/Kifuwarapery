@@ -124,14 +124,14 @@ namespace {
 		}
 
 		const PieceType m1pt = first.pieceTypeFromOrDropped();
-		const Color us = pos.turn();
+		const Color us = pos.GetTurn();
 		const Bitboard occ = (second.isDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from));
-		const Bitboard m1att = pos.attacksFrom(m1pt, us, m1to, occ);
+		const Bitboard m1att = pos.GetAttacksFrom(m1pt, us, m1to, occ);
 		if (m1att.IsSet(m2to)) {
 			return true;
 		}
 
-		if (m1att.IsSet(pos.kingSquare(us))) {
+		if (m1att.IsSet(pos.GetKingSquare(us))) {
 			return true;
 		}
 
@@ -155,7 +155,7 @@ namespace {
 
 	// fitst move によって、first move の相手側の second move を違法手にするか。
 	bool refutes(const Position& pos, const Move first, const Move second) {
-		assert(pos.isOK());
+		assert(pos.IsOK());
 
 		const Square m2to = second.to();
 		const Square m1from = first.from(); // 駒打でも今回はこれで良い。
@@ -166,13 +166,13 @@ namespace {
 
 		const PieceType m2ptFrom = second.pieceTypeFrom();
 		if (second.isCaptureOrPromotion()
-			&& ((pos.pieceScore(second.cap()) <= pos.pieceScore(m2ptFrom))
+			&& ((pos.GetPieceScore(second.cap()) <= pos.GetPieceScore(m2ptFrom))
 				|| m2ptFrom == King))
 		{
 			// first により、新たに m2to に当たりになる駒があるなら true
 			assert(!second.isDrop());
 
-			const Color us = pos.turn();
+			const Color us = pos.GetTurn();
 			const Square m1to = first.to();
 			const Square m2from = second.from();
 			Bitboard occ = pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from) ^ Bitboard::SetMaskBB(m1to);
@@ -186,16 +186,16 @@ namespace {
 				occ ^= Bitboard::SetMaskBB(m1from);
 			}
 
-			if (pos.attacksFrom(m1ptTo, us, m1to, occ).IsSet(m2to)) {
+			if (pos.GetAttacksFrom(m1ptTo, us, m1to, occ).IsSet(m2to)) {
 				return true;
 			}
 
 			const Color them = UtilColor::OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
-				(pos.attacksFrom<Lance>(them, m2to, occ) & pos.GetBbOf(Lance, us))
-				| (pos.attacksFrom<Rook  >(m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
-				| (pos.attacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
+				(pos.GetAttacksFrom<Lance>(them, m2to, occ) & pos.GetBbOf(Lance, us))
+				| (pos.GetAttacksFrom<Rook  >(m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
+				| (pos.GetAttacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
 			if (xray.IsNot0() && (xray ^ (xray & pos.GetOccupiedBB().QueenAttack(m2to))).IsNot0()) {
@@ -206,7 +206,7 @@ namespace {
 		if (!second.isDrop()
 			&& UtilPieceType::IsSlider(m2ptFrom)
 			&& Bitboard::BetweenBB(second.from(), m2to).IsSet(first.to())
-			&& ScoreZero <= pos.seeSign(first))
+			&& ScoreZero <= pos.GetSeeSign(first))
 		{
 			return true;
 		}
@@ -261,8 +261,8 @@ std::string Searcher::pvInfoToUSI(Position& pos, const Ply depth, const Score al
 		ss << "info depth " << d
 		   << " seldepth " << selDepth
 		   << " score " << (i == pvIdx ? scoreToUSI(s, alpha, beta) : scoreToUSI(s))
-		   << " nodes " << pos.nodesSearched()
-		   << " nps " << (0 < t ? pos.nodesSearched() * 1000 / t : 0)
+		   << " nodes " << pos.GetNodesSearched()
+		   << " nps " << (0 < t ? pos.GetNodesSearched() * 1000 / t : 0)
 		   << " time " << t
 		   << " multipv " << i + 1
 		   << " pv ";
@@ -281,7 +281,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	const bool PVNode = (NT == PV);
 
 	assert(NT == PV || NT == NonPV);
-	assert(INCHECK == pos.inCheck());
+	assert(INCHECK == pos.InCheck());
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(PVNode || (alpha == beta - 1));
 	assert(depth <= Depth0);
@@ -315,7 +315,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 	ttDepth = ((INCHECK || DepthQChecks <= depth) ? DepthQChecks : DepthQNoChecks);
 
-	posKey = pos.getKey();
+	posKey = pos.GetKey();
 	tte = tt.probe(posKey);
 	ttMove = (tte != nullptr ? move16toMove(tte->move(), pos) : Move::moveNone());
 	ttScore = (tte != nullptr ? scoreFromTT(tte->score(), ss->ply) : ScoreNone);
@@ -331,14 +331,14 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		return ttScore;
 	}
 
-	pos.setNodesSearched(pos.nodesSearched() + 1);
+	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	if (INCHECK) {
 		ss->staticEval = ScoreNone;
 		bestScore = futilityBase = -ScoreInfinite;
 	}
 	else {
-		if (!(move = pos.mateMoveIn1Ply()).isNone()) {
+		if (!(move = pos.GetMateMoveIn1Ply()).isNone()) {
 			return UtilScore::MateIn(ss->ply);
 		}
 
@@ -355,7 +355,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 		if (beta <= bestScore) {
 			if (tte == nullptr) {
-				tt.store(pos.getKey(), scoreToTT(bestScore, ss->ply), BoundLower,
+				tt.store(pos.GetKey(), scoreToTT(bestScore, ss->ply), BoundLower,
 						 DepthNone, Move::moveNone(), ss->staticEval);
 			}
 
@@ -377,9 +377,9 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 	while (!(move = mp.nextMove<false>()).isNone())
 	{
-		assert(pos.isOK());
+		assert(pos.IsOK());
 
-		givesCheck = pos.moveGivesCheck(move, ci);
+		givesCheck = pos.IsMoveGivesCheck(move, ci);
 
 		// futility pruning
 		if (!PVNode
@@ -388,9 +388,9 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			&& move != ttMove)
 		{
 			futilityScore =
-				futilityBase + Position::capturePieceScore(pos.GetPiece(move.to()));
+				futilityBase + Position::GetCapturePieceScore(pos.GetPiece(move.to()));
 			if (move.isPromotion()) {
-				futilityScore += Position::promotePieceScore(move.pieceTypeFrom());
+				futilityScore += Position::GetPromotePieceScore(move.pieceTypeFrom());
 			}
 
 			if (futilityScore < beta) {
@@ -401,7 +401,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			// todo: MovePicker のオーダリングで SEE してるので、ここで SEE するの勿体無い。
 			if (futilityBase < beta
 				&& depth < Depth0
-				&& pos.see(move, beta - futilityBase) <= ScoreZero)
+				&& pos.GetSee(move, beta - futilityBase) <= ScoreZero)
 			{
 				bestScore = std::max(bestScore, futilityBase);
 				continue;
@@ -416,22 +416,22 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			&& (!INCHECK || evasionPrunable)
 			&& move != ttMove
 			&& (!move.isPromotion() || move.pieceTypeFrom() != Pawn)
-			&& pos.seeSign(move) < 0)
+			&& pos.GetSeeSign(move) < 0)
 		{
 			continue;
 		}
 
-		if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 			continue;
 		}
 
 		ss->currentMove = move;
 
-		pos.doMove(move, st, ci, givesCheck);
+		pos.DoMove(move, st, ci, givesCheck);
 		(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 		score = (givesCheck ? -qsearch<NT, true>(pos, ss+1, -beta, -alpha, depth - OnePly)
 				 : -qsearch<NT, false>(pos, ss+1, -beta, -alpha, depth - OnePly));
-		pos.undoMove(move);
+		pos.UndoMove(move);
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
@@ -495,7 +495,7 @@ void Searcher::idLoop(Position& pos) {
 	pvSize = options["MultiPV"];
 	Skill skill(options["Skill_Level"], options["Max_Random_Score_Diff"]);
 
-	if (options["Max_Random_Score_Diff_Ply"] < pos.gamePly()) {
+	if (options["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
 		skill.max_random_score_diff = ScoreZero;
 		pvSize = 1;
 		assert(!skill.enabled()); // level による設定が出来るようになるまでは、これで良い。
@@ -697,21 +697,21 @@ void Searcher::idLoop(Position& pos) {
 #if defined INANIWA_SHIFT
 // 稲庭判定
 void Searcher::detectInaniwa(const Position& pos) {
-	if (inaniwaFlag == NotInaniwa && 20 <= pos.gamePly()) {
-		const Rank TRank7 = (pos.turn() == Black ? Rank7 : Rank3); // not constant
+	if (inaniwaFlag == NotInaniwa && 20 <= pos.GetGamePly()) {
+		const Rank TRank7 = (pos.GetTurn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
-		if ((pos.GetBbOf(Pawn, UtilColor::OppositeColor(pos.turn())) & mask) == mask) {
-			inaniwaFlag = (pos.turn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
-			tt.clear();
+		if ((pos.GetBbOf(Pawn, UtilColor::OppositeColor(pos.GetTurn())) & mask) == mask) {
+			inaniwaFlag = (pos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
+			tt.Clear();
 		}
 	}
 }
 #endif
 #if defined BISHOP_IN_DANGER
 void Searcher::detectBishopInDanger(const Position& pos) {
-	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
-		const Color them = UtilColor::OppositeColor(pos.turn());
-		if (pos.m_hand(pos.turn()).Exists<HBishop>()
+	if (bishopInDangerFlag == NotBishopInDanger && pos.GetGamePly() <= 50) {
+		const Color them = UtilColor::OppositeColor(pos.GetTurn());
+		if (pos.m_hand(pos.GetTurn()).Exists<HBishop>()
 			&& pos.GetBbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
 			&& (pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F2))
 				|| pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F3))
@@ -721,10 +721,10 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 			&& pos.GetPiece(InverseIfWhite(them, G2)) == Empty
 			&& pos.GetPiece(InverseIfWhite(them, G1)) == Empty)
 		{
-			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
+			bishopInDangerFlag = (pos.GetTurn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
-		else if (pos.m_hand(pos.turn()).Exists<HBishop>()
+		else if (pos.m_hand(pos.GetTurn()).Exists<HBishop>()
 				 && pos.m_hand(them).Exists<HBishop>()
 				 && pos.GetPiece(InverseIfWhite(them, C2)) == Empty
 				 && pos.GetPiece(InverseIfWhite(them, C1)) == Empty
@@ -739,14 +739,14 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 					  && UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == King)
 					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == Gold))
 		{
-			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
+			bishopInDangerFlag = (pos.GetTurn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
 		}
 	}
 }
 #endif
-template <bool DO> void Position::doNullMove(StateInfo& backUpSt) {
-	assert(!inCheck());
+template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
+	assert(!InCheck());
 
 	StateInfo* src = (DO ? m_st_ : &backUpSt);
 	StateInfo* dst = (DO ? &backUpSt : m_st_);
@@ -754,18 +754,18 @@ template <bool DO> void Position::doNullMove(StateInfo& backUpSt) {
 	dst->m_boardKey      = src->m_boardKey;
 	dst->m_handKey       = src->m_handKey;
 	dst->m_pliesFromNull = src->m_pliesFromNull;
-	dst->m_hand = GetHand(turn());
-	m_turn_ = UtilColor::OppositeColor(turn());
+	dst->m_hand = GetHand(GetTurn());
+	m_turn_ = UtilColor::OppositeColor(GetTurn());
 
 	if (DO) {
-		m_st_->m_boardKey ^= zobTurn();
-		prefetch(csearcher()->tt.firstEntry(m_st_->GetKey()));
+		m_st_->m_boardKey ^= GetZobTurn();
+		prefetch(GetCsearcher()->tt.firstEntry(m_st_->GetKey()));
 		m_st_->m_pliesFromNull = 0;
-		m_st_->m_continuousCheck[turn()] = 0;
+		m_st_->m_continuousCheck[GetTurn()] = 0;
 	}
-	m_st_->m_hand = GetHand(turn());
+	m_st_->m_hand = GetHand(GetTurn());
 
-	assert(isOK());
+	assert(IsOK());
 }
 
 template <NodeType NT>
@@ -807,9 +807,9 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 
 	// step1
 	// initialize node
-	Thread* thisThread = pos.thisThread();
+	Thread* thisThread = pos.GetThisThread();
 	moveCount = playedMoveCount = 0;
-	inCheck = pos.inCheck();
+	inCheck = pos.InCheck();
 
 	if (SPNode) {
 		splitPoint = ss->splitPoint;
@@ -842,7 +842,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	if (!RootNode) {
 		// step2
 		// stop と最大探索深さのチェック
-		switch (pos.isDraw(16)) {
+		switch (pos.IsDraw(16)) {
 		case NotRepetition      : if (!signals.stop && ss->ply <= MaxPly) { break; }
 		case RepetitionDraw     : return ScoreDraw;
 		case RepetitionWin      : return UtilScore::MateIn(ss->ply);
@@ -863,12 +863,12 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		}
 	}
 
-	pos.setNodesSearched(pos.nodesSearched() + 1);
+	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	// step4
 	// trans position table lookup
 	excludedMove = ss->excludedMove;
-	posKey = (excludedMove.isNone() ? pos.getKey() : pos.getExclusionKey());
+	posKey = (excludedMove.isNone() ? pos.GetKey() : pos.GetExclusionKey());
 	tte = tt.probe(posKey);
 	ttMove = 
 		RootNode ? rootMoves[pvIdx].pv_[0] :
@@ -903,7 +903,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	if (!RootNode
 		&& !inCheck)
 	{
-		if (!(move = pos.mateMoveIn1Ply()).isNone()) {
+		if (!(move = pos.GetMateMoveIn1Ply()).isNone()) {
 			ss->staticEval = bestScore = UtilScore::MateIn(ss->ply);
 			tt.store(posKey, scoreToTT(bestScore, ss->ply), BoundExact, depth,
 					 move, ss->staticEval);
@@ -986,14 +986,14 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 			reduction += OnePly;
 		}
 
-		pos.doNullMove<true>(st);
+		pos.DoNullMove<true>(st);
 		(ss+1)->staticEvalRaw = (ss)->staticEvalRaw; // 評価値の差分評価の為。
 		(ss+1)->skipNullMove = true;
 		Score nullScore = (depth - reduction < OnePly ?
 						   -qsearch<NonPV, false>(pos, ss + 1, -beta, -alpha, Depth0)
 						   : -search<NonPV>(pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
 		(ss+1)->skipNullMove = false;
-		pos.doNullMove<false>(st);
+		pos.DoNullMove<false>(st);
 
 		if (beta <= nullScore) {
 			if (ScoreMateInMaxPly <= nullScore) {
@@ -1046,12 +1046,12 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		MovePicker mp(pos, ttMove, history, move.cap());
 		const CheckInfo ci(pos);
 		while (!(move = mp.nextMove<false>()).isNone()) {
-			if (pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				ss->currentMove = move;
-				pos.doMove(move, st, ci, pos.moveGivesCheck(move, ci));
+				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
 				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 				score = -search<NonPV>(pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
-				pos.undoMove(move);
+				pos.UndoMove(move);
 				if (rbeta <= score) {
 					return score;
 				}
@@ -1108,7 +1108,7 @@ split_point_start:
 		}
 
 		if (SPNode) {
-			if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				continue;
 			}
 			moveCount = ++splitPoint->moveCount;
@@ -1122,7 +1122,7 @@ split_point_start:
 		if (RootNode) {
 			signals.firstRootMove = (moveCount == 1);
 #if 0
-			if (thisThread == threads.mainThread() && 3000 < searchTimer.Elapsed()) {
+			if (GetThisThread == threads.mainThread() && 3000 < searchTimer.Elapsed()) {
 				SYNCCOUT << "info depth " << depth / OnePly
 						 << " currmove " << move.toUSI()
 						 << " currmovenumber " << moveCount + pvIdx << SYNCENDL;
@@ -1132,11 +1132,11 @@ split_point_start:
 
 		extension = Depth0;
 		captureOrPawnPromotion = move.isCaptureOrPawnPromotion();
-		givesCheck = pos.moveGivesCheck(move, ci);
+		givesCheck = pos.IsMoveGivesCheck(move, ci);
 		dangerous = givesCheck; // todo: not implement
 
 		// step12
-		if (givesCheck && ScoreZero <= pos.seeSign(move))
+		if (givesCheck && ScoreZero <= pos.GetSeeSign(move))
 		{
 			extension = OnePly;
 		}
@@ -1145,7 +1145,7 @@ split_point_start:
 		if (singularExtensionNode
 			&& extension == Depth0
 			&& move == ttMove
-			&& pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
+			&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
 			&& abs(ttScore) < g_ScoreKnownWin)
 		{
 			assert(ttScore != ScoreNone);
@@ -1190,7 +1190,7 @@ split_point_start:
 			const Depth predictedDepth = newDepth - reduction<PVNode>(depth, moveCount);
 			// gain を 2倍にする。
 			const Score futilityScore = ss->staticEval + futilityMargin(predictedDepth, moveCount)
-				+ 2 * gains.value(move.isDrop(), UtilPiece::FromColorAndPieceType(pos.turn(), move.pieceTypeFromOrDropped()), move.to());
+				+ 2 * gains.value(move.isDrop(), UtilPiece::FromColorAndPieceType(pos.GetTurn(), move.pieceTypeFromOrDropped()), move.to());
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
@@ -1204,7 +1204,7 @@ split_point_start:
 			}
 
 			if (predictedDepth < 4 * OnePly
-				&& pos.seeSign(move) < ScoreZero)
+				&& pos.GetSeeSign(move) < ScoreZero)
 			{
 				if (SPNode) {
 					splitPoint->mutex.lock();
@@ -1214,7 +1214,7 @@ split_point_start:
 		}
 
 		// RootNode, SPNode はすでに合法手であることを確認済み。
-		if (!RootNode && !SPNode && !pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+		if (!RootNode && !SPNode && !pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 			--moveCount;
 			continue;
 		}
@@ -1226,7 +1226,7 @@ split_point_start:
 		}
 
 		// step14
-		pos.doMove(move, st, ci, givesCheck);
+		pos.DoMove(move, st, ci, givesCheck);
 		(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 
 		// step15
@@ -1278,7 +1278,7 @@ split_point_start:
 		}
 
 		// step17
-		pos.undoMove(move);
+		pos.UndoMove(move);
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
@@ -1378,12 +1378,12 @@ split_point_start:
 			}
 
 			const Score bonus = static_cast<Score>(depth * depth);
-			const Piece pc1 = UtilPiece::FromColorAndPieceType(pos.turn(), bestMove.pieceTypeFromOrDropped());
+			const Piece pc1 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), bestMove.pieceTypeFromOrDropped());
 			history.update(bestMove.isDrop(), pc1, bestMove.to(), bonus);
 
 			for (int i = 0; i < playedMoveCount - 1; ++i) {
 				const Move m = movesSearched[i];
-				const Piece pc2 = UtilPiece::FromColorAndPieceType(pos.turn(), m.pieceTypeFromOrDropped());
+				const Piece pc2 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), m.pieceTypeFromOrDropped());
 				history.update(m.isDrop(), pc2, m.to(), -bonus);
 			}
 		}
@@ -1407,27 +1407,27 @@ void RootMove::extractPvFromTT(Position& pos) {
 	Ply ply = 0;
 	Move m = pv_[0];
 
-	assert(!m.isNone() && pos.moveIsPseudoLegal(m));
+	assert(!m.isNone() && pos.MoveIsPseudoLegal(m));
 
 	pv_.clear();
 
 	do {
 		pv_.push_back(m);
 
-		assert(pos.moveIsLegal(pv_[ply]));
-		pos.doMove(pv_[ply++], *st++);
-		tte = pos.csearcher()->tt.probe(pos.getKey());
+		assert(pos.MoveIsLegal(pv_[ply]));
+		pos.DoMove(pv_[ply++], *st++);
+		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
 	}
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
-		   && pos.moveIsPseudoLegal(m = move16toMove(tte->move(), pos))
-		   && pos.pseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
+		   && pos.MoveIsPseudoLegal(m = move16toMove(tte->move(), pos))
+		   && pos.IsPseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
 		   && ply < MaxPly
-		   && (!pos.isDraw(20) || ply < 6));
+		   && (!pos.IsDraw(20) || ply < 6));
 
 	pv_.push_back(Move::moveNone());
 	while (ply) {
-		pos.undoMove(pv_[--ply]);
+		pos.UndoMove(pv_[--ply]);
 	}
 }
 
@@ -1438,20 +1438,20 @@ void RootMove::insertPvInTT(Position& pos) {
 	Ply ply = 0;
 
 	do {
-		tte = pos.csearcher()->tt.probe(pos.getKey());
+		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
 
 		if (tte == nullptr
 			|| move16toMove(tte->move(), pos) != pv_[ply])
 		{
-			pos.searcher()->tt.store(pos.getKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
+			pos.GetSearcher()->tt.store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
 		}
 
-		assert(pos.moveIsLegal(pv_[ply]));
-		pos.doMove(pv_[ply++], *st++);
+		assert(pos.MoveIsLegal(pv_[ply]));
+		pos.DoMove(pv_[ply++], *st++);
 	} while (!pv_[ply].isNone());
 
 	while (ply) {
-		pos.undoMove(pv_[--ply]);
+		pos.UndoMove(pv_[--ply]);
 	}
 }
 
@@ -1492,7 +1492,7 @@ bool nyugyoku(const Position& pos) {
 
 	// この関数を呼び出すのは自分の手番のみとする。ponder では呼び出さない。
 
-	const Color us = pos.turn();
+	const Color us = pos.GetTurn();
 	// 敵陣のマスク
 	const Bitboard opponentsField = (us == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
 
@@ -1526,7 +1526,7 @@ bool nyugyoku(const Position& pos) {
 		return false;
 
 	// 五 宣言側の玉に王手がかかっていない。
-	if (pos.inCheck())
+	if (pos.InCheck())
 		return false;
 
 	// 六 宣言側の持ち時間が残っている。
@@ -1539,7 +1539,7 @@ bool nyugyoku(const Position& pos) {
 void Searcher::think() {
 	static Book book;
 	Position& pos = rootPosition;
-	timeManager.init(limits, pos.gamePly(), pos.turn(), this);
+	timeManager.init(limits, pos.GetGamePly(), pos.GetTurn(), this);
 	std::uniform_int_distribution<int> dist(options["Min_Book_Ply"], options["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
@@ -1551,7 +1551,7 @@ void Searcher::think() {
 		goto finalize;
 	}
 #endif
-	pos.setNodesSearched(0);
+	pos.SetNodesSearched(0);
 
 #if defined LEARN
 	threads[0]->searching = true;
@@ -1559,7 +1559,7 @@ void Searcher::think() {
 	tt.setSize(options["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
-	if (options["OwnBook"] && pos.gamePly() <= book_ply) {
+	if (options["OwnBook"] && pos.GetGamePly() <= book_ply) {
 		const MoveScore bookMoveScore = book.probe(pos, options["Book_File"], options["Best_Book_Move"]);
 		if (
 			!bookMoveScore.move.isNone()
@@ -1607,12 +1607,12 @@ void Searcher::think() {
 
 finalize:
 
-	SYNCCOUT << "info nodes " << pos.nodesSearched()
+	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
 			 << " time " << searchTimer.Elapsed() << SYNCENDL;
 
 	if (!signals.stop && (limits.ponder || limits.infinite)) {
 		signals.stopOnPonderHit = true;
-		pos.thisThread()->waitFor(signals.stop);
+		pos.GetThisThread()->waitFor(signals.stop);
 	}
 
 	if (nyugyokuWin) {
@@ -1637,7 +1637,7 @@ void Searcher::checkTime() {
 	if (limits.nodes) {
 		std::unique_lock<Mutex> lock(threads.mutex_);
 
-		nodes = rootPosition.nodesSearched();
+		nodes = rootPosition.GetNodesSearched();
 		for (size_t i = 0; i < threads.size(); ++i) {
 			for (int j = 0; j < threads[i]->splitPointsSize; ++j) {
 				SplitPoint& splitPoint = threads[i]->splitPoints[j];
@@ -1649,7 +1649,7 @@ void Searcher::checkTime() {
 					sm &= sm - 1;
 					Position* pos = threads[index]->activePosition;
 					if (pos != nullptr) {
-						nodes += pos->nodesSearched();
+						nodes += pos->GetNodesSearched();
 					}
 				}
 			}
@@ -1728,7 +1728,7 @@ void Thread::idleLoop() {
 			activePosition = nullptr;
 			assert(sp->slavesMask & (UINT64_C(1) << idx));
 			sp->slavesMask ^= (UINT64_C(1) << idx);
-			sp->nodes += pos.nodesSearched();
+			sp->nodes += pos.GetNodesSearched();
 
 			if (searcher->threads.sleepWhileIdle_
 				&& this != sp->masterThread

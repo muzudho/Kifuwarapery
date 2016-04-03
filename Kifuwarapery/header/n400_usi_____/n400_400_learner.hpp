@@ -18,19 +18,19 @@ struct RawEvaluater {
 	std::array<float, 2> kk_raw[SquareNum][SquareNum];
 
 	void incParam(const Position& pos, const std::array<double, 2>& dinc) {
-		const Square sq_bk = pos.kingSquare(Black);
-		const Square sq_wk = pos.kingSquare(White);
-		const int* list0 = pos.cplist0();
-		const int* list1 = pos.cplist1();
+		const Square sq_bk = pos.GetKingSquare(Black);
+		const Square sq_wk = pos.GetKingSquare(White);
+		const int* GetList0 = pos.GetCplist0();
+		const int* GetList1 = pos.GetCplist1();
 		const std::array<float, 2> f = {{static_cast<float>(dinc[0] / FVScale), static_cast<float>(dinc[1] / FVScale)}};
 
 		kk_raw[sq_bk][sq_wk] += f;
-		for (int i = 0; i < pos.nlist(); ++i) {
-			const int k0 = list0[i];
-			const int k1 = list1[i];
+		for (int i = 0; i < pos.GetNlist(); ++i) {
+			const int k0 = GetList0[i];
+			const int k1 = GetList1[i];
 			for (int j = 0; j < i; ++j) {
-				const int l0 = list0[j];
-				const int l1 = list1[j];
+				const int l0 = GetList0[j];
+				const int l1 = GetList1[j];
 				kpp_raw[sq_bk         ][k0][l0] += f;
 				kpp_raw[Inverse(sq_wk)][k1][l1][0] -= f[0];
 				kpp_raw[Inverse(sq_wk)][k1][l1][1] += f[1];
@@ -39,7 +39,7 @@ struct RawEvaluater {
 		}
 	}
 
-	void clear() { memset(this, 0, sizeof(*this)); } // float 型とかだと規格的に 0 は保証されなかった気がするが実用上問題ないだろう。
+	void Clear() { memset(this, 0, sizeof(*this)); } // float 型とかだと規格的に 0 は保証されなかった気がするが実用上問題ないだろう。
 };
 
 // float 型の atomic 加算
@@ -141,8 +141,8 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 struct Parse2Data {
 	RawEvaluater params;
 
-	void clear() {
-		params.clear();
+	void Clear() {
+		params.Clear();
 	}
 };
 
@@ -168,7 +168,7 @@ struct BookMoveData {
 class Learner {
 public:
 	void learn(Position& pos, std::istringstream& ssCmd) {
-		eval_.initOptions(pos.searcher()->options["Eval_Dir"], false);
+		eval_.initOptions(pos.GetSearcher()->options["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -225,7 +225,7 @@ public:
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
 			parse2Datum_.push_back(parse2Data_);
 		}
-		setLearnOptions(*pos.searcher());
+		setLearnOptions(*pos.GetSearcher());
 		mt_ = std::mt19937(std::chrono::system_clock::now().time_since_epoch().count());
 		mt64_ = std::mt19937_64(std::chrono::system_clock::now().time_since_epoch().count());
 		for (int i = 0; ; ++i) {
@@ -257,7 +257,7 @@ private:
 		ss >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+		pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
@@ -266,12 +266,12 @@ private:
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
 			if (move.isNone())
 				break;
-			BookMoveData bmd = bmdBase[pos.turn()];
+			BookMoveData bmd = bmdBase[pos.GetTurn()];
 			bmd.move = move;
-			if (useTurnMove[pos.turn()] && dict.find(std::make_pair(pos.getKey(), move)) == std::end(dict)) {
+			if (useTurnMove[pos.GetTurn()] && dict.find(std::make_pair(pos.GetKey(), move)) == std::end(dict)) {
 				// この局面かつこの指し手は初めて見るので、学習に使う。
 				bmd.useLearning = true;
-				dict.insert(std::make_pair(pos.getKey(), move));
+				dict.insert(std::make_pair(pos.GetKey(), move));
 			}
 			else
 				bmd.useLearning = false;
@@ -280,7 +280,7 @@ private:
 			s1.erase(0, 6);
 
 			setUpStates->push(StateInfo());
-			pos.doMove(move, setUpStates->top());
+			pos.DoMove(move, setUpStates->top());
 		}
 	}
 	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& pos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
@@ -336,33 +336,33 @@ private:
 	}
 	void learnParse1Body(Position& pos, std::mt19937& mt) {
 		std::uniform_int_distribution<Ply> dist(minDepth_, maxDepth_);
-		pos.searcher()->tt.clear();
+		pos.GetSearcher()->tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+			pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
-					pos.searcher()->alpha = -ScoreMaxEvaluate;
-					pos.searcher()->beta  =  ScoreMaxEvaluate;
+					pos.GetSearcher()->alpha = -ScoreMaxEvaluate;
+					pos.GetSearcher()->beta  =  ScoreMaxEvaluate;
 					go(pos, dist(mt), bmd.move);
-					const Score recordScore = pos.searcher()->rootMoves[0].score_;
+					const Score recordScore = pos.GetSearcher()->rootMoves[0].score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
-					bmd.pvBuffer.clear();
+					bmd.pvBuffer.Clear();
 					if (abs(recordScore) < ScoreMaxEvaluate) {
 						int recordIsNth = 0; // 正解の手が何番目に良い手か。0から数える。
-						auto& recordPv = pos.searcher()->rootMoves[0].pv_;
+						auto& recordPv = pos.GetSearcher()->rootMoves[0].pv_;
 						bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(recordPv), std::end(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
 						for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
 							if (ml.move() != bmd.move) {
-								pos.searcher()->alpha = recordScore - FVWindow;
-								pos.searcher()->beta  = recordScore + FVWindow;
+								pos.GetSearcher()->alpha = recordScore - FVWindow;
+								pos.GetSearcher()->beta  = recordScore + FVWindow;
 								go(pos, dist(mt), ml.move());
-								const Score score = pos.searcher()->rootMoves[0].score_;
-								if (pos.searcher()->alpha < score && score < pos.searcher()->beta) {
-									auto& pv = pos.searcher()->rootMoves[0].pv_;
+								const Score score = pos.GetSearcher()->rootMoves[0].score_;
+								if (pos.GetSearcher()->alpha < score && score < pos.GetSearcher()->beta) {
+									auto& pv = pos.GetSearcher()->rootMoves[0].pv_;
 									bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(pv), std::end(pv));
 								}
 								if (recordScore < score)
@@ -375,7 +375,7 @@ private:
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.doMove(bmd.move, setUpStates->top());
+				pos.DoMove(bmd.move, setUpStates->top());
 			}
 		}
 	}
@@ -435,7 +435,7 @@ private:
 		// updateFV()で学習しないパラメータに入ったノイズを無くす。
 		eval_.write(dirName);
 		eval_.initOptions(dirName, false);
-		g_evalTable.clear();
+		g_evalTable.Clear();
 	}
 	double sigmoid(const double x) const {
 		const double a = 7.0/static_cast<double>(FVWindow);
@@ -460,29 +460,29 @@ private:
 		updateMask_ = max - (((max - min)*step+(stepMax>>1))/stepMax);
 	}
 	void learnParse2Body(Position& pos, Parse2Data& parse2Data) {
-		parse2Data.clear();
+		parse2Data.Clear();
 		SearchStack ss[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+			pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
-				PRINT_PV(pos.print());
+				PRINT_PV(pos.Print());
 				if (bmd.useLearning && bmd.otherPVExist) {
-					const Color rootColor = pos.turn();
+					const Color rootColor = pos.GetTurn();
 					int recordPVIndex = 0;
 					PRINT_PV(std::cout << "recordpv: ");
 					for (; !bmd.pvBuffer[recordPVIndex].isNone(); ++recordPVIndex) {
 						PRINT_PV(std::cout << bmd.pvBuffer[recordPVIndex].toCSA());
 						setUpStates->push(StateInfo());
-						pos.doMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
+						pos.DoMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
 					}
 					// evaluate() の差分計算を無効化する。
 					ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-					const Score recordScore = (rootColor == pos.turn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
+					const Score recordScore = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
-						pos.undoMove(bmd.pvBuffer[jj]);
+						pos.UndoMove(bmd.pvBuffer[jj]);
 					}
 
 					std::array<double, 2> sum_dT = {{0.0, 0.0}};
@@ -491,35 +491,35 @@ private:
 						for (; !bmd.pvBuffer[otherPVIndex].isNone(); ++otherPVIndex) {
 							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].toCSA());
 							setUpStates->push(StateInfo());
-							pos.doMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
+							pos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
 						}
 						ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score score = (rootColor == pos.turn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
+						const Score score = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
 						const auto diff = score - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};
 						PRINT_PV(std::cout << ", score: " << score << ", dT: " << dT[0] << std::endl);
 						sum_dT += dT;
 						dT[0] = -dT[0];
-						dT[1] = (pos.turn() == rootColor ? -dT[1] : dT[1]);
+						dT[1] = (pos.GetTurn() == rootColor ? -dT[1] : dT[1]);
 						parse2Data.params.incParam(pos, dT);
 						for (int jj = otherPVIndex - 1; !bmd.pvBuffer[jj].isNone(); --jj) {
-							pos.undoMove(bmd.pvBuffer[jj]);
+							pos.UndoMove(bmd.pvBuffer[jj]);
 						}
 					}
 
 					for (int jj = 0; jj < recordPVIndex; ++jj) {
 						setUpStates->push(StateInfo());
-						pos.doMove(bmd.pvBuffer[jj], setUpStates->top());
+						pos.DoMove(bmd.pvBuffer[jj], setUpStates->top());
 					}
-					sum_dT[1] = (pos.turn() == rootColor ? sum_dT[1] : -sum_dT[1]);
+					sum_dT[1] = (pos.GetTurn() == rootColor ? sum_dT[1] : -sum_dT[1]);
 					parse2Data.params.incParam(pos, sum_dT);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
-						pos.undoMove(bmd.pvBuffer[jj]);
+						pos.UndoMove(bmd.pvBuffer[jj]);
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.doMove(bmd.move, setUpStates->top());
+				pos.DoMove(bmd.move, setUpStates->top());
 			}
 		}
 	}
@@ -539,18 +539,18 @@ private:
 			for (auto& parse2 : parse2Datum_) {
 				parse2Data_.params += parse2.params;
 			}
-			parse2EvalBase_.clear();
+			parse2EvalBase_.Clear();
 			lowerDimension(parse2EvalBase_, parse2Data_.params);
 			setUpdateMask(step);
 			std::cout << "update eval ... " << std::flush;
-			if (usePenalty_) updateEval<true >(pos.searcher()->options["Eval_Dir"]);
-			else             updateEval<false>(pos.searcher()->options["Eval_Dir"]);
+			if (usePenalty_) updateEval<true >(pos.GetSearcher()->options["Eval_Dir"]);
+			else             updateEval<false>(pos.GetSearcher()->options["Eval_Dir"]);
 			std::cout << "done" << std::endl;
 			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
-			print();
+			Print();
 		}
 	}
-	void print() {
+	void Print() {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileA; FileI <= f; --f) {
 				const Square sq = FromFileRank(f, r);

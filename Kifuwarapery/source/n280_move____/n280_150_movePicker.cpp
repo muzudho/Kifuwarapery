@@ -18,7 +18,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 	endBadCaptures_ = legalMoves_ + MaxLegalMoves - 1;
 	ss_ = searchStack;
 
-	if (pos.inCheck()) {
+	if (pos.InCheck()) {
 		phase_ = EvasionSearch;
 	}
 	else {
@@ -35,7 +35,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 		}
 	}
 
-	ttMove_ = (!ttm.isNone() && pos.moveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
+	ttMove_ = (!ttm.isNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
 	lastMove_ += (!ttMove_.isNone());
 }
 
@@ -46,7 +46,7 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 	assert(depth <= Depth0);
 	legalMoves_[0].score = INT_MAX; // 番兵のセット
 
-	if (pos.inCheck())
+	if (pos.InCheck())
 		phase_ = QEvasionSearch;
 	// todo: ここで Stockfish は qcheck がある。
 	else if (DepthQRecaptures < depth)
@@ -57,22 +57,22 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 		ttm = Move::moveNone();
 	}
 
-	ttMove_ = (!ttm.isNone() && pos.moveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
+	ttMove_ = (!ttm.isNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
 	lastMove_ += !ttMove_.isNone();
 }
 
 MovePicker::MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt)
 	: pos_(pos), history_(history), currMove_(firstMove()), lastMove_(firstMove())
 {
-	assert(!pos.inCheck());
+	assert(!pos.InCheck());
 
 	legalMoves_[0].score = INT_MAX; // 番兵のセット
 	phase_ = ProbCut;
 
-	captureThreshold_ = pos.capturePieceScore(pt);
-	ttMove_ = ((!ttm.isNone() && pos.moveIsPseudoLegal(ttm)) ? ttm : Move::moveNone());
+	captureThreshold_ = pos.GetCapturePieceScore(pt);
+	ttMove_ = ((!ttm.isNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::moveNone());
 
-	if (!ttMove_.isNone() && (!ttMove_.isCapture() || pos.see(ttMove_) <= captureThreshold_)) {
+	if (!ttMove_.isNone() && (!ttMove_.isCapture() || pos.GetSee(ttMove_) <= captureThreshold_)) {
 		ttMove_ = Move::moveNone();
 	}
 
@@ -99,7 +99,7 @@ template <> Move MovePicker::nextMove<false>() {
 			if (ms->move != ttMove_) {
 				assert(captureThreshold_ <= 0);
 
-				if (captureThreshold_ <= pos().see(ms->move)) {
+				if (captureThreshold_ <= pos().GetSee(ms->move)) {
 					return ms->move;
 				}
 
@@ -112,7 +112,7 @@ template <> Move MovePicker::nextMove<false>() {
 			move = (currMove_++)->move;
 			if (!move.isNone()
 				&& move != ttMove_
-				&& pos().moveIsPseudoLegal(move, true)
+				&& pos().MoveIsPseudoLegal(move, true)
 				&& pos().GetPiece(move.to()) == Empty)
 			{
 				return move;
@@ -144,7 +144,7 @@ template <> Move MovePicker::nextMove<false>() {
 		case PH_TacticalMoves1:
 			ms = pickBest(currMove_++, lastMove());
 			// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
-			if (ms->move != ttMove_ && captureThreshold_ < pos().see(ms->move)) {
+			if (ms->move != ttMove_ && captureThreshold_ < pos().GetSee(ms->move)) {
 				return ms->move;
 			}
 			break;
@@ -175,7 +175,7 @@ inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 void MovePicker::scoreCaptures() {
 	for (MoveStack* curr = currMove(); curr != lastMove(); ++curr) {
 		const Move move = curr->move;
-		curr->score = Position::pieceScore(pos().GetPiece(move.to())) - LVA(move.pieceTypeFrom());
+		curr->score = Position::GetPieceScore(pos().GetPiece(move.to())) - LVA(move.pieceTypeFrom());
 	}
 }
 
@@ -184,7 +184,7 @@ template <bool IsDrop> void MovePicker::scoreNonCapturesMinusPro() {
 		const Move move = curr->move;
 		curr->score =
 			history().value(IsDrop,
-				UtilPiece::FromColorAndPieceType(pos().turn(),
+				UtilPiece::FromColorAndPieceType(pos().GetTurn(),
 													 (IsDrop ? move.pieceTypeDropped() : move.pieceTypeFrom())),
 							move.to());
 	}
@@ -193,19 +193,19 @@ template <bool IsDrop> void MovePicker::scoreNonCapturesMinusPro() {
 void MovePicker::scoreEvasions() {
 	for (MoveStack* curr = currMove(); curr != lastMove(); ++curr) {
 		const Move move = curr->move;
-		const Score seeScore = pos().seeSign(move);
+		const Score seeScore = pos().GetSeeSign(move);
 		if (seeScore < 0) {
 			curr->score = seeScore - History::MaxScore;
 		}
 		else if (move.isCaptureOrPromotion()) {
-			curr->score = pos().capturePieceScore(pos().GetPiece(move.to())) + History::MaxScore;
+			curr->score = pos().GetCapturePieceScore(pos().GetPiece(move.to())) + History::MaxScore;
 			if (move.isPromotion()) {
 				const PieceType pt = UtilPiece::ToPieceType(pos().GetPiece(move.from()));
-				curr->score += pos().promotePieceScore(pt);
+				curr->score += pos().GetPromotePieceScore(pt);
 			}
 		}
 		else {
-			curr->score = history().value(move.isDrop(), UtilPiece::FromColorAndPieceType(pos().turn(), move.pieceTypeFromOrDropped()), move.to());
+			curr->score = history().value(move.isDrop(), UtilPiece::FromColorAndPieceType(pos().GetTurn(), move.pieceTypeFromOrDropped()), move.to());
 		}
 	}
 }

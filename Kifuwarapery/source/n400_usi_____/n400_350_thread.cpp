@@ -159,32 +159,32 @@ void ThreadPool::startThinking(const Position& pos, const LimitsType& limits,
 #else
 	waitForThinkFinished();
 #endif
-	pos.searcher()->searchTimer.Restart();
+	pos.GetSearcher()->searchTimer.Restart();
 
-	pos.searcher()->signals.stopOnPonderHit = pos.searcher()->signals.firstRootMove = false;
-	pos.searcher()->signals.stop = pos.searcher()->signals.failedLowAtRoot = false;
+	pos.GetSearcher()->signals.stopOnPonderHit = pos.GetSearcher()->signals.firstRootMove = false;
+	pos.GetSearcher()->signals.stop = pos.GetSearcher()->signals.failedLowAtRoot = false;
 
-	pos.searcher()->rootPosition = pos;
-	pos.searcher()->limits = limits;
-	pos.searcher()->rootMoves.clear();
+	pos.GetSearcher()->rootPosition = pos;
+	pos.GetSearcher()->limits = limits;
+	pos.GetSearcher()->rootMoves.clear();
 
 #if defined LEARN
 	// searchMoves を直接使う。
-	pos.searcher()->rootMoves.push_back(RootMove(searchMoves[0]));
+	pos.GetSearcher()->rootMoves.push_back(RootMove(searchMoves[0]));
 #else
 	const MoveType MT = Legal;
 	for (MoveList<MT> ml(pos); !ml.end(); ++ml) {
 		if (searchMoves.empty()
 			|| std::find(searchMoves.begin(), searchMoves.end(), ml.move()) != searchMoves.end())
 		{
-			pos.searcher()->rootMoves.push_back(RootMove(ml.move()));
+			pos.GetSearcher()->rootMoves.push_back(RootMove(ml.move()));
 		}
 	}
 #endif
 
 #if defined LEARN
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
-	pos.searcher()->think();
+	pos.GetSearcher()->think();
 #else
 	mainThread()->thinking = true;
 	mainThread()->notifyOne();
@@ -196,7 +196,7 @@ void Thread::split(Position& pos, SearchStack* ss, const Score alpha, const Scor
 				   Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 				   MovePicker& mp, const NodeType nodeType, const bool cutNode)
 {
-	assert(pos.isOK());
+	assert(pos.IsOK());
 	assert(bestScore <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(-ScoreInfinite < bestScore);
 	assert(searcher->threads.minSplitDepth() <= depth);
@@ -258,7 +258,7 @@ void Thread::split(Position& pos, SearchStack* ss, const Score alpha, const Scor
 	--splitPointsSize;
 	activeSplitPoint = sp.parentSplitPoint;
 	activePosition = &pos;
-	pos.setNodesSearched(pos.nodesSearched() + sp.nodes);
+	pos.SetNodesSearched(pos.GetNodesSearched() + sp.nodes);
 	bestMove = sp.bestMove;
 	bestScore = sp.bestScore;
 

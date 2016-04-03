@@ -16,7 +16,7 @@
 // for debug
 // 指し手生成の速度を計測
 void measureGenerateMoves(const Position& pos) {
-	pos.print();
+	pos.Print();
 
 	MoveStack legalMoves[MaxLegalMoves];
 	for (int i = 0; i < MaxLegalMoves; ++i)
@@ -26,7 +26,7 @@ void measureGenerateMoves(const Position& pos) {
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;
 	Time t = Time::CurrentTime();
-	if (pos.inCheck()) {
+	if (pos.InCheck()) {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
 			pms = generateMoves<Evasion>(pms, pos);
@@ -164,9 +164,9 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 #if !defined MINIMUL
 		// 以下、デバッグ用
 		else if (token == "bench") { benchmark(pos); }
-		else if (token == "d") { pos.print(); }
+		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
-		else if (token == "t") { std::cout << pos.mateMoveIn1Ply().toCSA() << std::endl; }
+		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().toCSA() << std::endl; }
 		else if (token == "b") { makeBook(pos, ssCmd); }
 #endif
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
