@@ -1,28 +1,28 @@
 ﻿#include "../../header/n105_color___/n105_500_utilColor.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 
-const Score PieceScore[PieceNone] = {
+const Score g_PieceScore[PieceNone] = {
 	ScoreZero,
-	PawnScore, LanceScore, KnightScore, SilverScore, BishopScore, RookScore, GoldScore,
+	g_PawnScore, g_LanceScore, g_KnightScore, g_SilverScore, g_BishopScore, g_RookScore, g_GoldScore,
 	ScoreZero, // King
-	ProPawnScore, ProLanceScore, ProKnightScore, ProSilverScore, HorseScore, DragonScore,
+	g_ProPawnScore, g_ProLanceScore, g_ProKnightScore, g_ProSilverScore, g_HorseScore, g_DragonScore,
 	ScoreZero, ScoreZero,
-	PawnScore, LanceScore, KnightScore, SilverScore, BishopScore, RookScore, GoldScore,
+	g_PawnScore, g_LanceScore, g_KnightScore, g_SilverScore, g_BishopScore, g_RookScore, g_GoldScore,
 	ScoreZero, // King
-	ProPawnScore, ProLanceScore, ProKnightScore, ProSilverScore, HorseScore, DragonScore,
+	g_ProPawnScore, g_ProLanceScore, g_ProKnightScore, g_ProSilverScore, g_HorseScore, g_DragonScore,
 };
-const Score CapturePieceScore[PieceNone] = {
+const Score g_CapturePieceScore[PieceNone] = {
 	ScoreZero,
-	CapturePawnScore, CaptureLanceScore, CaptureKnightScore, CaptureSilverScore, CaptureBishopScore, CaptureRookScore, CaptureGoldScore,
+	g_CapturePawnScore, g_CaptureLanceScore, g_CaptureKnightScore, g_CaptureSilverScore, g_CaptureBishopScore, g_CaptureRookScore, g_CaptureGoldScore,
 	ScoreZero, // King
-	CaptureProPawnScore, CaptureProLanceScore, CaptureProKnightScore, CaptureProSilverScore, CaptureHorseScore, CaptureDragonScore,
+	g_CaptureProPawnScore, g_CaptureProLanceScore, g_CaptureProKnightScore, g_CaptureProSilverScore, g_CaptureHorseScore, g_CaptureDragonScore,
 	ScoreZero, ScoreZero,
-	CapturePawnScore, CaptureLanceScore, CaptureKnightScore, CaptureSilverScore, CaptureBishopScore, CaptureRookScore, CaptureGoldScore,
+	g_CapturePawnScore, g_CaptureLanceScore, g_CaptureKnightScore, g_CaptureSilverScore, g_CaptureBishopScore, g_CaptureRookScore, g_CaptureGoldScore,
 	ScoreZero, // King
-	CaptureProPawnScore, CaptureProLanceScore, CaptureProKnightScore, CaptureProSilverScore, CaptureHorseScore, CaptureDragonScore,
+	g_CaptureProPawnScore, g_CaptureProLanceScore, g_CaptureProKnightScore, g_CaptureProSilverScore, g_CaptureHorseScore, g_CaptureDragonScore,
 };
-const Score PromotePieceScore[7] = {
+const Score g_PromotePieceScore[7] = {
 	ScoreZero,
-	PromotePawnScore, PromoteLanceScore, PromoteKnightScore,
-	PromoteSilverScore, PromoteBishopScore, PromoteRookScore
+	g_PromotePawnScore, g_PromoteLanceScore, g_PromoteKnightScore,
+	g_PromoteSilverScore, g_PromoteBishopScore, g_PromoteRookScore
 };

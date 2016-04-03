@@ -27,8 +27,8 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 		killerMoves_[0].move = searchStack->killers[0];
 		killerMoves_[1].move = searchStack->killers[1];
 
-		if (ss_ != nullptr && ss_->staticEval < beta - CapturePawnScore && depth < 3 * OnePly) {
-			captureThreshold_ = -CapturePawnScore;
+		if (ss_ != nullptr && ss_->staticEval < beta - g_CapturePawnScore && depth < 3 * OnePly) {
+			captureThreshold_ = -g_CapturePawnScore;
 		}
 		else if (ss_ != nullptr && beta < ss_->staticEval) {
 			captureThreshold_ = beta - ss_->staticEval;

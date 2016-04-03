@@ -219,7 +219,7 @@ namespace {
 
 		if (abs(score) < ScoreMateInMaxPly) {
 			// cp は centi pawn の略
-			ss << "cp " << score * 100 / PawnScore;
+			ss << "cp " << score * 100 / g_PawnScore;
 		}
 		else {
 			// mate の後には、何手で詰むかを表示する。
@@ -339,7 +339,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	}
 	else {
 		if (!(move = pos.mateMoveIn1Ply()).isNone()) {
-			return mateIn(ss->ply);
+			return UtilScore::MateIn(ss->ply);
 		}
 
 		if (tte != nullptr) {
@@ -454,7 +454,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	}
 
 	if (INCHECK && bestScore == -ScoreInfinite) {
-		return matedIn(ss->ply);
+		return UtilScore::MatedIn(ss->ply);
 	}
 
 	tt.store(posKey, scoreToTT(bestScore, ss->ply), 
@@ -553,7 +553,7 @@ void Searcher::idLoop(Position& pos) {
 #else
 			// aspiration search
 			// alpha, beta をある程度絞ることで、探索効率を上げる。
-			if (5 <= depth && abs(rootMoves[pvIdx].prevScore_) < ScoreKnownWin) {
+			if (5 <= depth && abs(rootMoves[pvIdx].prevScore_) < g_ScoreKnownWin) {
 				delta = static_cast<Score>(16);
 				alpha = rootMoves[pvIdx].prevScore_ - delta;
 				beta  = rootMoves[pvIdx].prevScore_ + delta;
@@ -607,7 +607,7 @@ void Searcher::idLoop(Position& pos) {
 				}
 
 				// fail high/low のとき、aspiration window を広げる。
-				if (ScoreKnownWin <= abs(bestScore)) {
+				if (g_ScoreKnownWin <= abs(bestScore)) {
 					// 勝ち(負け)だと判定したら、最大の幅で探索を試してみる。
 					alpha = -ScoreInfinite;
 					beta = ScoreInfinite;
@@ -663,11 +663,11 @@ void Searcher::idLoop(Position& pos) {
 				&& bestMoveNeverChanged
 				&& pvSize == 1
 				// ここは確実にバグらせないようにする。
-				&& -ScoreInfinite + 2 * CapturePawnScore <= bestScore
+				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
 				&& (rootMoves.size() == 1
 					|| timeManager.availableTime() * 40 / 100 < searchTimer.Elapsed()))
 			{
-				const Score rBeta = bestScore - 2 * CapturePawnScore;
+				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
 				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 				(ss+1)->excludedMove = rootMoves[0].pv_[0];
 				(ss+1)->skipNullMove = true;
@@ -845,8 +845,8 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		switch (pos.isDraw(16)) {
 		case NotRepetition      : if (!signals.stop && ss->ply <= MaxPly) { break; }
 		case RepetitionDraw     : return ScoreDraw;
-		case RepetitionWin      : return mateIn(ss->ply);
-		case RepetitionLose     : return matedIn(ss->ply);
+		case RepetitionWin      : return UtilScore::MateIn(ss->ply);
+		case RepetitionLose     : return UtilScore::MatedIn(ss->ply);
 		case RepetitionSuperior : if (ss->ply != 2) { return ScoreMateInMaxPly; } break;
 		case RepetitionInferior : if (ss->ply != 2) { return ScoreMatedInMaxPly; } break;
 		default                 : UNREACHABLE;
@@ -855,8 +855,8 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		// step3
 		// mate distance pruning
 		if (!RootNode) {
-			alpha = std::max(matedIn(ss->ply), alpha);
-			beta = std::min(mateIn(ss->ply+1), beta);
+			alpha = std::max(UtilScore::MatedIn(ss->ply), alpha);
+			beta = std::min(UtilScore::MateIn(ss->ply+1), beta);
 			if (beta <= alpha) {
 				return alpha;
 			}
@@ -904,7 +904,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		&& !inCheck)
 	{
 		if (!(move = pos.mateMoveIn1Ply()).isNone()) {
-			ss->staticEval = bestScore = mateIn(ss->ply);
+			ss->staticEval = bestScore = UtilScore::MateIn(ss->ply);
 			tt.store(posKey, scoreToTT(bestScore, ss->ply), BoundExact, depth,
 					 move, ss->staticEval);
 			bestMove = move;
@@ -982,7 +982,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		ss->currentMove = Move::moveNull();
 		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
-		if (beta < eval - PawnScore) {
+		if (beta < eval - g_PawnScore) {
 			reduction += OnePly;
 		}
 
@@ -1146,7 +1146,7 @@ split_point_start:
 			&& extension == Depth0
 			&& move == ttMove
 			&& pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)
-			&& abs(ttScore) < ScoreKnownWin)
+			&& abs(ttScore) < g_ScoreKnownWin)
 		{
 			assert(ttScore != ScoreNone);
 
@@ -1358,7 +1358,7 @@ split_point_start:
 
 	// step20
 	if (moveCount == 0) {
-		return !excludedMove.isNone() ? alpha : matedIn(ss->ply);
+		return !excludedMove.isNone() ? alpha : UtilScore::MatedIn(ss->ply);
 	}
 
 	if (bestScore == -ScoreInfinite) {

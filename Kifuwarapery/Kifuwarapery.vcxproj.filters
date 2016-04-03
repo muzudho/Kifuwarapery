@@ -144,9 +144,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_100_score.hpp">
-      <Filter>header\n200_score___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
       <Filter>header\n200_score___</Filter>
     </ClInclude>
@@ -369,6 +366,18 @@
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
       <Filter>header\n111_colorSq_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_050_bound.hpp">
+      <Filter>header\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_055_utilBound.hpp">
+      <Filter>header\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_090_score.hpp">
+      <Filter>header\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n200_score___\n200_100_utilScore.hpp">
+      <Filter>header\n200_score___</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -478,6 +487,9 @@
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_200_bitboardMask.cpp">
       <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n200_score___\n200_100_utilScore.cpp">
+      <Filter>source\n200_score___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

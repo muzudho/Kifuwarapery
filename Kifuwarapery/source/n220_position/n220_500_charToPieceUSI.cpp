@@ -604,7 +604,7 @@ Score Position::see(const Move move, const int asymmThreshold) const {
 
 		if (ptCaptured == King) {
 			if (opponentAttackers.IsNot0()) {
-				swapList[slIndex++] = CaptureKingScore;
+				swapList[slIndex++] = g_CaptureKingScore;
 			}
 			break;
 		}
@@ -613,7 +613,7 @@ Score Position::see(const Move move, const int asymmThreshold) const {
 	if (asymmThreshold) {
 		for (int i = 0; i < slIndex; i += 2) {
 			if (swapList[i] < asymmThreshold) {
-				swapList[i] = -CaptureKingScore;
+				swapList[i] = -g_CaptureKingScore;
 			}
 		}
 	}

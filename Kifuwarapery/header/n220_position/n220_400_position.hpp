@@ -203,17 +203,17 @@ public:
 
 	static void initZobrist();
 
-	static Score pieceScore(const Piece pc) { return PieceScore[pc]; }
+	static Score pieceScore(const Piece pc) { return g_PieceScore[pc]; }
 	// Piece を index としても、 PieceType を index としても、
 	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score pieceScore(const PieceType pt) { return PieceScore[pt]; }
-	static Score capturePieceScore(const Piece pc) { return CapturePieceScore[pc]; }
+	static Score pieceScore(const PieceType pt) { return g_PieceScore[pt]; }
+	static Score capturePieceScore(const Piece pc) { return g_CapturePieceScore[pc]; }
 	// Piece を index としても、 PieceType を index としても、
 	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score capturePieceScore(const PieceType pt) { return CapturePieceScore[pt]; }
+	static Score capturePieceScore(const PieceType pt) { return g_CapturePieceScore[pt]; }
 	static Score promotePieceScore(const PieceType pt) {
 		assert(pt < Gold);
-		return PromotePieceScore[pt];
+		return g_PromotePieceScore[pt];
 	}
 
 private:
