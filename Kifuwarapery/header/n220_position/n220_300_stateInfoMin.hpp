@@ -1,7 +1,8 @@
 #pragma once
 
-#include "../../header/n105_color___/n105_500_utilColor.hpp"
-#include "../../header/n220_position/n220_250_changedLists.hpp"
+#include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n200_score___/n200_100_utilScore.hpp"
+#include "../n220_position/n220_250_changedLists.hpp"
 
 // minimul stateinfo
 struct StateInfoMin {

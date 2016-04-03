@@ -1,6 +1,7 @@
 #pragma once
 
-#include "../../header/n220_position/n220_300_stateInfoMin.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n220_position/n220_300_stateInfoMin.hpp"
 
 
 // StateInfoMin だけ memcpy でコピーすることああるので、
