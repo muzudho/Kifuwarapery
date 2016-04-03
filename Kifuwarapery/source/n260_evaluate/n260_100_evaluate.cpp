@@ -374,7 +374,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	int nlist = 0;
 
 	auto func = [&](const Hand hand, const HandPiece hp, const int list0_index, const int list1_index) {
-		for (u32 i = 1; i <= hand.numOf(hp); ++i) {
+		for (u32 i = 1; i <= hand.NumOf(hp); ++i) {
 			list0[nlist] = list0_index + i;
 			list1[nlist] = list1_index + i;
 			++nlist;

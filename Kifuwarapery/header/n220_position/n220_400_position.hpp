@@ -228,7 +228,7 @@ private:
 		byColorBB_[c].setBit(sq);
 		byTypeBB_[Occupied].setBit(sq);
 	}
-	void setHand(const HandPiece hp, const Color c, const int num) { hand_[c].orEqual(num, hp); }
+	void setHand(const HandPiece hp, const Color c, const int num) { hand_[c].OrEqual(num, hp); }
 	void setHand(const Piece piece, const int num) {
 		const Color c = UtilPiece::ToColor(piece);
 		const PieceType pt = UtilPiece::ToPieceType(piece);

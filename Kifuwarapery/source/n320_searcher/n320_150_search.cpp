@@ -711,7 +711,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(pos.turn());
-		if (pos.hand(pos.turn()).exists<HBishop>()
+		if (pos.hand(pos.turn()).Exists<HBishop>()
 			&& pos.bbOf(Silver, them).isSet(InverseIfWhite(them, H3))
 			&& (pos.bbOf(King  , them).isSet(InverseIfWhite(them, F2))
 				|| pos.bbOf(King  , them).isSet(InverseIfWhite(them, F3))
@@ -724,8 +724,8 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
-		else if (pos.hand(pos.turn()).exists<HBishop>()
-				 && pos.hand(them).exists<HBishop>()
+		else if (pos.hand(pos.turn()).Exists<HBishop>()
+				 && pos.hand(them).Exists<HBishop>()
 				 && pos.piece(InverseIfWhite(them, C2)) == Empty
 				 && pos.piece(InverseIfWhite(them, C1)) == Empty
 				 && pos.piece(InverseIfWhite(them, D2)) == Empty
@@ -1507,10 +1507,10 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard bigBB = pos.bbOf(Rook, Dragon, Bishop, Horse) & opponentsField & pos.bbOf(us);
 	const Bitboard smallBB = (pos.bbOf(Pawn, Lance, Knight, Silver) | pos.goldsBB()) & opponentsField & pos.bbOf(us);
 	const Hand hand = pos.hand(us);
-	const int val = (bigBB.popCount() + hand.numOf<HRook>() + hand.numOf<HBishop>()) * 5
+	const int val = (bigBB.popCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
 		+ smallBB.popCount()
-		+ hand.numOf<HPawn>() + hand.numOf<HLance>() + hand.numOf<HKnight>()
-		+ hand.numOf<HSilver>() + hand.numOf<HGold>();
+		+ hand.NumOf<HPawn>() + hand.NumOf<HLance>() + hand.NumOf<HKnight>()
+		+ hand.NumOf<HSilver>() + hand.NumOf<HGold>();
 #if defined LAW_24
 	if (val < 31)
 		return false;

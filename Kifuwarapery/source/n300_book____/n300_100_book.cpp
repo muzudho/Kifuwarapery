@@ -88,7 +88,7 @@ Key Book::bookKey(const Position& pos) {
 	}
 	const Hand hand = pos.hand(pos.turn());
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
-		key ^= ZobHand[hp][hand.numOf(hp)];
+		key ^= ZobHand[hp][hand.NumOf(hp)];
 	}
 	if (pos.turn() == White) {
 		key ^= ZobTurn;

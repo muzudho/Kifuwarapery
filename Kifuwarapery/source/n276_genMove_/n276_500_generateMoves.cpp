@@ -39,7 +39,7 @@ namespace {
 	) {
 		const Hand hand = pos.hand(US);
 		// まず、歩に対して指し手を生成
-		if (hand.exists<HPawn>()) {
+		if (hand.Exists<HPawn>()) {
 			Bitboard toBB = target;
 			// 一段目には打てない
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
@@ -78,19 +78,19 @@ namespace {
 		}
 
 		// 歩 以外の駒を持っているか
-		if (hand.exceptPawnExists()) {
+		if (hand.ExceptPawnExists()) {
 			PieceType haveHand[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
 			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
 								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
-			if (hand.exists<HKnight>()) { haveHand[haveHandNum++] = Knight; }
+			if (hand.Exists<HKnight>()) { haveHand[haveHandNum++] = Knight; }
 			const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
-			if (hand.exists<HLance >()) { haveHand[haveHandNum++] = Lance; }
+			if (hand.Exists<HLance >()) { haveHand[haveHandNum++] = Lance; }
 			const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
-			if (hand.exists<HSilver>()) { haveHand[haveHandNum++] = Silver; }
-			if (hand.exists<HGold  >()) { haveHand[haveHandNum++] = Gold; }
-			if (hand.exists<HBishop>()) { haveHand[haveHandNum++] = Bishop; }
-			if (hand.exists<HRook  >()) { haveHand[haveHandNum++] = Rook; }
+			if (hand.Exists<HSilver>()) { haveHand[haveHandNum++] = Silver; }
+			if (hand.Exists<HGold  >()) { haveHand[haveHandNum++] = Gold; }
+			if (hand.Exists<HBishop>()) { haveHand[haveHandNum++] = Bishop; }
+			if (hand.Exists<HRook  >()) { haveHand[haveHandNum++] = Rook; }
 
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);

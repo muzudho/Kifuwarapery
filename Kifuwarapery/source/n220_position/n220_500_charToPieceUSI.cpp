@@ -137,7 +137,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	if (move.isDrop()) {
 		const PieceType ptFrom = move.pieceTypeDropped();
-		if (!hand(us).exists(UtilHandPiece::FromPieceType(ptFrom)) || piece(to) != Empty) {
+		if (!hand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || piece(to) != Empty) {
 			return false;
 		}
 
@@ -255,7 +255,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		prefetch(csearcher()->tt.firstEntry(boardKey + handKey));
 
-		const int handnum = hand(us).numOf(hpTo);
+		const int handnum = hand(us).NumOf(hpTo);
 		const int listIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpTo] + handnum];
 		const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
 		st_->cl.listindex[0] = listIndex;
@@ -270,7 +270,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		st_->cl.clistpair[0].newlist[0] = evalList_.list0[listIndex];
 		st_->cl.clistpair[0].newlist[1] = evalList_.list1[listIndex];
 
-		hand_[us].minusOne(hpTo);
+		hand_[us].MinusOne(hpTo);
 		xorBBs(ptTo, to, us);
 		piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 
@@ -308,14 +308,14 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			byTypeBB_[ptCaptured].xorBit(to);
 			byColorBB_[them].xorBit(to);
 
-			hand_[us].plusOne(hpCaptured);
+			hand_[us].PlusOne(hpCaptured);
 			const int toListIndex = evalList_.squareHandToList[to];
 			st_->cl.listindex[1] = toListIndex;
 			st_->cl.clistpair[1].oldlist[0] = evalList_.list0[toListIndex];
 			st_->cl.clistpair[1].oldlist[1] = evalList_.list1[toListIndex];
 			st_->cl.size = 2;
 
-			const int handnum = hand(us).numOf(hpCaptured);
+			const int handnum = hand(us).NumOf(hpCaptured);
 			evalList_.list0[toListIndex] = kppHandArray[us  ][hpCaptured] + handnum;
 			evalList_.list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
 			const Square squarehand = HandPieceToSquareHand[us][hpCaptured] + handnum;
@@ -415,10 +415,10 @@ void Position::undoMove(const Move move) {
 		piece_[to] = Empty;
 
 		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
-		hand_[us].plusOne(hp);
+		hand_[us].PlusOne(hp);
 
 		const int toListIndex  = evalList_.squareHandToList[to];
-		const int handnum = hand(us).numOf(hp);
+		const int handnum = hand(us).NumOf(hp);
 		evalList_.list0[toListIndex] = kppHandArray[us  ][hp] + handnum;
 		evalList_.list1[toListIndex] = kppHandArray[them][hp] + handnum;
 		const Square squarehand = HandPieceToSquareHand[us][hp] + handnum;
@@ -451,14 +451,14 @@ void Position::undoMove(const Move move) {
 			const Piece pcCaptured = UtilPiece::FromColorAndPieceType(them, ptCaptured);
 			piece_[to] = pcCaptured;
 
-			const int handnum = hand(us).numOf(hpCaptured);
+			const int handnum = hand(us).NumOf(hpCaptured);
 			const int toListIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
 			evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
 			evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
 			evalList_.listToSquareHand[toListIndex] = to;
 			evalList_.squareHandToList[to] = toListIndex;
 
-			hand_[us].minusOne(hpCaptured);
+			hand_[us].MinusOne(hpCaptured);
 		}
 		else {
 			// 駒を取らないときは、UtilPiece::colorAndPieceTypeToPiece(us, ptCaptured) は 0 または 16 になる。
@@ -761,7 +761,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	const Bitboard dcBB_betweenIsThem = discoveredCheckBB<false>();
 
 	// 飛車打ち
-	if (ourHand.exists<HRook>()) {
+	if (ourHand.Exists<HRook>()) {
 		// 合駒されるとややこしいので、3手詰み関数の中で調べる。
 		// ここでは離れた位置から王手するのは考えない。
 		Bitboard toBB = dropTarget & rookStepAttacks(ksq);
@@ -781,7 +781,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	// 香車打ち
 	// 飛車で詰まなければ香車でも詰まないので、else if を使用。
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
-	else if (ourHand.exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
+	else if (ourHand.Exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
 		const Square to = ksq + TDeltaS;
 		if (piece(to) == Empty && attackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, lanceAttackToEdge(US, to))
@@ -793,7 +793,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	}
 
 	// 角打ち
-	if (ourHand.exists<HBishop>()) {
+	if (ourHand.Exists<HBishop>()) {
 		Bitboard toBB = dropTarget & bishopStepAttacks(ksq);
 		while (toBB.isNot0()) {
 			const Square to = toBB.firstOneFromI9();
@@ -808,9 +808,9 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	}
 
 	// 金打ち
-	if (ourHand.exists<HGold>()) {
+	if (ourHand.Exists<HGold>()) {
 		Bitboard toBB;
-		if (ourHand.exists<HRook>()) {
+		if (ourHand.Exists<HRook>()) {
 			// 飛車打ちを先に調べたので、尻金だけは省く。
 			toBB = dropTarget & (goldAttack(Them, ksq) ^ pawnAttack(US, ksq));
 		}
@@ -829,12 +829,12 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 		}
 	}
 
-	if (ourHand.exists<HSilver>()) {
+	if (ourHand.Exists<HSilver>()) {
 		Bitboard toBB;
-		if (ourHand.exists<HGold>()) {
+		if (ourHand.Exists<HGold>()) {
 			// 金打ちを先に調べたので、斜め後ろから打つ場合だけを調べる。
 
-			if (ourHand.exists<HBishop>()) {
+			if (ourHand.Exists<HBishop>()) {
 				// 角打ちを先に調べたので、斜めからの王手も除外できる。銀打ちを調べる必要がない。
 				goto silver_drop_end;
 			}
@@ -842,7 +842,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 			toBB = dropTarget & (silverAttack(Them, ksq) & inFrontMask(US, UtilSquare::ToRank(ksq)));
 		}
 		else {
-			if (ourHand.exists<HBishop>()) {
+			if (ourHand.Exists<HBishop>()) {
 				// 斜め後ろを除外。前方から打つ場合を調べる必要がある。
 				toBB = dropTarget & goldAndSilverAttacks(Them, ksq);
 			}
@@ -863,7 +863,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	}
 silver_drop_end:
 
-	if (ourHand.exists<HKnight>()) {
+	if (ourHand.Exists<HKnight>()) {
 		Bitboard toBB = dropTarget & knightAttack(Them, ksq);
 		while (toBB.isNot0()) {
 			const Square to = toBB.firstOneFromI9();
@@ -1684,7 +1684,7 @@ Key Position::computeHandKey() const {
 	Key result = 0;
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
 		for (Color c = Black; c < ColorNum; ++c) {
-			const int num = hand(c).numOf(hp);
+			const int num = hand(c).NumOf(hp);
 			for (int i = 0; i < num; ++i) {
 				result += zobHand(hp, c);
 			}
@@ -1725,8 +1725,8 @@ RepetitionType Position::isDraw(const int checkMaxPly) const {
 #endif
 			}
 			else if (stp->boardKey == st_->boardKey) {
-				if (st_->hand.isEqualOrSuperior(stp->hand)) { return RepetitionSuperior; }
-				if (stp->hand.isEqualOrSuperior(st_->hand)) { return RepetitionInferior; }
+				if (st_->hand.IsEqualOrSuperior(stp->hand)) { return RepetitionSuperior; }
+				if (stp->hand.IsEqualOrSuperior(st_->hand)) { return RepetitionInferior; }
 			}
 			i += 2;
 		} while (i <= e);
@@ -1736,10 +1736,10 @@ RepetitionType Position::isDraw(const int checkMaxPly) const {
 
 namespace {
 	void printHandPiece(const Position& pos, const HandPiece hp, const Color c, const std::string& str) {
-		if (pos.hand(c).numOf(hp)) {
+		if (pos.hand(c).NumOf(hp)) {
 			const char* sign = (c == Black ? "+" : "-");
 			std::cout << "P" << sign;
-			for (u32 i = 0; i < pos.hand(c).numOf(hp); ++i) {
+			for (u32 i = 0; i < pos.hand(c).NumOf(hp); ++i) {
 				std::cout << "00" << str;
 			}
 			std::cout << std::endl;
@@ -1953,7 +1953,7 @@ Score Position::computeMaterial() const {
 		s += num * pieceScore(pt);
 	}
 	for (PieceType pt = Pawn; pt < King; ++pt) {
-		const int num = hand(Black).numOf(UtilHandPiece::FromPieceType(pt)) - hand(White).numOf(UtilHandPiece::FromPieceType(pt));
+		const int num = hand(Black).NumOf(UtilHandPiece::FromPieceType(pt)) - hand(White).NumOf(UtilHandPiece::FromPieceType(pt));
 		s += num * pieceScore(pt);
 	}
 	return s;
