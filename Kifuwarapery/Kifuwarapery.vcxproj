@@ -239,6 +239,7 @@
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp" />
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />
+    <ClCompile Include="source\n160_board___\n160_200_bitboardMask.cpp" />
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp" />
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp" />
     <ClCompile Include="source\n240_position\n240_150_move.cpp" />

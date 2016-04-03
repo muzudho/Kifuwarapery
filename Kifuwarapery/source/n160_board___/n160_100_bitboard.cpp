@@ -214,16 +214,16 @@ const u64 g_bishopMagic[SquareNum] = {
 #endif
 
 const Bitboard g_fileMask[FileNum] = {
-	FileIMask, FileHMask, FileGMask, FileFMask, FileEMask, FileDMask, FileCMask, FileBMask, FileAMask
+	g_FileIMask, g_FileHMask, g_FileGMask, g_FileFMask, g_FileEMask, g_FileDMask, g_FileCMask, g_FileBMask, g_FileAMask
 };
 
 const Bitboard g_rankMask[RankNum] = {
-	Rank9Mask, Rank8Mask, Rank7Mask, Rank6Mask, Rank5Mask, Rank4Mask, Rank3Mask, Rank2Mask, Rank1Mask
+	g_Rank9Mask, g_Rank8Mask, g_Rank7Mask, g_Rank6Mask, g_Rank5Mask, g_Rank4Mask, g_Rank3Mask, g_Rank2Mask, g_Rank1Mask
 };
 
 const Bitboard g_inFrontMask[ColorNum][RankNum] = {
-	{ InFrontOfRank9Black, InFrontOfRank8Black, InFrontOfRank7Black, InFrontOfRank6Black, InFrontOfRank5Black, InFrontOfRank4Black, InFrontOfRank3Black, InFrontOfRank2Black, InFrontOfRank1Black },
-	{ InFrontOfRank9White, InFrontOfRank8White, InFrontOfRank7White, InFrontOfRank6White, InFrontOfRank5White, InFrontOfRank4White, InFrontOfRank3White, InFrontOfRank2White, InFrontOfRank1White }
+	{ g_InFrontOfRank9Black, g_InFrontOfRank8Black, g_InFrontOfRank7Black, g_InFrontOfRank6Black, g_InFrontOfRank5Black, g_InFrontOfRank4Black, g_InFrontOfRank3Black, g_InFrontOfRank2Black, g_InFrontOfRank1Black },
+	{ g_InFrontOfRank9White, g_InFrontOfRank8White, g_InFrontOfRank7White, g_InFrontOfRank6White, g_InFrontOfRank5White, g_InFrontOfRank4White, g_InFrontOfRank3White, g_InFrontOfRank2White, g_InFrontOfRank1White }
 };
 
 // これらは一度値を設定したら二度と変更しない。

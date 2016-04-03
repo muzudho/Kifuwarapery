@@ -118,7 +118,7 @@ namespace {
 		}
 
 		if (!second.isDrop() && !first.isDrop()) {
-			if (Bitboard::betweenBB(m2from, m2to).IsSet(m1from)) {
+			if (Bitboard::BetweenBB(m2from, m2to).IsSet(m1from)) {
 				return true;
 			}
 		}
@@ -205,7 +205,7 @@ namespace {
 
 		if (!second.isDrop()
 			&& UtilPieceType::IsSlider(m2ptFrom)
-			&& Bitboard::betweenBB(second.from(), m2to).IsSet(first.to())
+			&& Bitboard::BetweenBB(second.from(), m2to).IsSet(first.to())
 			&& ScoreZero <= pos.seeSign(first))
 		{
 			return true;
@@ -699,7 +699,7 @@ void Searcher::idLoop(Position& pos) {
 void Searcher::detectInaniwa(const Position& pos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= pos.gamePly()) {
 		const Rank TRank7 = (pos.turn() == Black ? Rank7 : Rank3); // not constant
-		const Bitboard mask = rankMask(TRank7) & ~fileMask<FileA>() & ~fileMask<FileI>();
+		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
 		if ((pos.bbOf(Pawn, UtilColor::OppositeColor(pos.turn())) & mask) == mask) {
 			inaniwaFlag = (pos.turn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			tt.clear();
@@ -1494,7 +1494,7 @@ bool nyugyoku(const Position& pos) {
 
 	const Color us = pos.turn();
 	// 敵陣のマスク
-	const Bitboard opponentsField = (us == Black ? inFrontMask<Black, Rank6>() : inFrontMask<White, Rank4>());
+	const Bitboard opponentsField = (us == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.bbOf(King, us).AndIsNot0(opponentsField))

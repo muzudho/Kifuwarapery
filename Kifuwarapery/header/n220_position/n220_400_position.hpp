@@ -66,7 +66,7 @@ public:
 	template <bool BetweenIsUs = true> Bitboard discoveredCheckBB() const { return hiddenCheckers<false, BetweenIsUs>(); }
 
 	// toFile と同じ筋に us の歩がないなら true
-	bool noPawns(const Color us, const File toFile) const { return !bbOf(Pawn, us).AndIsNot0(fileMask(toFile)); }
+	bool noPawns(const Color us, const File toFile) const { return !bbOf(Pawn, us).AndIsNot0(BitboardMask::GetFileMask(toFile)); }
 	bool isPawnDropCheckMate(const Color us, const Square sq) const;
 	// Pinされているfromの駒がtoに移動出来なければtrueを返す。
 	template <bool IsKnight = false>
@@ -122,7 +122,7 @@ public:
 
 	template <PieceType PT> Bitboard attacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
-		return Bitboard::goldAttack(c, sq);
+		return Bitboard::GoldAttack(c, sq);
 	}
 	template <PieceType PT> Bitboard attacksFrom(const Square sq) const {
 		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "");
@@ -258,13 +258,13 @@ private:
 		const Square ksq = kingSquare(FindPinned ? us : them);
 
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
-		pinners &= (bbOf(Lance) & Bitboard::lanceAttackToEdge((FindPinned ? us : them), ksq)) |
-			(bbOf(Rook, Dragon) & Bitboard::rookAttackToEdge(ksq)) | (bbOf(Bishop, Horse) & Bitboard::bishopAttackToEdge(ksq));
+		pinners &= (bbOf(Lance) & Bitboard::LanceAttackToEdge((FindPinned ? us : them), ksq)) |
+			(bbOf(Rook, Dragon) & Bitboard::RookAttackToEdge(ksq)) | (bbOf(Bishop, Horse) & Bitboard::BishopAttackToEdge(ksq));
 
 		while (pinners.IsNot0()) {
 			const Square sq = pinners.FirstOneFromI9();
 			// pin する遠隔駒と玉の間にある駒の位置の Bitboard
-			const Bitboard between = Bitboard::betweenBB(sq, ksq) & occupiedBB();
+			const Bitboard between = Bitboard::BetweenBB(sq, ksq) & occupiedBB();
 
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
 			if (between.IsNot0()

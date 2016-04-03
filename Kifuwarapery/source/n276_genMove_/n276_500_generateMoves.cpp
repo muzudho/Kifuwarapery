@@ -43,13 +43,13 @@ namespace {
 			Bitboard toBB = target;
 			// 一段目には打てない
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			toBB.AndEqualNot(rankMask<TRank9>());
+			toBB.AndEqualNot(BitboardMask::GetRankMask<TRank9>());
 
 			// 二歩の回避
 			Bitboard pawnsBB = pos.bbOf(Pawn, US);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
-				toBB.SetP(part, toBB.GetP(part) & ~squareFileMask(pawnsSquare).GetP(part));
+				toBB.SetP(part, toBB.GetP(part) & ~BitboardMask::GetSquareFileMask(pawnsSquare).GetP(part));
 			});
 
 			// 打ち歩詰めの回避
@@ -94,8 +94,8 @@ namespace {
 
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			const Bitboard TRank8BB = rankMask<TRank8>();
-			const Bitboard TRank9BB = rankMask<TRank9>();
+			const Bitboard TRank8BB = BitboardMask::GetRankMask<TRank8>();
+			const Bitboard TRank9BB = BitboardMask::GetRankMask<TRank9>();
 
 			Bitboard toBB;
 			Square to;
@@ -167,7 +167,7 @@ namespace {
 		) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
+			const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
 			Bitboard toBB = pos.bbOf(Pawn, US).PawnAttack<US>() & target;
@@ -349,9 +349,9 @@ namespace {
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
 			const Rank TRank7 = (US == Black ? Rank7 : Rank3);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
-			const Bitboard TRank789BB = inFrontMask<US, TRank6>();
-			const Bitboard TRank1_6BB = inFrontMask<UtilColor::OppositeColor(US), TRank7>();
-			const Bitboard TRank1_7BB = inFrontMask<UtilColor::OppositeColor(US), TRank8>();
+			const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
+			const Bitboard TRank1_6BB = BitboardMask::GetInFrontMask<UtilColor::OppositeColor(US), TRank7>();
+			const Bitboard TRank1_7BB = BitboardMask::GetInFrontMask<UtilColor::OppositeColor(US), TRank8>();
 
 			const Bitboard targetPawn =
 				(MT == Capture) ? pos.bbOf(UtilColor::OppositeColor(US)) :
@@ -412,26 +412,26 @@ namespace {
 				);
 			break;
 		case (THEM == Black ? BLance : WLance) :
-			bannedKingToBB |= Bitboard::lanceAttackToEdge(THEM, checkSq);
+			bannedKingToBB |= Bitboard::LanceAttackToEdge(THEM, checkSq);
 			break;
 		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= Bitboard::silverAttack(THEM, checkSq);
+			bannedKingToBB |= Bitboard::SilverAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BGold : WGold) :
 		case (THEM == Black ? BProPawn : WProPawn) :
 		case (THEM == Black ? BProLance : WProLance) :
 		case (THEM == Black ? BProKnight : WProKnight) :
 		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= Bitboard::goldAttack(THEM, checkSq);
+			bannedKingToBB |= Bitboard::GoldAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BBishop : WBishop) :
-			bannedKingToBB |= Bitboard::bishopAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::BishopAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
-			bannedKingToBB |= Bitboard::horseAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::HorseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
-			bannedKingToBB |= Bitboard::rookAttackToEdge(checkSq);
+			bannedKingToBB |= Bitboard::RookAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
 			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
@@ -440,7 +440,7 @@ namespace {
 				bannedKingToBB |= pos.attacksFrom<Dragon>(checkSq);
 			}
 			else {
-				bannedKingToBB |= Bitboard::dragonAttackToEdge(checkSq);
+				bannedKingToBB |= Bitboard::DragonAttackToEdge(checkSq);
 			}
 			break;
 		default:
@@ -494,7 +494,7 @@ namespace {
 
 			// 王手している駒を玉以外で取る手の生成。
 			// pin されているかどうかは movePicker か search で調べる。
-			const Bitboard target1 = Bitboard::betweenBB(checkSq, ksq);
+			const Bitboard target1 = Bitboard::BetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);

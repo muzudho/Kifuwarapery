@@ -21,10 +21,10 @@ template <> inline Bitboard Position::attacksFrom<Rook  >(const Color  , const S
 template <> inline Bitboard Position::attacksFrom<Horse >(const Color  , const Square sq, const Bitboard& occupied) { return  occupied.HorseAttack(   sq); }
 template <> inline Bitboard Position::attacksFrom<Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return occupied.DragonAttack(   sq); }
 
-template <> inline Bitboard Position::attacksFrom<Pawn  >(const Color c, const Square sq) const { return   Bitboard::pawnAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Pawn  >(const Color c, const Square sq) const { return   Bitboard::PawnAttack(c, sq              ); }
 template <> inline Bitboard Position::attacksFrom<Lance >(const Color c, const Square sq) const { return  occupiedBB().LanceAttack(c, sq); }
-template <> inline Bitboard Position::attacksFrom<Knight>(const Color c, const Square sq) const { return Bitboard::knightAttack(c, sq              ); }
-template <> inline Bitboard Position::attacksFrom<Silver>(const Color c, const Square sq) const { return Bitboard::silverAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Knight>(const Color c, const Square sq) const { return Bitboard::KnightAttack(c, sq              ); }
+template <> inline Bitboard Position::attacksFrom<Silver>(const Color c, const Square sq) const { return Bitboard::SilverAttack(c, sq              ); }
 template <> inline Bitboard Position::attacksFrom<Bishop>(const Color  , const Square sq) const { return occupiedBB().BishopAttack(   sq); }
 template <> inline Bitboard Position::attacksFrom<Rook  >(const Color  , const Square sq) const { return   occupiedBB().RookAttack(   sq); }
 template <> inline Bitboard Position::attacksFrom<King  >(const Color  , const Square sq) const { return   Bitboard::KingAttack(   sq              ); }

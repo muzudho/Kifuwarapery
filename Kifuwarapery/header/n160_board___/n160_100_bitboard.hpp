@@ -384,29 +384,29 @@ public://(^q^)
 		return this->RookAttack(sq) | this->BishopAttack(sq);
 	}
 
-	static inline Bitboard goldAttack(const Color c, const Square sq) { return g_goldAttack[c][sq]; }
-	static inline Bitboard silverAttack(const Color c, const Square sq) { return g_silverAttack[c][sq]; }
-	static inline Bitboard knightAttack(const Color c, const Square sq) { return g_knightAttack[c][sq]; }
-	static inline Bitboard pawnAttack(const Color c, const Square sq) { return g_pawnAttack[c][sq]; }
+	static inline Bitboard GoldAttack(const Color c, const Square sq) { return g_goldAttack[c][sq]; }
+	static inline Bitboard SilverAttack(const Color c, const Square sq) { return g_silverAttack[c][sq]; }
+	static inline Bitboard KnightAttack(const Color c, const Square sq) { return g_knightAttack[c][sq]; }
+	static inline Bitboard PawnAttack(const Color c, const Square sq) { return g_pawnAttack[c][sq]; }
 
 
 	// sq1, sq2 の間(sq1, sq2 は含まない)のビットが立った Bitboard
-	static inline Bitboard betweenBB(const Square sq1, const Square sq2) { return g_betweenBB[sq1][sq2]; }
-	static inline Bitboard rookAttackToEdge(const Square sq) { return g_rookAttackToEdge[sq]; }
-	static inline Bitboard bishopAttackToEdge(const Square sq) { return g_bishopAttackToEdge[sq]; }
-	static inline Bitboard lanceAttackToEdge(const Color c, const Square sq) { return g_lanceAttackToEdge[c][sq]; }
-	static inline Bitboard dragonAttackToEdge(const Square sq) { return Bitboard::rookAttackToEdge(sq) | Bitboard::KingAttack(sq); }
-	static inline Bitboard horseAttackToEdge(const Square sq) { return Bitboard::bishopAttackToEdge(sq) | Bitboard::KingAttack(sq); }
-	static inline Bitboard goldCheckTable(const Color c, const Square sq) { return g_goldCheckTable[c][sq]; }
-	static inline Bitboard silverCheckTable(const Color c, const Square sq) { return g_silverCheckTable[c][sq]; }
-	static inline Bitboard knightCheckTable(const Color c, const Square sq) { return g_knightCheckTable[c][sq]; }
-	static inline Bitboard lanceCheckTable(const Color c, const Square sq) { return g_lanceCheckTable[c][sq]; }
+	static inline Bitboard BetweenBB(const Square sq1, const Square sq2) { return g_betweenBB[sq1][sq2]; }
+	static inline Bitboard RookAttackToEdge(const Square sq) { return g_rookAttackToEdge[sq]; }
+	static inline Bitboard BishopAttackToEdge(const Square sq) { return g_bishopAttackToEdge[sq]; }
+	static inline Bitboard LanceAttackToEdge(const Color c, const Square sq) { return g_lanceAttackToEdge[c][sq]; }
+	static inline Bitboard DragonAttackToEdge(const Square sq) { return Bitboard::RookAttackToEdge(sq) | Bitboard::KingAttack(sq); }
+	static inline Bitboard HorseAttackToEdge(const Square sq) { return Bitboard::BishopAttackToEdge(sq) | Bitboard::KingAttack(sq); }
+	static inline Bitboard GoldCheckTable(const Color c, const Square sq) { return g_goldCheckTable[c][sq]; }
+	static inline Bitboard SilverCheckTable(const Color c, const Square sq) { return g_silverCheckTable[c][sq]; }
+	static inline Bitboard KnightCheckTable(const Color c, const Square sq) { return g_knightCheckTable[c][sq]; }
+	static inline Bitboard LanceCheckTable(const Color c, const Square sq) { return g_lanceCheckTable[c][sq]; }
 	// todo: テーブル引きを検討
-	static inline Bitboard rookStepAttacks(const Square sq) { return Bitboard::goldAttack(Black, sq) & Bitboard::goldAttack(White, sq); }
+	static inline Bitboard RookStepAttacks(const Square sq) { return Bitboard::GoldAttack(Black, sq) & Bitboard::GoldAttack(White, sq); }
 	// todo: テーブル引きを検討
-	static inline Bitboard bishopStepAttacks(const Square sq) { return Bitboard::silverAttack(Black, sq) & Bitboard::silverAttack(White, sq); }
+	static inline Bitboard BishopStepAttacks(const Square sq) { return Bitboard::SilverAttack(Black, sq) & Bitboard::SilverAttack(White, sq); }
 	// 前方3方向の位置のBitboard
-	static inline Bitboard goldAndSilverAttacks(const Color c, const Square sq) { return Bitboard::goldAttack(c, sq) & Bitboard::silverAttack(c, sq); }
+	static inline Bitboard GoldAndSilverAttacks(const Color c, const Square sq) { return Bitboard::GoldAttack(c, sq) & Bitboard::SilverAttack(c, sq); }
 
 };
 
