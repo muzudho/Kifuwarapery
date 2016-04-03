@@ -139,7 +139,7 @@ void UsiOperation::setPosition(Position& pos, std::istringstream& ssCmd) {
 		return;
 	}
 
-	pos.set(sfen, pos.searcher()->threads.mainThread());
+	pos.Set(sfen, pos.searcher()->threads.mainThread());
 	pos.searcher()->setUpStates = StateStackPtr(new std::stack<StateInfo>());
 
 	Ply currentPly = pos.gamePly();
@@ -183,13 +183,13 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = makeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.piece(from)), from, to, pos);
+			move = makeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return Move::moveNone();
 			}
-			move = makePromoteMove<Capture>(UtilPiece::ToPieceType(pos.piece(from)), from, to, pos);
+			move = makePromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else {
 			return Move::moveNone();
@@ -197,7 +197,7 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 	}
 
 	if (pos.moveIsPseudoLegal(move, true)
-		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.pinnedBB()))
+		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
 	{
 		return move;
 	}
@@ -231,7 +231,7 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 			return Move::moveNone();
 		}
 		const Square from = UtilSquare::FromFileRank(fromFile, fromRank);
-		PieceType ptFrom = UtilPiece::ToPieceType(pos.piece(from));
+		PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
 			move = makeNonPromoteMove<Capture>(ptFrom, from, to, pos);
@@ -246,7 +246,7 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 	}
 
 	if (pos.moveIsPseudoLegal(move, true)
-		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.pinnedBB()))
+		&& pos.pseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
 	{
 		return move;
 	}

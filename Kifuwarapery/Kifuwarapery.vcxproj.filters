@@ -491,5 +491,8 @@
     <ClCompile Include="source\n200_score___\n200_100_utilScore.cpp">
       <Filter>source\n200_score___</Filter>
     </ClCompile>
+    <ClCompile Include="source\n220_position\n220_400_position.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

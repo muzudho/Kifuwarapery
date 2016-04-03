@@ -339,8 +339,8 @@ public:
 				H9,	H8, H7, H6, H5, H4, H3, H2, H1,
 				I9, I8, I7, I6, I5, I4, I3, I2, I1,
 			};
-			int size = sizeof(squares) / sizeof(squares[0]);
-			for (int o = 0; o < size; o++)//order
+			int m_size = sizeof(squares) / sizeof(squares[0]);
+			for (int o = 0; o < m_size; o++)//order
 			{
 				int k1 = squares[o];//�ʂ̈ʒu
 #else

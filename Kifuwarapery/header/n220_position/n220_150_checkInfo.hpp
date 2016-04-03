@@ -6,7 +6,7 @@ class Position;
 
 struct CheckInfo {
 	explicit CheckInfo(const Position&);
-	Bitboard dcBB; // discoverd check candidates bitboard
-	Bitboard pinned;
-	Bitboard checkBB[PieceTypeNum];
+	Bitboard m_dcBB; // discoverd check candidates bitboard
+	Bitboard m_pinned;
+	Bitboard m_checkBB[PieceTypeNum];
 };

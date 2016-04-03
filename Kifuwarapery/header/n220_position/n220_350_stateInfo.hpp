@@ -7,15 +7,15 @@
 // StateInfoMin だけ memcpy でコピーすることああるので、
 // 継承を使っている。
 struct StateInfo : public StateInfoMin {
-	Key boardKey;
-	Key handKey;
+	Key m_boardKey;
+	Key m_handKey;
 	// 手番側の玉へ check している駒の Bitboard
-	Bitboard checkersBB;
-	StateInfo* previous;
+	Bitboard m_checkersBB;
+	StateInfo* m_previous;
 	// 手番側の持ち駒
-	Hand hand;
+	Hand m_hand;
 	// capturedPieceType は move.cap() で取得出来るので必要無い。
-	ChangedLists cl;
+	ChangedLists m_cl;
 
-	Key key() const { return boardKey + handKey; }
+	Key GetKey() const { return m_boardKey + m_handKey; }
 };

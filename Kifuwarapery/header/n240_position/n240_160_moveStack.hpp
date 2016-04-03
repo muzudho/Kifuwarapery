@@ -51,7 +51,7 @@ inline Move move16toMove(const Move move, const Position& pos) {
 		return move;
 	}
 	const Square from = move.from();
-	const PieceType ptFrom = UtilPiece::ToPieceType(pos.piece(from));
+	const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 	return move | pieceType2Move(ptFrom) | capturedPieceType2Move(move.to(), pos);
 }
 

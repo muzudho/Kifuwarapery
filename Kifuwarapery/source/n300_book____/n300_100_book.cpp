@@ -80,13 +80,13 @@ void Book::binary_search(const Key key) {
 
 Key Book::bookKey(const Position& pos) {
 	Key key = 0;
-	Bitboard bb = pos.occupiedBB();
+	Bitboard bb = pos.GetOccupiedBB();
 
 	while (bb.IsNot0()) {
 		const Square sq = bb.FirstOneFromI9();
-		key ^= ZobPiece[pos.piece(sq)][sq];
+		key ^= ZobPiece[pos.GetPiece(sq)][sq];
 	}
-	const Hand hand = pos.hand(pos.turn());
+	const Hand hand = pos.GetHand(pos.turn());
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
 		key ^= ZobHand[hp][hand.NumOf(hp)];
 	}
@@ -130,7 +130,7 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 			}
 			else {
 				const Square from = tmp.from();
-				const PieceType ptFrom = UtilPiece::ToPieceType(pos.piece(from));
+				const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 				const bool promo = tmp.isPromotion();
 				if (promo) {
 					move = makeCapturePromoteMove(ptFrom, from, to, pos);
@@ -193,7 +193,7 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
+		pos.Set(DefaultStartPositionSFEN, pos.searcher()->threads.mainThread());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {

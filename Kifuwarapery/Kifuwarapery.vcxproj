@@ -245,6 +245,7 @@
     <ClCompile Include="source\n160_board___\n160_200_bitboardMask.cpp" />
     <ClCompile Include="source\n200_score___\n200_100_utilScore.cpp" />
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp" />
+    <ClCompile Include="source\n220_position\n220_400_position.cpp" />
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp" />
     <ClCompile Include="source\n240_position\n240_150_move.cpp" />
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp" />

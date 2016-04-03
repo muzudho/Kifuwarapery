@@ -113,7 +113,7 @@ template <> Move MovePicker::nextMove<false>() {
 			if (!move.isNone()
 				&& move != ttMove_
 				&& pos().moveIsPseudoLegal(move, true)
-				&& pos().piece(move.to()) == Empty)
+				&& pos().GetPiece(move.to()) == Empty)
 			{
 				return move;
 			}
@@ -175,7 +175,7 @@ inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 void MovePicker::scoreCaptures() {
 	for (MoveStack* curr = currMove(); curr != lastMove(); ++curr) {
 		const Move move = curr->move;
-		curr->score = Position::pieceScore(pos().piece(move.to())) - LVA(move.pieceTypeFrom());
+		curr->score = Position::pieceScore(pos().GetPiece(move.to())) - LVA(move.pieceTypeFrom());
 	}
 }
 
@@ -198,9 +198,9 @@ void MovePicker::scoreEvasions() {
 			curr->score = seeScore - History::MaxScore;
 		}
 		else if (move.isCaptureOrPromotion()) {
-			curr->score = pos().capturePieceScore(pos().piece(move.to())) + History::MaxScore;
+			curr->score = pos().capturePieceScore(pos().GetPiece(move.to())) + History::MaxScore;
 			if (move.isPromotion()) {
-				const PieceType pt = UtilPiece::ToPieceType(pos().piece(move.from()));
+				const PieceType pt = UtilPiece::ToPieceType(pos().GetPiece(move.from()));
 				curr->score += pos().promotePieceScore(pt);
 			}
 		}

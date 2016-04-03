@@ -8,8 +8,8 @@ const Square HandPieceToSquareHand[ColorNum][HandPieceNum] = {
 };
 
 void EvalList::set(const Position& pos) {
-	const Hand handB = pos.hand(Black);
-	const Hand handW = pos.hand(White);
+	const Hand handB = pos.GetHand(Black);
+	const Hand handW = pos.GetHand(White);
 
 	int nlist = 0;
 	auto func = [&nlist, this](const Hand hand, const HandPiece hp, const int list0_index, const int list1_index, const Color c) {
@@ -37,10 +37,10 @@ void EvalList::set(const Position& pos) {
 	func(handB, HRook  , f_hand_rook  , e_hand_rook  , Black);
 	func(handW, HRook  , e_hand_rook  , f_hand_rook  , White);
 
-	Bitboard bb = pos.bbOf(King).NotThisAnd(pos.occupiedBB());
+	Bitboard bb = pos.GetBbOf(King).NotThisAnd(pos.GetOccupiedBB());
 	while (bb.IsNot0()) {
 		const Square sq = bb.FirstOneFromI9();
-		const Piece pc = pos.piece(sq);
+		const Piece pc = pos.GetPiece(sq);
 		listToSquareHand[nlist] = sq;
 		squareHandToList[sq] = nlist;
 		list0[nlist  ] = kppArray[pc         ] + sq;

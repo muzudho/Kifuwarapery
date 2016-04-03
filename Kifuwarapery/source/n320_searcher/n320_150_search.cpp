@@ -125,7 +125,7 @@ namespace {
 
 		const PieceType m1pt = first.pieceTypeFromOrDropped();
 		const Color us = pos.turn();
-		const Bitboard occ = (second.isDrop() ? pos.occupiedBB() : pos.occupiedBB() ^ Bitboard::SetMaskBB(m2from));
+		const Bitboard occ = (second.isDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from));
 		const Bitboard m1att = pos.attacksFrom(m1pt, us, m1to, occ);
 		if (m1att.IsSet(m2to)) {
 			return true;
@@ -175,7 +175,7 @@ namespace {
 			const Color us = pos.turn();
 			const Square m1to = first.to();
 			const Square m2from = second.from();
-			Bitboard occ = pos.occupiedBB() ^ Bitboard::SetMaskBB(m2from) ^ Bitboard::SetMaskBB(m1to);
+			Bitboard occ = pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from) ^ Bitboard::SetMaskBB(m1to);
 			PieceType m1ptTo;
 
 			if (first.isDrop()) {
@@ -193,12 +193,12 @@ namespace {
 			const Color them = UtilColor::OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
-				(pos.attacksFrom<Lance>(them, m2to, occ) & pos.bbOf(Lance, us))
-				| (pos.attacksFrom<Rook  >(m2to, occ) & pos.bbOf(Rook, Dragon, us))
-				| (pos.attacksFrom<Bishop>(m2to, occ) & pos.bbOf(Bishop, Horse, us));
+				(pos.attacksFrom<Lance>(them, m2to, occ) & pos.GetBbOf(Lance, us))
+				| (pos.attacksFrom<Rook  >(m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
+				| (pos.attacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.IsNot0() && (xray ^ (xray & pos.occupiedBB().QueenAttack(m2to))).IsNot0()) {
+			if (xray.IsNot0() && (xray ^ (xray & pos.GetOccupiedBB().QueenAttack(m2to))).IsNot0()) {
 				return true;
 			}
 		}
@@ -388,7 +388,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			&& move != ttMove)
 		{
 			futilityScore =
-				futilityBase + Position::capturePieceScore(pos.piece(move.to()));
+				futilityBase + Position::capturePieceScore(pos.GetPiece(move.to()));
 			if (move.isPromotion()) {
 				futilityScore += Position::promotePieceScore(move.pieceTypeFrom());
 			}
@@ -421,7 +421,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			continue;
 		}
 
-		if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)) {
+		if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 			continue;
 		}
 
@@ -530,7 +530,7 @@ void Searcher::idLoop(Position& pos) {
 			&& std::find_if(std::begin(rootMoves), std::end(rootMoves),
 							[](const RootMove& rm) { return rm.pv_[0].toCSA() == "0078KA"; }) != std::end(rootMoves)))
 	{
-		if (rootMoves.size() != 1)
+		if (rootMoves.m_size() != 1)
 			pvSize = std::max<size_t>(pvSize, 2);
 	}
 #endif
@@ -700,7 +700,7 @@ void Searcher::detectInaniwa(const Position& pos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= pos.gamePly()) {
 		const Rank TRank7 = (pos.turn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
-		if ((pos.bbOf(Pawn, UtilColor::OppositeColor(pos.turn())) & mask) == mask) {
+		if ((pos.GetBbOf(Pawn, UtilColor::OppositeColor(pos.turn())) & mask) == mask) {
 			inaniwaFlag = (pos.turn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			tt.clear();
 		}
@@ -711,33 +711,33 @@ void Searcher::detectInaniwa(const Position& pos) {
 void Searcher::detectBishopInDanger(const Position& pos) {
 	if (bishopInDangerFlag == NotBishopInDanger && pos.gamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(pos.turn());
-		if (pos.hand(pos.turn()).Exists<HBishop>()
-			&& pos.bbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
-			&& (pos.bbOf(King  , them).IsSet(InverseIfWhite(them, F2))
-				|| pos.bbOf(King  , them).IsSet(InverseIfWhite(them, F3))
-				|| pos.bbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
-			&& pos.bbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
-			&& pos.piece(InverseIfWhite(them, H2)) == Empty
-			&& pos.piece(InverseIfWhite(them, G2)) == Empty
-			&& pos.piece(InverseIfWhite(them, G1)) == Empty)
+		if (pos.m_hand(pos.turn()).Exists<HBishop>()
+			&& pos.GetBbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
+			&& (pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F2))
+				|| pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F3))
+				|| pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
+			&& pos.GetBbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
+			&& pos.GetPiece(InverseIfWhite(them, H2)) == Empty
+			&& pos.GetPiece(InverseIfWhite(them, G2)) == Empty
+			&& pos.GetPiece(InverseIfWhite(them, G1)) == Empty)
 		{
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
-		else if (pos.hand(pos.turn()).Exists<HBishop>()
-				 && pos.hand(them).Exists<HBishop>()
-				 && pos.piece(InverseIfWhite(them, C2)) == Empty
-				 && pos.piece(InverseIfWhite(them, C1)) == Empty
-				 && pos.piece(InverseIfWhite(them, D2)) == Empty
-				 && pos.piece(InverseIfWhite(them, D1)) == Empty
-				 && pos.piece(InverseIfWhite(them, A2)) == Empty
-				 && (UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, C3))) == Silver
-					 || UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, B2))) == Silver)
-				 && (UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, C3))) == Knight
-					 || UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, B1))) == Knight)
-				 && ((UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, E2))) == Gold
-					  && UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, E1))) == King)
-					 || UtilPiece::ToPieceType(pos.piece(InverseIfWhite(them, E1))) == Gold))
+		else if (pos.m_hand(pos.turn()).Exists<HBishop>()
+				 && pos.m_hand(them).Exists<HBishop>()
+				 && pos.GetPiece(InverseIfWhite(them, C2)) == Empty
+				 && pos.GetPiece(InverseIfWhite(them, C1)) == Empty
+				 && pos.GetPiece(InverseIfWhite(them, D2)) == Empty
+				 && pos.GetPiece(InverseIfWhite(them, D1)) == Empty
+				 && pos.GetPiece(InverseIfWhite(them, A2)) == Empty
+				 && (UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, C3))) == Silver
+					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, B2))) == Silver)
+				 && (UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, C3))) == Knight
+					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, B1))) == Knight)
+				 && ((UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E2))) == Gold
+					  && UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == King)
+					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == Gold))
 		{
 			bishopInDangerFlag = (pos.turn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
@@ -748,22 +748,22 @@ void Searcher::detectBishopInDanger(const Position& pos) {
 template <bool DO> void Position::doNullMove(StateInfo& backUpSt) {
 	assert(!inCheck());
 
-	StateInfo* src = (DO ? st_ : &backUpSt);
-	StateInfo* dst = (DO ? &backUpSt : st_);
+	StateInfo* src = (DO ? m_st_ : &backUpSt);
+	StateInfo* dst = (DO ? &backUpSt : m_st_);
 
-	dst->boardKey      = src->boardKey;
-	dst->handKey       = src->handKey;
-	dst->pliesFromNull = src->pliesFromNull;
-	dst->hand = hand(turn());
-	turn_ = UtilColor::OppositeColor(turn());
+	dst->m_boardKey      = src->m_boardKey;
+	dst->m_handKey       = src->m_handKey;
+	dst->m_pliesFromNull = src->m_pliesFromNull;
+	dst->m_hand = GetHand(turn());
+	m_turn_ = UtilColor::OppositeColor(turn());
 
 	if (DO) {
-		st_->boardKey ^= zobTurn();
-		prefetch(csearcher()->tt.firstEntry(st_->key()));
-		st_->pliesFromNull = 0;
-		st_->continuousCheck[turn()] = 0;
+		m_st_->m_boardKey ^= zobTurn();
+		prefetch(csearcher()->tt.firstEntry(m_st_->GetKey()));
+		m_st_->m_pliesFromNull = 0;
+		m_st_->m_continuousCheck[turn()] = 0;
 	}
-	st_->hand = hand(turn());
+	m_st_->m_hand = GetHand(turn());
 
 	assert(isOK());
 }
@@ -942,7 +942,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		)
 	{
 		const Square to = move.to();
-		gains.update(move.isDrop(), pos.piece(to), to, -(ss-1)->staticEval - ss->staticEval);
+		gains.update(move.isDrop(), pos.GetPiece(to), to, -(ss-1)->staticEval - ss->staticEval);
 	}
 
 	// step6
@@ -1046,7 +1046,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		MovePicker mp(pos, ttMove, history, move.cap());
 		const CheckInfo ci(pos);
 		while (!(move = mp.nextMove<false>()).isNone()) {
-			if (pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)) {
+			if (pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				ss->currentMove = move;
 				pos.doMove(move, st, ci, pos.moveGivesCheck(move, ci));
 				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
@@ -1108,7 +1108,7 @@ split_point_start:
 		}
 
 		if (SPNode) {
-			if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)) {
+			if (!pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				continue;
 			}
 			moveCount = ++splitPoint->moveCount;
@@ -1145,7 +1145,7 @@ split_point_start:
 		if (singularExtensionNode
 			&& extension == Depth0
 			&& move == ttMove
-			&& pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)
+			&& pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
 			&& abs(ttScore) < g_ScoreKnownWin)
 		{
 			assert(ttScore != ScoreNone);
@@ -1214,7 +1214,7 @@ split_point_start:
 		}
 
 		// RootNode, SPNode はすでに合法手であることを確認済み。
-		if (!RootNode && !SPNode && !pos.pseudoLegalMoveIsLegal<false, false>(move, ci.pinned)) {
+		if (!RootNode && !SPNode && !pos.pseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 			--moveCount;
 			continue;
 		}
@@ -1421,7 +1421,7 @@ void RootMove::extractPvFromTT(Position& pos) {
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
 		   && pos.moveIsPseudoLegal(m = move16toMove(tte->move(), pos))
-		   && pos.pseudoLegalMoveIsLegal<false, false>(m, pos.pinnedBB())
+		   && pos.pseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
 		   && ply < MaxPly
 		   && (!pos.isDraw(20) || ply < 6));
 
@@ -1497,16 +1497,16 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard opponentsField = (us == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
-	if (!pos.bbOf(King, us).AndIsNot0(opponentsField))
+	if (!pos.GetBbOf(King, us).AndIsNot0(opponentsField))
 		return false;
 
 	// 三 宣言側が、大駒5点小駒1点で計算して
 	//     先手の場合28点以上の持点がある。
 	//     後手の場合27点以上の持点がある。
 	//     点数の対象となるのは、宣言側の持駒と敵陣三段目以内に存在する玉を除く宣言側の駒のみである。
-	const Bitboard bigBB = pos.bbOf(Rook, Dragon, Bishop, Horse) & opponentsField & pos.bbOf(us);
-	const Bitboard smallBB = (pos.bbOf(Pawn, Lance, Knight, Silver) | pos.goldsBB()) & opponentsField & pos.bbOf(us);
-	const Hand hand = pos.hand(us);
+	const Bitboard bigBB = pos.GetBbOf(Rook, Dragon, Bishop, Horse) & opponentsField & pos.GetBbOf(us);
+	const Bitboard smallBB = (pos.GetBbOf(Pawn, Lance, Knight, Silver) | pos.GetGoldsBB()) & opponentsField & pos.GetBbOf(us);
+	const Hand hand = pos.GetHand(us);
 	const int val = (bigBB.PopCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
 		+ smallBB.PopCount()
 		+ hand.NumOf<HPawn>() + hand.NumOf<HLance>() + hand.NumOf<HKnight>()
@@ -1522,7 +1522,7 @@ bool nyugyoku(const Position& pos) {
 	// 四 宣言側の敵陣三段目以内の駒は、玉を除いて10枚以上存在する。
 
 	// 玉は敵陣にいるので、自駒が敵陣に11枚以上あればよい。
-	if ((pos.bbOf(us) & opponentsField).PopCount() < 11)
+	if ((pos.GetBbOf(us) & opponentsField).PopCount() < 11)
 		return false;
 
 	// 五 宣言側の玉に王手がかかっていない。

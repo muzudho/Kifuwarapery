@@ -302,7 +302,7 @@ private:
 			if (!ifs) break;
 			setLearnMoves(pos, dict, s0, s1, useTurnMove);
 		}
-		std::cout << "games existed: " << bookMovesDatum_.size() << std::endl;
+		std::cout << "games existed: " << bookMovesDatum_.m_size() << std::endl;
 	}
 	void readBook(Position& pos,
 				  const std::string& recordFileName,
@@ -313,7 +313,7 @@ private:
 		readBookBody(dict, pos,      recordFileName, {true , true }, gameNum);
 		readBookBody(dict, pos, blackRecordFileName, {true , false}, gameNum);
 		readBookBody(dict, pos, whiteRecordFileName, {false, true }, gameNum);
-		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.size());
+		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.m_size());
 	}
 	void setLearnOptions(Searcher& s) {
 		std::string options[] = {"name Threads value 1",
@@ -354,7 +354,7 @@ private:
 						int recordIsNth = 0; // 正解の手が何番目に良い手か。0から数える。
 						auto& recordPv = pos.searcher()->rootMoves[0].pv_;
 						bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(recordPv), std::end(recordPv));
-						const auto recordPVSize = bmd.pvBuffer.size();
+						const auto recordPVSize = bmd.pvBuffer.m_size();
 						for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
 							if (ml.move() != bmd.move) {
 								pos.searcher()->alpha = recordScore - FVWindow;
@@ -369,7 +369,7 @@ private:
 									++recordIsNth;
 							}
 						}
-						bmd.otherPVExist = (recordPVSize != bmd.pvBuffer.size());
+						bmd.otherPVExist = (recordPVSize != bmd.pvBuffer.m_size());
 						for (int i = recordIsNth; i < PredSize; ++i)
 							++predictions_[i];
 					}
@@ -388,14 +388,14 @@ private:
 		moveCount_.store(0);
 		for (auto& pred : predictions_)
 			pred.store(0);
-		std::vector<std::thread> threads(positions_.size());
-		for (size_t i = 0; i < positions_.size(); ++i)
+		std::vector<std::thread> threads(positions_.m_size());
+		for (size_t i = 0; i < positions_.m_size(); ++i)
 			threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
 		learnParse1Body(pos, mt_);
 		for (auto& thread : threads)
 			thread.join();
 
-		std::cout << "\nGames = " << bookMovesDatum_.size()
+		std::cout << "\nGames = " << bookMovesDatum_.m_size()
 				  << "\nTotal Moves = " << moveCount_
 				  << "\nPrediction = ";
 		for (auto& pred : predictions_)
@@ -486,7 +486,7 @@ private:
 					}
 
 					std::array<double, 2> sum_dT = {{0.0, 0.0}};
-					for (int otherPVIndex = recordPVIndex + 1; otherPVIndex < static_cast<int>(bmd.pvBuffer.size()); ++otherPVIndex) {
+					for (int otherPVIndex = recordPVIndex + 1; otherPVIndex < static_cast<int>(bmd.pvBuffer.m_size()); ++otherPVIndex) {
 						PRINT_PV(std::cout << "otherpv : ");
 						for (; !bmd.pvBuffer[otherPVIndex].isNone(); ++otherPVIndex) {
 							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].toCSA());
@@ -529,8 +529,8 @@ private:
 			t.Restart();
 			std::cout << "step " << step << "/" << stepNum_ << " " << std::flush;
 			index_ = 0;
-			std::vector<std::thread> threads(positions_.size());
-			for (size_t i = 0; i < positions_.size(); ++i)
+			std::vector<std::thread> threads(positions_.m_size());
+			for (size_t i = 0; i < positions_.m_size(); ++i)
 				threads[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
 			learnParse2Body(pos, parse2Data_);
 			for (auto& thread : threads)

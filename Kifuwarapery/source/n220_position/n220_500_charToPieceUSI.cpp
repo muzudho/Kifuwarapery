@@ -5,9 +5,9 @@
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 
-Key Position::zobrist_[PieceTypeNum][SquareNum][ColorNum];
-Key Position::zobHand_[HandPieceNum][ColorNum];
-Key Position::zobExclusion_;
+Key Position::m_zobrist_[PieceTypeNum][SquareNum][ColorNum];
+Key Position::m_zobHand_[HandPieceNum][ColorNum];
+Key Position::m_zobExclusion_;
 
 const CharToPieceUSI g_charToPieceUSI;
 
@@ -25,25 +25,25 @@ CheckInfo::CheckInfo(const Position& pos) {
 	const Color them = UtilColor::OppositeColor(pos.turn());
 	const Square ksq = pos.kingSquare(them);
 
-	pinned = pos.pinnedBB();
-	dcBB = pos.discoveredCheckBB();
+	m_pinned = pos.GetPinnedBB();
+	m_dcBB = pos.DiscoveredCheckBB();
 
-	checkBB[Pawn     ] = pos.attacksFrom<Pawn  >(them, ksq);
-	checkBB[Lance    ] = pos.attacksFrom<Lance >(them, ksq);
-	checkBB[Knight   ] = pos.attacksFrom<Knight>(them, ksq);
-	checkBB[Silver   ] = pos.attacksFrom<Silver>(them, ksq);
-	checkBB[Bishop   ] = pos.attacksFrom<Bishop>(ksq);
-	checkBB[Rook     ] = pos.attacksFrom<Rook  >(ksq);
-	checkBB[Gold     ] = pos.attacksFrom<Gold  >(them, ksq);
-	checkBB[King     ] = Bitboard::AllZeroBB();
+	m_checkBB[Pawn     ] = pos.attacksFrom<Pawn  >(them, ksq);
+	m_checkBB[Lance    ] = pos.attacksFrom<Lance >(them, ksq);
+	m_checkBB[Knight   ] = pos.attacksFrom<Knight>(them, ksq);
+	m_checkBB[Silver   ] = pos.attacksFrom<Silver>(them, ksq);
+	m_checkBB[Bishop   ] = pos.attacksFrom<Bishop>(ksq);
+	m_checkBB[Rook     ] = pos.attacksFrom<Rook  >(ksq);
+	m_checkBB[Gold     ] = pos.attacksFrom<Gold  >(them, ksq);
+	m_checkBB[King     ] = Bitboard::AllZeroBB();
 	// todo: ここで AVX2 使えそう。
 	//       checkBB のreadアクセスは switch (pt) で場合分けして、余計なコピー減らした方が良いかも。
-	checkBB[ProPawn  ] = checkBB[Gold];
-	checkBB[ProLance ] = checkBB[Gold];
-	checkBB[ProKnight] = checkBB[Gold];
-	checkBB[ProSilver] = checkBB[Gold];
-	checkBB[Horse    ] = checkBB[Bishop] | pos.attacksFrom<King>(ksq);
-	checkBB[Dragon   ] = checkBB[Rook  ] | pos.attacksFrom<King>(ksq);
+	m_checkBB[ProPawn  ] = m_checkBB[Gold];
+	m_checkBB[ProLance ] = m_checkBB[Gold];
+	m_checkBB[ProKnight] = m_checkBB[Gold];
+	m_checkBB[ProSilver] = m_checkBB[Gold];
+	m_checkBB[Horse    ] = m_checkBB[Bishop] | pos.attacksFrom<King>(ksq);
+	m_checkBB[Dragon   ] = m_checkBB[Rook  ] | pos.attacksFrom<King>(ksq);
 }
 
 Bitboard Position::attacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) {
@@ -87,7 +87,7 @@ bool Position::pseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) c
 	const Color us = turn();
 	const Square from = move.from();
 
-	if (!FROMMUSTNOTKING && UtilPiece::ToPieceType(piece(from)) == King) {
+	if (!FROMMUSTNOTKING && UtilPiece::ToPieceType(GetPiece(from)) == King) {
 		const Color them = UtilColor::OppositeColor(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
 		return !attackersToIsNot0(them, move.to());
@@ -137,7 +137,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	if (move.isDrop()) {
 		const PieceType ptFrom = move.pieceTypeDropped();
-		if (!hand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || piece(to) != Empty) {
+		if (!GetHand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != Empty) {
 			return false;
 		}
 
@@ -159,12 +159,12 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 
 		if (ptFrom == Pawn && checkPawnDrop) {
-			if ((bbOf(Pawn, us) & BitboardMask::GetFileMask(UtilSquare::ToFile(to))).IsNot0()) {
+			if ((this->GetBbOf(Pawn, us) & BitboardMask::GetFileMask(UtilSquare::ToFile(to))).IsNot0()) {
 				// 二歩
 				return false;
 			}
 			const SquareDelta TDeltaN = (us == Black ? DeltaN : DeltaS);
-			if (to + TDeltaN == kingSquare(them) && isPawnDropCheckMate(us, to)) {
+			if (to + TDeltaN == kingSquare(them) && IsPawnDropCheckMate(us, to)) {
 				// 王手かつ打ち歩詰め
 				return false;
 			}
@@ -173,7 +173,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 	else {
 		const Square from = move.from();
 		const PieceType ptFrom = move.pieceTypeFrom();
-		if (piece(from) != UtilPiece::FromColorAndPieceType(us, ptFrom) || bbOf(us).IsSet(to)) {
+		if (GetPiece(from) != UtilPiece::FromColorAndPieceType(us, ptFrom) || this->GetBbOf(us).IsSet(to)) {
 			return false;
 		}
 
@@ -183,7 +183,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 		if (inCheck()) {
 			if (ptFrom == King) {
-				Bitboard occ = occupiedBB();
+				Bitboard occ = GetOccupiedBB();
 				occ.ClearBit(from);
 				if (attackersToIsNot0(them, to, occ)) {
 					// 王手から逃げていない。
@@ -230,17 +230,17 @@ void Position::doMove(const Move move, StateInfo& newSt) {
 void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck) {
 	assert(isOK());
 	assert(!move.isNone());
-	assert(&newSt != st_);
+	assert(&newSt != m_st_);
 
 	Key boardKey = getBoardKey();
 	Key handKey = getHandKey();
 	boardKey ^= zobTurn();
 
-	memcpy(&newSt, st_, sizeof(StateInfoMin));
-	newSt.previous = st_;
-	st_ = &newSt;
+	memcpy(&newSt, m_st_, sizeof(StateInfoMin));
+	newSt.m_previous = m_st_;
+	m_st_ = &newSt;
 
-	st_->cl.size = 1;
+	m_st_->m_cl.m_size = 1;
 
 	const Color us = turn();
 	const Square to = move.to();
@@ -255,33 +255,33 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		prefetch(csearcher()->tt.firstEntry(boardKey + handKey));
 
-		const int handnum = hand(us).NumOf(hpTo);
-		const int listIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpTo] + handnum];
+		const int handnum = GetHand(us).NumOf(hpTo);
+		const int listIndex = m_evalList_.squareHandToList[HandPieceToSquareHand[us][hpTo] + handnum];
 		const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
-		st_->cl.listindex[0] = listIndex;
-		st_->cl.clistpair[0].oldlist[0] = evalList_.list0[listIndex];
-		st_->cl.clistpair[0].oldlist[1] = evalList_.list1[listIndex];
+		m_st_->m_cl.m_listindex[0] = listIndex;
+		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.list0[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.list1[listIndex];
 
-		evalList_.list0[listIndex] = kppArray[pcTo         ] + to;
-		evalList_.list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
-		evalList_.listToSquareHand[listIndex] = to;
-		evalList_.squareHandToList[to] = listIndex;
+		m_evalList_.list0[listIndex] = kppArray[pcTo         ] + to;
+		m_evalList_.list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+		m_evalList_.listToSquareHand[listIndex] = to;
+		m_evalList_.squareHandToList[to] = listIndex;
 
-		st_->cl.clistpair[0].newlist[0] = evalList_.list0[listIndex];
-		st_->cl.clistpair[0].newlist[1] = evalList_.list1[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.list0[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.list1[listIndex];
 
-		hand_[us].MinusOne(hpTo);
+		m_hand_[us].MinusOne(hpTo);
 		xorBBs(ptTo, to, us);
-		piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
+		m_piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 
 		if (moveIsCheck) {
 			// Direct checks
-			st_->checkersBB = Bitboard::SetMaskBB(to);
-			st_->continuousCheck[us] += 2;
+			m_st_->m_checkersBB = Bitboard::SetMaskBB(to);
+			m_st_->m_continuousCheck[us] += 2;
 		}
 		else {
-			st_->checkersBB = Bitboard::AllZeroBB();
-			st_->continuousCheck[us] = 0;
+			m_st_->m_checkersBB = Bitboard::AllZeroBB();
+			m_st_->m_continuousCheck[us] = 0;
 		}
 	}
 	else {
@@ -289,11 +289,11 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		const PieceType ptFrom = move.pieceTypeFrom();
 		ptTo = move.pieceTypeTo(ptFrom);
 
-		byTypeBB_[ptFrom].XorBit(from);
-		byTypeBB_[ptTo].XorBit(to);
-		byColorBB_[us].XorBit(from, to);
-		piece_[from] = Empty;
-		piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
+		m_byTypeBB_[ptFrom].XorBit(from);
+		m_byTypeBB_[ptTo].XorBit(to);
+		m_byColorBB_[us].XorBit(from, to);
+		m_piece_[from] = Empty;
+		m_piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 		boardKey -= zobrist(ptFrom, from, us);
 		boardKey += zobrist(ptTo, to, us);
 
@@ -305,96 +305,96 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			boardKey -= zobrist(ptCaptured, to, them);
 			handKey += zobHand(hpCaptured, us);
 
-			byTypeBB_[ptCaptured].XorBit(to);
-			byColorBB_[them].XorBit(to);
+			m_byTypeBB_[ptCaptured].XorBit(to);
+			m_byColorBB_[them].XorBit(to);
 
-			hand_[us].PlusOne(hpCaptured);
-			const int toListIndex = evalList_.squareHandToList[to];
-			st_->cl.listindex[1] = toListIndex;
-			st_->cl.clistpair[1].oldlist[0] = evalList_.list0[toListIndex];
-			st_->cl.clistpair[1].oldlist[1] = evalList_.list1[toListIndex];
-			st_->cl.size = 2;
+			m_hand_[us].PlusOne(hpCaptured);
+			const int toListIndex = m_evalList_.squareHandToList[to];
+			m_st_->m_cl.m_listindex[1] = toListIndex;
+			m_st_->m_cl.m_clistpair[1].m_oldlist[0] = m_evalList_.list0[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_oldlist[1] = m_evalList_.list1[toListIndex];
+			m_st_->m_cl.m_size = 2;
 
-			const int handnum = hand(us).NumOf(hpCaptured);
-			evalList_.list0[toListIndex] = kppHandArray[us  ][hpCaptured] + handnum;
-			evalList_.list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
+			const int handnum = GetHand(us).NumOf(hpCaptured);
+			m_evalList_.list0[toListIndex] = kppHandArray[us  ][hpCaptured] + handnum;
+			m_evalList_.list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
 			const Square squarehand = HandPieceToSquareHand[us][hpCaptured] + handnum;
-			evalList_.listToSquareHand[toListIndex] = squarehand;
-			evalList_.squareHandToList[squarehand]  = toListIndex;
+			m_evalList_.listToSquareHand[toListIndex] = squarehand;
+			m_evalList_.squareHandToList[squarehand]  = toListIndex;
 
-			st_->cl.clistpair[1].newlist[0] = evalList_.list0[toListIndex];
-			st_->cl.clistpair[1].newlist[1] = evalList_.list1[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_newlist[0] = m_evalList_.list0[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_newlist[1] = m_evalList_.list1[toListIndex];
 
-			st_->material += (us == Black ? capturePieceScore(ptCaptured) : -capturePieceScore(ptCaptured));
+			m_st_->m_material += (us == Black ? capturePieceScore(ptCaptured) : -capturePieceScore(ptCaptured));
 		}
 		prefetch(csearcher()->tt.firstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
 		// Black と White の or を取る方が速いはず。
-		byTypeBB_[Occupied] = bbOf(Black) | bbOf(White);
+		m_byTypeBB_[Occupied] = this->GetBbOf(Black) | GetBbOf(White);
 
 		if (ptTo == King) {
-			kingSquare_[us] = to;
+			m_kingSquare_[us] = to;
 		}
 		else {
 			const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
-			const int fromListIndex = evalList_.squareHandToList[from];
+			const int fromListIndex = m_evalList_.squareHandToList[from];
 
-			st_->cl.listindex[0] = fromListIndex;
-			st_->cl.clistpair[0].oldlist[0] = evalList_.list0[fromListIndex];
-			st_->cl.clistpair[0].oldlist[1] = evalList_.list1[fromListIndex];
+			m_st_->m_cl.m_listindex[0] = fromListIndex;
+			m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.list0[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.list1[fromListIndex];
 
-			evalList_.list0[fromListIndex] = kppArray[pcTo         ] + to;
-			evalList_.list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
-			evalList_.listToSquareHand[fromListIndex] = to;
-			evalList_.squareHandToList[to] = fromListIndex;
+			m_evalList_.list0[fromListIndex] = kppArray[pcTo         ] + to;
+			m_evalList_.list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+			m_evalList_.listToSquareHand[fromListIndex] = to;
+			m_evalList_.squareHandToList[to] = fromListIndex;
 
-			st_->cl.clistpair[0].newlist[0] = evalList_.list0[fromListIndex];
-			st_->cl.clistpair[0].newlist[1] = evalList_.list1[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.list0[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.list1[fromListIndex];
 		}
 
 		if (move.isPromotion()) {
-			st_->material += (us == Black ?
+			m_st_->m_material += (us == Black ?
 							  (pieceScore(ptTo) - pieceScore(ptFrom))
 							  : -(pieceScore(ptTo) - pieceScore(ptFrom)));
 		}
 
 		if (moveIsCheck) {
 			// Direct checks
-			st_->checkersBB = ci.checkBB[ptTo] & Bitboard::SetMaskBB(to);
+			m_st_->m_checkersBB = ci.m_checkBB[ptTo] & Bitboard::SetMaskBB(to);
 
 			// Discovery checks
 			const Square ksq = kingSquare(UtilColor::OppositeColor(us));
-			if (isDiscoveredCheck(from, to, ksq, ci.dcBB)) {
+			if (isDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
 				switch (UtilSquare::GetSquareRelation(from, ksq)) {
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
-					st_->checkersBB |= occupiedBB().RookAttackFile(from) & bbOf(us);
+					m_st_->m_checkersBB |= GetOccupiedBB().RookAttackFile(from) & this->GetBbOf(us);
 					break;
 				case DirecRank:
-					st_->checkersBB |= attacksFrom<Rook>(ksq) & bbOf(Rook, Dragon, us);
+					m_st_->m_checkersBB |= attacksFrom<Rook>(ksq) & this->GetBbOf(Rook, Dragon, us);
 					break;
 				case DirecDiagNESW: case DirecDiagNWSE:
-					st_->checkersBB |= attacksFrom<Bishop>(ksq) & bbOf(Bishop, Horse, us);
+					m_st_->m_checkersBB |= attacksFrom<Bishop>(ksq) & this->GetBbOf(Bishop, Horse, us);
 					break;
 				default: UNREACHABLE;
 				}
 			}
-			st_->continuousCheck[us] += 2;
+			m_st_->m_continuousCheck[us] += 2;
 		}
 		else {
-			st_->checkersBB = Bitboard::AllZeroBB();
-			st_->continuousCheck[us] = 0;
+			m_st_->m_checkersBB = Bitboard::AllZeroBB();
+			m_st_->m_continuousCheck[us] = 0;
 		}
 	}
-	goldsBB_ = bbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
+	m_goldsBB_ = this->GetBbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
 
-	st_->boardKey = boardKey;
-	st_->handKey = handKey;
-	++st_->pliesFromNull;
+	m_st_->m_boardKey = boardKey;
+	m_st_->m_handKey = handKey;
+	++m_st_->m_pliesFromNull;
 
-	turn_ = UtilColor::OppositeColor(us);
-	st_->hand = hand(turn());
+	m_turn_ = UtilColor::OppositeColor(us);
+	m_st_->m_hand = GetHand(turn());
 
 	assert(isOK());
 }
@@ -406,24 +406,24 @@ void Position::undoMove(const Move move) {
 	const Color them = turn();
 	const Color us = UtilColor::OppositeColor(them);
 	const Square to = move.to();
-	turn_ = us;
+	m_turn_ = us;
 	// ここで先に turn_ を戻したので、以下、move は us の指し手とする。
 	if (move.isDrop()) {
 		const PieceType ptTo = move.pieceTypeDropped();
-		byTypeBB_[ptTo].XorBit(to);
-		byColorBB_[us].XorBit(to);
-		piece_[to] = Empty;
+		m_byTypeBB_[ptTo].XorBit(to);
+		m_byColorBB_[us].XorBit(to);
+		m_piece_[to] = Empty;
 
 		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
-		hand_[us].PlusOne(hp);
+		m_hand_[us].PlusOne(hp);
 
-		const int toListIndex  = evalList_.squareHandToList[to];
-		const int handnum = hand(us).NumOf(hp);
-		evalList_.list0[toListIndex] = kppHandArray[us  ][hp] + handnum;
-		evalList_.list1[toListIndex] = kppHandArray[them][hp] + handnum;
+		const int toListIndex  = m_evalList_.squareHandToList[to];
+		const int handnum = GetHand(us).NumOf(hp);
+		m_evalList_.list0[toListIndex] = kppHandArray[us  ][hp] + handnum;
+		m_evalList_.list1[toListIndex] = kppHandArray[them][hp] + handnum;
 		const Square squarehand = HandPieceToSquareHand[us][hp] + handnum;
-		evalList_.listToSquareHand[toListIndex] = squarehand;
-		evalList_.squareHandToList[squarehand]  = toListIndex;
+		m_evalList_.listToSquareHand[toListIndex] = squarehand;
+		m_evalList_.squareHandToList[squarehand]  = toListIndex;
 	}
 	else {
 		const Square from = move.from();
@@ -432,52 +432,52 @@ void Position::undoMove(const Move move) {
 		const PieceType ptCaptured = move.cap(); // todo: st_->capturedType 使えば良い。
 
 		if (ptTo == King) {
-			kingSquare_[us] = from;
+			m_kingSquare_[us] = from;
 		}
 		else {
 			const Piece pcFrom = UtilPiece::FromColorAndPieceType(us, ptFrom);
-			const int toListIndex = evalList_.squareHandToList[to];
-			evalList_.list0[toListIndex] = kppArray[pcFrom         ] + from;
-			evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
-			evalList_.listToSquareHand[toListIndex] = from;
-			evalList_.squareHandToList[from] = toListIndex;
+			const int toListIndex = m_evalList_.squareHandToList[to];
+			m_evalList_.list0[toListIndex] = kppArray[pcFrom         ] + from;
+			m_evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
+			m_evalList_.listToSquareHand[toListIndex] = from;
+			m_evalList_.squareHandToList[from] = toListIndex;
 		}
 
 		if (ptCaptured) {
 			// 駒を取ったとき
-			byTypeBB_[ptCaptured].XorBit(to);
-			byColorBB_[them].XorBit(to);
+			m_byTypeBB_[ptCaptured].XorBit(to);
+			m_byColorBB_[them].XorBit(to);
 			const HandPiece hpCaptured = UtilHandPiece::FromPieceType(ptCaptured);
 			const Piece pcCaptured = UtilPiece::FromColorAndPieceType(them, ptCaptured);
-			piece_[to] = pcCaptured;
+			m_piece_[to] = pcCaptured;
 
-			const int handnum = hand(us).NumOf(hpCaptured);
-			const int toListIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
-			evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
-			evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
-			evalList_.listToSquareHand[toListIndex] = to;
-			evalList_.squareHandToList[to] = toListIndex;
+			const int handnum = GetHand(us).NumOf(hpCaptured);
+			const int toListIndex = m_evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
+			m_evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
+			m_evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
+			m_evalList_.listToSquareHand[toListIndex] = to;
+			m_evalList_.squareHandToList[to] = toListIndex;
 
-			hand_[us].MinusOne(hpCaptured);
+			m_hand_[us].MinusOne(hpCaptured);
 		}
 		else {
 			// 駒を取らないときは、UtilPiece::colorAndPieceTypeToPiece(us, ptCaptured) は 0 または 16 になる。
 			// 16 になると困るので、駒を取らないときは明示的に Empty にする。
-			piece_[to] = Empty;
+			m_piece_[to] = Empty;
 		}
-		byTypeBB_[ptFrom].XorBit(from);
-		byTypeBB_[ptTo].XorBit(to);
-		byColorBB_[us].XorBit(from, to);
-		piece_[from] = UtilPiece::FromColorAndPieceType(us, ptFrom);
+		m_byTypeBB_[ptFrom].XorBit(from);
+		m_byTypeBB_[ptTo].XorBit(to);
+		m_byColorBB_[us].XorBit(from, to);
+		m_piece_[from] = UtilPiece::FromColorAndPieceType(us, ptFrom);
 	}
 	// Occupied は to, from の位置のビットを操作するよりも、
 	// Black と White の or を取る方が速いはず。
-	byTypeBB_[Occupied] = bbOf(Black) | bbOf(White);
-	goldsBB_ = bbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
+	m_byTypeBB_[Occupied] = this->GetBbOf(Black) | GetBbOf(White);
+	m_goldsBB_ = this->GetBbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
 
 	// key などは StateInfo にまとめられているので、
 	// previous のポインタを st_ に代入するだけで良い。
-	st_ = st_->previous;
+	m_st_ = m_st_->m_previous;
 
 	assert(isOK());
 }
@@ -502,33 +502,33 @@ namespace {
 	template <PieceType PT> FORCE_INLINE PieceType nextAttacker(const Position& pos, const Square to, const Bitboard& opponentAttackers,
 																Bitboard& occupied, Bitboard& attackers, const Color turn)
 	{
-		if (opponentAttackers.AndIsNot0(pos.bbOf(PT))) {
-			const Bitboard bb = opponentAttackers & pos.bbOf(PT);
+		if (opponentAttackers.AndIsNot0(pos.GetBbOf(PT))) {
+			const Bitboard bb = opponentAttackers & pos.GetBbOf(PT);
 			const Square from = bb.ConstFirstOneFromI9();
 			occupied.XorBit(from);
 			// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
 			//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
 			if (PT == Pawn || PT == Lance) {
-				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & (pos.bbOf(Rook, Dragon) | pos.bbOf(Lance, turn)));
+				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & (pos.GetBbOf(Rook, Dragon) | pos.GetBbOf(Lance, turn)));
 			}
 			if (PT == Gold || PT == ProPawn || PT == ProLance || PT == ProKnight || PT == ProSilver || PT == Horse || PT == Dragon) {
-				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.bbOf(Lance, turn))
-					| (occupied.LanceAttack(turn, to) & pos.bbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (occupied.RookAttack(to) & pos.bbOf(Rook, Dragon))
-					| (occupied.BishopAttack(to) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+					| (occupied.LanceAttack(turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
+					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon))
+					| (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Silver) {
-				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.bbOf(Lance, turn))
-					| (occupied.RookAttack(to) & pos.bbOf(Rook, Dragon))
-					| (occupied.BishopAttack(to) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon))
+					| (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Bishop) {
-				attackers |= (occupied.BishopAttack(to) & pos.bbOf(Bishop, Horse));
+				attackers |= (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Rook) {
-				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.bbOf(Lance, turn))
-					| (occupied.LanceAttack(turn, to) & pos.bbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (occupied.RookAttack(to) & pos.bbOf(Rook, Dragon));
+				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+					| (occupied.LanceAttack(turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
+					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon));
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {
@@ -556,7 +556,7 @@ Score Position::see(const Move move, const int asymmThreshold) const {
 	const Square to = move.to();
 	Square from;
 	PieceType ptCaptured;
-	Bitboard occ = occupiedBB();
+	Bitboard occ = GetOccupiedBB();
 	Bitboard attackers;
 	Bitboard opponentAttackers;
 	Color turn = UtilColor::OppositeColor(this->turn());
@@ -600,7 +600,7 @@ Score Position::see(const Move move, const int asymmThreshold) const {
 		attackers &= occ;
 		++slIndex;
 		turn = UtilColor::OppositeColor(turn);
-		opponentAttackers = attackers & bbOf(turn);
+		opponentAttackers = attackers & GetBbOf(turn);
 
 		if (ptCaptured == King) {
 			if (opponentAttackers.IsNot0()) {
@@ -629,7 +629,7 @@ Score Position::seeSign(const Move move) const {
 	if (move.isCapture()) {
 		const PieceType ptFrom = move.pieceTypeFrom();
 		const Square to = move.to();
-		if (capturePieceScore(ptFrom) <= capturePieceScore(piece(to))) {
+		if (capturePieceScore(ptFrom) <= capturePieceScore(GetPiece(to))) {
 			return static_cast<Score>(1);
 		}
 	}
@@ -645,11 +645,11 @@ namespace {
 	bool canKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
 		const Color them = UtilColor::OppositeColor(us);
 		const Square ksq = pos.kingSquare(them);
-		Bitboard kingMoveBB = bb.NotThisAnd(pos.bbOf(them).NotThisAnd(Bitboard::KingAttack(ksq)));
+		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf(them).NotThisAnd(Bitboard::KingAttack(ksq)));
 		kingMoveBB.ClearBit(sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
 
 		if (kingMoveBB.IsNot0()) {
-			Bitboard tempOccupied = pos.occupiedBB();
+			Bitboard tempOccupied = pos.GetOccupiedBB();
 			tempOccupied.SetBit(sq);
 			tempOccupied.ClearBit(ksq);
 			do {
@@ -688,7 +688,7 @@ namespace {
 
 		if (fromBB.IsNot0()) {
 			const Square ksq = pos.kingSquare(them);
-			const Bitboard dcBB = pos.discoveredCheckBB<false>();
+			const Bitboard dcBB = pos.DiscoveredCheckBB<false>();
 			do {
 				const Square from = fromBB.FirstOneFromI9();
 				if (!pos.isDiscoveredCheck(from, sq, ksq, dcBB)) {
@@ -705,7 +705,7 @@ namespace {
 // us が sq へ歩を打ったとき、them の玉が詰むか。
 // us が sq へ歩を打つのは王手であると仮定する。
 // 打ち歩詰めのとき、true を返す。
-bool Position::isPawnDropCheckMate(const Color us, const Square sq) const {
+bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 	const Color them = UtilColor::OppositeColor(us);
 	// 玉以外の駒で、打たれた歩が取れるなら、打ち歩詰めではない。
 	if (canPieceCapture(*this, them, sq)) {
@@ -719,8 +719,8 @@ bool Position::isPawnDropCheckMate(const Color us, const Square sq) const {
 	// 利きを求める際に、occupied の歩を打った位置の bit を立てた Bitboard を使用する。
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
-	const Bitboard tempOccupied = occupiedBB() | Bitboard::SetMaskBB(sq);
-	Bitboard kingMoveBB = bbOf(them).NotThisAnd(Bitboard::KingAttack(ksq));
+	const Bitboard tempOccupied = GetOccupiedBB() | Bitboard::SetMaskBB(sq);
+	Bitboard kingMoveBB = GetBbOf(them).NotThisAnd(Bitboard::KingAttack(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
 	assert(kingMoveBB.IsNot0());
@@ -736,9 +736,9 @@ bool Position::isPawnDropCheckMate(const Color us, const Square sq) const {
 }
 
 inline void Position::xorBBs(const PieceType pt, const Square sq, const Color c) {
-	byTypeBB_[Occupied].XorBit(sq);
-	byTypeBB_[pt].XorBit(sq);
-	byColorBB_[c].XorBit(sq);
+	m_byTypeBB_[Occupied].XorBit(sq);
+	m_byTypeBB_[pt].XorBit(sq);
+	m_byColorBB_[c].XorBit(sq);
 }
 
 // 相手玉が1手詰みかどうかを判定。
@@ -753,12 +753,12 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	assert(!attackersToIsNot0(Them, kingSquare(US)));
 
 	// 駒打ちを調べる。
-	const Bitboard dropTarget = nOccupiedBB(); // emptyBB() ではないので注意して使うこと。
-	const Hand ourHand = hand(US);
+	const Bitboard dropTarget = GetNOccupiedBB(); // emptyBB() ではないので注意して使うこと。
+	const Hand ourHand = GetHand(US);
 	// 王手する前の状態の dcBB。
 	// 間にある駒は相手側の駒。
 	// 駒打ちのときは、打った後も、打たれる前の状態の dcBB を使用する。
-	const Bitboard dcBB_betweenIsThem = discoveredCheckBB<false>();
+	const Bitboard dcBB_betweenIsThem = DiscoveredCheckBB<false>();
 
 	// 飛車打ち
 	if (ourHand.Exists<HRook>()) {
@@ -783,7 +783,7 @@ template <Color US> Move Position::mateMoveIn1Ply() {
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
 	else if (ourHand.Exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
 		const Square to = ksq + TDeltaS;
-		if (piece(to) == Empty && attackersToIsNot0(US, to)) {
+		if (GetPiece(to) == Empty && attackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, Bitboard::LanceAttackToEdge(US, to))
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
@@ -881,13 +881,13 @@ silver_drop_end:
 
 	// 駒を移動する場合
 	// moveTarget は桂馬以外の移動先の大まかな位置。飛角香の遠隔王手は含まない。
-	const Bitboard moveTarget = bbOf(US).NotThisAnd(Bitboard::KingAttack(ksq));
-	const Bitboard pinned = pinnedBB();
-	const Bitboard dcBB_betweenIsUs = discoveredCheckBB<true>();
+	const Bitboard moveTarget = GetBbOf(US).NotThisAnd(Bitboard::KingAttack(ksq));
+	const Bitboard pinned = GetPinnedBB();
+	const Bitboard dcBB_betweenIsUs = DiscoveredCheckBB<true>();
 
 	{
 		// 竜による移動
-		Bitboard fromBB = bbOf(Dragon, US);
+		Bitboard fromBB = GetBbOf(Dragon, US);
 		while (fromBB.IsNot0()) {
 			const Square from = fromBB.FirstOneFromI9();
 			// 遠隔王手は考えない。
@@ -895,7 +895,7 @@ silver_drop_end:
 			if (toBB.IsNot0()) {
 				xorBBs(Dragon, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-				const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 				// to の位置の Bitboard は canKingEscape の中で更新する。
 				do {
 					const Square to = toBB.FirstOneFromI9();
@@ -904,7 +904,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、王手した駒が pin されていない
-						if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::SetMaskBB(ksq)))
+						if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, GetOccupiedBB() ^ Bitboard::SetMaskBB(ksq)))
 							&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -924,7 +924,7 @@ silver_drop_end:
 	const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
 	{
 		// 飛車による移動
-		Bitboard fromBB = bbOf(Rook, US);
+		Bitboard fromBB = GetBbOf(Rook, US);
 		Bitboard fromOn789BB = fromBB & TRank789BB;
 		// from が 123 段目
 		if (fromOn789BB.IsNot0()) {
@@ -935,12 +935,12 @@ silver_drop_end:
 				if (toBB.IsNot0()) {
 					xorBBs(Rook, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					do {
 						const Square to = toBB.FirstOneFromI9();
 						if (unDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::SetMaskBB(ksq)))
+							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, GetOccupiedBB() ^ Bitboard::SetMaskBB(ksq)))
 								&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -962,7 +962,7 @@ silver_drop_end:
 			if (toBB.IsNot0()) {
 				xorBBs(Rook, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-				const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 
 				Bitboard toOn789BB = toBB & TRank789BB;
 				// 成り
@@ -970,7 +970,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.FirstOneFromI9();
 						if (unDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, occupiedBB() ^ Bitboard::SetMaskBB(ksq)))
+							if (!canKingEscape(*this, US, to, attacksFrom<Dragon>(to, GetOccupiedBB() ^ Bitboard::SetMaskBB(ksq)))
 								&& (isDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
@@ -1004,7 +1004,7 @@ silver_drop_end:
 
 	{
 		// 馬による移動
-		Bitboard fromBB = bbOf(Horse, US);
+		Bitboard fromBB = GetBbOf(Horse, US);
 		while (fromBB.IsNot0()) {
 			const Square from = fromBB.FirstOneFromI9();
 			// 遠隔王手は考えない。
@@ -1012,7 +1012,7 @@ silver_drop_end:
 			if (toBB.IsNot0()) {
 				xorBBs(Horse, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-				const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 				// to の位置の Bitboard は canKingEscape の中で更新する。
 				do {
 					const Square to = toBB.FirstOneFromI9();
@@ -1038,7 +1038,7 @@ silver_drop_end:
 
 	{
 		// 角による移動
-		Bitboard fromBB = bbOf(Bishop, US);
+		Bitboard fromBB = GetBbOf(Bishop, US);
 		Bitboard fromOn789BB = fromBB & TRank789BB;
 		// from が 123 段目
 		if (fromOn789BB.IsNot0()) {
@@ -1049,7 +1049,7 @@ silver_drop_end:
 				if (toBB.IsNot0()) {
 					xorBBs(Bishop, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					do {
 						const Square to = toBB.FirstOneFromI9();
@@ -1076,7 +1076,7 @@ silver_drop_end:
 			if (toBB.IsNot0()) {
 				xorBBs(Bishop, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-				const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 
 				Bitboard toOn789BB = toBB & TRank789BB;
 				// 成り
@@ -1118,16 +1118,16 @@ silver_drop_end:
 
 	{
 		// 金、成り金による移動
-		Bitboard fromBB = goldsBB(US) & Bitboard::GoldCheckTable(US, ksq);
+		Bitboard fromBB = GetGoldsBB(US) & Bitboard::GoldCheckTable(US, ksq);
 		while (fromBB.IsNot0()) {
 			const Square from = fromBB.FirstOneFromI9();
 			Bitboard toBB = moveTarget & attacksFrom<Gold>(US, from) & attacksFrom<Gold>(Them, ksq);
 			if (toBB.IsNot0()) {
-				const PieceType pt = UtilPiece::ToPieceType(piece(from));
+				const PieceType pt = UtilPiece::ToPieceType(GetPiece(from));
 				xorBBs(pt, from, US);
-				goldsBB_.XorBit(from);
+				m_goldsBB_.XorBit(from);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-				const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 				// to の位置の Bitboard は canKingEscape の中で更新する。
 				do {
 					const Square to = toBB.FirstOneFromI9();
@@ -1142,20 +1142,20 @@ silver_drop_end:
 							&& !isPinnedIllegal(from, to, kingSquare(US), pinned))
 						{
 							xorBBs(pt, from, US);
-							goldsBB_.XorBit(from);
+							m_goldsBB_.XorBit(from);
 							return makeCaptureMove(pt, from, to, *this);
 						}
 					}
 				} while (toBB.IsNot0());
 				xorBBs(pt, from, US);
-				goldsBB_.XorBit(from);
+				m_goldsBB_.XorBit(from);
 			}
 		}
 	}
 
 	{
 		// 銀による移動
-		Bitboard fromBB = bbOf(Silver, US) & Bitboard::SilverCheckTable(US, ksq);
+		Bitboard fromBB = GetBbOf(Silver, US) & Bitboard::SilverCheckTable(US, ksq);
 		if (fromBB.IsNot0()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const Bitboard TRank1_5BB = BitboardMask::GetInFrontMask<Them, TRank6>();
@@ -1175,7 +1175,7 @@ silver_drop_end:
 					if ((toBB_promo | toBB).IsNot0()) {
 						xorBBs(Silver, from, US);
 						// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-						const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+						const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 						// to の位置の Bitboard は canKingEscape の中で更新する。
 						while (toBB_promo.IsNot0()) {
 							const Square to = toBB_promo.FirstOneFromI9();
@@ -1226,7 +1226,7 @@ silver_drop_end:
 					if (toBB.IsNot0()) {
 						xorBBs(Silver, from, US);
 						// 動いた後の dcBB, pinned: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-						const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+						const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 						// to の位置の Bitboard は canKingEscape の中で更新する。
 						while (toBB.IsNot0()) {
 							const Square to = toBB.FirstOneFromI9();
@@ -1259,7 +1259,7 @@ silver_drop_end:
 				if ((toBB_promo | toBB).IsNot0()) {
 					xorBBs(Silver, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					while (toBB_promo.IsNot0()) {
 						const Square to = toBB_promo.FirstOneFromI9();
@@ -1299,20 +1299,20 @@ silver_drop_end:
 
 	{
 		// 桂による移動
-		Bitboard fromBB = bbOf(Knight, US) & Bitboard::KnightCheckTable(US, ksq);
+		Bitboard fromBB = GetBbOf(Knight, US) & Bitboard::KnightCheckTable(US, ksq);
 		if (fromBB.IsNot0()) {
 			const Bitboard chkBB_promo = attacksFrom<Gold>(Them, ksq) & TRank789BB;
 			const Bitboard chkBB = attacksFrom<Knight>(Them, ksq);
 
 			do {
 				const Square from = fromBB.FirstOneFromI9();
-				Bitboard toBB = bbOf(US).NotThisAnd(attacksFrom<Knight>(US, from));
+				Bitboard toBB = GetBbOf(US).NotThisAnd(attacksFrom<Knight>(US, from));
 				Bitboard toBB_promo = toBB & chkBB_promo;
 				toBB &= chkBB;
 				if ((toBB_promo | toBB).IsNot0()) {
 					xorBBs(Knight, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					while (toBB_promo.IsNot0()) {
 						const Square to = toBB_promo.FirstOneFromI9();
@@ -1350,7 +1350,7 @@ silver_drop_end:
 
 	{
 		// 香車による移動
-		Bitboard fromBB = bbOf(Lance, US) & Bitboard::LanceCheckTable(US, ksq);
+		Bitboard fromBB = GetBbOf(Lance, US) & Bitboard::LanceCheckTable(US, ksq);
 		if (fromBB.IsNot0()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
@@ -1370,7 +1370,7 @@ silver_drop_end:
 				if ((toBB_promo | toBB).IsNot0()) {
 					xorBBs(Lance, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 
 					while (toBB_promo.IsNot0()) {
@@ -1421,7 +1421,7 @@ silver_drop_end:
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 			const SquareDelta TDeltaN = (US == Black ? DeltaN : DeltaS);
 
-			Bitboard fromBB = bbOf(Pawn, US);
+			Bitboard fromBB = GetBbOf(Pawn, US);
 			// 玉が敵陣にいないと成で王手になることはない。
 			if (UtilSquare::IsInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
@@ -1433,7 +1433,7 @@ silver_drop_end:
 
 					xorBBs(Pawn, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					if (unDropCheckIsSupported(US, to)) {
 						// 成り
@@ -1454,12 +1454,12 @@ silver_drop_end:
 			// 玉が 8,9 段目にいることは無いので、from,to が隣の筋を指すことは無い。
 			const Square to = ksq + TDeltaS;
 			const Square from = to + TDeltaS;
-			if (fromBB.IsSet(from) && !bbOf(US).IsSet(to)) {
+			if (fromBB.IsSet(from) && !GetBbOf(US).IsSet(to)) {
 				// 玉が 1, 2 段目にいるなら、成りで王手出来るので不成は調べない。
 				if (UtilSquare::IsBehind<US, Rank8, Rank2>(krank)) {
 					xorBBs(Pawn, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
-					const Bitboard dcBB_betweenIsThem_after = discoveredCheckBB<false>();
+					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					if (unDropCheckIsSupported(US, to)) {
 						// 不成
@@ -1492,15 +1492,15 @@ void Position::initZobrist() {
 	for (PieceType pt = Occupied; pt < PieceTypeNum; ++pt) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			for (Color c = Black; c < ColorNum; ++c) {
-				zobrist_[pt][sq][c] = g_mt64bit.random() & ~UINT64_C(1);
+				m_zobrist_[pt][sq][c] = g_mt64bit.random() & ~UINT64_C(1);
 			}
 		}
 	}
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
-		zobHand_[hp][Black] = g_mt64bit.random() & ~UINT64_C(1);
-		zobHand_[hp][White] = g_mt64bit.random() & ~UINT64_C(1);
+		m_zobHand_[hp][Black] = g_mt64bit.random() & ~UINT64_C(1);
+		m_zobHand_[hp][White] = g_mt64bit.random() & ~UINT64_C(1);
 	}
-	zobExclusion_ = g_mt64bit.random() & ~UINT64_C(1);
+	m_zobExclusion_ = g_mt64bit.random() & ~UINT64_C(1);
 }
 
 void Position::print() const {
@@ -1510,7 +1510,7 @@ void Position::print() const {
 		++i;
 		std::cout << "P" << i;
 		for (File f = FileA; FileI <= f; --f) {
-			std::cout << pieceToCharCSA(piece(UtilSquare::FromFileRank(f, r)));
+			std::cout << pieceToCharCSA(GetPiece(UtilSquare::FromFileRank(f, r)));
 		}
 		std::cout << std::endl;
 	}
@@ -1537,21 +1537,21 @@ bool Position::isOK() const {
 
 	int failedStep = 0;
 	if (debugBitboards) {
-		if ((bbOf(Black) & bbOf(White)).IsNot0()) {
+		if ((GetBbOf(Black) & GetBbOf(White)).IsNot0()) {
 			goto incorrect_position;
 		}
-		if ((bbOf(Black) | bbOf(White)) != occupiedBB()) {
+		if ((GetBbOf(Black) | GetBbOf(White)) != GetOccupiedBB()) {
 			goto incorrect_position;
 		}
-		if ((bbOf(Pawn     ) ^ bbOf(Lance    ) ^ bbOf(Knight) ^ bbOf(Silver ) ^ bbOf(Bishop  ) ^
-			 bbOf(Rook     ) ^ bbOf(Gold     ) ^ bbOf(King  ) ^ bbOf(ProPawn) ^ bbOf(ProLance) ^
-			 bbOf(ProKnight) ^ bbOf(ProSilver) ^ bbOf(Horse ) ^ bbOf(Dragon )) != occupiedBB())
+		if ((GetBbOf(Pawn     ) ^ GetBbOf(Lance    ) ^ GetBbOf(Knight) ^ GetBbOf(Silver ) ^ GetBbOf(Bishop  ) ^
+			 GetBbOf(Rook     ) ^ GetBbOf(Gold     ) ^ GetBbOf(King  ) ^ GetBbOf(ProPawn) ^ GetBbOf(ProLance) ^
+			 GetBbOf(ProKnight) ^ GetBbOf(ProSilver) ^ GetBbOf(Horse ) ^ GetBbOf(Dragon )) != GetOccupiedBB())
 		{
 			goto incorrect_position;
 		}
 		for (PieceType pt1 = Pawn; pt1 < PieceTypeNum; ++pt1) {
 			for (PieceType pt2 = pt1 + 1; pt2 < PieceTypeNum; ++pt2) {
-				if ((bbOf(pt1) & bbOf(pt2)).IsNot0()) {
+				if ((GetBbOf(pt1) & GetBbOf(pt2)).IsNot0()) {
 					goto incorrect_position;
 				}
 			}
@@ -1561,20 +1561,20 @@ bool Position::isOK() const {
 	++failedStep;
 	if (debugKingCount) {
 		int kingCount[ColorNum] = {0, 0};
-		if (bbOf(King).PopCount() != 2) {
+		if (GetBbOf(King).PopCount() != 2) {
 			goto incorrect_position;
 		}
-		if (!bbOf(King, Black).IsOneBit()) {
+		if (!GetBbOf(King, Black).IsOneBit()) {
 			goto incorrect_position;
 		}
-		if (!bbOf(King, White).IsOneBit()) {
+		if (!GetBbOf(King, White).IsOneBit()) {
 			goto incorrect_position;
 		}
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			if (piece(sq) == BKing) {
+			if (GetPiece(sq) == BKing) {
 				++kingCount[Black];
 			}
-			if (piece(sq) == WKing) {
+			if (GetPiece(sq) == WKing) {
 				++kingCount[White];
 			}
 		}
@@ -1596,7 +1596,7 @@ bool Position::isOK() const {
 
 	++failedStep;
 	if (debugCheckerCount) {
-		if (2 < st_->checkersBB.PopCount()) {
+		if (2 < m_st_->m_checkersBB.PopCount()) {
 			goto incorrect_position;
 		}
 	}
@@ -1610,7 +1610,7 @@ bool Position::isOK() const {
 
 	++failedStep;
 	if (debugStateHand) {
-		if (st_->hand != hand(turn())) {
+		if (m_st_->m_hand != m_hand(turn())) {
 			goto incorrect_position;
 		}
 	}
@@ -1618,14 +1618,14 @@ bool Position::isOK() const {
 	++failedStep;
 	if (debugPiece) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			const Piece pc = piece(sq);
+			const Piece pc = GetPiece(sq);
 			if (pc == Empty) {
-				if (!emptyBB().IsSet(sq)) {
+				if (!GetEmptyBB().IsSet(sq)) {
 					goto incorrect_position;
 				}
 			}
 			else {
-				if (!bbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)).IsSet(sq)) {
+				if (!GetBbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)).IsSet(sq)) {
 					goto incorrect_position;
 				}
 			}
@@ -1634,7 +1634,7 @@ bool Position::isOK() const {
 
 	++failedStep;
 	if (debugMaterial) {
-		if (material() != computeMaterial()) {
+		if (m_material() != computeMaterial()) {
 			goto incorrect_position;
 		}
 	}
@@ -1670,8 +1670,8 @@ int Position::debugSetEvalList() const {
 Key Position::computeBoardKey() const {
 	Key result = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		if (piece(sq) != Empty) {
-			result += zobrist(UtilPiece::ToPieceType(piece(sq)), sq, UtilPiece::ToColor(piece(sq)));
+		if (GetPiece(sq) != Empty) {
+			result += zobrist(UtilPiece::ToPieceType(GetPiece(sq)), sq, UtilPiece::ToColor(GetPiece(sq)));
 		}
 	}
 	if (turn() == White) {
@@ -1684,7 +1684,7 @@ Key Position::computeHandKey() const {
 	Key result = 0;
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
 		for (Color c = Black; c < ColorNum; ++c) {
-			const int num = hand(c).NumOf(hp);
+			const int num = GetHand(c).NumOf(hp);
 			for (int i = 0; i < num; ++i) {
 				result += zobHand(hp, c);
 			}
@@ -1698,22 +1698,22 @@ Key Position::computeHandKey() const {
 RepetitionType Position::isDraw(const int checkMaxPly) const {
 	const int Start = 4;
 	int i = Start;
-	const int e = std::min(st_->pliesFromNull, checkMaxPly);
+	const int e = std::min(m_st_->m_pliesFromNull, checkMaxPly);
 
 	// 4手掛けないと千日手には絶対にならない。
 	if (i <= e) {
 		// 現在の局面と、少なくとも 4 手戻らないと同じ局面にならない。
 		// ここでまず 2 手戻る。
-		StateInfo* stp = st_->previous->previous;
+		StateInfo* stp = m_st_->m_previous->m_previous;
 
 		do {
 			// 更に 2 手戻る。
-			stp = stp->previous->previous;
-			if (stp->key() == st_->key()) {
-				if (i <= st_->continuousCheck[turn()]) {
+			stp = stp->m_previous->m_previous;
+			if (stp->GetKey() == m_st_->GetKey()) {
+				if (i <= m_st_->m_continuousCheck[turn()]) {
 					return RepetitionLose;
 				}
-				else if (i <= st_->continuousCheck[UtilColor::OppositeColor(turn())]) {
+				else if (i <= m_st_->m_continuousCheck[UtilColor::OppositeColor(turn())]) {
 					return RepetitionWin;
 				}
 #if defined BAN_BLACK_REPETITION
@@ -1724,9 +1724,9 @@ RepetitionType Position::isDraw(const int checkMaxPly) const {
 				return RepetitionDraw;
 #endif
 			}
-			else if (stp->boardKey == st_->boardKey) {
-				if (st_->hand.IsEqualOrSuperior(stp->hand)) { return RepetitionSuperior; }
-				if (stp->hand.IsEqualOrSuperior(st_->hand)) { return RepetitionInferior; }
+			else if (stp->m_boardKey == m_st_->m_boardKey) {
+				if (m_st_->m_hand.IsEqualOrSuperior(stp->m_hand)) { return RepetitionSuperior; }
+				if (stp->m_hand.IsEqualOrSuperior(m_st_->m_hand)) { return RepetitionInferior; }
 			}
 			i += 2;
 		} while (i <= e);
@@ -1736,10 +1736,10 @@ RepetitionType Position::isDraw(const int checkMaxPly) const {
 
 namespace {
 	void printHandPiece(const Position& pos, const HandPiece hp, const Color c, const std::string& str) {
-		if (pos.hand(c).NumOf(hp)) {
+		if (pos.GetHand(c).NumOf(hp)) {
 			const char* sign = (c == Black ? "+" : "-");
 			std::cout << "P" << sign;
-			for (u32 i = 0; i < pos.hand(c).NumOf(hp); ++i) {
+			for (u32 i = 0; i < pos.GetHand(c).NumOf(hp); ++i) {
 				std::cout << "00" << str;
 			}
 			std::cout << std::endl;
@@ -1758,22 +1758,22 @@ void Position::printHand(const Color c) const {
 
 Position& Position::operator = (const Position& pos) {
 	memcpy(this, &pos, sizeof(Position));
-	startState_ = *st_;
-	st_ = &startState_;
-	nodes_ = 0;
+	m_startState_ = *m_st_;
+	m_st_ = &m_startState_;
+	m_nodes_ = 0;
 
 	assert(isOK());
 
 	return *this;
 }
 
-void Position::set(const std::string& sfen, Thread* th) {
+void Position::Set(const std::string& sfen, Thread* th) {
 	Piece promoteFlag = UnPromoted;
 	std::istringstream ss(sfen);
 	char token;
 	Square sq = A9;
 
-	Searcher* s = std::move(searcher_);
+	Searcher* s = std::move(m_searcher_);
 	clear();
 	setSearcher(s);
 
@@ -1802,17 +1802,17 @@ void Position::set(const std::string& sfen, Thread* th) {
 			goto INCORRECT;
 		}
 	}
-	kingSquare_[Black] = bbOf(King, Black).ConstFirstOneFromI9();
-	kingSquare_[White] = bbOf(King, White).ConstFirstOneFromI9();
-	goldsBB_ = bbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
+	m_kingSquare_[Black] = GetBbOf(King, Black).ConstFirstOneFromI9();
+	m_kingSquare_[White] = GetBbOf(King, White).ConstFirstOneFromI9();
+	m_goldsBB_ = GetBbOf(Gold, ProPawn, ProLance, ProKnight, ProSilver);
 
 	// 手番
 	while (ss.get(token) && token != ' ') {
 		if (token == 'b') {
-			turn_ = Black;
+			m_turn_ = Black;
 		}
 		else if (token == 'w') {
-			turn_ = White;
+			m_turn_ = White;
 		}
 		else {
 			goto INCORRECT;
@@ -1822,7 +1822,7 @@ void Position::set(const std::string& sfen, Thread* th) {
 	// 持ち駒
 	for (int digits = 0; ss.get(token) && token != ' '; ) {
 		if (token == '-') {
-			memset(hand_, 0, sizeof(hand_));
+			memset(m_hand_, 0, sizeof(m_hand_));
 		}
 		else if (isdigit(token)) {
 			digits = digits * 10 + token - '0';
@@ -1840,18 +1840,18 @@ void Position::set(const std::string& sfen, Thread* th) {
 	}
 
 	// 次の手が何手目か
-	ss >> gamePly_;
-	gamePly_ = std::max(2 * (gamePly_ - 1), 0) + static_cast<int>(turn() == White);
+	ss >> m_gamePly_;
+	m_gamePly_ = std::max(2 * (m_gamePly_ - 1), 0) + static_cast<int>(turn() == White);
 
 	// 残り時間, hash key, (もし実装するなら)駒番号などをここで設定
-	st_->boardKey = computeBoardKey();
-	st_->handKey = computeHandKey();
-	st_->hand = hand(turn());
+	m_st_->m_boardKey = computeBoardKey();
+	m_st_->m_handKey = computeHandKey();
+	m_st_->m_hand = GetHand(turn());
 
 	setEvalList();
 	findCheckers();
-	st_->material = computeMaterial();
-	thisThread_ = th;
+	m_st_->m_material = computeMaterial();
+	m_thisThread_ = th;
 
 	return;
 INCORRECT:
@@ -1865,13 +1865,13 @@ bool Position::moveGivesCheck(const Move move) const {
 // move が王手なら true
 bool Position::moveGivesCheck(const Move move, const CheckInfo& ci) const {
 	assert(isOK());
-	assert(ci.dcBB == discoveredCheckBB());
+	assert(ci.m_dcBB == DiscoveredCheckBB());
 
 	const Square to = move.to();
 	if (move.isDrop()) {
 		const PieceType ptTo = move.pieceTypeDropped();
 		// Direct Check ?
-		if (ci.checkBB[ptTo].IsSet(to)) {
+		if (ci.m_checkBB[ptTo].IsSet(to)) {
 			return true;
 		}
 	}
@@ -1879,14 +1879,14 @@ bool Position::moveGivesCheck(const Move move, const CheckInfo& ci) const {
 		const Square from = move.from();
 		const PieceType ptFrom = move.pieceTypeFrom();
 		const PieceType ptTo = move.pieceTypeTo(ptFrom);
-		assert(ptFrom == UtilPiece::ToPieceType(piece(from)));
+		assert(ptFrom == UtilPiece::ToPieceType(GetPiece(from)));
 		// Direct Check ?
-		if (ci.checkBB[ptTo].IsSet(to)) {
+		if (ci.m_checkBB[ptTo].IsSet(to)) {
 			return true;
 		}
 
 		// Discovery Check ?
-		if (isDiscoveredCheck(from, to, kingSquare(UtilColor::OppositeColor(turn())), ci.dcBB)) {
+		if (isDiscoveredCheck(from, to, kingSquare(UtilColor::OppositeColor(turn())), ci.m_dcBB)) {
 			return true;
 		}
 	}
@@ -1896,64 +1896,64 @@ bool Position::moveGivesCheck(const Move move, const CheckInfo& ci) const {
 
 void Position::clear() {
 	memset(this, 0, sizeof(Position));
-	st_ = &startState_;
+	m_st_ = &m_startState_;
 }
 
 // 先手、後手に関わらず、sq へ移動可能な Bitboard を返す。
 Bitboard Position::attackersTo(const Square sq, const Bitboard& occupied) const {
-	const Bitboard golds = goldsBB();
-	return (((attacksFrom<Pawn  >(Black, sq          ) & bbOf(Pawn  ))
-			 | (attacksFrom<Lance >(Black, sq, occupied) & bbOf(Lance ))
-			 | (attacksFrom<Knight>(Black, sq          ) & bbOf(Knight))
-			 | (attacksFrom<Silver>(Black, sq          ) & bbOf(Silver))
+	const Bitboard golds = GetGoldsBB();
+	return (((attacksFrom<Pawn  >(Black, sq          ) & this->GetBbOf(Pawn  ))
+			 | (attacksFrom<Lance >(Black, sq, occupied) & this->GetBbOf(Lance ))
+			 | (attacksFrom<Knight>(Black, sq          ) & this->GetBbOf(Knight))
+			 | (attacksFrom<Silver>(Black, sq          ) & this->GetBbOf(Silver))
 			 | (attacksFrom<Gold  >(Black, sq          ) & golds       ))
-			& bbOf(White))
-		| (((attacksFrom<Pawn  >(White, sq          ) & bbOf(Pawn  ))
-			| (attacksFrom<Lance >(White, sq, occupied) & bbOf(Lance ))
-			| (attacksFrom<Knight>(White, sq          ) & bbOf(Knight))
-			| (attacksFrom<Silver>(White, sq          ) & bbOf(Silver))
+			& this->GetBbOf(White))
+		| (((attacksFrom<Pawn  >(White, sq          ) & this->GetBbOf(Pawn  ))
+			| (attacksFrom<Lance >(White, sq, occupied) & this->GetBbOf(Lance ))
+			| (attacksFrom<Knight>(White, sq          ) & this->GetBbOf(Knight))
+			| (attacksFrom<Silver>(White, sq          ) & this->GetBbOf(Silver))
 			| (attacksFrom<Gold  >(White, sq          ) & golds))
-		   & bbOf(Black))
-		| (attacksFrom<Bishop>(sq, occupied) & bbOf(Bishop, Horse        ))
-		| (attacksFrom<Rook  >(sq, occupied) & bbOf(Rook  , Dragon       ))
-		| (attacksFrom<King  >(sq          ) & bbOf(King  , Horse, Dragon));
+		   & this->GetBbOf(Black))
+		| (attacksFrom<Bishop>(sq, occupied) & this->GetBbOf(Bishop, Horse        ))
+		| (attacksFrom<Rook  >(sq, occupied) & this->GetBbOf(Rook  , Dragon       ))
+		| (attacksFrom<King  >(sq          ) & this->GetBbOf(King  , Horse, Dragon));
 }
 
 // occupied を Position::occupiedBB() 以外のものを使用する場合に使用する。
 Bitboard Position::attackersTo(const Color c, const Square sq, const Bitboard& occupied) const {
 	const Color opposite = UtilColor::OppositeColor(c);
-	return ((attacksFrom<Pawn  >(opposite, sq          ) & bbOf(Pawn  ))
-			| (attacksFrom<Lance >(opposite, sq, occupied) & bbOf(Lance ))
-			| (attacksFrom<Knight>(opposite, sq          ) & bbOf(Knight))
-			| (attacksFrom<Silver>(opposite, sq          ) & bbOf(Silver))
-			| (attacksFrom<Gold  >(opposite, sq          ) & goldsBB())
-			| (attacksFrom<Bishop>(          sq, occupied) & bbOf(Bishop, Horse        ))
-			| (attacksFrom<Rook  >(          sq, occupied) & bbOf(Rook  , Dragon       ))
-			| (attacksFrom<King  >(          sq          ) & bbOf(King  , Horse, Dragon)))
-		& bbOf(c);
+	return ((attacksFrom<Pawn  >(opposite, sq          ) & this->GetBbOf(Pawn  ))
+			| (attacksFrom<Lance >(opposite, sq, occupied) & this->GetBbOf(Lance ))
+			| (attacksFrom<Knight>(opposite, sq          ) & this->GetBbOf(Knight))
+			| (attacksFrom<Silver>(opposite, sq          ) & this->GetBbOf(Silver))
+			| (attacksFrom<Gold  >(opposite, sq          ) & GetGoldsBB())
+			| (attacksFrom<Bishop>(          sq, occupied) & this->GetBbOf(Bishop, Horse        ))
+			| (attacksFrom<Rook  >(          sq, occupied) & this->GetBbOf(Rook  , Dragon       ))
+			| (attacksFrom<King  >(          sq          ) & this->GetBbOf(King  , Horse, Dragon)))
+		& this->GetBbOf(c);
 }
 
 // 玉以外で sq へ移動可能な c 側の駒の Bitboard を返す。
 Bitboard Position::attackersToExceptKing(const Color c, const Square sq) const {
 	const Color opposite = UtilColor::OppositeColor(c);
-	return ((attacksFrom<Pawn  >(opposite, sq) & bbOf(Pawn  ))
-			| (attacksFrom<Lance >(opposite, sq) & bbOf(Lance ))
-			| (attacksFrom<Knight>(opposite, sq) & bbOf(Knight))
-			| (attacksFrom<Silver>(opposite, sq) & bbOf(Silver, Dragon))
-			| (attacksFrom<Gold  >(opposite, sq) & (goldsBB() | bbOf(Horse)))
-			| (attacksFrom<Bishop>(          sq) & bbOf(Bishop, Horse ))
-			| (attacksFrom<Rook  >(          sq) & bbOf(Rook  , Dragon)))
-		& bbOf(c);
+	return ((attacksFrom<Pawn  >(opposite, sq) & this->GetBbOf(Pawn  ))
+			| (attacksFrom<Lance >(opposite, sq) & this->GetBbOf(Lance ))
+			| (attacksFrom<Knight>(opposite, sq) & this->GetBbOf(Knight))
+			| (attacksFrom<Silver>(opposite, sq) & this->GetBbOf(Silver, Dragon))
+			| (attacksFrom<Gold  >(opposite, sq) & (GetGoldsBB() | this->GetBbOf(Horse)))
+			| (attacksFrom<Bishop>(          sq) & this->GetBbOf(Bishop, Horse ))
+			| (attacksFrom<Rook  >(          sq) & this->GetBbOf(Rook  , Dragon)))
+		& this->GetBbOf(c);
 }
 
 Score Position::computeMaterial() const {
 	Score s = ScoreZero;
 	for (PieceType pt = Pawn; pt < PieceTypeNum; ++pt) {
-		const int num = bbOf(pt, Black).PopCount() - bbOf(pt, White).PopCount();
+		const int num = this->GetBbOf(pt, Black).PopCount() - this->GetBbOf(pt, White).PopCount();
 		s += num * pieceScore(pt);
 	}
 	for (PieceType pt = Pawn; pt < King; ++pt) {
-		const int num = hand(Black).NumOf(UtilHandPiece::FromPieceType(pt)) - hand(White).NumOf(UtilHandPiece::FromPieceType(pt));
+		const int num = GetHand(Black).NumOf(UtilHandPiece::FromPieceType(pt)) - GetHand(White).NumOf(UtilHandPiece::FromPieceType(pt));
 		s += num * pieceScore(pt);
 	}
 	return s;
