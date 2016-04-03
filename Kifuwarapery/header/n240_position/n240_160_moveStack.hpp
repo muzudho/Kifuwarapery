@@ -1,6 +1,6 @@
 #pragma once
 
-#include "n240_150_move.hpp"
+#include "../n223_move____/n223_500_move.hpp"
 
 
 struct MoveStack {
@@ -44,14 +44,14 @@ inline MoveStack* pickBest(MoveStack* currMove, MoveStack* lastMove) {
 }
 
 inline Move move16toMove(const Move move, const Position& pos) {
-	if (move.isNone()) {
-		return Move::moveNone();
+	if (move.IsNone()) {
+		return Move::GetMoveNone();
 	}
-	if (move.isDrop()) {
+	if (move.IsDrop()) {
 		return move;
 	}
-	const Square from = move.from();
+	const Square from = move.From();
 	const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
-	return move | pieceType2Move(ptFrom) | capturedPieceType2Move(move.to(), pos);
+	return move | pieceType2Move(ptFrom) | capturedPieceType2Move(move.To(), pos);
 }
 

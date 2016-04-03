@@ -43,7 +43,7 @@ void TTEntry::setGeneration(const u8 g)
 void TTEntry::save(const Depth depth, const Score score, const Move move, const u32 posKeyHigh32, const Bound bound, const u8 generation, const Score evalScore)
 {
 	this->key32_ = posKeyHigh32;
-	this->move16_ = static_cast<u16>(move.value());
+	this->move16_ = static_cast<u16>(move.GetValue());
 	this->bound_ = static_cast<u8>(bound);
 	this->generation8_ = generation;
 	this->score16_ = static_cast<s16>(score);

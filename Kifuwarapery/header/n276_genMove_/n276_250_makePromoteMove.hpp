@@ -2,7 +2,7 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../n240_position/n240_150_move.hpp"
+#include "../n223_move____/n223_500_move.hpp"
 #include "../n276_genMove_/n276_200_promoteMode.hpp"
 
 

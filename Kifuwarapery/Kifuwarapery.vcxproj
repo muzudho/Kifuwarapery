@@ -183,7 +183,8 @@
     <ClInclude Include="header\n220_position\n220_350_stateInfo.hpp" />
     <ClInclude Include="header\n220_position\n220_400_position.hpp" />
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp" />
-    <ClInclude Include="header\n240_position\n240_150_move.hpp" />
+    <ClInclude Include="header\n223_move____\n223_100_move.hpp" />
+    <ClInclude Include="header\n223_move____\n223_500_move.hpp" />
     <ClInclude Include="header\n240_position\n240_160_moveStack.hpp" />
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp" />
     <ClInclude Include="header\n240_position\n240_275_depth.hpp" />

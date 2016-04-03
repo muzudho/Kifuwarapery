@@ -1,4 +1,4 @@
-﻿#include "../../header/n240_position/n240_150_move.hpp"
+﻿#include "../../header/n223_move____/n223_500_move.hpp"
 
 namespace {
 	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};
@@ -10,105 +10,105 @@ namespace {
 	inline std::string pieceTypeToString(const PieceType pt) { return PieceTypeToStringTable[pt]; }
 }
 
-Square Move::to() const
+Square Move::To() const
 {
-	return static_cast<Square>((value() >> 0) & 0x7f);
+	return static_cast<Square>((GetValue() >> 0) & 0x7f);
 }
 
-Square Move::from() const
+Square Move::From() const
 {
-	return static_cast<Square>((value() >> 7) & 0x7f);
+	return static_cast<Square>((GetValue() >> 7) & 0x7f);
 }
 
-u32 Move::fromAndTo() const
+u32 Move::FromAndTo() const
 {
-	return (value() >> 0) & 0x3fff;
+	return (GetValue() >> 0) & 0x3fff;
 }
 
-u32 Move::proFromAndTo() const
+u32 Move::ProFromAndTo() const
 {
-	return (value() >> 0) & 0x7fff;
+	return (GetValue() >> 0) & 0x7fff;
 }
 
-PieceType Move::cap() const
+PieceType Move::GetCap() const
 {
-	return static_cast<PieceType>((value() >> 20) & 0xf);
+	return static_cast<PieceType>((GetValue() >> 20) & 0xf);
 }
 
-u32 Move::isPromotion() const
+u32 Move::IsPromotion() const
 {
-	return value() & PromoteFlag;
+	return GetValue() & m_PromoteFlag;
 }
 
-PieceType Move::pieceTypeFrom() const
+PieceType Move::GetPieceTypeFrom() const
 {
-	return static_cast<PieceType>((value() >> 16) & 0xf);
+	return static_cast<PieceType>((GetValue() >> 16) & 0xf);
 }
 
-PieceType Move::pieceTypeTo() const
+PieceType Move::GetPieceTypeTo() const
 {
-	return (isDrop() ? pieceTypeDropped() : pieceTypeTo(pieceTypeFrom()));
+	return (IsDrop() ? GetPieceTypeDropped() : GetPieceTypeTo(GetPieceTypeFrom()));
 }
 
-PieceType Move::pieceTypeTo(const PieceType ptFrom) const
+PieceType Move::GetPieceTypeTo(const PieceType ptFrom) const
 {
 	// これらは同じ意味。
 #if 1
-	return (ptFrom + static_cast<PieceType>((value() & PromoteFlag) >> 11));
+	return (ptFrom + static_cast<PieceType>((GetValue() & m_PromoteFlag) >> 11));
 #else
-	return (isPromotion()) ? ptFrom + PTPromote : ptFrom;
+	return (IsPromotion()) ? ptFrom + PTPromote : ptFrom;
 #endif
 }
 
-bool Move::isDrop() const
+bool Move::IsDrop() const
 {
-	return this->from() >= 81;
+	return this->From() >= 81;
 }
 
-bool Move::isCapture() const
+bool Move::IsCapture() const
 {
-	return (value() & 0xf00000) ? true : false;
+	return (GetValue() & 0xf00000) ? true : false;
 }
 
-bool Move::isCaptureOrPromotion() const
+bool Move::IsCaptureOrPromotion() const
 {
-	return (value() & 0xf04000) ? true : false;
+	return (GetValue() & 0xf04000) ? true : false;
 }
 
-bool Move::isCaptureOrPawnPromotion() const
+bool Move::IsCaptureOrPawnPromotion() const
 {
-	return isCapture() || (isPromotion() && pieceTypeFrom() == Pawn);
+	return IsCapture() || (IsPromotion() && GetPieceTypeFrom() == Pawn);
 }
 
-PieceType Move::pieceTypeDropped() const
+PieceType Move::GetPieceTypeDropped() const
 {
-	return static_cast<PieceType>(this->from() - SquareNum + 1);
+	return static_cast<PieceType>(this->From() - SquareNum + 1);
 }
 
-PieceType Move::pieceTypeFromOrDropped() const
+PieceType Move::GetPieceTypeFromOrDropped() const
 {
-	return (isDrop() ? pieceTypeDropped() : pieceTypeFrom());
+	return (IsDrop() ? GetPieceTypeDropped() : GetPieceTypeFrom());
 }
 
-HandPiece Move::handPieceDropped() const
+HandPiece Move::GetHandPieceDropped() const
 {
-	assert(this->isDrop());
-	return UtilHandPiece::FromPieceType(pieceTypeDropped());
+	assert(this->IsDrop());
+	return UtilHandPiece::FromPieceType(GetPieceTypeDropped());
 }
 
-bool Move::isNone() const
+bool Move::IsNone() const
 {
-	return (value() == MoveNone);
+	return (GetValue() == m_MoveNone);
 }
 
-u32 Move::value() const
+u32 Move::GetValue() const
 {
 	return value_;
 }
 
 Move Move::operator|=(const Move rhs)
 {
-	this->value_ |= rhs.value();
+	this->value_ |= rhs.GetValue();
 	return *this;
 }
 
@@ -119,7 +119,7 @@ Move Move::operator|(const Move rhs) const
 
 bool Move::operator==(const Move rhs) const
 {
-	return this->value() == rhs.value();
+	return this->GetValue() == rhs.GetValue();
 }
 
 bool Move::operator!=(const Move rhs) const
@@ -129,46 +129,46 @@ bool Move::operator!=(const Move rhs) const
 
 bool Move::operator<(const Move rhs) const
 {
-	return this->value() < rhs.value();
+	return this->GetValue() < rhs.GetValue();
 }
 
-std::string Move::promoteFlagToStringUSI() const
+std::string Move::GetPromoteFlagToStringUSI() const
 {
-	return (this->isPromotion() ? "+" : "");
+	return (this->IsPromotion() ? "+" : "");
 }
 
-std::string Move::toUSI() const {
-	if (this->isNone()) { return "None"; }
+std::string Move::ToUSI() const {
+	if (this->IsNone()) { return "None"; }
 
-	const Square from = this->from();
-	const Square to = this->to();
-	if (this->isDrop()) {
-		return handPieceToString(this->handPieceDropped()) + UtilSquare::ToStringUSI(to);
+	const Square from = this->From();
+	const Square to = this->To();
+	if (this->IsDrop()) {
+		return handPieceToString(this->GetHandPieceDropped()) + UtilSquare::ToStringUSI(to);
 	}
 	std::string usi = UtilSquare::ToStringUSI(from) + UtilSquare::ToStringUSI(to);
-	if (this->isPromotion()) { usi += "+"; }
+	if (this->IsPromotion()) { usi += "+"; }
 	return usi;
 }
 
-std::string Move::toCSA() const {
-	if (this->isNone()) { return "None"; }
+std::string Move::ToCSA() const {
+	if (this->IsNone()) { return "None"; }
 
-	std::string s = (this->isDrop() ? std::string("00") : UtilSquare::ToStringCSA(this->from()));
-	s += UtilSquare::ToStringCSA(this->to()) + pieceTypeToString(this->pieceTypeTo());
+	std::string s = (this->IsDrop() ? std::string("00") : UtilSquare::ToStringCSA(this->From()));
+	s += UtilSquare::ToStringCSA(this->To()) + pieceTypeToString(this->GetPieceTypeTo());
 	return s;
 }
 
-Move Move::moveNone()
+Move Move::GetMoveNone()
 {
-	return Move(MoveNone);
+	return Move(m_MoveNone);
 }
 
-Move Move::moveNull()
+Move Move::GetMoveNull()
 {
-	return Move(MoveNull);
+	return Move(m_MoveNull);
 }
 
-Move Move::movePVsEnd()
+Move Move::GetMovePVsEnd()
 {
-	return Move(MovePVsEnd);
+	return Move(m_MovePVsEnd);
 }

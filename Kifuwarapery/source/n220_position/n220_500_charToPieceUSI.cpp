@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
@@ -79,21 +79,21 @@ template <bool MUSTNOTDROP, bool FROMMUSTNOTKING>
 bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const {
 	// 駒打ちは、打ち歩詰めや二歩は指し手生成時や、killerをMovePicker::nextMove() 内で排除しているので、常に合法手
 	// (連続王手の千日手は省いていないけれど。)
-	if (!MUSTNOTDROP && move.isDrop()) {
+	if (!MUSTNOTDROP && move.IsDrop()) {
 		return true;
 	}
-	assert(!move.isDrop());
+	assert(!move.IsDrop());
 
 	const Color us = GetTurn();
-	const Square from = move.from();
+	const Square from = move.From();
 
 	if (!FROMMUSTNOTKING && UtilPiece::ToPieceType(GetPiece(from)) == King) {
 		const Color them = UtilColor::OppositeColor(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
-		return !IsAttackersToIsNot0(them, move.to());
+		return !IsAttackersToIsNot0(them, move.To());
 	}
 	// 玉以外の駒の移動
-	return !IsPinnedIllegal(from, move.to(), GetKingSquare(us), pinned);
+	return !IsPinnedIllegal(from, move.To(), GetKingSquare(us), pinned);
 }
 
 template bool Position::IsPseudoLegalMoveIsLegal<false, false>(const Move move, const Bitboard& pinned) const;
@@ -104,10 +104,10 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 	assert(IsOK());
 
 	// 玉の移動
-	if (move.pieceTypeFrom() == King) {
+	if (move.GetPieceTypeFrom() == King) {
 		// 遠隔駒で王手されたとき、王手している遠隔駒の利きには移動しないように指し手を生成している。
 		// その為、移動先に他の駒の利きが無いか調べるだけで良い。
-		const bool canMove = !IsAttackersToIsNot0(UtilColor::OppositeColor(GetTurn()), move.to());
+		const bool canMove = !IsAttackersToIsNot0(UtilColor::OppositeColor(GetTurn()), move.To());
 		assert(canMove == (IsPseudoLegalMoveIsLegal<false, false>(move, pinned)));
 		return canMove;
 	}
@@ -122,7 +122,7 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 	}
 
 	const Color us = GetTurn();
-	const Square to = move.to();
+	const Square to = move.To();
 	// 移動、又は打った駒が、王手をさえぎるか、王手している駒を取る必要がある。
 	target = Bitboard::BetweenBB(checkSq, GetKingSquare(us)) | GetCheckersBB();
 	return target.IsSet(to) && IsPseudoLegalMoveIsLegal<false, true>(move, pinned);
@@ -133,10 +133,10 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) const {
 	const Color us = GetTurn();
 	const Color them = UtilColor::OppositeColor(us);
-	const Square to = move.to();
+	const Square to = move.To();
 
-	if (move.isDrop()) {
-		const PieceType ptFrom = move.pieceTypeDropped();
+	if (move.IsDrop()) {
+		const PieceType ptFrom = move.GetPieceTypeDropped();
 		if (!GetHand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != Empty) {
 			return false;
 		}
@@ -171,8 +171,8 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 	}
 	else {
-		const Square from = move.from();
-		const PieceType ptFrom = move.pieceTypeFrom();
+		const Square from = move.From();
+		const PieceType ptFrom = move.GetPieceTypeFrom();
 		if (GetPiece(from) != UtilPiece::FromColorAndPieceType(us, ptFrom) || this->GetBbOf(us).IsSet(to)) {
 			return false;
 		}
@@ -229,7 +229,7 @@ void Position::DoMove(const Move move, StateInfo& newSt) {
 // 局面の更新
 void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck) {
 	assert(IsOK());
-	assert(!move.isNone());
+	assert(!move.IsNone());
 	assert(&newSt != m_st_);
 
 	Key boardKey = GetBoardKey();
@@ -243,11 +243,11 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 	m_st_->m_cl.m_size = 1;
 
 	const Color us = GetTurn();
-	const Square to = move.to();
-	const PieceType ptCaptured = move.cap();
+	const Square to = move.To();
+	const PieceType ptCaptured = move.GetCap();
 	PieceType ptTo;
-	if (move.isDrop()) {
-		ptTo = move.pieceTypeDropped();
+	if (move.IsDrop()) {
+		ptTo = move.GetPieceTypeDropped();
 		const HandPiece hpTo = UtilHandPiece::FromPieceType(ptTo);
 
 		handKey -= GetZobHand(hpTo, us);
@@ -285,9 +285,9 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		}
 	}
 	else {
-		const Square from = move.from();
-		const PieceType ptFrom = move.pieceTypeFrom();
-		ptTo = move.pieceTypeTo(ptFrom);
+		const Square from = move.From();
+		const PieceType ptFrom = move.GetPieceTypeFrom();
+		ptTo = move.GetPieceTypeTo(ptFrom);
 
 		m_byTypeBB_[ptFrom].XorBit(from);
 		m_byTypeBB_[ptTo].XorBit(to);
@@ -352,7 +352,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.list1[fromListIndex];
 		}
 
-		if (move.isPromotion()) {
+		if (move.IsPromotion()) {
 			m_st_->m_material += (us == Black ?
 							  (GetPieceScore(ptTo) - GetPieceScore(ptFrom))
 							  : -(GetPieceScore(ptTo) - GetPieceScore(ptFrom)));
@@ -401,15 +401,15 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 void Position::UndoMove(const Move move) {
 	assert(IsOK());
-	assert(!move.isNone());
+	assert(!move.IsNone());
 
 	const Color them = GetTurn();
 	const Color us = UtilColor::OppositeColor(them);
-	const Square to = move.to();
+	const Square to = move.To();
 	m_turn_ = us;
 	// ここで先に turn_ を戻したので、以下、move は us の指し手とする。
-	if (move.isDrop()) {
-		const PieceType ptTo = move.pieceTypeDropped();
+	if (move.IsDrop()) {
+		const PieceType ptTo = move.GetPieceTypeDropped();
 		m_byTypeBB_[ptTo].XorBit(to);
 		m_byColorBB_[us].XorBit(to);
 		m_piece_[to] = Empty;
@@ -426,10 +426,10 @@ void Position::UndoMove(const Move move) {
 		m_evalList_.squareHandToList[squarehand]  = toListIndex;
 	}
 	else {
-		const Square from = move.from();
-		const PieceType ptFrom = move.pieceTypeFrom();
-		const PieceType ptTo = move.pieceTypeTo(ptFrom);
-		const PieceType ptCaptured = move.cap(); // todo: st_->capturedType 使えば良い。
+		const Square from = move.From();
+		const PieceType ptFrom = move.GetPieceTypeFrom();
+		const PieceType ptTo = move.GetPieceTypeTo(ptFrom);
+		const PieceType ptCaptured = move.GetCap(); // todo: st_->capturedType 使えば良い。
 
 		if (ptTo == King) {
 			m_kingSquare_[us] = from;
@@ -553,7 +553,7 @@ namespace {
 }
 
 Score Position::GetSee(const Move move, const int asymmThreshold) const {
-	const Square to = move.to();
+	const Square to = move.To();
 	Square from;
 	PieceType ptCaptured;
 	Bitboard occ = GetOccupiedBB();
@@ -561,31 +561,31 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 	Bitboard opponentAttackers;
 	Color turn = UtilColor::OppositeColor(this->GetTurn());
 	Score swapList[32];
-	if (move.isDrop()) {
+	if (move.IsDrop()) {
 		opponentAttackers = GetAttackersTo(turn, to, occ);
 		if (!opponentAttackers.IsNot0()) {
 			return ScoreZero;
 		}
 		attackers = opponentAttackers | GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
 		swapList[0] = ScoreZero;
-		ptCaptured = move.pieceTypeDropped();
+		ptCaptured = move.GetPieceTypeDropped();
 	}
 	else {
-		from = move.from();
+		from = move.From();
 		occ.XorBit(from);
 		opponentAttackers = GetAttackersTo(turn, to, occ);
 		if (!opponentAttackers.IsNot0()) {
-			if (move.isPromotion()) {
-				const PieceType ptFrom = move.pieceTypeFrom();
-				return GetCapturePieceScore(move.cap()) + GetPromotePieceScore(ptFrom);
+			if (move.IsPromotion()) {
+				const PieceType ptFrom = move.GetPieceTypeFrom();
+				return GetCapturePieceScore(move.GetCap()) + GetPromotePieceScore(ptFrom);
 			}
-			return GetCapturePieceScore(move.cap());
+			return GetCapturePieceScore(move.GetCap());
 		}
 		attackers = opponentAttackers | GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
-		swapList[0] = GetCapturePieceScore(move.cap());
-		ptCaptured = move.pieceTypeFrom();
-		if (move.isPromotion()) {
-			const PieceType ptFrom = move.pieceTypeFrom();
+		swapList[0] = GetCapturePieceScore(move.GetCap());
+		ptCaptured = move.GetPieceTypeFrom();
+		if (move.IsPromotion()) {
+			const PieceType ptFrom = move.GetPieceTypeFrom();
 			swapList[0] += GetPromotePieceScore(ptFrom);
 			ptCaptured += PTPromote;
 		}
@@ -626,9 +626,9 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 }
 
 Score Position::GetSeeSign(const Move move) const {
-	if (move.isCapture()) {
-		const PieceType ptFrom = move.pieceTypeFrom();
-		const Square to = move.to();
+	if (move.IsCapture()) {
+		const PieceType ptFrom = move.GetPieceTypeFrom();
+		const Square to = move.To();
 		if (GetCapturePieceScore(ptFrom) <= GetCapturePieceScore(GetPiece(to))) {
 			return static_cast<Score>(1);
 		}
@@ -1478,7 +1478,7 @@ silver_drop_end:
 		}
 	}
 
-	return Move::moveNone();
+	return Move::GetMoveNone();
 }
 
 Move Position::GetMateMoveIn1Ply() {
@@ -1867,18 +1867,18 @@ bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 	assert(IsOK());
 	assert(ci.m_dcBB == DiscoveredCheckBB());
 
-	const Square to = move.to();
-	if (move.isDrop()) {
-		const PieceType ptTo = move.pieceTypeDropped();
+	const Square to = move.To();
+	if (move.IsDrop()) {
+		const PieceType ptTo = move.GetPieceTypeDropped();
 		// Direct Check ?
 		if (ci.m_checkBB[ptTo].IsSet(to)) {
 			return true;
 		}
 	}
 	else {
-		const Square from = move.from();
-		const PieceType ptFrom = move.pieceTypeFrom();
-		const PieceType ptTo = move.pieceTypeTo(ptFrom);
+		const Square from = move.From();
+		const PieceType ptFrom = move.GetPieceTypeFrom();
+		const PieceType ptTo = move.GetPieceTypeTo(ptFrom);
 		assert(ptFrom == UtilPiece::ToPieceType(GetPiece(from)));
 		// Direct Check ?
 		if (ci.m_checkBB[ptTo].IsSet(to)) {

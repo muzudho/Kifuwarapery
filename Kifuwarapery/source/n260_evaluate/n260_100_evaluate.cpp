@@ -164,9 +164,9 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 		return false;
 
 	const Move lastMove = (ss - 1)->currentMove;
-	assert(lastMove != Move::moveNull());
+	assert(lastMove != Move::GetMoveNull());
 
-	if (lastMove.pieceTypeFrom() == King) {
+	if (lastMove.GetPieceTypeFrom() == King) {
 		EvalSum diff = (ss - 1)->staticEvalRaw; // 本当は diff ではないので名前が良くない。
 		const Square sq_bk = pos.GetKingSquare(Black);
 		const Square sq_wk = pos.GetKingSquare(White);

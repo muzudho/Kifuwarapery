@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../header/n200_score___/n200_100_utilScore.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 
 // 指し手と、評価値。
 class MoveScore {

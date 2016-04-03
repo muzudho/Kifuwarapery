@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
@@ -18,8 +18,8 @@
 void measureGenerateMoves(const Position& pos) {
 	pos.Print();
 
-	MoveStack legalMoves[MaxLegalMoves];
-	for (int i = 0; i < MaxLegalMoves; ++i)
+	MoveStack legalMoves[g_MaxLegalMoves];
+	for (int i = 0; i < g_MaxLegalMoves; ++i)
 	{
 		legalMoves[i].move = moveNone();
 	}
@@ -50,7 +50,7 @@ void measureGenerateMoves(const Position& pos) {
 	const ptrdiff_t count = pms - &legalMoves[0];
 	std::cout << "num of moves = " << count << std::endl;
 	for (int i = 0; i < count; ++i) {
-		std::cout << legalMoves[i].move.toCSA() << ", ";
+		std::cout << legalMoves[i].move.ToCSA() << ", ";
 	}
 	std::cout << std::endl;
 }
@@ -69,7 +69,7 @@ UsiLoop::UsiLoop()
 
 void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 {
-	Position pos(DefaultStartPositionSFEN, searcher.threads.mainThread(), &searcher);
+	Position pos(g_DefaultStartPositionSFEN, searcher.threads.mainThread(), &searcher);
 
 	std::string cmd;
 	std::string token;
@@ -166,7 +166,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else if (token == "bench") { benchmark(pos); }
 		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
-		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().toCSA() << std::endl; }
+		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().ToCSA() << std::endl; }
 		else if (token == "b") { makeBook(pos, ssCmd); }
 #endif
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }

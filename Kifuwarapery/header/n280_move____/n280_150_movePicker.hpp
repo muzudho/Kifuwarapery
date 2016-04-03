@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 
 enum GenerateMovePhase {
@@ -53,6 +53,6 @@ private:
 	MoveStack* lastNonCapture_;
 	MoveStack* endBadCaptures_;
 	// std::array にした方が良さそう。
-	MoveStack legalMoves_[MaxLegalMoves];
+	MoveStack legalMoves_[g_MaxLegalMoves];
 };
 

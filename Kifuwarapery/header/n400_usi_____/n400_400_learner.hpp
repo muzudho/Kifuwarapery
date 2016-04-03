@@ -219,7 +219,7 @@ public:
 		for (auto& s : searchers) {
 			s.initOptions();
 			setLearnOptions(s);
-			positions_.push_back(Position(DefaultStartPositionSFEN, s.threads.mainThread(), s.thisptr));
+			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.threads.mainThread(), s.thisptr));
 			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().count()));
 			// ここでデフォルトコンストラクタでpush_backすると、
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
@@ -244,7 +244,7 @@ private:
 	{
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
 		BookMoveData bmdBase[ColorNum];
-		bmdBase[Black].move = bmdBase[White].move = Move::moveNone();
+		bmdBase[Black].move = bmdBase[White].move = Move::GetMoveNone();
 		std::stringstream ss(s0);
 		std::string elem;
 		ss >> elem; // 対局番号
@@ -257,14 +257,14 @@ private:
 		ss >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+		pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
 			const std::string moveStrCSA = s1.substr(0, 6);
 			const Move move = usiOperation::csaToMove(pos, moveStrCSA);
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
-			if (move.isNone())
+			if (move.IsNone())
 				break;
 			BookMoveData bmd = bmdBase[pos.GetTurn()];
 			bmd.move = move;
@@ -339,7 +339,7 @@ private:
 		pos.GetSearcher()->tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+			pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
@@ -464,7 +464,7 @@ private:
 		SearchStack ss[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+			pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				PRINT_PV(pos.Print());
@@ -472,8 +472,8 @@ private:
 					const Color rootColor = pos.GetTurn();
 					int recordPVIndex = 0;
 					PRINT_PV(std::cout << "recordpv: ");
-					for (; !bmd.pvBuffer[recordPVIndex].isNone(); ++recordPVIndex) {
-						PRINT_PV(std::cout << bmd.pvBuffer[recordPVIndex].toCSA());
+					for (; !bmd.pvBuffer[recordPVIndex].IsNone(); ++recordPVIndex) {
+						PRINT_PV(std::cout << bmd.pvBuffer[recordPVIndex].ToCSA());
 						setUpStates->push(StateInfo());
 						pos.DoMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
 					}
@@ -488,8 +488,8 @@ private:
 					std::array<double, 2> sum_dT = {{0.0, 0.0}};
 					for (int otherPVIndex = recordPVIndex + 1; otherPVIndex < static_cast<int>(bmd.pvBuffer.m_size()); ++otherPVIndex) {
 						PRINT_PV(std::cout << "otherpv : ");
-						for (; !bmd.pvBuffer[otherPVIndex].isNone(); ++otherPVIndex) {
-							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].toCSA());
+						for (; !bmd.pvBuffer[otherPVIndex].IsNone(); ++otherPVIndex) {
+							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].ToCSA());
 							setUpStates->push(StateInfo());
 							pos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
 						}
@@ -503,7 +503,7 @@ private:
 						dT[0] = -dT[0];
 						dT[1] = (pos.GetTurn() == rootColor ? -dT[1] : dT[1]);
 						parse2Data.params.incParam(pos, dT);
-						for (int jj = otherPVIndex - 1; !bmd.pvBuffer[jj].isNone(); --jj) {
+						for (int jj = otherPVIndex - 1; !bmd.pvBuffer[jj].IsNone(); --jj) {
 							pos.UndoMove(bmd.pvBuffer[jj]);
 						}
 					}

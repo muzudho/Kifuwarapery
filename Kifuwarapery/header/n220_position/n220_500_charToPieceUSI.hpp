@@ -2,6 +2,7 @@
 
 #include <stack>
 #include <memory>
+#include <map>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../../header/n116_hand____/n116_500_hand.hpp"
@@ -11,7 +12,7 @@
 #include "../../header/n240_position/n240_200_evalList.hpp"
 
 
-const std::string DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
+const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";
 
 
 
@@ -33,7 +34,7 @@ template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , cons
 
 // position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
 // の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。
-const int MaxLegalMoves = 593 + 1;
+const int g_MaxLegalMoves = 593 + 1;
 
 class CharToPieceUSI : public std::map<char, Piece> {
 public:

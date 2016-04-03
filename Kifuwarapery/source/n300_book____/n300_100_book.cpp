@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
@@ -100,13 +100,13 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
-	Move move = Move::moveNone();
+	Move move = Move::GetMoveNone();
 	const Key key = bookKey(pos);
 	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->options["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (fileName_ != fName && !open(fName.c_str())) {
-		return MoveScore(Move::moveNone(), ScoreNone);
+		return MoveScore(Move::GetMoveNone(), ScoreNone);
 	}
 
 	binary_search(key);
@@ -123,15 +123,15 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 				|| (pickBest && entry.count == best)))
 		{
 			const Move tmp = Move(entry.fromToPro);
-			const Square to = tmp.to();
-			if (tmp.isDrop()) {
-				const PieceType ptDropped = tmp.pieceTypeDropped();
+			const Square to = tmp.To();
+			if (tmp.IsDrop()) {
+				const PieceType ptDropped = tmp.GetPieceTypeDropped();
 				move = makeDropMove(ptDropped, to);
 			}
 			else {
-				const Square from = tmp.from();
+				const Square from = tmp.From();
 				const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
-				const bool promo = tmp.isPromotion();
+				const bool promo = tmp.IsPromotion();
 				if (promo) {
 					move = makeCapturePromoteMove(ptFrom, from, to, pos);
 				}
@@ -193,13 +193,13 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.Set(DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {
 			const std::string moveStrCSA = line.substr(0, 6);
 			const Move move = usiOperation.csaToMove(pos, moveStrCSA);
-			if (move.isNone()) {
+			if (move.IsNone()) {
 				pos.Print();
 				std::cout << "!!! Illegal move = " << moveStrCSA << " !!!" << std::endl;
 				break;
@@ -214,7 +214,7 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 						 it != bookMap[key].end();
 						 ++it)
 					{
-						if (it->fromToPro == move.proFromAndTo()) {
+						if (it->fromToPro == move.ProFromAndTo()) {
 							++it->count;
 							if (it->count < 1) {
 								// 数えられる数の上限を超えたので元に戻す。
@@ -246,7 +246,7 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 					BookEntry be;
 					be.score = score;
 					be.key = key;
-					be.fromToPro = static_cast<u16>(move.proFromAndTo());
+					be.fromToPro = static_cast<u16>(move.ProFromAndTo());
 					be.count = 1;
 					bookMap[key].push_back(be);
 				}

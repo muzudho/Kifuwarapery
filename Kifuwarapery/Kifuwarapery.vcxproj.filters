@@ -127,6 +127,9 @@
     <Filter Include="source\n111_colorSq_">
       <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n223_move____">
+      <UniqueIdentifier>{a0a085e1-a6b1-4a03-99fe-f40bc7fd1bae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -146,9 +149,6 @@
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
       <Filter>header\n200_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_150_move.hpp">
-      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_300_tt.hpp">
       <Filter>header\n240_position</Filter>
@@ -377,6 +377,12 @@
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_100_utilScore.hpp">
       <Filter>header\n200_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_500_move.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_100_move.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

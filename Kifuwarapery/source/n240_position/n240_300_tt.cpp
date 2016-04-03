@@ -42,7 +42,7 @@ void TranspositionTable::store(const Key posKey, const Score score, const Bound 
 		// 置換表が空か、keyが同じな古い情報が入っているとき
 		if (!tte->key() || tte->key() == posKeyHigh32) {
 			// move が無いなら、とりあえず古い情報でも良いので、他の指し手を保存する。
-			if (move.isNone()) {
+			if (move.IsNone()) {
 				move = tte->move();
 			}
 

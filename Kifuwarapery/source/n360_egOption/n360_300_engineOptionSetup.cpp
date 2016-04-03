@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
@@ -44,7 +44,7 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Searcher * s)
 	pMap->Put("Write_Synthesized_Eval", EngineOption(false));
 	pMap->Put("USI_Ponder", EngineOption(true));
 	pMap->Put("Byoyomi_Margin", EngineOption(500, 0, INT_MAX));
-	pMap->Put("MultiPV", EngineOption(1, 1, MaxLegalMoves));
+	pMap->Put("MultiPV", EngineOption(1, 1, g_MaxLegalMoves));
 	pMap->Put("Skill_Level", EngineOption(20, 0, 20));
 	pMap->Put("Max_Random_Score_Diff", EngineOption(0, 0, ScoreMate0Ply));
 	pMap->Put("Max_Random_Score_Diff_Ply", EngineOption(40, 0, SHRT_MAX));

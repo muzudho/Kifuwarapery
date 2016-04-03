@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_150_move.hpp"
+#include "../../header/n223_move____/n223_500_move.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
@@ -15,7 +15,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 	legalMoves_[0].score = INT_MAX; // 番兵のセット
 	currMove_ = lastMove_ = firstMove();
 	captureThreshold_ = 0;
-	endBadCaptures_ = legalMoves_ + MaxLegalMoves - 1;
+	endBadCaptures_ = legalMoves_ + g_MaxLegalMoves - 1;
 	ss_ = searchStack;
 
 	if (pos.InCheck()) {
@@ -35,8 +35,8 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 		}
 	}
 
-	ttMove_ = (!ttm.isNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
-	lastMove_ += (!ttMove_.isNone());
+	ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
+	lastMove_ += (!ttMove_.IsNone());
 }
 
 // 静止探索で呼ばれる。
@@ -54,11 +54,11 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 	else {
 		phase_ = QRecapture;
 		recaptureSquare_ = sq;
-		ttm = Move::moveNone();
+		ttm = Move::GetMoveNone();
 	}
 
-	ttMove_ = (!ttm.isNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::moveNone());
-	lastMove_ += !ttMove_.isNone();
+	ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
+	lastMove_ += !ttMove_.IsNone();
 }
 
 MovePicker::MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt)
@@ -70,13 +70,13 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 	phase_ = ProbCut;
 
 	captureThreshold_ = pos.GetCapturePieceScore(pt);
-	ttMove_ = ((!ttm.isNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::moveNone());
+	ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::GetMoveNone());
 
-	if (!ttMove_.isNone() && (!ttMove_.isCapture() || pos.GetSee(ttMove_) <= captureThreshold_)) {
-		ttMove_ = Move::moveNone();
+	if (!ttMove_.IsNone() && (!ttMove_.IsCapture() || pos.GetSee(ttMove_) <= captureThreshold_)) {
+		ttMove_ = Move::GetMoveNone();
 	}
 
-	lastMove_ += !ttMove_.isNone();
+	lastMove_ += !ttMove_.IsNone();
 }
 
 template <> Move MovePicker::nextMove<false>() {
@@ -110,10 +110,10 @@ template <> Move MovePicker::nextMove<false>() {
 
 		case PH_Killers:
 			move = (currMove_++)->move;
-			if (!move.isNone()
+			if (!move.IsNone()
 				&& move != ttMove_
 				&& pos().MoveIsPseudoLegal(move, true)
-				&& pos().GetPiece(move.to()) == Empty)
+				&& pos().GetPiece(move.To()) == Empty)
 			{
 				return move;
 			}
@@ -151,11 +151,11 @@ template <> Move MovePicker::nextMove<false>() {
 
 		case PH_QCaptures1:
 			move = pickBest(currMove_++, lastMove())->move;
-			assert(move.to() == recaptureSquare_);
+			assert(move.To() == recaptureSquare_);
 			return move;
 
 		case PH_Stop:
-			return Move::moveNone();
+			return Move::GetMoveNone();
 		default:
 			UNREACHABLE;
 		}
@@ -175,7 +175,7 @@ inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 void MovePicker::scoreCaptures() {
 	for (MoveStack* curr = currMove(); curr != lastMove(); ++curr) {
 		const Move move = curr->move;
-		curr->score = Position::GetPieceScore(pos().GetPiece(move.to())) - LVA(move.pieceTypeFrom());
+		curr->score = Position::GetPieceScore(pos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
 	}
 }
 
@@ -185,8 +185,8 @@ template <bool IsDrop> void MovePicker::scoreNonCapturesMinusPro() {
 		curr->score =
 			history().value(IsDrop,
 				UtilPiece::FromColorAndPieceType(pos().GetTurn(),
-													 (IsDrop ? move.pieceTypeDropped() : move.pieceTypeFrom())),
-							move.to());
+													 (IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
+							move.To());
 	}
 }
 
@@ -197,15 +197,15 @@ void MovePicker::scoreEvasions() {
 		if (seeScore < 0) {
 			curr->score = seeScore - History::MaxScore;
 		}
-		else if (move.isCaptureOrPromotion()) {
-			curr->score = pos().GetCapturePieceScore(pos().GetPiece(move.to())) + History::MaxScore;
-			if (move.isPromotion()) {
-				const PieceType pt = UtilPiece::ToPieceType(pos().GetPiece(move.from()));
+		else if (move.IsCaptureOrPromotion()) {
+			curr->score = pos().GetCapturePieceScore(pos().GetPiece(move.To())) + History::MaxScore;
+			if (move.IsPromotion()) {
+				const PieceType pt = UtilPiece::ToPieceType(pos().GetPiece(move.From()));
 				curr->score += pos().GetPromotePieceScore(pt);
 			}
 		}
 		else {
-			curr->score = history().value(move.isDrop(), UtilPiece::FromColorAndPieceType(pos().GetTurn(), move.pieceTypeFromOrDropped()), move.to());
+			curr->score = history().value(move.IsDrop(), UtilPiece::FromColorAndPieceType(pos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 		}
 	}
 }
@@ -248,7 +248,7 @@ void MovePicker::goNextPhase() {
 		return;
 
 	case PH_BadCaptures:
-		currMove_ = legalMoves_ + MaxLegalMoves - 1;
+		currMove_ = legalMoves_ + g_MaxLegalMoves - 1;
 		lastMove_ = endBadCaptures_;
 		return;
 
