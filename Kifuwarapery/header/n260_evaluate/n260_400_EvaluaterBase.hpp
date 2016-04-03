@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
+#include "../../header/n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n260_evaluate/n260_200_evaluate01.hpp"
 #include "../../header/n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
@@ -190,8 +190,8 @@ struct EvaluaterBase {
 #endif
 
 #if defined EVAL_PHASE1 || defined EVAL_PHASE3
-			const Color jcolor = UtilPiece::pieceToColor(jpiece);
-			const PieceType jpt = UtilPiece::pieceToPieceType(jpiece);
+			const Color jcolor = UtilPiece::ToColor(jpiece);
+			const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 			Bitboard jtoBB = Bitboard::setMaskBB(ksq).notThisAnd(
 				Position::attacksFrom(jpt, jcolor, jsq, Bitboard::setMaskBB(ksq)));
 			while (jtoBB.isNot0()) {
@@ -273,8 +273,8 @@ struct EvaluaterBase {
 				const Square ijsq = static_cast<Square>(ij - ijbegin);
 				const Square jisq = static_cast<Square>(ji - jibegin);
 
-				const Color jicolor = UtilPiece::pieceToColor(jipiece);
-				const PieceType jipt = UtilPiece::pieceToPieceType(jipiece);
+				const Color jicolor = UtilPiece::ToColor(jipiece);
+				const PieceType jipt = UtilPiece::ToPieceType(jipiece);
 				const Bitboard mask = Bitboard::setMaskBB(ksq) | Bitboard::setMaskBB(ijsq);
 				Bitboard jitoBB = mask.notThisAnd(Position::attacksFrom(jipt, jicolor, jisq, mask));
 				while (jitoBB.isNot0()) {
@@ -354,7 +354,7 @@ struct EvaluaterBase {
 				auto color = [](int ij) {
 					const int ijbegin = Evaluation01::kppIndexBegin(ij);
 					const Piece ijpiece = g_kppBoardIndexStartToPiece.value(ijbegin);
-					const Color ijcolor = UtilPiece::pieceToColor(ijpiece);
+					const Color ijcolor = UtilPiece::ToColor(ijpiece);
 					return ijcolor;
 				};
 				if (color(j) < color(i))
@@ -366,10 +366,10 @@ struct EvaluaterBase {
 				const Square isq = static_cast<Square>(i - ibegin);
 				const Square jsq = static_cast<Square>(j - jbegin);
 
-				const Color icolor = UtilPiece::pieceToColor(ipiece);
-				const Color jcolor = UtilPiece::pieceToColor(jpiece);
-				const PieceType ipt = UtilPiece::pieceToPieceType(ipiece);
-				const PieceType jpt = UtilPiece::pieceToPieceType(jpiece);
+				const Color icolor = UtilPiece::ToColor(ipiece);
+				const Color jcolor = UtilPiece::ToColor(jpiece);
+				const PieceType ipt = UtilPiece::ToPieceType(ipiece);
+				const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 				const Bitboard imask = Bitboard::setMaskBB(ksq) | Bitboard::setMaskBB(jsq);
 				const Bitboard jmask = Bitboard::setMaskBB(ksq) | Bitboard::setMaskBB(isq);
 				Bitboard itoBB = imask.notThisAnd(Position::attacksFrom(jpt, icolor, isq, imask));
@@ -523,8 +523,8 @@ struct EvaluaterBase {
 #endif
 
 #if defined EVAL_PHASE1
-					const PieceType ipt = UtilPiece::pieceToPieceType(ipiece);
-					const Color icolor = UtilPiece::pieceToColor(ipiece);
+					const PieceType ipt = UtilPiece::ToPieceType(ipiece);
+					const Color icolor = UtilPiece::ToColor(ipiece);
 					Bitboard itoBB = Bitboard::setMaskBB(ksq).notThisAnd(
 						Position::attacksFrom(ipt, icolor, isq, Bitboard::setMaskBB(ksq)));
 					while (itoBB.isNot0()) {
@@ -541,8 +541,8 @@ struct EvaluaterBase {
 				const int ibegin = Evaluation01::kppIndexBegin(i);
 				const Square isq = static_cast<Square>(i - ibegin);
 				const Piece ipiece = g_kppBoardIndexStartToPiece.value(ibegin);
-				const PieceType ipt = UtilPiece::pieceToPieceType(ipiece);
-				const Color icolor = UtilPiece::pieceToColor(ipiece);
+				const PieceType ipt = UtilPiece::ToPieceType(ipiece);
+				const Color icolor = UtilPiece::ToColor(ipiece);
 
 				Bitboard itoBB = Bitboard::setMaskBB(ksq).notThisAnd(
 					Position::attacksFrom(ipt, icolor, isq, Bitboard::setMaskBB(ksq)));
@@ -608,8 +608,8 @@ struct EvaluaterBase {
 			const Rank diff_rank_k0i = UtilSquare::ToRank(ksq0) - UtilSquare::ToRank(isq);
 			File diff_file_k0i = UtilSquare::ToFile(ksq0) - UtilSquare::ToFile(isq);
 
-			const Color icolor = UtilPiece::pieceToColor(ipiece);
-			const PieceType ipt = UtilPiece::pieceToPieceType(ipiece);
+			const Color icolor = UtilPiece::ToColor(ipiece);
+			const PieceType ipt = UtilPiece::ToPieceType(ipiece);
 			const Bitboard mask = Bitboard::setMaskBB(ksq0) | Bitboard::setMaskBB(ksq1);
 			Bitboard itoBB = mask.notThisAnd(Position::attacksFrom(ipt, icolor, isq, mask));
 			while (itoBB.isNot0()) {

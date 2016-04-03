@@ -93,7 +93,7 @@ PieceType Move::pieceTypeFromOrDropped() const
 HandPiece Move::handPieceDropped() const
 {
 	assert(this->isDrop());
-	return UtilHandPiece::pieceTypeToHandPiece(pieceTypeDropped());
+	return UtilHandPiece::FromPieceType(pieceTypeDropped());
 }
 
 bool Move::isNone() const

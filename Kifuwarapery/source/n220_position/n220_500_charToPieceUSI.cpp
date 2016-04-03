@@ -87,7 +87,7 @@ bool Position::pseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) c
 	const Color us = turn();
 	const Square from = move.from();
 
-	if (!FROMMUSTNOTKING && UtilPiece::pieceToPieceType(piece(from)) == King) {
+	if (!FROMMUSTNOTKING && UtilPiece::ToPieceType(piece(from)) == King) {
 		const Color them = UtilColor::OppositeColor(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
 		return !attackersToIsNot0(them, move.to());
@@ -137,7 +137,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	if (move.isDrop()) {
 		const PieceType ptFrom = move.pieceTypeDropped();
-		if (!hand(us).exists(UtilHandPiece::pieceTypeToHandPiece(ptFrom)) || piece(to) != Empty) {
+		if (!hand(us).exists(UtilHandPiece::FromPieceType(ptFrom)) || piece(to) != Empty) {
 			return false;
 		}
 
@@ -173,7 +173,7 @@ bool Position::moveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 	else {
 		const Square from = move.from();
 		const PieceType ptFrom = move.pieceTypeFrom();
-		if (piece(from) != UtilPiece::colorAndPieceTypeToPiece(us, ptFrom) || bbOf(us).isSet(to)) {
+		if (piece(from) != UtilPiece::FromColorAndPieceType(us, ptFrom) || bbOf(us).isSet(to)) {
 			return false;
 		}
 
@@ -248,7 +248,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 	PieceType ptTo;
 	if (move.isDrop()) {
 		ptTo = move.pieceTypeDropped();
-		const HandPiece hpTo = UtilHandPiece::pieceTypeToHandPiece(ptTo);
+		const HandPiece hpTo = UtilHandPiece::FromPieceType(ptTo);
 
 		handKey -= zobHand(hpTo, us);
 		boardKey += zobrist(ptTo, to, us);
@@ -257,13 +257,13 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		const int handnum = hand(us).numOf(hpTo);
 		const int listIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpTo] + handnum];
-		const Piece pcTo = UtilPiece::colorAndPieceTypeToPiece(us, ptTo);
+		const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
 		st_->cl.listindex[0] = listIndex;
 		st_->cl.clistpair[0].oldlist[0] = evalList_.list0[listIndex];
 		st_->cl.clistpair[0].oldlist[1] = evalList_.list1[listIndex];
 
 		evalList_.list0[listIndex] = kppArray[pcTo         ] + to;
-		evalList_.list1[listIndex] = kppArray[UtilPiece::inverse(pcTo)] + UtilSquare::Inverse(to);
+		evalList_.list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
 		evalList_.listToSquareHand[listIndex] = to;
 		evalList_.squareHandToList[to] = listIndex;
 
@@ -272,7 +272,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		hand_[us].minusOne(hpTo);
 		xorBBs(ptTo, to, us);
-		piece_[to] = UtilPiece::colorAndPieceTypeToPiece(us, ptTo);
+		piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 
 		if (moveIsCheck) {
 			// Direct checks
@@ -293,13 +293,13 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		byTypeBB_[ptTo].xorBit(to);
 		byColorBB_[us].xorBit(from, to);
 		piece_[from] = Empty;
-		piece_[to] = UtilPiece::colorAndPieceTypeToPiece(us, ptTo);
+		piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 		boardKey -= zobrist(ptFrom, from, us);
 		boardKey += zobrist(ptTo, to, us);
 
 		if (ptCaptured) {
 			// 駒を取ったとき
-			const HandPiece hpCaptured = UtilHandPiece::pieceTypeToHandPiece(ptCaptured);
+			const HandPiece hpCaptured = UtilHandPiece::FromPieceType(ptCaptured);
 			const Color them = UtilColor::OppositeColor(us);
 
 			boardKey -= zobrist(ptCaptured, to, them);
@@ -336,7 +336,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			kingSquare_[us] = to;
 		}
 		else {
-			const Piece pcTo = UtilPiece::colorAndPieceTypeToPiece(us, ptTo);
+			const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
 			const int fromListIndex = evalList_.squareHandToList[from];
 
 			st_->cl.listindex[0] = fromListIndex;
@@ -344,7 +344,7 @@ void Position::doMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			st_->cl.clistpair[0].oldlist[1] = evalList_.list1[fromListIndex];
 
 			evalList_.list0[fromListIndex] = kppArray[pcTo         ] + to;
-			evalList_.list1[fromListIndex] = kppArray[UtilPiece::inverse(pcTo)] + UtilSquare::Inverse(to);
+			evalList_.list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
 			evalList_.listToSquareHand[fromListIndex] = to;
 			evalList_.squareHandToList[to] = fromListIndex;
 
@@ -414,7 +414,7 @@ void Position::undoMove(const Move move) {
 		byColorBB_[us].xorBit(to);
 		piece_[to] = Empty;
 
-		const HandPiece hp = UtilHandPiece::pieceTypeToHandPiece(ptTo);
+		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
 		hand_[us].plusOne(hp);
 
 		const int toListIndex  = evalList_.squareHandToList[to];
@@ -435,10 +435,10 @@ void Position::undoMove(const Move move) {
 			kingSquare_[us] = from;
 		}
 		else {
-			const Piece pcFrom = UtilPiece::colorAndPieceTypeToPiece(us, ptFrom);
+			const Piece pcFrom = UtilPiece::FromColorAndPieceType(us, ptFrom);
 			const int toListIndex = evalList_.squareHandToList[to];
 			evalList_.list0[toListIndex] = kppArray[pcFrom         ] + from;
-			evalList_.list1[toListIndex] = kppArray[UtilPiece::inverse(pcFrom)] + UtilSquare::Inverse(from);
+			evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
 			evalList_.listToSquareHand[toListIndex] = from;
 			evalList_.squareHandToList[from] = toListIndex;
 		}
@@ -447,14 +447,14 @@ void Position::undoMove(const Move move) {
 			// 駒を取ったとき
 			byTypeBB_[ptCaptured].xorBit(to);
 			byColorBB_[them].xorBit(to);
-			const HandPiece hpCaptured = UtilHandPiece::pieceTypeToHandPiece(ptCaptured);
-			const Piece pcCaptured = UtilPiece::colorAndPieceTypeToPiece(them, ptCaptured);
+			const HandPiece hpCaptured = UtilHandPiece::FromPieceType(ptCaptured);
+			const Piece pcCaptured = UtilPiece::FromColorAndPieceType(them, ptCaptured);
 			piece_[to] = pcCaptured;
 
 			const int handnum = hand(us).numOf(hpCaptured);
 			const int toListIndex = evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
 			evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
-			evalList_.list1[toListIndex] = kppArray[UtilPiece::inverse(pcCaptured)] + UtilSquare::Inverse(to);
+			evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
 			evalList_.listToSquareHand[toListIndex] = to;
 			evalList_.squareHandToList[to] = toListIndex;
 
@@ -468,7 +468,7 @@ void Position::undoMove(const Move move) {
 		byTypeBB_[ptFrom].xorBit(from);
 		byTypeBB_[ptTo].xorBit(to);
 		byColorBB_[us].xorBit(from, to);
-		piece_[from] = UtilPiece::colorAndPieceTypeToPiece(us, ptFrom);
+		piece_[from] = UtilPiece::FromColorAndPieceType(us, ptFrom);
 	}
 	// Occupied は to, from の位置のビットを操作するよりも、
 	// Black と White の or を取る方が速いはず。
@@ -1123,7 +1123,7 @@ silver_drop_end:
 			const Square from = fromBB.firstOneFromI9();
 			Bitboard toBB = moveTarget & attacksFrom<Gold>(US, from) & attacksFrom<Gold>(Them, ksq);
 			if (toBB.isNot0()) {
-				const PieceType pt = UtilPiece::pieceToPieceType(piece(from));
+				const PieceType pt = UtilPiece::ToPieceType(piece(from));
 				xorBBs(pt, from, US);
 				goldsBB_.xorBit(from);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -1625,7 +1625,7 @@ bool Position::isOK() const {
 				}
 			}
 			else {
-				if (!bbOf(UtilPiece::pieceToPieceType(pc), UtilPiece::pieceToColor(pc)).isSet(sq)) {
+				if (!bbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)).isSet(sq)) {
 					goto incorrect_position;
 				}
 			}
@@ -1671,7 +1671,7 @@ Key Position::computeBoardKey() const {
 	Key result = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		if (piece(sq) != Empty) {
-			result += zobrist(UtilPiece::pieceToPieceType(piece(sq)), sq, UtilPiece::pieceToColor(piece(sq)));
+			result += zobrist(UtilPiece::ToPieceType(piece(sq)), sq, UtilPiece::ToColor(piece(sq)));
 		}
 	}
 	if (turn() == White) {
@@ -1879,7 +1879,7 @@ bool Position::moveGivesCheck(const Move move, const CheckInfo& ci) const {
 		const Square from = move.from();
 		const PieceType ptFrom = move.pieceTypeFrom();
 		const PieceType ptTo = move.pieceTypeTo(ptFrom);
-		assert(ptFrom == UtilPiece::pieceToPieceType(piece(from)));
+		assert(ptFrom == UtilPiece::ToPieceType(piece(from)));
 		// Direct Check ?
 		if (ci.checkBB[ptTo].isSet(to)) {
 			return true;
@@ -1953,7 +1953,7 @@ Score Position::computeMaterial() const {
 		s += num * pieceScore(pt);
 	}
 	for (PieceType pt = Pawn; pt < King; ++pt) {
-		const int num = hand(Black).numOf(UtilHandPiece::pieceTypeToHandPiece(pt)) - hand(White).numOf(UtilHandPiece::pieceTypeToHandPiece(pt));
+		const int num = hand(Black).numOf(UtilHandPiece::FromPieceType(pt)) - hand(White).numOf(UtilHandPiece::FromPieceType(pt));
 		s += num * pieceScore(pt);
 	}
 	return s;

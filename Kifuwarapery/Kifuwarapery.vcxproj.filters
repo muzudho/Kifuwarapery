@@ -8,9 +8,6 @@
     <Filter Include="header\n080_common__">
       <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n120_brdEntry">
-      <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n160_board___">
       <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
     </Filter>
@@ -48,9 +45,6 @@
     </Filter>
     <Filter Include="source\n080_common">
       <UniqueIdentifier>{402fcfcc-1379-4ee1-93c7-83438a227775}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n120_brdEntry">
-      <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n160_board___">
       <UniqueIdentifier>{7ca6996e-3e41-4079-bff6-634b0fa58752}</UniqueIdentifier>
@@ -121,6 +115,18 @@
     <Filter Include="header\n113_piece___">
       <UniqueIdentifier>{888784f3-27a1-44c9-975c-141d36552a64}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n116_hand____">
+      <UniqueIdentifier>{23b824cb-ddf1-4ed7-b976-90817fea480a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n116_hand____">
+      <UniqueIdentifier>{1af9527b-7b4e-4f09-82c2-336142a783af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n111_colorSq_">
+      <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n111_colorSq_">
+      <UniqueIdentifier>{900d1854-d547-48c6-a64f-afe20f838870}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -143,12 +149,6 @@
     </ClInclude>
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
       <Filter>header\n200_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n120_brdEntry\n120_300_ColorFileRank.h">
-      <Filter>header\n120_brdEntry</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n120_brdEntry\n120_250_hand.hpp">
-      <Filter>header\n120_brdEntry</Filter>
     </ClInclude>
     <ClInclude Include="header\n240_position\n240_150_move.hpp">
       <Filter>header\n240_position</Filter>
@@ -363,6 +363,12 @@
     <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp">
       <Filter>header\n113_piece___</Filter>
     </ClInclude>
+    <ClInclude Include="header\n116_hand____\n116_500_hand.hpp">
+      <Filter>header\n116_hand____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
+      <Filter>header\n111_colorSq_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -379,12 +385,6 @@
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
       <Filter>source\n160_board___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n120_brdEntry\n120_250_hand.cpp">
-      <Filter>source\n120_brdEntry</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n120_brdEntry\n120_300_ColorFileRank.cpp">
-      <Filter>source\n120_brdEntry</Filter>
     </ClCompile>
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
       <Filter>source\n200_score___</Filter>
@@ -469,6 +469,12 @@
     </ClCompile>
     <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp">
       <Filter>source\n110_square___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n116_hand____\n116_500_hand.cpp">
+      <Filter>source\n116_hand____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
+      <Filter>source\n111_colorSq_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

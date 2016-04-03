@@ -1,4 +1,4 @@
-#include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
+#include "../../header/n111_colorSq_/n111_500_ColorFileRank.h"
 
 ColorFileRank::ColorFileRank(Color color, File file, Rank rank)
 {

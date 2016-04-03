@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../../header/n120_brdEntry/n120_250_hand.hpp"
+#include "../../header/n116_hand____/n116_500_hand.hpp"
 
 const int Hand::HandPieceShiftBits[HandPieceNum] = {
 	HPawnShiftBits,
@@ -30,3 +30,9 @@ const u32 Hand::HandPieceOne[HandPieceNum] = {
 	1 << HBishopShiftBits,
 	1 << HRookShiftBits
 };
+
+u32 Hand::Value() const
+{
+	return this->m_value_;
+}
+

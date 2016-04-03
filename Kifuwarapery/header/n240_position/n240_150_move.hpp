@@ -136,7 +136,7 @@ inline Move capturedPieceType2Move(const PieceType captured) { return static_cas
 // 移動先と、Position から 取った駒の種類を判別し、指し手に変換
 // 駒を取らないときは、0 (MoveNone) を返す。
 inline Move capturedPieceType2Move(const Square to, const Position& pos) {
-	const PieceType captured = UtilPiece::pieceToPieceType( pos.piece(to) );
+	const PieceType captured = UtilPiece::ToPieceType( pos.piece(to) );
 	return capturedPieceType2Move(captured);
 }
 

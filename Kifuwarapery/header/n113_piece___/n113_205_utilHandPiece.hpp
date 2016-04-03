@@ -10,7 +10,7 @@
 
 class UtilHandPiece {
 public:
-	static inline HandPiece pieceTypeToHandPiece(const PieceType pt) { return PieceTypeToHandPieceTable[pt]; }
+	static inline HandPiece FromPieceType(const PieceType pt) { return PieceTypeToHandPieceTable[pt]; }
 };
 
 

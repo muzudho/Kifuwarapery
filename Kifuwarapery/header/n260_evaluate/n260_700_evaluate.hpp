@@ -2,7 +2,7 @@
 
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n080_common__/n080_150_overloadEnumOperators.hpp"
-#include "../../header/n120_brdEntry/n120_300_ColorFileRank.h"
+#include "../../header/n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n260_evaluate/n260_600_EvalSum.hpp"

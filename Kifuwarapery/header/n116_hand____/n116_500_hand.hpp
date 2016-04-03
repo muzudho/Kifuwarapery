@@ -15,40 +15,54 @@
 // xxxxx11x xxxxxxxx xxxxxxxx xxxxxxxx  Rook
 class Hand {
 public:
+
 	Hand() {}
-	explicit Hand(u32 v) : value_(v) {}
-	u32 value() const { return value_; }
+
+	explicit Hand(u32 v) : m_value_(v) {}
+
+	u32 Value() const;
+
 	template <HandPiece HP> u32 numOf() const {
-		return (HP == HPawn   ? ((value() & HPawnMask  ) >> HPawnShiftBits  ) :
-				HP == HLance  ? ((value() & HLanceMask ) >> HLanceShiftBits ) :
-				HP == HKnight ? ((value() & HKnightMask) >> HKnightShiftBits) :
-				HP == HSilver ? ((value() & HSilverMask) >> HSilverShiftBits) :
-				HP == HGold   ? ((value() & HGoldMask  ) >> HGoldShiftBits  ) :
-				HP == HBishop ? ((value() & HBishopMask) >> HBishopShiftBits) :
-				/*HP == HRook   ?*/ ((value() /*& HRookMask*/  ) >> HRookShiftBits  ));
+		return (HP == HPawn ? ((Value() & HPawnMask) >> HPawnShiftBits) :
+			HP == HLance ? ((Value() & HLanceMask) >> HLanceShiftBits) :
+			HP == HKnight ? ((Value() & HKnightMask) >> HKnightShiftBits) :
+			HP == HSilver ? ((Value() & HSilverMask) >> HSilverShiftBits) :
+			HP == HGold ? ((Value() & HGoldMask) >> HGoldShiftBits) :
+			HP == HBishop ? ((Value() & HBishopMask) >> HBishopShiftBits) :
+			/*HP == HRook   ?*/ ((Value() /*& HRookMask*/) >> HRookShiftBits));
 	}
+
 	u32 numOf(const HandPiece handPiece) const {
-		return (value() & HandPieceMask[handPiece]) >> HandPieceShiftBits[handPiece];
+		return (Value() & HandPieceMask[handPiece]) >> HandPieceShiftBits[handPiece];
 	}
+
 	// 2つの Hand 型変数の、同じ種類の駒の数を比較する必要があるため、
 	// bool じゃなくて、u32 型でそのまま返す。
 	template <HandPiece HP> u32 exists() const {
-		return (HP == HPawn   ? (value() & HPawnMask  ) :
-				HP == HLance  ? (value() & HLanceMask ) :
-				HP == HKnight ? (value() & HKnightMask) :
-				HP == HSilver ? (value() & HSilverMask) :
-				HP == HGold   ? (value() & HGoldMask  ) :
-				HP == HBishop ? (value() & HBishopMask) :
-				/*HP == HRook   ?*/ (value() & HRookMask  ));
+		return (HP == HPawn   ? (Value() & HPawnMask  ) :
+				HP == HLance  ? (Value() & HLanceMask ) :
+				HP == HKnight ? (Value() & HKnightMask) :
+				HP == HSilver ? (Value() & HSilverMask) :
+				HP == HGold   ? (Value() & HGoldMask  ) :
+				HP == HBishop ? (Value() & HBishopMask) :
+				/*HP == HRook   ?*/ (Value() & HRookMask  ));
 	}
-	u32 exists(const HandPiece handPiece) const { return value() & HandPieceMask[handPiece]; }
-	u32 exceptPawnExists() const { return value() & HandPieceExceptPawnMask; }
+
+	u32 exists(const HandPiece handPiece) const { return Value() & HandPieceMask[handPiece]; }
+
+	u32 exceptPawnExists() const { return Value() & HandPieceExceptPawnMask; }
+
 	// num が int だけどまあ良いか。
-	void orEqual(const int num, const HandPiece handPiece) { value_ |= num << HandPieceShiftBits[handPiece]; }
-	void plusOne(const HandPiece handPiece) { value_ += HandPieceOne[handPiece]; }
-	void minusOne(const HandPiece handPiece) { value_ -= HandPieceOne[handPiece]; }
-	bool operator == (const Hand rhs) const { return this->value() == rhs.value(); }
-	bool operator != (const Hand rhs) const { return this->value() != rhs.value(); }
+	void orEqual(const int num, const HandPiece handPiece) { m_value_ |= num << HandPieceShiftBits[handPiece]; }
+
+	void plusOne(const HandPiece handPiece) { m_value_ += HandPieceOne[handPiece]; }
+
+	void minusOne(const HandPiece handPiece) { m_value_ -= HandPieceOne[handPiece]; }
+
+	bool operator == (const Hand rhs) const { return this->Value() == rhs.Value(); }
+
+	bool operator != (const Hand rhs) const { return this->Value() != rhs.Value(); }
+
 	// 手駒の優劣判定
 	// 手駒が ref と同じか、勝っていれば true
 	// 勝っている状態とは、全ての種類の手駒が、ref 以上の枚数があることを言う。
@@ -63,7 +77,7 @@ public:
 #else
 		// こちらは、同じ意味でより高速
 		// ref の方がどれか一つでも多くの枚数の駒を持っていれば、Borrow の位置のビットが立つ。
-		return ((this->value() - ref.value()) & BorrowMask) == 0;
+		return ((this->Value() - ref.Value()) & BorrowMask) == 0;
 #endif
 	}
 
@@ -97,6 +111,6 @@ private:
 								   (HBishopMask + (1 << HBishopShiftBits)) | 
 								   (HRookMask   + (1 << HRookShiftBits  )));
 
-	u32 value_;
+	u32 m_value_;
 };
 

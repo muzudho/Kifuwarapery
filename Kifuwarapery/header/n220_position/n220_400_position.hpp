@@ -219,8 +219,8 @@ public:
 private:
 	void clear();
 	void setPiece(const Piece piece, const Square sq) {
-		const Color c = UtilPiece::pieceToColor(piece);
-		const PieceType pt = UtilPiece::pieceToPieceType(piece);
+		const Color c = UtilPiece::ToColor(piece);
+		const PieceType pt = UtilPiece::ToPieceType(piece);
 
 		piece_[sq] = piece;
 
@@ -230,9 +230,9 @@ private:
 	}
 	void setHand(const HandPiece hp, const Color c, const int num) { hand_[c].orEqual(num, hp); }
 	void setHand(const Piece piece, const int num) {
-		const Color c = UtilPiece::pieceToColor(piece);
-		const PieceType pt = UtilPiece::pieceToPieceType(piece);
-		const HandPiece hp = UtilHandPiece::pieceTypeToHandPiece(pt);
+		const Color c = UtilPiece::ToColor(piece);
+		const PieceType pt = UtilPiece::ToPieceType(piece);
+		const HandPiece hp = UtilHandPiece::FromPieceType(pt);
 		setHand(hp, c, num);
 	}
 

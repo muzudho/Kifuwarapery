@@ -130,7 +130,7 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 			}
 			else {
 				const Square from = tmp.from();
-				const PieceType ptFrom = UtilPiece::pieceToPieceType(pos.piece(from));
+				const PieceType ptFrom = UtilPiece::ToPieceType(pos.piece(from));
 				const bool promo = tmp.isPromotion();
 				if (promo) {
 					move = makeCapturePromoteMove(ptFrom, from, to, pos);
