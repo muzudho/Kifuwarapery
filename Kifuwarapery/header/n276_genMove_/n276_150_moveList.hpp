@@ -14,13 +14,17 @@ MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos, const Sq
 template <MoveType MT>
 class MoveList {
 public:
-	explicit MoveList(const Position& pos) : curr_(moveStackList_), last_(generateMoves<MT>(moveStackList_, pos)) {}
-	void operator ++ () { ++curr_; }
-	bool end() const { return (curr_ == last_); }
-	Move move() const { return curr_->move; }
-	size_t size() const { return static_cast<size_t>(last_ - moveStackList_); }
-	bool contains(const Move move) const {
-		for (const MoveStack* it(moveStackList_); it != last_; ++it) {
+
+	explicit MoveList(const Position& pos) : m_curr_(m_moveStackList_), m_last_(generateMoves<MT>(m_moveStackList_, pos)) {}
+
+	void operator ++ () { ++m_curr_; }
+
+	bool IsEnd() const { return (m_curr_ == m_last_); }
+
+	Move GetMove() const { return m_curr_->move; }
+	size_t GetSize() const { return static_cast<size_t>(m_last_ - m_moveStackList_); }
+	bool Contains(const Move move) const {
+		for (const MoveStack* it(m_moveStackList_); it != m_last_; ++it) {
 			if (it->move == move) {
 				return true;
 			}
@@ -29,7 +33,7 @@ public:
 	}
 
 private:
-	MoveStack moveStackList_[g_MaxLegalMoves];
-	MoveStack* curr_;
-	MoveStack* last_;
+	MoveStack m_moveStackList_[g_MaxLegalMoves];
+	MoveStack* m_curr_;
+	MoveStack* m_last_;
 };

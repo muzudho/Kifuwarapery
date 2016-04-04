@@ -367,7 +367,7 @@ public:
 #endif
 
 					// indices は更に for ループの外側に置きたいが、OpenMP 使っているとアクセス競合しそうなのでループの中に置く。
-					std::pair<ptrdiff_t, int> indices[KPPIndicesMax];
+					std::pair<ptrdiff_t, int> indices[g_KPPIndicesMax];
 					for (int p1 = 0; p1 < fe_end; ++p1) {
 
 						//SYNCCOUT << "(^q^)ReadLv3Files!" << SYNCENDL;
@@ -432,7 +432,7 @@ public:
 				SYNCCOUT << "(^q^)KKP: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
-				std::pair<ptrdiff_t, int> indices[KKPIndicesMax];
+				std::pair<ptrdiff_t, int> indices[g_KKPIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 					for (int p1 = 0; p1 < fe_end; ++p1) {
 						//SYNCCOUT << "(^q^)KKP: p1=" << p1 << "/" << fe_end << SYNCENDL;
@@ -461,7 +461,7 @@ public:
 				SYNCCOUT << "(^q^)KK: ksq0=" << std::to_string(ksq0) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
-				std::pair<ptrdiff_t, int> indices[KKIndicesMax];
+				std::pair<ptrdiff_t, int> indices[g_KKIndicesMax];
 				for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 					//SYNCCOUT << "(^q^)KKP: ksq1=" << ksq1 << "/" << fe_end << SYNCENDL;
 

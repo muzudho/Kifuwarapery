@@ -274,9 +274,9 @@ using ConditionVariable = std::condition_variable;
 #include <boost/detail/endian.hpp>
 template <typename T> inline void reverseEndian(T& r) {
 	u8* begin = reinterpret_cast<u8*>(&r);
-	u8* end = reinterpret_cast<u8*>(&r) + sizeof(T);
-	for (; begin < end; ++begin, --end) {
-		std::swap(*begin, *(end - 1));
+	u8* IsEnd = reinterpret_cast<u8*>(&r) + sizeof(T);
+	for (; begin < IsEnd; ++begin, --IsEnd) {
+		std::swap(*begin, *(IsEnd - 1));
 	}
 }
 #endif

@@ -33,8 +33,8 @@ private:
 	std::array<s32, 2> doawhite(const Position& pos, const int index[2]);
 
 #if defined INANIWA_SHIFT
-	Score inaniwaScoreBody(const Position& pos);
-	inline Score inaniwaScore(const Position& pos);
+	Score inaniwaScoreBody(const Position& GetPos);
+	inline Score inaniwaScore(const Position& GetPos);
 #endif
 
 	bool calcDifference(Position& pos, SearchStack* ss);

@@ -17,15 +17,15 @@ struct RawEvaluater {
 	std::array<float, 2> kkp_raw[SquareNum][SquareNum][fe_end];
 	std::array<float, 2> kk_raw[SquareNum][SquareNum];
 
-	void incParam(const Position& pos, const std::array<double, 2>& dinc) {
-		const Square sq_bk = pos.GetKingSquare(Black);
-		const Square sq_wk = pos.GetKingSquare(White);
-		const int* GetList0 = pos.GetCplist0();
-		const int* GetList1 = pos.GetCplist1();
+	void incParam(const Position& GetPos, const std::array<double, 2>& dinc) {
+		const Square sq_bk = GetPos.GetKingSquare(Black);
+		const Square sq_wk = GetPos.GetKingSquare(White);
+		const int* GetList0 = GetPos.GetCplist0();
+		const int* GetList1 = GetPos.GetCplist1();
 		const std::array<float, 2> f = {{static_cast<float>(dinc[0] / g_FVScale), static_cast<float>(dinc[1] / g_FVScale)}};
 
 		kk_raw[sq_bk][sq_wk] += f;
-		for (int i = 0; i < pos.GetNlist(); ++i) {
+		for (int i = 0; i < GetPos.GetNlist(); ++i) {
 			const int k0 = GetList0[i];
 			const int k1 = GetList1[i];
 			for (int j = 0; j < i; ++j) {
@@ -60,11 +60,11 @@ inline float atomicSub(std::atomic<float> &x, const float diff) {
 }
 
 RawEvaluater& operator += (RawEvaluater& lhs, RawEvaluater& rhs) {
-	for (auto lit = &(***std::begin(lhs.kpp_raw)), rit = &(***std::begin(rhs.kpp_raw)); lit != &(***std::end(lhs.kpp_raw)); ++lit, ++rit)
+	for (auto lit = &(***std::begin(lhs.kpp_raw)), rit = &(***std::begin(rhs.kpp_raw)); lit != &(***std::IsEnd(lhs.kpp_raw)); ++lit, ++rit)
 		*lit += *rit;
-	for (auto lit = &(***std::begin(lhs.kkp_raw)), rit = &(***std::begin(rhs.kkp_raw)); lit != &(***std::end(lhs.kkp_raw)); ++lit, ++rit)
+	for (auto lit = &(***std::begin(lhs.kkp_raw)), rit = &(***std::begin(rhs.kkp_raw)); lit != &(***std::IsEnd(lhs.kkp_raw)); ++lit, ++rit)
 		*lit += *rit;
-	for (auto lit = &(** std::begin(lhs.kk_raw )), rit = &(** std::begin(rhs.kk_raw )); lit != &(** std::end(lhs.kk_raw )); ++lit, ++rit)
+	for (auto lit = &(** std::begin(lhs.kk_raw )), rit = &(** std::begin(rhs.kk_raw )); lit != &(** std::IsEnd(lhs.kk_raw )); ++lit, ++rit)
 		*lit += *rit;
 
 	return lhs;
@@ -167,8 +167,8 @@ struct BookMoveData {
 
 class Learner {
 public:
-	void learn(Position& pos, std::istringstream& ssCmd) {
-		eval_.initOptions(pos.GetSearcher()->options["Eval_Dir"], false);
+	void learn(Position& GetPos, std::istringstream& ssCmd) {
+		eval_.initOptions(GetPos.GetSearcher()->options["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -212,7 +212,7 @@ public:
 		updateMaxMask_ = (UINT64_C(1) << updateMax) - 1;
 		updateMinMask_ = (UINT64_C(1) << updateMin) - 1;
 		setUpdateMask(stepNum_);
-		readBook(pos, recordFileName, blackRecordFileName, whiteRecordFileName, gameNum);
+		readBook(GetPos, recordFileName, blackRecordFileName, whiteRecordFileName, gameNum);
 		// 既に 1 つのSearcher, Positionが立ち上がっているので、指定した数 - 1 の Searcher, Position を立ち上げる。
 		threadNum = std::max<size_t>(0, threadNum - 1);
 		std::vector<Searcher> searchers(threadNum);
@@ -220,26 +220,26 @@ public:
 			s.initOptions();
 			setLearnOptions(s);
 			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.threads.mainThread(), s.thisptr));
-			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().count()));
+			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().m_count()));
 			// ここでデフォルトコンストラクタでpush_backすると、
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
 			parse2Datum_.push_back(parse2Data_);
 		}
-		setLearnOptions(*pos.GetSearcher());
-		mt_ = std::mt19937(std::chrono::system_clock::now().time_since_epoch().count());
-		mt64_ = std::mt19937_64(std::chrono::system_clock::now().time_since_epoch().count());
+		setLearnOptions(*GetPos.GetSearcher());
+		mt_ = std::mt19937(std::chrono::system_clock::now().time_since_epoch().m_count());
+		mt64_ = std::mt19937_64(std::chrono::system_clock::now().time_since_epoch().m_count());
 		for (int i = 0; ; ++i) {
 			std::cout << "iteration " << i << std::endl;
 			std::cout << "parse1 start" << std::endl;
-			learnParse1(pos);
+			learnParse1(GetPos);
 			std::cout << "parse2 start" << std::endl;
-			learnParse2(pos);
+			learnParse2(GetPos);
 		}
 	}
 private:
 	// 学習に使う棋譜から、手と手に対する補助的な情報を付けでデータ保持する。
 	// 50000局程度に対して10秒程度で終わるからシングルコアで良い。
-	void setLearnMoves(Position& pos, std::SetP<std::pair<Key, Move> >& dict, std::string& s0, std::string& s1,
+	void setLearnMoves(Position& GetPos, std::SetP<std::pair<Key, Move> >& dict, std::string& s0, std::string& s1,
 					   const std::array<bool, ColorNum>& useTurnMove)
 	{
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
@@ -257,21 +257,21 @@ private:
 		ss >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
 		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
 			const std::string moveStrCSA = s1.substr(0, 6);
-			const Move GetMove = usiOperation::csaToMove(pos, moveStrCSA);
+			const Move GetMove = usiOperation::csaToMove(GetPos, moveStrCSA);
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
 			if (GetMove.IsNone())
 				break;
-			BookMoveData bmd = bmdBase[pos.GetTurn()];
+			BookMoveData bmd = bmdBase[GetPos.GetTurn()];
 			bmd.GetMove = GetMove;
-			if (useTurnMove[pos.GetTurn()] && dict.find(std::make_pair(pos.GetKey(), GetMove)) == std::end(dict)) {
+			if (useTurnMove[GetPos.GetTurn()] && dict.find(std::make_pair(GetPos.GetKey(), GetMove)) == std::IsEnd(dict)) {
 				// この局面かつこの指し手は初めて見るので、学習に使う。
 				bmd.useLearning = true;
-				dict.insert(std::make_pair(pos.GetKey(), GetMove));
+				dict.insert(std::make_pair(GetPos.GetKey(), GetMove));
 			}
 			else
 				bmd.useLearning = false;
@@ -280,10 +280,10 @@ private:
 			s1.erase(0, 6);
 
 			setUpStates->push(StateInfo());
-			pos.DoMove(GetMove, setUpStates->top());
+			GetPos.DoMove(GetMove, setUpStates->top());
 		}
 	}
-	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& pos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
+	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& GetPos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
 	{
 		if (record == "-") // "-" なら棋譜ファイルを読み込まない。
 			return;
@@ -300,19 +300,19 @@ private:
 			std::getline(ifs, s0);
 			std::getline(ifs, s1);
 			if (!ifs) break;
-			setLearnMoves(pos, dict, s0, s1, useTurnMove);
+			setLearnMoves(GetPos, dict, s0, s1, useTurnMove);
 		}
 		std::cout << "games existed: " << bookMovesDatum_.m_size() << std::endl;
 	}
-	void readBook(Position& pos,
+	void readBook(Position& GetPos,
 				  const std::string& recordFileName,
 				  const std::string& blackRecordFileName,
 				  const std::string& whiteRecordFileName, const s64 gameNum)
 	{
 		std::SetP<std::pair<Key, Move> > dict;
-		readBookBody(dict, pos,      recordFileName, {true , true }, gameNum);
-		readBookBody(dict, pos, blackRecordFileName, {true , false}, gameNum);
-		readBookBody(dict, pos, whiteRecordFileName, {false, true }, gameNum);
+		readBookBody(dict, GetPos,      recordFileName, {true , true }, gameNum);
+		readBookBody(dict, GetPos, blackRecordFileName, {true , false}, gameNum);
+		readBookBody(dict, GetPos, whiteRecordFileName, {false, true }, gameNum);
 		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.m_size());
 	}
 	void setLearnOptions(Searcher& s) {
@@ -334,36 +334,36 @@ private:
 		}
 		return index_++;
 	}
-	void learnParse1Body(Position& pos, std::mt19937& mt) {
+	void learnParse1Body(Position& GetPos, std::mt19937& mt) {
 		std::uniform_int_distribution<Ply> dist(minDepth_, maxDepth_);
-		pos.GetSearcher()->tt.Clear();
+		GetPos.GetSearcher()->tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
-					pos.GetSearcher()->alpha = -ScoreMaxEvaluate;
-					pos.GetSearcher()->beta  =  ScoreMaxEvaluate;
-					go(pos, dist(mt), bmd.GetMove);
-					const Score recordScore = pos.GetSearcher()->rootMoves[0].score_;
+					GetPos.GetSearcher()->alpha = -ScoreMaxEvaluate;
+					GetPos.GetSearcher()->beta  =  ScoreMaxEvaluate;
+					go(GetPos, dist(mt), bmd.GetMove);
+					const Score recordScore = GetPos.GetSearcher()->rootMoves[0].score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
 					bmd.pvBuffer.Clear();
 					if (abs(recordScore) < ScoreMaxEvaluate) {
 						int recordIsNth = 0; // 正解の手が何番目に良い手か。0から数える。
-						auto& recordPv = pos.GetSearcher()->rootMoves[0].pv_;
-						bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(recordPv), std::end(recordPv));
+						auto& recordPv = GetPos.GetSearcher()->rootMoves[0].pv_;
+						bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(recordPv), std::IsEnd(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
-						for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
+						for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 							if (ml.GetMove() != bmd.GetMove) {
-								pos.GetSearcher()->alpha = recordScore - FVWindow;
-								pos.GetSearcher()->beta  = recordScore + FVWindow;
-								go(pos, dist(mt), ml.GetMove());
-								const Score GetScore = pos.GetSearcher()->rootMoves[0].score_;
-								if (pos.GetSearcher()->alpha < GetScore && GetScore < pos.GetSearcher()->beta) {
-									auto& pv = pos.GetSearcher()->rootMoves[0].pv_;
-									bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(pv), std::end(pv));
+								GetPos.GetSearcher()->alpha = recordScore - FVWindow;
+								GetPos.GetSearcher()->beta  = recordScore + FVWindow;
+								go(GetPos, dist(mt), ml.GetMove());
+								const Score GetScore = GetPos.GetSearcher()->rootMoves[0].score_;
+								if (GetPos.GetSearcher()->alpha < GetScore && GetScore < GetPos.GetSearcher()->beta) {
+									auto& pv = GetPos.GetSearcher()->rootMoves[0].pv_;
+									bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(pv), std::IsEnd(pv));
 								}
 								if (recordScore < GetScore)
 									++recordIsNth;
@@ -375,14 +375,14 @@ private:
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.DoMove(bmd.GetMove, setUpStates->top());
+				GetPos.DoMove(bmd.GetMove, setUpStates->top());
 			}
 		}
 	}
-	void learnParse1(Position& pos) {
+	void learnParse1(Position& GetPos) {
 		Time t = Time::CurrentTime();
 		// 棋譜をシャッフルすることで、先頭 gameNum_ 個の学習に使うデータをランダムに選ぶ。
-		std::shuffle(std::begin(bookMovesDatum_), std::end(bookMovesDatum_), mt_);
+		std::shuffle(std::begin(bookMovesDatum_), std::IsEnd(bookMovesDatum_), mt_);
 		std::cout << "shuffle elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 		index_ = 0;
 		moveCount_.Store(0);
@@ -391,7 +391,7 @@ private:
 		std::vector<std::thread> threads(positions_.m_size());
 		for (size_t i = 0; i < positions_.m_size(); ++i)
 			threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
-		learnParse1Body(pos, mt_);
+		learnParse1Body(GetPos, mt_);
 		for (auto& thread : threads)
 			thread.join();
 
@@ -459,30 +459,30 @@ private:
 		const int min = count1s(updateMinMask_);
 		updateMask_ = max - (((max - min)*step+(stepMax>>1))/stepMax);
 	}
-	void learnParse2Body(Position& pos, Parse2Data& parse2Data) {
+	void learnParse2Body(Position& GetPos, Parse2Data& parse2Data) {
 		parse2Data.Clear();
 		SearchStack ss[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			pos.SetP(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
-				PRINT_PV(pos.Print());
+				PRINT_PV(GetPos.Print());
 				if (bmd.useLearning && bmd.otherPVExist) {
-					const Color rootColor = pos.GetTurn();
+					const Color rootColor = GetPos.GetTurn();
 					int recordPVIndex = 0;
 					PRINT_PV(std::cout << "recordpv: ");
 					for (; !bmd.pvBuffer[recordPVIndex].IsNone(); ++recordPVIndex) {
 						PRINT_PV(std::cout << bmd.pvBuffer[recordPVIndex].ToCSA());
 						setUpStates->push(StateInfo());
-						pos.DoMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
+						GetPos.DoMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
 					}
 					// evaluate() の差分計算を無効化する。
 					ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-					const Score recordScore = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
+					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, ss+1) : -evaluate(GetPos, ss+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
-						pos.UndoMove(bmd.pvBuffer[jj]);
+						GetPos.UndoMove(bmd.pvBuffer[jj]);
 					}
 
 					std::array<double, 2> sum_dT = {{0.0, 0.0}};
@@ -491,39 +491,39 @@ private:
 						for (; !bmd.pvBuffer[otherPVIndex].IsNone(); ++otherPVIndex) {
 							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].ToCSA());
 							setUpStates->push(StateInfo());
-							pos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
+							GetPos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
 						}
 						ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score GetScore = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
+						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, ss+1) : -evaluate(GetPos, ss+1));
 						const auto diff = GetScore - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};
 						PRINT_PV(std::cout << ", score: " << GetScore << ", dT: " << dT[0] << std::endl);
 						sum_dT += dT;
 						dT[0] = -dT[0];
-						dT[1] = (pos.GetTurn() == rootColor ? -dT[1] : dT[1]);
-						parse2Data.params.incParam(pos, dT);
+						dT[1] = (GetPos.GetTurn() == rootColor ? -dT[1] : dT[1]);
+						parse2Data.params.incParam(GetPos, dT);
 						for (int jj = otherPVIndex - 1; !bmd.pvBuffer[jj].IsNone(); --jj) {
-							pos.UndoMove(bmd.pvBuffer[jj]);
+							GetPos.UndoMove(bmd.pvBuffer[jj]);
 						}
 					}
 
 					for (int jj = 0; jj < recordPVIndex; ++jj) {
 						setUpStates->push(StateInfo());
-						pos.DoMove(bmd.pvBuffer[jj], setUpStates->top());
+						GetPos.DoMove(bmd.pvBuffer[jj], setUpStates->top());
 					}
-					sum_dT[1] = (pos.GetTurn() == rootColor ? sum_dT[1] : -sum_dT[1]);
-					parse2Data.params.incParam(pos, sum_dT);
+					sum_dT[1] = (GetPos.GetTurn() == rootColor ? sum_dT[1] : -sum_dT[1]);
+					parse2Data.params.incParam(GetPos, sum_dT);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
-						pos.UndoMove(bmd.pvBuffer[jj]);
+						GetPos.UndoMove(bmd.pvBuffer[jj]);
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.DoMove(bmd.GetMove, setUpStates->top());
+				GetPos.DoMove(bmd.GetMove, setUpStates->top());
 			}
 		}
 	}
-	void learnParse2(Position& pos) {
+	void learnParse2(Position& GetPos) {
 		Time t;
 		for (int step = 1; step <= stepNum_; ++step) {
 			t.Restart();
@@ -532,7 +532,7 @@ private:
 			std::vector<std::thread> threads(positions_.m_size());
 			for (size_t i = 0; i < positions_.m_size(); ++i)
 				threads[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
-			learnParse2Body(pos, parse2Data_);
+			learnParse2Body(GetPos, parse2Data_);
 			for (auto& thread : threads)
 				thread.join();
 
@@ -543,8 +543,8 @@ private:
 			lowerDimension(parse2EvalBase_, parse2Data_.params);
 			setUpdateMask(step);
 			std::cout << "update eval ... " << std::flush;
-			if (usePenalty_) updateEval<true >(pos.GetSearcher()->options["Eval_Dir"]);
-			else             updateEval<false>(pos.GetSearcher()->options["Eval_Dir"]);
+			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->options["Eval_Dir"]);
+			else             updateEval<false>(GetPos.GetSearcher()->options["Eval_Dir"]);
 			std::cout << "done" << std::endl;
 			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 			Print();

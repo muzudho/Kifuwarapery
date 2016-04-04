@@ -74,12 +74,12 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 
 #if defined LEARN
 // 学習用。通常の go 呼び出しは文字列を扱って高コストなので、大量に探索の開始、終了を行う学習では別の呼び出し方にする。
-void UsiOperation::go(const Position& pos, const Ply GetDepth, const Move GetMove) {
+void UsiOperation::go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
 	LimitsType limits;
 	std::vector<Move> moves;
 	limits.GetDepth = GetDepth;
 	moves.push_back(GetMove);
-	pos.GetSearcher()->threads.startThinking(pos, limits, moves);
+	GetPos.GetSearcher()->threads.startThinking(GetPos, limits, moves);
 }
 #endif
 
@@ -87,8 +87,8 @@ void UsiOperation::go(const Position& pos, const Ply GetDepth, const Move GetMov
 
 #if !defined NDEBUG
 // for debug
-Move UsiOperation::usiToMoveDebug(const Position& pos, const std::string& moveStr) {
-	for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
+Move UsiOperation::usiToMoveDebug(const Position& GetPos, const std::string& moveStr) {
+	for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 		if (moveStr == ml.GetMove().ToUSI()) {
 			return ml.GetMove();
 		}
@@ -97,8 +97,8 @@ Move UsiOperation::usiToMoveDebug(const Position& pos, const std::string& moveSt
 }
 
 
-Move UsiOperation::csaToMoveDebug(const Position& pos, const std::string& moveStr) {
-	for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
+Move UsiOperation::csaToMoveDebug(const Position& GetPos, const std::string& moveStr) {
+	for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 		if (moveStr == ml.GetMove().ToCSA()) {
 			return ml.GetMove();
 		}
@@ -183,13 +183,13 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = makeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = MakeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return Move::GetMoveNone();
 			}
-			move = makePromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = MakePromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();
@@ -234,11 +234,11 @@ Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = makeNonPromoteMove<Capture>(ptFrom, from, to, pos);
+			move = MakeNonPromoteMove<Capture>(ptFrom, from, to, pos);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = makePromoteMove<Capture>(ptFrom, from, to, pos);
+			move = MakePromoteMove<Capture>(ptFrom, from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();

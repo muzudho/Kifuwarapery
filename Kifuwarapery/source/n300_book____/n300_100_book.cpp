@@ -6,27 +6,27 @@
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
-MT64bit Book::mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
-Key Book::ZobPiece[PieceNone][SquareNum];
-Key Book::ZobHand[HandPieceNum][19]; // 持ち駒の同一種類の駒の数ごと
-Key Book::ZobTurn;
+MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
+Key Book::m_ZobPiece[PieceNone][SquareNum];
+Key Book::m_ZobHand[HandPieceNum][19]; // 持ち駒の同一種類の駒の数ごと
+Key Book::m_ZobTurn;
 
-void Book::init() {
+void Book::Init() {
 	for (Piece p = Empty; p < PieceNone; ++p) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			ZobPiece[p][sq] = mt64bit_.random();
+			m_ZobPiece[p][sq] = m_mt64bit_.GetRandom();
 		}
 	}
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
 		for (int num = 0; num < 19; ++num) {
-			ZobHand[hp][num] = mt64bit_.random();
+			m_ZobHand[hp][num] = m_mt64bit_.GetRandom();
 		}
 	}
-	ZobTurn = mt64bit_.random();
+	m_ZobTurn = m_mt64bit_.GetRandom();
 }
 
-bool Book::open(const char* fName) {
-	fileName_ = "";
+bool Book::Open(const char* fName) {
+	m_fileName_ = "";
 
 	if (is_open()) {
 		close();
@@ -38,20 +38,20 @@ bool Book::open(const char* fName) {
 		return false;
 	}
 
-	size_ = tellg() / sizeof(BookEntry);
+	m_size_ = tellg() / sizeof(BookEntry);
 
 	if (!good()) {
 		std::cerr << "Failed to open book file " << fName  << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
-	fileName_ = fName;
+	m_fileName_ = fName;
 	return true;
 }
 
-void Book::binary_search(const Key key) {
+void Book::Binary_search(const Key key) {
 	size_t low = 0;
-	size_t high = size_ - 1;
+	size_t high = m_size_ - 1;
 	size_t mid;
 	BookEntry entry;
 
@@ -65,7 +65,7 @@ void Book::binary_search(const Key key) {
 		seekg(mid * sizeof(BookEntry), std::ios_base::beg);
 		read(reinterpret_cast<char*>(&entry), sizeof(entry));
 
-		if (key <= entry.key) {
+		if (key <= entry.m_key) {
 			high = mid;
 		}
 		else {
@@ -78,51 +78,51 @@ void Book::binary_search(const Key key) {
 	seekg(low * sizeof(BookEntry), std::ios_base::beg);
 }
 
-Key Book::bookKey(const Position& pos) {
+Key Book::GetBookKey(const Position& pos) {
 	Key key = 0;
 	Bitboard bb = pos.GetOccupiedBB();
 
 	while (bb.IsNot0()) {
 		const Square sq = bb.FirstOneFromI9();
-		key ^= ZobPiece[pos.GetPiece(sq)][sq];
+		key ^= m_ZobPiece[pos.GetPiece(sq)][sq];
 	}
 	const Hand hand = pos.GetHand(pos.GetTurn());
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
-		key ^= ZobHand[hp][hand.NumOf(hp)];
+		key ^= m_ZobHand[hp][hand.NumOf(hp)];
 	}
 	if (pos.GetTurn() == White) {
-		key ^= ZobTurn;
+		key ^= m_ZobTurn;
 	}
 	return key;
 }
 
-MoveScore Book::probe(const Position& pos, const std::string& fName, const bool pickBest) {
+MoveScore Book::GetProbe(const Position& pos, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
 	Move move = Move::GetMoveNone();
-	const Key key = bookKey(pos);
+	const Key key = GetBookKey(pos);
 	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->options["Min_Book_Score"]));
 	Score score = ScoreZero;
 
-	if (fileName_ != fName && !open(fName.c_str())) {
+	if (m_fileName_ != fName && !Open(fName.c_str())) {
 		return MoveScore(Move::GetMoveNone(), ScoreNone);
 	}
 
-	binary_search(key);
+	Binary_search(key);
 
 	// 現在の局面における定跡手の数だけループする。
-	while (read(reinterpret_cast<char*>(&entry), sizeof(entry)), entry.key == key && good()) {
-		best = std::max(best, entry.count);
-		sum += entry.count;
+	while (read(reinterpret_cast<char*>(&entry), sizeof(entry)), entry.m_key == key && good()) {
+		best = std::max(best, entry.m_count);
+		sum += entry.m_count;
 
 		// 指された確率に従って手が選択される。
 		// count が大きい順に並んでいる必要はない。
-		if (min_book_score <= entry.score
-			&& ((random_.random() % sum < entry.count)
-				|| (pickBest && entry.count == best)))
+		if (min_book_score <= entry.m_score
+			&& ((m_random_.GetRandom() % sum < entry.m_count)
+				|| (pickBest && entry.m_count == best)))
 		{
-			const Move tmp = Move(entry.fromToPro);
+			const Move tmp = Move(entry.m_fromToPro);
 			const Square to = tmp.To();
 			if (tmp.IsDrop()) {
 				const PieceType ptDropped = tmp.GetPieceTypeDropped();
@@ -139,7 +139,7 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 					move = UtilMove::MakeCaptureMove(ptFrom, from, to, pos);
 				}
 			}
-			score = entry.score;
+			score = entry.m_score;
 		}
 	}
 
@@ -147,7 +147,7 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {
-	return b1.count < b2.count;
+	return b1.m_count < b2.m_count;
 }
 
 #if !defined MINIMUL
@@ -163,7 +163,7 @@ inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {
 // 出現回数がそのまま定跡として使う確率となる。
 // 基本的には棋譜を丁寧に選別した上で定跡を作る必要がある。
 // MAKE_SEARCHED_BOOK を on にしていると、定跡生成に非常に時間が掛かる。
-void makeBook(Position& pos, std::istringstream& ssCmd) {
+void MakeBook(Position& pos, std::istringstream& ssCmd) {
 	std::string fileName;
 	ssCmd >> fileName;
 	std::ifstream ifs(fileName.c_str(), std::ios::binary);
@@ -207,18 +207,18 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 			line.erase(0, 6); // 先頭から6文字削除
 			if (pos.GetTurn() == saveColor) {
 				// 先手、後手の内、片方だけを記録する。
-				const Key key = Book::bookKey(pos);
+				const Key key = Book::GetBookKey(pos);
 				bool isFind = false;
 				if (bookMap.find(key) != bookMap.end()) {
 					for (std::vector<BookEntry>::iterator it = bookMap[key].begin();
 						 it != bookMap[key].end();
 						 ++it)
 					{
-						if (it->fromToPro == move.ProFromAndTo()) {
-							++it->count;
-							if (it->count < 1) {
+						if (it->m_fromToPro == move.ProFromAndTo()) {
+							++it->m_count;
+							if (it->m_count < 1) {
 								// 数えられる数の上限を超えたので元に戻す。
-								--it->count;
+								--it->m_count;
 							}
 							isFind = true;
 						}
@@ -244,10 +244,10 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 #endif
 					// 未登録の手
 					BookEntry be;
-					be.score = score;
-					be.key = key;
-					be.fromToPro = static_cast<u16>(move.ProFromAndTo());
-					be.count = 1;
+					be.m_score = score;
+					be.m_key = key;
+					be.m_fromToPro = static_cast<u16>(move.ProFromAndTo());
+					be.m_count = 1;
 					bookMap[key].push_back(be);
 				}
 			}
@@ -265,8 +265,8 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 	// 2 回以上棋譜に出現していない手は削除する。
 	for (auto& elem : bookMap) {
 		auto& second = elem.second;
-		auto erase_it = std::find_if(second.begin(), second.end(), [](decltype(*second.begin())& second_elem) { return second_elem.count < 2; });
-		second.erase(erase_it, second.end());
+		auto erase_it = std::find_if(second.begin(), second.IsEnd(), [](decltype(*second.begin())& second_elem) { return second_elem.m_count < 2; });
+		second.erase(erase_it, second.IsEnd());
 	}
 #endif
 
@@ -274,8 +274,8 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 	// narrow book
 	for (auto& elem : bookMap) {
 		auto& second = elem.second;
-		auto erase_it = std::find_if(second.begin(), second.end(), [&](decltype(*second.begin())& second_elem) { return second_elem.count < second[0].count / 2; });
-		second.erase(erase_it, second.end());
+		auto erase_it = std::find_if(second.begin(), second.IsEnd(), [&](decltype(*second.begin())& second_elem) { return second_elem.m_count < second[0].m_count / 2; });
+		second.erase(erase_it, second.IsEnd());
 	}
 #endif
 

@@ -216,7 +216,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 // 過去(又は現在)に生成した指し手が現在の局面でも有効か判定。
 // あまり速度が要求される場面で使ってはいけない。
 bool Position::MoveIsLegal(const Move GetMove) const {
-	return MoveList<LegalAll>(*this).contains(GetMove);
+	return MoveList<LegalAll>(*this).Contains(GetMove);
 }
 #endif
 
@@ -1492,15 +1492,15 @@ void Position::InitZobrist() {
 	for (PieceType pt = Occupied; pt < PieceTypeNum; ++pt) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			for (Color c = Black; c < ColorNum; ++c) {
-				m_zobrist_[pt][sq][c] = g_mt64bit.random() & ~UINT64_C(1);
+				m_zobrist_[pt][sq][c] = g_mt64bit.GetRandom() & ~UINT64_C(1);
 			}
 		}
 	}
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
-		m_zobHand_[hp][Black] = g_mt64bit.random() & ~UINT64_C(1);
-		m_zobHand_[hp][White] = g_mt64bit.random() & ~UINT64_C(1);
+		m_zobHand_[hp][Black] = g_mt64bit.GetRandom() & ~UINT64_C(1);
+		m_zobHand_[hp][White] = g_mt64bit.GetRandom() & ~UINT64_C(1);
 	}
-	m_zobExclusion_ = g_mt64bit.random() & ~UINT64_C(1);
+	m_zobExclusion_ = g_mt64bit.GetRandom() & ~UINT64_C(1);
 }
 
 void Position::Print() const {

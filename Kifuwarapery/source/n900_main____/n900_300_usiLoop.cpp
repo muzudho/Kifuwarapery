@@ -78,7 +78,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 	boost::mpi::environment  env(argc, argv);
 	boost::mpi::communicator world;
 	if (world.rank() != 0) {
-		learn(pos, env, world);
+		learn(GetPos, env, world);
 		return;
 	}
 #endif
@@ -155,9 +155,9 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else if (token == "l") {
 			auto learner = std::unique_ptr<Learner>(new Learner);
 #if defined MPI_LEARN
-			learner->learn(pos, env, world);
+			learner->learn(GetPos, env, world);
 #else
-			learner->learn(pos, ssCmd);
+			learner->learn(GetPos, ssCmd);
 #endif
 		}
 #endif
@@ -167,7 +167,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
 		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().ToCSA() << std::endl; }
-		else if (token == "b") { makeBook(pos, ssCmd); }
+		else if (token == "b") { MakeBook(pos, ssCmd); }
 #endif
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
 	} while (token != "quit" && argc == 1);

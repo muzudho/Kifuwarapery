@@ -361,7 +361,7 @@ void Initializer::initTable() {
 	this->initSquareDistance();
 
 	SYNCCOUT << "(^q^)I14: Book::init!" << SYNCENDL;
-	Book::init();
+	Book::Init();
 
 	SYNCCOUT << "(^q^)I15: initSearchTable!" << SYNCENDL;
 	initSearchTable();
@@ -384,14 +384,14 @@ u64 Initializer::findMagic(const Square square, const bool isBishop) {
 	}
 
 	for (u64 k = 0; k < UINT64_C(100000000); ++k) {
-		const u64 magic = g_mt64bit.randomFewBits();
+		const u64 magic = g_mt64bit.GetRandomFewBits();
 		bool fail = false;
 
 		// これは無くても良いけど、少しマジックナンバーが見つかるのが早くなるはず。
 		if (count1s((mask.MergeP() * magic) & UINT64_C(0xfff0000000000000)) < 6)
 			continue;
 
-		std::fill(std::begin(attackUsed), std::end(attackUsed), AllZeroBB());
+		std::fill(std::begin(attackUsed), std::IsEnd(attackUsed), AllZeroBB());
 
 		for (int i = 0; !fail && i < (1 << num1s); ++i) {
 			const int shiftBits = (isBishop ? g_bishopShiftBits[square] : g_rookShiftBits[square]);

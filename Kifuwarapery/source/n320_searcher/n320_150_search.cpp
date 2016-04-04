@@ -375,7 +375,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	MovePicker mp(pos, ttMove, depth, history, (ss-1)->currentMove.To());
 	const CheckInfo ci(pos);
 
-	while (!(move = mp.nextMove<false>()).IsNone())
+	while (!(move = mp.GetNextMove<false>()).IsNone())
 	{
 		assert(pos.IsOK());
 
@@ -518,17 +518,17 @@ void Searcher::idLoop(Position& pos) {
 
 #if defined BISHOP_IN_DANGER
 	if ((bishopInDangerFlag == BlackBishopInDangerIn28
-		 && std::find_if(std::begin(rootMoves), std::end(rootMoves),
-						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0082KA"; }) != std::end(rootMoves))
+		 && std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
+						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0082KA"; }) != std::IsEnd(rootMoves))
 		|| (bishopInDangerFlag == WhiteBishopInDangerIn28
-			&& std::find_if(std::begin(rootMoves), std::end(rootMoves),
-							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0028KA"; }) != std::end(rootMoves))
+			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
+							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0028KA"; }) != std::IsEnd(rootMoves))
 		|| (bishopInDangerFlag == BlackBishopInDangerIn78
-			&& std::find_if(std::begin(rootMoves), std::end(rootMoves),
-						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0032KA"; }) != std::end(rootMoves))
+			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
+						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0032KA"; }) != std::IsEnd(rootMoves))
 		|| (bishopInDangerFlag == WhiteBishopInDangerIn78
-			&& std::find_if(std::begin(rootMoves), std::end(rootMoves),
-							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0078KA"; }) != std::end(rootMoves)))
+			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
+							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0078KA"; }) != std::IsEnd(rootMoves)))
 	{
 		if (rootMoves.m_size() != 1)
 			pvSize = std::max<size_t>(pvSize, 2);
@@ -581,7 +581,7 @@ void Searcher::idLoop(Position& pos) {
 #if 0
 				// 詰みを発見したら即指す。
 				if (ScoreMateInMaxPly <= abs(bestScore) && abs(bestScore) < ScoreInfinite) {
-					SYNCCOUT << pvInfoToUSI(pos, ply, alpha, beta) << SYNCENDL;
+					SYNCCOUT << pvInfoToUSI(GetPos, ply, alpha, beta) << SYNCENDL;
 					signals.stop = true;
 				}
 #endif
@@ -645,11 +645,11 @@ void Searcher::idLoop(Position& pos) {
 			bool stop = false;
 
 			if (4 < depth && depth < 50 && pvSize == 1) {
-				timeManager.pvInstability(bestMoveChanges, prevBestMoveChanges);
+				timeManager.PvInstability(bestMoveChanges, prevBestMoveChanges);
 			}
 
 			// 次のイテレーションを回す時間が無いなら、ストップ
-			if ((timeManager.availableTime() * 62) / 100 < searchTimer.Elapsed()) {
+			if ((timeManager.AvailableTime() * 62) / 100 < searchTimer.Elapsed()) {
 				stop = true;
 			}
 
@@ -665,7 +665,7 @@ void Searcher::idLoop(Position& pos) {
 				// ここは確実にバグらせないようにする。
 				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
 				&& (rootMoves.size() == 1
-					|| timeManager.availableTime() * 40 / 100 < searchTimer.Elapsed()))
+					|| timeManager.AvailableTime() * 40 / 100 < searchTimer.Elapsed()))
 			{
 				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
 				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
@@ -696,50 +696,50 @@ void Searcher::idLoop(Position& pos) {
 
 #if defined INANIWA_SHIFT
 // 稲庭判定
-void Searcher::detectInaniwa(const Position& pos) {
-	if (inaniwaFlag == NotInaniwa && 20 <= pos.GetGamePly()) {
-		const Rank TRank7 = (pos.GetTurn() == Black ? Rank7 : Rank3); // not constant
+void Searcher::detectInaniwa(const Position& GetPos) {
+	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
+		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
-		if ((pos.GetBbOf(Pawn, UtilColor::OppositeColor(pos.GetTurn())) & mask) == mask) {
-			inaniwaFlag = (pos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
+		if ((GetPos.GetBbOf(Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
+			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			tt.Clear();
 		}
 	}
 }
 #endif
 #if defined BISHOP_IN_DANGER
-void Searcher::detectBishopInDanger(const Position& pos) {
-	if (bishopInDangerFlag == NotBishopInDanger && pos.GetGamePly() <= 50) {
-		const Color them = UtilColor::OppositeColor(pos.GetTurn());
-		if (pos.m_hand(pos.GetTurn()).Exists<HBishop>()
-			&& pos.GetBbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
-			&& (pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F2))
-				|| pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F3))
-				|| pos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
-			&& pos.GetBbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
-			&& pos.GetPiece(InverseIfWhite(them, H2)) == Empty
-			&& pos.GetPiece(InverseIfWhite(them, G2)) == Empty
-			&& pos.GetPiece(InverseIfWhite(them, G1)) == Empty)
+void Searcher::detectBishopInDanger(const Position& GetPos) {
+	if (bishopInDangerFlag == NotBishopInDanger && GetPos.GetGamePly() <= 50) {
+		const Color them = UtilColor::OppositeColor(GetPos.GetTurn());
+		if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
+			&& GetPos.GetBbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
+			&& (GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F2))
+				|| GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F3))
+				|| GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
+			&& GetPos.GetBbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
+			&& GetPos.GetPiece(InverseIfWhite(them, H2)) == Empty
+			&& GetPos.GetPiece(InverseIfWhite(them, G2)) == Empty
+			&& GetPos.GetPiece(InverseIfWhite(them, G1)) == Empty)
 		{
-			bishopInDangerFlag = (pos.GetTurn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
+			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
-		else if (pos.m_hand(pos.GetTurn()).Exists<HBishop>()
-				 && pos.m_hand(them).Exists<HBishop>()
-				 && pos.GetPiece(InverseIfWhite(them, C2)) == Empty
-				 && pos.GetPiece(InverseIfWhite(them, C1)) == Empty
-				 && pos.GetPiece(InverseIfWhite(them, D2)) == Empty
-				 && pos.GetPiece(InverseIfWhite(them, D1)) == Empty
-				 && pos.GetPiece(InverseIfWhite(them, A2)) == Empty
-				 && (UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, C3))) == Silver
-					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, B2))) == Silver)
-				 && (UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, C3))) == Knight
-					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, B1))) == Knight)
-				 && ((UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E2))) == Gold
-					  && UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == King)
-					 || UtilPiece::ToPieceType(pos.GetPiece(InverseIfWhite(them, E1))) == Gold))
+		else if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
+				 && GetPos.m_hand(them).Exists<HBishop>()
+				 && GetPos.GetPiece(InverseIfWhite(them, C2)) == Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, C1)) == Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, D2)) == Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, D1)) == Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, A2)) == Empty
+				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == Silver
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B2))) == Silver)
+				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == Knight
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B1))) == Knight)
+				 && ((UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E2))) == Gold
+					  && UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == King)
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == Gold))
 		{
-			bishopInDangerFlag = (pos.GetTurn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
+			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
 		}
 	}
@@ -1045,7 +1045,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		// move.cap() は前回(一手前)の指し手で取った駒の種類
 		MovePicker mp(pos, ttMove, history, move.GetCap());
 		const CheckInfo ci(pos);
-		while (!(move = mp.nextMove<false>()).IsNone()) {
+		while (!(move = mp.GetNextMove<false>()).IsNone()) {
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				ss->currentMove = move;
 				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
@@ -1094,7 +1094,7 @@ split_point_start:
 
 	// step11
 	// Loop through moves
-	while (!(move = mp.nextMove<SPNode>()).IsNone()) {
+	while (!(move = mp.GetNextMove<SPNode>()).IsNone()) {
 		if (move == excludedMove) {
 			continue;
 		}
@@ -1539,7 +1539,7 @@ bool nyugyoku(const Position& pos) {
 void Searcher::think() {
 	static Book book;
 	Position& pos = rootPosition;
-	timeManager.init(limits, pos.GetGamePly(), pos.GetTurn(), this);
+	timeManager.Init(limits, pos.GetGamePly(), pos.GetTurn(), this);
 	std::uniform_int_distribution<int> dist(options["Min_Book_Ply"], options["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
@@ -1560,7 +1560,7 @@ void Searcher::think() {
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (options["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScore bookMoveScore = book.probe(pos, options["Book_File"], options["Best_Book_Move"]);
+		const MoveScore bookMoveScore = book.GetProbe(pos, options["Book_File"], options["Best_Book_Move"]);
 		if (
 			!bookMoveScore.move.IsNone()
 			&&
@@ -1586,16 +1586,16 @@ void Searcher::think() {
 	Searcher::threads.wakeUp(this);
 
 	Searcher::threads.timerThread()->msec =
-		(limits.useTimeManagement() ? std::min(100, std::max(timeManager.availableTime() / 16, TimerResolution)) :
+		(limits.useTimeManagement() ? std::min(100, std::max(timeManager.AvailableTime() / 16, TimerResolution)) :
 		 limits.nodes               ? 2 * TimerResolution :
 		 100);
 	Searcher::threads.timerThread()->notifyOne();
 
 #if defined INANIWA_SHIFT
-	detectInaniwa(pos);
+	detectInaniwa(GetPos);
 #endif
 #if defined BISHOP_IN_DANGER
-	detectBishopInDanger(pos);
+	detectBishopInDanger(GetPos);
 #endif
 #endif
 	idLoop(pos);
@@ -1660,10 +1660,10 @@ void Searcher::checkTime() {
 	const bool stillAtFirstMove =
 		signals.firstRootMove
 		&& !signals.failedLowAtRoot
-		&& timeManager.availableTime() < e;
+		&& timeManager.AvailableTime() < e;
 
 	const bool noMoreTime =
-		timeManager.maximumTime() - 2 * TimerResolution < e
+		timeManager.MaximumTime() - 2 * TimerResolution < e
 		|| stillAtFirstMove;
 
 	if ((limits.useTimeManagement() && noMoreTime)

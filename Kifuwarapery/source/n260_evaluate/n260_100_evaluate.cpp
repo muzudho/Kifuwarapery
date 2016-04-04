@@ -60,7 +60,7 @@ EvalSum Evaluation09::doapc(const Position& pos, const int index[2]) {
 #if defined USE_AVX2_EVAL || defined USE_SSE_EVAL
 	sum.m[0] = _mm_set_epi32(0, 0, *reinterpret_cast<const s32*>(&pkppw[GetList1[0]][0]), *reinterpret_cast<const s32*>(&pkppb[GetList0[0]][0]));
 	sum.m[0] = _mm_cvtepi16_epi32(sum.m[0]);
-	for (int i = 1; i < pos.GetNlist(); ++i) {
+	for (int i = 1; i < GetPos.GetNlist(); ++i) {
 		__m128i tmp;
 		tmp = _mm_set_epi32(0, 0, *reinterpret_cast<const s32*>(&pkppw[GetList1[i]][0]), *reinterpret_cast<const s32*>(&pkppb[GetList0[i]][0]));
 		tmp = _mm_cvtepi16_epi32(tmp);
@@ -113,44 +113,44 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 
 
 #if defined INANIWA_SHIFT
-Score Evaluation09::inaniwaScoreBody(const Position& pos) {
+Score Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 	Score GetScore = ScoreZero;
-	if (pos.GetCsearcher()->inaniwaFlag == InaniwaIsBlack) {
-		if (pos.GetPiece(B9) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(H9) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(A7) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(I7) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(C7) == WKnight) { GetScore += 400 * g_FVScale; }
-		if (pos.GetPiece(G7) == WKnight) { GetScore += 400 * g_FVScale; }
-		if (pos.GetPiece(B5) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(H5) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (pos.GetPiece(D5) == WKnight) { GetScore += 100 * g_FVScale; }
-		if (pos.GetPiece(F5) == WKnight) { GetScore += 100 * g_FVScale; }
-		if (pos.GetPiece(E3) == BPawn) { GetScore += 200 * g_FVScale; }
-		if (pos.GetPiece(E4) == BPawn) { GetScore += 200 * g_FVScale; }
-		if (pos.GetPiece(E5) == BPawn) { GetScore += 200 * g_FVScale; }
+	if (GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsBlack) {
+		if (GetPos.GetPiece(B9) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(H9) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(A7) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(I7) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(C7) == WKnight) { GetScore += 400 * g_FVScale; }
+		if (GetPos.GetPiece(G7) == WKnight) { GetScore += 400 * g_FVScale; }
+		if (GetPos.GetPiece(B5) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(H5) == WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(D5) == WKnight) { GetScore += 100 * g_FVScale; }
+		if (GetPos.GetPiece(F5) == WKnight) { GetScore += 100 * g_FVScale; }
+		if (GetPos.GetPiece(E3) == BPawn) { GetScore += 200 * g_FVScale; }
+		if (GetPos.GetPiece(E4) == BPawn) { GetScore += 200 * g_FVScale; }
+		if (GetPos.GetPiece(E5) == BPawn) { GetScore += 200 * g_FVScale; }
 	}
 	else {
-		assert(pos.GetCsearcher()->inaniwaFlag == InaniwaIsWhite);
-		if (pos.GetPiece(B1) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(H1) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(A3) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(I3) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(C3) == BKnight) { GetScore -= 400 * g_FVScale; }
-		if (pos.GetPiece(G3) == BKnight) { GetScore -= 400 * g_FVScale; }
-		if (pos.GetPiece(B5) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(H5) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (pos.GetPiece(D5) == BKnight) { GetScore -= 100 * g_FVScale; }
-		if (pos.GetPiece(F5) == BKnight) { GetScore -= 100 * g_FVScale; }
-		if (pos.GetPiece(E7) == WPawn) { GetScore -= 200 * g_FVScale; }
-		if (pos.GetPiece(E6) == WPawn) { GetScore -= 200 * g_FVScale; }
-		if (pos.GetPiece(E5) == WPawn) { GetScore -= 200 * g_FVScale; }
+		assert(GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsWhite);
+		if (GetPos.GetPiece(B1) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(H1) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(A3) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(I3) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(C3) == BKnight) { GetScore -= 400 * g_FVScale; }
+		if (GetPos.GetPiece(G3) == BKnight) { GetScore -= 400 * g_FVScale; }
+		if (GetPos.GetPiece(B5) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(H5) == BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(D5) == BKnight) { GetScore -= 100 * g_FVScale; }
+		if (GetPos.GetPiece(F5) == BKnight) { GetScore -= 100 * g_FVScale; }
+		if (GetPos.GetPiece(E7) == WPawn) { GetScore -= 200 * g_FVScale; }
+		if (GetPos.GetPiece(E6) == WPawn) { GetScore -= 200 * g_FVScale; }
+		if (GetPos.GetPiece(E5) == WPawn) { GetScore -= 200 * g_FVScale; }
 	}
 	return GetScore;
 }
-inline Score Evaluation09::inaniwaScore(const Position& pos) {
-	if (pos.GetCsearcher()->inaniwaFlag == NotInaniwa) return ScoreZero;
-	return inaniwaScoreBody(pos);
+inline Score Evaluation09::inaniwaScore(const Position& GetPos) {
+	if (GetPos.GetCsearcher()->inaniwaFlag == NotInaniwa) return ScoreZero;
+	return inaniwaScoreBody(GetPos);
 }
 #endif
 
@@ -158,7 +158,7 @@ inline Score Evaluation09::inaniwaScore(const Position& pos) {
 
 bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 #if defined INANIWA_SHIFT
-	if (pos.GetCsearcher()->inaniwaFlag != NotInaniwa) return false;
+	if (GetPos.GetCsearcher()->inaniwaFlag != NotInaniwa) return false;
 #endif
 	if ((ss - 1)->staticEvalRaw.p[0][0] == ScoreNotEvaluated)
 		return false;
@@ -314,7 +314,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 	sum.p[2] = EvalStorage::KK[sq_bk][sq_wk];
 #if defined USE_AVX2_EVAL || defined USE_SSE_EVAL
 	sum.m[0] = _mm_setzero_si128();
-	for (int i = 0; i < pos.GetNlist(); ++i) {
+	for (int i = 0; i < GetPos.GetNlist(); ++i) {
 		const int k0 = GetList0[i];
 		const int k1 = GetList1[i];
 		const auto* pkppb = ppkppb[k0];
@@ -353,7 +353,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 
 	sum.p[2][0] += pos.GetMaterial() * g_FVScale;
 #if defined INANIWA_SHIFT
-	sum.GetP[2][0] += inaniwaScore(pos);
+	sum.GetP[2][0] += inaniwaScore(GetPos);
 #endif
 	ss->staticEvalRaw = sum;
 
@@ -424,7 +424,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	score.p[2][0] += pos.GetMaterial() * g_FVScale;
 
 #if defined INANIWA_SHIFT
-	GetScore.GetP[2][0] += inaniwaScore(pos);
+	GetScore.GetP[2][0] += inaniwaScore(GetPos);
 #endif
 
 	return static_cast<Score>(score.sum(pos.GetTurn()));

@@ -18,12 +18,12 @@ namespace {
 				const Square to = toBB.FirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
-					(*moveStackList++).move = makePromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).move = MakePromoteMove<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)
-						(*moveStackList++).move = makeNonPromoteMove<MT>(PT, from, to, pos);
+						(*moveStackList++).move = MakeNonPromoteMove<MT>(PT, from, to, pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
-					(*moveStackList++).move = makeNonPromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).move = MakeNonPromoteMove<MT>(PT, from, to, pos);
 			}
 		}
 		return moveStackList;
@@ -154,7 +154,7 @@ namespace {
 				Bitboard toBB = pos.GetAttacksFrom(pt, US, from) & target;
 				while (toBB.IsNot0()) {
 					const Square to = toBB.FirstOneFromI9();
-					(*moveStackList++).move = makeNonPromoteMove<MT>(pt, from, to, pos);
+					(*moveStackList++).move = MakeNonPromoteMove<MT>(pt, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -180,11 +180,11 @@ namespace {
 					Square to;
 					FOREACH_BB(toOn789BB, to, {
 						const Square from = to + TDeltaS;
-					(*moveStackList++).move = makePromoteMove<MT>(Pawn, from, to, pos);
+					(*moveStackList++).move = MakePromoteMove<MT>(Pawn, from, to, pos);
 					if (MT == NonEvasion || ALL) {
 						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
 						if (UtilSquare::ToRank(to) != TRank9) {
-							(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
+							(*moveStackList++).move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
 						}
 					}
 					});
@@ -199,7 +199,7 @@ namespace {
 			Square to;
 			FOREACH_BB(toBB, to, {
 				const Square from = to + TDeltaS;
-			(*moveStackList++).move = makeNonPromoteMove<MT>(Pawn, from, to, pos);
+			(*moveStackList++).move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
 			});
 			return moveStackList;
 		}
@@ -219,18 +219,18 @@ namespace {
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.ConstFirstOneFromI9() : toBB.FirstOneFromI9());
 						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 						if (toCanPromote) {
-							(*moveStackList++).move = makePromoteMove<MT>(Lance, from, to, pos);
+							(*moveStackList++).move = MakePromoteMove<MT>(Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
 								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1段目の不成は省く
-									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
+									(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
 								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2段目の不成を省く
-									(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
+									(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 						}
 						else
-							(*moveStackList++).move = makeNonPromoteMove<MT>(Lance, from, to, pos);
+							(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 					}
 					// 駒取り対象は必ず一つ以下なので、loop は不要。最適化で do while が無くなると良い。
 				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.IsNot0());
@@ -251,12 +251,12 @@ namespace {
 					const Square to = toBB.FirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (toCanPromote) {
-						(*moveStackList++).move = makePromoteMove<MT>(Knight, from, to, pos);
+						(*moveStackList++).move = MakePromoteMove<MT>(Knight, from, to, pos);
 						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
-							(*moveStackList++).move = makeNonPromoteMove<MT>(Knight, from, to, pos);
+							(*moveStackList++).move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
 					}
 					else
-						(*moveStackList++).move = makeNonPromoteMove<MT>(Knight, from, to, pos);
+						(*moveStackList++).move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -276,8 +276,8 @@ namespace {
 					const Square to = toBB.FirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (fromCanPromote | toCanPromote)
-						(*moveStackList++).move = makePromoteMove<MT>(Silver, from, to, pos);
-					(*moveStackList++).move = makeNonPromoteMove<MT>(Silver, from, to, pos);
+						(*moveStackList++).move = MakePromoteMove<MT>(Silver, from, to, pos);
+					(*moveStackList++).move = MakeNonPromoteMove<MT>(Silver, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -307,7 +307,7 @@ namespace {
 			Bitboard toBB = pos.GetAttacksFrom<King>(US, from) & target;
 			while (toBB.IsNot0()) {
 				const Square to = toBB.FirstOneFromI9();
-				(*moveStackList++).move = makeNonPromoteMove<MT>(King, from, to, pos);
+				(*moveStackList++).move = MakeNonPromoteMove<MT>(King, from, to, pos);
 			}
 			return moveStackList;
 		}
@@ -325,11 +325,11 @@ namespace {
 			case Empty: assert(false); break; // 最適化の為のダミー
 			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
 				(*moveStackList++).move = ((UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))) ?
-					makePromoteMove<Capture>(pt, from, to, pos) :
-					makeNonPromoteMove<Capture>(pt, from, to, pos));
+					MakePromoteMove<Capture>(pt, from, to, pos) :
+					MakeNonPromoteMove<Capture>(pt, from, to, pos));
 				break;
 			case Gold: case King: case ProPawn: case ProLance: case ProKnight: case ProSilver: case Horse: case Dragon:
-				(*moveStackList++).move = makeNonPromoteMove<Capture>(pt, from, to, pos);
+				(*moveStackList++).move = MakeNonPromoteMove<Capture>(pt, from, to, pos);
 				break;
 			default: UNREACHABLE;
 			}
@@ -483,7 +483,7 @@ namespace {
 				const Square to = bb.FirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 				// attackersTo() が重いので、movePicker か search で合法手か調べる。
-				(*moveStackList++).move = makeNonPromoteMove<Capture>(King, ksq, to, pos);
+				(*moveStackList++).move = MakeNonPromoteMove<Capture>(King, ksq, to, pos);
 			}
 
 			// 両王手なら、玉を移動するしか回避方法は無い。
@@ -623,6 +623,6 @@ template MoveStack* generateMoves<Evasion           >(MoveStack* moveStackList, 
 template MoveStack* generateMoves<NonEvasion        >(MoveStack* moveStackList, const Position& pos);
 template MoveStack* generateMoves<Legal             >(MoveStack* moveStackList, const Position& pos);
 #if !defined NDEBUG || defined LEARN
-template MoveStack* generateMoves<LegalAll          >(MoveStack* moveStackList, const Position& pos);
+template MoveStack* generateMoves<LegalAll          >(MoveStack* moveStackList, const Position& GetPos);
 #endif
 template MoveStack* generateMoves<Recapture         >(MoveStack* moveStackList, const Position& pos, const Square to);

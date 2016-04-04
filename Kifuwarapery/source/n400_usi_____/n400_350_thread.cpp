@@ -170,21 +170,21 @@ void ThreadPool::startThinking(const Position& pos, const LimitsType& limits,
 
 #if defined LEARN
 	// searchMoves を直接使う。
-	pos.GetSearcher()->rootMoves.push_back(RootMove(searchMoves[0]));
+	GetPos.GetSearcher()->rootMoves.push_back(RootMove(searchMoves[0]));
 #else
 	const MoveType MT = Legal;
-	for (MoveList<MT> ml(pos); !ml.end(); ++ml) {
+	for (MoveList<MT> ml(pos); !ml.IsEnd(); ++ml) {
 		if (searchMoves.empty()
-			|| std::find(searchMoves.begin(), searchMoves.end(), ml.move()) != searchMoves.end())
+			|| std::find(searchMoves.begin(), searchMoves.end(), ml.GetMove()) != searchMoves.end())
 		{
-			pos.GetSearcher()->rootMoves.push_back(RootMove(ml.move()));
+			pos.GetSearcher()->rootMoves.push_back(RootMove(ml.GetMove()));
 		}
 	}
 #endif
 
 #if defined LEARN
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
-	pos.GetSearcher()->think();
+	GetPos.GetSearcher()->think();
 #else
 	mainThread()->thinking = true;
 	mainThread()->notifyOne();

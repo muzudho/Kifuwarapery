@@ -65,10 +65,10 @@ public:
 	template <NodeType NT, bool INCHECK>
 	Score					qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
 #if defined INANIWA_SHIFT
-	void					detectInaniwa(const Position& pos);
+	void					detectInaniwa(const Position& GetPos);
 #endif
 #if defined BISHOP_IN_DANGER
-	void						detectBishopInDanger(const Position& pos);
+	void						detectBishopInDanger(const Position& GetPos);
 #endif
 	template <NodeType NT>
 	Score					search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);

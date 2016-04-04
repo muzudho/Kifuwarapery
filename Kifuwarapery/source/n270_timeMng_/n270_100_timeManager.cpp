@@ -82,22 +82,22 @@ namespace {
 	}
 }
 
-void TimeManager::pvInstability(const int currChanges, const int prevChanges) {
-	unstablePVExtraTime_ =
-		currChanges * (optimumSearchTime_ / 2)
+void TimeManager::PvInstability(const int currChanges, const int prevChanges) {
+	m_unstablePVExtraTime_ =
+		currChanges * (m_optimumSearchTime_ / 2)
 		+
-		prevChanges * (optimumSearchTime_ / 3);
+		prevChanges * (m_optimumSearchTime_ / 3);
 }
 
-void TimeManager::init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
+void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
 	const int emergencyMoveHorizon = searcher->options["Emergency_Move_Horizon"];
 	const int emergencyBaseTime    = searcher->options["Emergency_Base_Time"];
 	const int emergencyMoveTime    = searcher->options["Emergency_Move_Time"];
 	const int minThinkingTime      = searcher->options["Minimum_Thinking_Time"];
     const int slowMover            = searcher->options["Slow_Mover"];
 
-	unstablePVExtraTime_ = 0;
-	optimumSearchTime_ = maximumSearchTime_ = limits.time[us];
+	m_unstablePVExtraTime_ = 0;
+	m_optimumSearchTime_ = m_maximumSearchTime_ = limits.time[us];
 
 	for (
 		int hypMTG = 1;
@@ -115,31 +115,31 @@ void TimeManager::init(LimitsType& limits, const Ply currentPly, const Color us,
 		const int t1 = minThinkingTime + remaining<OptimumTime>(hypMyTime, hypMTG, currentPly, slowMover);
 		const int t2 = minThinkingTime + remaining<MaxTime>(hypMyTime, hypMTG, currentPly, slowMover);
 
-		optimumSearchTime_ = std::min(optimumSearchTime_, t1);
-		maximumSearchTime_ = std::min(maximumSearchTime_, t2);
+		m_optimumSearchTime_ = std::min(m_optimumSearchTime_, t1);
+		m_maximumSearchTime_ = std::min(m_maximumSearchTime_, t2);
 	}
 
 	if (searcher->options["USI_Ponder"]) {
-		optimumSearchTime_ += optimumSearchTime_ / 4;
+		m_optimumSearchTime_ += m_optimumSearchTime_ / 4;
 	}
 
 	// こちらも minThinkingTime 以上にする。
-	optimumSearchTime_ = std::max(optimumSearchTime_, minThinkingTime);
-	optimumSearchTime_ = std::min(optimumSearchTime_, maximumSearchTime_);
+	m_optimumSearchTime_ = std::max(m_optimumSearchTime_, minThinkingTime);
+	m_optimumSearchTime_ = std::min(m_optimumSearchTime_, m_maximumSearchTime_);
 
 	if (limits.moveTime != 0) {
-		if (optimumSearchTime_ < limits.moveTime) {
-			optimumSearchTime_ = std::min(limits.time[us], limits.moveTime);
+		if (m_optimumSearchTime_ < limits.moveTime) {
+			m_optimumSearchTime_ = std::min(limits.time[us], limits.moveTime);
 		}
-		if (maximumSearchTime_ < limits.moveTime) {
-			maximumSearchTime_ = std::min(limits.time[us], limits.moveTime);
+		if (m_maximumSearchTime_ < limits.moveTime) {
+			m_maximumSearchTime_ = std::min(limits.time[us], limits.moveTime);
 		}
-		optimumSearchTime_ += limits.moveTime;
-		maximumSearchTime_ += limits.moveTime;
+		m_optimumSearchTime_ += limits.moveTime;
+		m_maximumSearchTime_ += limits.moveTime;
 		if (limits.time[us] != 0) {
 			limits.moveTime = 0;
 		}
 	}
-	SYNCCOUT << "info string optimum_search_time = " << optimumSearchTime_ << SYNCENDL;
-	SYNCCOUT << "info string maximum_search_time = " << maximumSearchTime_ << SYNCENDL;
+	SYNCCOUT << "info string optimum_search_time = " << m_optimumSearchTime_ << SYNCENDL;
+	SYNCCOUT << "info string maximum_search_time = " << m_maximumSearchTime_ << SYNCENDL;
 }

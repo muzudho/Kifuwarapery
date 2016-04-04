@@ -8,26 +8,26 @@ class TimeManager {
 public:
 
 	// 初期化？
-	void init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* s);
+	void Init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* s);
 
 	// 本譜の情勢不安定さ☆？
-	void pvInstability(const int currChanges, const int prevChanges);
+	void PvInstability(const int currChanges, const int prevChanges);
 
 	// 利用可能時間？
-	int availableTime() const { return optimumSearchTime_ + unstablePVExtraTime_; }
+	int AvailableTime() const { return m_optimumSearchTime_ + m_unstablePVExtraTime_; }
 
 	// 最大時間？
-	int maximumTime() const { return maximumSearchTime_; }
+	int MaximumTime() const { return m_maximumSearchTime_; }
 
 private:
 
 	// 最適な検索時間？
-	int optimumSearchTime_;
+	int m_optimumSearchTime_;
 
 	// 最大検索時間？
-	int maximumSearchTime_;
+	int m_maximumSearchTime_;
 
 	// 不安定な本譜のその他の時間？
-	int unstablePVExtraTime_;
+	int m_unstablePVExtraTime_;
 };
 
