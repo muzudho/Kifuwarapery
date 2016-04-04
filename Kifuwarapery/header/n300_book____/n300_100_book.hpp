@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_400_MoveScore.hpp"
-#include "../../header/n280_move____/n280_200_mt64bit.hpp"
+#include "../n220_position/n220_500_charToPieceUSI.hpp"
+#include "../n223_move____/n223_300_moveScore.hpp"
+#include "../n280_move____/n280_200_mt64bit.hpp"
 
 struct BookEntry {
 	Key key;

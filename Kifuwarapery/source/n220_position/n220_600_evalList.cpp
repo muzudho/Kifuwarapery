@@ -1,24 +1,24 @@
 ﻿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_200_evalList.hpp"
+#include "../../header/n220_position/n220_600_evalList.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 
-const Square HandPieceToSquareHand[ColorNum][HandPieceNum] = {
+const Square g_HandPieceToSquareHand[ColorNum][HandPieceNum] = {
 	{B_hand_pawn, B_hand_lance, B_hand_knight, B_hand_silver, B_hand_gold, B_hand_bishop, B_hand_rook},
 	{W_hand_pawn, W_hand_lance, W_hand_knight, W_hand_silver, W_hand_gold, W_hand_bishop, W_hand_rook}
 };
 
-void EvalList::set(const Position& pos) {
+void EvalList::Set(const Position& pos) {
 	const Hand handB = pos.GetHand(Black);
 	const Hand handW = pos.GetHand(White);
 
 	int nlist = 0;
 	auto func = [&nlist, this](const Hand hand, const HandPiece hp, const int list0_index, const int list1_index, const Color c) {
 		for (u32 i = 1; i <= hand.NumOf(hp); ++i) {
-			list0[nlist] = list0_index + i;
-			list1[nlist] = list1_index + i;
-			const Square squarehand = HandPieceToSquareHand[c][hp] + static_cast<Square>(i);
-			listToSquareHand[nlist] = squarehand;
-			squareHandToList[squarehand] = nlist;
+			m_list0[nlist] = list0_index + i;
+			m_list1[nlist] = list1_index + i;
+			const Square squarehand = g_HandPieceToSquareHand[c][hp] + static_cast<Square>(i);
+			m_listToSquareHand[nlist] = squarehand;
+			m_squareHandToList[squarehand] = nlist;
 			++nlist;
 		}
 	};
@@ -41,9 +41,9 @@ void EvalList::set(const Position& pos) {
 	while (bb.IsNot0()) {
 		const Square sq = bb.FirstOneFromI9();
 		const Piece pc = pos.GetPiece(sq);
-		listToSquareHand[nlist] = sq;
-		squareHandToList[sq] = nlist;
-		list0[nlist  ] = kppArray[pc         ] + sq;
-		list1[nlist++] = kppArray[UtilPiece::Inverse(pc)] + UtilSquare::Inverse(sq);
+		m_listToSquareHand[nlist] = sq;
+		m_squareHandToList[sq] = nlist;
+		m_list0[nlist  ] = kppArray[pc         ] + sq;
+		m_list1[nlist++] = kppArray[UtilPiece::Inverse(pc)] + UtilSquare::Inverse(sq);
 	}
 }

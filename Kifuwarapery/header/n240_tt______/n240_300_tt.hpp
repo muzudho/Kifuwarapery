@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_position/n240_285_tTCluster.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n223_move____/n223_105_utilMove.hpp"
+#include "../n240_tt______/n240_285_tTCluster.hpp"
 
 
 class TranspositionTable {
@@ -47,11 +47,11 @@ inline TTEntry* TranspositionTable::firstEntry(const Key posKey) const {
 	// ここでは下位32bit 以上が確認出来れば完璧。
 	// 置換表のサイズを小さく指定しているときは下位32bit の一致は確認出来ないが、
 	// 仕方ない。
-	return entries_[posKey & (size() - 1)].data;
+	return entries_[posKey & (size() - 1)].m_data;
 }
 
 inline void TranspositionTable::refresh(const TTEntry* tte) const {
-	const_cast<TTEntry*>(tte)->setGeneration(this->generation());
+	const_cast<TTEntry*>(tte)->SetGeneration(this->generation());
 }
 
 inline void TranspositionTable::newSearch() {

@@ -1,4 +1,5 @@
-#include "../../header/n240_position/n240_300_tt.hpp"
+#include <algorithm>
+#include "../../header/n240_tt______/n240_300_tt.hpp"
 
 void TranspositionTable::setSize(const size_t mbSize) { // Mega Byte 指定
 	// 確保する要素数を取得する。
@@ -38,28 +39,28 @@ void TranspositionTable::store(const Key posKey, const Score score, const Bound 
 		depth = Depth0;
 	}
 
-	for (int i = 0; i < ClusterSize; ++i, ++tte) {
+	for (int i = 0; i < g_ClusterSize; ++i, ++tte) {
 		// 置換表が空か、keyが同じな古い情報が入っているとき
-		if (!tte->key() || tte->key() == posKeyHigh32) {
+		if (!tte->GetKey() || tte->GetKey() == posKeyHigh32) {
 			// move が無いなら、とりあえず古い情報でも良いので、他の指し手を保存する。
 			if (move.IsNone()) {
-				move = tte->move();
+				move = tte->GetMove();
 			}
 
-			tte->save(depth, score, move, posKeyHigh32,
+			tte->SetSave(depth, score, move, posKeyHigh32,
 					  bound, this->generation(), evalScore);
 			return;
 		}
 
-		int c = (replace->generation() == this->generation() ? 2 : 0);
-		c    += (tte->generation() == this->generation() || tte->type() == BoundExact ? -2 : 0);
-		c    += (tte->depth() < replace->depth() ? 1 : 0);
+		int c = (replace->GetGeneration() == this->generation() ? 2 : 0);
+		c    += (tte->GetGeneration() == this->generation() || tte->GetType() == BoundExact ? -2 : 0);
+		c    += (tte->GetDepth() < replace->GetDepth() ? 1 : 0);
 
 		if (0 < c) {
 			replace = tte;
 		}
 	}
-	replace->save(depth, score, move, posKeyHigh32,
+	replace->SetSave(depth, score, move, posKeyHigh32,
 				  bound, this->generation(), evalScore);
 }
 
@@ -69,8 +70,8 @@ TTEntry* TranspositionTable::probe(const Key posKey) const {
 
 	// firstEntry() で、posKey の下位 (size() - 1) ビットを hash key に使用した。
 	// ここでは posKey の上位 32bit が 保存されている hash key と同じか調べる。
-	for (int i = 0; i < ClusterSize; ++i, ++tte) {
-		if (tte->key() == posKeyHigh32) {
+	for (int i = 0; i < g_ClusterSize; ++i, ++tte) {
+		if (tte->GetKey() == posKeyHigh32) {
 			return tte;
 		}
 	}

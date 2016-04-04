@@ -6,7 +6,7 @@ public:
 
 	void go(const Position& pos, std::istringstream& ssCmd);
 #if defined LEARN
-	void go(const Position& pos, const Ply depth, const Move move);
+	void go(const Position& pos, const Ply GetDepth, const Move GetMove);
 #endif
 
 	void setPosition(Position& pos, std::istringstream& ssCmd);

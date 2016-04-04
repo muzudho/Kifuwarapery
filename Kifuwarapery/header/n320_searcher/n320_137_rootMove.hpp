@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_position/n240_400_MoveScore.hpp"
+#include "../n223_move____/n223_105_utilMove.hpp"
+#include "../n223_move____/n223_300_moveScore.hpp"
 
 
 

@@ -1,6 +1,6 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_position/n240_300_tt.hpp"
+#include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
@@ -215,8 +215,8 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 #if !defined NDEBUG
 // 過去(又は現在)に生成した指し手が現在の局面でも有効か判定。
 // あまり速度が要求される場面で使ってはいけない。
-bool Position::MoveIsLegal(const Move move) const {
-	return MoveList<LegalAll>(*this).contains(move);
+bool Position::MoveIsLegal(const Move GetMove) const {
+	return MoveList<LegalAll>(*this).contains(GetMove);
 }
 #endif
 
@@ -256,19 +256,19 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		prefetch(GetCsearcher()->tt.firstEntry(boardKey + handKey));
 
 		const int handnum = GetHand(us).NumOf(hpTo);
-		const int listIndex = m_evalList_.squareHandToList[HandPieceToSquareHand[us][hpTo] + handnum];
+		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpTo] + handnum];
 		const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
 		m_st_->m_cl.m_listindex[0] = listIndex;
-		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.list0[listIndex];
-		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.list1[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.m_list0[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[listIndex];
 
-		m_evalList_.list0[listIndex] = kppArray[pcTo         ] + to;
-		m_evalList_.list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
-		m_evalList_.listToSquareHand[listIndex] = to;
-		m_evalList_.squareHandToList[to] = listIndex;
+		m_evalList_.m_list0[listIndex] = kppArray[pcTo         ] + to;
+		m_evalList_.m_list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+		m_evalList_.m_listToSquareHand[listIndex] = to;
+		m_evalList_.m_squareHandToList[to] = listIndex;
 
-		m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.list0[listIndex];
-		m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.list1[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.m_list0[listIndex];
+		m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.m_list1[listIndex];
 
 		m_hand_[us].MinusOne(hpTo);
 		XorBBs(ptTo, to, us);
@@ -309,21 +309,21 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_byColorBB_[them].XorBit(to);
 
 			m_hand_[us].PlusOne(hpCaptured);
-			const int toListIndex = m_evalList_.squareHandToList[to];
+			const int toListIndex = m_evalList_.m_squareHandToList[to];
 			m_st_->m_cl.m_listindex[1] = toListIndex;
-			m_st_->m_cl.m_clistpair[1].m_oldlist[0] = m_evalList_.list0[toListIndex];
-			m_st_->m_cl.m_clistpair[1].m_oldlist[1] = m_evalList_.list1[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_oldlist[0] = m_evalList_.m_list0[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_oldlist[1] = m_evalList_.m_list1[toListIndex];
 			m_st_->m_cl.m_size = 2;
 
 			const int handnum = GetHand(us).NumOf(hpCaptured);
-			m_evalList_.list0[toListIndex] = kppHandArray[us  ][hpCaptured] + handnum;
-			m_evalList_.list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
-			const Square squarehand = HandPieceToSquareHand[us][hpCaptured] + handnum;
-			m_evalList_.listToSquareHand[toListIndex] = squarehand;
-			m_evalList_.squareHandToList[squarehand]  = toListIndex;
+			m_evalList_.m_list0[toListIndex] = kppHandArray[us  ][hpCaptured] + handnum;
+			m_evalList_.m_list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
+			const Square squarehand = g_HandPieceToSquareHand[us][hpCaptured] + handnum;
+			m_evalList_.m_listToSquareHand[toListIndex] = squarehand;
+			m_evalList_.m_squareHandToList[squarehand]  = toListIndex;
 
-			m_st_->m_cl.m_clistpair[1].m_newlist[0] = m_evalList_.list0[toListIndex];
-			m_st_->m_cl.m_clistpair[1].m_newlist[1] = m_evalList_.list1[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_newlist[0] = m_evalList_.m_list0[toListIndex];
+			m_st_->m_cl.m_clistpair[1].m_newlist[1] = m_evalList_.m_list1[toListIndex];
 
 			m_st_->m_material += (us == Black ? GetCapturePieceScore(ptCaptured) : -GetCapturePieceScore(ptCaptured));
 		}
@@ -337,19 +337,19 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		}
 		else {
 			const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
-			const int fromListIndex = m_evalList_.squareHandToList[from];
+			const int fromListIndex = m_evalList_.m_squareHandToList[from];
 
 			m_st_->m_cl.m_listindex[0] = fromListIndex;
-			m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.list0[fromListIndex];
-			m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.list1[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.m_list0[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[fromListIndex];
 
-			m_evalList_.list0[fromListIndex] = kppArray[pcTo         ] + to;
-			m_evalList_.list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
-			m_evalList_.listToSquareHand[fromListIndex] = to;
-			m_evalList_.squareHandToList[to] = fromListIndex;
+			m_evalList_.m_list0[fromListIndex] = kppArray[pcTo         ] + to;
+			m_evalList_.m_list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+			m_evalList_.m_listToSquareHand[fromListIndex] = to;
+			m_evalList_.m_squareHandToList[to] = fromListIndex;
 
-			m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.list0[fromListIndex];
-			m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.list1[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.m_list0[fromListIndex];
+			m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.m_list1[fromListIndex];
 		}
 
 		if (move.IsPromotion()) {
@@ -417,13 +417,13 @@ void Position::UndoMove(const Move move) {
 		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
 		m_hand_[us].PlusOne(hp);
 
-		const int toListIndex  = m_evalList_.squareHandToList[to];
+		const int toListIndex  = m_evalList_.m_squareHandToList[to];
 		const int handnum = GetHand(us).NumOf(hp);
-		m_evalList_.list0[toListIndex] = kppHandArray[us  ][hp] + handnum;
-		m_evalList_.list1[toListIndex] = kppHandArray[them][hp] + handnum;
-		const Square squarehand = HandPieceToSquareHand[us][hp] + handnum;
-		m_evalList_.listToSquareHand[toListIndex] = squarehand;
-		m_evalList_.squareHandToList[squarehand]  = toListIndex;
+		m_evalList_.m_list0[toListIndex] = kppHandArray[us  ][hp] + handnum;
+		m_evalList_.m_list1[toListIndex] = kppHandArray[them][hp] + handnum;
+		const Square squarehand = g_HandPieceToSquareHand[us][hp] + handnum;
+		m_evalList_.m_listToSquareHand[toListIndex] = squarehand;
+		m_evalList_.m_squareHandToList[squarehand]  = toListIndex;
 	}
 	else {
 		const Square from = move.From();
@@ -436,11 +436,11 @@ void Position::UndoMove(const Move move) {
 		}
 		else {
 			const Piece pcFrom = UtilPiece::FromColorAndPieceType(us, ptFrom);
-			const int toListIndex = m_evalList_.squareHandToList[to];
-			m_evalList_.list0[toListIndex] = kppArray[pcFrom         ] + from;
-			m_evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
-			m_evalList_.listToSquareHand[toListIndex] = from;
-			m_evalList_.squareHandToList[from] = toListIndex;
+			const int toListIndex = m_evalList_.m_squareHandToList[to];
+			m_evalList_.m_list0[toListIndex] = kppArray[pcFrom         ] + from;
+			m_evalList_.m_list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
+			m_evalList_.m_listToSquareHand[toListIndex] = from;
+			m_evalList_.m_squareHandToList[from] = toListIndex;
 		}
 
 		if (ptCaptured) {
@@ -452,11 +452,11 @@ void Position::UndoMove(const Move move) {
 			m_piece_[to] = pcCaptured;
 
 			const int handnum = GetHand(us).NumOf(hpCaptured);
-			const int toListIndex = m_evalList_.squareHandToList[HandPieceToSquareHand[us][hpCaptured] + handnum];
-			m_evalList_.list0[toListIndex] = kppArray[pcCaptured         ] + to;
-			m_evalList_.list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
-			m_evalList_.listToSquareHand[toListIndex] = to;
-			m_evalList_.squareHandToList[to] = toListIndex;
+			const int toListIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpCaptured] + handnum];
+			m_evalList_.m_list0[toListIndex] = kppArray[pcCaptured         ] + to;
+			m_evalList_.m_list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
+			m_evalList_.m_listToSquareHand[toListIndex] = to;
+			m_evalList_.m_squareHandToList[to] = toListIndex;
 
 			m_hand_[us].MinusOne(hpCaptured);
 		}

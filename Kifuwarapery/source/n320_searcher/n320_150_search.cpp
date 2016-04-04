@@ -1,7 +1,7 @@
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n240_position/n240_400_MoveScore.hpp"
+#include "../../header/n223_move____/n223_300_moveScore.hpp"
+#include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
@@ -317,15 +317,15 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 	posKey = pos.GetKey();
 	tte = tt.probe(posKey);
-	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->move(), pos) : Move::GetMoveNone());
-	ttScore = (tte != nullptr ? scoreFromTT(tte->score(), ss->ply) : ScoreNone);
+	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : Move::GetMoveNone());
+	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->ply) : ScoreNone);
 
 	if (tte != nullptr
-		&& ttDepth <= tte->depth()
+		&& ttDepth <= tte->GetDepth()
 		&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
-		&& (PVNode ? tte->type() == BoundExact
-			: (beta <= ttScore ? (tte->type() & BoundLower)
-			   : (tte->type() & BoundUpper))))
+		&& (PVNode ? tte->GetType() == BoundExact
+			: (beta <= ttScore ? (tte->GetType() & BoundLower)
+			   : (tte->GetType() & BoundUpper))))
 	{
 		ss->currentMove = ttMove;
 		return ttScore;
@@ -343,7 +343,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		}
 
 		if (tte != nullptr) {
-			if ((ss->staticEval = bestScore = tte->evalScore()) == ScoreNone) {
+			if ((ss->staticEval = bestScore = tte->GetEvalScore()) == ScoreNone) {
 				Evaluation09 evaluation;
 				ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
 			}
@@ -482,7 +482,7 @@ void Searcher::idLoop(Position& pos) {
 	bestMoveChanges = 0;
 #if defined LEARN
 	// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
-	depth = std::max<Ply>(0, limits.depth - 1);
+	GetDepth = std::max<Ply>(0, limits.GetDepth - 1);
 #else
 	depth = 0;
 #endif
@@ -873,17 +873,17 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	ttMove = 
 		RootNode ? rootMoves[pvIdx].pv_[0] :
 		tte != nullptr ?
-		UtilMoveStack::Move16toMove(tte->move(), pos) :
+		UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
 		Move::GetMoveNone();
-	ttScore = (tte != nullptr ? scoreFromTT(tte->score(), ss->ply) : ScoreNone);
+	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->ply) : ScoreNone);
 
 	if (!RootNode
 		&& tte != nullptr
-		&& depth <= tte->depth()
+		&& depth <= tte->GetDepth()
 		&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
-		&& (PVNode ? tte->type() == BoundExact
-			: (beta <= ttScore ? (tte->type() & BoundLower)
-			   : (tte->type() & BoundUpper))))
+		&& (PVNode ? tte->GetType() == BoundExact
+			: (beta <= ttScore ? (tte->GetType() & BoundLower)
+			   : (tte->GetType() & BoundUpper))))
 	{
 		tt.refresh(tte);
 		ss->currentMove = ttMove; // Move::moveNone() もありえる。
@@ -923,7 +923,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	}
 	else if (tte != nullptr) {
 		if (ttScore != ScoreNone
-			&& (tte->type() & (eval < ttScore ? BoundLower : BoundUpper)))
+			&& (tte->GetType() & (eval < ttScore ? BoundLower : BoundUpper)))
 		{
 			eval = ttScore;
 		}
@@ -1075,7 +1075,7 @@ iid_start:
 
 		tte = tt.probe(posKey);
 		ttMove = (tte != nullptr ?
-			UtilMoveStack::Move16toMove(tte->move(), pos) :
+			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
 				  Move::GetMoveNone());
 	}
 
@@ -1089,8 +1089,8 @@ split_point_start:
 		&& 8 * OnePly <= depth
 		&& !ttMove.IsNone()
 		&& excludedMove.IsNone()
-		&& (tte->type() & BoundLower)
-		&& depth - 3 * OnePly <= tte->depth();
+		&& (tte->GetType() & BoundLower)
+		&& depth - 3 * OnePly <= tte->GetDepth();
 
 	// step11
 	// Loop through moves
@@ -1123,8 +1123,8 @@ split_point_start:
 			signals.firstRootMove = (moveCount == 1);
 #if 0
 			if (GetThisThread == threads.mainThread() && 3000 < searchTimer.Elapsed()) {
-				SYNCCOUT << "info depth " << depth / OnePly
-						 << " currmove " << move.ToUSI()
+				SYNCCOUT << "info depth " << GetDepth / OnePly
+						 << " currmove " << GetMove.ToUSI()
 						 << " currmovenumber " << moveCount + pvIdx << SYNCENDL;
 			}
 #endif
@@ -1299,10 +1299,10 @@ split_point_start:
 				// PV move or new best move
 				rm.score_ = score;
 #if defined BISHOP_IN_DANGER
-				if ((bishopInDangerFlag == BlackBishopInDangerIn28 && move.ToCSA() == "0082KA")
-					|| (bishopInDangerFlag == WhiteBishopInDangerIn28 && move.ToCSA() == "0028KA")
-					|| (bishopInDangerFlag == BlackBishopInDangerIn78 && move.ToCSA() == "0032KA")
-					|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && move.ToCSA() == "0078KA"))
+				if ((bishopInDangerFlag == BlackBishopInDangerIn28 && GetMove.ToCSA() == "0082KA")
+					|| (bishopInDangerFlag == WhiteBishopInDangerIn28 && GetMove.ToCSA() == "0028KA")
+					|| (bishopInDangerFlag == BlackBishopInDangerIn78 && GetMove.ToCSA() == "0032KA")
+					|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && GetMove.ToCSA() == "0078KA"))
 				{
 					rm.score_ -= options["Danger_Demerit_Score"];
 				}
@@ -1420,7 +1420,7 @@ void RootMove::extractPvFromTT(Position& pos) {
 	}
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
-		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->move(), pos))
+		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
 		   && pos.IsPseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
 		   && ply < MaxPly
 		   && (!pos.IsDraw(20) || ply < 6));
@@ -1441,7 +1441,7 @@ void RootMove::insertPvInTT(Position& pos) {
 		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
 
 		if (tte == nullptr
-			|| UtilMoveStack::Move16toMove(tte->move(), pos) != pv_[ply])
+			|| UtilMoveStack::Move16toMove(tte->GetMove(), pos) != pv_[ply])
 		{
 			pos.GetSearcher()->tt.store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
 		}

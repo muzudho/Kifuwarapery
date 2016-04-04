@@ -240,7 +240,7 @@ void makeBook(Position& pos, std::istringstream& ssCmd) {
 					// doMove してから search してるので点数が反転しているので直す。
 					const Score score = -pos.GetCsearcher()->rootMoves[0].score_;
 #else
-					const Score score = ScoreZero;
+					const Score GetScore = ScoreZero;
 #endif
 					// 未登録の手
 					BookEntry be;

@@ -1,6 +1,6 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_position/n240_300_tt.hpp"
+#include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
@@ -74,11 +74,11 @@ void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
 
 #if defined LEARN
 // 学習用。通常の go 呼び出しは文字列を扱って高コストなので、大量に探索の開始、終了を行う学習では別の呼び出し方にする。
-void UsiOperation::go(const Position& pos, const Ply depth, const Move move) {
+void UsiOperation::go(const Position& pos, const Ply GetDepth, const Move GetMove) {
 	LimitsType limits;
 	std::vector<Move> moves;
-	limits.depth = depth;
-	moves.push_back(move);
+	limits.GetDepth = GetDepth;
+	moves.push_back(GetMove);
 	pos.GetSearcher()->threads.startThinking(pos, limits, moves);
 }
 #endif
@@ -89,8 +89,8 @@ void UsiOperation::go(const Position& pos, const Ply depth, const Move move) {
 // for debug
 Move UsiOperation::usiToMoveDebug(const Position& pos, const std::string& moveStr) {
 	for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
-		if (moveStr == ml.move().ToUSI()) {
-			return ml.move();
+		if (moveStr == ml.GetMove().ToUSI()) {
+			return ml.GetMove();
 		}
 	}
 	return Move::GetMoveNone();
@@ -99,8 +99,8 @@ Move UsiOperation::usiToMoveDebug(const Position& pos, const std::string& moveSt
 
 Move UsiOperation::csaToMoveDebug(const Position& pos, const std::string& moveStr) {
 	for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
-		if (moveStr == ml.move().ToCSA()) {
-			return ml.move();
+		if (moveStr == ml.GetMove().ToCSA()) {
+			return ml.GetMove();
 		}
 	}
 	return Move::GetMoveNone();

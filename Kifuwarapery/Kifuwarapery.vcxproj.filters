@@ -14,9 +14,6 @@
     <Filter Include="header\n200_score___">
       <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n240_position">
-      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n280_move____">
       <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
     </Filter>
@@ -51,9 +48,6 @@
     </Filter>
     <Filter Include="source\n200_score___">
       <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n240_position">
-      <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n280_move____">
       <UniqueIdentifier>{d3ae253d-2733-4e83-8e46-5bba8d5f1097}</UniqueIdentifier>
@@ -136,6 +130,12 @@
     <Filter Include="header\n226_movStack">
       <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n240_tt______">
+      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n240_tt______">
+      <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -156,20 +156,11 @@
     <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
       <Filter>header\n200_score___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n240_position\n240_300_tt.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_400_MoveScore.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
       <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp">
       <Filter>header\n280_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_200_evalList.hpp">
-      <Filter>header\n240_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
       <Filter>header\n400_usi_____</Filter>
@@ -282,15 +273,6 @@
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n240_position\n240_275_depth.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_280_tTEntry.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_position\n240_285_tTCluster.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n220_position\n220_100_repetitionType.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
@@ -307,9 +289,6 @@
       <Filter>header\n220_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_350_stateInfo.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n220_position\n220_400_position.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp">
@@ -393,13 +372,31 @@
     <ClInclude Include="header\n226_movStack\n226_100_moveStack.hpp">
       <Filter>header\n226_movStack</Filter>
     </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_200_depth.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_400_position.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_600_evalList.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_tt______\n240_280_tTEntry.hpp">
+      <Filter>header\n240_tt______</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_tt______\n240_285_tTCluster.hpp">
+      <Filter>header\n240_tt______</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n240_tt______\n240_300_tt.hpp">
+      <Filter>header\n240_tt______</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_position\n240_200_evalList.cpp">
-      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp">
       <Filter>source\n280_move____</Filter>
@@ -412,12 +409,6 @@
     </ClCompile>
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
       <Filter>source\n200_score___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_position\n240_300_tt.cpp">
-      <Filter>source\n240_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_position\n240_400_MoveScore.cpp">
-      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
       <Filter>source\n400_usi_____</Filter>
@@ -482,9 +473,6 @@
     <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp">
       <Filter>source\n260_evaluate</Filter>
     </ClCompile>
-    <ClCompile Include="source\n240_position\n240_280_tTEntry.cpp">
-      <Filter>source\n240_position</Filter>
-    </ClCompile>
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
@@ -508,6 +496,18 @@
     </ClCompile>
     <ClCompile Include="source\n223_move____\n223_100_move.cpp">
       <Filter>source\n223_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_600_evalList.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp">
+      <Filter>source\n223_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_tt______\n240_280_tTEntry.cpp">
+      <Filter>source\n240_tt______</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n240_tt______\n240_300_tt.cpp">
+      <Filter>source\n240_tt______</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

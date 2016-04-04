@@ -159,7 +159,7 @@ struct BookMoveData {
 	std::vector<Move> pvBuffer; // 正解のPV, その他0のPV, その他1のPV という順に並べる。
 								// 間には MoveNone で区切りを入れる。
 
-	Move move; // 指し手
+	Move GetMove; // 指し手
 	bool winner; // 勝ったかどうか
 	bool useLearning; // 学習に使うかどうか
 	bool otherPVExist; // 棋譜の手と近い点数の手があったか。useLearning == true のときだけ有効な値が入る
@@ -244,7 +244,7 @@ private:
 	{
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
 		BookMoveData bmdBase[ColorNum];
-		bmdBase[Black].move = bmdBase[White].move = Move::GetMoveNone();
+		bmdBase[Black].GetMove = bmdBase[White].GetMove = Move::GetMoveNone();
 		std::stringstream ss(s0);
 		std::string elem;
 		ss >> elem; // 対局番号
@@ -262,16 +262,16 @@ private:
 		UsiOperation usiOperation;
 		while (true) {
 			const std::string moveStrCSA = s1.substr(0, 6);
-			const Move move = usiOperation::csaToMove(pos, moveStrCSA);
+			const Move GetMove = usiOperation::csaToMove(pos, moveStrCSA);
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
-			if (move.IsNone())
+			if (GetMove.IsNone())
 				break;
 			BookMoveData bmd = bmdBase[pos.GetTurn()];
-			bmd.move = move;
-			if (useTurnMove[pos.GetTurn()] && dict.find(std::make_pair(pos.GetKey(), move)) == std::end(dict)) {
+			bmd.GetMove = GetMove;
+			if (useTurnMove[pos.GetTurn()] && dict.find(std::make_pair(pos.GetKey(), GetMove)) == std::end(dict)) {
 				// この局面かつこの指し手は初めて見るので、学習に使う。
 				bmd.useLearning = true;
-				dict.insert(std::make_pair(pos.GetKey(), move));
+				dict.insert(std::make_pair(pos.GetKey(), GetMove));
 			}
 			else
 				bmd.useLearning = false;
@@ -280,7 +280,7 @@ private:
 			s1.erase(0, 6);
 
 			setUpStates->push(StateInfo());
-			pos.DoMove(move, setUpStates->top());
+			pos.DoMove(GetMove, setUpStates->top());
 		}
 	}
 	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& pos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
@@ -345,7 +345,7 @@ private:
 				if (bmd.useLearning) {
 					pos.GetSearcher()->alpha = -ScoreMaxEvaluate;
 					pos.GetSearcher()->beta  =  ScoreMaxEvaluate;
-					go(pos, dist(mt), bmd.move);
+					go(pos, dist(mt), bmd.GetMove);
 					const Score recordScore = pos.GetSearcher()->rootMoves[0].score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
@@ -356,16 +356,16 @@ private:
 						bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(recordPv), std::end(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
 						for (MoveList<LegalAll> ml(pos); !ml.end(); ++ml) {
-							if (ml.move() != bmd.move) {
+							if (ml.GetMove() != bmd.GetMove) {
 								pos.GetSearcher()->alpha = recordScore - FVWindow;
 								pos.GetSearcher()->beta  = recordScore + FVWindow;
-								go(pos, dist(mt), ml.move());
-								const Score score = pos.GetSearcher()->rootMoves[0].score_;
-								if (pos.GetSearcher()->alpha < score && score < pos.GetSearcher()->beta) {
+								go(pos, dist(mt), ml.GetMove());
+								const Score GetScore = pos.GetSearcher()->rootMoves[0].score_;
+								if (pos.GetSearcher()->alpha < GetScore && GetScore < pos.GetSearcher()->beta) {
 									auto& pv = pos.GetSearcher()->rootMoves[0].pv_;
 									bmd.pvBuffer.insert(std::end(bmd.pvBuffer), std::begin(pv), std::end(pv));
 								}
-								if (recordScore < score)
+								if (recordScore < GetScore)
 									++recordIsNth;
 							}
 						}
@@ -375,7 +375,7 @@ private:
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.DoMove(bmd.move, setUpStates->top());
+				pos.DoMove(bmd.GetMove, setUpStates->top());
 			}
 		}
 	}
@@ -494,11 +494,11 @@ private:
 							pos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
 						}
 						ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score score = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
-						const auto diff = score - recordScore;
+						const Score GetScore = (rootColor == pos.GetTurn() ? evaluate(pos, ss+1) : -evaluate(pos, ss+1));
+						const auto diff = GetScore - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};
-						PRINT_PV(std::cout << ", score: " << score << ", dT: " << dT[0] << std::endl);
+						PRINT_PV(std::cout << ", score: " << GetScore << ", dT: " << dT[0] << std::endl);
 						sum_dT += dT;
 						dT[0] = -dT[0];
 						dT[1] = (pos.GetTurn() == rootColor ? -dT[1] : dT[1]);
@@ -519,7 +519,7 @@ private:
 					}
 				}
 				setUpStates->push(StateInfo());
-				pos.DoMove(bmd.move, setUpStates->top());
+				pos.DoMove(bmd.GetMove, setUpStates->top());
 			}
 		}
 	}

@@ -5,7 +5,7 @@
 #include "../n160_board___/n160_200_bitboardMask.hpp"
 #include "../n200_score___/n200_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
-#include "../n240_position/n240_200_evalList.hpp"
+#include "../n220_position/n220_600_evalList.hpp"
 
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
@@ -167,7 +167,7 @@ public:
 	bool MoveIsPseudoLegal(const Move move, const bool checkPawnDrop = false) const;
 
 #if !defined NDEBUG
-	bool MoveIsLegal(const Move move) const;
+	bool MoveIsLegal(const Move GetMove) const;
 #endif
 
 	void DoMove(const Move move, StateInfo& newSt);
@@ -203,23 +203,23 @@ public:
 
 	void SetStartPosPly(const Ply ply) { m_gamePly_ = ply; }
 
-	static constexpr int GetNlist() { return EvalList::ListSize; }
+	static constexpr int GetNlist() { return EvalList::m_ListSize; }
 
-	int GetList0(const int index) const { return m_evalList_.list0[index]; }
+	int GetList0(const int index) const { return m_evalList_.m_list0[index]; }
 
-	int GetList1(const int index) const { return m_evalList_.list1[index]; }
+	int GetList1(const int index) const { return m_evalList_.m_list1[index]; }
 
-	int GetSquareHandToList(const Square sq) const { return m_evalList_.squareHandToList[sq]; }
+	int GetSquareHandToList(const Square sq) const { return m_evalList_.m_squareHandToList[sq]; }
 
-	Square GetListToSquareHand(const int i) const { return m_evalList_.listToSquareHand[i]; }
+	Square GetListToSquareHand(const int i) const { return m_evalList_.m_listToSquareHand[i]; }
 
-	int* GetPlist0() { return &m_evalList_.list0[0]; }
+	int* GetPlist0() { return &m_evalList_.m_list0[0]; }
 
-	int* GetPlist1() { return &m_evalList_.list1[0]; }
+	int* GetPlist1() { return &m_evalList_.m_list1[0]; }
 
-	const int* GetCplist0() const { return &m_evalList_.list0[0]; }
+	const int* GetCplist0() const { return &m_evalList_.m_list0[0]; }
 
-	const int* GetCplist1() const { return &m_evalList_.list1[0]; }
+	const int* GetCplist1() const { return &m_evalList_.m_list1[0]; }
 
 	const ChangedLists& GetCl() const { return m_st_->m_cl; }
 
@@ -315,7 +315,7 @@ private:
 #if !defined NDEBUG
 	int GetDebugSetEvalList() const;
 #endif
-	void SetEvalList() { m_evalList_.set(*this); }
+	void SetEvalList() { m_evalList_.Set(*this); }
 
 	Key GetComputeBoardKey() const;
 	Key GetComputeHandKey() const;

@@ -9,7 +9,7 @@
 #include "../../header/n160_board___/n160_400_bitboardAll.hpp"
 #include "../../header/n200_score___/n200_200_pieceScore.hpp"
 #include "../../header/n220_position/n220_400_position.hpp"
-#include "../../header/n240_position/n240_200_evalList.hpp"
+#include "../../header/n220_position/n220_600_evalList.hpp"
 
 
 const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

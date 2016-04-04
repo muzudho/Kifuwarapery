@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n240_position/n240_300_tt.hpp"
-#include "../../header/n260_evaluate/n260_700_evaluate.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n240_tt______/n240_300_tt.hpp"
+#include "../n260_evaluate/n260_700_evaluate.hpp"
 
 const int MaxThreads = 64;
 const int MaxSplitPointsPerThread = 8;

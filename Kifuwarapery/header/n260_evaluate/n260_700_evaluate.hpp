@@ -38,7 +38,7 @@ private:
 #endif
 
 	bool calcDifference(Position& pos, SearchStack* ss);
-	int make_list_unUseDiff(const Position& pos, int list0[EvalList::ListSize], int list1[EvalList::ListSize], int nlist);
+	int make_list_unUseDiff(const Position& pos, int list0[EvalList::m_ListSize], int list1[EvalList::m_ListSize], int nlist);
 	void evaluateBody(Position& pos, SearchStack* ss);
 };
 
