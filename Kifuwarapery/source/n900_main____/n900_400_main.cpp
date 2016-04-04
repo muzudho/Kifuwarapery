@@ -23,17 +23,17 @@ void Main01::Initialize()
 {
 	SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
 	Initializer initializer;
-	initializer.initTable();
+	initializer.InitTable();
 
 	SYNCCOUT << "(^q^)main(2/6): initZobrist!" << SYNCENDL;
 	Position::InitZobrist();
 
 	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
-	this->searcher->init();
+	this->searcher->Init();
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<EvalStorage>(new EvalStorage)->init(this->searcher->options["Eval_Dir"], true);
+	std::unique_ptr<EvalStorage>(new EvalStorage)->init(this->searcher->m_options["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 }
@@ -47,5 +47,5 @@ void Main01::Body(int argc, char* argv[])
 void Main01::Finalize()
 {
 	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
-	this->searcher->threads.exit();
+	this->searcher->m_threads.Exit();
 }

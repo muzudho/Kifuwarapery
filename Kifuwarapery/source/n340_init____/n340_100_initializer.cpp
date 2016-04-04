@@ -8,7 +8,7 @@
 
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
-Bitboard Initializer::rookBlockMaskCalc(const Square square) {
+Bitboard Initializer::RookBlockMaskCalc(const Square square) {
 	Bitboard result = BitboardMask::GetSquareFileMask(square) ^ BitboardMask::GetSquareRankMask(square);
 	if (UtilSquare::ToFile(square) != FileA) { result &= ~BitboardMask::GetFileMask<FileA>(); }
 	if (UtilSquare::ToFile(square) != FileI) { result &= ~BitboardMask::GetFileMask<FileI>(); }
@@ -18,7 +18,7 @@ Bitboard Initializer::rookBlockMaskCalc(const Square square) {
 }
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
-Bitboard Initializer::bishopBlockMaskCalc(const Square square) {
+Bitboard Initializer::BishopBlockMaskCalc(const Square square) {
 	const Rank rank = UtilSquare::ToRank(square);
 	const File file = UtilSquare::ToFile(square);
 	Bitboard result = Bitboard::AllZeroBB();
@@ -37,13 +37,13 @@ Bitboard Initializer::bishopBlockMaskCalc(const Square square) {
 // square のマスにおける、障害物を調べる必要がある場所を Bitboard で返す。
 // lance の前方だけを調べれば良さそうだけど、Rank8 ~ Rank2 の状態をそのまま index に使いたいので、
 // 縦方向全て(端を除く)の occupied を全て調べる。
-Bitboard Initializer::lanceBlockMask(const Square square) {
+Bitboard Initializer::LanceBlockMask(const Square square) {
 	return BitboardMask::GetSquareFileMask(square) & ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>());
 }
 
 // Rook or Bishop の利きの範囲を調べて bitboard で返す。
 // occupied  障害物があるマスが 1 の bitboard
-Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, const bool isBishop) {
+Bitboard Initializer::AttackCalc(const Square square, const Bitboard& occupied, const bool isBishop) {
 	const SquareDelta deltaArray[2][4] = { { DeltaN, DeltaS, DeltaE, DeltaW },{ DeltaNE, DeltaSE, DeltaSW, DeltaNW } };
 	Bitboard result = Bitboard::AllZeroBB();
 	for (SquareDelta delta : deltaArray[isBishop]) {
@@ -63,7 +63,7 @@ Bitboard Initializer::attackCalc(const Square square, const Bitboard& occupied, 
 // lance の利きを返す。
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
-Bitboard Initializer::lanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
+Bitboard Initializer::LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
 	return occupied.RookAttack(square) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(square));
 }
 
@@ -73,7 +73,7 @@ Bitboard Initializer::lanceAttackCalc(const Color c, const Square square, const 
 // bits    bit size
 // blockMask   利きのあるマスが 1 のbitboard
 // result  occupied
-Bitboard Initializer::indexToOccupied(const int index, const int bits, const Bitboard& blockMask) {
+Bitboard Initializer::IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) {
 	Bitboard tmpBlockMask = blockMask;
 	Bitboard result = Bitboard::AllZeroBB();
 	for (int i = 0; i < bits; ++i) {
@@ -84,7 +84,7 @@ Bitboard Initializer::indexToOccupied(const int index, const int bits, const Bit
 	return result;
 }
 
-void Initializer::initAttacks(const bool isBishop)
+void Initializer::InitAttacks(const bool isBishop)
 {
 	auto* attacks = (isBishop ? g_bishopAttack : g_rookAttack);
 	auto* attackIndex = (isBishop ? g_bishopAttackIndex : g_rookAttackIndex);
@@ -96,18 +96,18 @@ void Initializer::initAttacks(const bool isBishop)
 #endif
 	int index = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		blockMask[sq] = (isBishop ? bishopBlockMaskCalc(sq) : rookBlockMaskCalc(sq));
+		blockMask[sq] = (isBishop ? BishopBlockMaskCalc(sq) : RookBlockMaskCalc(sq));
 		attackIndex[sq] = index;
 
 		const int num1s = (isBishop ? g_bishopBlockBits[sq] : g_rookBlockBits[sq]);
 		for (int i = 0; i < (1 << num1s); ++i)
 		{
-			const Bitboard occupied = this->indexToOccupied(i, num1s, blockMask[sq]);
+			const Bitboard occupied = this->IndexToOccupied(i, num1s, blockMask[sq]);
 #if defined HAVE_BMI2
-			attacks[index + (occupied & blockMask[sq]).OccupiedToIndex( blockMask[sq])] = attackCalc(sq, occupied, isBishop);
+			attacks[index + (occupied & blockMask[sq]).OccupiedToIndex( blockMask[sq])] = AttackCalc(sq, occupied, isBishop);
 #else
 			attacks[index + occupied.OccupiedToIndex( magic[sq], shift[sq])] =
-				this->attackCalc(sq, occupied, isBishop);
+				this->AttackCalc(sq, occupied, isBishop);
 #endif
 		}
 		index += 1 << (64 - shift[sq]);
@@ -115,39 +115,39 @@ void Initializer::initAttacks(const bool isBishop)
 }
 
 // LanceBlockMask, g_lanceAttack の値を設定する。
-void Initializer::initLanceAttacks() {
+void Initializer::InitLanceAttacks() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			const Bitboard blockMask = lanceBlockMask(sq);
+			const Bitboard blockMask = LanceBlockMask(sq);
 			//const int num1s = blockMask.popCount(); // 常に 7
 			const int num1s = 7;
 			assert(num1s == blockMask.PopCount());
 			for (int i = 0; i < (1 << num1s); ++i) {
-				Bitboard occupied = indexToOccupied(i, num1s, blockMask);
-				g_lanceAttack[c][sq][i] = lanceAttackCalc(c, sq, occupied);
+				Bitboard occupied = IndexToOccupied(i, num1s, blockMask);
+				g_lanceAttack[c][sq][i] = LanceAttackCalc(c, sq, occupied);
 			}
 		}
 	}
 }
 
-void Initializer::initKingAttacks() {
+void Initializer::InitKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
 		g_kingAttack[sq] = Bitboard::AllOneBB().RookAttack(sq) | Bitboard::AllOneBB().BishopAttack(sq);
 }
 
-void Initializer::initGoldAttacks() {
+void Initializer::InitGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_goldAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::AllOneBB().RookAttack(sq);
 }
 
-void Initializer::initSilverAttacks() {
+void Initializer::InitSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_silverAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::AllOneBB().BishopAttack(sq);
 }
 
-void Initializer::initKnightAttacks() {
+void Initializer::InitKnightAttacks() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_knightAttack[c][sq] = Bitboard::AllZeroBB();
@@ -158,13 +158,13 @@ void Initializer::initKnightAttacks() {
 	}
 }
 
-void Initializer::initPawnAttacks() {
+void Initializer::InitPawnAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_pawnAttack[c][sq] = Bitboard::SilverAttack(c, sq) ^ Bitboard::AllOneBB().BishopAttack(sq);
 }
 
-void Initializer::initSquareRelation() {
+void Initializer::InitSquareRelation() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 		const File file1 = UtilSquare::ToFile(sq1);
 		const Rank rank1 = UtilSquare::ToRank(sq1);
@@ -188,7 +188,7 @@ void Initializer::initSquareRelation() {
 
 // 障害物が無いときの利きの Bitboard
 // g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
-void Initializer::initAttackToEdge() {
+void Initializer::InitAttackToEdge() {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		g_rookAttackToEdge[sq] = Bitboard::AllZeroBB().RookAttack(sq);
 		g_bishopAttackToEdge[sq] = Bitboard::AllZeroBB().BishopAttack(sq);
@@ -197,7 +197,7 @@ void Initializer::initAttackToEdge() {
 	}
 }
 
-void Initializer::initBetweenBB() {
+void Initializer::InitBetweenBB() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
 			g_betweenBB[sq1][sq2] = Bitboard::AllZeroBB();
@@ -211,7 +211,7 @@ void Initializer::initBetweenBB() {
 	}
 }
 
-void Initializer::initCheckTable() {
+void Initializer::InitCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
@@ -289,7 +289,7 @@ void Initializer::initCheckTable() {
 	}
 }
 
-void Initializer::initSquareDistance() {
+void Initializer::InitSquareDistance() {
 	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 			switch (UtilSquare::GetSquareRelation(sq0, sq1)) {
@@ -317,54 +317,54 @@ void Initializer::initSquareDistance() {
 	}
 }
 
-void Initializer::initTable() {
+void Initializer::InitTable() {
 
 #ifndef SKIP_LONG_TIME_EVAL
 	SYNCCOUT << "(^q^)I1: SKIP! (long time)initAttacks!" << SYNCENDL;
-	this->initAttacks(false);
+	this->InitAttacks(false);
 #endif
 
 	SYNCCOUT << "(^q^)I2: initAttacks!" << SYNCENDL;
-	this->initAttacks(true);
+	this->InitAttacks(true);
 
 	SYNCCOUT << "(^q^)I3: initKingAttacks!" << SYNCENDL;
-	this->initKingAttacks();
+	this->InitKingAttacks();
 
 	SYNCCOUT << "(^q^)I4: initGoldAttacks!" << SYNCENDL;
-	this->initGoldAttacks();
+	this->InitGoldAttacks();
 
 	SYNCCOUT << "(^q^)I5: initSilverAttacks!" << SYNCENDL;
-	this->initSilverAttacks();
+	this->InitSilverAttacks();
 
 	SYNCCOUT << "(^q^)I6: initPawnAttacks!" << SYNCENDL;
-	this->initPawnAttacks();
+	this->InitPawnAttacks();
 
 	SYNCCOUT << "(^q^)I7: initKnightAttacks!" << SYNCENDL;
-	this->initKnightAttacks();
+	this->InitKnightAttacks();
 
 	SYNCCOUT << "(^q^)I8: initLanceAttacks!" << SYNCENDL;
-	this->initLanceAttacks();
+	this->InitLanceAttacks();
 
 	SYNCCOUT << "(^q^)I9: initSquareRelation!" << SYNCENDL;
-	this->initSquareRelation();
+	this->InitSquareRelation();
 
 	SYNCCOUT << "(^q^)I10: initAttackToEdge!" << SYNCENDL;
-	this->initAttackToEdge();
+	this->InitAttackToEdge();
 
 	SYNCCOUT << "(^q^)I11: initBetweenBB!" << SYNCENDL;
-	this->initBetweenBB();
+	this->InitBetweenBB();
 
 	SYNCCOUT << "(^q^)I12: initCheckTable!" << SYNCENDL;
-	this->initCheckTable();
+	this->InitCheckTable();
 
 	SYNCCOUT << "(^q^)I13: initSquareDistance!" << SYNCENDL;
-	this->initSquareDistance();
+	this->InitSquareDistance();
 
 	SYNCCOUT << "(^q^)I14: Book::init!" << SYNCENDL;
 	Book::Init();
 
 	SYNCCOUT << "(^q^)I15: initSearchTable!" << SYNCENDL;
-	initSearchTable();
+	InitSearchTable();
 }
 
 #if defined FIND_MAGIC
@@ -374,13 +374,13 @@ u64 Initializer::findMagic(const Square square, const bool isBishop) {
 	Bitboard occupied[1<<14];
 	Bitboard attack[1<<14];
 	Bitboard attackUsed[1<<14];
-	Bitboard mask = (isBishop ? bishopBlockMaskCalc(square) : rookBlockMaskCalc(square));
+	Bitboard mask = (isBishop ? BishopBlockMaskCalc(square) : RookBlockMaskCalc(square));
 	int num1s = (isBishop ? g_bishopBlockBits[square] : g_rookBlockBits[square]);
 
 	// n bit の全ての数字 (利きのあるマスの全ての 0 or 1 の組み合わせ)
 	for (int i = 0; i < (1 << num1s); ++i) {
-		occupied[i] = indexToOccupied(i, num1s, mask);
-		attack[i] = attackCalc(square, occupied[i], isBishop);
+		occupied[i] = IndexToOccupied(i, num1s, mask);
+		attack[i] = AttackCalc(square, occupied[i], isBishop);
 	}
 
 	for (u64 k = 0; k < UINT64_C(100000000); ++k) {

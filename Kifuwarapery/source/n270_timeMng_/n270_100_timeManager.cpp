@@ -90,23 +90,23 @@ void TimeManager::PvInstability(const int currChanges, const int prevChanges) {
 }
 
 void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
-	const int emergencyMoveHorizon = searcher->options["Emergency_Move_Horizon"];
-	const int emergencyBaseTime    = searcher->options["Emergency_Base_Time"];
-	const int emergencyMoveTime    = searcher->options["Emergency_Move_Time"];
-	const int minThinkingTime      = searcher->options["Minimum_Thinking_Time"];
-    const int slowMover            = searcher->options["Slow_Mover"];
+	const int emergencyMoveHorizon = searcher->m_options["Emergency_Move_Horizon"];
+	const int emergencyBaseTime    = searcher->m_options["Emergency_Base_Time"];
+	const int emergencyMoveTime    = searcher->m_options["Emergency_Move_Time"];
+	const int minThinkingTime      = searcher->m_options["Minimum_Thinking_Time"];
+    const int slowMover            = searcher->m_options["Slow_Mover"];
 
 	m_unstablePVExtraTime_ = 0;
-	m_optimumSearchTime_ = m_maximumSearchTime_ = limits.time[us];
+	m_optimumSearchTime_ = m_maximumSearchTime_ = limits.m_time[us];
 
 	for (
 		int hypMTG = 1;
-		hypMTG <= (limits.movesToGo ? std::min(limits.movesToGo, MoveHorizon) : MoveHorizon);
+		hypMTG <= (limits.m_movesToGo ? std::min(limits.m_movesToGo, MoveHorizon) : MoveHorizon);
 		++hypMTG
 	) {
 		int hypMyTime =
-			limits.time[us]
-			+ limits.increment[us] * (hypMTG - 1)
+			limits.m_time[us]
+			+ limits.m_increment[us] * (hypMTG - 1)
 			- emergencyBaseTime
 			- emergencyMoveTime + std::min(hypMTG, emergencyMoveHorizon);
 
@@ -119,7 +119,7 @@ void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us,
 		m_maximumSearchTime_ = std::min(m_maximumSearchTime_, t2);
 	}
 
-	if (searcher->options["USI_Ponder"]) {
+	if (searcher->m_options["USI_Ponder"]) {
 		m_optimumSearchTime_ += m_optimumSearchTime_ / 4;
 	}
 
@@ -127,17 +127,17 @@ void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us,
 	m_optimumSearchTime_ = std::max(m_optimumSearchTime_, minThinkingTime);
 	m_optimumSearchTime_ = std::min(m_optimumSearchTime_, m_maximumSearchTime_);
 
-	if (limits.moveTime != 0) {
-		if (m_optimumSearchTime_ < limits.moveTime) {
-			m_optimumSearchTime_ = std::min(limits.time[us], limits.moveTime);
+	if (limits.m_moveTime != 0) {
+		if (m_optimumSearchTime_ < limits.m_moveTime) {
+			m_optimumSearchTime_ = std::min(limits.m_time[us], limits.m_moveTime);
 		}
-		if (m_maximumSearchTime_ < limits.moveTime) {
-			m_maximumSearchTime_ = std::min(limits.time[us], limits.moveTime);
+		if (m_maximumSearchTime_ < limits.m_moveTime) {
+			m_maximumSearchTime_ = std::min(limits.m_time[us], limits.m_moveTime);
 		}
-		m_optimumSearchTime_ += limits.moveTime;
-		m_maximumSearchTime_ += limits.moveTime;
-		if (limits.time[us] != 0) {
-			limits.moveTime = 0;
+		m_optimumSearchTime_ += limits.m_moveTime;
+		m_maximumSearchTime_ += limits.m_moveTime;
+		if (limits.m_time[us] != 0) {
+			limits.m_moveTime = 0;
 		}
 	}
 	SYNCCOUT << "info string optimum_search_time = " << m_optimumSearchTime_ << SYNCENDL;

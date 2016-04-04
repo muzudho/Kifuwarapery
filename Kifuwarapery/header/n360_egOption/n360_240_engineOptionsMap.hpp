@@ -18,7 +18,7 @@ struct CaseInsensitiveLess {
 struct EngineOptionsMap : public std::map<std::string, EngineOptionable, CaseInsensitiveLess> {
 public:
 
-	bool isLegalOption(const std::string name) {
+	bool IsLegalOption(const std::string name) {
 		return this->find(name) != std::end(*this);
 	}
 

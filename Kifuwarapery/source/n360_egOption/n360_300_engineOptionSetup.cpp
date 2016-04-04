@@ -15,12 +15,12 @@
 
 // 初期化の値を取ってくるのに使います。
 namespace {
-	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->tt.SetSize(opt); }
-	void onClearHash(Searcher* s, const EngineOptionable&) { s->tt.Clear(); }
+	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
+	void onClearHash(Searcher* s, const EngineOptionable&) { s->m_tt.Clear(); }
 	void onEvalDir(Searcher*, const EngineOptionable& opt) {
 		std::unique_ptr<EvalStorage>(new EvalStorage)->init(opt, true);
 	}
-	void onThreads(Searcher* s, const EngineOptionable&) { s->threads.readUSIOptions(s); }
+	void onThreads(Searcher* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
 	// 論理的なコア数の取得
 	inline int cpuCoreCount() {
 		// todo: boost::thread::physical_concurrency() を使うこと。
@@ -54,7 +54,7 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Searcher * s)
 	pMap->Put("Slow_Mover", EngineOption(100, 10, 1000));
 	pMap->Put("Minimum_Thinking_Time", EngineOption(1500, 0, INT_MAX));
 	pMap->Put("Max_Threads_per_Split_Point", EngineOption(5, 4, 8, onThreads, s));
-	pMap->Put("Threads", EngineOption(cpuCoreCount(), 1, MaxThreads, onThreads, s));
+	pMap->Put("Threads", EngineOption(cpuCoreCount(), 1, g_MaxThreads, onThreads, s));
 	pMap->Put("Use_Sleeping_Threads", EngineOption(false));
 #if defined BISHOP_IN_DANGER
 	(*this)["Danger_Demerit_Score"] = EngineOption(700, SHRT_MIN, SHRT_MAX);

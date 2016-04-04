@@ -13,23 +13,23 @@
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
 
 // 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::wakeUp(Searcher* s) {
+FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
 	for (size_t i = 0; i < size(); ++i) {
-		(*this)[i]->maxPly = 0;
+		(*this)[i]->m_maxPly = 0;
 	}
-	sleepWhileIdle_ = s->options["Use_Sleeping_Threads"];
+	m_isSleepWhileIdle_ = s->m_options["Use_Sleeping_Threads"];
 }
 // 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::sleep() {
-	sleepWhileIdle_ = true;
+FORCE_INLINE void ThreadPool::Sleep() {
+	m_isSleepWhileIdle_ = true;
 }
 
-void Searcher::init() {
+void Searcher::Init() {
 	EngineOptionSetup engineOptionSetup;
-	engineOptionSetup.Initialize( &options, this);
+	engineOptionSetup.Initialize( &m_options, this);
 
-	this->threads.init(this);
-	this->tt.SetSize(this->options["USI_Hash"]);
+	this->m_threads.Init(this);
+	this->m_tt.SetSize(this->m_options["USI_Hash"]);
 }
 
 namespace {
@@ -65,12 +65,12 @@ namespace {
 		~Skill() {}
 		void swapIfEnabled(Searcher* s) {
 			if (enabled()) {
-				auto it = std::find(s->rootMoves.begin(),
-									s->rootMoves.end(),
+				auto it = std::find(s->m_rootMoves.begin(),
+									s->m_rootMoves.end(),
 									(!best.IsNone() ? best : pickMove(s)));
-				if (s->rootMoves.begin() != it)
-					SYNCCOUT << "info string swap multipv 1, " << it - s->rootMoves.begin() + 1 << SYNCENDL;
-				std::swap(s->rootMoves[0], *it);
+				if (s->m_rootMoves.begin() != it)
+					SYNCCOUT << "info string swap multipv 1, " << it - s->m_rootMoves.begin() + 1 << SYNCENDL;
+				std::swap(s->m_rootMoves[0], *it);
 			}
 		}
 		bool enabled() const { return level < 20 || max_random_score_diff != ScoreZero; }
@@ -79,16 +79,16 @@ namespace {
 			// level については未対応。max_random_score_diff についてのみ対応する。
 			if (max_random_score_diff != ScoreZero) {
 				size_t i = 1;
-				for (; i < s->pvSize; ++i) {
-					if (max_random_score_diff < s->rootMoves[0].score_ - s->rootMoves[i].score_)
+				for (; i < s->m_pvSize; ++i) {
+					if (max_random_score_diff < s->m_rootMoves[0].m_score_ - s->m_rootMoves[i].m_score_)
 						break;
 				}
 				// 0 から i-1 までの間でランダムに選ぶ。
 				std::uniform_int_distribution<size_t> dist(0, i-1);
-				best = s->rootMoves[dist(g_randomTimeSeed)].pv_[0];
+				best = s->m_rootMoves[dist(g_randomTimeSeed)].m_pv_[0];
 				return best;
 			}
-			best = s->rootMoves[0].pv_[0];
+			best = s->m_rootMoves[0].m_pv_[0];
 			return best;
 		}
 
@@ -236,39 +236,39 @@ namespace {
 	}
 }
 
-std::string Searcher::pvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
-	const int t = searchTimer.Elapsed();
-	const size_t usiPVSize = pvSize;
+std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
+	const int t = m_searchTimer.Elapsed();
+	const size_t usiPVSize = m_pvSize;
 	Ply selDepth = 0; // 選択的に読んでいる部分の探索深さ。
 	std::stringstream ss;
 
-	for (size_t i = 0; i < threads.size(); ++i) {
-		if (selDepth < threads[i]->maxPly) {
-			selDepth = threads[i]->maxPly;
+	for (size_t i = 0; i < m_threads.size(); ++i) {
+		if (selDepth < m_threads[i]->m_maxPly) {
+			selDepth = m_threads[i]->m_maxPly;
 		}
 	}
 
 	for (size_t i = usiPVSize-1; 0 <= static_cast<int>(i); --i) {
-		const bool update = (i <= pvIdx);
+		const bool update = (i <= m_pvIdx);
 
 		if (depth == 1 && !update) {
 			continue;
 		}
 
 		const Ply d = (update ? depth : depth - 1);
-		const Score s = (update ? rootMoves[i].score_ : rootMoves[i].prevScore_);
+		const Score s = (update ? m_rootMoves[i].m_score_ : m_rootMoves[i].m_prevScore_);
 
 		ss << "info depth " << d
 		   << " seldepth " << selDepth
-		   << " score " << (i == pvIdx ? scoreToUSI(s, alpha, beta) : scoreToUSI(s))
+		   << " score " << (i == m_pvIdx ? scoreToUSI(s, alpha, beta) : scoreToUSI(s))
 		   << " nodes " << pos.GetNodesSearched()
 		   << " nps " << (0 < t ? pos.GetNodesSearched() * 1000 / t : 0)
 		   << " time " << t
 		   << " multipv " << i + 1
 		   << " pv ";
 
-		for (int j = 0; !rootMoves[i].pv_[j].IsNone(); ++j) {
-			ss << " " << rootMoves[i].pv_[j].ToUSI();
+		for (int j = 0; !m_rootMoves[i].m_pv_[j].IsNone(); ++j) {
+			ss << " " << m_rootMoves[i].m_pv_[j].ToUSI();
 		}
 
 		ss << std::endl;
@@ -277,7 +277,7 @@ std::string Searcher::pvInfoToUSI(Position& pos, const Ply depth, const Score al
 }
 
 template <NodeType NT, bool INCHECK>
-Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth) {
+Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth) {
 	const bool PVNode = (NT == PV);
 
 	assert(NT == PV || NT == NonPV);
@@ -306,19 +306,19 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		oldAlpha = alpha;
 	}
 
-	ss->currentMove = bestMove = Move::GetMoveNone();
-	ss->ply = (ss-1)->ply + 1;
+	ss->m_currentMove = bestMove = Move::GetMoveNone();
+	ss->m_ply = (ss-1)->m_ply + 1;
 
-	if (MaxPly < ss->ply) {
+	if (MaxPly < ss->m_ply) {
 		return ScoreDraw;
 	}
 
 	ttDepth = ((INCHECK || DepthQChecks <= depth) ? DepthQChecks : DepthQNoChecks);
 
 	posKey = pos.GetKey();
-	tte = tt.Probe(posKey);
+	tte = m_tt.Probe(posKey);
 	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : Move::GetMoveNone());
-	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->ply) : ScoreNone);
+	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
 
 	if (tte != nullptr
 		&& ttDepth <= tte->GetDepth()
@@ -327,36 +327,36 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			: (beta <= ttScore ? (tte->GetType() & BoundLower)
 			   : (tte->GetType() & BoundUpper))))
 	{
-		ss->currentMove = ttMove;
+		ss->m_currentMove = ttMove;
 		return ttScore;
 	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	if (INCHECK) {
-		ss->staticEval = ScoreNone;
+		ss->m_staticEval = ScoreNone;
 		bestScore = futilityBase = -ScoreInfinite;
 	}
 	else {
 		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
-			return UtilScore::MateIn(ss->ply);
+			return UtilScore::MateIn(ss->m_ply);
 		}
 
 		if (tte != nullptr) {
-			if ((ss->staticEval = bestScore = tte->GetEvalScore()) == ScoreNone) {
+			if ((ss->m_staticEval = bestScore = tte->GetEvalScore()) == ScoreNone) {
 				Evaluation09 evaluation;
-				ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
+				ss->m_staticEval = bestScore = evaluation.evaluate(pos, ss);
 			}
 		}
 		else {
 			Evaluation09 evaluation;
-			ss->staticEval = bestScore = evaluation.evaluate(pos, ss);
+			ss->m_staticEval = bestScore = evaluation.evaluate(pos, ss);
 		}
 
 		if (beta <= bestScore) {
 			if (tte == nullptr) {
-				tt.Store(pos.GetKey(), scoreToTT(bestScore, ss->ply), BoundLower,
-						 DepthNone, Move::GetMoveNone(), ss->staticEval);
+				m_tt.Store(pos.GetKey(), scoreToTT(bestScore, ss->m_ply), BoundLower,
+						 DepthNone, Move::GetMoveNone(), ss->m_staticEval);
 			}
 
 			return bestScore;
@@ -372,7 +372,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	Evaluation09 evaluation;
 	evaluation.evaluate(pos, ss);
 
-	MovePicker mp(pos, ttMove, depth, history, (ss-1)->currentMove.To());
+	MovePicker mp(pos, ttMove, depth, m_history, (ss-1)->m_currentMove.To());
 	const CheckInfo ci(pos);
 
 	while (!(move = mp.GetNextMove<false>()).IsNone())
@@ -425,12 +425,12 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 			continue;
 		}
 
-		ss->currentMove = move;
+		ss->m_currentMove = move;
 
 		pos.DoMove(move, st, ci, givesCheck);
-		(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
-		score = (givesCheck ? -qsearch<NT, true>(pos, ss+1, -beta, -alpha, depth - OnePly)
-				 : -qsearch<NT, false>(pos, ss+1, -beta, -alpha, depth - OnePly));
+		(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+		score = (givesCheck ? -Qsearch<NT, true>(pos, ss+1, -beta, -alpha, depth - OnePly)
+				 : -Qsearch<NT, false>(pos, ss+1, -beta, -alpha, depth - OnePly));
 		pos.UndoMove(move);
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
@@ -445,8 +445,8 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 				}
 				else {
 					// fail high
-					tt.Store(posKey, scoreToTT(score, ss->ply), BoundLower,
-							 ttDepth, move, ss->staticEval);
+					m_tt.Store(posKey, scoreToTT(score, ss->m_ply), BoundLower,
+							 ttDepth, move, ss->m_staticEval);
 					return score;
 				}
 			}
@@ -454,12 +454,12 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	}
 
 	if (INCHECK && bestScore == -ScoreInfinite) {
-		return UtilScore::MatedIn(ss->ply);
+		return UtilScore::MatedIn(ss->m_ply);
 	}
 
-	tt.Store(posKey, scoreToTT(bestScore, ss->ply), 
+	m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply), 
 			 ((PVNode && oldAlpha < bestScore) ? BoundExact : BoundUpper),
-			 ttDepth, bestMove, ss->staticEval);
+			 ttDepth, bestMove, ss->m_staticEval);
 
 	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
 
@@ -467,7 +467,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 }
 
 // iterative deepening loop
-void Searcher::idLoop(Position& pos) {
+void Searcher::IdLoop(Position& pos) {
 	SearchStack ss[MaxPlyPlus2];
 	Ply depth;
 	Ply prevBestMoveChanges;
@@ -479,36 +479,36 @@ void Searcher::idLoop(Position& pos) {
 	int lastInfoTime = -1; // 将棋所のコンソールが詰まる問題への対処用
 
 	memset(ss, 0, 4 * sizeof(SearchStack));
-	bestMoveChanges = 0;
+	m_bestMoveChanges = 0;
 #if defined LEARN
 	// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
-	GetDepth = std::max<Ply>(0, limits.GetDepth - 1);
+	GetDepth = std::max<Ply>(0, m_limits.GetDepth - 1);
 #else
 	depth = 0;
 #endif
 
-	ss[0].currentMove = Move::GetMoveNull(); // skip update gains
-	tt.NewSearch();
-	history.clear();
-	gains.clear();
+	ss[0].m_currentMove = Move::GetMoveNull(); // skip update gains
+	m_tt.NewSearch();
+	m_history.Clear();
+	m_gains.Clear();
 
-	pvSize = options["MultiPV"];
-	Skill skill(options["Skill_Level"], options["Max_Random_Score_Diff"]);
+	m_pvSize = m_options["MultiPV"];
+	Skill skill(m_options["Skill_Level"], m_options["Max_Random_Score_Diff"]);
 
-	if (options["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
+	if (m_options["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
 		skill.max_random_score_diff = ScoreZero;
-		pvSize = 1;
+		m_pvSize = 1;
 		assert(!skill.enabled()); // level による設定が出来るようになるまでは、これで良い。
 	}
 
-	if (skill.enabled() && pvSize < 3) {
-		pvSize = 3;
+	if (skill.enabled() && m_pvSize < 3) {
+		m_pvSize = 3;
 	}
-	pvSize = std::min(pvSize, rootMoves.size());
+	m_pvSize = std::min(m_pvSize, m_rootMoves.size());
 
 	// 指し手が無ければ負け
-	if (rootMoves.empty()) {
-		rootMoves.push_back(RootMove(Move::GetMoveNone()));
+	if (m_rootMoves.empty()) {
+		m_rootMoves.push_back(RootMove(Move::GetMoveNone()));
 		SYNCCOUT << "info depth 0 score "
 				 << scoreToUSI(-ScoreMate0Ply)
 				 << SYNCENDL;
@@ -518,45 +518,45 @@ void Searcher::idLoop(Position& pos) {
 
 #if defined BISHOP_IN_DANGER
 	if ((bishopInDangerFlag == BlackBishopInDangerIn28
-		 && std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
-						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0082KA"; }) != std::IsEnd(rootMoves))
+		 && std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
+						 [](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0082KA"; }) != std::IsEnd(m_rootMoves))
 		|| (bishopInDangerFlag == WhiteBishopInDangerIn28
-			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
-							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0028KA"; }) != std::IsEnd(rootMoves))
+			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
+							[](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0028KA"; }) != std::IsEnd(m_rootMoves))
 		|| (bishopInDangerFlag == BlackBishopInDangerIn78
-			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
-						 [](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0032KA"; }) != std::IsEnd(rootMoves))
+			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
+						 [](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0032KA"; }) != std::IsEnd(m_rootMoves))
 		|| (bishopInDangerFlag == WhiteBishopInDangerIn78
-			&& std::find_if(std::begin(rootMoves), std::IsEnd(rootMoves),
-							[](const RootMove& rm) { return rm.pv_[0].ToCSA() == "0078KA"; }) != std::IsEnd(rootMoves)))
+			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
+							[](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0078KA"; }) != std::IsEnd(m_rootMoves)))
 	{
-		if (rootMoves.m_size() != 1)
-			pvSize = std::max<size_t>(pvSize, 2);
+		if (m_rootMoves.m_size() != 1)
+			m_pvSize = std::max<size_t>(m_pvSize, 2);
 	}
 #endif
 
 	// 反復深化で探索を行う。
-	while (++depth <= MaxPly && !signals.stop && (!limits.depth || depth <= limits.depth)) {
+	while (++depth <= MaxPly && !m_signals.m_stop && (!m_limits.m_depth || depth <= m_limits.m_depth)) {
 		// 前回の iteration の結果を全てコピー
-		for (size_t i = 0; i < rootMoves.size(); ++i) {
-			rootMoves[i].prevScore_ = rootMoves[i].score_;
+		for (size_t i = 0; i < m_rootMoves.size(); ++i) {
+			m_rootMoves[i].m_prevScore_ = m_rootMoves[i].m_score_;
 		}
 
-		prevBestMoveChanges = bestMoveChanges;
-		bestMoveChanges = 0;
+		prevBestMoveChanges = m_bestMoveChanges;
+		m_bestMoveChanges = 0;
 
 		// Multi PV loop
-		for (pvIdx = 0; pvIdx < pvSize && !signals.stop; ++pvIdx) {
+		for (m_pvIdx = 0; m_pvIdx < m_pvSize && !m_signals.m_stop; ++m_pvIdx) {
 #if defined LEARN
-			alpha = this->alpha;
-			beta  = this->beta;
+			m_alpha = this->m_alpha;
+			m_beta  = this->m_beta;
 #else
 			// aspiration search
 			// alpha, beta をある程度絞ることで、探索効率を上げる。
-			if (5 <= depth && abs(rootMoves[pvIdx].prevScore_) < g_ScoreKnownWin) {
+			if (5 <= depth && abs(m_rootMoves[m_pvIdx].m_prevScore_) < g_ScoreKnownWin) {
 				delta = static_cast<Score>(16);
-				alpha = rootMoves[pvIdx].prevScore_ - delta;
-				beta  = rootMoves[pvIdx].prevScore_ + delta;
+				alpha = m_rootMoves[m_pvIdx].m_prevScore_ - delta;
+				beta  = m_rootMoves[m_pvIdx].m_prevScore_ + delta;
 			}
 			else {
 				alpha = -ScoreInfinite;
@@ -568,21 +568,21 @@ void Searcher::idLoop(Position& pos) {
 			// fail high/low になったなら、今度は window 幅を広げて、再探索を行う。
 			while (true) {
 				// 探索を行う。
-				ss->staticEvalRaw.p[0][0] = (ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
-				bestScore = search<Root>(pos, ss + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
+				ss->m_staticEvalRaw.p[0][0] = (ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				bestScore = Search<Root>(pos, ss + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 				// 先頭が最善手になるようにソート
-				UtilMoveStack::InsertionSort(rootMoves.begin() + pvIdx, rootMoves.end());
+				UtilMoveStack::InsertionSort(m_rootMoves.begin() + m_pvIdx, m_rootMoves.end());
 
-				for (size_t i = 0; i <= pvIdx; ++i) {
-					ss->staticEvalRaw.p[0][0] = (ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
-					rootMoves[i].insertPvInTT(pos);
+				for (size_t i = 0; i <= m_pvIdx; ++i) {
+					ss->m_staticEvalRaw.p[0][0] = (ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+					m_rootMoves[i].InsertPvInTT(pos);
 				}
 
 #if 0
 				// 詰みを発見したら即指す。
-				if (ScoreMateInMaxPly <= abs(bestScore) && abs(bestScore) < ScoreInfinite) {
-					SYNCCOUT << pvInfoToUSI(GetPos, ply, alpha, beta) << SYNCENDL;
-					signals.stop = true;
+				if (ScoreMateInMaxPly <= abs(m_bestScore) && abs(m_bestScore) < ScoreInfinite) {
+					SYNCCOUT << PvInfoToUSI(GetPos, m_ply, m_alpha, m_beta) << SYNCENDL;
+					m_signals.m_stop = true;
 				}
 #endif
 
@@ -590,7 +590,7 @@ void Searcher::idLoop(Position& pos) {
 				break;
 #endif
 
-				if (signals.stop) {
+				if (m_signals.m_stop) {
 					break;
 				}
 
@@ -598,12 +598,12 @@ void Searcher::idLoop(Position& pos) {
 					break;
 				}
 
-				if (3000 < searchTimer.Elapsed()
+				if (3000 < m_searchTimer.Elapsed()
 					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < searchTimer.Elapsed()))
+					&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.Elapsed()))
 				{
-					lastInfoTime = searchTimer.Elapsed();
-					SYNCCOUT << pvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
+					lastInfoTime = m_searchTimer.Elapsed();
+					SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 				}
 
 				// fail high/low のとき、aspiration window を広げる。
@@ -617,8 +617,8 @@ void Searcher::idLoop(Position& pos) {
 					delta += delta / 2;
 				}
 				else {
-					signals.failedLowAtRoot = true;
-					signals.stopOnPonderHit = false;
+					m_signals.m_failedLowAtRoot = true;
+					m_signals.m_stopOnPonderHit = false;
 
 					alpha -= delta;
 					delta += delta / 2;
@@ -627,13 +627,13 @@ void Searcher::idLoop(Position& pos) {
 				assert(-ScoreInfinite <= alpha && beta <= ScoreInfinite);
 			}
 
-			UtilMoveStack::InsertionSort(rootMoves.begin(), rootMoves.begin() + pvIdx + 1);
-			if ((pvIdx + 1 == pvSize || 3000 < searchTimer.Elapsed())
+			UtilMoveStack::InsertionSort(m_rootMoves.begin(), m_rootMoves.begin() + m_pvIdx + 1);
+			if ((m_pvIdx + 1 == m_pvSize || 3000 < m_searchTimer.Elapsed())
 				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < searchTimer.Elapsed()))
+				&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.Elapsed()))
 			{
-				lastInfoTime = searchTimer.Elapsed();
-				SYNCCOUT << pvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
+				lastInfoTime = m_searchTimer.Elapsed();
+				SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 			}
 		}
 
@@ -641,19 +641,19 @@ void Searcher::idLoop(Position& pos) {
 		//	skill.pickMove();
 		//}
 
-		if (limits.useTimeManagement() && !signals.stopOnPonderHit) {
+		if (m_limits.IsUseTimeManagement() && !m_signals.m_stopOnPonderHit) {
 			bool stop = false;
 
-			if (4 < depth && depth < 50 && pvSize == 1) {
-				timeManager.PvInstability(bestMoveChanges, prevBestMoveChanges);
+			if (4 < depth && depth < 50 && m_pvSize == 1) {
+				m_timeManager.PvInstability(m_bestMoveChanges, prevBestMoveChanges);
 			}
 
 			// 次のイテレーションを回す時間が無いなら、ストップ
-			if ((timeManager.AvailableTime() * 62) / 100 < searchTimer.Elapsed()) {
+			if ((m_timeManager.AvailableTime() * 62) / 100 < m_searchTimer.Elapsed()) {
 				stop = true;
 			}
 
-			if (2 < depth && bestMoveChanges)
+			if (2 < depth && m_bestMoveChanges)
 				bestMoveNeverChanged = false;
 
 			// 最善手が、ある程度の深さまで同じであれば、
@@ -661,19 +661,19 @@ void Searcher::idLoop(Position& pos) {
 			if (12 <= depth
 				&& !stop
 				&& bestMoveNeverChanged
-				&& pvSize == 1
+				&& m_pvSize == 1
 				// ここは確実にバグらせないようにする。
 				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
-				&& (rootMoves.size() == 1
-					|| timeManager.AvailableTime() * 40 / 100 < searchTimer.Elapsed()))
+				&& (m_rootMoves.size() == 1
+					|| m_timeManager.AvailableTime() * 40 / 100 < m_searchTimer.Elapsed()))
 			{
 				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
-				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
-				(ss+1)->excludedMove = rootMoves[0].pv_[0];
-				(ss+1)->skipNullMove = true;
-				const Score s = search<NonPV>(pos, ss+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
-				(ss+1)->skipNullMove = false;
-				(ss+1)->excludedMove = Move::GetMoveNone();
+				(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				(ss+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
+				(ss+1)->m_skipNullMove = true;
+				const Score s = Search<NonPV>(pos, ss+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
+				(ss+1)->m_skipNullMove = false;
+				(ss+1)->m_excludedMove = Move::GetMoveNone();
 
 				if (s < rBeta) {
 					stop = true;
@@ -681,17 +681,17 @@ void Searcher::idLoop(Position& pos) {
 			}
 
 			if (stop) {
-				if (limits.ponder) {
-					signals.stopOnPonderHit = true;
+				if (m_limits.m_ponder) {
+					m_signals.m_stopOnPonderHit = true;
 				}
 				else {
-					signals.stop = true;
+					m_signals.m_stop = true;
 				}
 			}
 		}
 	}
 	skill.swapIfEnabled(this);
-	SYNCCOUT << pvInfoToUSI(pos, depth-1, alpha, beta) << SYNCENDL;
+	SYNCCOUT << PvInfoToUSI(pos, depth-1, alpha, beta) << SYNCENDL;
 }
 
 #if defined INANIWA_SHIFT
@@ -702,7 +702,7 @@ void Searcher::detectInaniwa(const Position& GetPos) {
 		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
 		if ((GetPos.GetBbOf(Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
-			tt.Clear();
+			m_tt.Clear();
 		}
 	}
 }
@@ -759,7 +759,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 
 	if (DO) {
 		m_st_->m_boardKey ^= GetZobTurn();
-		prefetch(GetCsearcher()->tt.FirstEntry(m_st_->GetKey()));
+		prefetch(GetCsearcher()->m_tt.FirstEntry(m_st_->GetKey()));
 		m_st_->m_pliesFromNull = 0;
 		m_st_->m_continuousCheck[GetTurn()] = 0;
 	}
@@ -769,7 +769,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 }
 
 template <NodeType NT>
-Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode) {
+Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode) {
 	const bool PVNode = (NT == PV || NT == Root || NT == SplitPointPV || NT == SplitPointRoot);
 	const bool SPNode = (NT == SplitPointPV || NT == SplitPointNonPV || NT == SplitPointRoot);
 	const bool RootNode = (NT == Root || NT == SplitPointRoot);
@@ -812,10 +812,10 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	inCheck = pos.InCheck();
 
 	if (SPNode) {
-		splitPoint = ss->splitPoint;
-		bestMove = splitPoint->bestMove;
-		threatMove = splitPoint->threatMove;
-		bestScore = splitPoint->bestScore;
+		splitPoint = ss->m_splitPoint;
+		bestMove = splitPoint->m_bestMove;
+		threatMove = splitPoint->m_threatMove;
+		bestScore = splitPoint->m_bestScore;
 		tte = nullptr;
 		ttMove = excludedMove = Move::GetMoveNone();
 		ttScore = ScoreNone;
@@ -823,40 +823,40 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		Evaluation09 evaluation;
 		evaluation.evaluate(pos, ss);
 
-		assert(-ScoreInfinite < splitPoint->bestScore && 0 < splitPoint->moveCount);
+		assert(-ScoreInfinite < splitPoint->m_bestScore && 0 < splitPoint->m_moveCount);
 
 		goto split_point_start;
 	}
 
 	bestScore = -ScoreInfinite;
-	ss->currentMove = threatMove = bestMove = (ss + 1)->excludedMove = Move::GetMoveNone();
-	ss->ply = (ss-1)->ply + 1;
-	(ss+1)->skipNullMove = false;
-	(ss+1)->reduction = Depth0;
-	(ss+2)->killers[0] = (ss+2)->killers[1] = Move::GetMoveNone();
+	ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = Move::GetMoveNone();
+	ss->m_ply = (ss-1)->m_ply + 1;
+	(ss+1)->m_skipNullMove = false;
+	(ss+1)->m_reduction = Depth0;
+	(ss+2)->m_killers[0] = (ss+2)->m_killers[1] = Move::GetMoveNone();
 
-	if (PVNode && thisThread->maxPly < ss->ply) {
-		thisThread->maxPly = ss->ply;
+	if (PVNode && thisThread->m_maxPly < ss->m_ply) {
+		thisThread->m_maxPly = ss->m_ply;
 	}
 
 	if (!RootNode) {
 		// step2
 		// stop と最大探索深さのチェック
 		switch (pos.IsDraw(16)) {
-		case NotRepetition      : if (!signals.stop && ss->ply <= MaxPly) { break; }
+		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= MaxPly) { break; }
 		case RepetitionDraw     : return ScoreDraw;
-		case RepetitionWin      : return UtilScore::MateIn(ss->ply);
-		case RepetitionLose     : return UtilScore::MatedIn(ss->ply);
-		case RepetitionSuperior : if (ss->ply != 2) { return ScoreMateInMaxPly; } break;
-		case RepetitionInferior : if (ss->ply != 2) { return ScoreMatedInMaxPly; } break;
+		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);
+		case RepetitionLose     : return UtilScore::MatedIn(ss->m_ply);
+		case RepetitionSuperior : if (ss->m_ply != 2) { return ScoreMateInMaxPly; } break;
+		case RepetitionInferior : if (ss->m_ply != 2) { return ScoreMatedInMaxPly; } break;
 		default                 : UNREACHABLE;
 		}
 
 		// step3
 		// mate distance pruning
 		if (!RootNode) {
-			alpha = std::max(UtilScore::MatedIn(ss->ply), alpha);
-			beta = std::min(UtilScore::MateIn(ss->ply+1), beta);
+			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
+			beta = std::min(UtilScore::MateIn(ss->m_ply+1), beta);
 			if (beta <= alpha) {
 				return alpha;
 			}
@@ -867,15 +867,15 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 
 	// step4
 	// trans position table lookup
-	excludedMove = ss->excludedMove;
+	excludedMove = ss->m_excludedMove;
 	posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
-	tte = tt.Probe(posKey);
+	tte = m_tt.Probe(posKey);
 	ttMove = 
-		RootNode ? rootMoves[pvIdx].pv_[0] :
+		RootNode ? m_rootMoves[m_pvIdx].m_pv_[0] :
 		tte != nullptr ?
 		UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
 		Move::GetMoveNone();
-	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->ply) : ScoreNone);
+	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
 
 	if (!RootNode
 		&& tte != nullptr
@@ -885,16 +885,16 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 			: (beta <= ttScore ? (tte->GetType() & BoundLower)
 			   : (tte->GetType() & BoundUpper))))
 	{
-		tt.Refresh(tte);
-		ss->currentMove = ttMove; // Move::moveNone() もありえる。
+		m_tt.Refresh(tte);
+		ss->m_currentMove = ttMove; // Move::moveNone() もありえる。
 
 		if (beta <= ttScore
 			&& !ttMove.IsNone()
 			&& !ttMove.IsCaptureOrPawnPromotion()
-			&& ttMove != ss->killers[0])
+			&& ttMove != ss->m_killers[0])
 		{
-			ss->killers[1] = ss->killers[0];
-			ss->killers[0] = ttMove;
+			ss->m_killers[1] = ss->m_killers[0];
+			ss->m_killers[0] = ttMove;
 		}
 		return ttScore;
 	}
@@ -904,9 +904,9 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		&& !inCheck)
 	{
 		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
-			ss->staticEval = bestScore = UtilScore::MateIn(ss->ply);
-			tt.Store(posKey, scoreToTT(bestScore, ss->ply), BoundExact, depth,
-					 move, ss->staticEval);
+			ss->m_staticEval = bestScore = UtilScore::MateIn(ss->m_ply);
+			m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply), BoundExact, depth,
+					 move, ss->m_staticEval);
 			bestMove = move;
 			return bestScore;
 		}
@@ -916,9 +916,9 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	// step5
 	// evaluate the position statically
 	Evaluation09 evaluation;
-	eval = ss->staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
+	eval = ss->m_staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
 	if (inCheck) {
-		eval = ss->staticEval = ScoreNone;
+		eval = ss->m_staticEval = ScoreNone;
 		goto iid_start;
 	}
 	else if (tte != nullptr) {
@@ -929,20 +929,20 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		}
 	}
 	else {
-		tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
-				 Move::GetMoveNone(), ss->staticEval);
+		m_tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
+				 Move::GetMoveNone(), ss->m_staticEval);
 	}
 
 	// 一手前の指し手について、history を更新する。
 	// todo: ここの条件はもう少し考えた方が良い。
-	if ((move = (ss-1)->currentMove) != Move::GetMoveNull()
-		&& (ss-1)->staticEval != ScoreNone
-		&& ss->staticEval != ScoreNone
+	if ((move = (ss-1)->m_currentMove) != Move::GetMoveNull()
+		&& (ss-1)->m_staticEval != ScoreNone
+		&& ss->m_staticEval != ScoreNone
 		&& !move.IsCaptureOrPawnPromotion() // 前回(一手前)の指し手が駒取りでなかった。
 		)
 	{
 		const Square to = move.To();
-		gains.update(move.IsDrop(), pos.GetPiece(to), to, -(ss-1)->staticEval - ss->staticEval);
+		m_gains.Update(move.IsDrop(), pos.GetPiece(to), to, -(ss-1)->m_staticEval - ss->m_staticEval);
 	}
 
 	// step6
@@ -954,7 +954,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		&& abs(beta) < ScoreMateInMaxPly)
 	{
 		const Score rbeta = beta - razorMargin(depth);
-		const Score s = qsearch<NonPV, false>(pos, ss, rbeta-1, rbeta, Depth0);
+		const Score s = Qsearch<NonPV, false>(pos, ss, rbeta-1, rbeta, Depth0);
 		if (s < rbeta) {
 			return s;
 		}
@@ -963,7 +963,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	// step7
 	// static null move pruning
 	if (!PVNode
-		&& !ss->skipNullMove
+		&& !ss->m_skipNullMove
 		&& depth < 4 * OnePly
 		&& beta <= eval - FutilityMargins[depth][0]
 		&& abs(beta) < ScoreMateInMaxPly)
@@ -974,12 +974,12 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	// step8
 	// null move
 	if (!PVNode
-		&& !ss->skipNullMove
+		&& !ss->m_skipNullMove
 		&& 2 * OnePly <= depth
 		&& beta <= eval
 		&& abs(beta) < ScoreMateInMaxPly)
 	{
-		ss->currentMove = Move::GetMoveNull();
+		ss->m_currentMove = Move::GetMoveNull();
 		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
 		if (beta < eval - g_PawnScore) {
@@ -987,12 +987,12 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		}
 
 		pos.DoNullMove<true>(st);
-		(ss+1)->staticEvalRaw = (ss)->staticEvalRaw; // 評価値の差分評価の為。
-		(ss+1)->skipNullMove = true;
+		(ss+1)->m_staticEvalRaw = (ss)->m_staticEvalRaw; // 評価値の差分評価の為。
+		(ss+1)->m_skipNullMove = true;
 		Score nullScore = (depth - reduction < OnePly ?
-						   -qsearch<NonPV, false>(pos, ss + 1, -beta, -alpha, Depth0)
-						   : -search<NonPV>(pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
-		(ss+1)->skipNullMove = false;
+						   -Qsearch<NonPV, false>(pos, ss + 1, -beta, -alpha, Depth0)
+						   : -Search<NonPV>(pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
+		(ss+1)->m_skipNullMove = false;
 		pos.DoNullMove<false>(st);
 
 		if (beta <= nullScore) {
@@ -1004,10 +1004,10 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 				return nullScore;
 			}
 
-			ss->skipNullMove = true;
+			ss->m_skipNullMove = true;
 			assert(Depth0 < depth - reduction);
-			const Score s = search<NonPV>(pos, ss, alpha, beta, depth - reduction, false);
-			ss->skipNullMove = false;
+			const Score s = Search<NonPV>(pos, ss, alpha, beta, depth - reduction, false);
+			ss->m_skipNullMove = false;
 
 			if (beta <= s) {
 				return nullScore;
@@ -1015,11 +1015,11 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		}
 		else {
 			// fail low
-			threatMove = (ss+1)->currentMove;
+			threatMove = (ss+1)->m_currentMove;
 			if (depth < 5 * OnePly
-				&& (ss-1)->reduction != Depth0
+				&& (ss-1)->m_reduction != Depth0
 				&& !threatMove.IsNone()
-				&& allows(pos, (ss-1)->currentMove, threatMove))
+				&& allows(pos, (ss-1)->m_currentMove, threatMove))
 			{
 				return beta - 1;
 			}
@@ -1030,7 +1030,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	// probcut
 	if (!PVNode
 		&& 5 * OnePly <= depth
-		&& !ss->skipNullMove
+		&& !ss->m_skipNullMove
 		// 確実にバグらせないようにする。
 		&& abs(beta) < ScoreInfinite - 200)
 	{
@@ -1038,19 +1038,19 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		const Depth rdepth = depth - OnePly - 3 * OnePly;
 
 		assert(OnePly <= rdepth);
-		assert(!(ss-1)->currentMove.IsNone());
-		assert((ss-1)->currentMove != Move::GetMoveNull());
+		assert(!(ss-1)->m_currentMove.IsNone());
+		assert((ss-1)->m_currentMove != Move::GetMoveNull());
 
-		assert(move == (ss-1)->currentMove);
+		assert(move == (ss-1)->m_currentMove);
 		// move.cap() は前回(一手前)の指し手で取った駒の種類
-		MovePicker mp(pos, ttMove, history, move.GetCap());
+		MovePicker mp(pos, ttMove, m_history, move.GetCap());
 		const CheckInfo ci(pos);
 		while (!(move = mp.GetNextMove<false>()).IsNone()) {
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-				ss->currentMove = move;
+				ss->m_currentMove = move;
 				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
-				(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
-				score = -search<NonPV>(pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
+				(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				score = -Search<NonPV>(pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
 				pos.UndoMove(move);
 				if (rbeta <= score) {
 					return score;
@@ -1064,23 +1064,23 @@ iid_start:
 	// internal iterative deepening
 	if ((PVNode ? 5 * OnePly : 8 * OnePly) <= depth
 		&& ttMove.IsNone()
-		&& (PVNode || (!inCheck && beta <= ss->staticEval + static_cast<Score>(256))))
+		&& (PVNode || (!inCheck && beta <= ss->m_staticEval + static_cast<Score>(256))))
 	{
 		//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
 		const Depth d = (PVNode ? depth - 2 * OnePly : depth / 2);
 
-		ss->skipNullMove = true;
-		search<PVNode ? PV : NonPV>(pos, ss, alpha, beta, d, true);
-		ss->skipNullMove = false;
+		ss->m_skipNullMove = true;
+		Search<PVNode ? PV : NonPV>(pos, ss, alpha, beta, d, true);
+		ss->m_skipNullMove = false;
 
-		tte = tt.Probe(posKey);
+		tte = m_tt.Probe(posKey);
 		ttMove = (tte != nullptr ?
 			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
 				  Move::GetMoveNone());
 	}
 
 split_point_start:
-	MovePicker mp(pos, ttMove, depth, history, ss, PVNode ? -ScoreInfinite : beta);
+	MovePicker mp(pos, ttMove, depth, m_history, ss, PVNode ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
 	score = bestScore;
 	singularExtensionNode =
@@ -1100,9 +1100,9 @@ split_point_start:
 		}
 
 		if (RootNode
-			&& std::find(rootMoves.begin() + pvIdx,
-						 rootMoves.end(),
-						 move) == rootMoves.end())
+			&& std::find(m_rootMoves.begin() + m_pvIdx,
+						 m_rootMoves.end(),
+						 move) == m_rootMoves.end())
 		{
 			continue;
 		}
@@ -1111,8 +1111,8 @@ split_point_start:
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				continue;
 			}
-			moveCount = ++splitPoint->moveCount;
-			splitPoint->mutex.unlock();
+			moveCount = ++splitPoint->m_moveCount;
+			splitPoint->m_mutex.unlock();
 		}
 		else {
 			++moveCount;
@@ -1120,12 +1120,12 @@ split_point_start:
 
 
 		if (RootNode) {
-			signals.firstRootMove = (moveCount == 1);
+			m_signals.m_firstRootMove = (moveCount == 1);
 #if 0
-			if (GetThisThread == threads.mainThread() && 3000 < searchTimer.Elapsed()) {
+			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_searchTimer.Elapsed()) {
 				SYNCCOUT << "info depth " << GetDepth / OnePly
 						 << " currmove " << GetMove.ToUSI()
-						 << " currmovenumber " << moveCount + pvIdx << SYNCENDL;
+						 << " currmovenumber " << m_moveCount + m_pvIdx << SYNCENDL;
 			}
 #endif
 		}
@@ -1151,11 +1151,11 @@ split_point_start:
 			assert(ttScore != ScoreNone);
 
 			const Score rBeta = ttScore - static_cast<Score>(depth);
-			ss->excludedMove = move;
-			ss->skipNullMove = true;
-			score = search<NonPV>(pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
-			ss->skipNullMove = false;
-			ss->excludedMove = Move::GetMoveNone();
+			ss->m_excludedMove = move;
+			ss->m_skipNullMove = true;
+			score = Search<NonPV>(pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
+			ss->m_skipNullMove = false;
+			ss->m_excludedMove = Move::GetMoveNone();
 
 			if (score < rBeta) {
 				//extension = OnePly;
@@ -1181,7 +1181,7 @@ split_point_start:
 				&& (threatMove.IsNone() || !refutes(pos, move, threatMove)))
 			{
 				if (SPNode) {
-					splitPoint->mutex.lock();
+					splitPoint->m_mutex.lock();
 				}
 				continue;
 			}
@@ -1189,15 +1189,15 @@ split_point_start:
 			// score based pruning
 			const Depth predictedDepth = newDepth - reduction<PVNode>(depth, moveCount);
 			// gain を 2倍にする。
-			const Score futilityScore = ss->staticEval + futilityMargin(predictedDepth, moveCount)
-				+ 2 * gains.value(move.IsDrop(), UtilPiece::FromColorAndPieceType(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
+			const Score futilityScore = ss->m_staticEval + futilityMargin(predictedDepth, moveCount)
+				+ 2 * m_gains.GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
 				if (SPNode) {
-					splitPoint->mutex.lock();
-					if (splitPoint->bestScore < bestScore) {
-						splitPoint->bestScore = bestScore;
+					splitPoint->m_mutex.lock();
+					if (splitPoint->m_bestScore < bestScore) {
+						splitPoint->m_bestScore = bestScore;
 					}
 				}
 				continue;
@@ -1207,7 +1207,7 @@ split_point_start:
 				&& pos.GetSeeSign(move) < ScoreZero)
 			{
 				if (SPNode) {
-					splitPoint->mutex.lock();
+					splitPoint->m_mutex.lock();
 				}
 				continue;
 			}
@@ -1220,14 +1220,14 @@ split_point_start:
 		}
 
 		isPVMove = (PVNode && moveCount == 1);
-		ss->currentMove = move;
+		ss->m_currentMove = move;
 		if (!SPNode && !captureOrPawnPromotion && playedMoveCount < 64) {
 			movesSearched[playedMoveCount++] = move;
 		}
 
 		// step14
 		pos.DoMove(move, st, ci, givesCheck);
-		(ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+		(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 
 		// step15
 		// LMR
@@ -1235,22 +1235,22 @@ split_point_start:
 			&& !isPVMove
 			&& !captureOrPawnPromotion
 			&& move != ttMove
-			&& ss->killers[0] != move
-			&& ss->killers[1] != move)
+			&& ss->m_killers[0] != move
+			&& ss->m_killers[1] != move)
 		{
-			ss->reduction = reduction<PVNode>(depth, moveCount);
+			ss->m_reduction = reduction<PVNode>(depth, moveCount);
 			if (!PVNode && cutNode) {
-				ss->reduction += OnePly;
+				ss->m_reduction += OnePly;
 			}
-			const Depth d = std::max(newDepth - ss->reduction, OnePly);
+			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
 			if (SPNode) {
-				alpha = splitPoint->alpha;
+				alpha = splitPoint->m_alpha;
 			}
 			// PVS
-			score = -search<NonPV>(pos, ss+1, -(alpha + 1), -alpha, d, true);
+			score = -Search<NonPV>(pos, ss+1, -(alpha + 1), -alpha, d, true);
 
-			doFullDepthSearch = (alpha < score && ss->reduction != Depth0);
-			ss->reduction = Depth0;
+			doFullDepthSearch = (alpha < score && ss->m_reduction != Depth0);
+			ss->m_reduction = Depth0;
 		}
 		else {
 			doFullDepthSearch = !isPVMove;
@@ -1261,20 +1261,20 @@ split_point_start:
 		// PVS
 		if (doFullDepthSearch) {
 			if (SPNode) {
-				alpha = splitPoint->alpha;
+				alpha = splitPoint->m_alpha;
 			}
 			score = (newDepth < OnePly ?
-					 (givesCheck ? -qsearch<NonPV, true>(pos, ss+1, -(alpha + 1), -alpha, Depth0)
-					  : -qsearch<NonPV, false>(pos, ss+1, -(alpha + 1), -alpha, Depth0))
-					 : -search<NonPV>(pos, ss+1, -(alpha + 1), -alpha, newDepth, !cutNode));
+					 (givesCheck ? -Qsearch<NonPV, true>(pos, ss+1, -(alpha + 1), -alpha, Depth0)
+					  : -Qsearch<NonPV, false>(pos, ss+1, -(alpha + 1), -alpha, Depth0))
+					 : -Search<NonPV>(pos, ss+1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 
 		// 通常の探索
 		if (PVNode && (isPVMove || (alpha < score && (RootNode || score < beta)))) {
 			score = (newDepth < OnePly ?
-					 (givesCheck ? -qsearch<PV, true>(pos, ss+1, -beta, -alpha, Depth0)
-					  : -qsearch<PV, false>(pos, ss+1, -beta, -alpha, Depth0))
-					 : -search<PV>(pos, ss+1, -beta, -alpha, newDepth, false));
+					 (givesCheck ? -Qsearch<PV, true>(pos, ss+1, -beta, -alpha, Depth0)
+					  : -Qsearch<PV, false>(pos, ss+1, -beta, -alpha, Depth0))
+					 : -Search<PV>(pos, ss+1, -beta, -alpha, newDepth, false));
 		}
 
 		// step17
@@ -1284,53 +1284,53 @@ split_point_start:
 
 		// step18
 		if (SPNode) {
-			splitPoint->mutex.lock();
-			bestScore = splitPoint->bestScore;
-			alpha = splitPoint->alpha;
+			splitPoint->m_mutex.lock();
+			bestScore = splitPoint->m_bestScore;
+			alpha = splitPoint->m_alpha;
 		}
 
-		if (signals.stop || thisThread->cutoffOccurred()) {
+		if (m_signals.m_stop || thisThread->CutoffOccurred()) {
 			return score;
 		}
 
 		if (RootNode) {
-			RootMove& rm = *std::find(rootMoves.begin(), rootMoves.end(), move);
+			RootMove& rm = *std::find(m_rootMoves.begin(), m_rootMoves.end(), move);
 			if (isPVMove || alpha < score) {
 				// PV move or new best move
-				rm.score_ = score;
+				rm.m_score_ = score;
 #if defined BISHOP_IN_DANGER
 				if ((bishopInDangerFlag == BlackBishopInDangerIn28 && GetMove.ToCSA() == "0082KA")
 					|| (bishopInDangerFlag == WhiteBishopInDangerIn28 && GetMove.ToCSA() == "0028KA")
 					|| (bishopInDangerFlag == BlackBishopInDangerIn78 && GetMove.ToCSA() == "0032KA")
 					|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && GetMove.ToCSA() == "0078KA"))
 				{
-					rm.score_ -= options["Danger_Demerit_Score"];
+					rm.m_score_ -= m_options["Danger_Demerit_Score"];
 				}
 #endif
-				rm.extractPvFromTT(pos);
+				rm.ExtractPvFromTT(pos);
 
 				if (!isPVMove) {
-					++bestMoveChanges;
+					++m_bestMoveChanges;
 				}
 			}
 			else {
-				rm.score_ = -ScoreInfinite;
+				rm.m_score_ = -ScoreInfinite;
 			}
 		}
 
 		if (bestScore < score) {
-			bestScore = (SPNode ? splitPoint->bestScore = score : score);
+			bestScore = (SPNode ? splitPoint->m_bestScore = score : score);
 
 			if (alpha < score) {
-				bestMove = (SPNode ? splitPoint->bestMove = move : move);
+				bestMove = (SPNode ? splitPoint->m_bestMove = move : move);
 
 				if (PVNode && score < beta) {
-					alpha = (SPNode ? splitPoint->alpha = score : score);
+					alpha = (SPNode ? splitPoint->m_alpha = score : score);
 				}
 				else {
 					// fail high
 					if (SPNode) {
-						splitPoint->cutoff = true;
+						splitPoint->m_cutoff = true;
 					}
 					break;
 				}
@@ -1339,12 +1339,12 @@ split_point_start:
 
 		// step19
 		if (!SPNode
-			&& threads.minSplitDepth() <= depth
-			&& threads.availableSlave(thisThread)
-			&& thisThread->splitPointsSize < MaxSplitPointsPerThread)
+			&& m_threads.GetMinSplitDepth() <= depth
+			&& m_threads.GetAvailableSlave(thisThread)
+			&& thisThread->m_splitPointsSize < g_MaxSplitPointsPerThread)
 		{
 			assert(bestScore < beta);
-			thisThread->split<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
+			thisThread->Split<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
 										 depth, threatMove, moveCount, mp, NT, cutNode);
 			if (beta <= bestScore) {
 				break;
@@ -1358,7 +1358,7 @@ split_point_start:
 
 	// step20
 	if (moveCount == 0) {
-		return !excludedMove.IsNone() ? alpha : UtilScore::MatedIn(ss->ply);
+		return !excludedMove.IsNone() ? alpha : UtilScore::MatedIn(ss->m_ply);
 	}
 
 	if (bestScore == -ScoreInfinite) {
@@ -1368,31 +1368,31 @@ split_point_start:
 
 	if (beta <= bestScore) {
 		// failed high
-		tt.Store(posKey, scoreToTT(bestScore, ss->ply), BoundLower, depth,
-				 bestMove, ss->staticEval);
+		m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply), BoundLower, depth,
+				 bestMove, ss->m_staticEval);
 
 		if (!bestMove.IsCaptureOrPawnPromotion() && !inCheck) {
-			if (bestMove != ss->killers[0]) {
-				ss->killers[1] = ss->killers[0];
-				ss->killers[0] = bestMove;
+			if (bestMove != ss->m_killers[0]) {
+				ss->m_killers[1] = ss->m_killers[0];
+				ss->m_killers[0] = bestMove;
 			}
 
 			const Score bonus = static_cast<Score>(depth * depth);
 			const Piece pc1 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), bestMove.GetPieceTypeFromOrDropped());
-			history.update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
+			m_history.Update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
 
 			for (int i = 0; i < playedMoveCount - 1; ++i) {
 				const Move m = movesSearched[i];
 				const Piece pc2 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), m.GetPieceTypeFromOrDropped());
-				history.update(m.IsDrop(), pc2, m.To(), -bonus);
+				m_history.Update(m.IsDrop(), pc2, m.To(), -bonus);
 			}
 		}
 	}
 	else {
 		// failed low or PV search
-		tt.Store(posKey, scoreToTT(bestScore, ss->ply),
+		m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply),
 				 ((PVNode && !bestMove.IsNone()) ? BoundExact : BoundUpper),
-				 depth, bestMove, ss->staticEval);
+				 depth, bestMove, ss->m_staticEval);
 	}
 
 	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
@@ -1400,23 +1400,23 @@ split_point_start:
 	return bestScore;
 }
 
-void RootMove::extractPvFromTT(Position& pos) {
+void RootMove::ExtractPvFromTT(Position& pos) {
 	StateInfo state[MaxPlyPlus2];
 	StateInfo* st = state;
 	TTEntry* tte;
 	Ply ply = 0;
-	Move m = pv_[0];
+	Move m = m_pv_[0];
 
 	assert(!m.IsNone() && pos.MoveIsPseudoLegal(m));
 
-	pv_.clear();
+	m_pv_.clear();
 
 	do {
-		pv_.push_back(m);
+		m_pv_.push_back(m);
 
-		assert(pos.MoveIsLegal(pv_[ply]));
-		pos.DoMove(pv_[ply++], *st++);
-		tte = pos.GetCsearcher()->tt.Probe(pos.GetKey());
+		assert(pos.MoveIsLegal(m_pv_[ply]));
+		pos.DoMove(m_pv_[ply++], *st++);
+		tte = pos.GetCsearcher()->m_tt.Probe(pos.GetKey());
 	}
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
@@ -1425,37 +1425,37 @@ void RootMove::extractPvFromTT(Position& pos) {
 		   && ply < MaxPly
 		   && (!pos.IsDraw(20) || ply < 6));
 
-	pv_.push_back(Move::GetMoveNone());
+	m_pv_.push_back(Move::GetMoveNone());
 	while (ply) {
-		pos.UndoMove(pv_[--ply]);
+		pos.UndoMove(m_pv_[--ply]);
 	}
 }
 
-void RootMove::insertPvInTT(Position& pos) {
+void RootMove::InsertPvInTT(Position& pos) {
 	StateInfo state[MaxPlyPlus2];
 	StateInfo* st = state;
 	TTEntry* tte;
 	Ply ply = 0;
 
 	do {
-		tte = pos.GetCsearcher()->tt.Probe(pos.GetKey());
+		tte = pos.GetCsearcher()->m_tt.Probe(pos.GetKey());
 
 		if (tte == nullptr
-			|| UtilMoveStack::Move16toMove(tte->GetMove(), pos) != pv_[ply])
+			|| UtilMoveStack::Move16toMove(tte->GetMove(), pos) != m_pv_[ply])
 		{
-			pos.GetSearcher()->tt.Store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
+			pos.GetSearcher()->m_tt.Store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, m_pv_[ply], ScoreNone);
 		}
 
-		assert(pos.MoveIsLegal(pv_[ply]));
-		pos.DoMove(pv_[ply++], *st++);
-	} while (!pv_[ply].IsNone());
+		assert(pos.MoveIsLegal(m_pv_[ply]));
+		pos.DoMove(m_pv_[ply++], *st++);
+	} while (!m_pv_[ply].IsNone());
 
 	while (ply) {
-		pos.UndoMove(pv_[--ply]);
+		pos.UndoMove(m_pv_[--ply]);
 	}
 }
 
-void initSearchTable() {
+void InitSearchTable() {
 	// todo: パラメータは改善の余地あり。
 	int d;  // depth (ONE_PLY == 2)
 	int hd; // half depth (ONE_PLY == 1)
@@ -1536,11 +1536,11 @@ bool nyugyoku(const Position& pos) {
 	return true;
 }
 
-void Searcher::think() {
+void Searcher::Think() {
 	static Book book;
-	Position& pos = rootPosition;
-	timeManager.Init(limits, pos.GetGamePly(), pos.GetTurn(), this);
-	std::uniform_int_distribution<int> dist(options["Min_Book_Ply"], options["Max_Book_Ply"]);
+	Position& pos = m_rootPosition;
+	m_timeManager.Init(m_limits, pos.GetGamePly(), pos.GetTurn(), this);
+	std::uniform_int_distribution<int> dist(m_options["Min_Book_Ply"], m_options["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
 	bool nyugyokuWin = false;
@@ -1554,25 +1554,25 @@ void Searcher::think() {
 	pos.SetNodesSearched(0);
 
 #if defined LEARN
-	threads[0]->searching = true;
+	m_threads[0]->m_searching = true;
 #else
-	tt.SetSize(options["USI_Hash"]); // operator int() 呼び出し。
+	m_tt.SetSize(m_options["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
-	if (options["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScore bookMoveScore = book.GetProbe(pos, options["Book_File"], options["Best_Book_Move"]);
+	if (m_options["OwnBook"] && pos.GetGamePly() <= book_ply) {
+		const MoveScore bookMoveScore = book.GetProbe(pos, m_options["Book_File"], m_options["Best_Book_Move"]);
 		if (
 			!bookMoveScore.move.IsNone()
 			&&
 			std::find(
-				rootMoves.begin(),
-				rootMoves.end(),
+				m_rootMoves.begin(),
+				m_rootMoves.end(),
 				bookMoveScore.move
-			) != rootMoves.end()
+			) != m_rootMoves.end()
 		)
 		{
-			std::swap(rootMoves[0], *std::find(rootMoves.begin(),
-											   rootMoves.end(),
+			std::swap(m_rootMoves[0], *std::find(m_rootMoves.begin(),
+											   m_rootMoves.end(),
 											   bookMoveScore.move));
 			SYNCCOUT << "info"
 					 << " score " << scoreToUSI(bookMoveScore.score)
@@ -1583,13 +1583,13 @@ void Searcher::think() {
 		}
 	}
 
-	Searcher::threads.wakeUp(this);
+	Searcher::m_threads.WakeUp(this);
 
-	Searcher::threads.timerThread()->msec =
-		(limits.useTimeManagement() ? std::min(100, std::max(timeManager.AvailableTime() / 16, TimerResolution)) :
-		 limits.nodes               ? 2 * TimerResolution :
+	Searcher::m_threads.GetTimerThread()->m_msec =
+		(m_limits.IsUseTimeManagement() ? std::min(100, std::max(m_timeManager.AvailableTime() / 16, TimerResolution)) :
+		 m_limits.m_nodes               ? 2 * TimerResolution :
 		 100);
-	Searcher::threads.timerThread()->notifyOne();
+	Searcher::m_threads.GetTimerThread()->NotifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(GetPos);
@@ -1598,56 +1598,56 @@ void Searcher::think() {
 	detectBishopInDanger(GetPos);
 #endif
 #endif
-	idLoop(pos);
+	IdLoop(pos);
 
 #if defined LEARN
 #else
-	threads.timerThread()->msec = 0; // timer を止める。
-	threads.sleep();
+	m_threads.GetTimerThread()->m_msec = 0; // timer を止める。
+	m_threads.Sleep();
 
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
-			 << " time " << searchTimer.Elapsed() << SYNCENDL;
+			 << " time " << m_searchTimer.Elapsed() << SYNCENDL;
 
-	if (!signals.stop && (limits.ponder || limits.infinite)) {
-		signals.stopOnPonderHit = true;
-		pos.GetThisThread()->waitFor(signals.stop);
+	if (!m_signals.m_stop && (m_limits.m_ponder || m_limits.m_infinite)) {
+		m_signals.m_stopOnPonderHit = true;
+		pos.GetThisThread()->WaitFor(m_signals.m_stop);
 	}
 
 	if (nyugyokuWin) {
 		SYNCCOUT << "bestmove win" << SYNCENDL;
 	}
-	else if (rootMoves[0].pv_[0].IsNone()) {
+	else if (m_rootMoves[0].m_pv_[0].IsNone()) {
 		SYNCCOUT << "bestmove resign" << SYNCENDL;
 	}
 	else {
-		SYNCCOUT << "bestmove " << rootMoves[0].pv_[0].ToUSI()
-				 << " ponder " << rootMoves[0].pv_[1].ToUSI()
+		SYNCCOUT << "bestmove " << m_rootMoves[0].m_pv_[0].ToUSI()
+				 << " ponder " << m_rootMoves[0].m_pv_[1].ToUSI()
 				 << SYNCENDL;
 	}
 #endif
 }
 
-void Searcher::checkTime() {
-	if (limits.ponder)
+void Searcher::CheckTime() {
+	if (m_limits.m_ponder)
 		return;
 
 	s64 nodes = 0;
-	if (limits.nodes) {
-		std::unique_lock<Mutex> lock(threads.mutex_);
+	if (m_limits.m_nodes) {
+		std::unique_lock<Mutex> lock(m_threads.m_mutex_);
 
-		nodes = rootPosition.GetNodesSearched();
-		for (size_t i = 0; i < threads.size(); ++i) {
-			for (int j = 0; j < threads[i]->splitPointsSize; ++j) {
-				SplitPoint& splitPoint = threads[i]->splitPoints[j];
-				std::unique_lock<Mutex> spLock(splitPoint.mutex);
-				nodes += splitPoint.nodes;
-				u64 sm = splitPoint.slavesMask;
+		nodes = m_rootPosition.GetNodesSearched();
+		for (size_t i = 0; i < m_threads.size(); ++i) {
+			for (int j = 0; j < m_threads[i]->m_splitPointsSize; ++j) {
+				SplitPoint& splitPoint = m_threads[i]->m_SplitPoints[j];
+				std::unique_lock<Mutex> spLock(splitPoint.m_mutex);
+				nodes += splitPoint.m_nodes;
+				u64 sm = splitPoint.m_slavesMask;
 				while (sm) {
 					const int index = firstOneFromLSB(sm);
 					sm &= sm - 1;
-					Position* pos = threads[index]->activePosition;
+					Position* pos = m_threads[index]->m_activePosition;
 					if (pos != nullptr) {
 						nodes += pos->GetNodesSearched();
 					}
@@ -1656,94 +1656,94 @@ void Searcher::checkTime() {
 		}
 	}
 
-	const int e = searchTimer.Elapsed();
+	const int e = m_searchTimer.Elapsed();
 	const bool stillAtFirstMove =
-		signals.firstRootMove
-		&& !signals.failedLowAtRoot
-		&& timeManager.AvailableTime() < e;
+		m_signals.m_firstRootMove
+		&& !m_signals.m_failedLowAtRoot
+		&& m_timeManager.AvailableTime() < e;
 
 	const bool noMoreTime =
-		timeManager.MaximumTime() - 2 * TimerResolution < e
+		m_timeManager.MaximumTime() - 2 * TimerResolution < e
 		|| stillAtFirstMove;
 
-	if ((limits.useTimeManagement() && noMoreTime)
-		|| (limits.moveTime != 0 && limits.moveTime < e)
-		|| (limits.nodes != 0 && limits.nodes < nodes))
+	if ((m_limits.IsUseTimeManagement() && noMoreTime)
+		|| (m_limits.m_moveTime != 0 && m_limits.m_moveTime < e)
+		|| (m_limits.m_nodes != 0 && m_limits.m_nodes < nodes))
 	{
-		signals.stop = true;
+		m_signals.m_stop = true;
 	}
 }
 
-void Thread::idleLoop() {
-	SplitPoint* thisSp = splitPointsSize ? activeSplitPoint : nullptr;
-	assert(!thisSp || (thisSp->masterThread == this && searching));
+void Thread::IdleLoop() {
+	SplitPoint* thisSp = m_splitPointsSize ? m_activeSplitPoint : nullptr;
+	assert(!thisSp || (thisSp->m_masterThread == this && m_searching));
 
 	while (true) {
-		while ((!searching && searcher->threads.sleepWhileIdle_) || exit)
+		while ((!m_searching && m_pSearcher->m_threads.m_isSleepWhileIdle_) || m_exit)
 		{
-			if (exit) {
+			if (m_exit) {
 				assert(thisSp == nullptr);
 				return;
 			}
 
-			std::unique_lock<Mutex> lock(sleepLock);
-			if (thisSp != nullptr && !thisSp->slavesMask) {
+			std::unique_lock<Mutex> lock(m_sleepLock);
+			if (thisSp != nullptr && !thisSp->m_slavesMask) {
 				break;
 			}
 
-			if (!searching && !exit) {
-				sleepCond.wait(lock);
+			if (!m_searching && !m_exit) {
+				m_sleepCond.wait(lock);
 			}
 		}
 
-		if (searching) {
-			assert(!exit);
+		if (m_searching) {
+			assert(!m_exit);
 
-			searcher->threads.mutex_.lock();
-			assert(searching);
-			SplitPoint* sp = activeSplitPoint;
-			searcher->threads.mutex_.unlock();
+			m_pSearcher->m_threads.m_mutex_.lock();
+			assert(m_searching);
+			SplitPoint* sp = m_activeSplitPoint;
+			m_pSearcher->m_threads.m_mutex_.unlock();
 
 			SearchStack ss[MaxPlyPlus2];
-			Position pos(*sp->pos, this);
+			Position pos(*sp->m_pos, this);
 
-			memcpy(ss, sp->ss - 1, 4 * sizeof(SearchStack));
-			(ss+1)->splitPoint = sp;
+			memcpy(ss, sp->m_ss - 1, 4 * sizeof(SearchStack));
+			(ss+1)->m_splitPoint = sp;
 
-			sp->mutex.lock();
+			sp->m_mutex.lock();
 
-			assert(activePosition == nullptr);
+			assert(m_activePosition == nullptr);
 
-			activePosition = &pos;
+			m_activePosition = &pos;
 
-			switch (sp->nodeType) {
-			case Root : searcher->search<SplitPointRoot >(pos, ss + 1, sp->alpha, sp->beta, sp->depth, sp->cutNode); break;
-			case PV   : searcher->search<SplitPointPV   >(pos, ss + 1, sp->alpha, sp->beta, sp->depth, sp->cutNode); break;
-			case NonPV: searcher->search<SplitPointNonPV>(pos, ss + 1, sp->alpha, sp->beta, sp->depth, sp->cutNode); break;
+			switch (sp->m_nodeType) {
+			case Root : m_pSearcher->Search<SplitPointRoot >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
+			case PV   : m_pSearcher->Search<SplitPointPV   >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
+			case NonPV: m_pSearcher->Search<SplitPointNonPV>(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
 			default   : UNREACHABLE;
 			}
 
-			assert(searching);
-			searching = false;
-			activePosition = nullptr;
-			assert(sp->slavesMask & (UINT64_C(1) << idx));
-			sp->slavesMask ^= (UINT64_C(1) << idx);
-			sp->nodes += pos.GetNodesSearched();
+			assert(m_searching);
+			m_searching = false;
+			m_activePosition = nullptr;
+			assert(sp->m_slavesMask & (UINT64_C(1) << m_idx));
+			sp->m_slavesMask ^= (UINT64_C(1) << m_idx);
+			sp->m_nodes += pos.GetNodesSearched();
 
-			if (searcher->threads.sleepWhileIdle_
-				&& this != sp->masterThread
-				&& !sp->slavesMask)
+			if (m_pSearcher->m_threads.m_isSleepWhileIdle_
+				&& this != sp->m_masterThread
+				&& !sp->m_slavesMask)
 			{
-				assert(!sp->masterThread->searching);
-				sp->masterThread->notifyOne();
+				assert(!sp->m_masterThread->m_searching);
+				sp->m_masterThread->NotifyOne();
 			}
-			sp->mutex.unlock();
+			sp->m_mutex.unlock();
 		}
 
-		if (thisSp != nullptr && !thisSp->slavesMask) {
-			thisSp->mutex.lock();
-			const bool finished = !thisSp->slavesMask;
-			thisSp->mutex.unlock();
+		if (thisSp != nullptr && !thisSp->m_slavesMask) {
+			thisSp->m_mutex.lock();
+			const bool finished = !thisSp->m_slavesMask;
+			thisSp->m_mutex.unlock();
 			if (finished) {
 				return;
 			}
@@ -1753,7 +1753,7 @@ void Thread::idleLoop() {
 
 
 
-void Searcher::setOption(std::istringstream& ssCmd) {
+void Searcher::SetOption(std::istringstream& ssCmd) {
 	std::string token;
 	std::string name;
 	std::string value;
@@ -1772,10 +1772,10 @@ void Searcher::setOption(std::istringstream& ssCmd) {
 		value += " " + token;
 	}
 
-	if (!options.isLegalOption(name)) {
+	if (!m_options.IsLegalOption(name)) {
 		std::cout << "No such option: " << name << std::endl;
 	}
 	else {
-		options[name] = value;
+		m_options[name] = value;
 	}
 }

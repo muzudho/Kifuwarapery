@@ -5,7 +5,7 @@
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。
-void benchmark(Position& pos) {
+void Benchmark(Position& pos) {
 	std::string token;
 	LimitsType limits;
 
@@ -15,7 +15,7 @@ void benchmark(Position& pos) {
 							 "name Max_Random_Score_Diff value 0"};
 	for (auto& str : options) {
 		std::istringstream is(str);
-		pos.GetSearcher()->setOption(is);
+		pos.GetSearcher()->SetOption(is);
 	}
 
 	std::ifstream ifs("benchmark.sfen");
@@ -25,10 +25,10 @@ void benchmark(Position& pos) {
 		std::cout << sfen << std::endl;
 		std::istringstream ss_sfen(sfen);
 
-		usiOperation.setPosition(pos, ss_sfen);
+		usiOperation.SetPosition(pos, ss_sfen);
 
 		std::istringstream ss_go("byoyomi 10000");
-		usiOperation.go(pos, ss_go);
-		pos.GetSearcher()->threads.waitForThinkFinished();
+		usiOperation.Go(pos, ss_go);
+		pos.GetSearcher()->m_threads.WaitForThinkFinished();
 	}
 }

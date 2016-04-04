@@ -29,25 +29,25 @@ class TranspositionTable;
 // 検索のための構造体？
 class Searcher {
 public:
-	volatile SignalsType	signals;
-	LimitsType				limits;
-	std::vector<Move>		searchMoves;
-	Time					searchTimer;
-	StateStackPtr			setUpStates;
-	std::vector<RootMove>	rootMoves;
+	volatile SignalsType	m_signals;
+	LimitsType				m_limits;
+	std::vector<Move>		m_searchMoves;
+	Time					m_searchTimer;
+	StateStackPtr			m_setUpStates;
+	std::vector<RootMove>	m_rootMoves;
 
 #if defined LEARN
-	Score					alpha;
-	Score					beta;
+	Score					m_alpha;
+	Score					m_beta;
 #endif
 
-	size_t					pvSize;
-	size_t					pvIdx;
-	TimeManager				timeManager;
-	Ply						bestMoveChanges;
-	History					history;
-	Gains					gains;
-	TranspositionTable		tt;
+	size_t					m_pvSize;
+	size_t					m_pvIdx;
+	TimeManager				m_timeManager;
+	Ply						m_bestMoveChanges;
+	History					m_history;
+	Gains					m_gains;
+	TranspositionTable		m_tt;
 
 #if defined INANIWA_SHIFT
 	InaniwaFlag				inaniwaFlag;
@@ -55,15 +55,16 @@ public:
 #if defined BISHOP_IN_DANGER
 	BishopInDangerFlag		bishopInDangerFlag;
 #endif
-	Position				rootPosition;
-	ThreadPool				threads;
-	EngineOptionsMap		options;
+	Position				m_rootPosition;
+	ThreadPool				m_threads;
+	EngineOptionsMap		m_options;
 
-	void					init();
-	void					idLoop(Position& pos);
-	std::string				pvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
+	void					Init();
+	void					IdLoop(Position& pos);
+	std::string				PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
+
 	template <NodeType NT, bool INCHECK>
-	Score					qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
+	Score					Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
 #if defined INANIWA_SHIFT
 	void					detectInaniwa(const Position& GetPos);
 #endif
@@ -71,12 +72,12 @@ public:
 	void						detectBishopInDanger(const Position& GetPos);
 #endif
 	template <NodeType NT>
-	Score					search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
-	void					think();
-	void					checkTime();
+	Score					Search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
+	void					Think();
+	void					CheckTime();
 
-	void					setOption(std::istringstream& ssCmd);
+	void					SetOption(std::istringstream& ssCmd);
 };
 
-void initSearchTable();
+void InitSearchTable();
 

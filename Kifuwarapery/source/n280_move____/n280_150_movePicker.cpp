@@ -24,14 +24,14 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
 	else {
 		m_phase_ = MainSearch;
 
-		m_killerMoves_[0].move = searchStack->killers[0];
-		m_killerMoves_[1].move = searchStack->killers[1];
+		m_killerMoves_[0].move = searchStack->m_killers[0];
+		m_killerMoves_[1].move = searchStack->m_killers[1];
 
-		if (m_ss_ != nullptr && m_ss_->staticEval < beta - g_CapturePawnScore && depth < 3 * OnePly) {
+		if (m_ss_ != nullptr && m_ss_->m_staticEval < beta - g_CapturePawnScore && depth < 3 * OnePly) {
 			m_captureThreshold_ = -g_CapturePawnScore;
 		}
-		else if (m_ss_ != nullptr && beta < m_ss_->staticEval) {
-			m_captureThreshold_ = beta - m_ss_->staticEval;
+		else if (m_ss_ != nullptr && beta < m_ss_->m_staticEval) {
+			m_captureThreshold_ = beta - m_ss_->m_staticEval;
 		}
 	}
 
@@ -163,7 +163,7 @@ template <> Move MovePicker::GetNextMove<false>() {
 }
 
 template <> Move MovePicker::GetNextMove<true>() {
-	return m_ss_->splitPoint->movePicker->GetNextMove<false>();
+	return m_ss_->m_splitPoint->m_pMovePicker->GetNextMove<false>();
 }
 
 const Score LVATable[PieceTypeNum] = {
@@ -183,7 +183,7 @@ template <bool IsDrop> void MovePicker::ScoreNonCapturesMinusPro() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->move;
 		curr->score =
-			GetHistory().value(IsDrop,
+			GetHistory().GetValue(IsDrop,
 				UtilPiece::FromColorAndPieceType(GetPos().GetTurn(),
 													 (IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
 							move.To());
@@ -195,17 +195,17 @@ void MovePicker::ScoreEvasions() {
 		const Move move = curr->move;
 		const Score seeScore = GetPos().GetSeeSign(move);
 		if (seeScore < 0) {
-			curr->score = seeScore - History::MaxScore;
+			curr->score = seeScore - History::m_MaxScore;
 		}
 		else if (move.IsCaptureOrPromotion()) {
-			curr->score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::MaxScore;
+			curr->score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			if (move.IsPromotion()) {
 				const PieceType pt = UtilPiece::ToPieceType(GetPos().GetPiece(move.From()));
 				curr->score += GetPos().GetPromotePieceScore(pt);
 			}
 		}
 		else {
-			curr->score = GetHistory().value(move.IsDrop(), UtilPiece::FromColorAndPieceType(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
+			curr->score = GetHistory().GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 		}
 	}
 }

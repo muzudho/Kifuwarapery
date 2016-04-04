@@ -168,7 +168,7 @@ struct BookMoveData {
 class Learner {
 public:
 	void learn(Position& GetPos, std::istringstream& ssCmd) {
-		eval_.initOptions(GetPos.GetSearcher()->options["Eval_Dir"], false);
+		eval_.initOptions(GetPos.GetSearcher()->m_options["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -219,7 +219,7 @@ public:
 		for (auto& s : searchers) {
 			s.initOptions();
 			setLearnOptions(s);
-			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.threads.mainThread(), s.thisptr));
+			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.m_threads.GetMainThread(), s.thisptr));
 			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().m_count()));
 			// ここでデフォルトコンストラクタでpush_backすると、
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
@@ -245,24 +245,24 @@ private:
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
 		BookMoveData bmdBase[ColorNum];
 		bmdBase[Black].GetMove = bmdBase[White].GetMove = Move::GetMoveNone();
-		std::stringstream ss(s0);
+		std::stringstream m_ss(s0);
 		std::string elem;
-		ss >> elem; // 対局番号
-		ss >> elem; // 対局日
+		m_ss >> elem; // 対局番号
+		m_ss >> elem; // 対局日
 		bmdBase[Black].date = bmdBase[White].date = elem;
-		ss >> elem; // 先手名
+		m_ss >> elem; // 先手名
 		bmdBase[Black].player = elem;
-		ss >> elem; // 後手名
+		m_ss >> elem; // 後手名
 		bmdBase[White].player = elem;
-		ss >> elem; // 引き分け勝ち負け
+		m_ss >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
-		StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
+		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
+		StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
 			const std::string moveStrCSA = s1.substr(0, 6);
-			const Move GetMove = usiOperation::csaToMove(GetPos, moveStrCSA);
+			const Move GetMove = usiOperation::CsaToMove(GetPos, moveStrCSA);
 			// 指し手の文字列のサイズが足りなかったり、反則手だったりすれば move.isNone() == true となるので、break する。
 			if (GetMove.IsNone())
 				break;
@@ -279,8 +279,8 @@ private:
 			bookMovesDatum_.back().push_back(bmd);
 			s1.erase(0, 6);
 
-			setUpStates->push(StateInfo());
-			GetPos.DoMove(GetMove, setUpStates->top());
+			m_setUpStates->push(StateInfo());
+			GetPos.DoMove(GetMove, m_setUpStates->top());
 		}
 	}
 	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& GetPos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
@@ -290,7 +290,7 @@ private:
 		std::ifstream ifs(record.c_str(), std::ios::binary);
 		if (!ifs) {
 			std::cout << "I cannot read " << record << std::endl;
-			exit(EXIT_FAILURE);
+			m_exit(EXIT_FAILURE);
 		}
 		std::string s0;
 		std::string s1;
@@ -316,17 +316,17 @@ private:
 		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.m_size());
 	}
 	void setLearnOptions(Searcher& s) {
-		std::string options[] = {"name Threads value 1",
+		std::string m_options[] = {"name Threads value 1",
 								 "name MultiPV value 1",
 								 "name OwnBook value false",
 								 "name Max_Random_Score_Diff value 0"};
-		for (auto& str : options) {
+		for (auto& str : m_options) {
 			std::istringstream is(str);
-			s.setOption(is);
+			s.SetOption(is);
 		}
 	}
 	template <bool Dump> size_t lockingIndexIncrement() {
-		std::unique_lock<Mutex> lock(mutex_);
+		std::unique_lock<Mutex> lock(m_mutex_);
 		if (Dump) {
 			if      (index_ % 500 == 0) std::cout << index_ << std::endl;
 			else if (index_ % 100 == 0) std::cout << "o" << std::flush;
@@ -336,33 +336,33 @@ private:
 	}
 	void learnParse1Body(Position& GetPos, std::mt19937& mt) {
 		std::uniform_int_distribution<Ply> dist(minDepth_, maxDepth_);
-		GetPos.GetSearcher()->tt.Clear();
+		GetPos.GetSearcher()->m_tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
-			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
+			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
-					GetPos.GetSearcher()->alpha = -ScoreMaxEvaluate;
-					GetPos.GetSearcher()->beta  =  ScoreMaxEvaluate;
-					go(GetPos, dist(mt), bmd.GetMove);
-					const Score recordScore = GetPos.GetSearcher()->rootMoves[0].score_;
+					GetPos.GetSearcher()->m_alpha = -ScoreMaxEvaluate;
+					GetPos.GetSearcher()->m_beta  =  ScoreMaxEvaluate;
+					Go(GetPos, dist(mt), bmd.GetMove);
+					const Score recordScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
 					bmd.pvBuffer.Clear();
 					if (abs(recordScore) < ScoreMaxEvaluate) {
 						int recordIsNth = 0; // 正解の手が何番目に良い手か。0から数える。
-						auto& recordPv = GetPos.GetSearcher()->rootMoves[0].pv_;
+						auto& recordPv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
 						bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(recordPv), std::IsEnd(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
 						for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 							if (ml.GetMove() != bmd.GetMove) {
-								GetPos.GetSearcher()->alpha = recordScore - FVWindow;
-								GetPos.GetSearcher()->beta  = recordScore + FVWindow;
-								go(GetPos, dist(mt), ml.GetMove());
-								const Score GetScore = GetPos.GetSearcher()->rootMoves[0].score_;
-								if (GetPos.GetSearcher()->alpha < GetScore && GetScore < GetPos.GetSearcher()->beta) {
-									auto& pv = GetPos.GetSearcher()->rootMoves[0].pv_;
+								GetPos.GetSearcher()->m_alpha = recordScore - FVWindow;
+								GetPos.GetSearcher()->m_beta  = recordScore + FVWindow;
+								Go(GetPos, dist(mt), ml.GetMove());
+								const Score GetScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
+								if (GetPos.GetSearcher()->m_alpha < GetScore && GetScore < GetPos.GetSearcher()->m_beta) {
+									auto& pv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
 									bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(pv), std::IsEnd(pv));
 								}
 								if (recordScore < GetScore)
@@ -374,8 +374,8 @@ private:
 							++predictions_[i];
 					}
 				}
-				setUpStates->push(StateInfo());
-				GetPos.DoMove(bmd.GetMove, setUpStates->top());
+				m_setUpStates->push(StateInfo());
+				GetPos.DoMove(bmd.GetMove, m_setUpStates->top());
 			}
 		}
 	}
@@ -388,11 +388,11 @@ private:
 		moveCount_.Store(0);
 		for (auto& pred : predictions_)
 			pred.Store(0);
-		std::vector<std::thread> threads(positions_.m_size());
+		std::vector<std::thread> m_threads(positions_.m_size());
 		for (size_t i = 0; i < positions_.m_size(); ++i)
-			threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
+			m_threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
 		learnParse1Body(GetPos, mt_);
-		for (auto& thread : threads)
+		for (auto& thread : m_threads)
 			thread.join();
 
 		std::cout << "\nGames = " << bookMovesDatum_.m_size()
@@ -461,10 +461,10 @@ private:
 	}
 	void learnParse2Body(Position& GetPos, Parse2Data& parse2Data) {
 		parse2Data.Clear();
-		SearchStack ss[2];
+		SearchStack m_ss[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
-			StateStackPtr setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->threads.mainThread());
+			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				PRINT_PV(GetPos.Print());
@@ -474,12 +474,12 @@ private:
 					PRINT_PV(std::cout << "recordpv: ");
 					for (; !bmd.pvBuffer[recordPVIndex].IsNone(); ++recordPVIndex) {
 						PRINT_PV(std::cout << bmd.pvBuffer[recordPVIndex].ToCSA());
-						setUpStates->push(StateInfo());
-						GetPos.DoMove(bmd.pvBuffer[recordPVIndex], setUpStates->top());
+						m_setUpStates->push(StateInfo());
+						GetPos.DoMove(bmd.pvBuffer[recordPVIndex], m_setUpStates->top());
 					}
 					// evaluate() の差分計算を無効化する。
-					ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, ss+1) : -evaluate(GetPos, ss+1));
+					m_ss[0].m_staticEvalRaw.GetP[0][0] = m_ss[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
+					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_ss+1) : -evaluate(GetPos, m_ss+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
 						GetPos.UndoMove(bmd.pvBuffer[jj]);
@@ -490,11 +490,11 @@ private:
 						PRINT_PV(std::cout << "otherpv : ");
 						for (; !bmd.pvBuffer[otherPVIndex].IsNone(); ++otherPVIndex) {
 							PRINT_PV(std::cout << bmd.pvBuffer[otherPVIndex].ToCSA());
-							setUpStates->push(StateInfo());
-							GetPos.DoMove(bmd.pvBuffer[otherPVIndex], setUpStates->top());
+							m_setUpStates->push(StateInfo());
+							GetPos.DoMove(bmd.pvBuffer[otherPVIndex], m_setUpStates->top());
 						}
-						ss[0].staticEvalRaw.GetP[0][0] = ss[1].staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, ss+1) : -evaluate(GetPos, ss+1));
+						m_ss[0].m_staticEvalRaw.GetP[0][0] = m_ss[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
+						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_ss+1) : -evaluate(GetPos, m_ss+1));
 						const auto diff = GetScore - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};
@@ -509,8 +509,8 @@ private:
 					}
 
 					for (int jj = 0; jj < recordPVIndex; ++jj) {
-						setUpStates->push(StateInfo());
-						GetPos.DoMove(bmd.pvBuffer[jj], setUpStates->top());
+						m_setUpStates->push(StateInfo());
+						GetPos.DoMove(bmd.pvBuffer[jj], m_setUpStates->top());
 					}
 					sum_dT[1] = (GetPos.GetTurn() == rootColor ? sum_dT[1] : -sum_dT[1]);
 					parse2Data.params.incParam(GetPos, sum_dT);
@@ -518,8 +518,8 @@ private:
 						GetPos.UndoMove(bmd.pvBuffer[jj]);
 					}
 				}
-				setUpStates->push(StateInfo());
-				GetPos.DoMove(bmd.GetMove, setUpStates->top());
+				m_setUpStates->push(StateInfo());
+				GetPos.DoMove(bmd.GetMove, m_setUpStates->top());
 			}
 		}
 	}
@@ -529,11 +529,11 @@ private:
 			t.Restart();
 			std::cout << "step " << step << "/" << stepNum_ << " " << std::flush;
 			index_ = 0;
-			std::vector<std::thread> threads(positions_.m_size());
+			std::vector<std::thread> m_threads(positions_.m_size());
 			for (size_t i = 0; i < positions_.m_size(); ++i)
-				threads[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
+				m_threads[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
 			learnParse2Body(GetPos, parse2Data_);
-			for (auto& thread : threads)
+			for (auto& thread : m_threads)
 				thread.join();
 
 			for (auto& parse2 : parse2Datum_) {
@@ -543,8 +543,8 @@ private:
 			lowerDimension(parse2EvalBase_, parse2Data_.params);
 			setUpdateMask(step);
 			std::cout << "update eval ... " << std::flush;
-			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->options["Eval_Dir"]);
-			else             updateEval<false>(GetPos.GetSearcher()->options["Eval_Dir"]);
+			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->m_options["Eval_Dir"]);
+			else             updateEval<false>(GetPos.GetSearcher()->m_options["Eval_Dir"]);
 			std::cout << "done" << std::endl;
 			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 			Print();
@@ -565,7 +565,7 @@ private:
 	static const int PredSize = 8;
 	static const Score FVWindow = static_cast<Score>(256);
 
-	Mutex mutex_;
+	Mutex m_mutex_;
 	size_t index_;
 	Ply minDepth_;
 	Ply maxDepth_;

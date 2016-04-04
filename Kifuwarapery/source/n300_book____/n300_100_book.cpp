@@ -102,7 +102,7 @@ MoveScore Book::GetProbe(const Position& pos, const std::string& fName, const bo
 	u32 sum = 0;
 	Move move = Move::GetMoveNone();
 	const Key key = GetBookKey(pos);
-	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->options["Min_Book_Score"]));
+	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->m_options["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
@@ -193,12 +193,12 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->threads.mainThread());
+		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->m_threads.GetMainThread());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {
 			const std::string moveStrCSA = line.substr(0, 6);
-			const Move move = usiOperation.csaToMove(pos, moveStrCSA);
+			const Move move = usiOperation.CsaToMove(pos, moveStrCSA);
 			if (move.IsNone()) {
 				pos.Print();
 				std::cout << "!!! Illegal move = " << moveStrCSA << " !!!" << std::endl;
@@ -231,14 +231,14 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 
 					std::istringstream ssCmd("byoyomi 1000");
 					UsiOperation usiOperation;
-					usiOperation.go(pos, ssCmd);
-					pos.GetSearcher()->threads.waitForThinkFinished();
+					usiOperation.Go(pos, ssCmd);
+					pos.GetSearcher()->m_threads.WaitForThinkFinished();
 
 					pos.UndoMove(move);
 					SetUpStates->pop();
 
 					// doMove してから search してるので点数が反転しているので直す。
-					const Score score = -pos.GetCsearcher()->rootMoves[0].score_;
+					const Score score = -pos.GetCsearcher()->m_rootMoves[0].m_score_;
 #else
 					const Score GetScore = ScoreZero;
 #endif

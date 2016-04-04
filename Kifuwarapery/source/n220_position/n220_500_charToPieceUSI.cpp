@@ -253,7 +253,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		handKey -= GetZobHand(hpTo, us);
 		boardKey += GetZobrist(ptTo, to, us);
 
-		prefetch(GetCsearcher()->tt.FirstEntry(boardKey + handKey));
+		prefetch(GetCsearcher()->m_tt.FirstEntry(boardKey + handKey));
 
 		const int handnum = GetHand(us).NumOf(hpTo);
 		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpTo] + handnum];
@@ -327,7 +327,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 			m_st_->m_material += (us == Black ? GetCapturePieceScore(ptCaptured) : -GetCapturePieceScore(ptCaptured));
 		}
-		prefetch(GetCsearcher()->tt.FirstEntry(boardKey + handKey));
+		prefetch(GetCsearcher()->m_tt.FirstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
 		// Black と White の or を取る方が速いはず。
 		m_byTypeBB_[Occupied] = this->GetBbOf(Black) | GetBbOf(White);

@@ -69,7 +69,7 @@ UsiLoop::UsiLoop()
 
 void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 {
-	Position pos(g_DefaultStartPositionSFEN, searcher.threads.mainThread(), &searcher);
+	Position pos(g_DefaultStartPositionSFEN, searcher.m_threads.GetMainThread(), &searcher);
 
 	std::string cmd;
 	std::string token;
@@ -107,21 +107,21 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 			token == "gameover"
 		) {
 			if (token != "ponderhit" ||
-				searcher.signals.stopOnPonderHit
+				searcher.m_signals.m_stopOnPonderHit
 			) {
-				searcher.signals.stop = true;
-				searcher.threads.mainThread()->notifyOne();
+				searcher.m_signals.m_stop = true;
+				searcher.m_threads.GetMainThread()->NotifyOne();
 			}
 			else {
-				searcher.limits.ponder = false;
+				searcher.m_limits.m_ponder = false;
 			}
 
-			if (token == "ponderhit" && searcher.limits.moveTime != 0) {
-				searcher.limits.moveTime += searcher.searchTimer.Elapsed();
+			if (token == "ponderhit" && searcher.m_limits.m_moveTime != 0) {
+				searcher.m_limits.m_moveTime += searcher.m_searchTimer.Elapsed();
 			}
 		}
 		else if (token == "usinewgame") {
-			searcher.tt.Clear();
+			searcher.m_tt.Clear();
 #if defined INANIWA_SHIFT
 			inaniwaFlag = NotInaniwa;
 #endif
@@ -136,20 +136,20 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else if (token == "usi") {
 			SYNCCOUT << "id name " << MyName
 				<< "\nid author Hiraoka Takuya"
-				<< "\n" << searcher.options
+				<< "\n" << searcher.m_options
 				<< "\nusiok" << SYNCENDL;
 		}
 		else if (token == "go") {
-			usiOperation.go(pos, ssCmd);
+			usiOperation.Go(pos, ssCmd);
 		}
 		else if (token == "isready") {
 			SYNCCOUT << "readyok" << SYNCENDL;
 		}
 		else if (token == "position") {
-			usiOperation.setPosition(pos, ssCmd);
+			usiOperation.SetPosition(pos, ssCmd);
 		}
 		else if (token == "setoption") {
-			searcher.setOption(ssCmd);
+			searcher.SetOption(ssCmd);
 		}
 #if defined LEARN
 		else if (token == "l") {
@@ -163,7 +163,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 #endif
 #if !defined MINIMUL
 		// 以下、デバッグ用
-		else if (token == "bench") { benchmark(pos); }
+		else if (token == "bench") { Benchmark(pos); }
 		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
 		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().ToCSA() << std::endl; }
@@ -175,13 +175,13 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 	//────────────────────────────────────────────────────────────────────────────────
 
 	// 評価値ファイルを書き出す指定なら
-	if (searcher.options["Write_Synthesized_Eval"])
+	if (searcher.m_options["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
-		EvalStorage::writeSynthesized(searcher.options["Eval_Dir"]);
+		EvalStorage::writeSynthesized(searcher.m_options["Eval_Dir"]);
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────
 
-	searcher.threads.waitForThinkFinished();
+	searcher.m_threads.WaitForThinkFinished();
 }

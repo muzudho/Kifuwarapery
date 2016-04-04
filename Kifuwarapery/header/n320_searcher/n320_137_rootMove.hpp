@@ -7,28 +7,32 @@
 
 class RootMove {
 public:
+
 	RootMove() {}
-	explicit RootMove(const Move m) : score_(-ScoreInfinite), prevScore_(-ScoreInfinite) {
-		pv_.push_back(m);
-		pv_.push_back(Move::GetMoveNone());
+
+	explicit RootMove(const Move m) : m_score_(-ScoreInfinite), m_prevScore_(-ScoreInfinite) {
+		m_pv_.push_back(m);
+		m_pv_.push_back(Move::GetMoveNone());
 	}
-	explicit RootMove(const MoveScore m) : score_(m.score), prevScore_(-ScoreInfinite) {
-		pv_.push_back(m.move);
-		pv_.push_back(Move::GetMoveNone());
+
+	explicit RootMove(const MoveScore m) : m_score_(m.score), m_prevScore_(-ScoreInfinite) {
+		m_pv_.push_back(m.move);
+		m_pv_.push_back(Move::GetMoveNone());
 	}
 
 	bool operator < (const RootMove& m) const {
-		return score_ < m.score_;
+		return m_score_ < m.m_score_;
 	}
 	bool operator == (const Move& m) const {
-		return pv_[0] == m;
+		return m_pv_[0] == m;
 	}
 
-	void extractPvFromTT(Position& pos);
-	void insertPvInTT(Position& pos);
+	void ExtractPvFromTT(Position& pos);
+
+	void InsertPvInTT(Position& pos);
 
 public:
-	Score score_;
-	Score prevScore_;
-	std::vector<Move> pv_;
+	Score m_score_;
+	Score m_prevScore_;
+	std::vector<Move> m_pv_;
 };

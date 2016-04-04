@@ -160,14 +160,14 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 #if defined INANIWA_SHIFT
 	if (GetPos.GetCsearcher()->inaniwaFlag != NotInaniwa) return false;
 #endif
-	if ((ss - 1)->staticEvalRaw.p[0][0] == ScoreNotEvaluated)
+	if ((ss - 1)->m_staticEvalRaw.p[0][0] == ScoreNotEvaluated)
 		return false;
 
-	const Move lastMove = (ss - 1)->currentMove;
+	const Move lastMove = (ss - 1)->m_currentMove;
 	assert(lastMove != Move::GetMoveNull());
 
 	if (lastMove.GetPieceTypeFrom() == King) {
-		EvalSum diff = (ss - 1)->staticEvalRaw; // 本当は diff ではないので名前が良くない。
+		EvalSum diff = (ss - 1)->m_staticEvalRaw; // 本当は diff ではないので名前が良くない。
 		const Square sq_bk = pos.GetKingSquare(Black);
 		const Square sq_wk = pos.GetKingSquare(White);
 		diff.p[2] = EvalStorage::KK[sq_bk][sq_wk];
@@ -219,7 +219,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 				pos.GetPlist1()[listIndex_cap] = pos.GetCl().m_clistpair[1].m_newlist[1];
 			}
 		}
-		ss->staticEvalRaw = diff;
+		ss->m_staticEvalRaw = diff;
 	}
 	else {
 		const int listIndex = pos.GetCl().m_listindex[0];
@@ -253,7 +253,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 
 		diff.p[2][0] += pos.GetMaterialDiff() * g_FVScale;
 
-		ss->staticEvalRaw = diff + (ss - 1)->staticEvalRaw;
+		ss->m_staticEvalRaw = diff + (ss - 1)->m_staticEvalRaw;
 	}
 
 	return true;
@@ -296,7 +296,7 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 	if (this->calcDifference(pos, ss)) {
 		assert([&] {
-			const auto score = ss->staticEvalRaw.sum(pos.GetTurn());
+			const auto score = ss->m_staticEvalRaw.sum(pos.GetTurn());
 			return (this->evaluateUnUseDiff(pos) == score);
 		}());
 		return;
@@ -355,7 +355,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 #if defined INANIWA_SHIFT
 	sum.GetP[2][0] += inaniwaScore(GetPos);
 #endif
-	ss->staticEvalRaw = sum;
+	ss->m_staticEvalRaw = sum;
 
 	Evaluation09 evaluation;
 	assert(this->evaluateUnUseDiff(pos) == sum.sum(pos.GetTurn()));
@@ -431,8 +431,8 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 }
 
 Score Evaluation09::evaluate(Position& pos, SearchStack* ss) {
-	if (ss->staticEvalRaw.p[0][0] != ScoreNotEvaluated) {
-		const Score score = static_cast<Score>(ss->staticEvalRaw.sum(pos.GetTurn()));
+	if (ss->m_staticEvalRaw.p[0][0] != ScoreNotEvaluated) {
+		const Score score = static_cast<Score>(ss->m_staticEvalRaw.sum(pos.GetTurn()));
 		assert(score == evaluateUnUseDiff(pos));
 		return score / g_FVScale;
 	}
@@ -441,15 +441,15 @@ Score Evaluation09::evaluate(Position& pos, SearchStack* ss) {
 	EvaluateHashEntry entry = *g_evalTable[keyExcludeTurn]; // atomic にデータを取得する必要がある。
 	entry.decode();
 	if (entry.key == keyExcludeTurn) {
-		ss->staticEvalRaw = entry;
-		assert(static_cast<Score>(ss->staticEvalRaw.sum(pos.GetTurn())) == evaluateUnUseDiff(pos));
+		ss->m_staticEvalRaw = entry;
+		assert(static_cast<Score>(ss->m_staticEvalRaw.sum(pos.GetTurn())) == evaluateUnUseDiff(pos));
 		return static_cast<Score>(entry.sum(pos.GetTurn())) / g_FVScale;
 	}
 
 	this->evaluateBody(pos, ss);
 
-	ss->staticEvalRaw.key = keyExcludeTurn;
-	ss->staticEvalRaw.encode();
-	*g_evalTable[keyExcludeTurn] = ss->staticEvalRaw;
-	return static_cast<Score>(ss->staticEvalRaw.sum(pos.GetTurn())) / g_FVScale;
+	ss->m_staticEvalRaw.key = keyExcludeTurn;
+	ss->m_staticEvalRaw.encode();
+	*g_evalTable[keyExcludeTurn] = ss->m_staticEvalRaw;
+	return static_cast<Score>(ss->m_staticEvalRaw.sum(pos.GetTurn())) / g_FVScale;
 }

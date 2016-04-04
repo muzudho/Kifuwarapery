@@ -2,8 +2,8 @@
 
 class SignalsType {
 public:
-	bool stopOnPonderHit;
-	bool firstRootMove;
-	bool stop;
-	bool failedLowAtRoot;
+	bool m_stopOnPonderHit;
+	bool m_firstRootMove;
+	bool m_stop;
+	bool m_failedLowAtRoot;
 };

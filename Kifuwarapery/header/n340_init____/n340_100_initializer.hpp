@@ -6,48 +6,48 @@
 
 class Initializer {
 public:
-	void initTable();
+	void InitTable();
 
 #if defined FIND_MAGIC
 	u64 findMagic(const Square sqare, const bool isBishop);
 #endif // #if defined FIND_MAGIC
 
 private:
-	Bitboard rookBlockMaskCalc(const Square square);
+	Bitboard RookBlockMaskCalc(const Square square);
 
-	Bitboard bishopBlockMaskCalc(const Square square);
+	Bitboard BishopBlockMaskCalc(const Square square);
 
-	Bitboard lanceBlockMask(const Square square);
+	Bitboard LanceBlockMask(const Square square);
 
-	Bitboard attackCalc(const Square square, const Bitboard& occupied, const bool isBishop);
+	Bitboard AttackCalc(const Square square, const Bitboard& occupied, const bool isBishop);
 
-	Bitboard lanceAttackCalc(const Color c, const Square square, const Bitboard& occupied);
+	Bitboard LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied);
 
-	Bitboard indexToOccupied(const int index, const int bits, const Bitboard& blockMask);
+	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask);
 
-	void initAttacks(const bool isBishop);
+	void InitAttacks(const bool isBishop);
 
-	void initLanceAttacks();
+	void InitLanceAttacks();
 
-	void initKingAttacks();
+	void InitKingAttacks();
 
-	void initGoldAttacks();
+	void InitGoldAttacks();
 
-	void initSilverAttacks();
+	void InitSilverAttacks();
 
-	void initKnightAttacks();
+	void InitKnightAttacks();
 
-	void initPawnAttacks();
+	void InitPawnAttacks();
 
-	void initSquareRelation();
+	void InitSquareRelation();
 
-	void initAttackToEdge();
+	void InitAttackToEdge();
 
-	void initBetweenBB();
+	void InitBetweenBB();
 
-	void initCheckTable();
+	void InitCheckTable();
 
-	void initSquareDistance();
+	void InitSquareDistance();
 
 };
 

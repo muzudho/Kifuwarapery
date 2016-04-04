@@ -39,47 +39,47 @@ const StringToPieceTypeCSA g_stringToPieceTypeCSA;
 
 
 // 考え始めるのはここ。
-void UsiOperation::go(const Position& pos, std::istringstream& ssCmd) {
+void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 	LimitsType limits;
 	std::vector<Move> moves;
 	std::string token;
 
 	// go にも種類がある☆
 	while (ssCmd >> token) {
-		if      (token == "ponder"     ) { limits.ponder = true; }
-		else if (token == "btime"      ) { ssCmd >> limits.time[Black]; }
-		else if (token == "wtime"      ) { ssCmd >> limits.time[White]; }
-		else if (token == "infinite"   ) { limits.infinite = true; }
+		if      (token == "ponder"     ) { limits.m_ponder = true; }
+		else if (token == "btime"      ) { ssCmd >> limits.m_time[Black]; }
+		else if (token == "wtime"      ) { ssCmd >> limits.m_time[White]; }
+		else if (token == "infinite"   ) { limits.m_infinite = true; }
 		else if (token == "byoyomi" ||
 				 token == "movetime"   ) {
 			// btime wtime の後に byoyomi が来る前提になっているので良くない。
-			ssCmd >> limits.moveTime;
-			if (limits.moveTime != 0) { limits.moveTime -= pos.GetSearcher()->options["Byoyomi_Margin"]; }
+			ssCmd >> limits.m_moveTime;
+			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetSearcher()->m_options["Byoyomi_Margin"]; }
 		}
-		else if (token == "depth"      ) { ssCmd >> limits.depth; }
-		else if (token == "nodes"      ) { ssCmd >> limits.nodes; }
+		else if (token == "depth"      ) { ssCmd >> limits.m_depth; }
+		else if (token == "nodes"      ) { ssCmd >> limits.m_nodes; }
 		else if (token == "searchmoves") {
 			UsiOperation usiOperation;
 			while (ssCmd >> token)
 			{
-				moves.push_back(usiOperation.usiToMove(pos, token));
+				moves.push_back(usiOperation.UsiToMove(pos, token));
 			}
 		}
 	}
-	pos.GetSearcher()->searchMoves = moves;
+	pos.GetSearcher()->m_searchMoves = moves;
 
 	// 思考を開始☆
-	pos.GetSearcher()->threads.startThinking(pos, limits, moves);
+	pos.GetSearcher()->m_threads.StartThinking(pos, limits, moves);
 }
 
 #if defined LEARN
 // 学習用。通常の go 呼び出しは文字列を扱って高コストなので、大量に探索の開始、終了を行う学習では別の呼び出し方にする。
-void UsiOperation::go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
-	LimitsType limits;
+void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
+	LimitsType m_limits;
 	std::vector<Move> moves;
-	limits.GetDepth = GetDepth;
+	m_limits.GetDepth = GetDepth;
 	moves.push_back(GetMove);
-	GetPos.GetSearcher()->threads.startThinking(GetPos, limits, moves);
+	GetPos.GetSearcher()->m_threads.StartThinking(GetPos, m_limits, moves);
 }
 #endif
 
@@ -108,19 +108,19 @@ Move UsiOperation::csaToMoveDebug(const Position& GetPos, const std::string& mov
 #endif
 
 
-Move UsiOperation::usiToMove(const Position& pos, const std::string& moveStr) {
-	const Move move = usiToMoveBody(pos, moveStr);
+Move UsiOperation::UsiToMove(const Position& pos, const std::string& moveStr) {
+	const Move move = UsiToMoveBody(pos, moveStr);
 	assert(move == this->usiToMoveDebug(pos, moveStr));
 	return move;
 }
 
-Move UsiOperation::csaToMove(const Position& pos, const std::string& moveStr) {
-	const Move move = csaToMoveBody(pos, moveStr);
+Move UsiOperation::CsaToMove(const Position& pos, const std::string& moveStr) {
+	const Move move = CsaToMoveBody(pos, moveStr);
 	assert(move == this->csaToMoveDebug(pos, moveStr));
 	return move;
 }
 
-void UsiOperation::setPosition(Position& pos, std::istringstream& ssCmd) {
+void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 	std::string token;
 	std::string sfen;
 
@@ -139,21 +139,21 @@ void UsiOperation::setPosition(Position& pos, std::istringstream& ssCmd) {
 		return;
 	}
 
-	pos.Set(sfen, pos.GetSearcher()->threads.mainThread());
-	pos.GetSearcher()->setUpStates = StateStackPtr(new std::stack<StateInfo>());
+	pos.Set(sfen, pos.GetSearcher()->m_threads.GetMainThread());
+	pos.GetSearcher()->m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 
 	Ply currentPly = pos.GetGamePly();
 	while (ssCmd >> token) {
-		const Move move = this->usiToMove(pos, token);
+		const Move move = this->UsiToMove(pos, token);
 		if (move.IsNone()) break;
-		pos.GetSearcher()->setUpStates->push(StateInfo());
-		pos.DoMove(move, pos.GetSearcher()->setUpStates->top());
+		pos.GetSearcher()->m_setUpStates->push(StateInfo());
+		pos.DoMove(move, pos.GetSearcher()->m_setUpStates->top());
 		++currentPly;
 	}
 	pos.SetStartPosPly(currentPly);
 }
 
-Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr) {
+Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr) {
 	Move move;
 	if (g_charToPieceUSI.isLegalChar(moveStr[0])) {
 		// drop
@@ -204,7 +204,7 @@ Move UsiOperation::usiToMoveBody(const Position& pos, const std::string& moveStr
 	return Move::GetMoveNone();
 }
 
-Move UsiOperation::csaToMoveBody(const Position& pos, const std::string& moveStr) {
+Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr) {
 	if (moveStr.size() != 6) {
 		return Move::GetMoveNone();
 	}
