@@ -130,6 +130,12 @@
     <Filter Include="header\n223_move____">
       <UniqueIdentifier>{a0a085e1-a6b1-4a03-99fe-f40bc7fd1bae}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\n223_move____">
+      <UniqueIdentifier>{04934408-75af-4da9-b9c6-26fbedbbda5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n226_movStack">
+      <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -285,9 +291,6 @@
     <ClInclude Include="header\n240_position\n240_285_tTCluster.hpp">
       <Filter>header\n240_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n240_position\n240_160_moveStack.hpp">
-      <Filter>header\n240_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n220_position\n220_100_repetitionType.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
@@ -384,6 +387,12 @@
     <ClInclude Include="header\n223_move____\n223_105_utilMove.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n226_movStack\n226_105_utilMoveStack.hpp">
+      <Filter>header\n226_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n226_movStack\n226_100_moveStack.hpp">
+      <Filter>header\n226_movStack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -403,9 +412,6 @@
     </ClCompile>
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
       <Filter>source\n200_score___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_position\n240_150_move.cpp">
-      <Filter>source\n240_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n240_position\n240_300_tt.cpp">
       <Filter>source\n240_position</Filter>
@@ -499,6 +505,9 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_position.cpp">
       <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n223_move____\n223_100_move.cpp">
+      <Filter>source\n223_move____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

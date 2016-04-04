@@ -95,7 +95,7 @@ template <> Move MovePicker::nextMove<false>() {
 			return ttMove_;
 
 		case PH_TacticalMoves0:
-			ms = pickBest(currMove_++, lastMove());
+			ms = UtilMoveStack::PickBest(currMove_++, lastMove());
 			if (ms->move != ttMove_) {
 				assert(captureThreshold_ <= 0);
 
@@ -135,14 +135,14 @@ template <> Move MovePicker::nextMove<false>() {
 			return (currMove_--)->move;
 
 		case PH_Evasions: case PH_QEvasions: case PH_QCaptures0:
-			move = pickBest(currMove_++, lastMove())->move;
+			move = UtilMoveStack::PickBest(currMove_++, lastMove())->move;
 			if (move != ttMove_) {
 				return move;
 			}
 			break;
 
 		case PH_TacticalMoves1:
-			ms = pickBest(currMove_++, lastMove());
+			ms = UtilMoveStack::PickBest(currMove_++, lastMove());
 			// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
 			if (ms->move != ttMove_ && captureThreshold_ < pos().GetSee(ms->move)) {
 				return ms->move;
@@ -150,7 +150,7 @@ template <> Move MovePicker::nextMove<false>() {
 			break;
 
 		case PH_QCaptures1:
-			move = pickBest(currMove_++, lastMove())->move;
+			move = UtilMoveStack::PickBest(currMove_++, lastMove())->move;
 			assert(move.To() == recaptureSquare_);
 			return move;
 
@@ -236,7 +236,7 @@ void MovePicker::goNextPhase() {
 		currMove_ = firstMove();
 		lastMove_ = std::partition(currMove(), lastNonCapture(), HasPositiveScore());
 		// 要素数は10個くらいまでであることが多い。要素数が少ないので、insertionSort() を使用する。
-		insertionSort<MoveStack*, true>(currMove(), lastMove());
+		UtilMoveStack::InsertionSort<MoveStack*, true>(currMove(), lastMove());
 		return;
 
 	case PH_NonTacticalMoves1:

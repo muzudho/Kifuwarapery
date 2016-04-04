@@ -317,7 +317,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 	posKey = pos.GetKey();
 	tte = tt.probe(posKey);
-	ttMove = (tte != nullptr ? move16toMove(tte->move(), pos) : Move::GetMoveNone());
+	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->move(), pos) : Move::GetMoveNone());
 	ttScore = (tte != nullptr ? scoreFromTT(tte->score(), ss->ply) : ScoreNone);
 
 	if (tte != nullptr
@@ -571,7 +571,7 @@ void Searcher::idLoop(Position& pos) {
 				ss->staticEvalRaw.p[0][0] = (ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
 				bestScore = search<Root>(pos, ss + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 				// 先頭が最善手になるようにソート
-				insertionSort(rootMoves.begin() + pvIdx, rootMoves.end());
+				UtilMoveStack::InsertionSort(rootMoves.begin() + pvIdx, rootMoves.end());
 
 				for (size_t i = 0; i <= pvIdx; ++i) {
 					ss->staticEvalRaw.p[0][0] = (ss+1)->staticEvalRaw.p[0][0] = ScoreNotEvaluated;
@@ -627,7 +627,7 @@ void Searcher::idLoop(Position& pos) {
 				assert(-ScoreInfinite <= alpha && beta <= ScoreInfinite);
 			}
 
-			insertionSort(rootMoves.begin(), rootMoves.begin() + pvIdx + 1);
+			UtilMoveStack::InsertionSort(rootMoves.begin(), rootMoves.begin() + pvIdx + 1);
 			if ((pvIdx + 1 == pvSize || 3000 < searchTimer.Elapsed())
 				// 将棋所のコンソールが詰まるのを防ぐ。
 				&& (depth < 10 || lastInfoTime + 200 < searchTimer.Elapsed()))
@@ -873,7 +873,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	ttMove = 
 		RootNode ? rootMoves[pvIdx].pv_[0] :
 		tte != nullptr ?
-		move16toMove(tte->move(), pos) :
+		UtilMoveStack::Move16toMove(tte->move(), pos) :
 		Move::GetMoveNone();
 	ttScore = (tte != nullptr ? scoreFromTT(tte->score(), ss->ply) : ScoreNone);
 
@@ -1075,7 +1075,7 @@ iid_start:
 
 		tte = tt.probe(posKey);
 		ttMove = (tte != nullptr ?
-				  move16toMove(tte->move(), pos) :
+			UtilMoveStack::Move16toMove(tte->move(), pos) :
 				  Move::GetMoveNone());
 	}
 
@@ -1420,7 +1420,7 @@ void RootMove::extractPvFromTT(Position& pos) {
 	}
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
-		   && pos.MoveIsPseudoLegal(m = move16toMove(tte->move(), pos))
+		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->move(), pos))
 		   && pos.IsPseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
 		   && ply < MaxPly
 		   && (!pos.IsDraw(20) || ply < 6));
@@ -1441,7 +1441,7 @@ void RootMove::insertPvInTT(Position& pos) {
 		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
 
 		if (tte == nullptr
-			|| move16toMove(tte->move(), pos) != pv_[ply])
+			|| UtilMoveStack::Move16toMove(tte->move(), pos) != pv_[ply])
 		{
 			pos.GetSearcher()->tt.store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
 		}

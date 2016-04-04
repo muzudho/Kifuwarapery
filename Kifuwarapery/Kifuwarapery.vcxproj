@@ -185,7 +185,8 @@
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp" />
     <ClInclude Include="header\n223_move____\n223_100_move.hpp" />
     <ClInclude Include="header\n223_move____\n223_105_utilMove.hpp" />
-    <ClInclude Include="header\n240_position\n240_160_moveStack.hpp" />
+    <ClInclude Include="header\n226_movStack\n226_100_moveStack.hpp" />
+    <ClInclude Include="header\n226_movStack\n226_105_utilMoveStack.hpp" />
     <ClInclude Include="header\n240_position\n240_200_evalList.hpp" />
     <ClInclude Include="header\n240_position\n240_275_depth.hpp" />
     <ClInclude Include="header\n240_position\n240_280_tTEntry.hpp" />
@@ -248,7 +249,7 @@
     <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp" />
     <ClCompile Include="source\n220_position\n220_400_position.cpp" />
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp" />
-    <ClCompile Include="source\n240_position\n240_150_move.cpp" />
+    <ClCompile Include="source\n223_move____\n223_100_move.cpp" />
     <ClCompile Include="source\n240_position\n240_200_evalList.cpp" />
     <ClCompile Include="source\n240_position\n240_280_tTEntry.cpp" />
     <ClCompile Include="source\n240_position\n240_300_tt.cpp" />
