@@ -65,7 +65,7 @@ namespace {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*moveStackList++).move = makeDropMove(Pawn, pawnDropCheckSquare);
+						(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, pawnDropCheckSquare);
 					}
 					toBB.XorBit(pawnDropCheckSquare);
 				}
@@ -73,7 +73,7 @@ namespace {
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-				(*moveStackList++).move = makeDropMove(Pawn, to);
+				(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, to);
 			});
 		}
 
@@ -103,10 +103,10 @@ namespace {
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
 			switch (haveHandNum - noKnightLanceIdx) {
 			case 0: break; // 桂馬、香車 以外の持ち駒がない。
-			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 
@@ -114,11 +114,11 @@ namespace {
 			// 二段目に対して、桂馬以外の指し手を生成。
 			switch (haveHandNum - noKnightIdx) {
 			case 0: break; // 桂馬 以外の持ち駒がない。
-			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 
@@ -126,12 +126,12 @@ namespace {
 			toBB = target & ~(TRank8BB | TRank9BB);
 			switch (haveHandNum) {
 			case 0: assert(false); break; // 最適化の為のダミー
-			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
-			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
-			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
-			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
-			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
-			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).move = makeDropMove(haveHand[i], to); }); }); break;
+			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 		}

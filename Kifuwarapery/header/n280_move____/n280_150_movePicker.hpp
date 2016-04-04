@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_500_move.hpp"
+#include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 
 enum GenerateMovePhase {

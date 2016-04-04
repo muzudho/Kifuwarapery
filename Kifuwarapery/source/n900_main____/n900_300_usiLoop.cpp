@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_500_move.hpp"
+#include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
@@ -21,7 +21,7 @@ void measureGenerateMoves(const Position& pos) {
 	MoveStack legalMoves[g_MaxLegalMoves];
 	for (int i = 0; i < g_MaxLegalMoves; ++i)
 	{
-		legalMoves[i].move = moveNone();
+		legalMoves[i].move = UtilMove::GetMoveNone();
 	}
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;

@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_500_move.hpp"
+#include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
@@ -126,17 +126,17 @@ MoveScore Book::probe(const Position& pos, const std::string& fName, const bool 
 			const Square to = tmp.To();
 			if (tmp.IsDrop()) {
 				const PieceType ptDropped = tmp.GetPieceTypeDropped();
-				move = makeDropMove(ptDropped, to);
+				move = UtilMove::MakeDropMove(ptDropped, to);
 			}
 			else {
 				const Square from = tmp.From();
 				const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 				const bool promo = tmp.IsPromotion();
 				if (promo) {
-					move = makeCapturePromoteMove(ptFrom, from, to, pos);
+					move = UtilMove::MakeCapturePromoteMove(ptFrom, from, to, pos);
 				}
 				else {
-					move = makeCaptureMove(ptFrom, from, to, pos);
+					move = UtilMove::MakeCaptureMove(ptFrom, from, to, pos);
 				}
 			}
 			score = entry.score;

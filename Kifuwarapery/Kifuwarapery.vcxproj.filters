@@ -378,10 +378,10 @@
     <ClInclude Include="header\n200_score___\n200_100_utilScore.hpp">
       <Filter>header\n200_score___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_500_move.hpp">
+    <ClInclude Include="header\n223_move____\n223_100_move.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_100_move.hpp">
+    <ClInclude Include="header\n223_move____\n223_105_utilMove.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>

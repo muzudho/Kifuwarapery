@@ -1,4 +1,4 @@
-﻿#include "../../header/n223_move____/n223_500_move.hpp"
+﻿#include "../../header/n223_move____/n223_105_utilMove.hpp"
 
 namespace {
 	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};

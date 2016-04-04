@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n223_move____/n223_500_move.hpp"
+#include "../n223_move____/n223_105_utilMove.hpp"
 
 
 struct MoveStack {
@@ -52,6 +52,6 @@ inline Move move16toMove(const Move move, const Position& pos) {
 	}
 	const Square from = move.From();
 	const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
-	return move | pieceType2Move(ptFrom) | capturedPieceType2Move(move.To(), pos);
+	return move | UtilMove::GetPieceType2Move(ptFrom) | UtilMove::GetCapturedPieceType2Move(move.To(), pos);
 }
 

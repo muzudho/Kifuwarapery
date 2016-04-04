@@ -1,5 +1,5 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_500_move.hpp"
+#include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_position/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
@@ -773,7 +773,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, Bitboard::RookAttackToEdge(to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return makeDropMove(Rook, to);
+					return UtilMove::MakeDropMove(Rook, to);
 				}
 			}
 		}
@@ -787,7 +787,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 			if (!canKingEscape(*this, US, to, Bitboard::LanceAttackToEdge(US, to))
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
-				return makeDropMove(Lance, to);
+				return UtilMove::MakeDropMove(Lance, to);
 			}
 		}
 	}
@@ -801,7 +801,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, Bitboard::BishopAttackToEdge(to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return makeDropMove(Bishop, to);
+					return UtilMove::MakeDropMove(Bishop, to);
 				}
 			}
 		}
@@ -823,7 +823,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, Bitboard::GoldAttack(US, to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return makeDropMove(Gold, to);
+					return UtilMove::MakeDropMove(Gold, to);
 				}
 			}
 		}
@@ -856,7 +856,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, Bitboard::SilverAttack(US, to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return makeDropMove(Silver, to);
+					return UtilMove::MakeDropMove(Silver, to);
 				}
 			}
 		}
@@ -872,7 +872,7 @@ silver_drop_end:
 			if (!canKingEscape(*this, US, to, Bitboard::AllZeroBB())
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
-				return makeDropMove(Knight, to);
+				return UtilMove::MakeDropMove(Knight, to);
 			}
 		}
 	}
@@ -910,7 +910,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Dragon, from, US);
-							return makeCaptureMove(Dragon, from, to, *this);
+							return UtilMove::MakeCaptureMove(Dragon, from, to, *this);
 						}
 					}
 				} while (toBB.IsNot0());
@@ -946,7 +946,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Rook, from, US);
-								return makeCapturePromoteMove(Rook, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Rook, from, to, *this);
 							}
 						}
 					} while (toBB.IsNot0());
@@ -976,7 +976,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Rook, from, US);
-								return makeCapturePromoteMove(Rook, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Rook, from, to, *this);
 							}
 						}
 					} while (toOn789BB.IsNot0());
@@ -993,7 +993,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Rook, from, US);
-							return makeCaptureMove(Rook, from, to, *this);
+							return UtilMove::MakeCaptureMove(Rook, from, to, *this);
 						}
 					}
 				}
@@ -1027,7 +1027,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Horse, from, US);
-							return makeCaptureMove(Horse, from, to, *this);
+							return UtilMove::MakeCaptureMove(Horse, from, to, *this);
 						}
 					}
 				} while (toBB.IsNot0());
@@ -1060,7 +1060,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Bishop, from, US);
-								return makeCapturePromoteMove(Bishop, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Bishop, from, to, *this);
 							}
 						}
 					} while (toBB.IsNot0());
@@ -1090,7 +1090,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Bishop, from, US);
-								return makeCapturePromoteMove(Bishop, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Bishop, from, to, *this);
 							}
 						}
 					} while (toOn789BB.IsNot0());
@@ -1107,7 +1107,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Bishop, from, US);
-							return makeCaptureMove(Bishop, from, to, *this);
+							return UtilMove::MakeCaptureMove(Bishop, from, to, *this);
 						}
 					}
 				}
@@ -1143,7 +1143,7 @@ silver_drop_end:
 						{
 							XorBBs(pt, from, US);
 							m_goldsBB_.XorBit(from);
-							return makeCaptureMove(pt, from, to, *this);
+							return UtilMove::MakeCaptureMove(pt, from, to, *this);
 						}
 					}
 				} while (toBB.IsNot0());
@@ -1187,7 +1187,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									XorBBs(Silver, from, US);
-									return makeCapturePromoteMove(Silver, from, to, *this);
+									return UtilMove::MakeCapturePromoteMove(Silver, from, to, *this);
 								}
 							}
 						}
@@ -1205,7 +1205,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									XorBBs(Silver, from, US);
-									return makeCaptureMove(Silver, from, to, *this);
+									return UtilMove::MakeCaptureMove(Silver, from, to, *this);
 								}
 							}
 						}
@@ -1238,7 +1238,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									XorBBs(Silver, from, US);
-									return makeCaptureMove(Silver, from, to, *this);
+									return UtilMove::MakeCaptureMove(Silver, from, to, *this);
 								}
 							}
 						}
@@ -1271,7 +1271,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Silver, from, US);
-								return makeCapturePromoteMove(Silver, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Silver, from, to, *this);
 							}
 						}
 					}
@@ -1286,7 +1286,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Silver, from, US);
-								return makeCaptureMove(Silver, from, to, *this);
+								return UtilMove::MakeCaptureMove(Silver, from, to, *this);
 							}
 						}
 					}
@@ -1324,7 +1324,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Knight, from, US);
-								return makeCapturePromoteMove(Knight, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Knight, from, to, *this);
 							}
 						}
 					}
@@ -1339,7 +1339,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Knight, from, US);
-							return makeCaptureMove(Knight, from, to, *this);
+							return UtilMove::MakeCaptureMove(Knight, from, to, *this);
 						}
 					}
 					XorBBs(Knight, from, US);
@@ -1383,7 +1383,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Lance, from, US);
-								return makeCapturePromoteMove(Lance, from, to, *this);
+								return UtilMove::MakeCapturePromoteMove(Lance, from, to, *this);
 							}
 						}
 					}
@@ -1400,7 +1400,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(Lance, from, US);
-								return makeCaptureMove(Lance, from, to, *this);
+								return UtilMove::MakeCaptureMove(Lance, from, to, *this);
 							}
 						}
 					}
@@ -1443,7 +1443,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Pawn, from, US);
-							return makeCapturePromoteMove(Pawn, from, to, *this);
+							return UtilMove::MakeCapturePromoteMove(Pawn, from, to, *this);
 						}
 					}
 					XorBBs(Pawn, from, US);
@@ -1469,7 +1469,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(Pawn, from, US);
-							return makeCaptureMove(Pawn, from, to, *this);
+							return UtilMove::MakeCaptureMove(Pawn, from, to, *this);
 						}
 					}
 					XorBBs(Pawn, from, US);
