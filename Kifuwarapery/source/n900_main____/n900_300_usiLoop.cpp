@@ -121,7 +121,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 			}
 		}
 		else if (token == "usinewgame") {
-			searcher.tt.clear();
+			searcher.tt.Clear();
 #if defined INANIWA_SHIFT
 			inaniwaFlag = NotInaniwa;
 #endif

@@ -7,39 +7,50 @@
 
 class TranspositionTable {
 public:
-	TranspositionTable();
-	~TranspositionTable();
-	void setSize(const size_t mbSize); // Mega Byte 指定
-	void clear();
-	void store(const Key posKey, const Score score, const Bound bound, Depth depth,
-			   Move move, const Score evalScore);
-	TTEntry* probe(const Key posKey) const;
-	void newSearch();
-	TTEntry* firstEntry(const Key posKey) const;
-	void refresh(const TTEntry* tte) const;
 
-	size_t size() const { return size_; }
-	TTCluster* entries() const { return entries_; }
-	u8 generation() const { return generation_; }
+	TranspositionTable();
+
+	~TranspositionTable();
+
+	void SetSize(const size_t mbSize); // Mega Byte 指定
+
+	void Clear();
+
+	void Store(const Key posKey, const Score score, const Bound bound, Depth depth,
+			   Move move, const Score evalScore);
+
+	TTEntry* Probe(const Key posKey) const;
+
+	void NewSearch();
+
+	TTEntry* FirstEntry(const Key posKey) const;
+
+	void Refresh(const TTEntry* tte) const;
+
+	size_t GetSize() const { return m_size_; }
+
+	TTCluster* GetEntries() const { return m_entries_; }
+
+	u8 GetGeneration() const { return m_generation_; }
 
 private:
 	TranspositionTable(const TranspositionTable&);
 	TranspositionTable& operator = (const TranspositionTable&);
 
-	size_t size_; // 置換表のバイト数。2のべき乗である必要がある。
-	TTCluster* entries_;
+	size_t m_size_; // 置換表のバイト数。2のべき乗である必要がある。
+	TTCluster* m_entries_;
 	// iterative deepening していくとき、過去の探索で調べたものかを判定する。
-	u8 generation_;
+	u8 m_generation_;
 };
 
 inline TranspositionTable::TranspositionTable()
-	: size_(0), entries_(nullptr), generation_(0) {}
+	: m_size_(0), m_entries_(nullptr), m_generation_(0) {}
 
 inline TranspositionTable::~TranspositionTable() {
-	delete [] entries_;
+	delete [] m_entries_;
 }
 
-inline TTEntry* TranspositionTable::firstEntry(const Key posKey) const {
+inline TTEntry* TranspositionTable::FirstEntry(const Key posKey) const {
 	// (size() - 1) は置換表で使用するバイト数のマスク
 	// posKey の下位 (size() - 1) ビットを hash key として使用。
 	// ここで posKey の下位ビットの一致を確認。
@@ -47,14 +58,14 @@ inline TTEntry* TranspositionTable::firstEntry(const Key posKey) const {
 	// ここでは下位32bit 以上が確認出来れば完璧。
 	// 置換表のサイズを小さく指定しているときは下位32bit の一致は確認出来ないが、
 	// 仕方ない。
-	return entries_[posKey & (size() - 1)].m_data;
+	return m_entries_[posKey & (GetSize() - 1)].m_data;
 }
 
-inline void TranspositionTable::refresh(const TTEntry* tte) const {
-	const_cast<TTEntry*>(tte)->SetGeneration(this->generation());
+inline void TranspositionTable::Refresh(const TTEntry* tte) const {
+	const_cast<TTEntry*>(tte)->SetGeneration(this->GetGeneration());
 }
 
-inline void TranspositionTable::newSearch() {
-	++generation_;
+inline void TranspositionTable::NewSearch() {
+	++m_generation_;
 }
 

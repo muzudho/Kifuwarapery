@@ -44,14 +44,5 @@ enum {
 };
 
 
-const int FVScale = 32;
+const int g_FVScale = 32;
 
-
-const int KPPIndexArray[] = {
-	f_hand_pawn, e_hand_pawn, f_hand_lance, e_hand_lance, f_hand_knight,
-	e_hand_knight, f_hand_silver, e_hand_silver, f_hand_gold, e_hand_gold,
-	f_hand_bishop, e_hand_bishop, f_hand_rook, e_hand_rook, /*fe_hand_end,*/
-	f_pawn, e_pawn, f_lance, e_lance, f_knight, e_knight, f_silver, e_silver,
-	f_gold, e_gold, f_bishop, e_bishop, f_horse, e_horse, f_rook, e_rook,
-	f_dragon, e_dragon, fe_end
-};

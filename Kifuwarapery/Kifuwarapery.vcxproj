@@ -194,7 +194,7 @@
     <ClInclude Include="header\n240_tt______\n240_285_tTCluster.hpp" />
     <ClInclude Include="header\n240_tt______\n240_300_tt.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp" />
-    <ClInclude Include="header\n260_evaluate\n260_200_evaluate01.hpp" />
+    <ClInclude Include="header\n260_evaluate\n260_150_kppIndexArray.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_400_EvaluaterBase.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp" />

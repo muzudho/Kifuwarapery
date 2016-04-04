@@ -15,8 +15,8 @@
 
 // ‰Šú‰»‚Ì’l‚ðŽæ‚Á‚Ä‚­‚é‚Ì‚ÉŽg‚¢‚Ü‚·B
 namespace {
-	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->tt.setSize(opt); }
-	void onClearHash(Searcher* s, const EngineOptionable&) { s->tt.clear(); }
+	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->tt.SetSize(opt); }
+	void onClearHash(Searcher* s, const EngineOptionable&) { s->tt.Clear(); }
 	void onEvalDir(Searcher*, const EngineOptionable& opt) {
 		std::unique_ptr<EvalStorage>(new EvalStorage)->init(opt, true);
 	}

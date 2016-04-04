@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../../header/n160_board___/n160_400_bitboardAll.hpp"
-#include "../../header/n260_evaluate/n260_200_evaluate01.hpp"
+#include "../../header/n260_evaluate/n260_150_kppIndexArray.hpp"
 
 
 struct KPPBoardIndexStartToPiece : public std::unordered_map<int, Piece> {

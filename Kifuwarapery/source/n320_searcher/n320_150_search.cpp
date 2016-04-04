@@ -29,7 +29,7 @@ void Searcher::init() {
 	engineOptionSetup.Initialize( &options, this);
 
 	this->threads.init(this);
-	this->tt.setSize(this->options["USI_Hash"]);
+	this->tt.SetSize(this->options["USI_Hash"]);
 }
 
 namespace {
@@ -316,7 +316,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	ttDepth = ((INCHECK || DepthQChecks <= depth) ? DepthQChecks : DepthQNoChecks);
 
 	posKey = pos.GetKey();
-	tte = tt.probe(posKey);
+	tte = tt.Probe(posKey);
 	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : Move::GetMoveNone());
 	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->ply) : ScoreNone);
 
@@ -355,7 +355,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 		if (beta <= bestScore) {
 			if (tte == nullptr) {
-				tt.store(pos.GetKey(), scoreToTT(bestScore, ss->ply), BoundLower,
+				tt.Store(pos.GetKey(), scoreToTT(bestScore, ss->ply), BoundLower,
 						 DepthNone, Move::GetMoveNone(), ss->staticEval);
 			}
 
@@ -445,7 +445,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 				}
 				else {
 					// fail high
-					tt.store(posKey, scoreToTT(score, ss->ply), BoundLower,
+					tt.Store(posKey, scoreToTT(score, ss->ply), BoundLower,
 							 ttDepth, move, ss->staticEval);
 					return score;
 				}
@@ -457,7 +457,7 @@ Score Searcher::qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		return UtilScore::MatedIn(ss->ply);
 	}
 
-	tt.store(posKey, scoreToTT(bestScore, ss->ply), 
+	tt.Store(posKey, scoreToTT(bestScore, ss->ply), 
 			 ((PVNode && oldAlpha < bestScore) ? BoundExact : BoundUpper),
 			 ttDepth, bestMove, ss->staticEval);
 
@@ -488,7 +488,7 @@ void Searcher::idLoop(Position& pos) {
 #endif
 
 	ss[0].currentMove = Move::GetMoveNull(); // skip update gains
-	tt.newSearch();
+	tt.NewSearch();
 	history.clear();
 	gains.clear();
 
@@ -759,7 +759,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 
 	if (DO) {
 		m_st_->m_boardKey ^= GetZobTurn();
-		prefetch(GetCsearcher()->tt.firstEntry(m_st_->GetKey()));
+		prefetch(GetCsearcher()->tt.FirstEntry(m_st_->GetKey()));
 		m_st_->m_pliesFromNull = 0;
 		m_st_->m_continuousCheck[GetTurn()] = 0;
 	}
@@ -869,7 +869,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	// trans position table lookup
 	excludedMove = ss->excludedMove;
 	posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
-	tte = tt.probe(posKey);
+	tte = tt.Probe(posKey);
 	ttMove = 
 		RootNode ? rootMoves[pvIdx].pv_[0] :
 		tte != nullptr ?
@@ -885,7 +885,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 			: (beta <= ttScore ? (tte->GetType() & BoundLower)
 			   : (tte->GetType() & BoundUpper))))
 	{
-		tt.refresh(tte);
+		tt.Refresh(tte);
 		ss->currentMove = ttMove; // Move::moveNone() もありえる。
 
 		if (beta <= ttScore
@@ -905,7 +905,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	{
 		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
 			ss->staticEval = bestScore = UtilScore::MateIn(ss->ply);
-			tt.store(posKey, scoreToTT(bestScore, ss->ply), BoundExact, depth,
+			tt.Store(posKey, scoreToTT(bestScore, ss->ply), BoundExact, depth,
 					 move, ss->staticEval);
 			bestMove = move;
 			return bestScore;
@@ -929,7 +929,7 @@ Score Searcher::search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		}
 	}
 	else {
-		tt.store(posKey, ScoreNone, BoundNone, DepthNone,
+		tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
 				 Move::GetMoveNone(), ss->staticEval);
 	}
 
@@ -1073,7 +1073,7 @@ iid_start:
 		search<PVNode ? PV : NonPV>(pos, ss, alpha, beta, d, true);
 		ss->skipNullMove = false;
 
-		tte = tt.probe(posKey);
+		tte = tt.Probe(posKey);
 		ttMove = (tte != nullptr ?
 			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
 				  Move::GetMoveNone());
@@ -1368,7 +1368,7 @@ split_point_start:
 
 	if (beta <= bestScore) {
 		// failed high
-		tt.store(posKey, scoreToTT(bestScore, ss->ply), BoundLower, depth,
+		tt.Store(posKey, scoreToTT(bestScore, ss->ply), BoundLower, depth,
 				 bestMove, ss->staticEval);
 
 		if (!bestMove.IsCaptureOrPawnPromotion() && !inCheck) {
@@ -1390,7 +1390,7 @@ split_point_start:
 	}
 	else {
 		// failed low or PV search
-		tt.store(posKey, scoreToTT(bestScore, ss->ply),
+		tt.Store(posKey, scoreToTT(bestScore, ss->ply),
 				 ((PVNode && !bestMove.IsNone()) ? BoundExact : BoundUpper),
 				 depth, bestMove, ss->staticEval);
 	}
@@ -1416,7 +1416,7 @@ void RootMove::extractPvFromTT(Position& pos) {
 
 		assert(pos.MoveIsLegal(pv_[ply]));
 		pos.DoMove(pv_[ply++], *st++);
-		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
+		tte = pos.GetCsearcher()->tt.Probe(pos.GetKey());
 	}
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
@@ -1438,12 +1438,12 @@ void RootMove::insertPvInTT(Position& pos) {
 	Ply ply = 0;
 
 	do {
-		tte = pos.GetCsearcher()->tt.probe(pos.GetKey());
+		tte = pos.GetCsearcher()->tt.Probe(pos.GetKey());
 
 		if (tte == nullptr
 			|| UtilMoveStack::Move16toMove(tte->GetMove(), pos) != pv_[ply])
 		{
-			pos.GetSearcher()->tt.store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
+			pos.GetSearcher()->tt.Store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, pv_[ply], ScoreNone);
 		}
 
 		assert(pos.MoveIsLegal(pv_[ply]));
@@ -1556,7 +1556,7 @@ void Searcher::think() {
 #if defined LEARN
 	threads[0]->searching = true;
 #else
-	tt.setSize(options["USI_Hash"]); // operator int() 呼び出し。
+	tt.SetSize(options["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (options["OwnBook"] && pos.GetGamePly() <= book_ply) {

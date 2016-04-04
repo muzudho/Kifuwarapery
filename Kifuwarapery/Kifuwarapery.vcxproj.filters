@@ -255,9 +255,6 @@
     <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_200_evaluate01.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
@@ -392,6 +389,9 @@
     </ClInclude>
     <ClInclude Include="header\n240_tt______\n240_300_tt.hpp">
       <Filter>header\n240_tt______</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_150_kppIndexArray.hpp">
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

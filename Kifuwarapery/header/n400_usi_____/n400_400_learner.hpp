@@ -22,7 +22,7 @@ struct RawEvaluater {
 		const Square sq_wk = pos.GetKingSquare(White);
 		const int* GetList0 = pos.GetCplist0();
 		const int* GetList1 = pos.GetCplist1();
-		const std::array<float, 2> f = {{static_cast<float>(dinc[0] / FVScale), static_cast<float>(dinc[1] / FVScale)}};
+		const std::array<float, 2> f = {{static_cast<float>(dinc[0] / g_FVScale), static_cast<float>(dinc[1] / g_FVScale)}};
 
 		kk_raw[sq_bk][sq_wk] += f;
 		for (int i = 0; i < pos.GetNlist(); ++i) {
@@ -98,7 +98,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 #pragma omp for
 #endif
 		for (int ksq = I9; ksq < SquareNum; ++ksq) {
-			std::pair<ptrdiff_t, int> indices[base.KPPIndicesMax];
+			std::pair<ptrdiff_t, int> indices[base.g_KPPIndicesMax];
 			for (int i = 0; i < fe_end; ++i) {
 				for (int j = 0; j < fe_end; ++j) {
 					base.CreateKppIndices(indices, static_cast<Square>(ksq), i, j);
@@ -113,7 +113,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 #pragma omp for
 #endif
 		for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-			std::pair<ptrdiff_t, int> indices[base.KKPIndicesMax];
+			std::pair<ptrdiff_t, int> indices[base.g_KKPIndicesMax];
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 				for (int i = 0; i < fe_end; ++i) {
 					base.CreateKkpIndices(indices, static_cast<Square>(ksq0), ksq1, i);
@@ -128,7 +128,7 @@ inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
 #pragma omp for
 #endif
 		for (int ksq0 = I9; ksq0 < SquareNum; ++ksq0) {
-			std::pair<ptrdiff_t, int> indices[base.KKIndicesMax];
+			std::pair<ptrdiff_t, int> indices[base.g_KKIndicesMax];
 			for (Square ksq1 = I9; ksq1 < SquareNum; ++ksq1) {
 				base.CreateKkIndices(indices, static_cast<Square>(ksq0), ksq1);
 				FOO(indices, base.GetKkOneArrayFirst, raw.kk_raw[ksq0][ksq1]);
@@ -385,9 +385,9 @@ private:
 		std::shuffle(std::begin(bookMovesDatum_), std::end(bookMovesDatum_), mt_);
 		std::cout << "shuffle elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 		index_ = 0;
-		moveCount_.store(0);
+		moveCount_.Store(0);
 		for (auto& pred : predictions_)
-			pred.store(0);
+			pred.Store(0);
 		std::vector<std::thread> threads(positions_.m_size());
 		for (size_t i = 0; i < positions_.m_size(); ++i)
 			threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
@@ -403,7 +403,7 @@ private:
 		std::cout << std::endl;
 		std::cout << "parse1 elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 	}
-	static constexpr double FVPenalty() { return (0.2/static_cast<double>(FVScale)); }
+	static constexpr double FVPenalty() { return (0.2/static_cast<double>(g_FVScale)); }
 	template <bool UsePenalty, typename T>
 	void updateFV(std::array<T, 2>& v, const std::array<std::atomic<float>, 2>& dvRef) {
 		std::array<float, 2> dv = {dvRef[0].load(), dvRef[1].load()};
@@ -424,11 +424,11 @@ private:
 	}
 	template <bool UsePenalty>
 	void updateEval(const std::string& dirName) {
-		for (size_t i = 0; i < eval_.kpps_end_index(); ++i)
+		for (size_t i = 0; i < eval_.GetKpps_end_index(); ++i)
 			updateFV<UsePenalty>(*eval_.GetKppOneArrayFirst(i), *parse2EvalBase_.GetKppOneArrayFirst(i));
-		for (size_t i = 0; i < eval_.kkps_end_index(); ++i)
+		for (size_t i = 0; i < eval_.GetKkps_end_index(); ++i)
 			updateFV<UsePenalty>(*eval_.GetKkpOneArrayFirst(i), *parse2EvalBase_.GetKkpOneArrayFirst(i));
-		for (size_t i = 0; i < eval_.kks_end_index(); ++i)
+		for (size_t i = 0; i < eval_.GetKks_end_index(); ++i)
 			updateFV<UsePenalty>(*eval_.GetKkOneArrayFirst(i), *parse2EvalBase_.GetKkOneArrayFirst(i));
 
 		// 学習しないパラメータがある時は、一旦 write() で学習しているパラメータだけ書きこんで、再度読み込む事で、
