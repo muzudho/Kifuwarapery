@@ -6,13 +6,6 @@
 
 class Bitboard;
 
-// メモリ節約の為、1次元配列にして無駄が無いようにしている。
-#if defined HAVE_BMI2
-extern Bitboard g_rookAttack[495616];
-#else
-extern Bitboard g_rookAttack[512000];
-#endif
-
 
 
 // メモリ節約の為、1次元配列にして無駄が無いようにしている。
@@ -223,31 +216,11 @@ public://(^q^)
 		return _pext_u64(this->MergeP(), mask.MergeP());
 	}
 
-	inline Bitboard RookAttack(const Square sq) const {
-		const Bitboard block((*this) & g_rookBlockMask[sq]);
-		return g_rookAttack[g_rookAttackIndex[sq] + OccupiedToIndex(block, g_rookBlockMask[sq])];
-	}
-
-	inline Bitboard BishopAttack(const Square sq) const {
-		const Bitboard block((*this) & g_bishopBlockMask[sq]);
-		return g_bishopAttack[g_bishopAttackIndex[sq] + OccupiedToIndex(block, g_bishopBlockMask[sq])];
-	}
-
 #else
 	// magic bitboard.
 	// magic number を使って block の模様から利きのテーブルへのインデックスを算出
 	inline u64 OccupiedToIndex( const u64 magic, const int shiftBits) const {
 		return (this->MergeP() * magic) >> shiftBits;
-	}
-
-	inline Bitboard RookAttack(const Square sq) const {
-		const Bitboard block((*this) & g_rookBlockMask[sq]);
-		return g_rookAttack[g_rookAttackIndex[sq] + block.OccupiedToIndex(g_rookMagic[sq], g_rookShiftBits[sq])];
-	}
-
-	inline Bitboard BishopAttack(const Square sq) const {
-		const Bitboard block((*this) & g_bishopBlockMask[sq]);
-		return g_bishopAttack[g_bishopAttackIndex[sq] + block.OccupiedToIndex(g_bishopMagic[sq], g_bishopShiftBits[sq])];
 	}
 #endif
 
@@ -276,21 +249,6 @@ public://(^q^)
 	// Bitboard で直接利きを返す関数。
 	inline static Bitboard KingAttack(const Square sq) {
 		return g_kingAttack[sq];
-	}
-
-	inline Bitboard DragonAttack(const Square sq) const
-	{
-		return this->RookAttack(sq) | Bitboard::KingAttack(sq);
-	}
-
-	inline Bitboard HorseAttack(const Square sq) const
-	{
-		return this->BishopAttack(sq) | Bitboard::KingAttack(sq);
-	}
-
-	inline Bitboard QueenAttack(const Square sq) const
-	{
-		return this->RookAttack(sq) | this->BishopAttack(sq);
 	}
 
 	static inline Bitboard GoldAttack(const Color c, const Square sq) { return g_goldAttack[c][sq]; }

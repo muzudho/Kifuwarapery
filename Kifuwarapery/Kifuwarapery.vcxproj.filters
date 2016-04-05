@@ -396,6 +396,9 @@
     <ClInclude Include="header\n160_board___\n160_050_configBits.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_105_utilBitboard.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -513,6 +516,9 @@
       <Filter>source\n119_score___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_050_configBits.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_105_utilBitboard.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

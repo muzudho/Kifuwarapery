@@ -53,16 +53,16 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	case Lance:     return occupied.LanceAttack(c, sq);
 	case Knight:    return Bitboard::KnightAttack(c, sq);
 	case Silver:    return Bitboard::SilverAttack(c, sq);
-	case Bishop:    return occupied.BishopAttack(sq);
-	case Rook:      return occupied.RookAttack(sq);
+	case Bishop:    return UtilBitboard::BishopAttack(&occupied, sq);
+	case Rook:      return UtilBitboard::RookAttack(&occupied, sq);
 	case Gold:
 	case ProPawn:
 	case ProLance:
 	case ProKnight:
 	case ProSilver: return Bitboard::GoldAttack(c, sq);
 	case King:      return Bitboard::KingAttack(sq);
-	case Horse:     return occupied.HorseAttack(sq);
-	case Dragon:    return occupied.DragonAttack(sq);
+	case Horse:     return UtilBitboard::HorseAttack(&occupied,sq);
+	case Dragon:    return UtilBitboard::DragonAttack(&occupied,sq);
 	default:        UNREACHABLE;
 	}
 	UNREACHABLE;
@@ -514,21 +514,21 @@ namespace {
 			if (PT == Gold || PT == ProPawn || PT == ProLance || PT == ProKnight || PT == ProSilver || PT == Horse || PT == Dragon) {
 				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
 					| (occupied.LanceAttack(turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon))
-					| (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
+					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
+					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Silver) {
 				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
-					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon))
-					| (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
+					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
+					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Bishop) {
-				attackers |= (occupied.BishopAttack(to) & pos.GetBbOf(Bishop, Horse));
+				attackers |= (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Rook) {
 				attackers |= (occupied.LanceAttack(UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
 					| (occupied.LanceAttack(turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (occupied.RookAttack(to) & pos.GetBbOf(Rook, Dragon));
+					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon));
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {

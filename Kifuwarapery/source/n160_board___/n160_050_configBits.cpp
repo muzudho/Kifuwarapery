@@ -6,7 +6,7 @@ ConfigBits::ConfigBits()
 {
 }
 
-const int ConfigBits::m_slide[] = {//SquareNum
+const int ConfigBits::m_slide[SquareNum] = {
 	1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 , 1 ,
 	10, 10, 10, 10, 10, 10, 10, 10, 10,
 	19, 19, 19, 19, 19, 19, 19, 19, 19,
@@ -19,7 +19,7 @@ const int ConfigBits::m_slide[] = {//SquareNum
 };
 
 // 各マスのrookが利きを調べる必要があるマスの数
-const int g_rookBlockBits[SquareNum] = {
+const int ConfigBits::m_rookBlockBits[SquareNum] = {
 	14, 13, 13, 13, 13, 13, 13, 13, 14,
 	13, 12, 12, 12, 12, 12, 12, 12, 13,
 	13, 12, 12, 12, 12, 12, 12, 12, 13,
@@ -33,7 +33,7 @@ const int g_rookBlockBits[SquareNum] = {
 
 
 // 各マスのbishopが利きを調べる必要があるマスの数
-const int g_bishopBlockBits[SquareNum] = {
+const int ConfigBits::m_bishopBlockBits[SquareNum] = {
 	7,  6,  6,  6,  6,  6,  6,  6,  7,
 	6,  6,  6,  6,  6,  6,  6,  6,  6,
 	6,  6,  8,  8,  8,  8,  8,  6,  6,
@@ -51,7 +51,7 @@ const int g_bishopBlockBits[SquareNum] = {
 // シフト量を 1 つ減らす。(テーブルサイズを 2 倍にする。)
 // この方法は issei_y さんに相談したところ、教えて頂いた方法。
 // PEXT Bitboardを使用する際はシフト量を減らす必要が無い。
-const int g_rookShiftBits[SquareNum] = {
+const int ConfigBits::m_rookShiftBits[SquareNum] = {
 	50, 51, 51, 51, 51, 51, 51, 51, 50,
 #if defined HAVE_BMI2
 	51, 52, 52, 52, 52, 52, 52, 52, 51,
@@ -73,7 +73,7 @@ const int g_rookShiftBits[SquareNum] = {
 
 
 // Magic Bitboard で利きを求める際のシフト量
-const int g_bishopShiftBits[SquareNum] = {
+const int ConfigBits::m_bishopShiftBits[SquareNum] = {
 	57, 58, 58, 58, 58, 58, 58, 58, 57,
 	58, 58, 58, 58, 58, 58, 58, 58, 58,
 	58, 58, 56, 56, 56, 56, 56, 58, 58,
@@ -88,7 +88,7 @@ const int g_bishopShiftBits[SquareNum] = {
 
 #if defined HAVE_BMI2
 #else
-const u64 g_rookMagic[SquareNum] = {
+const u64 ConfigBits::m_rookMagic[SquareNum] = {
 	UINT64_C(0x140000400809300),  UINT64_C(0x1320000902000240), UINT64_C(0x8001910c008180),
 	UINT64_C(0x40020004401040),   UINT64_C(0x40010000d01120),   UINT64_C(0x80048020084050),
 	UINT64_C(0x40004000080228),   UINT64_C(0x400440000a2a0a),   UINT64_C(0x40003101010102),
@@ -118,7 +118,7 @@ const u64 g_rookMagic[SquareNum] = {
 	UINT64_C(0x1000200060030c18), UINT64_C(0x4004200020010102), UINT64_C(0x140600021010302)
 };
 
-const u64 g_bishopMagic[SquareNum] = {
+const u64 ConfigBits::m_bishopMagic[SquareNum] = {
 	UINT64_C(0x20101042c8200428), UINT64_C(0x840240380102),     UINT64_C(0x800800c018108251),
 	UINT64_C(0x82428010301000),   UINT64_C(0x481008201000040),  UINT64_C(0x8081020420880800),
 	UINT64_C(0x804222110000),     UINT64_C(0xe28301400850),     UINT64_C(0x2010221420800810),
@@ -150,7 +150,4 @@ const u64 g_bishopMagic[SquareNum] = {
 #endif
 
 
-
-
-
-int			g_rookAttackIndex[SquareNum];
+int			ConfigBits::m_rookAttackIndex[SquareNum];

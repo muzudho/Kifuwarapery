@@ -64,7 +64,7 @@ Bitboard Initializer::AttackCalc(const Square square, const Bitboard& occupied, 
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard Initializer::LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return occupied.RookAttack(square) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(square));
+	return UtilBitboard::RookAttack(&occupied, square) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(square));
 }
 
 // index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
@@ -86,20 +86,20 @@ Bitboard Initializer::IndexToOccupied(const int index, const int bits, const Bit
 
 void Initializer::InitAttacks(const bool isBishop)
 {
-	auto* attacks = (isBishop ? g_bishopAttack : g_rookAttack);
-	auto* attackIndex = (isBishop ? g_bishopAttackIndex : g_rookAttackIndex);
+	auto* attacks = (isBishop ? g_bishopAttack : UtilBitboard::m_rookAttack);
+	auto* attackIndex = (isBishop ? g_bishopAttackIndex : ConfigBits::m_rookAttackIndex);
 	auto* blockMask = (isBishop ? g_bishopBlockMask : g_rookBlockMask);
-	auto* shift = (isBishop ? g_bishopShiftBits : g_rookShiftBits);
+	auto* shift = (isBishop ? ConfigBits::m_bishopShiftBits : ConfigBits::m_rookShiftBits);
 #if defined HAVE_BMI2
 #else
-	auto* magic = (isBishop ? g_bishopMagic : g_rookMagic);
+	auto* magic = (isBishop ? ConfigBits::m_bishopMagic : ConfigBits::m_rookMagic);
 #endif
 	int index = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		blockMask[sq] = (isBishop ? BishopBlockMaskCalc(sq) : RookBlockMaskCalc(sq));
 		attackIndex[sq] = index;
 
-		const int num1s = (isBishop ? g_bishopBlockBits[sq] : g_rookBlockBits[sq]);
+		const int num1s = (isBishop ? ConfigBits::m_bishopBlockBits[sq] : ConfigBits::m_rookBlockBits[sq]);
 		for (int i = 0; i < (1 << num1s); ++i)
 		{
 			const Bitboard occupied = this->IndexToOccupied(i, num1s, blockMask[sq]);
@@ -132,19 +132,19 @@ void Initializer::InitLanceAttacks() {
 
 void Initializer::InitKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
-		g_kingAttack[sq] = Bitboard::AllOneBB().RookAttack(sq) | Bitboard::AllOneBB().BishopAttack(sq);
+		g_kingAttack[sq] = UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_goldAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::AllOneBB().RookAttack(sq);
+			g_goldAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_silverAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | Bitboard::AllOneBB().BishopAttack(sq);
+			g_silverAttack[c][sq] = (Bitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitKnightAttacks() {
@@ -161,7 +161,7 @@ void Initializer::InitKnightAttacks() {
 void Initializer::InitPawnAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_pawnAttack[c][sq] = Bitboard::SilverAttack(c, sq) ^ Bitboard::AllOneBB().BishopAttack(sq);
+			g_pawnAttack[c][sq] = Bitboard::SilverAttack(c, sq) ^ UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitSquareRelation() {
@@ -190,8 +190,8 @@ void Initializer::InitSquareRelation() {
 // g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
 void Initializer::InitAttackToEdge() {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_rookAttackToEdge[sq] = Bitboard::AllZeroBB().RookAttack(sq);
-		g_bishopAttackToEdge[sq] = Bitboard::AllZeroBB().BishopAttack(sq);
+		g_rookAttackToEdge[sq] = UtilBitboard::RookAttack(&Bitboard::AllZeroBB(),sq);
+		g_bishopAttackToEdge[sq] = UtilBitboard::BishopAttack(&Bitboard::AllZeroBB(),sq);
 		g_lanceAttackToEdge[Black][sq] = Bitboard::AllZeroBB().LanceAttack(Black, sq);
 		g_lanceAttackToEdge[White][sq] = Bitboard::AllZeroBB().LanceAttack(White, sq);
 	}
@@ -204,9 +204,9 @@ void Initializer::InitBetweenBB() {
 			if (sq1 == sq2) continue;
 			const Direction direc = UtilSquare::GetSquareRelation(sq1, sq2);
 			if (direc & DirecCross)
-				g_betweenBB[sq1][sq2] = Bitboard::SetMaskBB(sq2).RookAttack(sq1) & Bitboard::SetMaskBB(sq1).RookAttack(sq2);
+				g_betweenBB[sq1][sq2] = UtilBitboard::RookAttack(&Bitboard::SetMaskBB(sq2),sq1) & UtilBitboard::RookAttack(&Bitboard::SetMaskBB(sq1),sq2);
 			else if (direc & DirecDiag)
-				g_betweenBB[sq1][sq2] = Bitboard::SetMaskBB(sq2).BishopAttack(sq1) & Bitboard::SetMaskBB(sq1).BishopAttack(sq2);
+				g_betweenBB[sq1][sq2] = UtilBitboard::BishopAttack(&Bitboard::SetMaskBB(sq2),sq1) & UtilBitboard::BishopAttack(&Bitboard::SetMaskBB(sq1),sq2);
 		}
 	}
 }

@@ -198,7 +198,7 @@ namespace {
 				| (pos.GetAttacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.IsNot0() && (xray ^ (xray & pos.GetOccupiedBB().QueenAttack(m2to))).IsNot0()) {
+			if (xray.IsNot0() && (xray ^ (xray & UtilBitboard::QueenAttack(&pos.GetOccupiedBB(),m2to))).IsNot0()) {
 				return true;
 			}
 		}

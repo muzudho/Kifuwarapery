@@ -104,15 +104,11 @@ const Bitboard g_inFrontMask[ColorNum][RankNum] = {
 	{ g_InFrontOfRank9White, g_InFrontOfRank8White, g_InFrontOfRank7White, g_InFrontOfRank6White, g_InFrontOfRank5White, g_InFrontOfRank4White, g_InFrontOfRank3White, g_InFrontOfRank2White, g_InFrontOfRank1White }
 };
 
+
+
+
 // これらは一度値を設定したら二度と変更しない。
 // 本当は const 化したい。
-#if defined HAVE_BMI2
-Bitboard g_rookAttack[495616];
-#else
-Bitboard g_rookAttack[512000];
-#endif
-
-
 Bitboard g_rookBlockMask[SquareNum];
 Bitboard g_bishopAttack[20224];
 int			g_bishopAttackIndex[SquareNum];
