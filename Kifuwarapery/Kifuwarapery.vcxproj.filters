@@ -11,9 +11,6 @@
     <Filter Include="header\n160_board___">
       <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n200_score___">
-      <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n280_move____">
       <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
     </Filter>
@@ -45,9 +42,6 @@
     </Filter>
     <Filter Include="source\n160_board___">
       <UniqueIdentifier>{7ca6996e-3e41-4079-bff6-634b0fa58752}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n200_score___">
-      <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n280_move____">
       <UniqueIdentifier>{d3ae253d-2733-4e83-8e46-5bba8d5f1097}</UniqueIdentifier>
@@ -136,6 +130,12 @@
     <Filter Include="source\n240_tt______">
       <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n119_score___">
+      <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n119_score___">
+      <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -152,9 +152,6 @@
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_200_pieceScore.hpp">
-      <Filter>header\n200_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
       <Filter>header\n280_move____</Filter>
@@ -345,18 +342,6 @@
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
       <Filter>header\n111_colorSq_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_050_bound.hpp">
-      <Filter>header\n200_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_055_utilBound.hpp">
-      <Filter>header\n200_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_090_score.hpp">
-      <Filter>header\n200_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n200_score___\n200_100_utilScore.hpp">
-      <Filter>header\n200_score___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_100_move.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
@@ -393,6 +378,24 @@
     <ClInclude Include="header\n260_evaluate\n260_150_kppIndexArray.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_050_bound.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_055_utilBound.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_090_score.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_100_utilScore.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_200_pieceScore.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_050_configBits.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -406,9 +409,6 @@
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
       <Filter>source\n160_board___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n200_score___\n200_200_pieceScore.cpp">
-      <Filter>source\n200_score___</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
       <Filter>source\n400_usi_____</Filter>
@@ -488,9 +488,6 @@
     <ClCompile Include="source\n160_board___\n160_200_bitboardMask.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n200_score___\n200_100_utilScore.cpp">
-      <Filter>source\n200_score___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_position.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
@@ -508,6 +505,15 @@
     </ClCompile>
     <ClCompile Include="source\n240_tt______\n240_300_tt.cpp">
       <Filter>source\n240_tt______</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n119_score___\n119_100_utilScore.cpp">
+      <Filter>source\n119_score___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
+      <Filter>source\n119_score___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_050_configBits.cpp">
+      <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

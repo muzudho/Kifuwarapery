@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../n200_score___/n200_100_utilScore.hpp"
+#include "../n119_score___/n119_100_utilScore.hpp"
 
 const Score g_PawnScore             = static_cast<Score>( 100 * 9 / 10);
 const Score g_LanceScore            = static_cast<Score>( 350 * 9 / 10);

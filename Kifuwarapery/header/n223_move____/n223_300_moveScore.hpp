@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../header/n200_score___/n200_100_utilScore.hpp"
+#include "../../header/n119_score___/n119_100_utilScore.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 
 // 指し手と、評価値。
