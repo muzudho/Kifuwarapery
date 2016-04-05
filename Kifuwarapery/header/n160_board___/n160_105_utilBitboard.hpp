@@ -4,6 +4,14 @@
 
 class UtilBitboard {
 public:
+	static Bitboard m_kingAttack[SquareNum];
+
+	// Bitboard で直接利きを返す関数。
+	static inline Bitboard KingAttack(const Square sq) {
+		return UtilBitboard::m_kingAttack[sq];
+	}
+
+public:
 
 	// メモリ節約の為、1次元配列にして無駄が無いようにしている。
 	#if defined HAVE_BMI2
@@ -40,7 +48,7 @@ public:
 
 	static inline Bitboard DragonAttack(const Bitboard* thisBitboard, const Square sq) //const
 	{
-		return UtilBitboard::RookAttack(thisBitboard, sq) | Bitboard::KingAttack(sq);
+		return UtilBitboard::RookAttack(thisBitboard, sq) | UtilBitboard::KingAttack(sq);
 	}
 
 	static inline Bitboard QueenAttack(const Bitboard* thisBitboard, const Square sq) //const
@@ -49,7 +57,16 @@ public:
 	}
 
 	static inline Bitboard HorseAttack(const Bitboard* thisBitboard, const Square sq) {//const
-		return UtilBitboard::BishopAttack(thisBitboard, sq) | Bitboard::KingAttack(sq);
+		return UtilBitboard::BishopAttack(thisBitboard, sq) | UtilBitboard::KingAttack(sq);
+	}
+
+
+
+	static inline Bitboard DragonAttackToEdge(const Square sq) {
+		return Bitboard::RookAttackToEdge(sq) | UtilBitboard::KingAttack(sq);
+	}
+	static inline Bitboard HorseAttackToEdge(const Square sq) {
+		return Bitboard::BishopAttackToEdge(sq) | UtilBitboard::KingAttack(sq);
 	}
 
 };

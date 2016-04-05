@@ -1,9 +1,12 @@
+#include <sstream>      // std::istringstream
+#include "../../header/n160_board___/n160_105_utilBitboard.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
+
 
 Key Position::m_zobrist_[PieceTypeNum][SquareNum][ColorNum];
 Key Position::m_zobHand_[HandPieceNum][ColorNum];
@@ -60,7 +63,7 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	case ProLance:
 	case ProKnight:
 	case ProSilver: return Bitboard::GoldAttack(c, sq);
-	case King:      return Bitboard::KingAttack(sq);
+	case King:      return UtilBitboard::KingAttack(sq);
 	case Horse:     return UtilBitboard::HorseAttack(&occupied,sq);
 	case Dragon:    return UtilBitboard::DragonAttack(&occupied,sq);
 	default:        UNREACHABLE;
@@ -645,7 +648,7 @@ namespace {
 	bool canKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
 		const Color them = UtilColor::OppositeColor(us);
 		const Square ksq = pos.GetKingSquare(them);
-		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf(them).NotThisAnd(Bitboard::KingAttack(ksq)));
+		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf(them).NotThisAnd(UtilBitboard::KingAttack(ksq)));
 		kingMoveBB.ClearBit(sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
 
 		if (kingMoveBB.IsNot0()) {
@@ -720,7 +723,7 @@ bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
 	const Bitboard tempOccupied = GetOccupiedBB() | Bitboard::SetMaskBB(sq);
-	Bitboard kingMoveBB = GetBbOf(them).NotThisAnd(Bitboard::KingAttack(ksq));
+	Bitboard kingMoveBB = GetBbOf(them).NotThisAnd(UtilBitboard::KingAttack(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
 	assert(kingMoveBB.IsNot0());
@@ -881,7 +884,7 @@ silver_drop_end:
 
 	// 駒を移動する場合
 	// moveTarget は桂馬以外の移動先の大まかな位置。飛角香の遠隔王手は含まない。
-	const Bitboard moveTarget = GetBbOf(US).NotThisAnd(Bitboard::KingAttack(ksq));
+	const Bitboard moveTarget = GetBbOf(US).NotThisAnd(UtilBitboard::KingAttack(ksq));
 	const Bitboard pinned = GetPinnedBB();
 	const Bitboard dcBB_betweenIsUs = DiscoveredCheckBB<true>();
 
@@ -1021,7 +1024,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、動かした駒が pin されていない)
-						if (!canKingEscape(*this, US, to, Bitboard::HorseAttackToEdge(to)) // 竜の場合と違って、常に最大の利きを使用して良い。
+						if (!canKingEscape(*this, US, to, UtilBitboard::HorseAttackToEdge(to)) // 竜の場合と違って、常に最大の利きを使用して良い。
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1054,7 +1057,7 @@ silver_drop_end:
 					do {
 						const Square to = toBB.FirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, Bitboard::HorseAttackToEdge(to))
+							if (!canKingEscape(*this, US, to, UtilBitboard::HorseAttackToEdge(to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1084,7 +1087,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.FirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, Bitboard::HorseAttackToEdge(to))
+							if (!canKingEscape(*this, US, to, UtilBitboard::HorseAttackToEdge(to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))

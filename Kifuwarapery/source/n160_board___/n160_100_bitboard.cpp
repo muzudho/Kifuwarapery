@@ -115,7 +115,7 @@ int			g_bishopAttackIndex[SquareNum];
 Bitboard g_bishopBlockMask[SquareNum];
 Bitboard g_lanceAttack[ColorNum][SquareNum][128];
 
-Bitboard g_kingAttack[SquareNum];
+//Bitboard g_kingAttack[SquareNum];
 Bitboard g_goldAttack[ColorNum][SquareNum];
 Bitboard g_silverAttack[ColorNum][SquareNum];
 Bitboard g_knightAttack[ColorNum][SquareNum];

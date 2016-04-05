@@ -428,7 +428,7 @@ namespace {
 			bannedKingToBB |= Bitboard::BishopAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
-			bannedKingToBB |= Bitboard::HorseAttackToEdge(checkSq);
+			bannedKingToBB |= UtilBitboard::HorseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
 			bannedKingToBB |= Bitboard::RookAttackToEdge(checkSq);
@@ -440,7 +440,7 @@ namespace {
 				bannedKingToBB |= pos.GetAttacksFrom<Dragon>(checkSq);
 			}
 			else {
-				bannedKingToBB |= Bitboard::DragonAttackToEdge(checkSq);
+				bannedKingToBB |= UtilBitboard::DragonAttackToEdge(checkSq);
 			}
 			break;
 		default:
@@ -478,7 +478,7 @@ namespace {
 			} while (bb.IsNot0());
 
 			// 玉が移動出来る移動先を格納。
-			bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(US).NotThisAnd(Bitboard::KingAttack(ksq)));
+			bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(US).NotThisAnd(UtilBitboard::KingAttack(ksq)));
 			while (bb.IsNot0()) {
 				const Square to = bb.FirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。

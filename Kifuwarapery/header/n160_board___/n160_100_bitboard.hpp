@@ -16,7 +16,7 @@ extern Bitboard g_bishopBlockMask	[SquareNum];
 // ƒƒ‚ƒŠß–ñ‚ð‚¹‚¸A–³‘Ê‚Èƒƒ‚ƒŠ‚ðŽ‚Á‚Ä‚¢‚éB
 extern Bitboard g_lanceAttack		[ColorNum]	[SquareNum][128];
 
-extern Bitboard g_kingAttack		[SquareNum];
+//extern Bitboard g_kingAttack		[SquareNum];
 extern Bitboard g_goldAttack		[ColorNum]	[SquareNum];
 extern Bitboard g_silverAttack		[ColorNum]	[SquareNum];
 extern Bitboard g_knightAttack		[ColorNum]	[SquareNum];
@@ -246,11 +246,6 @@ public://(^q^)
 		return (US == Black ? ((*this) >> 1) : ((*this) << 1));
 	}
 
-	// Bitboard ‚Å’¼Ú—˜‚«‚ð•Ô‚·ŠÖ”B
-	inline static Bitboard KingAttack(const Square sq) {
-		return g_kingAttack[sq];
-	}
-
 	static inline Bitboard GoldAttack(const Color c, const Square sq) { return g_goldAttack[c][sq]; }
 	static inline Bitboard SilverAttack(const Color c, const Square sq) { return g_silverAttack[c][sq]; }
 	static inline Bitboard KnightAttack(const Color c, const Square sq) { return g_knightAttack[c][sq]; }
@@ -262,8 +257,6 @@ public://(^q^)
 	static inline Bitboard RookAttackToEdge		(const Square sq						) { return g_rookAttackToEdge	[sq];		}
 	static inline Bitboard BishopAttackToEdge	(const Square sq						) { return g_bishopAttackToEdge	[sq];		}
 	static inline Bitboard LanceAttackToEdge	(const Color c		, const Square sq	) { return g_lanceAttackToEdge	[c][sq];	}
-	static inline Bitboard DragonAttackToEdge	(const Square sq						) { return Bitboard::RookAttackToEdge(sq) | Bitboard::KingAttack(sq); }
-	static inline Bitboard HorseAttackToEdge	(const Square sq						) { return Bitboard::BishopAttackToEdge(sq) | Bitboard::KingAttack(sq); }
 	static inline Bitboard GoldCheckTable		(const Color c		, const Square sq	) { return g_goldCheckTable		[c][sq];	}
 	static inline Bitboard SilverCheckTable		(const Color c		, const Square sq	) { return g_silverCheckTable	[c][sq];	}
 	static inline Bitboard KnightCheckTable		(const Color c		, const Square sq	) { return g_knightCheckTable	[c][sq];	}
