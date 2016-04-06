@@ -141,7 +141,7 @@ public:
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
-		return g_goldAttackBb.GoldAttack(c, sq);
+		return g_goldAttackBb.GetControllBb(c, sq);
 	}
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq) const {
@@ -301,7 +301,7 @@ private:
 					) |
 					(
 						this->GetBbOf(Rook, Dragon) &
-						g_rookAttackBb.RookAttackToEdge(ksq)
+						g_rookAttackBb.GetControllBbToEdge(ksq)
 					) |
 					(
 						this->GetBbOf(Bishop, Horse) &
@@ -311,7 +311,7 @@ private:
 		while (pinners.IsNot0()) {
 			const Square sq = pinners.FirstOneFromI9();
 			// pin する遠隔駒と玉の間にある駒の位置の Bitboard
-			const Bitboard between = g_betweenBb.BetweenBB(sq, ksq) & GetOccupiedBB();
+			const Bitboard between = g_betweenBb.GetBetweenBB(sq, ksq) & GetOccupiedBB();
 
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
 			if (between.IsNot0()

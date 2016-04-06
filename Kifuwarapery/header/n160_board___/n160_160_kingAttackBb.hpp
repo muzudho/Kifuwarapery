@@ -2,21 +2,21 @@
 
 #include "../n160_board___/n160_100_bitboard.hpp"
 
+
 //────────────────────────────────────────────────────────────────────────────────
-// 銀
+// 玉の利き
 //────────────────────────────────────────────────────────────────────────────────
-class SilverAttackBb {
-public:
-	Bitboard m_silverAttack[ColorNum][SquareNum];
+const class KingAttackBb  {
+private:
+	// メモリ節約の為、1次元配列にして無駄が無いようにしている。
+	Bitboard m_controllBb_[SquareNum]; // TODO: const にしたい。
 
 public:
-	inline Bitboard SilverAttack(const Color c, const Square sq) const {
-		return this->m_silverAttack[c][sq];
-	}
 
-	Bitboard m_silverCheckTable[ColorNum][SquareNum];
-	inline Bitboard SilverCheckTable(const Color c, const Square sq) const {
-		return this->m_silverCheckTable[c][sq];
+	void Initialize();
+
+	// Bitboard で直接利きを返す関数。
+	inline Bitboard GetControllBb(const Square sq) const {
+		return this->m_controllBb_[sq];
 	}
 };
-

@@ -8,12 +8,12 @@ extern RookAttackBb g_rookAttackBb;
 
 class DragonAttackBb {
 public:
-	inline Bitboard DragonAttack(const Bitboard* thisBitboard, const Square sq) const
+	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Square sq) const
 	{
-		return g_rookAttackBb.RookAttack(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
+		return g_rookAttackBb.GetControllBb(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 
-	inline Bitboard DragonAttackToEdge(const Square sq) {
-		return g_rookAttackBb.RookAttackToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
+	inline Bitboard GetControllBbToEdge(const Square sq) {
+		return g_rookAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 };

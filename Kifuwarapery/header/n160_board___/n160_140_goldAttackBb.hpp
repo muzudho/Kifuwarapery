@@ -8,12 +8,12 @@
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 class GoldAttackBb {
 public:
-	Bitboard m_goldAttack[ColorNum][SquareNum];
+	Bitboard m_controllBb[ColorNum][SquareNum];
 	Bitboard m_goldCheckTable[ColorNum][SquareNum];
 
 public:
-	inline Bitboard GoldAttack(const Color c, const Square sq) const {
-		return this->m_goldAttack[c][sq];
+	inline Bitboard GetControllBb(const Color c, const Square sq) const {
+		return this->m_controllBb[c][sq];
 	}
 
 	inline Bitboard GoldCheckTable(const Color c, const Square sq) const {

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "n160_100_bitboard.hpp"
-#include "n160_120_silverAttack.hpp"
-#include "n160_150_goldAttack.hpp"
+#include "n160_110_silverAttackBb.hpp"
+#include "n160_140_goldAttackBb.hpp"
 
 extern SilverAttackBb g_silverAttackBb;
 extern GoldAttackBb g_goldAttackBb;
@@ -13,7 +13,7 @@ public:
 
 	// ‘O•û3•ûŒü‚ÌˆÊ’u‚ÌBitboard
 	inline Bitboard GoldAndSilverAttacks(const Color c, const Square sq) const {
-		return g_goldAttackBb.GoldAttack(c, sq) & g_silverAttackBb.SilverAttack(c, sq);
+		return g_goldAttackBb.GetControllBb(c, sq) & g_silverAttackBb.GetControllBb(c, sq);
 	}
 
 };

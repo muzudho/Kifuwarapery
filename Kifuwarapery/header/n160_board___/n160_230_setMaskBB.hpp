@@ -93,7 +93,7 @@ public:
 
 public:
 
-	inline Bitboard SetMaskBB(const Square sq) const {
+	inline Bitboard GetSetMaskBb(const Square sq) const {
 		return this->m_setMaskBB[sq];
 	}
 

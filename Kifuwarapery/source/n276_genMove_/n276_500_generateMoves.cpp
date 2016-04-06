@@ -415,23 +415,23 @@ namespace {
 			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(THEM, checkSq);
 			break;
 		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= g_silverAttackBb.SilverAttack(THEM, checkSq);
+			bannedKingToBB |= g_silverAttackBb.GetControllBb(THEM, checkSq);
 			break;
 		case (THEM == Black ? BGold : WGold) :
 		case (THEM == Black ? BProPawn : WProPawn) :
 		case (THEM == Black ? BProLance : WProLance) :
 		case (THEM == Black ? BProKnight : WProKnight) :
 		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= g_goldAttackBb.GoldAttack(THEM, checkSq);
+			bannedKingToBB |= g_goldAttackBb.GetControllBb(THEM, checkSq);
 			break;
 		case (THEM == Black ? BBishop : WBishop) :
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
-			bannedKingToBB |= g_horseAttackBb.HorseAttackToEdge(checkSq);
+			bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
-			bannedKingToBB |= g_rookAttackBb.RookAttackToEdge(checkSq);
+			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
 			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
@@ -440,7 +440,7 @@ namespace {
 				bannedKingToBB |= pos.GetAttacksFrom<Dragon>(checkSq);
 			}
 			else {
-				bannedKingToBB |= g_dragonAttackBb.DragonAttackToEdge(checkSq);
+				bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
 			}
 			break;
 		default:
@@ -494,7 +494,7 @@ namespace {
 
 			// 王手している駒を玉以外で取る手の生成。
 			// pin されているかどうかは movePicker か search で調べる。
-			const Bitboard target1 = g_betweenBb.BetweenBB(checkSq, ksq);
+			const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);
