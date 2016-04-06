@@ -18,21 +18,21 @@ const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/
 
 
 
-template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq, const Bitboard& occupied) { return g_lanceAttackBb.GetControllBb(&occupied, c, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::BishopAttack(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::RookAttack(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::HorseAttack(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::DragonAttack(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq, const Bitboard& occupied) { return g_lanceAttackBb.GetControllBb	(&occupied, c, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq, const Bitboard& occupied) { return g_bishopAttackBb.BishopAttack	(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq, const Bitboard& occupied) { return g_rookAttackBb.RookAttack		(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::HorseAttack		(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return UtilBitboard::DragonAttack		(&occupied, sq); }
 
-template <> inline Bitboard Position::GetAttacksFrom<Pawn  >(const Color c, const Square sq) const { return UtilBitboard::PawnAttack	(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<Pawn  >(const Color c, const Square sq) const { return g_pawnAttackBb.PawnAttack		(c, sq					); }
 template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq) const { return g_lanceAttackBb.GetControllBb	(&GetOccupiedBB(), c, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Knight>(const Color c, const Square sq) const { return UtilBitboard::KnightAttack	(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<Knight>(const Color c, const Square sq) const { return g_knightAttackBb.KnightAttack	(c, sq					); }
 template <> inline Bitboard Position::GetAttacksFrom<Silver>(const Color c, const Square sq) const { return g_silverAttackBb.SilverAttack	(c, sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq) const { return UtilBitboard::BishopAttack	(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq) const { return UtilBitboard::RookAttack	(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<King  >(const Color  , const Square sq) const { return g_kingAttackBb.GetControllBb(   sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq) const { return UtilBitboard::HorseAttack	(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq) const { return UtilBitboard::DragonAttack	(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq) const { return g_bishopAttackBb.BishopAttack	(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq) const { return g_rookAttackBb.RookAttack		(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<King  >(const Color  , const Square sq) const { return g_kingAttackBb.GetControllBb	(   sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq) const { return UtilBitboard::HorseAttack		(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq) const { return UtilBitboard::DragonAttack		(&GetOccupiedBB(),   sq	); }
 
 // position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
 // の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。

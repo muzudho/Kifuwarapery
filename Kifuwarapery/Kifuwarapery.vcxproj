@@ -182,6 +182,9 @@
     <ClInclude Include="header\n160_board___\n160_140_lanceAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_150_goldAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_160_rookAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_170_goldAndSilverAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_180_knightAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_190_pawnAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_200_utilBitboard.hpp" />
     <ClInclude Include="header\n160_board___\n160_110_kingAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_300_bitboardMask.hpp" />
@@ -260,6 +263,9 @@
     <ClCompile Include="source\n160_board___\n160_140_lanceAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_150_goldAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_160_rookAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_170_goldAndSilverAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_180_knightAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_190_pawnAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_200_utilBitboard.cpp" />
     <ClCompile Include="source\n160_board___\n160_110_kingAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_300_bitboardMask.cpp" />

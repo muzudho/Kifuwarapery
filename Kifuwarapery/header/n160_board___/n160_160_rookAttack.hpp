@@ -23,6 +23,8 @@ public:
 	Bitboard m_rookBlockMask[SquareNum];
 	Bitboard m_rookAttackToEdge[SquareNum];
 
+
+
 public:
 	inline Bitboard RookAttackToEdge(const Square sq) const {
 		return this->m_rookAttackToEdge[sq];
@@ -39,5 +41,21 @@ public:
 	inline Bitboard RookStepAttacks(const Square sq) const {
 		return g_goldAttackBb.GoldAttack(Black, sq) & g_goldAttackBb.GoldAttack(White, sq);
 	}
+
+	#if defined HAVE_BMI2
+		inline Bitboard RookAttack(Bitboard& thisBitboard, const Square sq) const {
+			const Bitboard block(thisBitboard & this->m_rookBlockMask[sq]);
+			return this->m_rookAttack[this->m_rookAttackIndex[sq] + OccupiedToIndex(block, this->m_rookBlockMask[sq])];
+		}
+	#else
+		inline Bitboard RookAttack(const Bitboard* thisBitboard, const Square sq) const {
+			const Bitboard block((*thisBitboard) & this->m_rookBlockMask[sq]);
+			return this->m_rookAttack[
+				ConfigBits::m_rookAttackIndex[sq] +
+					block.OccupiedToIndex(ConfigBits::m_rookMagic[sq], ConfigBits::m_rookShiftBits[sq])
+			];
+		}
+	#endif
+
 };
 

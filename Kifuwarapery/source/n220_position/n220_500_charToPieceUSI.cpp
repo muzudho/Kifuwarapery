@@ -52,12 +52,12 @@ CheckInfo::CheckInfo(const Position& pos) {
 Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) {
 	switch (pt) {
 	case Occupied:  return Bitboard::AllZeroBB();
-	case Pawn:      return UtilBitboard::PawnAttack(c, sq);
+	case Pawn:      return g_pawnAttackBb.PawnAttack(c, sq);
 	case Lance:     return g_lanceAttackBb.GetControllBb(&occupied, c, sq);
-	case Knight:    return UtilBitboard::KnightAttack(c, sq);
+	case Knight:    return g_knightAttackBb.KnightAttack(c, sq);
 	case Silver:    return g_silverAttackBb.SilverAttack(c, sq);
-	case Bishop:    return UtilBitboard::BishopAttack(&occupied, sq);
-	case Rook:      return UtilBitboard::RookAttack(&occupied, sq);
+	case Bishop:    return g_bishopAttackBb.BishopAttack(&occupied, sq);
+	case Rook:      return g_rookAttackBb.RookAttack(&occupied, sq);
 	case Gold:
 	case ProPawn:
 	case ProLance:
@@ -517,21 +517,21 @@ namespace {
 			if (PT == Gold || PT == ProPawn || PT == ProLance || PT == ProKnight || PT == ProSilver || PT == Horse || PT == Dragon) {
 				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
 					| (g_lanceAttackBb.GetControllBb(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
-					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
+					| (g_rookAttackBb.RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
+					| (g_bishopAttackBb.BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Silver) {
 				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
-					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
-					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
+					| (g_rookAttackBb.RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
+					| (g_bishopAttackBb.BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Bishop) {
-				attackers |= (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
+				attackers |= (g_bishopAttackBb.BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Rook) {
 				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
 					| (g_lanceAttackBb.GetControllBb(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
-					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon));
+					| (g_rookAttackBb.RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon));
 			}
 
 			if (PT == Pawn || PT == Lance || PT == Knight) {
@@ -815,7 +815,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 		Bitboard toBB;
 		if (ourHand.Exists<HRook>()) {
 			// 飛車打ちを先に調べたので、尻金だけは省く。
-			toBB = dropTarget & (g_goldAttackBb.GoldAttack(Them, ksq) ^ UtilBitboard::PawnAttack(US, ksq));
+			toBB = dropTarget & (g_goldAttackBb.GoldAttack(Them, ksq) ^ g_pawnAttackBb.PawnAttack(US, ksq));
 		}
 		else {
 			toBB = dropTarget & g_goldAttackBb.GoldAttack(Them, ksq);
@@ -847,7 +847,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 		else {
 			if (ourHand.Exists<HBishop>()) {
 				// 斜め後ろを除外。前方から打つ場合を調べる必要がある。
-				toBB = dropTarget & UtilBitboard::GoldAndSilverAttacks(Them, ksq);
+				toBB = dropTarget & g_goldAndSilverAttackBb.GoldAndSilverAttacks(Them, ksq);
 			}
 			else {
 				toBB = dropTarget & g_silverAttackBb.SilverAttack(Them, ksq);
@@ -867,7 +867,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 silver_drop_end:
 
 	if (ourHand.Exists<HKnight>()) {
-		Bitboard toBB = dropTarget & UtilBitboard::KnightAttack(Them, ksq);
+		Bitboard toBB = dropTarget & g_knightAttackBb.KnightAttack(Them, ksq);
 		while (toBB.IsNot0()) {
 			const Square to = toBB.FirstOneFromI9();
 			// 桂馬は紐が付いている必要はない。
@@ -1302,7 +1302,7 @@ silver_drop_end:
 
 	{
 		// 桂による移動
-		Bitboard fromBB = GetBbOf(Knight, US) & UtilBitboard::KnightCheckTable(US, ksq);
+		Bitboard fromBB = GetBbOf(Knight, US) & g_knightAttackBb.KnightCheckTable(US, ksq);
 		if (fromBB.IsNot0()) {
 			const Bitboard chkBB_promo = GetAttacksFrom<Gold>(Them, ksq) & TRank789BB;
 			const Bitboard chkBB = GetAttacksFrom<Knight>(Them, ksq);
