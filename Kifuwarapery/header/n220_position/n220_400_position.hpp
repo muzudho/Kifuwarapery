@@ -2,8 +2,8 @@
 
 #include <stack>
 #include "../n116_hand____/n116_500_hand.hpp"
-#include "../n160_board___/n160_105_utilBitboard.hpp"
-#include "../n160_board___/n160_200_bitboardMask.hpp"
+#include "../n160_board___/n160_200_utilBitboard.hpp"
+#include "../n160_board___/n160_300_bitboardMask.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_600_evalList.hpp"

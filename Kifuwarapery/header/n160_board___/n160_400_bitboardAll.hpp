@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n160_board___/n160_200_bitboardMask.hpp"
+#include "../n160_board___/n160_300_bitboardMask.hpp"
 
 
 // Bitboard の全ての bit に対して同様の処理を行う際に使用するマクロ

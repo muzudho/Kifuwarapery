@@ -189,9 +189,6 @@
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_200_bitboardMask.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -396,7 +393,13 @@
     <ClInclude Include="header\n160_board___\n160_050_configBits.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_105_utilBitboard.hpp">
+    <ClInclude Include="header\n160_board___\n160_110_kingAttack.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_300_bitboardMask.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_200_utilBitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -488,9 +491,6 @@
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
       <Filter>source\n111_colorSq_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_200_bitboardMask.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_position.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
@@ -518,7 +518,13 @@
     <ClCompile Include="source\n160_board___\n160_050_configBits.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_105_utilBitboard.cpp">
+    <ClCompile Include="source\n160_board___\n160_110_kingAttack.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_300_bitboardMask.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_200_utilBitboard.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

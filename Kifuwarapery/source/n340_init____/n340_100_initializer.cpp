@@ -132,19 +132,21 @@ void Initializer::InitLanceAttacks() {
 
 void Initializer::InitKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
-		UtilBitboard::m_kingAttack[sq] = UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
+		g_kingAttackBb.m_kingAttack[sq] =
+			UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq) |
+			UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			UtilBitboard::m_goldAttack[c][sq] = (UtilBitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq);
+			UtilBitboard::m_goldAttack[c][sq] = (g_kingAttackBb.KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			UtilBitboard::m_silverAttack[c][sq] = (UtilBitboard::KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
+			UtilBitboard::m_silverAttack[c][sq] = (g_kingAttackBb.KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitKnightAttacks() {

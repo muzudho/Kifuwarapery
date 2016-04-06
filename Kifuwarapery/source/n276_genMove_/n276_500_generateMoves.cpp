@@ -478,7 +478,7 @@ namespace {
 			} while (bb.IsNot0());
 
 			// 玉が移動出来る移動先を格納。
-			bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(US).NotThisAnd(UtilBitboard::KingAttack(ksq)));
+			bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(US).NotThisAnd(g_kingAttackBb.KingAttack(ksq)));
 			while (bb.IsNot0()) {
 				const Square to = bb.FirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。

@@ -35,11 +35,13 @@ public:
 
 	void SetP(const int index, const u64 val);
 
+	// マジックナンバーを作るのに使う☆
 	u64 MergeP() const;
 
+	// どこかにビットが立っていれば真☆
 	bool IsNot0() const;
 
-	// これはコードが見難くなるけど仕方ない。
+	// 高速化をラッピング☆ これはコードが見難くなるけど仕方ない。
 	bool AndIsNot0( const Bitboard& bb)const;
 
 	Bitboard operator ~ () const;
@@ -68,10 +70,10 @@ public:
 
 	bool operator != (const Bitboard& rhs) const;
 
-	// これはコードが見難くなるけど仕方ない。
+	// 高速化をラッピング☆ これはコードが見難くなるけど仕方ない。
 	Bitboard AndEqualNot(const Bitboard& bb);
 
-	// これはコードが見難くなるけど仕方ない。
+	// 高速化をラッピング☆ これはコードが見難くなるけど仕方ない。
 	Bitboard NotThisAnd(const Bitboard& bb) const;
 
 	// Bitboard の right 側だけの要素を調べて、最初に 1 であるマスの index を返す。
@@ -131,7 +133,9 @@ public:
 	// Bitboard の 1 の bit を数える。
 	// Crossover は、MergeP() すると 1 である bit が重なる可能性があるなら true
 	template <bool Crossover = true>
-	int PopCount() const { return (Crossover ? count1s(GetP(0)) + count1s(GetP(1)) : count1s(MergeP())); }
+	int PopCount() const {
+		return (Crossover ? count1s(GetP(0)) + count1s(GetP(1)) : count1s(MergeP()));
+	}
 
 	// bit が 1 つだけ立っているかどうかを判定する。
 	// Crossover は、MergeP() すると 1 である bit が重なる可能性があるなら true
