@@ -14,6 +14,9 @@ public:
 	Bitboard m_lanceCheckTable[ColorNum][SquareNum];
 
 public:
+
+	void Initialize();
+
 	// todo: ŽÔ‚Ì‹Ø‚ª‚Ç‚±‚É‚ ‚é‚©æ‚É•ª‚©‚Á‚Ä‚¢‚ê‚ÎABitboard ‚Ì•Ð•û‚Ì•Ï”‚¾‚¯‚ð’²‚×‚ê‚Î—Ç‚­‚È‚éB
 	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Color c, const Square sq) const {
 		const int part = Bitboard::Part(sq);
@@ -28,4 +31,11 @@ public:
 	inline Bitboard LanceCheckTable(const Color c, const Square sq) const {
 		return this->m_lanceCheckTable[c][sq];
 	}
+
+private:
+
+	Bitboard LanceBlockMask(const Square square);
+
+	Bitboard LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied);
+
 };

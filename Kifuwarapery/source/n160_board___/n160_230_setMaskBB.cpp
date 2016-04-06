@@ -32,3 +32,20 @@ void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq)
 {
 	*thisBitboard |= g_setMaskBb.m_setMaskBB[sq];
 }
+
+// index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
+// index の値を, occupied の 1のbit の位置に変換する。
+// index   [0, 1<<bits) の範囲のindex
+// bits    bit size
+// blockMask   利きのあるマスが 1 のbitboard
+// result  occupied
+Bitboard SetMaskBb::IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) {
+	Bitboard tmpBlockMask = blockMask;
+	Bitboard result = Bitboard::AllZeroBB();
+	for (int i = 0; i < bits; ++i) {
+		const Square sq = tmpBlockMask.FirstOneFromI9();
+		if (index & (1 << i))
+			this->SetBit(&result, sq);
+	}
+	return result;
+}

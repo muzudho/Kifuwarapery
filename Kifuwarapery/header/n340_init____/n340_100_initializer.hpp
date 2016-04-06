@@ -17,27 +17,9 @@ private:
 
 	Bitboard BishopBlockMaskCalc(const Square square);
 
-	Bitboard LanceBlockMask(const Square square);
-
 	Bitboard AttackCalc(const Square square, const Bitboard& occupied, const bool isBishop);
 
-	Bitboard LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied);
-
-	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask);
-
 	void InitAttacks(const bool isBishop);
-
-	void InitLanceAttacks();
-
-	void InitKingAttacks();
-
-	void InitGoldAttacks();
-
-	void InitSilverAttacks();
-
-	void InitKnightAttacks();
-
-	void InitPawnAttacks();
 
 	void InitSquareRelation();
 

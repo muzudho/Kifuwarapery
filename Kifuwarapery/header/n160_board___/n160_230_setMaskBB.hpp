@@ -110,4 +110,7 @@ public:
 
 	void SetBit(Bitboard* thisBitboard, const Square sq);
 
+public:
+	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask);
+
 };
