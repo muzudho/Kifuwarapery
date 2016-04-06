@@ -118,20 +118,20 @@ namespace {
 		}
 
 		if (!second.IsDrop() && !first.IsDrop()) {
-			if (UtilBitboard::IsSet(&UtilBitboard::BetweenBB(m2from, m2to), m1from)) {
+			if (g_setMaskBb.IsSet(&g_betweenBb.BetweenBB(m2from, m2to), m1from)) {
 				return true;
 			}
 		}
 
 		const PieceType m1pt = first.GetPieceTypeFromOrDropped();
 		const Color us = pos.GetTurn();
-		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ UtilBitboard::SetMaskBB(m2from));
+		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ g_setMaskBb.SetMaskBB(m2from));
 		const Bitboard m1att = pos.GetAttacksFrom(m1pt, us, m1to, occ);
-		if (UtilBitboard::IsSet(&m1att, m2to)) {
+		if (g_setMaskBb.IsSet(&m1att, m2to)) {
 			return true;
 		}
 
-		if (UtilBitboard::IsSet(&m1att, pos.GetKingSquare(us))) {
+		if (g_setMaskBb.IsSet(&m1att, pos.GetKingSquare(us))) {
 			return true;
 		}
 
@@ -175,7 +175,7 @@ namespace {
 			const Color us = pos.GetTurn();
 			const Square m1to = first.To();
 			const Square m2from = second.From();
-			Bitboard occ = pos.GetOccupiedBB() ^ UtilBitboard::SetMaskBB(m2from) ^ UtilBitboard::SetMaskBB(m1to);
+			Bitboard occ = pos.GetOccupiedBB() ^ g_setMaskBb.SetMaskBB(m2from) ^ g_setMaskBb.SetMaskBB(m1to);
 			PieceType m1ptTo;
 
 			if (first.IsDrop()) {
@@ -183,10 +183,10 @@ namespace {
 			}
 			else {
 				m1ptTo = first.GetPieceTypeTo();
-				occ ^= UtilBitboard::SetMaskBB(m1from);
+				occ ^= g_setMaskBb.SetMaskBB(m1from);
 			}
 
-			if (UtilBitboard::IsSet(&pos.GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
+			if (g_setMaskBb.IsSet(&pos.GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
 				return true;
 			}
 
@@ -198,14 +198,14 @@ namespace {
 				| (pos.GetAttacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.IsNot0() && (xray ^ (xray & UtilBitboard::QueenAttack(&pos.GetOccupiedBB(),m2to))).IsNot0()) {
+			if (xray.IsNot0() && (xray ^ (xray & g_queenAttackBb.QueenAttack(&pos.GetOccupiedBB(),m2to))).IsNot0()) {
 				return true;
 			}
 		}
 
 		if (!second.IsDrop()
 			&& UtilPieceType::IsSlider(m2ptFrom)
-			&& UtilBitboard::IsSet(&UtilBitboard::BetweenBB(second.From(), m2to), first.To())
+			&& g_setMaskBb.IsSet(&g_betweenBb.BetweenBB(second.From(), m2to), first.To())
 			&& ScoreZero <= pos.GetSeeSign(first))
 		{
 			return true;

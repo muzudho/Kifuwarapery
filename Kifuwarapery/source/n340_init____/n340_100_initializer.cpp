@@ -1,5 +1,5 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n160_board___/n160_400_bitboardAll.hpp"
+#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
@@ -26,10 +26,10 @@ Bitboard Initializer::BishopBlockMaskCalc(const Square square) {
 		const Rank r = UtilSquare::ToRank(sq);
 		const File f = UtilSquare::ToFile(sq);
 		if (abs(rank - r) == abs(file - f))
-			UtilBitboard::SetBit(&result,sq);
+			g_setMaskBb.SetBit(&result,sq);
 	}
 	result &= ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>() | BitboardMask::GetFileMask<FileA>() | BitboardMask::GetFileMask<FileI>());
-	UtilBitboard::ClearBit(&result,square);
+	g_setMaskBb.ClearBit(&result,square);
 
 	return result;
 }
@@ -51,8 +51,8 @@ Bitboard Initializer::AttackCalc(const Square square, const Bitboard& occupied, 
 		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
 			sq += delta)
 		{
-			UtilBitboard::SetBit(&result, sq);
-			if (UtilBitboard::IsSet(&occupied, sq))
+			g_setMaskBb.SetBit(&result, sq);
+			if (g_setMaskBb.IsSet(&occupied, sq))
 				break;
 		}
 	}
@@ -79,7 +79,7 @@ Bitboard Initializer::IndexToOccupied(const int index, const int bits, const Bit
 	for (int i = 0; i < bits; ++i) {
 		const Square sq = tmpBlockMask.FirstOneFromI9();
 		if (index & (1 << i))
-			UtilBitboard::SetBit(&result,sq);
+			g_setMaskBb.SetBit(&result,sq);
 	}
 	return result;
 }
@@ -202,13 +202,13 @@ void Initializer::InitAttackToEdge() {
 void Initializer::InitBetweenBB() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			UtilBitboard::m_betweenBB[sq1][sq2] = Bitboard::AllZeroBB();
+			g_betweenBb.m_betweenBB[sq1][sq2] = Bitboard::AllZeroBB();
 			if (sq1 == sq2) continue;
 			const Direction direc = UtilSquare::GetSquareRelation(sq1, sq2);
 			if (direc & DirecCross)
-				UtilBitboard::m_betweenBB[sq1][sq2] = g_rookAttackBb.RookAttack(&UtilBitboard::SetMaskBB(sq2),sq1) & g_rookAttackBb.RookAttack(&UtilBitboard::SetMaskBB(sq1),sq2);
+				g_betweenBb.m_betweenBB[sq1][sq2] = g_rookAttackBb.RookAttack(&g_setMaskBb.SetMaskBB(sq2),sq1) & g_rookAttackBb.RookAttack(&g_setMaskBb.SetMaskBB(sq1),sq2);
 			else if (direc & DirecDiag)
-				UtilBitboard::m_betweenBB[sq1][sq2] = g_bishopAttackBb.BishopAttack(&UtilBitboard::SetMaskBB(sq2),sq1) & g_bishopAttackBb.BishopAttack(&UtilBitboard::SetMaskBB(sq1),sq2);
+				g_betweenBb.m_betweenBB[sq1][sq2] = g_bishopAttackBb.BishopAttack(&g_setMaskBb.SetMaskBB(sq2),sq1) & g_bishopAttackBb.BishopAttack(&g_setMaskBb.SetMaskBB(sq1),sq2);
 		}
 	}
 }
@@ -223,7 +223,7 @@ void Initializer::InitCheckTable() {
 				const Square checkSq = checkBB.FirstOneFromI9();
 				g_goldAttackBb.m_goldCheckTable[c][sq] |= g_goldAttackBb.GoldAttack(opp, checkSq);
 			}
-			g_goldAttackBb.m_goldCheckTable[c][sq].AndEqualNot(UtilBitboard::SetMaskBB(sq) | g_goldAttackBb.GoldAttack(opp, sq));
+			g_goldAttackBb.m_goldCheckTable[c][sq].AndEqualNot(g_setMaskBb.SetMaskBB(sq) | g_goldAttackBb.GoldAttack(opp, sq));
 		}
 	}
 
@@ -252,7 +252,7 @@ void Initializer::InitCheckTable() {
 				const Square checkSq = checkBB.FirstOneFromI9();
 				g_silverAttackBb.m_silverCheckTable[c][sq] |= (g_silverAttackBb.SilverAttack(opp, checkSq) & TRank6BB);
 			}
-			g_silverAttackBb.m_silverCheckTable[c][sq].AndEqualNot(UtilBitboard::SetMaskBB(sq) | g_silverAttackBb.SilverAttack(opp, sq));
+			g_silverAttackBb.m_silverCheckTable[c][sq].AndEqualNot(g_setMaskBb.SetMaskBB(sq) | g_silverAttackBb.SilverAttack(opp, sq));
 		}
 	}
 
@@ -286,7 +286,7 @@ void Initializer::InitCheckTable() {
 				const Square checkSq = checkBB.FirstOneFromI9();
 				g_lanceAttackBb.m_lanceCheckTable[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
 			}
-			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(UtilBitboard::SetMaskBB(sq) | g_pawnAttackBb.PawnAttack(opp, sq));
+			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(g_setMaskBb.SetMaskBB(sq) | g_pawnAttackBb.PawnAttack(opp, sq));
 		}
 	}
 }
@@ -298,7 +298,7 @@ void Initializer::InitSquareDistance() {
 			case DirecMisc:
 				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
 				g_squareDistance[sq0][sq1] = 0;
-				if (UtilBitboard::IsSet(&g_knightAttackBb.KnightAttack(Black, sq0),sq1) || UtilBitboard::IsSet(&g_knightAttackBb.KnightAttack(White, sq0),sq1))
+				if (g_setMaskBb.IsSet(&g_knightAttackBb.KnightAttack(Black, sq0),sq1) || g_setMaskBb.IsSet(&g_knightAttackBb.KnightAttack(White, sq0),sq1))
 					g_squareDistance[sq0][sq1] = 1;
 				break;
 			case DirecFile:

@@ -61,13 +61,13 @@ namespace {
 			if (UtilSquare::ToRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (UtilBitboard::IsSet(&toBB,pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
+				if (g_setMaskBb.IsSet(&toBB,pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, pawnDropCheckSquare);
 					}
-					UtilBitboard::XorBit(&toBB,pawnDropCheckSquare);
+					g_setMaskBb.XorBit(&toBB,pawnDropCheckSquare);
 				}
 			}
 
@@ -428,7 +428,7 @@ namespace {
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
-			bannedKingToBB |= UtilBitboard::HorseAttackToEdge(checkSq);
+			bannedKingToBB |= g_horseAttackBb.HorseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
 			bannedKingToBB |= g_rookAttackBb.RookAttackToEdge(checkSq);
@@ -440,7 +440,7 @@ namespace {
 				bannedKingToBB |= pos.GetAttacksFrom<Dragon>(checkSq);
 			}
 			else {
-				bannedKingToBB |= UtilBitboard::DragonAttackToEdge(checkSq);
+				bannedKingToBB |= g_dragonAttackBb.DragonAttackToEdge(checkSq);
 			}
 			break;
 		default:
@@ -494,7 +494,7 @@ namespace {
 
 			// 王手している駒を玉以外で取る手の生成。
 			// pin されているかどうかは movePicker か search で調べる。
-			const Bitboard target1 = UtilBitboard::BetweenBB(checkSq, ksq);
+			const Bitboard target1 = g_betweenBb.BetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);

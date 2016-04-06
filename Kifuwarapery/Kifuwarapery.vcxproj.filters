@@ -192,9 +192,6 @@
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_400_bitboardAll.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
@@ -396,12 +393,6 @@
     <ClInclude Include="header\n160_board___\n160_110_kingAttack.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_300_bitboardMask.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_200_utilBitboard.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_140_lanceAttack.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -424,6 +415,30 @@
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_190_pawnAttack.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_500_bitboardMask.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_400_printBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_240_betweenBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_230_setMaskBB.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_200_horseAttackBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_210_dragonAttackBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_220_queenAttackBb.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -545,12 +560,6 @@
     <ClCompile Include="source\n160_board___\n160_110_kingAttack.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_300_bitboardMask.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_200_utilBitboard.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n160_board___\n160_140_lanceAttack.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
@@ -573,6 +582,24 @@
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_190_pawnAttack.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_400_printBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_240_betweenBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_230_setMaskBB.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_200_horseAttackBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_210_dragonAttackBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_220_queenAttackBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

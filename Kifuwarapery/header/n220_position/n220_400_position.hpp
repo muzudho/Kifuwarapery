@@ -2,8 +2,8 @@
 
 #include <stack>
 #include "../n116_hand____/n116_500_hand.hpp"
-#include "../n160_board___/n160_200_utilBitboard.hpp"
-#include "../n160_board___/n160_300_bitboardMask.hpp"
+#include "../n160_board___/n160_400_printBb.hpp"
+#include "../n160_board___/n160_500_bitboardMask.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_600_evalList.hpp"
@@ -87,13 +87,13 @@ public:
 	template <bool IsKnight = false>
 	bool IsPinnedIllegal(const Square from, const Square to, const Square ksq, const Bitboard& pinned) const {
 		// 桂馬ならどこに動いても駄目。
-		return UtilBitboard::IsSet(&pinned,from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
+		return g_setMaskBb.IsSet(&pinned,from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
 	}
 	// 空き王手かどうか。
 	template <bool IsKnight = false>
 	bool IsDiscoveredCheck(const Square from, const Square to, const Square ksq, const Bitboard& dcBB) const {
 		// 桂馬ならどこに動いても空き王手になる。
-		return UtilBitboard::IsSet(&dcBB,from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
+		return g_setMaskBb.IsSet(&dcBB,from) && (IsKnight || !UtilSquare::IsAligned<true>(from, to, ksq));
 	}
 
 	Bitboard GetCheckersBB() const { return m_st_->m_checkersBB; }
@@ -259,9 +259,9 @@ private:
 
 		m_piece_[sq] = piece;
 
-	 	UtilBitboard::SetBit(&m_byTypeBB_[pt], sq);
-		UtilBitboard::SetBit(&m_byColorBB_[c], sq);
-		UtilBitboard::SetBit(&m_byTypeBB_[Occupied], sq);
+		g_setMaskBb.SetBit(&m_byTypeBB_[pt], sq);
+		g_setMaskBb.SetBit(&m_byColorBB_[c], sq);
+		g_setMaskBb.SetBit(&m_byTypeBB_[Occupied], sq);
 	}
 	void SetHand(const HandPiece hp, const Color c, const int num) { m_hand_[c].OrEqual(num, hp); }
 	void SetHand(const Piece piece, const int num) {
@@ -311,7 +311,7 @@ private:
 		while (pinners.IsNot0()) {
 			const Square sq = pinners.FirstOneFromI9();
 			// pin する遠隔駒と玉の間にある駒の位置の Bitboard
-			const Bitboard between = UtilBitboard::BetweenBB(sq, ksq) & GetOccupiedBB();
+			const Bitboard between = g_betweenBb.BetweenBB(sq, ksq) & GetOccupiedBB();
 
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
 			if (between.IsNot0()
