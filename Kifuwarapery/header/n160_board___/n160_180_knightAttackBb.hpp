@@ -13,6 +13,7 @@ public:
 public:
 
 	void Initialize();
+	void InitCheckTableKnight();
 
 	inline Bitboard GetControllBb(const Color c, const Square sq) const {
 		return this->m_controllBb[c][sq];

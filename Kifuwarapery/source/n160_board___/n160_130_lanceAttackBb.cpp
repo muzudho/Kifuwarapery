@@ -23,6 +23,25 @@ void LanceAttackBb::Initialize()
 	}
 }
 
+
+void LanceAttackBb::InitCheckTableLance() {
+	for (Color c = Black; c < ColorNum; ++c) {
+		const Color opp = UtilColor::OppositeColor(c);
+		for (Square sq = I9; sq < SquareNum; ++sq) {
+			g_lanceAttackBb.m_lanceCheckTable[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
+
+			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
+			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
+			while (checkBB.IsNot0()) {
+				const Square checkSq = checkBB.FirstOneFromI9();
+				g_lanceAttackBb.m_lanceCheckTable[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
+			}
+			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
+		}
+	}
+}
+
+
 void LanceAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {

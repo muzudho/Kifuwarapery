@@ -15,11 +15,6 @@ private:
 
 	void InitSquareRelation();
 
-	void InitAttackToEdge();
-
-	void InitBetweenBB();
-
-	void InitCheckTable();
 
 	void InitSquareDistance();
 

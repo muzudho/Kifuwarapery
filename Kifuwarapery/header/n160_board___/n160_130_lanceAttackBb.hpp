@@ -16,6 +16,7 @@ public:
 public:
 
 	void Initialize();
+	void InitCheckTableLance();
 
 	// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
 	// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ğİ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ğŒÄ‚Ô‚±‚ÆB

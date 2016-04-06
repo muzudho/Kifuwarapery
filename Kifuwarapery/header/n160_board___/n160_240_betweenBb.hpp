@@ -7,6 +7,9 @@ public:
 	Bitboard m_betweenBB[SquareNum][SquareNum];
 
 public:
+
+	void Initialize();
+
 	// sq1, sq2 ‚ÌŠÔ(sq1, sq2 ‚ÍŠÜ‚Ü‚È‚¢)‚Ìƒrƒbƒg‚ª—§‚Á‚½ Bitboard
 	inline Bitboard GetBetweenBB(const Square sq1, const Square sq2) const {
 		return this->m_betweenBB[sq1][sq2];

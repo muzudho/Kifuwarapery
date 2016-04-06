@@ -368,7 +368,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			// Discovery checks
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
-				switch (UtilSquare::GetSquareRelation(from, ksq)) {
+				switch (SquareRelation::GetSquareRelation(from, ksq)) {
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。

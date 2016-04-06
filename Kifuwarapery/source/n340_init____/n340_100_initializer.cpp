@@ -29,112 +29,11 @@ void Initializer::InitSquareRelation() {
 	}
 }
 
-// 障害物が無いときの利きの Bitboard
-// g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
-void Initializer::InitAttackToEdge() {
-	g_rookAttackBb.InitializeToEdge();
-
-	g_bishopAttackBb.InitializeToEdge();
-
-	g_lanceAttackBb.InitializeToEdge();
-}
-
-void Initializer::InitBetweenBB() {
-	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			g_betweenBb.m_betweenBB[sq1][sq2] = Bitboard::AllZeroBB();
-			if (sq1 == sq2) continue;
-			const Direction direc = UtilSquare::GetSquareRelation(sq1, sq2);
-			if (direc & DirecCross)
-				g_betweenBb.m_betweenBB[sq1][sq2] = g_rookAttackBb.GetControllBb(&g_setMaskBb.GetSetMaskBb(sq2),sq1) & g_rookAttackBb.GetControllBb(&g_setMaskBb.GetSetMaskBb(sq1),sq2);
-			else if (direc & DirecDiag)
-				g_betweenBb.m_betweenBB[sq1][sq2] = g_bishopAttackBb.BishopAttack(&g_setMaskBb.GetSetMaskBb(sq2),sq1) & g_bishopAttackBb.BishopAttack(&g_setMaskBb.GetSetMaskBb(sq1),sq2);
-		}
-	}
-}
-
-void Initializer::InitCheckTable() {
-	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = UtilColor::OppositeColor(c);
-		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_goldAttackBb.m_goldCheckTable[c][sq] = Bitboard::AllZeroBB();
-			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq);
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_goldAttackBb.m_goldCheckTable[c][sq] |= g_goldAttackBb.GetControllBb(opp, checkSq);
-			}
-			g_goldAttackBb.m_goldCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_goldAttackBb.GetControllBb(opp, sq));
-		}
-	}
-
-	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = UtilColor::OppositeColor(c);
-		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_silverAttackBb.m_silverCheckTable[c][sq] = Bitboard::AllZeroBB();
-
-			Bitboard checkBB = g_silverAttackBb.GetControllBb(opp, sq);
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_silverAttackBb.m_silverCheckTable[c][sq] |= g_silverAttackBb.GetControllBb(opp, checkSq);
-			}
-			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
-			checkBB = g_goldAttackBb.GetControllBb(opp, sq);
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				// 移動元が敵陣である位置なら、金に成って王手出来る。
-				g_silverAttackBb.m_silverCheckTable[c][sq] |= (g_silverAttackBb.GetControllBb(opp, checkSq) & TRank789BB);
-			}
-
-			const Bitboard TRank6BB = (c == Black ? BitboardMask::GetRankMask<Rank6>() : BitboardMask::GetRankMask<Rank4>());
-			// 移動先が3段目で、4段目に移動したときも、成ることが出来る。
-			checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_silverAttackBb.m_silverCheckTable[c][sq] |= (g_silverAttackBb.GetControllBb(opp, checkSq) & TRank6BB);
-			}
-			g_silverAttackBb.m_silverCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_silverAttackBb.GetControllBb(opp, sq));
-		}
-	}
-
-	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = UtilColor::OppositeColor(c);
-		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_knightAttackBb.m_knightCheckTable[c][sq] = Bitboard::AllZeroBB();
-
-			Bitboard checkBB = g_knightAttackBb.GetControllBb(opp, sq);
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_knightAttackBb.m_knightCheckTable[c][sq] |= g_knightAttackBb.GetControllBb(opp, checkSq);
-			}
-			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
-			checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_knightAttackBb.m_knightCheckTable[c][sq] |= g_knightAttackBb.GetControllBb(opp, checkSq);
-			}
-		}
-	}
-
-	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = UtilColor::OppositeColor(c);
-		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_lanceAttackBb.m_lanceCheckTable[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
-
-			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
-			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_lanceAttackBb.m_lanceCheckTable[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
-			}
-			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
-		}
-	}
-}
 
 void Initializer::InitSquareDistance() {
 	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-			switch (UtilSquare::GetSquareRelation(sq0, sq1)) {
+			switch (SquareRelation::GetSquareRelation(sq0, sq1)) {
 			case DirecMisc:
 				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
 				g_squareDistance[sq0][sq1] = 0;
@@ -191,13 +90,20 @@ void Initializer::InitTable() {
 	this->InitSquareRelation();
 
 	SYNCCOUT << "(^q^)I10: initAttackToEdge!" << SYNCENDL;
-	this->InitAttackToEdge();
+	// 障害物が無いときの利きの Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
+	g_rookAttackBb.InitializeToEdge();
+	g_bishopAttackBb.InitializeToEdge();
+	g_lanceAttackBb.InitializeToEdge();
 
 	SYNCCOUT << "(^q^)I11: initBetweenBB!" << SYNCENDL;
-	this->InitBetweenBB();
+	g_betweenBb.Initialize();
 
 	SYNCCOUT << "(^q^)I12: initCheckTable!" << SYNCENDL;
-	this->InitCheckTable();
+    g_goldAttackBb.InitCheckTableGold();
+	g_silverAttackBb.InitCheckTableSilver();
+	g_knightAttackBb.InitCheckTableKnight();
+	g_lanceAttackBb.InitCheckTableLance();
 
 	SYNCCOUT << "(^q^)I13: initSquareDistance!" << SYNCENDL;
 	this->InitSquareDistance();

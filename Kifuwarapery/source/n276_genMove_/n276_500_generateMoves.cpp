@@ -434,7 +434,7 @@ namespace {
 			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
-			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
+			if (SquareRelation::GetSquareRelation(checkSq, ksq) & DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
 				bannedKingToBB |= pos.GetAttacksFrom<Dragon>(checkSq);

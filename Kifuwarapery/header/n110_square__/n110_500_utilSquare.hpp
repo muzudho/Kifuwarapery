@@ -3,9 +3,8 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n110_square__/n110_300_direction.hpp"
+#include "n110_410_squareRelation.hpp"
 
-// 2つの位置関係のテーブル
-extern Direction g_squareRelation[SquareNum][SquareNum];
 // 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
 extern int g_squareDistance[SquareNum][SquareNum];
 
@@ -47,22 +46,8 @@ public:
 		return SquareToFile[s];
 	}
 
-	static inline Direction GetSquareRelation(const Square sq1, const Square sq2) { return g_squareRelation[sq1][sq2]; }
 
 	static inline int GetSquareDistance(const Square sq1, const Square sq2) { return g_squareDistance[sq1][sq2]; }
-
-	// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
-	template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
-	static inline bool IsAligned(const Square from, const Square to, const Square ksq) {
-		const Direction direc = UtilSquare::GetSquareRelation(from, ksq);
-		if (FROM_KSQ_NEVER_BE_DIRECMISC) {
-			assert(direc != DirecMisc);
-			return (direc == UtilSquare::GetSquareRelation(from, to));
-		}
-		else {
-			return (direc != DirecMisc && direc == UtilSquare::GetSquareRelation(from, to));
-		}
-	}
 
 
 	static inline std::string ToStringUSI(const Square sq) {
