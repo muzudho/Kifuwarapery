@@ -27,7 +27,7 @@ template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , cons
 template <> inline Bitboard Position::GetAttacksFrom<Pawn  >(const Color c, const Square sq) const { return UtilBitboard::PawnAttack	(c, sq					); }
 template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq) const { return g_lanceAttackBb.GetControllBb	(&GetOccupiedBB(), c, sq); }
 template <> inline Bitboard Position::GetAttacksFrom<Knight>(const Color c, const Square sq) const { return UtilBitboard::KnightAttack	(c, sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Silver>(const Color c, const Square sq) const { return UtilBitboard::SilverAttack	(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<Silver>(const Color c, const Square sq) const { return g_silverAttackBb.SilverAttack	(c, sq					); }
 template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq) const { return UtilBitboard::BishopAttack	(&GetOccupiedBB(),   sq	); }
 template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq) const { return UtilBitboard::RookAttack	(&GetOccupiedBB(),   sq	); }
 template <> inline Bitboard Position::GetAttacksFrom<King  >(const Color  , const Square sq) const { return g_kingAttackBb.GetControllBb(   sq					); }

@@ -2,50 +2,23 @@
 
 #include "n160_100_bitboard.hpp"
 #include "n160_110_kingAttack.hpp"
-#include "n160_120_bishopAttack.hpp"
-#include "n160_130_lanceAttack.hpp"
+#include "n160_120_silverAttack.hpp"
+#include "n160_130_bishopAttack.hpp"
+#include "n160_140_lanceAttack.hpp"
+#include "n160_150_goldAttack.hpp"
+#include "n160_160_rookAttack.hpp"
 
 extern KingAttackBb g_kingAttackBb;
+extern SilverAttackBb g_silverAttackBb;
 extern BishopAttackBb g_bishopAttackBb;
 extern LanceAttackBb g_lanceAttackBb;
+extern GoldAttackBb g_goldAttackBb;
+extern RookAttackBb g_rookAttackBb;
 
 
 class UtilBitboard {
 public:
 
-
-	//────────────────────────────────────────────────────────────────────────────────
-	// 飛
-	//────────────────────────────────────────────────────────────────────────────────
-	// メモリ節約の為、1次元配列にして無駄が無いようにしている。
-#if defined HAVE_BMI2
-	static Bitboard m_rookAttack[495616];
-#else
-	static Bitboard m_rookAttack[512000];
-#endif
-
-	static Bitboard m_rookBlockMask[SquareNum];
-	static Bitboard m_rookAttackToEdge[SquareNum];
-	static inline Bitboard RookAttackToEdge(const Square sq) { return UtilBitboard::m_rookAttackToEdge[sq]; }
-
-	//────────────────────────────────────────────────────────────────────────────────
-	// 金
-	//────────────────────────────────────────────────────────────────────────────────
-	static Bitboard m_goldAttack[ColorNum][SquareNum];
-	static inline Bitboard GoldAttack(const Color c, const Square sq) { return UtilBitboard::m_goldAttack[c][sq]; }
-
-	static Bitboard m_goldCheckTable[ColorNum][SquareNum];
-
-	static inline Bitboard GoldCheckTable(const Color c, const Square sq) { return UtilBitboard::m_goldCheckTable[c][sq]; }
-
-	//────────────────────────────────────────────────────────────────────────────────
-	// 銀
-	//────────────────────────────────────────────────────────────────────────────────
-	static Bitboard m_silverAttack[ColorNum][SquareNum];
-	static inline Bitboard SilverAttack(const Color c, const Square sq) { return UtilBitboard::m_silverAttack[c][sq]; }
-
-	static Bitboard m_silverCheckTable[ColorNum][SquareNum];
-	static inline Bitboard SilverCheckTable(const Color c, const Square sq) { return UtilBitboard::m_silverCheckTable[c][sq]; }
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 桂
@@ -85,24 +58,9 @@ public:
 	static inline Bitboard BetweenBB(const Square sq1, const Square sq2) { return UtilBitboard::m_betweenBB[sq1][sq2]; }
 
 
-	// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
-	static inline Bitboard RookAttackFile(const Bitboard* thisBitboard, const Square sq) {//const
-		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
-		return g_lanceAttackBb.m_controllBb[Black][sq][index] | g_lanceAttackBb.m_controllBb[White][sq][index];
-	}
-
-	// todo: テーブル引きを検討
-	static inline Bitboard RookStepAttacks(const Square sq) {
-		return UtilBitboard::GoldAttack(Black, sq) & UtilBitboard::GoldAttack(White, sq);
-	}
-	// todo: テーブル引きを検討
-	static inline Bitboard BishopStepAttacks(const Square sq) {
-		return UtilBitboard::SilverAttack(Black, sq) & UtilBitboard::SilverAttack(White, sq);
-	}
 	// 前方3方向の位置のBitboard
 	static inline Bitboard GoldAndSilverAttacks(const Color c, const Square sq) {
-		return UtilBitboard::GoldAttack(c, sq) & UtilBitboard::SilverAttack(c, sq);
+		return g_goldAttackBb.GoldAttack(c, sq) & g_silverAttackBb.SilverAttack(c, sq);
 	}
 
 
@@ -131,8 +89,8 @@ public:
 
 	#else
 		static inline Bitboard RookAttack(const Bitboard* thisBitboard, const Square sq) {// const
-			const Bitboard block((*thisBitboard) & UtilBitboard::m_rookBlockMask[sq]);
-			return UtilBitboard::m_rookAttack[
+			const Bitboard block((*thisBitboard) & g_rookAttackBb.m_rookBlockMask[sq]);
+			return g_rookAttackBb.m_rookAttack[
 				ConfigBits::m_rookAttackIndex[sq] +
 				block.OccupiedToIndex(ConfigBits::m_rookMagic[sq], ConfigBits::m_rookShiftBits[sq])
 			];
@@ -163,7 +121,7 @@ public:
 
 
 	static inline Bitboard DragonAttackToEdge(const Square sq) {
-		return UtilBitboard::RookAttackToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
+		return g_rookAttackBb.RookAttackToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 	static inline Bitboard HorseAttackToEdge(const Square sq) {
 		return g_bishopAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);

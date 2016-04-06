@@ -415,14 +415,14 @@ namespace {
 			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(THEM, checkSq);
 			break;
 		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= UtilBitboard::SilverAttack(THEM, checkSq);
+			bannedKingToBB |= g_silverAttackBb.SilverAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BGold : WGold) :
 		case (THEM == Black ? BProPawn : WProPawn) :
 		case (THEM == Black ? BProLance : WProLance) :
 		case (THEM == Black ? BProKnight : WProKnight) :
 		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= UtilBitboard::GoldAttack(THEM, checkSq);
+			bannedKingToBB |= g_goldAttackBb.GoldAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BBishop : WBishop) :
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
@@ -431,7 +431,7 @@ namespace {
 			bannedKingToBB |= UtilBitboard::HorseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
-			bannedKingToBB |= UtilBitboard::RookAttackToEdge(checkSq);
+			bannedKingToBB |= g_rookAttackBb.RookAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
 			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {

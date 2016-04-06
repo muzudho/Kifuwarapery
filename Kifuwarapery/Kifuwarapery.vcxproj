@@ -177,8 +177,11 @@
     <ClInclude Include="header\n119_score___\n119_200_pieceScore.hpp" />
     <ClInclude Include="header\n160_board___\n160_050_configBits.hpp" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
-    <ClInclude Include="header\n160_board___\n160_120_bishopAttack.hpp" />
-    <ClInclude Include="header\n160_board___\n160_130_lanceAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_120_silverAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_130_bishopAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_140_lanceAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_150_goldAttack.hpp" />
+    <ClInclude Include="header\n160_board___\n160_160_rookAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_200_utilBitboard.hpp" />
     <ClInclude Include="header\n160_board___\n160_110_kingAttack.hpp" />
     <ClInclude Include="header\n160_board___\n160_300_bitboardMask.hpp" />
@@ -252,8 +255,11 @@
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp" />
     <ClCompile Include="source\n160_board___\n160_050_configBits.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />
-    <ClCompile Include="source\n160_board___\n160_120_bishopAttack.cpp" />
-    <ClCompile Include="source\n160_board___\n160_130_lanceAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_120_silverAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_130_bishopAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_140_lanceAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_150_goldAttack.cpp" />
+    <ClCompile Include="source\n160_board___\n160_160_rookAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_200_utilBitboard.cpp" />
     <ClCompile Include="source\n160_board___\n160_110_kingAttack.cpp" />
     <ClCompile Include="source\n160_board___\n160_300_bitboardMask.cpp" />

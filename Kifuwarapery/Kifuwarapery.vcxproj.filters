@@ -402,10 +402,19 @@
     <ClInclude Include="header\n160_board___\n160_200_utilBitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_120_bishopAttack.hpp">
+    <ClInclude Include="header\n160_board___\n160_140_lanceAttack.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_130_lanceAttack.hpp">
+    <ClInclude Include="header\n160_board___\n160_130_bishopAttack.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_120_silverAttack.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_150_goldAttack.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_160_rookAttack.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -533,10 +542,19 @@
     <ClCompile Include="source\n160_board___\n160_200_utilBitboard.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_120_bishopAttack.cpp">
+    <ClCompile Include="source\n160_board___\n160_140_lanceAttack.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_130_lanceAttack.cpp">
+    <ClCompile Include="source\n160_board___\n160_130_bishopAttack.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_120_silverAttack.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_150_goldAttack.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_160_rookAttack.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,32 +4,6 @@
 
 
 //────────────────────────────────────────────────────────────────────────────────
-// 飛
-//────────────────────────────────────────────────────────────────────────────────
-// これらは一度値を設定したら二度と変更しない。
-// 本当は const 化したい。
-#if defined HAVE_BMI2
-Bitboard UtilBitboard::m_rookAttack[495616];
-#else
-Bitboard UtilBitboard::m_rookAttack[512000];
-#endif
-
-Bitboard UtilBitboard::m_rookBlockMask[SquareNum];
-Bitboard UtilBitboard::m_rookAttackToEdge[SquareNum];
-
-//────────────────────────────────────────────────────────────────────────────────
-// 金
-//────────────────────────────────────────────────────────────────────────────────
-Bitboard UtilBitboard::m_goldAttack[ColorNum][SquareNum];
-Bitboard UtilBitboard::m_goldCheckTable[ColorNum][SquareNum];
-
-//────────────────────────────────────────────────────────────────────────────────
-// 銀
-//────────────────────────────────────────────────────────────────────────────────
-Bitboard UtilBitboard::m_silverAttack[ColorNum][SquareNum];
-Bitboard UtilBitboard::m_silverCheckTable[ColorNum][SquareNum];
-
-//────────────────────────────────────────────────────────────────────────────────
 // 桂
 //────────────────────────────────────────────────────────────────────────────────
 Bitboard UtilBitboard::m_knightAttack[ColorNum][SquareNum];

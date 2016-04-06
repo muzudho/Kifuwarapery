@@ -141,7 +141,7 @@ public:
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == Gold, ""); // Gold ˆÈŠO‚Í template “Áê‰»‚·‚éB
-		return UtilBitboard::GoldAttack(c, sq);
+		return g_goldAttackBb.GoldAttack(c, sq);
 	}
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq) const {
@@ -301,7 +301,7 @@ private:
 					) |
 					(
 						this->GetBbOf(Rook, Dragon) &
-						UtilBitboard::RookAttackToEdge(ksq)
+						g_rookAttackBb.RookAttackToEdge(ksq)
 					) |
 					(
 						this->GetBbOf(Bishop, Horse) &
