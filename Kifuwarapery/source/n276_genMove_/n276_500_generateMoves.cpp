@@ -61,13 +61,13 @@ namespace {
 			if (UtilSquare::ToRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (toBB.IsSet(pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
+				if (UtilBitboard::IsSet(&toBB,pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, pawnDropCheckSquare);
 					}
-					toBB.XorBit(pawnDropCheckSquare);
+					UtilBitboard::XorBit(&toBB,pawnDropCheckSquare);
 				}
 			}
 
@@ -412,26 +412,26 @@ namespace {
 				);
 			break;
 		case (THEM == Black ? BLance : WLance) :
-			bannedKingToBB |= Bitboard::LanceAttackToEdge(THEM, checkSq);
+			bannedKingToBB |= UtilBitboard::LanceAttackToEdge(THEM, checkSq);
 			break;
 		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= Bitboard::SilverAttack(THEM, checkSq);
+			bannedKingToBB |= UtilBitboard::SilverAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BGold : WGold) :
 		case (THEM == Black ? BProPawn : WProPawn) :
 		case (THEM == Black ? BProLance : WProLance) :
 		case (THEM == Black ? BProKnight : WProKnight) :
 		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= Bitboard::GoldAttack(THEM, checkSq);
+			bannedKingToBB |= UtilBitboard::GoldAttack(THEM, checkSq);
 			break;
 		case (THEM == Black ? BBishop : WBishop) :
-			bannedKingToBB |= Bitboard::BishopAttackToEdge(checkSq);
+			bannedKingToBB |= UtilBitboard::BishopAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BHorse : WHorse) :
 			bannedKingToBB |= UtilBitboard::HorseAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BRook : WRook) :
-			bannedKingToBB |= Bitboard::RookAttackToEdge(checkSq);
+			bannedKingToBB |= UtilBitboard::RookAttackToEdge(checkSq);
 			break;
 		case (THEM == Black ? BDragon : WDragon) :
 			if (UtilSquare::GetSquareRelation(checkSq, ksq) & DirecDiag) {
@@ -494,7 +494,7 @@ namespace {
 
 			// 王手している駒を玉以外で取る手の生成。
 			// pin されているかどうかは movePicker か search で調べる。
-			const Bitboard target1 = Bitboard::BetweenBB(checkSq, ksq);
+			const Bitboard target1 = UtilBitboard::BetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			moveStackList = GeneratePieceMoves<Evasion, Pawn, US, ALL>()(moveStackList, pos, target2, ksq);
 			moveStackList = GeneratePieceMoves<Evasion, Lance, US, ALL>()(moveStackList, pos, target2, ksq);

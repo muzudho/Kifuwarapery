@@ -4,38 +4,6 @@
 #include "../n110_square__/n110_500_utilSquare.hpp"
 #include "../n160_board___/n160_050_configBits.hpp"
 
-class Bitboard;
-
-
-
-// メモリ節約の為、1次元配列にして無駄が無いようにしている。
-extern Bitboard g_bishopAttack		[20224];
-extern int		g_bishopAttackIndex	[SquareNum];
-extern Bitboard g_rookBlockMask		[SquareNum];
-extern Bitboard g_bishopBlockMask	[SquareNum];
-// メモリ節約をせず、無駄なメモリを持っている。
-extern Bitboard g_lanceAttack		[ColorNum]	[SquareNum][128];
-
-//extern Bitboard g_kingAttack		[SquareNum];
-extern Bitboard g_goldAttack		[ColorNum]	[SquareNum];
-extern Bitboard g_silverAttack		[ColorNum]	[SquareNum];
-extern Bitboard g_knightAttack		[ColorNum]	[SquareNum];
-extern Bitboard g_pawnAttack		[ColorNum]	[SquareNum];
-
-extern Bitboard g_betweenBB			[SquareNum]	[SquareNum];
-
-extern Bitboard g_rookAttackToEdge	[SquareNum];
-extern Bitboard g_bishopAttackToEdge[SquareNum];
-extern Bitboard g_lanceAttackToEdge	[ColorNum]	[SquareNum];
-
-extern Bitboard g_goldCheckTable	[ColorNum]	[SquareNum];
-extern Bitboard g_silverCheckTable	[ColorNum]	[SquareNum];
-extern Bitboard g_knightCheckTable	[ColorNum]	[SquareNum];
-extern Bitboard g_lanceCheckTable	[ColorNum]	[SquareNum];
-
-
-
-extern const Bitboard g_setMaskBB	[SquareNum];
 
 class Bitboard {
 private:
@@ -72,7 +40,7 @@ public:
 	bool IsNot0() const;
 
 	// これはコードが見難くなるけど仕方ない。
-	bool AndIsNot0(const Bitboard& bb) const;
+	bool AndIsNot0( const Bitboard& bb)const;
 
 	Bitboard operator ~ () const;
 
@@ -105,16 +73,6 @@ public:
 
 	// これはコードが見難くなるけど仕方ない。
 	Bitboard NotThisAnd(const Bitboard& bb) const;
-
-	bool IsSet(const Square sq) const;
-
-	void SetBit(const Square sq);
-
-	void ClearBit(const Square sq);
-
-	void XorBit(const Square sq);
-
-	void XorBit(const Square sq1, const Square sq2);
 
 	// Bitboard の right 側だけの要素を調べて、最初に 1 であるマスの index を返す。
 	// そのマスを 0 にする。
@@ -192,16 +150,12 @@ public:
 #endif
 	}
 
-	// for debug
-	void PrintBoard() const;
-
 	void PrintTable(const int part) const;
 
 	// 指定した位置が Bitboard のどちらの u64 変数の要素か
 	static int Part(const Square sq);
 
 public://(^q^)
-	inline static Bitboard SetMaskBB(const Square sq) { return g_setMaskBB[sq]; }
 
 	// 実際に使用する部分の全て bit が立っている Bitboard
 	inline static Bitboard AllOneBB() { return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff)); }
@@ -224,20 +178,6 @@ public://(^q^)
 	}
 #endif
 
-	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
-	inline Bitboard LanceAttack(const Color c, const Square sq) const {
-		const int part = Bitboard::Part(sq);
-		const int index = ((*this).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
-		return g_lanceAttack[c][sq][index];
-	}
-
-	// 飛車の縦だけの利き。香車の利きを使い、index を共通化することで高速化している。
-	inline Bitboard RookAttackFile(const Square sq) const {
-		const int part = Bitboard::Part(sq);
-		const int index = ((*this).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
-		return g_lanceAttack[Black][sq][index] | g_lanceAttack[White][sq][index];
-	}
-
 	// Bitboard で直接利きを返す関数。
 	// 1段目には歩は存在しないので、1bit シフトで別の筋に行くことはない。
 	// ただし、from に歩以外の駒の Bitboard を入れると、別の筋のビットが立ってしまうことがあるので、
@@ -245,28 +185,6 @@ public://(^q^)
 	template <Color US> inline Bitboard PawnAttack() const { // thisはfrom
 		return (US == Black ? ((*this) >> 1) : ((*this) << 1));
 	}
-
-	static inline Bitboard GoldAttack(const Color c, const Square sq) { return g_goldAttack[c][sq]; }
-	static inline Bitboard SilverAttack(const Color c, const Square sq) { return g_silverAttack[c][sq]; }
-	static inline Bitboard KnightAttack(const Color c, const Square sq) { return g_knightAttack[c][sq]; }
-	static inline Bitboard PawnAttack(const Color c, const Square sq) { return g_pawnAttack[c][sq]; }
-
-
-	// sq1, sq2 の間(sq1, sq2 は含まない)のビットが立った Bitboard
-	static inline Bitboard BetweenBB			(const Square sq1	, const Square sq2	) { return g_betweenBB			[sq1][sq2]; }
-	static inline Bitboard RookAttackToEdge		(const Square sq						) { return g_rookAttackToEdge	[sq];		}
-	static inline Bitboard BishopAttackToEdge	(const Square sq						) { return g_bishopAttackToEdge	[sq];		}
-	static inline Bitboard LanceAttackToEdge	(const Color c		, const Square sq	) { return g_lanceAttackToEdge	[c][sq];	}
-	static inline Bitboard GoldCheckTable		(const Color c		, const Square sq	) { return g_goldCheckTable		[c][sq];	}
-	static inline Bitboard SilverCheckTable		(const Color c		, const Square sq	) { return g_silverCheckTable	[c][sq];	}
-	static inline Bitboard KnightCheckTable		(const Color c		, const Square sq	) { return g_knightCheckTable	[c][sq];	}
-	static inline Bitboard LanceCheckTable		(const Color c		, const Square sq	) { return g_lanceCheckTable	[c][sq];	}
-	// todo: テーブル引きを検討
-	static inline Bitboard RookStepAttacks		(const Square sq						) { return Bitboard::GoldAttack(Black, sq) & Bitboard::GoldAttack(White, sq); }
-	// todo: テーブル引きを検討
-	static inline Bitboard BishopStepAttacks	(const Square sq						) { return Bitboard::SilverAttack(Black, sq) & Bitboard::SilverAttack(White, sq); }
-	// 前方3方向の位置のBitboard
-	static inline Bitboard GoldAndSilverAttacks	(const Color c		, const Square sq	) { return Bitboard::GoldAttack(c, sq) & Bitboard::SilverAttack(c, sq); }
 
 };
 

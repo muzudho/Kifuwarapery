@@ -118,20 +118,20 @@ namespace {
 		}
 
 		if (!second.IsDrop() && !first.IsDrop()) {
-			if (Bitboard::BetweenBB(m2from, m2to).IsSet(m1from)) {
+			if (UtilBitboard::IsSet(&UtilBitboard::BetweenBB(m2from, m2to), m1from)) {
 				return true;
 			}
 		}
 
 		const PieceType m1pt = first.GetPieceTypeFromOrDropped();
 		const Color us = pos.GetTurn();
-		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from));
+		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ UtilBitboard::SetMaskBB(m2from));
 		const Bitboard m1att = pos.GetAttacksFrom(m1pt, us, m1to, occ);
-		if (m1att.IsSet(m2to)) {
+		if (UtilBitboard::IsSet(&m1att, m2to)) {
 			return true;
 		}
 
-		if (m1att.IsSet(pos.GetKingSquare(us))) {
+		if (UtilBitboard::IsSet(&m1att, pos.GetKingSquare(us))) {
 			return true;
 		}
 
@@ -175,7 +175,7 @@ namespace {
 			const Color us = pos.GetTurn();
 			const Square m1to = first.To();
 			const Square m2from = second.From();
-			Bitboard occ = pos.GetOccupiedBB() ^ Bitboard::SetMaskBB(m2from) ^ Bitboard::SetMaskBB(m1to);
+			Bitboard occ = pos.GetOccupiedBB() ^ UtilBitboard::SetMaskBB(m2from) ^ UtilBitboard::SetMaskBB(m1to);
 			PieceType m1ptTo;
 
 			if (first.IsDrop()) {
@@ -183,10 +183,10 @@ namespace {
 			}
 			else {
 				m1ptTo = first.GetPieceTypeTo();
-				occ ^= Bitboard::SetMaskBB(m1from);
+				occ ^= UtilBitboard::SetMaskBB(m1from);
 			}
 
-			if (pos.GetAttacksFrom(m1ptTo, us, m1to, occ).IsSet(m2to)) {
+			if (UtilBitboard::IsSet(&pos.GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
 				return true;
 			}
 
@@ -205,7 +205,7 @@ namespace {
 
 		if (!second.IsDrop()
 			&& UtilPieceType::IsSlider(m2ptFrom)
-			&& Bitboard::BetweenBB(second.From(), m2to).IsSet(first.To())
+			&& UtilBitboard::IsSet(&UtilBitboard::BetweenBB(second.From(), m2to), first.To())
 			&& ScoreZero <= pos.GetSeeSign(first))
 		{
 			return true;
