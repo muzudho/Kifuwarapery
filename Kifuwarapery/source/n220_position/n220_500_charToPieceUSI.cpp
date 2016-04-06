@@ -53,7 +53,7 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	switch (pt) {
 	case Occupied:  return Bitboard::AllZeroBB();
 	case Pawn:      return UtilBitboard::PawnAttack(c, sq);
-	case Lance:     return UtilBitboard::LanceAttack(&occupied, c, sq);
+	case Lance:     return g_lanceAttackBb.GetControllBb(&occupied, c, sq);
 	case Knight:    return UtilBitboard::KnightAttack(c, sq);
 	case Silver:    return UtilBitboard::SilverAttack(c, sq);
 	case Bishop:    return UtilBitboard::BishopAttack(&occupied, sq);
@@ -63,7 +63,7 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	case ProLance:
 	case ProKnight:
 	case ProSilver: return UtilBitboard::GoldAttack(c, sq);
-	case King:      return g_kingAttackBb.KingAttack(sq);
+	case King:      return g_kingAttackBb.GetControllBb(sq);
 	case Horse:     return UtilBitboard::HorseAttack(&occupied,sq);
 	case Dragon:    return UtilBitboard::DragonAttack(&occupied,sq);
 	default:        UNREACHABLE;
@@ -512,16 +512,16 @@ namespace {
 			// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
 			//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
 			if (PT == Pawn || PT == Lance) {
-				attackers |= (UtilBitboard::LanceAttack(&occupied,UtilColor::OppositeColor(turn), to) & (pos.GetBbOf(Rook, Dragon) | pos.GetBbOf(Lance, turn)));
+				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & (pos.GetBbOf(Rook, Dragon) | pos.GetBbOf(Lance, turn)));
 			}
 			if (PT == Gold || PT == ProPawn || PT == ProLance || PT == ProKnight || PT == ProSilver || PT == Horse || PT == Dragon) {
-				attackers |= (UtilBitboard::LanceAttack(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
-					| (UtilBitboard::LanceAttack(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
+				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+					| (g_lanceAttackBb.GetControllBb(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
 					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
 					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Silver) {
-				attackers |= (UtilBitboard::LanceAttack(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
 					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon))
 					| (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
@@ -529,8 +529,8 @@ namespace {
 				attackers |= (UtilBitboard::BishopAttack(&occupied,to) & pos.GetBbOf(Bishop, Horse));
 			}
 			if (PT == Rook) {
-				attackers |= (UtilBitboard::LanceAttack(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
-					| (UtilBitboard::LanceAttack(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
+				attackers |= (g_lanceAttackBb.GetControllBb(&occupied,UtilColor::OppositeColor(turn), to) & pos.GetBbOf(Lance, turn))
+					| (g_lanceAttackBb.GetControllBb(&occupied,turn, to) & pos.GetBbOf(Lance, UtilColor::OppositeColor(turn)))
 					| (UtilBitboard::RookAttack(&occupied,to) & pos.GetBbOf(Rook, Dragon));
 			}
 
@@ -648,7 +648,7 @@ namespace {
 	bool canKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
 		const Color them = UtilColor::OppositeColor(us);
 		const Square ksq = pos.GetKingSquare(them);
-		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf(them).NotThisAnd(g_kingAttackBb.KingAttack(ksq)));
+		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf(them).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
 		UtilBitboard::ClearBit(&kingMoveBB,sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
 
 		if (kingMoveBB.IsNot0()) {
@@ -723,7 +723,7 @@ bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
 	const Bitboard tempOccupied = GetOccupiedBB() | UtilBitboard::SetMaskBB(sq);
-	Bitboard kingMoveBB = GetBbOf(them).NotThisAnd(g_kingAttackBb.KingAttack(ksq));
+	Bitboard kingMoveBB = GetBbOf(them).NotThisAnd(g_kingAttackBb.GetControllBb(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
 	assert(kingMoveBB.IsNot0());
@@ -787,7 +787,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	else if (ourHand.Exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
 		const Square to = ksq + TDeltaS;
 		if (GetPiece(to) == Empty && IsAttackersToIsNot0(US, to)) {
-			if (!canKingEscape(*this, US, to, UtilBitboard::LanceAttackToEdge(US, to))
+			if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
 				return UtilMove::MakeDropMove(Lance, to);
@@ -801,7 +801,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 		while (toBB.IsNot0()) {
 			const Square to = toBB.FirstOneFromI9();
 			if (IsAttackersToIsNot0(US, to)) {
-				if (!canKingEscape(*this, US, to, UtilBitboard::BishopAttackToEdge(to))
+				if (!canKingEscape(*this, US, to, g_bishopAttackBb.GetControllBbToEdge(to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
 					return UtilMove::MakeDropMove(Bishop, to);
@@ -884,7 +884,7 @@ silver_drop_end:
 
 	// 駒を移動する場合
 	// moveTarget は桂馬以外の移動先の大まかな位置。飛角香の遠隔王手は含まない。
-	const Bitboard moveTarget = GetBbOf(US).NotThisAnd(g_kingAttackBb.KingAttack(ksq));
+	const Bitboard moveTarget = GetBbOf(US).NotThisAnd(g_kingAttackBb.GetControllBb(ksq));
 	const Bitboard pinned = GetPinnedBB();
 	const Bitboard dcBB_betweenIsUs = DiscoveredCheckBB<true>();
 
@@ -1104,7 +1104,7 @@ silver_drop_end:
 				while (toBB.IsNot0()) {
 					const Square to = toBB.FirstOneFromI9();
 					if (IsUnDropCheckIsSupported(US, to)) {
-						if (!canKingEscape(*this, US, to, UtilBitboard::BishopAttackToEdge(to))
+						if (!canKingEscape(*this, US, to, g_bishopAttackBb.GetControllBbToEdge(to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1353,7 +1353,7 @@ silver_drop_end:
 
 	{
 		// 香車による移動
-		Bitboard fromBB = GetBbOf(Lance, US) & UtilBitboard::LanceCheckTable(US, ksq);
+		Bitboard fromBB = GetBbOf(Lance, US) & g_lanceAttackBb.LanceCheckTable(US, ksq);
 		if (fromBB.IsNot0()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
@@ -1397,7 +1397,7 @@ silver_drop_end:
 						const Square to = ksq + TDeltaS;
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 不成
-							if (!canKingEscape(*this, US, to, UtilBitboard::LanceAttackToEdge(US, to))
+							if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))

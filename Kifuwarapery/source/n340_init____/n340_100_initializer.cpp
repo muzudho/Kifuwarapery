@@ -86,9 +86,9 @@ Bitboard Initializer::IndexToOccupied(const int index, const int bits, const Bit
 
 void Initializer::InitAttacks(const bool isBishop)
 {
-	auto* attacks = (isBishop ? UtilBitboard::m_bishopAttack : UtilBitboard::m_rookAttack);
-	auto* attackIndex = (isBishop ? UtilBitboard::m_bishopAttackIndex : ConfigBits::m_rookAttackIndex);
-	auto* blockMask = (isBishop ? UtilBitboard::m_bishopBlockMask : UtilBitboard::m_rookBlockMask);
+	auto* attacks = (isBishop ? g_bishopAttackBb.m_bishopAttack : UtilBitboard::m_rookAttack);
+	auto* attackIndex = (isBishop ? g_bishopAttackBb.m_bishopAttackIndex : ConfigBits::m_rookAttackIndex);
+	auto* blockMask = (isBishop ? g_bishopAttackBb.m_bishopBlockMask : UtilBitboard::m_rookBlockMask);
 	auto* shift = (isBishop ? ConfigBits::m_bishopShiftBits : ConfigBits::m_rookShiftBits);
 #if defined HAVE_BMI2
 #else
@@ -124,7 +124,7 @@ void Initializer::InitLanceAttacks() {
 			assert(num1s == blockMask.PopCount());
 			for (int i = 0; i < (1 << num1s); ++i) {
 				Bitboard occupied = IndexToOccupied(i, num1s, blockMask);
-				UtilBitboard::m_lanceAttack[c][sq][i] = LanceAttackCalc(c, sq, occupied);
+				g_lanceAttackBb.m_controllBb[c][sq][i] = LanceAttackCalc(c, sq, occupied);
 			}
 		}
 	}
@@ -132,7 +132,7 @@ void Initializer::InitLanceAttacks() {
 
 void Initializer::InitKingAttacks() {
 	for (Square sq = I9; sq < SquareNum; ++sq)
-		g_kingAttackBb.m_kingAttack[sq] =
+		g_kingAttackBb.m_controllBb[sq] =
 			UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq) |
 			UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
@@ -140,13 +140,13 @@ void Initializer::InitKingAttacks() {
 void Initializer::InitGoldAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			UtilBitboard::m_goldAttack[c][sq] = (g_kingAttackBb.KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq);
+			UtilBitboard::m_goldAttack[c][sq] = (g_kingAttackBb.GetControllBb(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::RookAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitSilverAttacks() {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			UtilBitboard::m_silverAttack[c][sq] = (g_kingAttackBb.KingAttack(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
+			UtilBitboard::m_silverAttack[c][sq] = (g_kingAttackBb.GetControllBb(sq) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))) | UtilBitboard::BishopAttack(&Bitboard::AllOneBB(),sq);
 }
 
 void Initializer::InitKnightAttacks() {
@@ -193,9 +193,9 @@ void Initializer::InitSquareRelation() {
 void Initializer::InitAttackToEdge() {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		UtilBitboard::m_rookAttackToEdge[sq] = UtilBitboard::RookAttack(&Bitboard::AllZeroBB(),sq);
-		UtilBitboard::m_bishopAttackToEdge[sq] = UtilBitboard::BishopAttack(&Bitboard::AllZeroBB(),sq);
-		UtilBitboard::m_lanceAttackToEdge[Black][sq] = UtilBitboard::LanceAttack(&Bitboard::AllZeroBB(), Black, sq);
-		UtilBitboard::m_lanceAttackToEdge[White][sq] = UtilBitboard::LanceAttack(&Bitboard::AllZeroBB(), White, sq);
+		g_bishopAttackBb.m_bishopAttackToEdge[sq] = UtilBitboard::BishopAttack(&Bitboard::AllZeroBB(),sq);
+		g_lanceAttackBb.m_controllBbToEdge[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), Black, sq);
+		g_lanceAttackBb.m_controllBbToEdge[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), White, sq);
 	}
 }
 
@@ -278,15 +278,15 @@ void Initializer::InitCheckTable() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			UtilBitboard::m_lanceCheckTable[c][sq] = UtilBitboard::LanceAttackToEdge(opp, sq);
+			g_lanceAttackBb.m_lanceCheckTable[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
 
 			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
 			Bitboard checkBB = UtilBitboard::GoldAttack(opp, sq) & TRank789BB;
 			while (checkBB.IsNot0()) {
 				const Square checkSq = checkBB.FirstOneFromI9();
-				UtilBitboard::m_lanceCheckTable[c][sq] |= UtilBitboard::LanceAttackToEdge(opp, checkSq);
+				g_lanceAttackBb.m_lanceCheckTable[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
 			}
-			UtilBitboard::m_lanceCheckTable[c][sq].AndEqualNot(UtilBitboard::SetMaskBB(sq) | UtilBitboard::PawnAttack(opp, sq));
+			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(UtilBitboard::SetMaskBB(sq) | UtilBitboard::PawnAttack(opp, sq));
 		}
 	}
 }

@@ -297,7 +297,7 @@ private:
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
 		pinners &=	(
 						this->GetBbOf(Lance) &
-						UtilBitboard::LanceAttackToEdge((FindPinned ? us : them), ksq)
+						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? us : them), ksq)
 					) |
 					(
 						this->GetBbOf(Rook, Dragon) &
@@ -305,7 +305,7 @@ private:
 					) |
 					(
 						this->GetBbOf(Bishop, Horse) &
-						UtilBitboard::BishopAttackToEdge(ksq)
+						g_bishopAttackBb.GetControllBbToEdge(ksq)
 					);
 
 		while (pinners.IsNot0()) {

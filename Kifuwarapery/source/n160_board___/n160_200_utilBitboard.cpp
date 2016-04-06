@@ -2,13 +2,6 @@
 #include "../../header/n160_board___/n160_200_utilBitboard.hpp"
 
 
-//────────────────────────────────────────────────────────────────────────────────
-// 角
-//────────────────────────────────────────────────────────────────────────────────
-Bitboard UtilBitboard::m_bishopAttack[20224];
-int		 UtilBitboard::m_bishopAttackIndex[SquareNum];
-Bitboard UtilBitboard::m_bishopBlockMask[SquareNum];
-Bitboard UtilBitboard::m_bishopAttackToEdge[SquareNum];
 
 //────────────────────────────────────────────────────────────────────────────────
 // 飛
@@ -41,15 +34,6 @@ Bitboard UtilBitboard::m_silverCheckTable[ColorNum][SquareNum];
 //────────────────────────────────────────────────────────────────────────────────
 Bitboard UtilBitboard::m_knightAttack[ColorNum][SquareNum];
 Bitboard UtilBitboard::m_knightCheckTable[ColorNum][SquareNum];
-
-//────────────────────────────────────────────────────────────────────────────────
-// 香
-//────────────────────────────────────────────────────────────────────────────────
-// これらは一度値を設定したら二度と変更しない。
-// 本当は const 化したい。
-Bitboard UtilBitboard::m_lanceAttack[ColorNum][SquareNum][128];
-Bitboard UtilBitboard::m_lanceAttackToEdge[ColorNum][SquareNum];
-Bitboard UtilBitboard::m_lanceCheckTable[ColorNum][SquareNum];
 
 //────────────────────────────────────────────────────────────────────────────────
 // 歩

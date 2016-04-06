@@ -1,22 +1,18 @@
 #pragma once
 
 #include "n160_100_bitboard.hpp"
-#include "n160_110_kingAttack.hpp" //
+#include "n160_110_kingAttack.hpp"
+#include "n160_120_bishopAttack.hpp"
+#include "n160_130_lanceAttack.hpp"
 
 extern KingAttackBb g_kingAttackBb;
+extern BishopAttackBb g_bishopAttackBb;
+extern LanceAttackBb g_lanceAttackBb;
 
 
 class UtilBitboard {
 public:
 
-	//────────────────────────────────────────────────────────────────────────────────
-	// 角
-	//────────────────────────────────────────────────────────────────────────────────
-	static Bitboard m_bishopAttack[20224];
-	static int		m_bishopAttackIndex[SquareNum];
-	static Bitboard m_bishopBlockMask[SquareNum];
-	static Bitboard m_bishopAttackToEdge[SquareNum];
-	static inline Bitboard BishopAttackToEdge(const Square sq) { return UtilBitboard::m_bishopAttackToEdge[sq]; }
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 飛
@@ -61,26 +57,6 @@ public:
 	static inline Bitboard KnightCheckTable(const Color c, const Square sq) { return UtilBitboard::m_knightCheckTable[c][sq]; }
 
 	//────────────────────────────────────────────────────────────────────────────────
-	// 香
-	//────────────────────────────────────────────────────────────────────────────────
-	// メモリ節約をせず、無駄なメモリを持っている。
-	static Bitboard m_lanceAttack[ColorNum][SquareNum][128];
-
-	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
-	static inline Bitboard LanceAttack(const Bitboard* thisBitboard, const Color c, const Square sq) {//const 
-		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
-		return UtilBitboard::m_lanceAttack[c][sq][index];
-	}
-
-	static Bitboard m_lanceAttackToEdge[ColorNum][SquareNum];
-
-	static Bitboard m_lanceCheckTable[ColorNum][SquareNum];
-	static inline Bitboard LanceCheckTable(const Color c, const Square sq) { return UtilBitboard::m_lanceCheckTable[c][sq]; }
-
-	static inline Bitboard LanceAttackToEdge(const Color c, const Square sq) { return UtilBitboard::m_lanceAttackToEdge[c][sq]; }
-
-	//────────────────────────────────────────────────────────────────────────────────
 	// 歩
 	//────────────────────────────────────────────────────────────────────────────────
 	static Bitboard m_pawnAttack[ColorNum][SquareNum];
@@ -113,15 +89,21 @@ public:
 	static inline Bitboard RookAttackFile(const Bitboard* thisBitboard, const Square sq) {//const
 		const int part = Bitboard::Part(sq);
 		const int index = ((*thisBitboard).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
-		return UtilBitboard::m_lanceAttack[Black][sq][index] | UtilBitboard::m_lanceAttack[White][sq][index];
+		return g_lanceAttackBb.m_controllBb[Black][sq][index] | g_lanceAttackBb.m_controllBb[White][sq][index];
 	}
 
 	// todo: テーブル引きを検討
-	static inline Bitboard RookStepAttacks(const Square sq) { return UtilBitboard::GoldAttack(Black, sq) & UtilBitboard::GoldAttack(White, sq); }
+	static inline Bitboard RookStepAttacks(const Square sq) {
+		return UtilBitboard::GoldAttack(Black, sq) & UtilBitboard::GoldAttack(White, sq);
+	}
 	// todo: テーブル引きを検討
-	static inline Bitboard BishopStepAttacks(const Square sq) { return UtilBitboard::SilverAttack(Black, sq) & UtilBitboard::SilverAttack(White, sq); }
+	static inline Bitboard BishopStepAttacks(const Square sq) {
+		return UtilBitboard::SilverAttack(Black, sq) & UtilBitboard::SilverAttack(White, sq);
+	}
 	// 前方3方向の位置のBitboard
-	static inline Bitboard GoldAndSilverAttacks(const Color c, const Square sq) { return UtilBitboard::GoldAttack(c, sq) & UtilBitboard::SilverAttack(c, sq); }
+	static inline Bitboard GoldAndSilverAttacks(const Color c, const Square sq) {
+		return UtilBitboard::GoldAttack(c, sq) & UtilBitboard::SilverAttack(c, sq);
+	}
 
 
 	// for debug
@@ -157,8 +139,8 @@ public:
 		}
 
 		static inline Bitboard BishopAttack(const Bitboard* thisBitboard, const Square sq) {//const
-			const Bitboard block((*thisBitboard) & UtilBitboard::m_bishopBlockMask[sq]);
-			return UtilBitboard::m_bishopAttack[UtilBitboard::m_bishopAttackIndex[sq] + block.OccupiedToIndex(ConfigBits::m_bishopMagic[sq], ConfigBits::m_bishopShiftBits[sq])];
+			const Bitboard block((*thisBitboard) & g_bishopAttackBb.m_bishopBlockMask[sq]);
+			return g_bishopAttackBb.m_bishopAttack[g_bishopAttackBb.m_bishopAttackIndex[sq] + block.OccupiedToIndex(ConfigBits::m_bishopMagic[sq], ConfigBits::m_bishopShiftBits[sq])];
 		}
 
 	#endif
@@ -166,7 +148,7 @@ public:
 
 	static inline Bitboard DragonAttack(const Bitboard* thisBitboard, const Square sq) //const
 	{
-		return UtilBitboard::RookAttack(thisBitboard, sq) | g_kingAttackBb.KingAttack(sq);
+		return UtilBitboard::RookAttack(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 
 	static inline Bitboard QueenAttack(const Bitboard* thisBitboard, const Square sq) //const
@@ -175,16 +157,16 @@ public:
 	}
 
 	static inline Bitboard HorseAttack(const Bitboard* thisBitboard, const Square sq) {//const
-		return UtilBitboard::BishopAttack(thisBitboard, sq) | g_kingAttackBb.KingAttack(sq);
+		return UtilBitboard::BishopAttack(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 
 
 
 	static inline Bitboard DragonAttackToEdge(const Square sq) {
-		return UtilBitboard::RookAttackToEdge(sq) | g_kingAttackBb.KingAttack(sq);
+		return UtilBitboard::RookAttackToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 	static inline Bitboard HorseAttackToEdge(const Square sq) {
-		return UtilBitboard::BishopAttackToEdge(sq) | g_kingAttackBb.KingAttack(sq);
+		return g_bishopAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 
 };
