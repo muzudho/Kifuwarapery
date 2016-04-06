@@ -1,6 +1,7 @@
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_500_bitboardMask.hpp"
 
+
 KnightAttackBb g_knightAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
 
 

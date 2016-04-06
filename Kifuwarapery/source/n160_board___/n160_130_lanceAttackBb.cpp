@@ -1,8 +1,10 @@
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_500_bitboardMask.hpp"
 
+
 // これらは一度値を設定したら二度と変更しない。
 LanceAttackBb g_lanceAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
+
 
 void LanceAttackBb::Initialize()
 {
@@ -18,6 +20,14 @@ void LanceAttackBb::Initialize()
 				g_lanceAttackBb.m_controllBb[c][sq][i] = this->LanceAttackCalc(c, sq, occupied);
 			}
 		}
+	}
+}
+
+void LanceAttackBb::InitializeToEdge()
+{
+	for (Square sq = I9; sq < SquareNum; ++sq) {
+		g_lanceAttackBb.m_controllBbToEdge[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), Black, sq);
+		g_lanceAttackBb.m_controllBbToEdge[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), White, sq);
 	}
 }
 

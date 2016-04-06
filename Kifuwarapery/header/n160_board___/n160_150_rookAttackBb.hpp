@@ -26,6 +26,20 @@ public:
 
 
 public:
+
+#if defined FIND_MAGIC
+	u64 findMagicRook(const Square sqare);
+#endif // #if defined FIND_MAGIC
+
+	// ‰Šú‰»—p
+	Bitboard RookBlockMaskCalc(const Square square);
+	Bitboard RookAttackCalc(const Square square, const Bitboard& occupied);
+	void InitRookAttacks();
+
+	// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ðÝ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ðŒÄ‚Ô‚±‚ÆB
+	void InitializeToEdge();
+
 	inline Bitboard GetControllBbToEdge(const Square sq) const {
 		return this->m_controllBbToEdge[sq];
 	}

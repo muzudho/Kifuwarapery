@@ -7,83 +7,6 @@
 #include "../../header/n340_init____/n340_100_initializer.hpp"
 
 
-// square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
-Bitboard Initializer::RookBlockMaskCalc(const Square square) {
-	Bitboard result = BitboardMask::GetSquareFileMask(square) ^ BitboardMask::GetSquareRankMask(square);
-	if (UtilSquare::ToFile(square) != FileA) { result &= ~BitboardMask::GetFileMask<FileA>(); }
-	if (UtilSquare::ToFile(square) != FileI) { result &= ~BitboardMask::GetFileMask<FileI>(); }
-	if (UtilSquare::ToRank(square) != Rank1) { result &= ~BitboardMask::GetRankMask<Rank1>(); }
-	if (UtilSquare::ToRank(square) != Rank9) { result &= ~BitboardMask::GetRankMask<Rank9>(); }
-	return result;
-}
-
-// square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
-Bitboard Initializer::BishopBlockMaskCalc(const Square square) {
-	const Rank rank = UtilSquare::ToRank(square);
-	const File file = UtilSquare::ToFile(square);
-	Bitboard result = Bitboard::AllZeroBB();
-	for (Square sq = I9; sq < SquareNum; ++sq) {
-		const Rank r = UtilSquare::ToRank(sq);
-		const File f = UtilSquare::ToFile(sq);
-		if (abs(rank - r) == abs(file - f))
-			g_setMaskBb.SetBit(&result,sq);
-	}
-	result &= ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>() | BitboardMask::GetFileMask<FileA>() | BitboardMask::GetFileMask<FileI>());
-	g_setMaskBb.ClearBit(&result,square);
-
-	return result;
-}
-
-
-// Rook or Bishop の利きの範囲を調べて bitboard で返す。
-// occupied  障害物があるマスが 1 の bitboard
-Bitboard Initializer::AttackCalc(const Square square, const Bitboard& occupied, const bool isBishop) {
-	const SquareDelta deltaArray[2][4] = { { DeltaN, DeltaS, DeltaE, DeltaW },{ DeltaNE, DeltaSE, DeltaSW, DeltaNW } };
-	Bitboard result = Bitboard::AllZeroBB();
-	for (SquareDelta delta : deltaArray[isBishop]) {
-		for (Square sq = square + delta;
-		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
-			sq += delta)
-		{
-			g_setMaskBb.SetBit(&result, sq);
-			if (g_setMaskBb.IsSet(&occupied, sq))
-				break;
-		}
-	}
-
-	return result;
-}
-
-void Initializer::InitAttacks(const bool isBishop)
-{
-	auto* attacks = (isBishop ? g_bishopAttackBb.m_controllBb : g_rookAttackBb.m_controllBb);
-	auto* attackIndex = (isBishop ? g_bishopAttackBb.m_controllBbIndex : ConfigBits::m_rookAttackIndex);
-	auto* blockMask = (isBishop ? g_bishopAttackBb.m_bishopBlockMask : g_rookAttackBb.m_rookBlockMask);
-	auto* shift = (isBishop ? ConfigBits::m_bishopShiftBits : ConfigBits::m_rookShiftBits);
-#if defined HAVE_BMI2
-#else
-	auto* magic = (isBishop ? ConfigBits::m_bishopMagic : ConfigBits::m_rookMagic);
-#endif
-	int index = 0;
-	for (Square sq = I9; sq < SquareNum; ++sq) {
-		blockMask[sq] = (isBishop ? BishopBlockMaskCalc(sq) : RookBlockMaskCalc(sq));
-		attackIndex[sq] = index;
-
-		const int num1s = (isBishop ? ConfigBits::m_bishopBlockBits[sq] : ConfigBits::m_rookBlockBits[sq]);
-		for (int i = 0; i < (1 << num1s); ++i)
-		{
-			const Bitboard occupied = g_setMaskBb.IndexToOccupied(i, num1s, blockMask[sq]);
-#if defined HAVE_BMI2
-			attacks[index + (occupied & blockMask[sq]).OccupiedToIndex( blockMask[sq])] = AttackCalc(sq, occupied, isBishop);
-#else
-			attacks[index + occupied.OccupiedToIndex( magic[sq], shift[sq])] =
-				this->AttackCalc(sq, occupied, isBishop);
-#endif
-		}
-		index += 1 << (64 - shift[sq]);
-	}
-}
-
 void Initializer::InitSquareRelation() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 		const File file1 = UtilSquare::ToFile(sq1);
@@ -109,12 +32,11 @@ void Initializer::InitSquareRelation() {
 // 障害物が無いときの利きの Bitboard
 // g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
 void Initializer::InitAttackToEdge() {
-	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_rookAttackBb.m_controllBbToEdge[sq] = g_rookAttackBb.GetControllBb(&Bitboard::AllZeroBB(),sq);
-		g_bishopAttackBb.m_controllBbToEdge[sq] = g_bishopAttackBb.BishopAttack(&Bitboard::AllZeroBB(),sq);
-		g_lanceAttackBb.m_controllBbToEdge[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), Black, sq);
-		g_lanceAttackBb.m_controllBbToEdge[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), White, sq);
-	}
+	g_rookAttackBb.InitializeToEdge();
+
+	g_bishopAttackBb.InitializeToEdge();
+
+	g_lanceAttackBb.InitializeToEdge();
 }
 
 void Initializer::InitBetweenBB() {
@@ -240,12 +162,12 @@ void Initializer::InitSquareDistance() {
 void Initializer::InitTable() {
 
 #ifndef SKIP_LONG_TIME_EVAL
-	SYNCCOUT << "(^q^)I1: SKIP! (long time)initAttacks!" << SYNCENDL;
-	this->InitAttacks(false);
+	SYNCCOUT << "(^q^)I1: SKIP! (long time)InitRookAttacks!" << SYNCENDL;
+	g_rookAttackBb.InitRookAttacks();
 #endif
 
 	SYNCCOUT << "(^q^)I2: initAttacks!" << SYNCENDL;
-	this->InitAttacks(true);
+	g_bishopAttackBb.InitBishopAttacks();
 
 	SYNCCOUT << "(^q^)I3: initKingAttacks!" << SYNCENDL;
 	g_kingAttackBb.Initialize();
@@ -287,45 +209,4 @@ void Initializer::InitTable() {
 	InitSearchTable();
 }
 
-#if defined FIND_MAGIC
-// square の位置の rook, bishop それぞれのMagic Bitboard に使用するマジックナンバーを見つける。
-// isBishop  : true なら bishop, false なら rook のマジックナンバーを見つける。
-u64 Initializer::findMagic(const Square square, const bool isBishop) {
-	Bitboard occupied[1<<14];
-	Bitboard attack[1<<14];
-	Bitboard attackUsed[1<<14];
-	Bitboard mask = (isBishop ? BishopBlockMaskCalc(square) : RookBlockMaskCalc(square));
-	int num1s = (isBishop ? g_bishopBlockBits[square] : g_rookBlockBits[square]);
 
-	// n bit の全ての数字 (利きのあるマスの全ての 0 or 1 の組み合わせ)
-	for (int i = 0; i < (1 << num1s); ++i) {
-		occupied[i] = g_setMaskBb.IndexToOccupied(i, num1s, mask);
-		attack[i] = AttackCalc(square, occupied[i], isBishop);
-	}
-
-	for (u64 k = 0; k < UINT64_C(100000000); ++k) {
-		const u64 magic = g_mt64bit.GetRandomFewBits();
-		bool fail = false;
-
-		// これは無くても良いけど、少しマジックナンバーが見つかるのが早くなるはず。
-		if (count1s((mask.MergeP() * magic) & UINT64_C(0xfff0000000000000)) < 6)
-			continue;
-
-		std::fill(std::begin(attackUsed), std::IsEnd(attackUsed), AllZeroBB());
-
-		for (int i = 0; !fail && i < (1 << num1s); ++i) {
-			const int shiftBits = (isBishop ? g_bishopShiftBits[square] : g_rookShiftBits[square]);
-			const u64 index = OccupiedToIndex(occupied[i], magic, shiftBits);
-			if      (attackUsed[index] == AllZeroBB())
-				attackUsed[index] = attack[i];
-			else if (attackUsed[index] != attack[i])
-				fail = true;
-		}
-		if (!fail)
-			return magic;
-	}
-
-	std::cout << "/***Failed***/\t";
-	return 0;
-}
-#endif // #if defined FIND_MAGIC

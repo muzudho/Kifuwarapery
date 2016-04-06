@@ -8,18 +8,10 @@ class Initializer {
 public:
 	void InitTable();
 
-#if defined FIND_MAGIC
-	u64 findMagic(const Square sqare, const bool isBishop);
-#endif // #if defined FIND_MAGIC
+
 
 private:
-	Bitboard RookBlockMaskCalc(const Square square);
 
-	Bitboard BishopBlockMaskCalc(const Square square);
-
-	Bitboard AttackCalc(const Square square, const Bitboard& occupied, const bool isBishop);
-
-	void InitAttacks(const bool isBishop);
 
 	void InitSquareRelation();
 

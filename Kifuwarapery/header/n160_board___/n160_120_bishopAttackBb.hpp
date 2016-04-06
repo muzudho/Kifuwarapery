@@ -17,6 +17,19 @@ public:
 	Bitboard	m_controllBbToEdge[SquareNum];
 
 public:
+
+#if defined FIND_MAGIC
+	u64 findMagicBishop(const Square sqare);
+#endif // #if defined FIND_MAGIC
+
+	Bitboard BishopBlockMaskCalc(const Square square);
+	Bitboard BishopAttackCalc(const Square square, const Bitboard& occupied);
+	void InitBishopAttacks();
+
+	// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ðÝ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ðŒÄ‚Ô‚±‚ÆB
+	void InitializeToEdge();
+
 	inline Bitboard GetControllBbToEdge(const Square sq) const {
 		return this->m_controllBbToEdge[sq];
 	}

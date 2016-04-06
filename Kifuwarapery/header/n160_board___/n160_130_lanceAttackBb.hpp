@@ -17,6 +17,10 @@ public:
 
 	void Initialize();
 
+	// 障害物が無いときの利きの Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack を設定してから、この関数を呼ぶこと。
+	void InitializeToEdge();
+
 	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
 	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Color c, const Square sq) const {
 		const int part = Bitboard::Part(sq);
