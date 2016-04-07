@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <fstream>//std::ifstream
 #include "../n260_evaluate/n260_490_KppCacheIo.hpp"
 #include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
 
@@ -56,175 +57,110 @@ struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::ar
 
 
 	static bool ReadSynthesized(const std::string& dirName) {
-#define FOO(x) {														\
-			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
-			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
-			else     return false;										\
-		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		FOO(KPP);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KPP_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KPP), sizeof(KPP));
+			else     return false;
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		FOO(KKP);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KKP_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KKP), sizeof(KKP));
+			else     return false;
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		FOO(KK);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KK_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KK), sizeof(KK));
+			else     return false;
+		}
 #endif
 
-#undef FOO
 		return true;
 	}
 
 
 	static void WriteSynthesized(const std::string& dirName) {
-#define FOO(x) {														\
-			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
-			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
-		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		FOO(KPP);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KPP_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KPP), sizeof(KPP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		FOO(KKP);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KKP_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KKP), sizeof(KKP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		FOO(KK);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KK_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KK), sizeof(KK));
+		}
 #endif
-
-#undef FOO
 	}
 
 
 	static void ReadSomeSynthesized(const std::string& dirName) {
-#define FOO(x) {														\
-			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
-			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
-			else     memset(x, 0, sizeof(x));							\
-		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		FOO(KPP);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KPP_some_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KPP), sizeof(KPP));
+			else     memset(KPP, 0, sizeof(KPP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		FOO(KKP);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KKP_some_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KKP), sizeof(KKP));
+			else     memset(KKP, 0, sizeof(KKP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		FOO(KK);
+		{
+			std::ifstream ifs((AppendSlashIfNone(dirName) + "KK_some_synthesized.bin").c_str(), std::ios::binary);
+			if (ifs) ifs.read(reinterpret_cast<char*>(KK), sizeof(KK));
+			else     memset(KK, 0, sizeof(KK));
+		}
 #endif
-
-#undef FOO
 	}
 
 
 	static void WriteSomeSynthesized(const std::string& dirName) {
-#define FOO(x) {														\
-			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
-			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
-		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		FOO(KPP);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KPP_some_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KPP), sizeof(KPP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		FOO(KKP);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KKP_some_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KKP), sizeof(KKP));
+		}
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		FOO(KK);
+		{
+			std::ofstream ofs((AppendSlashIfNone(dirName) + "KK_some_synthesized.bin").c_str(), std::ios::binary);
+			ofs.write(reinterpret_cast<char*>(KK), sizeof(KK));
+		}
 #endif
-
-#undef FOO
 	}
 
 
-#if defined EVAL_PHASE1
-	// フェーズ１の定義ここから
-#define BASE_PHASE1 {								\
-		FOO(kpps.kee);								\
-		FOO(kpps.r_kpe_b);							\
-		FOO(kpps.r_kpe_h);							\
-		FOO(kpps.r_kee);							\
-		FOO(kpps.xee);								\
-		FOO(kpps.yee);								\
-		FOO(kpps.pe);								\
-		FOO(kpps.ee);								\
-		FOO(kpps.r_pe_b);							\
-		FOO(kpps.r_pe_h);							\
-		FOO(kpps.r_ee);								\
-		FOO(kkps.ke);								\
-		FOO(kkps.r_kke);							\
-		FOO(kkps.r_ke);								\
-		FOO(kks.k);									\
-	}
-	// フェーズ１の定義ここまで
-#else
-#define BASE_PHASE1
-#endif
 
-
-#if defined EVAL_PHASE2
-#define BASE_PHASE2 {								\
-		FOO(kpps.r_pp_bb);							\
-		FOO(kpps.r_pp_hb);							\
-		FOO(kkps.r_kp_b);							\
-		FOO(kkps.r_kp_h);							\
-		FOO(kks.r_kk);								\
-	}
-#else
-#define BASE_PHASE2
-#endif
-
-
-#if defined EVAL_PHASE3
-#define BASE_PHASE3 {								\
-		FOO(kpps.r_kpp_bb);							\
-		FOO(kpps.r_kpp_hb);							\
-		FOO(kpps.pp);								\
-		FOO(kpps.kpe);								\
-		FOO(kpps.xpe);								\
-		FOO(kpps.ype);								\
-		FOO(kkps.kp);								\
-		FOO(kkps.r_kkp_b);							\
-		FOO(kkps.r_kkp_h);							\
-		FOO(kkps.kke);								\
-		FOO(kks.kk);								\
-	}
-#else
-#define BASE_PHASE3
-#endif
-
-
-#if defined EVAL_PHASE4
-#define BASE_PHASE4 {								\
-		FOO(kpps.kpp);								\
-		FOO(kpps.xpp);								\
-		FOO(kpps.ypp);								\
-		FOO(kkps.kkp);								\
-	}
-#else
-#define BASE_PHASE4
-#endif
-
-
-	// フェーズ１～４に展開されます。
-#define READ_BASE_EVAL {						\
-		BASE_PHASE1;							\
-		BASE_PHASE2;							\
-		BASE_PHASE3;							\
-		BASE_PHASE4;							\
-	}
-
-#define WRITE_BASE_EVAL {						\
-		BASE_PHASE1;							\
-		BASE_PHASE2;							\
-		BASE_PHASE3;							\
-		BASE_PHASE4;							\
-	}
 
 	// .bin ファイルを読み込む。
 	void ReadBins(const std::string& dirName) {
@@ -237,7 +173,49 @@ struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::ar
 		// 関数定義ここまで
 
 		// フェーズ１～４に展開されます。
-		READ_BASE_EVAL;
+#if defined EVAL_PHASE1
+		FOO(kpps.kee);
+		FOO(kpps.r_kpe_b);
+		FOO(kpps.r_kpe_h);
+		FOO(kpps.r_kee);
+		FOO(kpps.xee);
+		FOO(kpps.yee);
+		FOO(kpps.pe);
+		FOO(kpps.ee);
+		FOO(kpps.r_pe_b);
+		FOO(kpps.r_pe_h);
+		FOO(kpps.r_ee);
+		FOO(kkps.ke);
+		FOO(kkps.r_kke);
+		FOO(kkps.r_ke);
+		FOO(kks.k);
+#endif
+#if defined EVAL_PHASE2
+		FOO(kpps.r_pp_bb);
+		FOO(kpps.r_pp_hb);
+		FOO(kkps.r_kp_b);
+		FOO(kkps.r_kp_h);
+		FOO(kks.r_kk);
+#endif
+#if defined EVAL_PHASE3
+		FOO(kpps.r_kpp_bb);
+		FOO(kpps.r_kpp_hb);
+		FOO(kpps.pp);
+		FOO(kpps.kpe);
+		FOO(kpps.xpe);
+		FOO(kpps.ype);
+		FOO(kkps.kp);
+		FOO(kkps.r_kkp_b);
+		FOO(kkps.r_kkp_h);
+		FOO(kkps.kke);
+		FOO(kks.kk);
+#endif
+#if defined EVAL_PHASE4
+		FOO(kpps.kpp);
+		FOO(kpps.xpp);
+		FOO(kpps.ypp);
+		FOO(kkps.kkp);
+#endif
 
 		// 関数定義を廃棄
 #undef FOO
@@ -249,12 +227,55 @@ struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::ar
 			std::ofstream ofs((AppendSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
-		WRITE_BASE_EVAL;
+
+		// フェーズ１～４に展開されます。
+		//void* arr = kpps.kee;
+		//std::string name;
+#if defined EVAL_PHASE1
+		FOO(kpps.kee);
+		FOO(kpps.r_kpe_b);
+		FOO(kpps.r_kpe_h);
+		FOO(kpps.r_kee);
+		FOO(kpps.xee);
+		FOO(kpps.yee);
+		FOO(kpps.pe);
+		FOO(kpps.ee);
+		FOO(kpps.r_pe_b);
+		FOO(kpps.r_pe_h);
+		FOO(kpps.r_ee);
+		FOO(kkps.ke);
+		FOO(kkps.r_kke);
+		FOO(kkps.r_ke);
+		FOO(kks.k);
+#endif
+#if defined EVAL_PHASE2
+		FOO(kpps.r_pp_bb);
+		FOO(kpps.r_pp_hb);
+		FOO(kkps.r_kp_b);
+		FOO(kkps.r_kp_h);
+		FOO(kks.r_kk);
+#endif
+#if defined EVAL_PHASE3
+		FOO(kpps.r_kpp_bb);
+		FOO(kpps.r_kpp_hb);
+		FOO(kpps.pp);
+		FOO(kpps.kpe);
+		FOO(kpps.xpe);
+		FOO(kpps.ype);
+		FOO(kkps.kp);
+		FOO(kkps.r_kkp_b);
+		FOO(kkps.r_kkp_h);
+		FOO(kkps.kke);
+		FOO(kks.kk);
+#endif
+#if defined EVAL_PHASE4
+		FOO(kpps.kpp);
+		FOO(kpps.xpp);
+		FOO(kpps.ypp);
+		FOO(kkps.kkp);
+#endif
 #undef FOO
 	}
-
-#undef READ_BASE_EVAL
-#undef WRITE_BASE_EVAL
 
 public:
 
