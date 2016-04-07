@@ -64,12 +64,6 @@
     <Filter Include="header\n300_book____">
       <UniqueIdentifier>{9398154d-0646-456d-8741-9bdd8a09d72c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n340_init____">
-      <UniqueIdentifier>{d79c9798-80c3-4e97-8697-f76059c62da8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n340_init____">
-      <UniqueIdentifier>{9d44b0a6-ae75-4eed-81a2-40fba23c30a6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\n300_book____">
       <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
     </Filter>
@@ -206,9 +200,6 @@
     </ClInclude>
     <ClInclude Include="header\n300_book____\n300_100_book.hpp">
       <Filter>header\n300_book____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n340_init____\n340_100_initializer.hpp">
-      <Filter>header\n340_init____</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_125_searchStack.hpp">
       <Filter>header\n320_searcher</Filter>
@@ -505,9 +496,6 @@
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp">
       <Filter>source\n900_main____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n340_init____\n340_100_initializer.cpp">
-      <Filter>source\n340_init____</Filter>
     </ClCompile>
     <ClCompile Include="source\n300_book____\n300_100_book.cpp">
       <Filter>source\n300_book____</Filter>

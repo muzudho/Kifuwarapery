@@ -240,7 +240,6 @@
     <ClInclude Include="header\n320_searcher\n320_137_rootMove.hpp" />
     <ClInclude Include="header\n320_searcher\n320_140_stats.hpp" />
     <ClInclude Include="header\n320_searcher\n320_150_search.hpp" />
-    <ClInclude Include="header\n340_init____\n340_100_initializer.hpp" />
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp" />
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
     <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp" />
@@ -298,7 +297,6 @@
     <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp" />
     <ClCompile Include="source\n300_book____\n300_100_book.cpp" />
     <ClCompile Include="source\n320_searcher\n320_150_search.cpp" />
-    <ClCompile Include="source\n340_init____\n340_100_initializer.cpp" />
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp" />
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />
     <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp" />
