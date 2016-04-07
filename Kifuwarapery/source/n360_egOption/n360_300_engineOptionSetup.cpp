@@ -18,7 +18,7 @@ namespace {
 	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
 	void onClearHash(Searcher* s, const EngineOptionable&) { s->m_tt.Clear(); }
 	void onEvalDir(Searcher*, const EngineOptionable& opt) {
-		std::unique_ptr<EvalStorage>(new EvalStorage)->init(opt, true);
+		std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(opt, true);
 	}
 	void onThreads(Searcher* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
 	// 論理的なコア数の取得

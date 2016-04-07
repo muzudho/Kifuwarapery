@@ -2,7 +2,7 @@
 //#include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 #include "../../header/n080_common__/n080_200_utilProgram.hpp"
 #include "../../header/n260_evaluate/n260_490_KppCacheIo.hpp"
-#include "../../header/n260_evaluate/n260_500_evalStorage.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include <Windows.h>	// ファイル／ディレクトリ操作用
 #include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 
@@ -62,7 +62,7 @@ bool KppCacheIo::SynthesizeLv3To2(const std::string & dirName, int k1)
 			input.read((char*)buffer, sizeof(s16));// 2bytes
 
 												   // 書出
-			output.write((char*)buffer, sizeof(s16));// 2bytes
+			output.Write((char*)buffer, sizeof(s16));// 2bytes
 
 													 // インクリメント。
 			z++;
@@ -95,7 +95,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 
 #if defined(MODE_CACHE_EVAL)
 
-	std::string dir1 = EvalStorage::addSlashIfNone(dirName) + "obj";
+	std::string dir1 = KkKkpKppStorage1::AppendSlashIfNone(dirName) + "obj";
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
@@ -288,7 +288,7 @@ bool KppCacheIo::ReadLv3Files(const std::string & dirName, int k1, int p1, std::
 
 std::string KppCacheIo::GetLv2FilePath(const std::string & dirName, int k1)
 {
-	std::string dir1 = EvalStorage::addSlashIfNone(dirName) + "obj";
+	std::string dir1 = KkKkpKppStorage1::AppendSlashIfNone(dirName) + "obj";
 	std::string file2 = dir1 + "/Kpp[" + std::to_string(k1) + "][All].obj";
 	return file2;
 }
@@ -297,7 +297,7 @@ std::string KppCacheIo::GetLv3FilePath(const std::string & dirName, int k1, int 
 {
 	//SYNCCOUT << "(Write) File Search: dirName=[" << dirName << "]" << SYNCENDL;
 
-	std::string dir1 = EvalStorage::addSlashIfNone(dirName) + "obj";
+	std::string dir1 = KkKkpKppStorage1::AppendSlashIfNone(dirName) + "obj";
 	//SYNCCOUT << "(Write) File Search: dir1=[" << dir1 << "]" << SYNCENDL;
 
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";

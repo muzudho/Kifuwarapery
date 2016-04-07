@@ -71,7 +71,7 @@ RawEvaluater& operator += (RawEvaluater& lhs, RawEvaluater& rhs) {
 }
 
 // kpp_raw, kkp_raw, kk_raw の値を低次元の要素に与える。
-inline void lowerDimension(EvaluaterBase<std::array<std::atomic<float>, 2>,
+inline void lowerDimension(KkKkpKppStorageBase<std::array<std::atomic<float>, 2>,
 										 std::array<std::atomic<float>, 2>,
 										 std::array<std::atomic<float>, 2> >& base, const RawEvaluater& raw)
 {
@@ -433,7 +433,7 @@ private:
 
 		// 学習しないパラメータがある時は、一旦 write() で学習しているパラメータだけ書きこんで、再度読み込む事で、
 		// updateFV()で学習しないパラメータに入ったノイズを無くす。
-		eval_.write(dirName);
+		eval_.Write(dirName);
 		eval_.initOptions(dirName, false);
 		g_evalTable.Clear();
 	}
@@ -554,7 +554,7 @@ private:
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileA; FileI <= f; --f) {
 				const Square sq = FromFileRank(f, r);
-				printf("%5d", EvalStorage::KPP[B2][f_gold + C2][f_gold + sq][0]);
+				printf("%5d", KkKkpKppStorage1::KPP[B2][f_gold + C2][f_gold + sq][0]);
 			}
 			printf("\n");
 		}
@@ -579,10 +579,10 @@ private:
 	std::atomic<s64> predictions_[PredSize];
 	Parse2Data parse2Data_;
 	std::vector<Parse2Data> parse2Datum_;
-	EvaluaterBase<std::array<std::atomic<float>, 2>,
+	KkKkpKppStorageBase<std::array<std::atomic<float>, 2>,
 				  std::array<std::atomic<float>, 2>,
 				  std::array<std::atomic<float>, 2> > parse2EvalBase_;
-	EvalStorage eval_;
+	KkKkpKppStorage1 eval_;
 	int stepNum_;
 	size_t gameNumForIteration_;
 	u64 updateMaxMask_;

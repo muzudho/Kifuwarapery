@@ -25,7 +25,7 @@ inline std::array<Tl, 2> operator -= (std::array<Tl, 2>& lhs, const std::array<T
 
 
 template <typename KPPType, typename KKPType, typename KKType>
-struct EvaluaterBase {
+struct KkKkpKppStorageBase {
 
 	static const int m_R_Mid = 8; // 相対位置の中心のindex
 

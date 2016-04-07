@@ -218,9 +218,9 @@
     <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_150_kppIndexArray.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp" />
-    <ClInclude Include="header\n260_evaluate\n260_400_EvaluaterBase.hpp" />
+    <ClInclude Include="header\n260_evaluate\n260_400_KkKkpKppStorageBase.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp" />
-    <ClInclude Include="header\n260_evaluate\n260_500_evalStorage.hpp" />
+    <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_600_EvalSum.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_700_evaluate.hpp" />
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp" />

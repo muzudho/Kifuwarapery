@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "../../header/n260_evaluate/n260_490_KppCacheIo.hpp"
-#include "../../header/n260_evaluate/n260_400_EvaluaterBase.hpp"
+#include "../n260_evaluate/n260_490_KppCacheIo.hpp"
+#include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
 
 
-struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
+struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
 	// 探索時に参照する評価関数テーブル
 	static std::array<s16, 2> KPP[SquareNum][fe_end][fe_end];
 	static std::array<s32, 2> KKP[SquareNum][SquareNum][fe_end];
@@ -14,10 +14,10 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 #endif
 
 
-	void clear() { memset(this, 0, sizeof(*this)); }
+	void Clear() { memset(this, 0, sizeof(*this)); }
 
 
-	static std::string addSlashIfNone(const std::string& str) {
+	static std::string AppendSlashIfNone(const std::string& str) {
 		std::string ret = str;
 		if (ret == "")
 			ret += ".";
@@ -27,37 +27,37 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 	}
 
 
-	void init(const std::string& dirName, const bool Synthesized) {
+	void Init(const std::string& dirName, const bool Synthesized) {
 		// 合成された評価関数バイナリがあればそちらを使う。
 		if (Synthesized) {
-			if (readSynthesized(dirName))
+			if (ReadSynthesized(dirName))
 			{
 				SYNCCOUT << "(init 1/4)Use synthesized file!" << SYNCENDL;
 				return;
 			}
 		}
-		clear();
+		Clear();
 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 2/4) readSomeSynthesized!" << SYNCENDL;
 #endif
-		EvalStorage::readSomeSynthesized(dirName);
+		KkKkpKppStorage1::ReadSomeSynthesized(dirName);
 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 3/4) (long time)read bins! dir=" << dirName << SYNCENDL;
 #endif
-		EvalStorage::ReadBins(dirName);
+		KkKkpKppStorage1::ReadBins(dirName);
 
 #if defined(MODE_CACHE_EVAL)
 		SYNCCOUT << "(init 4/4) (long time)setEvaluate!" << SYNCENDL;
 #endif
-		EvalStorage::SetEvaluate(dirName);
+		KkKkpKppStorage1::SetEvaluate(dirName);
 	}
 
 
-	static bool readSynthesized(const std::string& dirName) {
+	static bool ReadSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
-			std::ifstream ifs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
+			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
 			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
 			else     return false;										\
 		}
@@ -78,9 +78,9 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 	}
 
 
-	static void writeSynthesized(const std::string& dirName) {
+	static void WriteSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
-			std::ofstream ofs((addSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
+			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
 
@@ -99,9 +99,9 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 	}
 
 
-	static void readSomeSynthesized(const std::string& dirName) {
+	static void ReadSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
-			std::ifstream ifs((addSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
+			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
 			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
 			else     memset(x, 0, sizeof(x));							\
 		}
@@ -121,9 +121,9 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 	}
 
 
-	static void writeSomeSynthesized(const std::string& dirName) {
+	static void WriteSomeSynthesized(const std::string& dirName) {
 #define FOO(x) {														\
-			std::ofstream ofs((addSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
+			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
 
@@ -231,7 +231,7 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 
 		// 関数定義ここから
 #define FOO(x) {														\
-			std::ifstream ifs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
+			std::ifstream ifs((AppendSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ifs.read(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
 		// 関数定義ここまで
@@ -244,9 +244,9 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 	}
 
 
-	void write(const std::string& dirName) {
+	void Write(const std::string& dirName) {
 #define FOO(x) {														\
-			std::ofstream ofs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
+			std::ofstream ofs((AppendSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
 		WRITE_BASE_EVAL;

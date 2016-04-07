@@ -240,13 +240,7 @@
     <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_400_EvaluaterBase.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_600_EvalSum.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_500_evalStorage.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp">
@@ -446,6 +440,12 @@
     </ClInclude>
     <ClInclude Include="header\n500_learn___\n500_500_learner.hpp">
       <Filter>header\n500_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_400_KkKkpKppStorageBase.hpp">
+      <Filter>header\n260_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
+      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
