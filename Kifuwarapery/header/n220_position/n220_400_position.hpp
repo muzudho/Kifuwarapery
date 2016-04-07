@@ -10,8 +10,6 @@
 #include "../n220_position/n220_600_evalList.hpp"
 
 
-//extern const FileMaskBb g_fileMaskBb;
-
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
 
@@ -22,60 +20,49 @@ struct Searcher;
 
 class Position {
 public:
-	Position() {}
+	Position();
 
-	explicit Position(Searcher* s) : m_searcher_(s) {}
+	explicit Position(Searcher* s);
 
-	Position(const Position& pos) { *this = pos; }
+	Position(const Position& pos);
 
-	Position(const Position& pos, Thread* th) {
-		*this = pos;
-		m_thisThread_ = th;
-	}
+	Position(const Position& pos, Thread* th);
 
-	Position(const std::string& sfen, Thread* th, Searcher* s) {
-		Set(sfen, th);
-		SetSearcher(s);
-	}
+	Position(const std::string& sfen, Thread* th, Searcher* s);
 
 	Position& operator = (const Position& pos);
 
 	void Set(const std::string& sfen, Thread* th);
 
-	Bitboard GetBbOf(const PieceType pt) const { return m_byTypeBB_[pt]; }
-	Bitboard GetBbOf(const Color c) const { return m_byColorBB_[c]; }
-	Bitboard GetBbOf(const PieceType pt, const Color c) const { return this->GetBbOf(pt) & this->GetBbOf(c); }
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2) const { return this->GetBbOf(pt1) | this->GetBbOf(pt2); }
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const Color c) const { return this->GetBbOf(pt1, pt2) & this->GetBbOf(c); }
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const { return this->GetBbOf(pt1, pt2) | this->GetBbOf(pt3); }
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3, const PieceType pt4) const {
-		return this->GetBbOf(pt1, pt2, pt3) | this->GetBbOf(pt4);
-	}
+	Bitboard GetBbOf(const PieceType pt) const;
+	Bitboard GetBbOf(const Color c) const;
+	Bitboard GetBbOf(const PieceType pt, const Color c) const;
+	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2) const;
+	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const Color c) const;
+	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const;
+	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3, const PieceType pt4) const;
 	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3,
-		const PieceType pt4, const PieceType pt5) const
-	{
-		return this->GetBbOf(pt1, pt2, pt3, pt4) | this->GetBbOf(pt5);
-	}
+		const PieceType pt4, const PieceType pt5) const;
 
-	Bitboard GetOccupiedBB() const { return this->GetBbOf(Occupied); }
+	Bitboard GetOccupiedBB() const;
 	// emptyBB() よりもわずかに速いはず。
 	// emptyBB() とは異なり、全く使用しない位置(0 から数えて、right の 63bit目、left の 18 ~ 63bit目)
 	// の bit が 1 になっても構わないとき、こちらを使う。
 	// todo: SSEにビット反転が無いので実はそんなに速くないはず。不要。
-	Bitboard GetNOccupiedBB() const { return ~GetOccupiedBB(); }
-	Bitboard GetEmptyBB() const { return GetOccupiedBB() ^ Bitboard::CreateAllOneBB(); }
+	Bitboard GetNOccupiedBB() const;
+	Bitboard GetEmptyBB() const;
 	// 金、成り金 の Bitboard
-	Bitboard GetGoldsBB() const { return m_goldsBB_; }
-	Bitboard GetGoldsBB(const Color c) const { return GetGoldsBB() & this->GetBbOf(c); }
+	Bitboard GetGoldsBB() const;
+	Bitboard GetGoldsBB(const Color c) const;
 
-	Piece GetPiece(const Square sq) const { return m_piece_[sq]; }
+	Piece GetPiece(const Square sq) const;
 
 	// hand
-	Hand GetHand(const Color c) const { return m_hand_[c]; }
+	Hand GetHand(const Color c) const;
 
 	// turn() 側が pin されている Bitboard を返す。
 	// checkersBB が更新されている必要がある。
-	Bitboard GetPinnedBB() const { return GetHiddenCheckers<true, true>(); }
+	Bitboard GetPinnedBB() const;
 	// 間の駒を動かすことで、turn() 側が空き王手が出来る駒のBitboardを返す。
 	// checkersBB が更新されている必要はない。
 	// BetweenIsUs == true  : 間の駒が自駒。
@@ -84,9 +71,7 @@ public:
 	Bitboard DiscoveredCheckBB() const { return GetHiddenCheckers<false, BetweenIsUs>(); }
 
 	// toFile と同じ筋に us の歩がないなら true
-	bool NoPawns(const Color us, const File toFile) const {
-		return !this->GetBbOf(Pawn, us).AndIsNot0(g_fileMaskBb.GetFileMask(toFile));
-	}
+	bool NoPawns(const Color us, const File toFile) const;
 	bool IsPawnDropCheckMate(const Color us, const Square sq) const;
 
 	// Pinされているfromの駒がtoに移動出来なければtrueを返す。
@@ -102,13 +87,13 @@ public:
 		return g_setMaskBb.IsSet(&dcBB,from) && (IsKnight || !g_squareRelation.IsAligned<true>(from, to, ksq));
 	}
 
-	Bitboard GetCheckersBB() const { return m_st_->m_checkersBB; }
-	Bitboard GetPrevCheckersBB() const { return m_st_->m_previous->m_checkersBB; }
+	Bitboard GetCheckersBB() const;
+	Bitboard GetPrevCheckersBB() const;
 	// 王手が掛かっているか。
-	bool InCheck() const { return GetCheckersBB().Exists1Bit(); }
+	bool InCheck() const;
 
-	Score GetMaterial() const { return m_st_->m_material; }
-	Score GetMaterialDiff() const { return m_st_->m_material - m_st_->m_previous->m_material; }
+	Score GetMaterial() const;
+	Score GetMaterialDiff() const;
 
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
 		assert(m_kingSquare_[c] == this->GetBbOf(King, c).GetFirstOneFromI9());
@@ -120,16 +105,14 @@ public:
 
 	// attacks
 	Bitboard GetAttackersTo(const Square sq, const Bitboard& occupied) const;
-	Bitboard GetAttackersTo(const Color c, const Square sq) const { return GetAttackersTo(c, sq, GetOccupiedBB()); }
+	Bitboard GetAttackersTo(const Color c, const Square sq) const;
 	Bitboard GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
 	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
 	// todo: 利きをデータとして持ったとき、attackersToIsNot0() を高速化すること。
-	bool IsAttackersToIsNot0(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
-	bool IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard& occupied) const {
-		return GetAttackersTo(c, sq, occupied).Exists1Bit();
-	}
+	bool IsAttackersToIsNot0(const Color c, const Square sq) const;
+	bool IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard& occupied) const;
 	// 移動王手が味方の利きに支えられているか。false なら相手玉で取れば詰まない。
-	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
+	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const;
 	// 利きの生成
 
 	// 任意の occupied に対する利きを生成する。
@@ -155,11 +138,11 @@ public:
 		// Color は何でも良い。
 		return GetAttacksFrom<PT>(ColorNum, sq);
 	}
-	Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const { return GetAttacksFrom(pt, c, sq, GetOccupiedBB()); }
+	Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const;
 	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);
 
 	// 次の手番
-	Color GetTurn() const { return m_turn_; }
+	Color GetTurn() const;
 
 	// pseudoLegal とは
 	// ・玉が相手駒の利きがある場所に移動する
@@ -192,50 +175,51 @@ public:
 	Move GetMateMoveIn1Ply();
 	Move GetMateMoveIn1Ply();
 
-	Ply GetGamePly() const { return m_gamePly_; }
+	Ply GetGamePly() const;
 
-	Key GetBoardKey() const { return m_st_->m_boardKey; }
-	Key GetHandKey() const { return m_st_->m_handKey; }
-	Key GetKey() const { return m_st_->GetKey(); }
-	Key GetExclusionKey() const { return m_st_->GetKey() ^ m_zobExclusion_; }
-	Key GetKeyExcludeTurn() const {
-		static_assert(m_zobTurn_ == 1, "");
-		return GetKey() >> 1;
-	}
+	Key GetBoardKey() const;
+	Key GetHandKey() const;
+	Key GetKey() const;
+	Key GetExclusionKey() const;
+	Key GetKeyExcludeTurn() const;
 	void Print() const;
 
-	u64 GetNodesSearched() const { return m_nodes_; }
-	void SetNodesSearched(const u64 n) { m_nodes_ = n; }
+	u64 GetNodesSearched() const;
+	void SetNodesSearched(const u64 n);
 	RepetitionType IsDraw(const int checkMaxPly = std::numeric_limits<int>::max()) const;
 
-	Thread* GetThisThread() const { return m_thisThread_; }
+	Thread* GetThisThread() const;
 
-	void SetStartPosPly(const Ply ply) { m_gamePly_ = ply; }
+	void SetStartPosPly(const Ply ply);
 
-	static constexpr int GetNlist() { return EvalList::m_ListSize; }
+	static constexpr int GetNlist() {
+		return EvalList::m_ListSize;
+	}
 
-	int GetList0(const int index) const { return m_evalList_.m_list0[index]; }
 
-	int GetList1(const int index) const { return m_evalList_.m_list1[index]; }
+	int GetList0(const int index) const;
 
-	int GetSquareHandToList(const Square sq) const { return m_evalList_.m_squareHandToList[sq]; }
+	int GetList1(const int index) const;
 
-	Square GetListToSquareHand(const int i) const { return m_evalList_.m_listToSquareHand[i]; }
+	int GetSquareHandToList(const Square sq) const;
 
-	int* GetPlist0() { return &m_evalList_.m_list0[0]; }
+	Square GetListToSquareHand(const int i) const;
 
-	int* GetPlist1() { return &m_evalList_.m_list1[0]; }
+	int* GetPlist0();
 
-	const int* GetCplist0() const { return &m_evalList_.m_list0[0]; }
+	int* GetPlist1();
 
-	const int* GetCplist1() const { return &m_evalList_.m_list1[0]; }
+	const int* GetCplist0() const;
 
-	const ChangedLists& GetCl() const { return m_st_->m_cl; }
+	const int* GetCplist1() const;
 
-	const Searcher* GetCsearcher() const { return m_searcher_; }
+	const ChangedLists& GetCl() const;
 
-	Searcher* GetSearcher() const { return m_searcher_; }
-	void SetSearcher(Searcher* s) { m_searcher_ = s; }
+	const Searcher* GetCsearcher() const;
+
+	Searcher* GetSearcher() const;
+
+	void SetSearcher(Searcher* s);
 
 #if !defined NDEBUG
 	// for debug
@@ -244,42 +228,25 @@ public:
 
 	static void InitZobrist();
 
-	static Score GetPieceScore(const Piece pc) { return g_PieceScore[pc]; }
+	static Score GetPieceScore(const Piece pc);
 	// Piece を index としても、 PieceType を index としても、
 	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score GetPieceScore(const PieceType pt) { return g_PieceScore[pt]; }
-	static Score GetCapturePieceScore(const Piece pc) { return g_CapturePieceScore[pc]; }
+	static Score GetPieceScore(const PieceType pt);
+	static Score GetCapturePieceScore(const Piece pc);
 	// Piece を index としても、 PieceType を index としても、
 	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score GetCapturePieceScore(const PieceType pt) { return g_CapturePieceScore[pt]; }
-	static Score GetPromotePieceScore(const PieceType pt) {
-		assert(pt < Gold);
-		return g_PromotePieceScore[pt];
-	}
+	static Score GetCapturePieceScore(const PieceType pt);
+	static Score GetPromotePieceScore(const PieceType pt);
 
 private:
 	void Clear();
-	void SetPiece(const Piece piece, const Square sq) {
-		const Color c = UtilPiece::ToColor(piece);
-		const PieceType pt = UtilPiece::ToPieceType(piece);
-
-		m_piece_[sq] = piece;
-
-		g_setMaskBb.SetBit(&m_byTypeBB_[pt], sq);
-		g_setMaskBb.SetBit(&m_byColorBB_[c], sq);
-		g_setMaskBb.SetBit(&m_byTypeBB_[Occupied], sq);
-	}
-	void SetHand(const HandPiece hp, const Color c, const int num) { m_hand_[c].OrEqual(num, hp); }
-	void SetHand(const Piece piece, const int num) {
-		const Color c = UtilPiece::ToColor(piece);
-		const PieceType pt = UtilPiece::ToPieceType(piece);
-		const HandPiece hp = UtilHandPiece::FromPieceType(pt);
-		SetHand(hp, c, num);
-	}
+	void SetPiece(const Piece piece, const Square sq);
+	void SetHand(const HandPiece hp, const Color c, const int num);
+	void SetHand(const Piece piece, const int num);
 
 	// 手番側の玉へ check している駒を全て探して checkersBB_ にセットする。
 	// 最後の手が何か覚えておけば、attackersTo() を使用しなくても良いはずで、処理が軽くなる。
-	void FindCheckers() { m_st_->m_checkersBB = GetAttackersToExceptKing(UtilColor::OppositeColor(GetTurn()), GetKingSquare(GetTurn())); }
+	void FindCheckers();
 
 	Score ComputeMaterial() const;
 
@@ -334,17 +301,17 @@ private:
 #if !defined NDEBUG
 	int GetDebugSetEvalList() const;
 #endif
-	void SetEvalList() { m_evalList_.Set(*this); }
+	void SetEvalList();
 
 	Key GetComputeBoardKey() const;
 	Key GetComputeHandKey() const;
-	Key GetComputeKey() const { return GetComputeBoardKey() + GetComputeHandKey(); }
+	Key GetComputeKey() const;
 
 	void PrintHand(const Color c) const;
 
-	static Key GetZobrist(const PieceType pt, const Square sq, const Color c) { return m_zobrist_[pt][sq][c]; }
-	static Key GetZobTurn() { return m_zobTurn_; }
-	static Key GetZobHand(const HandPiece hp, const Color c) { return m_zobHand_[hp][c]; }
+	static Key GetZobrist(const PieceType pt, const Square sq, const Color c);
+	static Key GetZobTurn();
+	static Key GetZobHand(const HandPiece hp, const Color c);
 
 
 	// byTypeBB は敵、味方の駒を区別しない。

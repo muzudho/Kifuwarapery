@@ -18,6 +18,11 @@ Key Position::m_zobExclusion_;
 
 
 
+Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const
+{
+	return GetAttacksFrom(pt, c, sq, GetOccupiedBB());
+}
+
 Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) {
 	switch (pt) {
 	case Occupied:  return Bitboard::CreateAllZeroBB();
@@ -39,6 +44,11 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	}
 	UNREACHABLE;
 	return Bitboard::CreateAllOneBB();
+}
+
+Color Position::GetTurn() const
+{
+	return m_turn_;
 }
 
 
@@ -684,6 +694,11 @@ namespace {
 		// 玉以外の駒で、打った駒を取れない。
 		return false;
 	}
+}
+
+bool Position::NoPawns(const Color us, const File toFile) const
+{
+	return !this->GetBbOf(Pawn, us).AndIsNot0(g_fileMaskBb.GetFileMask(toFile));
 }
 
 // us が sq へ歩を打ったとき、them の玉が詰むか。
@@ -1469,6 +1484,37 @@ Move Position::GetMateMoveIn1Ply() {
 	return (GetTurn() == Black ? GetMateMoveIn1Ply<Black>() : GetMateMoveIn1Ply<White>());
 }
 
+Ply Position::GetGamePly() const
+{
+	return m_gamePly_;
+}
+
+Key Position::GetBoardKey() const
+{
+	return m_st_->m_boardKey;
+}
+
+Key Position::GetHandKey() const
+{
+	return m_st_->m_handKey;
+}
+
+Key Position::GetKey() const
+{
+	return m_st_->GetKey();
+}
+
+Key Position::GetExclusionKey() const
+{
+	return m_st_->GetKey() ^ m_zobExclusion_;
+}
+
+Key Position::GetKeyExcludeTurn() const
+{
+	static_assert(m_zobTurn_ == 1, "");
+	return GetKey() >> 1;
+}
+
 void Position::InitZobrist() {
 	// zobTurn_ は 1 であり、その他は 1桁目を使わない。
 	// zobTurn のみ xor で更新する為、他の桁に影響しないようにする為。
@@ -1485,6 +1531,32 @@ void Position::InitZobrist() {
 		m_zobHand_[hp][White] = g_mt64bit.GetRandom() & ~UINT64_C(1);
 	}
 	m_zobExclusion_ = g_mt64bit.GetRandom() & ~UINT64_C(1);
+}
+
+Score Position::GetPieceScore(const Piece pc)
+{
+	return g_PieceScore[pc];
+}
+
+Score Position::GetPieceScore(const PieceType pt)
+{
+	return g_PieceScore[pt];
+}
+
+Score Position::GetCapturePieceScore(const Piece pc)
+{
+	return g_CapturePieceScore[pc];
+}
+
+Score Position::GetCapturePieceScore(const PieceType pt)
+{
+	return g_CapturePieceScore[pt];
+}
+
+Score Position::GetPromotePieceScore(const PieceType pt)
+{
+	assert(pt < Gold);
+	return g_PromotePieceScore[pt];
 }
 
 
@@ -1521,6 +1593,16 @@ void Position::Print() const {
 	std::cout << (GetTurn() == Black ? "+" : "-") << std::endl;
 	std::cout << std::endl;
 	std::cout << "key = " << GetKey() << std::endl;
+}
+
+u64 Position::GetNodesSearched() const
+{
+	return m_nodes_;
+}
+
+void Position::SetNodesSearched(const u64 n)
+{
+	m_nodes_ = n;
 }
 
 #if !defined NDEBUG
@@ -1668,6 +1750,10 @@ int Position::GetDebugSetEvalList() const {
 	return 0;
 }
 #endif
+void Position::SetEvalList()
+{
+	m_evalList_.Set(*this);
+}
 
 Key Position::GetComputeBoardKey() const {
 	Key result = 0;
@@ -1693,6 +1779,11 @@ Key Position::GetComputeHandKey() const {
 		}
 	}
 	return result;
+}
+
+Key Position::GetComputeKey() const
+{
+	return GetComputeBoardKey() + GetComputeHandKey();
 }
 
 // todo: isRepetition() に名前変えた方が良さそう。
@@ -1736,6 +1827,76 @@ RepetitionType Position::IsDraw(const int checkMaxPly) const {
 	return NotRepetition;
 }
 
+Thread * Position::GetThisThread() const
+{
+	return m_thisThread_;
+}
+
+void Position::SetStartPosPly(const Ply ply)
+{
+	m_gamePly_ = ply;
+}
+
+int Position::GetList0(const int index) const
+{
+	return m_evalList_.m_list0[index];
+}
+
+int Position::GetList1(const int index) const
+{
+	return m_evalList_.m_list1[index];
+}
+
+int Position::GetSquareHandToList(const Square sq) const
+{
+	return m_evalList_.m_squareHandToList[sq];
+}
+
+Square Position::GetListToSquareHand(const int i) const
+{
+	return m_evalList_.m_listToSquareHand[i];
+}
+
+int * Position::GetPlist0()
+{
+	return &m_evalList_.m_list0[0];
+}
+
+int * Position::GetPlist1()
+{
+	return &m_evalList_.m_list1[0];
+}
+
+const int * Position::GetCplist0() const
+{
+	return &m_evalList_.m_list0[0];
+}
+
+const int * Position::GetCplist1() const
+{
+	return &m_evalList_.m_list1[0];
+}
+
+const ChangedLists & Position::GetCl() const
+{
+	return m_st_->m_cl;
+}
+
+const Searcher * Position::GetCsearcher() const
+{
+	return m_searcher_;
+}
+
+Searcher * Position::GetSearcher() const
+{
+	return m_searcher_;
+}
+
+void Position::SetSearcher(Searcher * s)
+{
+	m_searcher_ = s;
+}
+
 namespace {
 	void printHandPiece(const Position& pos, const HandPiece hp, const Color c, const std::string& str) {
 		if (pos.GetHand(c).NumOf(hp)) {
@@ -1756,6 +1917,47 @@ void Position::PrintHand(const Color c) const {
 	printHandPiece(*this, HGold, c, "KI");
 	printHandPiece(*this, HBishop, c, "KA");
 	printHandPiece(*this, HRook, c, "HI");
+}
+
+Key Position::GetZobrist(const PieceType pt, const Square sq, const Color c)
+{
+	return m_zobrist_[pt][sq][c];
+}
+
+Key Position::GetZobTurn()
+{
+	return m_zobTurn_;
+}
+
+Key Position::GetZobHand(const HandPiece hp, const Color c)
+{
+	return m_zobHand_[hp][c];
+}
+
+Position::Position()
+{
+	// デフォルト・コンストラクタは空っぽ☆（＾ｑ＾）
+}
+
+Position::Position(Searcher * s) : m_searcher_(s)
+{
+}
+
+Position::Position(const Position & pos)
+{
+	*this = pos;
+}
+
+Position::Position(const Position & pos, Thread * th)
+{
+	*this = pos;
+	m_thisThread_ = th;
+}
+
+Position::Position(const std::string & sfen, Thread * th, Searcher * s)
+{
+	Set(sfen, th);
+	SetSearcher(s);
 }
 
 Position& Position::operator = (const Position& pos) {
@@ -1860,6 +2062,111 @@ INCORRECT:
 	std::cout << "incorrect SFEN string : " << sfen << std::endl;
 }
 
+Bitboard Position::GetBbOf(const PieceType pt) const
+{
+	return this->m_byTypeBB_[pt];
+}
+
+Bitboard Position::GetBbOf(const Color c) const
+{
+	return this->m_byColorBB_[c];
+}
+
+Bitboard Position::GetBbOf(const PieceType pt, const Color c) const
+{
+	return this->GetBbOf(pt) & this->GetBbOf(c);
+}
+
+Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2) const
+{
+	return this->GetBbOf(pt1) | this->GetBbOf(pt2);
+}
+
+Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2, const Color c) const
+{
+	return this->GetBbOf(pt1, pt2) & this->GetBbOf(c);
+}
+
+Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const
+{
+	return this->GetBbOf(pt1, pt2) | this->GetBbOf(pt3);
+}
+
+Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3, const PieceType pt4) const
+{
+	return this->GetBbOf(pt1, pt2, pt3) | this->GetBbOf(pt4);
+}
+
+Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3, const PieceType pt4, const PieceType pt5) const
+{
+	return this->GetBbOf(pt1, pt2, pt3, pt4) | this->GetBbOf(pt5);
+}
+
+Bitboard Position::GetOccupiedBB() const
+{
+	return this->GetBbOf(Occupied);
+}
+
+Bitboard Position::GetNOccupiedBB() const
+{
+	return ~GetOccupiedBB();
+}
+
+Bitboard Position::GetEmptyBB() const
+{
+	return GetOccupiedBB() ^ Bitboard::CreateAllOneBB();
+}
+
+Bitboard Position::GetGoldsBB() const
+{
+	return m_goldsBB_;
+}
+
+Bitboard Position::GetGoldsBB(const Color c) const
+{
+	return GetGoldsBB() & this->GetBbOf(c);
+}
+
+Piece Position::GetPiece(const Square sq) const
+{
+	return m_piece_[sq];
+}
+
+Hand Position::GetHand(const Color c) const
+{
+	return m_hand_[c];
+}
+
+Bitboard Position::GetPinnedBB() const
+{
+	return GetHiddenCheckers<true, true>();
+}
+
+Bitboard Position::GetCheckersBB() const
+{
+	return m_st_->m_checkersBB;
+}
+
+Bitboard Position::GetPrevCheckersBB() const
+{
+	return m_st_->m_previous->m_checkersBB;
+}
+
+bool Position::InCheck() const
+{
+	return GetCheckersBB().Exists1Bit();
+}
+
+Score Position::GetMaterial() const
+{
+	return m_st_->m_material;
+}
+
+Score Position::GetMaterialDiff() const
+{
+	return m_st_->m_material - m_st_->m_previous->m_material;
+}
+
 bool Position::IsMoveGivesCheck(const Move move) const {
 	return IsMoveGivesCheck(move, CheckInfo(*this));
 }
@@ -1901,6 +2208,31 @@ void Position::Clear() {
 	m_st_ = &m_startState_;
 }
 
+void Position::SetPiece(const Piece piece, const Square sq)
+{
+	const Color c = UtilPiece::ToColor(piece);
+	const PieceType pt = UtilPiece::ToPieceType(piece);
+
+	m_piece_[sq] = piece;
+
+	g_setMaskBb.SetBit(&m_byTypeBB_[pt], sq);
+	g_setMaskBb.SetBit(&m_byColorBB_[c], sq);
+	g_setMaskBb.SetBit(&m_byTypeBB_[Occupied], sq);
+}
+
+void Position::SetHand(const HandPiece hp, const Color c, const int num)
+{
+	m_hand_[c].OrEqual(num, hp);
+}
+
+void Position::SetHand(const Piece piece, const int num)
+{
+	const Color c = UtilPiece::ToColor(piece);
+	const PieceType pt = UtilPiece::ToPieceType(piece);
+	const HandPiece hp = UtilHandPiece::FromPieceType(pt);
+	SetHand(hp, c, num);
+}
+
 // 先手、後手に関わらず、sq へ移動可能な Bitboard を返す。
 Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) const {
 	const Bitboard golds = GetGoldsBB();
@@ -1919,6 +2251,11 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 		| (GetAttacksFrom<Bishop>(sq, occupied) & this->GetBbOf(Bishop, Horse))
 		| (GetAttacksFrom<Rook  >(sq, occupied) & this->GetBbOf(Rook, Dragon))
 		| (GetAttacksFrom<King  >(sq) & this->GetBbOf(King, Horse, Dragon));
+}
+
+Bitboard Position::GetAttackersTo(const Color c, const Square sq) const
+{
+	return GetAttackersTo(c, sq, GetOccupiedBB());
 }
 
 // occupied を Position::occupiedBB() 以外のものを使用する場合に使用する。
@@ -1946,6 +2283,26 @@ Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) cons
 		| (GetAttacksFrom<Bishop>(sq) & this->GetBbOf(Bishop, Horse))
 		| (GetAttacksFrom<Rook  >(sq) & this->GetBbOf(Rook, Dragon)))
 		& this->GetBbOf(c);
+}
+
+bool Position::IsAttackersToIsNot0(const Color c, const Square sq) const
+{
+	return GetAttackersTo(c, sq).Exists1Bit();
+}
+
+bool Position::IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard & occupied) const
+{
+	return GetAttackersTo(c, sq, occupied).Exists1Bit();
+}
+
+bool Position::IsUnDropCheckIsSupported(const Color c, const Square sq) const
+{
+	return GetAttackersTo(c, sq).Exists1Bit();
+}
+
+void Position::FindCheckers()
+{
+	m_st_->m_checkersBB = GetAttackersToExceptKing(UtilColor::OppositeColor(GetTurn()), GetKingSquare(GetTurn()));
 }
 
 Score Position::ComputeMaterial() const {
