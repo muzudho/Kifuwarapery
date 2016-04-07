@@ -62,7 +62,7 @@ bool KppCacheIo::SynthesizeLv3To2(const std::string & dirName, int k1)
 			input.read((char*)buffer, sizeof(s16));// 2bytes
 
 												   // 書出
-			output.Write((char*)buffer, sizeof(s16));// 2bytes
+			output.write((char*)buffer, sizeof(s16));// 2bytes
 
 													 // インクリメント。
 			z++;
