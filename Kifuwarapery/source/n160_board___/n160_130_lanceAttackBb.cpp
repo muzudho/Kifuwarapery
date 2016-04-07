@@ -57,7 +57,7 @@ void LanceAttackBb::InitializeToEdge()
 // lance の前方だけを調べれば良さそうだけど、Rank8 ~ Rank2 の状態をそのまま index に使いたいので、
 // 縦方向全て(端を除く)の occupied を全て調べる。
 Bitboard LanceAttackBb::LanceBlockMask(const Square square) {
-	return g_fileMaskBb.GetSquareFileMask(square) & ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>());
+	return g_fileMaskBb.GetSquareFileMask(square) & ~(g_rankMaskBb.GetRankMask<Rank1>() | g_rankMaskBb.GetRankMask<Rank9>());
 }
 
 // lance の利きを返す。

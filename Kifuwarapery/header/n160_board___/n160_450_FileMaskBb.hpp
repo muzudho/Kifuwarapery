@@ -1,7 +1,8 @@
 #pragma once
 
 
-#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
+//#include "../n160_board___/n160_600_bitboardAll.hpp"
 
 
 class FileMaskBb {
@@ -57,4 +58,5 @@ public:
 };
 
 
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
 extern const FileMaskBb g_fileMaskBb;

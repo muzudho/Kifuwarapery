@@ -699,7 +699,7 @@ void Searcher::IdLoop(Position& pos) {
 void Searcher::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
-		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
+		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
 		if ((GetPos.GetBbOf(Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			m_tt.Clear();

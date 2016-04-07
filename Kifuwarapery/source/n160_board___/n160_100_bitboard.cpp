@@ -8,9 +8,6 @@ using namespace std;
 
 
 
-const Bitboard g_rankMask[RankNum] = {
-	g_Rank9Mask, g_Rank8Mask, g_Rank7Mask, g_Rank6Mask, g_Rank5Mask, g_Rank4Mask, g_Rank3Mask, g_Rank2Mask, g_Rank1Mask
-};
 
 const Bitboard g_inFrontMask[ColorNum][RankNum] = {
 	{ g_InFrontOfRank9Black, g_InFrontOfRank8Black, g_InFrontOfRank7Black, g_InFrontOfRank6Black, g_InFrontOfRank5Black, g_InFrontOfRank4Black, g_InFrontOfRank3Black, g_InFrontOfRank2Black, g_InFrontOfRank1Black },

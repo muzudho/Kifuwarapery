@@ -48,7 +48,7 @@ namespace {
 			Bitboard toBB = target;
 			// 一段目には打てない
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			toBB.AndEqualNot(BitboardMask::GetRankMask<TRank9>());
+			toBB.AndEqualNot(g_rankMaskBb.GetRankMask<TRank9>());
 
 			// 二歩の回避
 			Bitboard pawnsBB = pos.GetBbOf(Pawn, US);
@@ -99,8 +99,8 @@ namespace {
 
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			const Bitboard TRank8BB = BitboardMask::GetRankMask<TRank8>();
-			const Bitboard TRank9BB = BitboardMask::GetRankMask<TRank9>();
+			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask<TRank8>();
+			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask<TRank9>();
 
 			Bitboard toBB;
 			Square to;
