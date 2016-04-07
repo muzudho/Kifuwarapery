@@ -3,10 +3,10 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n110_square__/n110_300_direction.hpp"
-#include "n110_410_squareRelation.hpp"
+#include "../n160_board___/n160_250_squareRelation.hpp"
 
-// 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
-extern int g_squareDistance[SquareNum][SquareNum];
+
+
 
 class UtilSquare {
 public:
@@ -47,7 +47,6 @@ public:
 	}
 
 
-	static inline int GetSquareDistance(const Square sq1, const Square sq2) { return g_squareDistance[sq1][sq2]; }
 
 
 	static inline std::string ToStringUSI(const Square sq) {

@@ -1,4 +1,5 @@
 #include <sstream>      // std::istringstream
+#include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
@@ -8,11 +9,16 @@
 #include "../../header/n320_searcher/n320_150_search.hpp"
 
 
+extern SquareRelation g_squareRelation;
+
+
 Key Position::m_zobrist_[PieceTypeNum][SquareNum][ColorNum];
 Key Position::m_zobHand_[HandPieceNum][ColorNum];
 Key Position::m_zobExclusion_;
 
+
 const CharToPieceUSI g_charToPieceUSI;
+
 
 namespace {
 	const char* PieceToCharCSATable[PieceNone] = {
@@ -368,7 +374,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			// Discovery checks
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
-				switch (SquareRelation::GetSquareRelation(from, ksq)) {
+				switch (g_squareRelation.GetSquareRelation(from, ksq)) {
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。

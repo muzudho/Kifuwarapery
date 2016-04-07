@@ -1,9 +1,15 @@
 #pragma once
 
-#include "../../header/n111_colorSq_/n111_500_ColorFileRank.h"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n260_evaluate/n260_150_kppIndexArray.hpp"
-#include "../../header/n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
+#include "../n160_board___/n160_260_squareDistance.hpp"
+#include "../n111_colorSq_/n111_500_ColorFileRank.h"
+#include "../n220_position/n220_500_charToPieceUSI.hpp"
+#include "../n260_evaluate/n260_150_kppIndexArray.hpp"
+#include "../n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
+
+
+
+extern SquareDistance g_squareDistance;
+
 
 
 template <typename Tl, typename Tr>
@@ -207,7 +213,7 @@ struct EvaluaterBase {
 				Square jto = jtoBB.FirstOneFromI9();
 				if (kfile == FileE && E1 < jto)
 					jto = UtilSquare::InverseFile(jto);
-				const int distance = UtilSquare::GetSquareDistance(jsq, jto);
+				const int distance = g_squareDistance.GetSquareDistance(jsq, jto);
 				// distance == 1 で 1/8 で 3bit シフトにする程度の寄与にする。
 #if defined EVAL_PHASE3
 				ret[retIdx++] = std::make_pair(&kpps.kpe[ksq][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
@@ -301,7 +307,7 @@ struct EvaluaterBase {
 					}
 					const Rank ijrank = UtilSquare::ToRank(ijsq_tmp);
 					const File ijfile = UtilSquare::ToFile(ijsq_tmp);
-					const int distance = UtilSquare::GetSquareDistance(jisq, jito);
+					const int distance = g_squareDistance.GetSquareDistance(jisq, jito);
 #if defined EVAL_PHASE3
 					ret[retIdx++] = std::make_pair(&kpps.kpe[ksq][ij][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 					ret[retIdx++] = std::make_pair(&kpps.xpe[UtilSquare::ToFile(ksq)][ij][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
@@ -385,11 +391,11 @@ struct EvaluaterBase {
 				Bitboard jtoBB = jmask.NotThisAnd(Position::GetAttacksFrom(jpt, jcolor, jsq, jmask));
 				while (itoBB.IsNot0()) {
 					const Square ito = itoBB.FirstOneFromI9();
-					const int itodistance = UtilSquare::GetSquareDistance(isq, ito);
+					const int itodistance = g_squareDistance.GetSquareDistance(isq, ito);
 					Bitboard jtoBB_tmp = jtoBB;
 					while (jtoBB_tmp.IsNot0()) {
 						const Square jto = jtoBB_tmp.FirstOneFromI9();
-						const int jtodistance = UtilSquare::GetSquareDistance(jsq, jto);
+						const int jtodistance = g_squareDistance.GetSquareDistance(jsq, jto);
 						const int distance = itodistance + jtodistance - 1;
 						{
 							Square ito_tmp = ito;
@@ -538,7 +544,7 @@ struct EvaluaterBase {
 						Position::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 					while (itoBB.IsNot0()) {
 						Square ito = itoBB.FirstOneFromI9();
-						const int distance = UtilSquare::GetSquareDistance(isq, ito);
+						const int distance = g_squareDistance.GetSquareDistance(isq, ito);
 						ret[retIdx++] = std::make_pair(sign*(&kkps.r_ke[icolor][m_R_Mid + -abs(UtilSquare::ToFile(ksq) - UtilSquare::ToFile(ito))][m_R_Mid + UtilSquare::ToRank(ksq) - UtilSquare::ToRank(ito)] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
 					}
 #endif
@@ -557,7 +563,7 @@ struct EvaluaterBase {
 					Position::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 				while (itoBB.IsNot0()) {
 					Square ito = itoBB.FirstOneFromI9();
-					const int distance = UtilSquare::GetSquareDistance(isq, ito);
+					const int distance = g_squareDistance.GetSquareDistance(isq, ito);
 					if (UtilSquare::ToFile(ksq) == FileE && E1 < ito)
 						ito = UtilSquare::InverseFile(ito);
 					ret[retIdx++] = std::make_pair(sign*(&kkps.ke[ksq][icolor][ito] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
@@ -623,7 +629,7 @@ struct EvaluaterBase {
 			Bitboard itoBB = mask.NotThisAnd(Position::GetAttacksFrom(ipt, icolor, isq, mask));
 			while (itoBB.IsNot0()) {
 				Square ito = itoBB.FirstOneFromI9();
-				const int distance = UtilSquare::GetSquareDistance(isq, ito);
+				const int distance = g_squareDistance.GetSquareDistance(isq, ito);
 				if (UtilSquare::ToFile(ksq0) == FileE && UtilSquare::ToFile(ksq1) == FileE && E1 < ito)
 					ito = UtilSquare::InverseFile(ito);
 #if defined EVAL_PHASE3

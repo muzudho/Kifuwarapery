@@ -9,14 +9,5 @@ public:
 	void InitTable();
 
 
-
-private:
-
-
-	void InitSquareRelation();
-
-
-	void InitSquareDistance();
-
 };
 

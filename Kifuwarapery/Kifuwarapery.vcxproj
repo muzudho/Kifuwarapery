@@ -161,7 +161,6 @@
     <ClInclude Include="header\n110_square__\n110_150_file.hpp" />
     <ClInclude Include="header\n110_square__\n110_200_rank.hpp" />
     <ClInclude Include="header\n110_square__\n110_300_direction.hpp" />
-    <ClInclude Include="header\n110_square__\n110_410_squareRelation.hpp" />
     <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp" />
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h" />
     <ClInclude Include="header\n113_piece___\n113_100_pieceType.hpp" />
@@ -191,6 +190,8 @@
     <ClInclude Include="header\n160_board___\n160_220_queenAttackBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_230_setMaskBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_240_betweenBb.hpp" />
+    <ClInclude Include="header\n160_board___\n160_250_squareRelation.hpp" />
+    <ClInclude Include="header\n160_board___\n160_260_squareDistance.hpp" />
     <ClInclude Include="header\n160_board___\n160_400_printBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_160_kingAttackBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_500_bitboardMask.hpp" />
@@ -257,7 +258,6 @@
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
     <ClCompile Include="source\n080_common__\n080_105_time.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
-    <ClCompile Include="source\n110_square\n110_410_squareRelation.cpp" />
     <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp" />
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp" />
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp" />
@@ -278,6 +278,8 @@
     <ClCompile Include="source\n160_board___\n160_220_queenAttackBb.cpp" />
     <ClCompile Include="source\n160_board___\n160_230_setMaskBb.cpp" />
     <ClCompile Include="source\n160_board___\n160_240_betweenBb.cpp" />
+    <ClCompile Include="source\n160_board___\n160_250_squareRelation.cpp" />
+    <ClCompile Include="source\n160_board___\n160_260_squareDistance.cpp" />
     <ClCompile Include="source\n160_board___\n160_400_printBb.cpp" />
     <ClCompile Include="source\n160_board___\n160_160_kingAttackBb.cpp" />
     <ClCompile Include="source\n220_position\n220_400_position.cpp" />

@@ -1,4 +1,5 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_600_bitboardAll.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n280_move____/n280_200_mt64bit.hpp"
@@ -7,56 +8,9 @@
 #include "../../header/n340_init____/n340_100_initializer.hpp"
 
 
-void Initializer::InitSquareRelation() {
-	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-		const File file1 = UtilSquare::ToFile(sq1);
-		const Rank rank1 = UtilSquare::ToRank(sq1);
-		for (Square sq2 = I9; sq2 < SquareNum; ++sq2) {
-			const File file2 = UtilSquare::ToFile(sq2);
-			const Rank rank2 = UtilSquare::ToRank(sq2);
-			g_squareRelation[sq1][sq2] = DirecMisc;
-			if (sq1 == sq2) continue;
-
-			if (file1 == file2)
-				g_squareRelation[sq1][sq2] = DirecFile;
-			else if (rank1 == rank2)
-				g_squareRelation[sq1][sq2] = DirecRank;
-			else if (static_cast<int>(rank1 - rank2) == static_cast<int>(file1 - file2))
-				g_squareRelation[sq1][sq2] = DirecDiagNESW;
-			else if (static_cast<int>(rank1 - rank2) == static_cast<int>(file2 - file1))
-				g_squareRelation[sq1][sq2] = DirecDiagNWSE;
-		}
-	}
-}
+extern SquareRelation g_squareRelation;
 
 
-void Initializer::InitSquareDistance() {
-	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
-		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-			switch (SquareRelation::GetSquareRelation(sq0, sq1)) {
-			case DirecMisc:
-				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
-				g_squareDistance[sq0][sq1] = 0;
-				if (g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(Black, sq0),sq1) || g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(White, sq0),sq1))
-					g_squareDistance[sq0][sq1] = 1;
-				break;
-			case DirecFile:
-				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
-				break;
-			case DirecRank:
-				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
-				break;
-			case DirecDiagNESW:
-				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
-				break;
-			case DirecDiagNWSE:
-				g_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
-				break;
-			default: UNREACHABLE;
-			}
-		}
-	}
-}
 
 void Initializer::InitTable() {
 
@@ -87,7 +41,7 @@ void Initializer::InitTable() {
 	g_lanceAttackBb.Initialize();
 
 	SYNCCOUT << "(^q^)I9: initSquareRelation!" << SYNCENDL;
-	this->InitSquareRelation();
+	g_squareRelation.Initialize();
 
 	SYNCCOUT << "(^q^)I10: initAttackToEdge!" << SYNCENDL;
 	// 障害物が無いときの利きの Bitboard
@@ -106,7 +60,7 @@ void Initializer::InitTable() {
 	g_lanceAttackBb.InitCheckTableLance();
 
 	SYNCCOUT << "(^q^)I13: initSquareDistance!" << SYNCENDL;
-	this->InitSquareDistance();
+	g_squareDistance.InitSquareDistance();
 
 	SYNCCOUT << "(^q^)I14: Book::init!" << SYNCENDL;
 	Book::Init();
