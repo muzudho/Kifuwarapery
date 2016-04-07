@@ -9,7 +9,7 @@
 #include "../../header/n360_egOption/n360_245_engineOption.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
-#include "../../header/n400_usi_____/n400_400_learner.hpp"
+#include "../../header/n500_learn___/n500_500_learner.hpp"
 #include "..\..\header\n900_main____\n900_300_usiLoop.hpp"
 
 #if !defined MINIMUL

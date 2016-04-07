@@ -249,7 +249,7 @@
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp" />
-    <ClInclude Include="header\n400_usi_____\n400_400_learner.hpp" />
+    <ClInclude Include="header\n500_learn___\n500_500_learner.hpp" />
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -294,6 +294,7 @@
     <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp" />
     <ClCompile Include="source\n240_tt______\n240_280_tTEntry.cpp" />
     <ClCompile Include="source\n240_tt______\n240_300_tt.cpp" />
+    <ClCompile Include="source\n260_evaluate\n260_150_kppIndexArray.cpp" />
     <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp" />
     <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp" />
     <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp" />

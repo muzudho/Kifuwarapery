@@ -10,6 +10,11 @@ namespace {
 	inline std::string pieceTypeToString(const PieceType pt) { return PieceTypeToStringTable[pt]; }
 }
 
+Move::Move()
+{
+	// デフォルト・コンストラクタは空っぽだぜ☆（＾ｑ＾）
+}
+
 Square Move::To() const
 {
 	return static_cast<Square>((GetValue() >> 0) & 0x7f);

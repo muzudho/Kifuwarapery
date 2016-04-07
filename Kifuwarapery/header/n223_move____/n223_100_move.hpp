@@ -15,7 +15,7 @@
 class Move {
 public:
 
-	Move() {}
+	Move();
 
 	explicit Move(const u32 u) : value_(u) {}
 

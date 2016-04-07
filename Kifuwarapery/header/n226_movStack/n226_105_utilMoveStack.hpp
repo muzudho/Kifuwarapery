@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include <algorithm> //std::swap std::max_element
-//#include <utility>
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"
 
