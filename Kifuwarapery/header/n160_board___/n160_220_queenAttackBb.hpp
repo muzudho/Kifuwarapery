@@ -15,3 +15,6 @@ public:
 	}
 
 };
+
+
+extern QueenAttackBb g_queenAttackBb;

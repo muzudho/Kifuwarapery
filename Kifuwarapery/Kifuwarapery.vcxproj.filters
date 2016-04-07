@@ -384,9 +384,6 @@
     <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_500_bitboardMask.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_400_printBb.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -438,10 +435,13 @@
     <ClInclude Include="header\n160_board___\n160_250_squareRelation.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_450_FileMaskBb.hpp">
+    <ClInclude Include="header\n160_board___\n160_102_fileMaskBb.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_460_RankMaskBb.hpp">
+    <ClInclude Include="header\n160_board___\n160_104_rankMaskBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_106_inFrontMaskBb.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -608,10 +608,13 @@
     <ClCompile Include="source\n160_board___\n160_250_squareRelation.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_450_FileMaskBb.cpp">
+    <ClCompile Include="source\n160_board___\n160_102_fileMaskBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_460_RankMaskBb.cpp">
+    <ClCompile Include="source\n160_board___\n160_104_rankMaskBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_106_inFrontMaskBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

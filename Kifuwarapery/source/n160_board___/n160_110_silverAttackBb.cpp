@@ -1,8 +1,13 @@
-#include "../../header/n160_board___/n160_400_printBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
-#include "../../header/n160_board___/n160_500_bitboardMask.hpp"
+#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
+#include "../../header/n160_board___/n160_140_goldAttackBb.hpp"
+#include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
+#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+
 
 SilverAttackBb g_silverAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
+
 
 void SilverAttackBb::Initialize()
 {
@@ -10,7 +15,7 @@ void SilverAttackBb::Initialize()
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_silverAttackBb.m_controllBb_[c][sq] = (
 				g_kingAttackBb.GetControllBb(sq) &
-				BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))
+				g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(sq))
 			) |
 			g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllOneBB(), sq);
 }
@@ -26,7 +31,7 @@ void SilverAttackBb::InitCheckTableSilver() {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
 				g_silverAttackBb.m_silverCheckTable_[c][sq] |= g_silverAttackBb.GetControllBb(opp, checkSq);
 			}
-			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 			checkBB = g_goldAttackBb.GetControllBb(opp, sq);
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();

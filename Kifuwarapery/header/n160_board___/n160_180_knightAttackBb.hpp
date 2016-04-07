@@ -23,3 +23,6 @@ public:
 		return this->m_knightCheckTable_[c][sq];
 	}
 };
+
+
+extern KnightAttackBb g_knightAttackBb;

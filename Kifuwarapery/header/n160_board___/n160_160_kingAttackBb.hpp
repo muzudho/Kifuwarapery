@@ -20,3 +20,6 @@ public:
 		return this->m_controllBb_[sq];
 	}
 };
+
+
+extern KingAttackBb g_kingAttackBb;

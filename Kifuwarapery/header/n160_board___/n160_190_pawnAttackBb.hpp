@@ -19,3 +19,7 @@ public:
 	}
 
 };
+
+
+extern PawnAttackBb g_pawnAttackBb;
+

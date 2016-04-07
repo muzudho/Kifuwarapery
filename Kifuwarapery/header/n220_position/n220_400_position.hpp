@@ -3,8 +3,8 @@
 #include <stack>
 #include "../n116_hand____/n116_500_hand.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
-#include "../n160_board___/n160_450_FileMaskBb.hpp"
-#include "../n160_board___/n160_500_bitboardMask.hpp"
+#include "../n160_board___/n160_102_FileMaskBb.hpp"
+#include "../n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_600_evalList.hpp"

@@ -16,20 +16,6 @@
 #include "n160_230_setMaskBb.hpp"
 #include "n160_240_betweenBb.hpp"
 
-extern KingAttackBb g_kingAttackBb;
-extern SilverAttackBb g_silverAttackBb;
-extern BishopAttackBb g_bishopAttackBb;
-extern LanceAttackBb g_lanceAttackBb;
-extern GoldAttackBb g_goldAttackBb;
-extern RookAttackBb g_rookAttackBb;
-extern GoldAndSilverAttackBb g_goldAndSilverAttackBb;
-extern KnightAttackBb g_knightAttackBb;
-extern PawnAttackBb g_pawnAttackBb;
-extern HorseAttackBb g_horseAttackBb;
-extern DragonAttackBb g_dragonAttackBb;
-extern QueenAttackBb g_queenAttackBb;
-extern SetMaskBb g_setMaskBb;
-extern BetweenBb g_betweenBb;
 
 
 class PrintBb {

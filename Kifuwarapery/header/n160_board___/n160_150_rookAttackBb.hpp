@@ -75,3 +75,5 @@ public:
 
 };
 
+
+extern RookAttackBb g_rookAttackBb;

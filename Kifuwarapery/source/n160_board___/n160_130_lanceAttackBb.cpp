@@ -1,11 +1,13 @@
 #include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_450_FileMaskBb.hpp"
-#include "../../header/n160_board___/n160_500_bitboardMask.hpp"
+#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+
+
+extern const InFrontMaskBb g_inFrontMaskBb;
 
 
 // これらは一度値を設定したら二度と変更しない。
 LanceAttackBb g_lanceAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
-//FileMaskBb g_fileMaskBb;
 
 
 void LanceAttackBb::Initialize()
@@ -32,7 +34,7 @@ void LanceAttackBb::InitCheckTableLance() {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_lanceAttackBb.m_lanceCheckTable_[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
 
-			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
@@ -64,5 +66,5 @@ Bitboard LanceAttackBb::LanceBlockMask(const Square square) {
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard LanceAttackBb::LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return g_rookAttackBb.GetControllBb(&occupied, square) & BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(square));
+	return g_rookAttackBb.GetControllBb(&occupied, square) & g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(square));
 }

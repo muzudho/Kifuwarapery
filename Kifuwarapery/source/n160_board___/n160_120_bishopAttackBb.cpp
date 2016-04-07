@@ -1,8 +1,8 @@
 #include "../../header/n160_board___/n160_050_configBits.hpp"
 #include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n160_board___/n160_450_FileMaskBb.hpp"
-#include "../../header/n160_board___/n160_500_bitboardMask.hpp"
+#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 
 extern ConfigBits g_configBits;
 extern SetMaskBb g_setMaskBb;

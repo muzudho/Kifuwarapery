@@ -1,6 +1,8 @@
 #pragma once
 
+
 #include "../n160_board___/n160_100_bitboard.hpp"
+
 
 //────────────────────────────────────────────────────────────────────────────────
 // 銀
@@ -24,3 +26,6 @@ public:
 	}
 };
 
+
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
+extern SilverAttackBb g_silverAttackBb;

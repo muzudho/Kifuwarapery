@@ -16,3 +16,6 @@ public:
 	}
 
 };
+
+
+extern BetweenBb g_betweenBb;

@@ -153,3 +153,7 @@ public:
 	ConfigBits();
 
 };
+
+
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
+//extern const ConfigBits g_configBits;

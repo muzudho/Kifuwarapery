@@ -1,9 +1,11 @@
 #include "../../header/n105_color___/n105_500_utilColor.hpp"
 #include "../../header/n160_board___/n160_250_squareRelation.hpp"
-#include "../../header/n160_board___/n160_450_FileMaskBb.hpp"
+#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 
 
+extern const InFrontMaskBb g_inFrontMaskBb;
 extern SquareRelation g_squareRelation;
 
 
@@ -172,7 +174,7 @@ namespace {
 		) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-			const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
+			const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
 			Bitboard toBB = pos.GetBbOf(Pawn, US).PawnAttack<US>() & target;
@@ -354,9 +356,9 @@ namespace {
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
 			const Rank TRank7 = (US == Black ? Rank7 : Rank3);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
-			const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
-			const Bitboard TRank1_6BB = BitboardMask::GetInFrontMask<UtilColor::OppositeColor(US), TRank7>();
-			const Bitboard TRank1_7BB = BitboardMask::GetInFrontMask<UtilColor::OppositeColor(US), TRank8>();
+			const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
+			const Bitboard TRank1_6BB = g_inFrontMaskBb.GetInFrontMask<UtilColor::OppositeColor(US), TRank7>();
+			const Bitboard TRank1_7BB = g_inFrontMaskBb.GetInFrontMask<UtilColor::OppositeColor(US), TRank8>();
 
 			const Bitboard targetPawn =
 				(MT == Capture) ? pos.GetBbOf(UtilColor::OppositeColor(US)) :

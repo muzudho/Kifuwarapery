@@ -134,7 +134,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MaxSpeed</Optimization>
+      <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -194,9 +194,9 @@
     <ClInclude Include="header\n160_board___\n160_260_squareDistance.hpp" />
     <ClInclude Include="header\n160_board___\n160_400_printBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_160_kingAttackBb.hpp" />
-    <ClInclude Include="header\n160_board___\n160_450_FileMaskBb.hpp" />
-    <ClInclude Include="header\n160_board___\n160_460_RankMaskBb.hpp" />
-    <ClInclude Include="header\n160_board___\n160_500_bitboardMask.hpp" />
+    <ClInclude Include="header\n160_board___\n160_102_fileMaskBb.hpp" />
+    <ClInclude Include="header\n160_board___\n160_104_rankMaskBb.hpp" />
+    <ClInclude Include="header\n160_board___\n160_106_inFrontMaskBb.hpp" />
     <ClInclude Include="header\n220_position\n220_100_repetitionType.hpp" />
     <ClInclude Include="header\n220_position\n220_150_checkInfo.hpp" />
     <ClInclude Include="header\n220_position\n220_200_changedListPair.hpp" />
@@ -283,8 +283,9 @@
     <ClCompile Include="source\n160_board___\n160_260_squareDistance.cpp" />
     <ClCompile Include="source\n160_board___\n160_400_printBb.cpp" />
     <ClCompile Include="source\n160_board___\n160_160_kingAttackBb.cpp" />
-    <ClCompile Include="source\n160_board___\n160_450_FileMaskBb.cpp" />
-    <ClCompile Include="source\n160_board___\n160_460_RankMaskBb.cpp" />
+    <ClCompile Include="source\n160_board___\n160_102_fileMaskBb.cpp" />
+    <ClCompile Include="source\n160_board___\n160_104_rankMaskBb.cpp" />
+    <ClCompile Include="source\n160_board___\n160_106_inFrontMaskBb.cpp" />
     <ClCompile Include="source\n220_position\n220_400_position.cpp" />
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_600_evalList.cpp" />

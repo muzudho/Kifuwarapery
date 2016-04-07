@@ -1,6 +1,7 @@
 #include <sstream>      // std::istringstream
 #include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
@@ -9,6 +10,7 @@
 #include "../../header/n320_searcher/n320_150_search.hpp"
 
 
+//extern const InFrontMaskBb g_inFrontMaskBb;
 extern SquareRelation g_squareRelation;
 
 
@@ -848,7 +850,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				goto silver_drop_end;
 			}
 			// 斜め後ろから打つ場合を調べる必要がある。
-			toBB = dropTarget & (g_silverAttackBb.GetControllBb(Them, ksq) & BitboardMask::GetInFrontMask(US, UtilSquare::ToRank(ksq)));
+			toBB = dropTarget & (g_silverAttackBb.GetControllBb(Them, ksq) & g_inFrontMaskBb.GetInFrontMask(US, UtilSquare::ToRank(ksq)));
 		}
 		else {
 			if (ourHand.Exists<HBishop>()) {
@@ -930,7 +932,7 @@ silver_drop_end:
 
 	// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 	const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-	const Bitboard TRank789BB = BitboardMask::GetInFrontMask<US, TRank6>();
+	const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
 	{
 		// 飛車による移動
 		Bitboard fromBB = GetBbOf(Rook, US);
@@ -1167,7 +1169,7 @@ silver_drop_end:
 		Bitboard fromBB = GetBbOf(Silver, US) & g_silverAttackBb.SilverCheckTable(US, ksq);
 		if (fromBB.Exists1Bit()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
-			const Bitboard TRank1_5BB = BitboardMask::GetInFrontMask<Them, TRank6>();
+			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask<Them, TRank6>();
 			const Bitboard chkBB = GetAttacksFrom<Silver>(Them, ksq);
 			const Bitboard chkBB_promo = GetAttacksFrom<Gold>(Them, ksq);
 
@@ -1203,7 +1205,7 @@ silver_drop_end:
 
 						// 玉の前方に移動する場合、成で詰まなかったら不成でも詰まないので、ここで省く。
 						// sakurapyon の作者が言ってたので実装。
-						toBB.AndEqualNot(BitboardMask::GetInFrontMask(Them, UtilSquare::ToRank(ksq)));
+						toBB.AndEqualNot(g_inFrontMaskBb.GetInFrontMask(Them, UtilSquare::ToRank(ksq)));
 						while (toBB.Exists1Bit()) {
 							const Square to = toBB.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
@@ -1367,7 +1369,7 @@ silver_drop_end:
 			const Bitboard chkBB_promo = GetAttacksFrom<Gold>(Them, ksq) & TRank789BB;
 			// 玉の前方1マスのみ。
 			// 玉が 1 段目にいるときは、成のみで良いので省く。
-			const Bitboard chkBB = GetAttacksFrom<Pawn>(Them, ksq) & BitboardMask::GetInFrontMask<Them, TRank8>();
+			const Bitboard chkBB = GetAttacksFrom<Pawn>(Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
 
 			do {
 				const Square from = fromBB.PopFirstOneFromI9();

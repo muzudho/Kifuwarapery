@@ -1,4 +1,5 @@
 #include "../../header/n080_common__/n080_105_time.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
@@ -11,6 +12,11 @@
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
 #include "../../header/n400_usi_____/n400_350_thread.hpp"
+
+
+extern const InFrontMaskBb g_inFrontMaskBb;
+
+
 
 // 一箇所でしか呼ばないので、FORCE_INLINE
 FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
@@ -1494,7 +1500,7 @@ bool nyugyoku(const Position& pos) {
 
 	const Color us = pos.GetTurn();
 	// 敵陣のマスク
-	const Bitboard opponentsField = (us == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
+	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.GetBbOf(King, us).AndIsNot0(opponentsField))

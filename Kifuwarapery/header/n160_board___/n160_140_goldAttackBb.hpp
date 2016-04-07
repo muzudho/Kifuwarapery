@@ -26,3 +26,5 @@ public:
 
 };
 
+
+extern GoldAttackBb g_goldAttackBb;

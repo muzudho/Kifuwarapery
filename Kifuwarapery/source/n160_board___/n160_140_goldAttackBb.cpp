@@ -1,5 +1,8 @@
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_500_bitboardMask.hpp"
+
+
+extern const InFrontMaskBb g_inFrontMaskBb;
 
 
 GoldAttackBb g_goldAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
@@ -12,7 +15,7 @@ void GoldAttackBb::Initialize()
 			g_goldAttackBb.m_controllBb_[c][sq] =
 			(
 				g_kingAttackBb.GetControllBb(sq) &
-				BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))
+				g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(sq))
 			) |
 			g_rookAttackBb.GetControllBb(&Bitboard::CreateAllOneBB(), sq);
 }

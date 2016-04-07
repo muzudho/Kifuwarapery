@@ -8,18 +8,6 @@ using namespace std;
 
 
 
-
-const Bitboard g_inFrontMask[ColorNum][RankNum] = {
-	{ g_InFrontOfRank9Black, g_InFrontOfRank8Black, g_InFrontOfRank7Black, g_InFrontOfRank6Black, g_InFrontOfRank5Black, g_InFrontOfRank4Black, g_InFrontOfRank3Black, g_InFrontOfRank2Black, g_InFrontOfRank1Black },
-	{ g_InFrontOfRank9White, g_InFrontOfRank8White, g_InFrontOfRank7White, g_InFrontOfRank6White, g_InFrontOfRank5White, g_InFrontOfRank4White, g_InFrontOfRank3White, g_InFrontOfRank2White, g_InFrontOfRank1White }
-};
-
-
-
-
-
-
-
 Bitboard::Bitboard(const u64 v0, const u64 v1)
 {
 	this->m_p_[0] = v0;

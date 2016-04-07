@@ -17,3 +17,6 @@ public:
 		return g_rookAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 };
+
+
+extern DragonAttackBb g_dragonAttackBb;

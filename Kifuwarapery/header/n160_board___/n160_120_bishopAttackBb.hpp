@@ -59,3 +59,6 @@ public:
 	#endif
 
 };
+
+
+extern BishopAttackBb g_bishopAttackBb;

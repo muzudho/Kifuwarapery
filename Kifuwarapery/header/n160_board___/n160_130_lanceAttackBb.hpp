@@ -52,3 +52,6 @@ private:
 	Bitboard LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied);
 
 };
+
+
+extern LanceAttackBb g_lanceAttackBb;

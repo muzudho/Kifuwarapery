@@ -17,3 +17,6 @@ public:
 	}
 
 };
+
+
+extern GoldAndSilverAttackBb g_goldAndSilverAttackBb;

@@ -16,3 +16,6 @@ public:
 		return g_bishopAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 };
+
+
+extern HorseAttackBb g_horseAttackBb;

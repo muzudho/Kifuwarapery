@@ -1,5 +1,8 @@
 #include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_500_bitboardMask.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+
+
+extern const InFrontMaskBb g_inFrontMaskBb;
 
 
 KnightAttackBb g_knightAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
@@ -18,7 +21,7 @@ void KnightAttackBb::Initialize()
 				g_knightAttackBb.m_controllBb_[c][sq] =
 					g_bishopAttackBb.BishopStepAttacks(
 						bb.GetFirstOneFromI9()) &
-						BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq)
+						g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(sq)
 					);
 		}
 	}
@@ -37,7 +40,7 @@ void KnightAttackBb::InitCheckTableKnight() {
 				this->m_knightCheckTable_[color][sq] |= this->GetControllBb(opponent, checkSq);
 			}
 
-			const Bitboard TRank789BB = (color == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (color == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 			checkBB = g_goldAttackBb.GetControllBb(opponent, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
