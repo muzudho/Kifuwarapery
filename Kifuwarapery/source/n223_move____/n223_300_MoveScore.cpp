@@ -1,4 +1,4 @@
-#include "../../header/n223_move____/n223_300_moveScore.hpp"
+﻿#include "../../header/n223_move____/n223_300_moveScore.hpp"
 
 MoveScore::MoveScore(Move move, Score score)
 {

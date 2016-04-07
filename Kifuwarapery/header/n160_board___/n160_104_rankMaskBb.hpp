@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include "../n160_board___/n160_100_bitboard.hpp"
@@ -47,7 +47,7 @@ public:
 			: /*R == Rank1 ?*/ this->m_1);
 	}
 
-	// ’¼Úƒe[ƒuƒ‹ˆø‚«‚·‚×‚«‚¾‚Æv‚¤B
+	// ç›´æ¥ãƒ†ãƒ¼ãƒ–ãƒ«å¼•ãã™ã¹ãã ã¨æ€ã†ã€‚
 	inline Bitboard GetSquareRankMask(const Square sq) const {
 		const Rank r = UtilSquare::ToRank(sq);
 		return this->GetRankMask(r);
@@ -56,5 +56,5 @@ public:
 };
 
 
-// ƒNƒ‰ƒX’è‹`‚Ì‚ ‚Æ‚É‘‚­‚Æƒrƒ‹ƒh‚Å‚«‚é‚º™iO‚‘Oj
+// ã‚¯ãƒ©ã‚¹å®šç¾©ã®ã‚ã¨ã«æ›¸ãã¨ãƒ“ãƒ«ãƒ‰ã§ãã‚‹ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 extern const RankMaskBb g_rankMaskBb;

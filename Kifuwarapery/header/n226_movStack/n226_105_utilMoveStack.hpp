@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <algorithm> //std::swap std::max_element
 //#include <utility>
@@ -7,14 +7,14 @@
 
 class UtilMoveStack {
 public:
-	// ”Ä—p“I‚È insertion sort. —v‘f”‚ª­‚È‚¢A‚‘¬‚Éƒ\[ƒg‚Å‚«‚éB
-	// ~‡(‘å‚«‚¢‚à‚Ì‚ªæ“ª•t‹ß‚ÉW‚Ü‚é)
-	// *(first - 1) ‚É ”Ô•º(sentinel) ‚Æ‚µ‚Ä MAX ’l‚ª“ü‚Á‚Ä‚¢‚é‚Æ‰¼’è‚µ‚Ä‚‘¬‰»‚µ‚Ä‚ ‚éB
-	// T ‚É‚Í ƒ|ƒCƒ“ƒ^‚©ƒCƒeƒŒ[ƒ^‚ğg—po—ˆ‚éB
+	// æ±ç”¨çš„ãª insertion sort. è¦ç´ æ•°ãŒå°‘ãªã„æ™‚ã€é«˜é€Ÿã«ã‚½ãƒ¼ãƒˆã§ãã‚‹ã€‚
+	// é™é †(å¤§ãã„ã‚‚ã®ãŒå…ˆé ­ä»˜è¿‘ã«é›†ã¾ã‚‹)
+	// *(first - 1) ã« ç•ªå…µ(sentinel) ã¨ã—ã¦ MAX å€¤ãŒå…¥ã£ã¦ã„ã‚‹ã¨ä»®å®šã—ã¦é«˜é€ŸåŒ–ã—ã¦ã‚ã‚‹ã€‚
+	// T ã«ã¯ ãƒã‚¤ãƒ³ã‚¿ã‹ã‚¤ãƒ†ãƒ¬ãƒ¼ã‚¿ã‚’ä½¿ç”¨å‡ºæ¥ã‚‹ã€‚
 	template <typename T, bool UseSentinel = false>
 	static inline void InsertionSort(T first, T last) {
 		if (UseSentinel) {
-			assert(std::max_element(first - 1, last) == first - 1); // ”Ô•º‚ªÅ‘å’l‚Æ‚È‚é‚±‚Æ‚ğŠm”F
+			assert(std::max_element(first - 1, last) == first - 1); // ç•ªå…µãŒæœ€å¤§å€¤ã¨ãªã‚‹ã“ã¨ã‚’ç¢ºèª
 		}
 		if (first != last) {
 			for (T curr = first + 1; curr != last; ++curr) {
@@ -31,9 +31,9 @@ public:
 		}
 	}
 
-	// Å‚à score ‚Ì‚‚¢ moveStack ‚Ìƒ|ƒCƒ“ƒ^‚ğ•Ô‚·B
-	// MoveStack ‚Ì”‚ª‘½‚¢‚Æ‚©‚È‚èŠÔ‚ª‚©‚©‚é‚Ì‚ÅA
-	// ‹î‘Å‚¿‚ğŠÜ‚Ş‚Æ‚«‚Ég—p‚µ‚Ä‚Í‚È‚ç‚È‚¢B
+	// æœ€ã‚‚ score ã®é«˜ã„ moveStack ã®ãƒã‚¤ãƒ³ã‚¿ã‚’è¿”ã™ã€‚
+	// MoveStack ã®æ•°ãŒå¤šã„ã¨ã‹ãªã‚Šæ™‚é–“ãŒã‹ã‹ã‚‹ã®ã§ã€
+	// é§’æ‰“ã¡ã‚’å«ã‚€ã¨ãã«ä½¿ç”¨ã—ã¦ã¯ãªã‚‰ãªã„ã€‚
 	static inline MoveStack* PickBest(MoveStack* currMove, MoveStack* lastMove) {
 		std::swap(*currMove, *std::max_element(currMove, lastMove));
 		return currMove;

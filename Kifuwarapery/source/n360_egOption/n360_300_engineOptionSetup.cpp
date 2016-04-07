@@ -1,4 +1,4 @@
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+ï»¿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
@@ -13,7 +13,7 @@
 #include "..\..\header\n360_egOption\n360_300_engineOptionSetup.hpp"
 
 
-// ‰Šú‰»‚Ì’l‚ğæ‚Á‚Ä‚­‚é‚Ì‚Ég‚¢‚Ü‚·B
+// åˆæœŸåŒ–ã®å€¤ã‚’å–ã£ã¦ãã‚‹ã®ã«ä½¿ã„ã¾ã™ã€‚
 namespace {
 	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
 	void onClearHash(Searcher* s, const EngineOptionable&) { s->m_tt.Clear(); }
@@ -21,10 +21,10 @@ namespace {
 		std::unique_ptr<EvalStorage>(new EvalStorage)->init(opt, true);
 	}
 	void onThreads(Searcher* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
-	// ˜_—“I‚ÈƒRƒA”‚Ìæ“¾
+	// è«–ç†çš„ãªã‚³ã‚¢æ•°ã®å–å¾—
 	inline int cpuCoreCount() {
-		// todo: boost::thread::physical_concurrency() ‚ğg‚¤‚±‚ÆB
-		// std::thread::hardware_concurrency() ‚Í 0 ‚ğ•Ô‚·‰Â”\«‚ª‚ ‚éB
+		// todo: boost::thread::physical_concurrency() ã‚’ä½¿ã†ã“ã¨ã€‚
+		// std::thread::hardware_concurrency() ã¯ 0 ã‚’è¿”ã™å¯èƒ½æ€§ãŒã‚ã‚‹ã€‚
 		return std::max(static_cast<int>(std::thread::hardware_concurrency() / 2), 1);
 	}
 }

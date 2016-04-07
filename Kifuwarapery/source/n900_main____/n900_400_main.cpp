@@ -1,5 +1,13 @@
-#include "../../header/n080_common__/n080_100_common.hpp"
+ï»¿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
+#include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
+#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
+#include "../../header/n160_board___/n160_130_lanceAttackBb.hpp"
+#include "../../header/n160_board___/n160_140_goldAttackBb.hpp"
+#include "../../header/n160_board___/n160_150_rookAttackBb.hpp"
+#include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
+#include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
+#include "../../header/n160_board___/n160_190_pawnAttackBb.hpp"
 #include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
@@ -10,7 +18,7 @@
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
 
 
-extern SquareRelation g_squareRelation;
+//extern SquareRelation g_squareRelation;
 
 
 Main01::Main01()
@@ -25,9 +33,9 @@ Main01::~Main01()
 
 void Main01::Initialize()
 {
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-	// ƒrƒbƒgƒ{[ƒh‚Æƒe[ƒuƒ‹‚Ì‰Šú‰»™iO‚‘Oj
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// ãƒ“ãƒƒãƒˆãƒœãƒ¼ãƒ‰ã¨ãƒ†ãƒ¼ãƒ–ãƒ«ã®åˆæœŸåŒ–â˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	{
 		SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
 #ifndef SKIP_LONG_TIME_EVAL
@@ -60,8 +68,8 @@ void Main01::Initialize()
 		g_squareRelation.Initialize();
 
 		SYNCCOUT << "(^q^)I10: initAttackToEdge!" << SYNCENDL;
-		// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
-		// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ğİ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ğŒÄ‚Ô‚±‚ÆB
+		// éšœå®³ç‰©ãŒç„¡ã„ã¨ãã®åˆ©ãã® Bitboard
+		// g_rookAttack, g_bishopAttack, g_lanceAttack ã‚’è¨­å®šã—ã¦ã‹ã‚‰ã€ã“ã®é–¢æ•°ã‚’å‘¼ã¶ã“ã¨ã€‚
 		g_rookAttackBb.InitializeToEdge();
 		g_bishopAttackBb.InitializeToEdge();
 		g_lanceAttackBb.InitializeToEdge();
@@ -90,7 +98,7 @@ void Main01::Initialize()
 
 	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
 	this->searcher->Init();
-	// ˆêƒIƒuƒWƒFƒNƒg‚Ì¶¬‚Æ”jŠü
+	// ä¸€æ™‚ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆã¨ç ´æ£„
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
 	std::unique_ptr<EvalStorage>(new EvalStorage)->init(this->searcher->m_options["Eval_Dir"], true);

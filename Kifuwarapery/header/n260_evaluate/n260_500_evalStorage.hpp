@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../header/n260_evaluate/n260_490_KppCacheIo.hpp"
 #include "../../header/n260_evaluate/n260_400_EvaluaterBase.hpp"
 
 
 struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
-	// ’Tõ‚ÉQÆ‚·‚é•]‰¿ŠÖ”ƒe[ƒuƒ‹
+	// æ¢ç´¢æ™‚ã«å‚ç…§ã™ã‚‹è©•ä¾¡é–¢æ•°ãƒ†ãƒ¼ãƒ–ãƒ«
 	static std::array<s16, 2> KPP[SquareNum][fe_end][fe_end];
 	static std::array<s32, 2> KKP[SquareNum][SquareNum][fe_end];
 	static std::array<s32, 2> KK[SquareNum][SquareNum];
@@ -28,7 +28,7 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 
 
 	void init(const std::string& dirName, const bool Synthesized) {
-		// ‡¬‚³‚ê‚½•]‰¿ŠÖ”ƒoƒCƒiƒŠ‚ª‚ ‚ê‚Î‚»‚¿‚ç‚ğg‚¤B
+		// åˆæˆã•ã‚ŒãŸè©•ä¾¡é–¢æ•°ãƒã‚¤ãƒŠãƒªãŒã‚ã‚Œã°ãã¡ã‚‰ã‚’ä½¿ã†ã€‚
 		if (Synthesized) {
 			if (readSynthesized(dirName))
 			{
@@ -143,7 +143,7 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 
 
 #if defined EVAL_PHASE1
-	// ƒtƒF[ƒY‚P‚Ì’è‹`‚±‚±‚©‚ç
+	// ãƒ•ã‚§ãƒ¼ã‚ºï¼‘ã®å®šç¾©ã“ã“ã‹ã‚‰
 #define BASE_PHASE1 {								\
 		FOO(kpps.kee);								\
 		FOO(kpps.r_kpe_b);							\
@@ -161,7 +161,7 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 		FOO(kkps.r_ke);								\
 		FOO(kks.k);									\
 	}
-	// ƒtƒF[ƒY‚P‚Ì’è‹`‚±‚±‚Ü‚Å
+	// ãƒ•ã‚§ãƒ¼ã‚ºï¼‘ã®å®šç¾©ã“ã“ã¾ã§
 #else
 #define BASE_PHASE1
 #endif
@@ -211,7 +211,7 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 #endif
 
 
-	// ƒtƒF[ƒY‚P`‚S‚É“WŠJ‚³‚ê‚Ü‚·B
+	// ãƒ•ã‚§ãƒ¼ã‚ºï¼‘ï½ï¼”ã«å±•é–‹ã•ã‚Œã¾ã™ã€‚
 #define READ_BASE_EVAL {						\
 		BASE_PHASE1;							\
 		BASE_PHASE2;							\
@@ -226,20 +226,20 @@ struct EvalStorage : public EvaluaterBase<std::array<s16, 2>, std::array<s32, 2>
 		BASE_PHASE4;							\
 	}
 
-	// .bin ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚ŞB
+	// .bin ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€ã€‚
 	void ReadBins(const std::string& dirName) {
 
-		// ŠÖ”’è‹`‚±‚±‚©‚ç
+		// é–¢æ•°å®šç¾©ã“ã“ã‹ã‚‰
 #define FOO(x) {														\
 			std::ifstream ifs((addSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ifs.read(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
-		// ŠÖ”’è‹`‚±‚±‚Ü‚Å
+		// é–¢æ•°å®šç¾©ã“ã“ã¾ã§
 
-		// ƒtƒF[ƒY‚P`‚S‚É“WŠJ‚³‚ê‚Ü‚·B
+		// ãƒ•ã‚§ãƒ¼ã‚ºï¼‘ï½ï¼”ã«å±•é–‹ã•ã‚Œã¾ã™ã€‚
 		READ_BASE_EVAL;
 
-		// ŠÖ”’è‹`‚ğ”pŠü
+		// é–¢æ•°å®šç¾©ã‚’å»ƒæ£„
 #undef FOO
 	}
 
@@ -293,12 +293,12 @@ public:
 			#pragma omp for
 			#endif
 
-			// 81 x 1548 x 1548 ‚Ìƒ‹[ƒvB
+			// 81 x 1548 x 1548 ã®ãƒ«ãƒ¼ãƒ—ã€‚
 
 
 #if defined(MODE_CACHE_EVAL)
-			// ”Õ–Ê‚ğ [0, 80] ‚Ì®”‚Ì index ‚Å•\‚·
-			// I9 = 1ˆê, I1 = 1‹ã, A1 = 9‹ã
+			// ç›¤é¢ã‚’ [0, 80] ã®æ•´æ•°ã® index ã§è¡¨ã™
+			// I9 = 1ä¸€, I1 = 1ä¹, A1 = 9ä¹
 			//
 			// A9, B9, C9, D9, E9, F9, G9, H9, I9,
 			// A8, B8, C8, D8, E8, F8, G8, H8, I8,
@@ -310,28 +310,28 @@ public:
 			// A2, B2, C2, D2, E2, F2, G2, H2, I2,
 			// A1, B1, C1, D1, E1, F1, G1, H1, I1,
 
-			// ‚æ‚­g‚¤‹Ê‚ÌˆÊ’u‚©‚ç‡‚É KPP ‚ğİ’è‚µ‚Ä‚¢‚­iO‚‘Oj
+			// ã‚ˆãä½¿ã†ç‰ã®ä½ç½®ã‹ã‚‰é †ã« KPP ã‚’è¨­å®šã—ã¦ã„ãï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			enum Square squares[] = {
-				A5, // ‚T‹ã
-				B8, // ‚W”ª
-				B2, // ‚Q”ª
-				A9, // ‚X‹ã
-				A1, // ‚P‹ã
-				A6, // ‚U‹ã
-				B4, // ‚S”ª
-				A7, // ‚V‹ã
-				B3, // ‚R”ª
-				B6, // ‚U”ª
-				B7, // ‚V”ª
-				B5, // ‚T”ª
-				A3, // ‚R‹ã
-				C8, // ‚Wµ “VçŠt”ü”Z
-				B1, // ‚P”ª
-				A4, // ‚S‹ã
-				B9, // ‚X”ª
-				A8, // ‚W‹ã
-				A2, // ‚Q‹ã
-				C9,	    C7, C6, C5, C4, C3, C2, C1,// 3’i–Ú
+				A5, // ï¼•ä¹
+				B8, // ï¼˜å…«
+				B2, // ï¼’å…«
+				A9, // ï¼™ä¹
+				A1, // ï¼‘ä¹
+				A6, // ï¼–ä¹
+				B4, // ï¼”å…«
+				A7, // ï¼—ä¹
+				B3, // ï¼“å…«
+				B6, // ï¼–å…«
+				B7, // ï¼—å…«
+				B5, // ï¼•å…«
+				A3, // ï¼“ä¹
+				C8, // ï¼˜ä¸ƒ å¤©å®ˆé–£ç¾æ¿ƒ
+				B1, // ï¼‘å…«
+				A4, // ï¼”ä¹
+				B9, // ï¼™å…«
+				A8, // ï¼˜ä¹
+				A2, // ï¼’ä¹
+				C9,	    C7, C6, C5, C4, C3, C2, C1,// 3æ®µç›®
 				D9,	D8, D7, D6, D5, D4, D3, D2, D1,
 				E9,	E8, E7, E6, E5, E4, E3, E2, E1,
 				F9,	F8, F7, F6, F5, F4, F3, F2, F1,
@@ -342,13 +342,13 @@ public:
 			int m_size = sizeof(squares) / sizeof(squares[0]);
 			for (int o = 0; o < m_size; o++)//order
 			{
-				int k1 = squares[o];//‹Ê‚ÌˆÊ’u
+				int k1 = squares[o];//ç‰ã®ä½ç½®
 #else
-			// OpenMP‘Î‰‚µ‚½‚ç‰½ŒÌ‚© k1 ‚ğ Square Œ^‚É‚·‚é‚Æ ++k1 ‚ª’è‹`‚³‚ê‚Ä‚¢‚È‚­‚ÄƒRƒ“ƒpƒCƒ‹ƒGƒ‰[‚É‚È‚éB
+			// OpenMPå¯¾å¿œã—ãŸã‚‰ä½•æ•…ã‹ k1 ã‚’ Square å‹ã«ã™ã‚‹ã¨ ++k1 ãŒå®šç¾©ã•ã‚Œã¦ã„ãªãã¦ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã€‚
 			for (int k1 = I9; k1 < SquareNum; ++k1) {
 #endif
 
-				// ‚Å‚«‚ê‚ÎACache3 ‚ğACache2 ‚É“‡‚µ‚Ü‚·B
+				// ã§ãã‚Œã°ã€Cache3 ã‚’ã€Cache2 ã«çµ±åˆã—ã¾ã™ã€‚
 				kppCacheIo.SynthesizeLv3To2(dirName, k1);
 
 #if defined(MODE_CACHE_EVAL)
@@ -358,7 +358,7 @@ public:
 #if defined(MODE_CACHE_EVAL)
 				if (kppCacheIo.ReadLv2Files(dirName, k1, KPP))
 				{
-					// ’†ŠÔƒtƒ@ƒCƒ‹‚©‚ç“ÇŠ®—¹B
+					// ä¸­é–“ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­è¾¼å®Œäº†ã€‚
 					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "(" << std::to_string(o) << "/" << std::to_string(SquareNum) << ") loaded." << SYNCENDL;
 				}
 				else
@@ -366,7 +366,7 @@ public:
 					SYNCCOUT << "(^q^)KPP: k1=" << std::to_string(k1) << "/" << std::to_string(SquareNum) << SYNCENDL;
 #endif
 
-					// indices ‚ÍX‚É for ƒ‹[ƒv‚ÌŠO‘¤‚É’u‚«‚½‚¢‚ªAOpenMP g‚Á‚Ä‚¢‚é‚ÆƒAƒNƒZƒX‹£‡‚µ‚»‚¤‚È‚Ì‚Åƒ‹[ƒv‚Ì’†‚É’u‚­B
+					// indices ã¯æ›´ã« for ãƒ«ãƒ¼ãƒ—ã®å¤–å´ã«ç½®ããŸã„ãŒã€OpenMP ä½¿ã£ã¦ã„ã‚‹ã¨ã‚¢ã‚¯ã‚»ã‚¹ç«¶åˆã—ãã†ãªã®ã§ãƒ«ãƒ¼ãƒ—ã®ä¸­ã«ç½®ãã€‚
 					std::pair<ptrdiff_t, int> indices[g_KPPIndicesMax];
 					for (int p1 = 0; p1 < fe_end; ++p1) {
 
@@ -376,12 +376,12 @@ public:
 #if defined(MODE_CACHE_EVAL)
 							SYNCCOUT << "(^q^)KPP: p1=" << std::to_string(p1) << "/" << std::to_string(fe_end) << " loaded." << SYNCENDL;
 #endif
-							// ’†ŠÔƒtƒ@ƒCƒ‹‚©‚ç“ÇŠ®—¹B
+							// ä¸­é–“ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰èª­è¾¼å®Œäº†ã€‚
 						}
 						else
 						{
 #if !defined(SKIP_KPP_EVAL_LOOP)
-							// WŒvŠJnB
+							// é›†è¨ˆé–‹å§‹ã€‚
 
 							for (int p2 = 0; p2 < fe_end; ++p2) {
 
@@ -390,11 +390,11 @@ public:
 								FOO(indices, GetKppOneArrayFirst, sum);
 								KPP[k1][p1][p2] += sum;
 							}
-							// iO‚‘Oj‚±‚±‚Åƒtƒ@ƒCƒ‹‚ğì¬‚µ‚½‚¢‚Æv‚¤‚ñ‚¾‚º™
-							// Œ^‚Í std::array<s16, 2> EvalStorage::KPP[81][1548][1548];
-							// shortŒ^(2byte?) —v‘f” 2 ‚Ì”z—ñB
-							// 1548 x 1548 x 2byte ƒTƒCƒY‚ÌƒoƒCƒiƒŠEƒtƒ@ƒCƒ‹‚ª 81 ŒÂ‚Å KPP ”z—ñ‚É‚È‚é‚Í‚¸™iO‚‘Oj
-							// ƒtƒ@ƒCƒ‹–¼‚Í uKKP[”š].objv‚Å‚Ç‚¤‚¾‚º™HiO‚‘Oj
+							// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ã“ã“ã§ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œæˆã—ãŸã„ã¨æ€ã†ã‚“ã ãœâ˜†
+							// å‹ã¯ std::array<s16, 2> EvalStorage::KPP[81][1548][1548];
+							// shortå‹(2byte?) è¦ç´ æ•° 2 ã®é…åˆ—ã€‚
+							// 1548 x 1548 x 2byte ã‚µã‚¤ã‚ºã®ãƒã‚¤ãƒŠãƒªãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ãŒ 81 å€‹ã§ KPP é…åˆ—ã«ãªã‚‹ã¯ãšâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
+							// ãƒ•ã‚¡ã‚¤ãƒ«åã¯ ã€ŒKKP[æ•°å­—].objã€ã§ã©ã†ã ãœâ˜†ï¼Ÿï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 							if (kppCacheIo.WriteLv3Files(dirName, k1, p1, KPP))
 							{
 #if defined(MODE_CACHE_EVAL)
@@ -403,7 +403,7 @@ public:
 							}
 							else
 							{
-								// ƒGƒ‰[
+								// ã‚¨ãƒ©ãƒ¼
 								goto gt_EndKPP;
 							}
 #endif

@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 
 #include "n119_050_bound.hpp"
 
 
 class UtilBound {
 public:
-	// g‚Á‚Ä‚È‚¢H
+	// ä½¿ã£ã¦ãªã„ï¼Ÿ
 	static inline bool ExactOrLower(const Bound st) {
 		return (st & BoundLower ? true : false);
 	}
 
-	// g‚Á‚Ä‚È‚¢H
+	// ä½¿ã£ã¦ãªã„ï¼Ÿ
 	static inline bool ExactOrUpper(const Bound st) {
 		return (st & BoundUpper ? true : false);
 	}

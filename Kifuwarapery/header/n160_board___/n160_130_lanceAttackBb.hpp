@@ -1,23 +1,20 @@
-#pragma once
+ï»¿#pragma once
 
 
-#include "n160_050_configBits.hpp"
 #include "n160_100_bitboard.hpp"
+#include "n160_108_slideBits.hpp"
 
 
-extern ConfigBits g_configBits;
-
-
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-// 
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// é¦™
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class LanceAttackBb {
 public:
-	// ƒƒ‚ƒŠß–ñ‚ğ‚¹‚¸A–³‘Ê‚Èƒƒ‚ƒŠ‚ğ‚Á‚Ä‚¢‚éB
+	// ãƒ¡ãƒ¢ãƒªç¯€ç´„ã‚’ã›ãšã€ç„¡é§„ãªãƒ¡ãƒ¢ãƒªã‚’æŒã£ã¦ã„ã‚‹ã€‚
 	Bitboard m_controllBb[ColorNum][SquareNum][128];
 
 private:
-	// ƒƒ‚ƒŠß–ñ‚ğ‚¹‚¸A–³‘Ê‚Èƒƒ‚ƒŠ‚ğ‚Á‚Ä‚¢‚éB
+	// ãƒ¡ãƒ¢ãƒªç¯€ç´„ã‚’ã›ãšã€ç„¡é§„ãªãƒ¡ãƒ¢ãƒªã‚’æŒã£ã¦ã„ã‚‹ã€‚
 	Bitboard m_controllBbToEdge_[ColorNum][SquareNum];
 	Bitboard m_lanceCheckTable_[ColorNum][SquareNum];
 
@@ -26,14 +23,14 @@ public:
 	void Initialize();
 	void InitCheckTableLance();
 
-	// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
-	// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ğİ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ğŒÄ‚Ô‚±‚ÆB
+	// éšœå®³ç‰©ãŒç„¡ã„ã¨ãã®åˆ©ãã® Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack ã‚’è¨­å®šã—ã¦ã‹ã‚‰ã€ã“ã®é–¢æ•°ã‚’å‘¼ã¶ã“ã¨ã€‚
 	void InitializeToEdge();
 
-	// todo: Ô‚Ì‹Ø‚ª‚Ç‚±‚É‚ ‚é‚©æ‚É•ª‚©‚Á‚Ä‚¢‚ê‚ÎABitboard ‚Ì•Ğ•û‚Ì•Ï”‚¾‚¯‚ğ’²‚×‚ê‚Î—Ç‚­‚È‚éB
+	// todo: é¦™è»Šã®ç­‹ãŒã©ã“ã«ã‚ã‚‹ã‹å…ˆã«åˆ†ã‹ã£ã¦ã„ã‚Œã°ã€Bitboard ã®ç‰‡æ–¹ã®å¤‰æ•°ã ã‘ã‚’èª¿ã¹ã‚Œã°è‰¯ããªã‚‹ã€‚
 	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Color c, const Square sq) const {
 		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> g_configBits.m_slide[sq]) & 127;
+		const int index = ((*thisBitboard).GetP(part) >> g_slideBits.m_slide[sq]) & 127;
 		return this->m_controllBb[c][sq][index];
 	}
 
@@ -54,4 +51,5 @@ private:
 };
 
 
+// ã‚¯ãƒ©ã‚¹å®šç¾©ã®ã‚ã¨ã«æ›¸ãã¨ãƒ“ãƒ«ãƒ‰ã§ãã‚‹ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 extern LanceAttackBb g_lanceAttackBb;

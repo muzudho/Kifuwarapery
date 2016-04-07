@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"

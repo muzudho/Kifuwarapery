@@ -1,4 +1,4 @@
-#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+ï»¿#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
 #include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
 #include "../../header/n160_board___/n160_140_goldAttackBb.hpp"
@@ -6,7 +6,7 @@
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 
 
-SilverAttackBb g_silverAttackBb;//–{“–‚Íconst ‚É‚µ‚½‚¢‚ªA‚â‚è•û‚ª‚í‚©‚ç‚È‚¢™ C2373ƒGƒ‰[‚É‚È‚é‚ñ‚¾‚º™
+SilverAttackBb g_silverAttackBb;//æœ¬å½“ã¯const ã«ã—ãŸã„ãŒã€ã‚„ã‚Šæ–¹ãŒã‚ã‹ã‚‰ãªã„â˜† C2373ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã‚“ã ãœâ˜†
 
 
 void SilverAttackBb::Initialize()
@@ -24,29 +24,29 @@ void SilverAttackBb::InitCheckTableSilver() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_silverAttackBb.m_silverCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();
+			this->m_silverCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();
 
-			Bitboard checkBB = g_silverAttackBb.GetControllBb(opp, sq);
+			Bitboard checkBB = this->GetControllBb(opp, sq);
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
-				g_silverAttackBb.m_silverCheckTable_[c][sq] |= g_silverAttackBb.GetControllBb(opp, checkSq);
+				this->m_silverCheckTable_[c][sq] |= this->GetControllBb(opp, checkSq);
 			}
 			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 			checkBB = g_goldAttackBb.GetControllBb(opp, sq);
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
-				// ˆÚ“®Œ³‚ª“Gw‚Å‚ ‚éˆÊ’u‚È‚çA‹à‚É¬‚Á‚Ä‰¤èo—ˆ‚éB
-				g_silverAttackBb.m_silverCheckTable_[c][sq] |= (g_silverAttackBb.GetControllBb(opp, checkSq) & TRank789BB);
+				// ç§»å‹•å…ƒãŒæ•µé™£ã§ã‚ã‚‹ä½ç½®ãªã‚‰ã€é‡‘ã«æˆã£ã¦ç‹æ‰‹å‡ºæ¥ã‚‹ã€‚
+				this->m_silverCheckTable_[c][sq] |= (this->GetControllBb(opp, checkSq) & TRank789BB);
 			}
 
 			const Bitboard TRank6BB = (c == Black ? g_rankMaskBb.GetRankMask<Rank6>() : g_rankMaskBb.GetRankMask<Rank4>());
-			// ˆÚ“®æ‚ª3’i–Ú‚ÅA4’i–Ú‚ÉˆÚ“®‚µ‚½‚Æ‚«‚àA¬‚é‚±‚Æ‚ªo—ˆ‚éB
+			// ç§»å‹•å…ˆãŒ3æ®µç›®ã§ã€4æ®µç›®ã«ç§»å‹•ã—ãŸã¨ãã‚‚ã€æˆã‚‹ã“ã¨ãŒå‡ºæ¥ã‚‹ã€‚
 			checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
-				g_silverAttackBb.m_silverCheckTable_[c][sq] |= (g_silverAttackBb.GetControllBb(opp, checkSq) & TRank6BB);
+				this->m_silverCheckTable_[c][sq] |= (this->GetControllBb(opp, checkSq) & TRank6BB);
 			}
-			g_silverAttackBb.m_silverCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_silverAttackBb.GetControllBb(opp, sq));
+			this->m_silverCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | this->GetControllBb(opp, sq));
 		}
 	}
 }

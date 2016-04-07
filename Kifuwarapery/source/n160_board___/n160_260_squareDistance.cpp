@@ -1,16 +1,11 @@
-#include "../../header/n105_color___/n105_100_color.hpp"
+ï»¿#include "../../header/n105_color___/n105_100_color.hpp"
 #include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_260_squareDistance.hpp"
 
 
-extern SquareRelation g_squareRelation;
-extern KnightAttackBb g_knightAttackBb;
-extern SetMaskBb g_setMaskBb;
-
-
-// ‰½‚©‚Ì‹î‚Åˆêè‚Ås‚¯‚éˆÊ’uŠÖŒW‚É‚Â‚¢‚Ä‚Ì‹——£‚Ìƒe[ƒuƒ‹BŒj”n‚ÌˆÊ’u‚Í‹——£1‚Æ‚·‚éB
+// ä½•ã‹ã®é§’ã§ä¸€æ‰‹ã§è¡Œã‘ã‚‹ä½ç½®é–¢ä¿‚ã«ã¤ã„ã¦ã®è·é›¢ã®ãƒ†ãƒ¼ãƒ–ãƒ«ã€‚æ¡‚é¦¬ã®ä½ç½®ã¯è·é›¢1ã¨ã™ã‚‹ã€‚
 SquareDistance g_squareDistance;
 
 
@@ -19,7 +14,7 @@ void SquareDistance::InitSquareDistance() {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 			switch (g_squareRelation.GetSquareRelation(sq0, sq1)) {
 			case DirecMisc:
-				// DirecMisc ‚ÈŠÖŒW‚Í‘S‚Ä‹——£ 1 ‚É‚µ‚Ä‚àKPEŠwK‚É‚Í–â‘è–³‚¢‚ñ‚¾‚¯‚ê‚ÇB
+				// DirecMisc ãªé–¢ä¿‚ã¯å…¨ã¦è·é›¢ 1 ã«ã—ã¦ã‚‚KPEå­¦ç¿’ã«ã¯å•é¡Œç„¡ã„ã‚“ã ã‘ã‚Œã©ã€‚
 				this->m_squareDistance_[sq0][sq1] = 0;
 				if (g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(Black, sq0), sq1) || g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(White, sq0), sq1))
 				    this->m_squareDistance_[sq0][sq1] = 1;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include "../../header/n110_square__/n110_100_square.hpp"
@@ -7,7 +7,7 @@
 class SquareDistance {
 private:
 
-	// �����̋�ň��ōs����ʒu�֌W�ɂ��Ă̋����̃e�[�u���B�j�n�̈ʒu�͋���1�Ƃ���B
+	// 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
 	int m_squareDistance_[SquareNum][SquareNum];
 
 public:
@@ -21,3 +21,7 @@ public:
 	}
 
 };
+
+
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
+extern SquareDistance g_squareDistance;

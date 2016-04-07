@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "n160_100_bitboard.hpp"
 
@@ -10,7 +10,7 @@ public:
 
 	void Initialize();
 
-	// sq1, sq2 �̊�(sq1, sq2 �͊܂܂Ȃ�)�̃r�b�g�������� Bitboard
+	// sq1, sq2 の間(sq1, sq2 は含まない)のビットが立った Bitboard
 	inline Bitboard GetBetweenBB(const Square sq1, const Square sq2) const {
 		return this->m_betweenBB_[sq1][sq2];
 	}
@@ -18,4 +18,5 @@ public:
 };
 
 
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
 extern BetweenBb g_betweenBb;

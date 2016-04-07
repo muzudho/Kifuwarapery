@@ -1,16 +1,16 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n113_piece___/n113_100_pieceType.hpp"
 
 
 
-// pc ‚ª‰“Šu‹î‚Å‚ ‚é‚©‚ğ’²‚×‚é‚Ì‚Ég‚¢‚Ü‚·B
+// pc ãŒé éš”é§’ã§ã‚ã‚‹ã‹ã‚’èª¿ã¹ã‚‹ã®ã«ä½¿ã„ã¾ã™ã€‚
 const u32 g_isSliderVal = 0x60646064;
 
 class UtilPieceType {
 public:
 
-	// pc ‚ª‰“Šu‹î‚Å‚ ‚é‚©
+	// pc ãŒé éš”é§’ã§ã‚ã‚‹ã‹
 	static inline bool IsSlider(const PieceType pt) { return (g_isSliderVal & (1 << pt)) != 0; }
 
 };

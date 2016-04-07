@@ -175,7 +175,7 @@
     <ClInclude Include="header\n119_score___\n119_090_score.hpp" />
     <ClInclude Include="header\n119_score___\n119_100_utilScore.hpp" />
     <ClInclude Include="header\n119_score___\n119_200_pieceScore.hpp" />
-    <ClInclude Include="header\n160_board___\n160_050_configBits.hpp" />
+    <ClInclude Include="header\n160_board___\n160_108_slideBits.hpp" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
     <ClInclude Include="header\n160_board___\n160_110_silverAttackBb.hpp" />
     <ClInclude Include="header\n160_board___\n160_120_bishopAttackBb.hpp" />
@@ -264,7 +264,7 @@
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp" />
     <ClCompile Include="source\n119_score___\n119_100_utilScore.cpp" />
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp" />
-    <ClCompile Include="source\n160_board___\n160_050_configBits.cpp" />
+    <ClCompile Include="source\n160_board___\n160_108_slideBits.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />
     <ClCompile Include="source\n160_board___\n160_110_silverAttackBb.cpp" />
     <ClCompile Include="source\n160_board___\n160_120_bishopAttackBb.cpp" />

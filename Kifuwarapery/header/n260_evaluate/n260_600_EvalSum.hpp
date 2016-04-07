@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../header/n260_evaluate/n260_500_evalStorage.hpp"
 
@@ -68,10 +68,10 @@ struct EvalSum {
 	EvalSum operator + (const EvalSum& rhs) const { return EvalSum(*this) += rhs; }
 	EvalSum operator - (const EvalSum& rhs) const { return EvalSum(*this) -= rhs; }
 
-	// ehash —pB
+	// ehash ç”¨ã€‚
 	void encode() {
 #if defined USE_AVX2_EVAL
-		// EvalSum ‚Í atomic ‚ÉƒRƒs[‚³‚ê‚é‚Ì‚Å key ‚ª‡‚Á‚Ä‚¢‚ê‚Îƒf[ƒ^‚à‡‚Á‚Ä‚¢‚éB
+		// EvalSum ã¯ atomic ã«ã‚³ãƒ”ãƒ¼ã•ã‚Œã‚‹ã®ã§ key ãŒåˆã£ã¦ã„ã‚Œã°ãƒ‡ãƒ¼ã‚¿ã‚‚åˆã£ã¦ã„ã‚‹ã€‚
 #else
 		key ^= data[0] ^ data[1] ^ data[2];
 #endif
@@ -82,7 +82,7 @@ struct EvalSum {
 		std::array<std::array<s32, 2>, 3> p;
 		struct {
 			u64 data[3];
-			u64 key; // ehash—pB
+			u64 key; // ehashç”¨ã€‚
 		};
 #if defined USE_AVX2_EVAL
 		__m256i mm;

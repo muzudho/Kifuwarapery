@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
@@ -93,5 +93,5 @@ public:
 };
 
 
-// ƒNƒ‰ƒX’è‹`‚Ì‚ ‚Æ‚É‘‚­‚Æƒrƒ‹ƒh‚Å‚«‚é‚º™iO‚‘Oj
+// ã‚¯ãƒ©ã‚¹å®šç¾©ã®ã‚ã¨ã«æ›¸ãã¨ãƒ“ãƒ«ãƒ‰ã§ãã‚‹ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 extern const InFrontMaskBb g_inFrontMaskBb;

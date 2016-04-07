@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../n240_tt______/n240_280_tTEntry.hpp"
 

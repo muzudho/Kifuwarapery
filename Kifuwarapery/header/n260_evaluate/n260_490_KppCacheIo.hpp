@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../../header/n260_evaluate/n260_400_EvaluaterBase.hpp"
 

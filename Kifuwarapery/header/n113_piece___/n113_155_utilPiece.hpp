@@ -1,14 +1,14 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n113_piece___/n113_150_piece.hpp"
 
 
 class UtilPiece {
 public:
-	// GetP == Empty ‚Ì‚Æ‚«APieceType ‚Í OccuPied ‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ÅA
-	// Position::bbOf(UtilPiece::pieceToPieceType(GetP)) ‚Æ‚·‚é‚ÆA
-	// Position::emptyBB() ‚Å‚Í‚È‚­ Position::occupiedBB() ‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ÅA
-	// ’ˆÓ‚·‚é‚±‚ÆBo—ˆ‚ê‚ÎC³‚µ‚½‚¢B
+	// GetP == Empty ã®ã¨ãã€PieceType ã¯ OccuPied ã«ãªã£ã¦ã—ã¾ã†ã®ã§ã€
+	// Position::bbOf(UtilPiece::pieceToPieceType(GetP)) ã¨ã™ã‚‹ã¨ã€
+	// Position::emptyBB() ã§ã¯ãªã Position::occupiedBB() ã«ãªã£ã¦ã—ã¾ã†ã®ã§ã€
+	// æ³¨æ„ã™ã‚‹ã“ã¨ã€‚å‡ºæ¥ã‚Œã°ä¿®æ­£ã—ãŸã„ã€‚
 	static inline PieceType ToPieceType(const Piece p) { return static_cast<PieceType>(p & 15); }
 
 
@@ -24,6 +24,6 @@ public:
 	static inline Piece FromColorAndPieceType(const Color c, const PieceType pt) { return static_cast<Piece>((c << 4) | pt); }
 
 
-	// pc ‚ª‰“Šu‹î‚Å‚ ‚é‚©
+	// pc ãŒé éš”é§’ã§ã‚ã‚‹ã‹
 	static inline bool IsSlider(const Piece     pc) { return (g_isSliderVal & (1 << pc)) != 0; }
 };

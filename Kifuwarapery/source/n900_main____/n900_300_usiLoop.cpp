@@ -1,4 +1,4 @@
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+ï»¿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
@@ -14,7 +14,7 @@
 
 #if !defined MINIMUL
 // for debug
-// w‚µè¶¬‚Ì‘¬“x‚ğŒv‘ª
+// æŒ‡ã—æ‰‹ç”Ÿæˆã®é€Ÿåº¦ã‚’è¨ˆæ¸¬
 void measureGenerateMoves(const Position& pos) {
 	pos.Print();
 
@@ -130,7 +130,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 #endif
 			for (int i = 0; i < 100; ++i)
 			{
-				g_randomTimeSeed(); // Å‰‚Í—”‚É•Î‚è‚ª‚ ‚é‚©‚àB­‚µ‰ñ‚µ‚Ä‚¨‚­B
+				g_randomTimeSeed(); // æœ€åˆã¯ä¹±æ•°ã«åã‚ŠãŒã‚ã‚‹ã‹ã‚‚ã€‚å°‘ã—å›ã—ã¦ãŠãã€‚
 			}
 		}
 		else if (token == "usi") {
@@ -162,7 +162,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		}
 #endif
 #if !defined MINIMUL
-		// ˆÈ‰ºAƒfƒoƒbƒO—p
+		// ä»¥ä¸‹ã€ãƒ‡ãƒãƒƒã‚°ç”¨
 		else if (token == "bench") { Benchmark(pos); }
 		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
@@ -172,16 +172,16 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
 	} while (token != "quit" && argc == 1);
 
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-	// •]‰¿’lƒtƒ@ƒCƒ‹‚ğ‘‚«o‚·w’è‚È‚ç
+	// è©•ä¾¡å€¤ãƒ•ã‚¡ã‚¤ãƒ«ã‚’æ›¸ãå‡ºã™æŒ‡å®šãªã‚‰
 	if (searcher.m_options["Write_Synthesized_Eval"])
 	{
-		// ƒVƒ“ƒZƒTƒCƒYƒh•]‰¿‚ğ‘‚«o‚µ‚Ü‚·B
+		// ã‚·ãƒ³ã‚»ã‚µã‚¤ã‚ºãƒ‰è©•ä¾¡ã‚’æ›¸ãå‡ºã—ã¾ã™ã€‚
 		EvalStorage::writeSynthesized(searcher.m_options["Eval_Dir"]);
 	}
 
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 	searcher.m_threads.WaitForThinkFinished();
 }

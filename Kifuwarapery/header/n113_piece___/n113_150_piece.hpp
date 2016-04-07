@@ -1,17 +1,17 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n113_piece___/n113_105_utilPieceType.hpp"
 
 
 
 enum Piece {
-	// B* ‚É 16 ‚ğ‰ÁZ‚·‚é‚±‚Æ‚ÅAW* ‚ğ•\‚·B
-	// Promoted ‚ğ‰ÁZ‚·‚é‚±‚Æ‚ÅA¬‚è‚ğ•\‚·B
+	// B* ã« 16 ã‚’åŠ ç®—ã™ã‚‹ã“ã¨ã§ã€W* ã‚’è¡¨ã™ã€‚
+	// Promoted ã‚’åŠ ç®—ã™ã‚‹ã“ã¨ã§ã€æˆã‚Šã‚’è¡¨ã™ã€‚
 	Empty = 0, UnPromoted = 0, Promoted = 8,
 	BPawn = 1, BLance, BKnight, BSilver, BBishop, BRook, BGold, BKing,
 	BProPawn, BProLance, BProKnight, BProSilver, BHorse, BDragon, // BDragon = 14
 	WPawn = 17, WLance, WKnight, WSilver, WBishop, WRook, WGold, WKing,
 	WProPawn, WProLance, WProKnight, WProSilver, WHorse, WDragon,
-	PieceNone // PieceNone = 31  ‚±‚ê‚ğ 32 ‚É‚µ‚½•û‚ª‘½d”z—ñ‚Ì‚Æ‚«‚É—L—˜‚©B
+	PieceNone // PieceNone = 31  ã“ã‚Œã‚’ 32 ã«ã—ãŸæ–¹ãŒå¤šé‡é…åˆ—ã®ã¨ãã«æœ‰åˆ©ã‹ã€‚
 };
 OverloadEnumOperators(Piece);

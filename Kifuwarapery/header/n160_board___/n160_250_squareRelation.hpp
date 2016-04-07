@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include "../n110_square__/n110_300_direction.hpp"
@@ -6,7 +6,7 @@
 
 class SquareRelation {
 private:
-	// 2�̈ʒu�֌W�̃e�[�u��
+	// 2つの位置関係のテーブル
 	Direction m_squareRelation_[SquareNum][SquareNum];
 
 public:
@@ -18,7 +18,7 @@ public:
 	}
 
 
-	// from, to, ksq �� �c���΂߂̓��ꃉ�C����ɂ���� true ��Ԃ��B
+	// from, to, ksq が 縦横斜めの同一ライン上にあれば true を返す。
 	template <bool FROM_KSQ_NEVER_BE_DIRECMISC>
 	inline bool IsAligned(const Square from, const Square to, const Square ksq) const {
 
@@ -34,3 +34,7 @@ public:
 	}
 
 };
+
+
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
+extern SquareRelation g_squareRelation;

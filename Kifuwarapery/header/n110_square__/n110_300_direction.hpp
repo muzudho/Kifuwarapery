@@ -1,19 +1,19 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n110_square__/n110_250_squareDelta.hpp"
 
 
-// ˆÊ’uŠÖŒWA•ûŒü
-// ƒ{ƒiƒ“ƒU‚»‚Ì‚Ü‚Ü
-// ‚Å‚à‚ ‚Ü‚èg‚í‚È‚¢‚Ì‚Å•’Ê‚Ì enum ‚Æ“¯—l‚É 0 ‚©‚ç‡‚É’l‚ğ•t‚¯‚Äs‚¯‚Î—Ç‚¢‚Æv‚¤B
+// ä½ç½®é–¢ä¿‚ã€æ–¹å‘
+// ãƒœãƒŠãƒ³ã‚¶ãã®ã¾ã¾
+// ã§ã‚‚ã‚ã¾ã‚Šä½¿ã‚ãªã„ã®ã§æ™®é€šã® enum ã¨åŒæ§˜ã« 0 ã‹ã‚‰é †ã«å€¤ã‚’ä»˜ã‘ã¦è¡Œã‘ã°è‰¯ã„ã¨æ€ã†ã€‚
 enum Direction {
-	DirecMisc = Binary<  0>::value, // cA‰¡AÎ‚ß‚ÌˆÊ’u‚É–³‚¢ê‡
-	DirecFile = Binary< 10>::value, // c
-	DirecRank = Binary< 11>::value, // ‰¡
-	DirecDiagNESW = Binary<100>::value, // ‰Eã‚©‚ç¶‰º
-	DirecDiagNWSE = Binary<101>::value, // ¶ã‚©‚ç‰E‰º
-	DirecCross = Binary< 10>::value, // cA‰¡
-	DirecDiag = Binary<100>::value, // Î‚ß
+	DirecMisc = Binary<  0>::value, // ç¸¦ã€æ¨ªã€æ–œã‚ã®ä½ç½®ã«ç„¡ã„å ´åˆ
+	DirecFile = Binary< 10>::value, // ç¸¦
+	DirecRank = Binary< 11>::value, // æ¨ª
+	DirecDiagNESW = Binary<100>::value, // å³ä¸Šã‹ã‚‰å·¦ä¸‹
+	DirecDiagNWSE = Binary<101>::value, // å·¦ä¸Šã‹ã‚‰å³ä¸‹
+	DirecCross = Binary< 10>::value, // ç¸¦ã€æ¨ª
+	DirecDiag = Binary<100>::value, // æ–œã‚
 };
 OverloadEnumOperators(Direction);

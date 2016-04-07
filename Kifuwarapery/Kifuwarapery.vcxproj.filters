@@ -378,9 +378,6 @@
     <ClInclude Include="header\n119_score___\n119_200_pieceScore.hpp">
       <Filter>header\n119_score___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_050_configBits.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -442,6 +439,9 @@
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_106_inFrontMaskBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_108_slideBits.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -554,9 +554,6 @@
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
       <Filter>source\n119_score___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_050_configBits.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n160_board___\n160_400_printBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
@@ -615,6 +612,9 @@
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_106_inFrontMaskBb.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_108_slideBits.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

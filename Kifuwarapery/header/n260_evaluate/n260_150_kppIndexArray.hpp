@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <algorithm> //std::upper_bound
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
@@ -28,7 +28,7 @@ public:
 	}
 
 	inline static bool IsBlack(const int i) {
-		// f_xxx ‚Æ e_xxx ‚ªŒğŒİ‚É”z—ñ‚ÉŠi”[‚³‚ê‚Ä‚¢‚é‚Ì‚ÅAƒCƒ“ƒfƒbƒNƒX‚ª‹ô”‚Ì‚Í Black
+		// f_xxx ã¨ e_xxx ãŒäº¤äº’ã«é…åˆ—ã«æ ¼ç´ã•ã‚Œã¦ã„ã‚‹ã®ã§ã€ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒå¶æ•°ã®æ™‚ã¯ Black
 		return !((std::upper_bound(std::begin(g_arrKPPIndex), std::end(g_arrKPPIndex), i) - 1) - std::begin(g_arrKPPIndex) & 1);
 	}
 
@@ -49,7 +49,7 @@ public:
 
 
 	inline static int ToOpponentBegin(const int i) {
-		// todo: ‚‘¬‰»
+		// todo: é«˜é€ŸåŒ–
 		return ToOpponentBegin(i, UtilKppIndex::IsBlack(i));
 	}
 

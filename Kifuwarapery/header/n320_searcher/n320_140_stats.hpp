@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 
 template <bool Gain>
 class Stats {
@@ -23,7 +23,7 @@ public:
 	}
 
 private:
-	// [isDrop][piece][square] Ç∆Ç∑ÇÈÅB
+	// [isDrop][piece][square] „Å®„Åô„Çã„ÄÇ
 	Score m_table_[2][PieceNone][SquareNum];
 };
 

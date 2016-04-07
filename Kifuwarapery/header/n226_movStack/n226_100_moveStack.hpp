@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 struct MoveStack {
@@ -6,6 +6,6 @@ struct MoveStack {
 	int score;
 };
 
-// insertionSort() ‚â std::sort() ‚Å•K—v
+// insertionSort() ã‚„ std::sort() ã§å¿…è¦
 inline bool operator < (const MoveStack& f, const MoveStack& s) { return f.score < s.score; }
 inline bool operator > (const MoveStack& f, const MoveStack& s) { return f.score > s.score; }

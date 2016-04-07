@@ -1,24 +1,17 @@
-#include "../../header/n160_board___/n160_050_configBits.hpp"
+ï»¿#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../../header/n160_board___/n160_108_slideBits.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
-#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 
 
-//extern const FileMaskBb g_fileMaskBb;
-
-
-extern ConfigBits g_configBits;
-extern SetMaskBb g_setMaskBb;
-
-
-// ‚±‚ê‚ç‚Íˆê“x’l‚ğİ’è‚µ‚½‚ç“ñ“x‚Æ•ÏX‚µ‚È‚¢B
-RookAttackBb g_rookAttackBb;//–{“–‚Íconst ‚É‚µ‚½‚¢‚ªA‚â‚è•û‚ª‚í‚©‚ç‚È‚¢™ C2373ƒGƒ‰[‚É‚È‚é‚ñ‚¾‚º™
+// ã“ã‚Œã‚‰ã¯ä¸€åº¦å€¤ã‚’è¨­å®šã—ãŸã‚‰äºŒåº¦ã¨å¤‰æ›´ã—ãªã„ã€‚
+RookAttackBb g_rookAttackBb;//æœ¬å½“ã¯const ã«ã—ãŸã„ãŒã€ã‚„ã‚Šæ–¹ãŒã‚ã‹ã‚‰ãªã„â˜† C2373ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã‚“ã ãœâ˜†
 
 
 #if defined FIND_MAGIC
-// square ‚ÌˆÊ’u‚Ì rook, bishop ‚»‚ê‚¼‚ê‚ÌMagic Bitboard ‚Ég—p‚·‚éƒ}ƒWƒbƒNƒiƒ“ƒo[‚ğŒ©‚Â‚¯‚éB
-// isBishop  : true ‚È‚ç bishop, false ‚È‚ç rook ‚Ìƒ}ƒWƒbƒNƒiƒ“ƒo[‚ğŒ©‚Â‚¯‚éB
+// square ã®ä½ç½®ã® rook, bishop ãã‚Œãã‚Œã®Magic Bitboard ã«ä½¿ç”¨ã™ã‚‹ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ã‚’è¦‹ã¤ã‘ã‚‹ã€‚
+// isBishop  : true ãªã‚‰ bishop, false ãªã‚‰ rook ã®ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ã‚’è¦‹ã¤ã‘ã‚‹ã€‚
 u64 RookAttackBb::findMagicRook(const Square square) {
 	Bitboard occupied[1 << 14];
 	Bitboard attack[1 << 14];
@@ -26,7 +19,7 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 	Bitboard mask = this->RookBlockMaskCalc(square);
 	int num1s = g_rookBlockBits[square];
 
-	// n bit ‚Ì‘S‚Ä‚Ì”š (—˜‚«‚Ì‚ ‚éƒ}ƒX‚Ì‘S‚Ä‚Ì 0 or 1 ‚Ì‘g‚İ‡‚í‚¹)
+	// n bit ã®å…¨ã¦ã®æ•°å­— (åˆ©ãã®ã‚ã‚‹ãƒã‚¹ã®å…¨ã¦ã® 0 or 1 ã®çµ„ã¿åˆã‚ã›)
 	for (int i = 0; i < (1 << num1s); ++i) {
 		occupied[i] = g_setMaskBb.IndexToOccupied(i, num1s, mask);
 		attack[i] = RookAttackCalc(square, occupied[i]);
@@ -36,7 +29,7 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 		const u64 magic = g_mt64bit.GetRandomFewBits();
 		bool fail = false;
 
-		// ‚±‚ê‚Í–³‚­‚Ä‚à—Ç‚¢‚¯‚ÇA­‚µƒ}ƒWƒbƒNƒiƒ“ƒo[‚ªŒ©‚Â‚©‚é‚Ì‚ª‘‚­‚È‚é‚Í‚¸B
+		// ã“ã‚Œã¯ç„¡ãã¦ã‚‚è‰¯ã„ã‘ã©ã€å°‘ã—ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ãŒè¦‹ã¤ã‹ã‚‹ã®ãŒæ—©ããªã‚‹ã¯ãšã€‚
 		if (count1s((mask.MergeP() * magic) & UINT64_C(0xfff0000000000000)) < 6)
 			continue;
 
@@ -60,7 +53,7 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 #endif // #if defined FIND_MAGIC
 
 
-// square ‚Ìƒ}ƒX‚É‚¨‚¯‚éAáŠQ•¨‚ğ’²‚×‚é•K—v‚ª‚ ‚éêŠ‚ğ’²‚×‚Ä Bitboard ‚Å•Ô‚·B
+// square ã®ãƒã‚¹ã«ãŠã‘ã‚‹ã€éšœå®³ç‰©ã‚’èª¿ã¹ã‚‹å¿…è¦ãŒã‚ã‚‹å ´æ‰€ã‚’èª¿ã¹ã¦ Bitboard ã§è¿”ã™ã€‚
 Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) const {
 	Bitboard result = g_fileMaskBb.GetSquareFileMask(square) ^ g_rankMaskBb.GetSquareRankMask(square);
 	if (UtilSquare::ToFile(square) != FileA) { result &= ~g_fileMaskBb.GetFileMask<FileA>(); }
@@ -71,8 +64,8 @@ Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) const {
 }
 
 
-// Rook or Bishop ‚Ì—˜‚«‚Ì”ÍˆÍ‚ğ’²‚×‚Ä bitboard ‚Å•Ô‚·B
-// occupied  áŠQ•¨‚ª‚ ‚éƒ}ƒX‚ª 1 ‚Ì bitboard
+// Rook or Bishop ã®åˆ©ãã®ç¯„å›²ã‚’èª¿ã¹ã¦ bitboard ã§è¿”ã™ã€‚
+// occupied  éšœå®³ç‰©ãŒã‚ã‚‹ãƒã‚¹ãŒ 1 ã® bitboard
 Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occupied) const {
 	const SquareDelta deltaArray[2][4] = { { DeltaN, DeltaS, DeltaE, DeltaW },{ DeltaNE, DeltaSE, DeltaSW, DeltaNW } };
 	Bitboard result = Bitboard::CreateAllZeroBB();
@@ -93,23 +86,23 @@ Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occup
 
 void RookAttackBb::InitRookAttacks()
 {
-	// Šp‚©A”òÔ‚©
+	// è§’ã‹ã€é£›è»Šã‹
 	auto* attacks = g_rookAttackBb.m_controllBb_;
-	auto* attackIndex = g_configBits.m_rookAttackIndex;
+	auto* attackIndex = g_rookAttackBb.m_rookAttackIndex;
 	auto* blockMask = g_rookAttackBb.m_rookBlockMask_;
-	auto* shift = g_configBits.m_rookShiftBits;
+	auto* shift = this->m_rookShiftBits_;
 #if defined HAVE_BMI2
 #else
-	auto* magic = g_configBits.m_rookMagic;
+	auto* magic = this->m_rookMagic_;
 #endif
 
-	// Šeƒ}ƒX‚É‚Â‚¢‚Ä
+	// å„ãƒã‚¹ã«ã¤ã„ã¦
 	int index = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		blockMask[sq] = this->RookBlockMaskCalc(sq);
 		attackIndex[sq] = index;
 
-		const int num1s = g_configBits.m_rookBlockBits[sq];
+		const int num1s = this->m_rookBlockBits_[sq];
 		for (int i = 0; i < (1 << num1s); ++i)
 		{
 			const Bitboard occupied = g_setMaskBb.IndexToOccupied(i, num1s, blockMask[sq]);

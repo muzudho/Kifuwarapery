@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 
-// �]���֐��e�[�u���̃I�t�Z�b�g�B
-// f_xxx �������̋�Ae_xxx ���G�̋�
-// Bonanza �̉e���Ŏ����� 0 �̏ꍇ�̃C���f�b�N�X�����݂��邪�A�Q�Ƃ��鎖�͖����B
-// todo: ������ 0 �̈ʒu���l�߂ăe�[�u���������ł�����������B(�L���b�V���ɏ����͏��₷��?)
+// 評価関数テーブルのオフセット。
+// f_xxx が味方の駒、e_xxx が敵の駒
+// Bonanza の影響で持ち駒 0 の場合のインデックスが存在するが、参照する事は無い。
+// todo: 持ち駒 0 の位置を詰めてテーブルを少しでも小さくする。(キャッシュに少しは乗りやすい?)
 enum {
 	f_hand_pawn = 0, // 0
 	e_hand_pawn = f_hand_pawn + 19,

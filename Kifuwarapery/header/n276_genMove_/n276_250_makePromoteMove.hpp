@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
@@ -6,8 +6,8 @@
 #include "../n276_genMove_/n276_200_promoteMode.hpp"
 
 
-// MoveType ‚É‚æ‚Á‚Äw‚µè¶¬ŠÖ”‚ğg‚¢•ª‚¯‚éB
-// Drop, Check, Evasion, ‚Ìê‡‚Í•Ê‚Åw‚µè¶¬‚ğs‚¤B
+// MoveType ã«ã‚ˆã£ã¦æŒ‡ã—æ‰‹ç”Ÿæˆé–¢æ•°ã‚’ä½¿ã„åˆ†ã‘ã‚‹ã€‚
+// Drop, Check, Evasion, ã®å ´åˆã¯åˆ¥ã§æŒ‡ã—æ‰‹ç”Ÿæˆã‚’è¡Œã†ã€‚
 template <MoveType MT, PromoteMode PM>
 inline Move GetSelectedMakeMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
 	static_assert(PM == Promote || PM == NonPromote, "");

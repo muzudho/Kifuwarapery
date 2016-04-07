@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n276_genMove_/n276_150_moveList.hpp"
 
 
 enum PromoteMode {
-	Promote,         // •K‚¸¬‚é
-	NonPromote,      // •K‚¸•s¬
+	Promote,         // å¿…ãšæˆã‚‹
+	NonPromote,      // å¿…ãšä¸æˆ
 	PromoteModeNone
 };

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 

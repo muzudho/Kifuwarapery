@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include "../n160_board___/n160_100_bitboard.hpp"
@@ -48,7 +48,7 @@ public:
 			: /*F == FileA ?*/ this->m_A);
 	}
 
-	// ’¼Úƒe[ƒuƒ‹ˆø‚«‚·‚×‚«‚¾‚Æv‚¤B
+	// ç›´æ¥ãƒ†ãƒ¼ãƒ–ãƒ«å¼•ãã™ã¹ãã ã¨æ€ã†ã€‚
 	inline Bitboard GetSquareFileMask(const Square sq) const {
 		const File f = UtilSquare::ToFile(sq);
 		return this->GetFileMask(f);
@@ -57,5 +57,5 @@ public:
 };
 
 
-// ƒNƒ‰ƒX’è‹`‚Ì‚ ‚Æ‚É‘‚­‚Æƒrƒ‹ƒh‚Å‚«‚é‚º™iO‚‘Oj
+// ã‚¯ãƒ©ã‚¹å®šç¾©ã®ã‚ã¨ã«æ›¸ãã¨ãƒ“ãƒ«ãƒ‰ã§ãã‚‹ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 extern const FileMaskBb g_fileMaskBb;

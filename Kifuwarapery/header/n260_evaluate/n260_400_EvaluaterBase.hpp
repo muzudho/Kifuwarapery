@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n160_board___/n160_260_squareDistance.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
@@ -8,7 +8,7 @@
 
 
 
-extern SquareDistance g_squareDistance;
+//extern SquareDistance g_squareDistance;
 
 
 
@@ -31,25 +31,25 @@ inline std::array<Tl, 2> operator -= (std::array<Tl, 2>& lhs, const std::array<T
 template <typename KPPType, typename KKPType, typename KKType>
 struct EvaluaterBase {
 
-	static const int m_R_Mid = 8; // ‘Š‘ÎˆÊ’u‚Ì’†S‚Ìindex
+	static const int m_R_Mid = 8; // ç›¸å¯¾ä½ç½®ã®ä¸­å¿ƒã®index
 
-	constexpr int MaxWeight() const { return 1 << 22; } // KPE©‘Ì‚ª1/32‚ÌŠñ—^BX‚ÉKPE‚Ì‰“Šu‹î‚Ì—˜‚«‚ª1ƒ}ƒX‚²‚Æ‚É1/2‚ÉŒ¸Š‚·‚é•ª(Å‘å‚ÅKEE‚ÌÛ‚É8ƒ}ƒX—£‚ê‚ª2–‡)
-														// X‚Éd‚İ‚ğ‰º‚°‚éê‡AMaxWeight‚ğX‚É‘å‚«‚­‚µ‚Ä‚¨‚­•K—v‚ª‚ ‚éB
-														// ‚È‚º‚© clang ‚Å static const int MaxWeight ‚ğg‚Á‚Ä‚à Undefined symbols for architecture x86_64 ‚ÆŒ¾‚í‚ê‚éB
+	constexpr int MaxWeight() const { return 1 << 22; } // KPEè‡ªä½“ãŒ1/32ã®å¯„ä¸ã€‚æ›´ã«KPEã®é éš”é§’ã®åˆ©ããŒ1ãƒã‚¹ã”ã¨ã«1/2ã«æ¸›è¡°ã™ã‚‹åˆ†(æœ€å¤§ã§KEEã®éš›ã«8ãƒã‚¹é›¢ã‚ŒãŒ2æš)
+														// æ›´ã«é‡ã¿ã‚’ä¸‹ã’ã‚‹å ´åˆã€MaxWeightã‚’æ›´ã«å¤§ããã—ã¦ãŠãå¿…è¦ãŒã‚ã‚‹ã€‚
+														// ãªãœã‹ clang ã§ static const int MaxWeight ã‚’ä½¿ã£ã¦ã‚‚ Undefined symbols for architecture x86_64 ã¨è¨€ã‚ã‚Œã‚‹ã€‚
 	constexpr int TurnWeight() const { return 8; }
 
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	// KPP
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-	// ç’·‚É”z—ñ‚ğŠm•Û‚µ‚Ä‚¢‚é‚ªA‘ÎÌ‚ÈŠÖŒW‚É‚ ‚é‚Íí‚Éá‚¢index‚Ì•û‚ÉƒAƒNƒZƒX‚·‚é‚±‚Æ‚É‚·‚éB
-	// —á‚¦‚Î kpp ‚¾‚Á‚½‚çAk ‚ª—Dæ“I‚É¬‚³‚­‚È‚é‚æ‚¤‚·‚éB¶‰E‚Ì‘ÎÌ‚àŠÜ‚ß‚ÄƒAƒNƒZƒXˆÊ’u‚ğŒˆ‚ß‚éB
-	// ‚½‚¾‚µAkkp ‚ÉŠÖ‚·‚é€–Ú (kkp, r_kkp_b, r_kkp_h) ‚Ì‚İAGetP ‚Í–¡•û‚Ì‹î‚Æ‚µ‚Äˆµ‚¤‚Ì‚ÅAk0 < k1 ‚Æ‚È‚é‚Æ‚ÍŒÀ‚ç‚È‚¢B
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+	// å†—é•·ã«é…åˆ—ã‚’ç¢ºä¿ã—ã¦ã„ã‚‹ãŒã€å¯¾ç§°ãªé–¢ä¿‚ã«ã‚ã‚‹æ™‚ã¯å¸¸ã«è‹¥ã„indexã®æ–¹ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ã“ã¨ã«ã™ã‚‹ã€‚
+	// ä¾‹ãˆã° kpp ã ã£ãŸã‚‰ã€k ãŒå„ªå…ˆçš„ã«å°ã•ããªã‚‹ã‚ˆã†ã™ã‚‹ã€‚å·¦å³ã®å¯¾ç§°ã‚‚å«ã‚ã¦ã‚¢ã‚¯ã‚»ã‚¹ä½ç½®ã‚’æ±ºã‚ã‚‹ã€‚
+	// ãŸã ã—ã€kkp ã«é–¢ã™ã‚‹é …ç›® (kkp, r_kkp_b, r_kkp_h) ã®ã¿ã€GetP ã¯å‘³æ–¹ã®é§’ã¨ã—ã¦æ‰±ã†ã®ã§ã€k0 < k1 ã¨ãªã‚‹ã¨ã¯é™ã‚‰ãªã„ã€‚
 	struct KPPElements {
-		// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
-		KPPType dummy; // ˆêŸŒ³”z—ñ‚É•ÏŠ·‚µ‚½‚Æ‚«A•„†‚Å += ‚ğ•\‚·‚æ‚¤‚É‚µ‚Ä‚¢‚é‚ªAindex = 0 ‚Ì‚Í•„†‚ğ•t‚¯‚ç‚ê‚È‚¢‚Ì‚ÅAƒ_ƒ~[‚ğ’u‚­B
+		// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
+		KPPType dummy; // ä¸€æ¬¡å…ƒé…åˆ—ã«å¤‰æ›ã—ãŸã¨ãã€ç¬¦å·ã§ += ã‚’è¡¨ã™ã‚ˆã†ã«ã—ã¦ã„ã‚‹ãŒã€index = 0 ã®æ™‚ã¯ç¬¦å·ã‚’ä»˜ã‘ã‚‰ã‚Œãªã„ã®ã§ã€ãƒ€ãƒŸãƒ¼ã‚’ç½®ãã€‚
 
 		KPPType kpp[SquareNoLeftNum][fe_end][fe_end];
-		// ‘Š‘ÎˆÊ’u‚Í[file][rank]‚Ì‡
+		// ç›¸å¯¾ä½ç½®ã¯[file][rank]ã®é †
 		KPPType r_kpp_bb[PieceNone][17][17][PieceNone][17][17];
 		KPPType r_kpp_hb[fe_hand_end][PieceNone][17][17];
 		KPPType xpp[FileNoLeftNum][fe_end][fe_end];
@@ -58,8 +58,8 @@ struct EvaluaterBase {
 		KPPType r_pp_bb[PieceNone][PieceNone][17][17];
 		KPPType r_pp_hb[fe_hand_end][PieceNone];
 
-		// e ‚Í Effect ‚Ì“ª•¶š‚Å—˜‚«‚ğ•\‚·B(Control = —˜‚« ‚Æ‚¢‚¤à‚à‚ ‚èB)
-		// todo: ‹Ê‚Ì—˜‚«‚Í‘S‚­–³‹‚µ‚Ä‚¢‚é‚¯‚ê‚ÇA‚»‚ê‚Å—Ç‚¢‚Ì‚©H
+		// e ã¯ Effect ã®é ­æ–‡å­—ã§åˆ©ãã‚’è¡¨ã™ã€‚(Control = åˆ©ã ã¨ã„ã†èª¬ã‚‚ã‚ã‚Šã€‚)
+		// todo: ç‰ã®åˆ©ãã¯å…¨ãç„¡è¦–ã—ã¦ã„ã‚‹ã‘ã‚Œã©ã€ãã‚Œã§è‰¯ã„ã®ã‹ï¼Ÿ
 		KPPType kpe[SquareNoLeftNum][fe_end][ColorNum][SquareNum];
 		KPPType kee[SquareNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
 		KPPType r_kpe_b[PieceNone][17][17][ColorNum][17][17];
@@ -75,15 +75,15 @@ struct EvaluaterBase {
 		KPPType r_pe_h[fe_hand_end][ColorNum];
 		KPPType r_ee[ColorNum][ColorNum][17][17];
 	};
-	// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
+	// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
 	KPPElements kpps;
 
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	// KKP
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	struct KKPElements {
-		// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
-		KKPType dummy; // ˆêŸŒ³”z—ñ‚É•ÏŠ·‚µ‚½‚Æ‚«A•„†‚Å += ‚ğ•\‚·‚æ‚¤‚É‚µ‚Ä‚¢‚é‚ªAindex = 0 ‚Ì‚Í•„†‚ğ•t‚¯‚ç‚ê‚È‚¢‚Ì‚ÅAƒ_ƒ~[‚ğ’u‚­B
+		// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
+		KKPType dummy; // ä¸€æ¬¡å…ƒé…åˆ—ã«å¤‰æ›ã—ãŸã¨ãã€ç¬¦å·ã§ += ã‚’è¡¨ã™ã‚ˆã†ã«ã—ã¦ã„ã‚‹ãŒã€index = 0 ã®æ™‚ã¯ç¬¦å·ã‚’ä»˜ã‘ã‚‰ã‚Œãªã„ã®ã§ã€ãƒ€ãƒŸãƒ¼ã‚’ç½®ãã€‚
 		KKPType kkp[SquareNoLeftNum][SquareNum][fe_end];
 		KKPType kp[SquareNoLeftNum][fe_end];
 		KKPType r_kkp_b[17][17][PieceNone][17][17];
@@ -96,32 +96,32 @@ struct EvaluaterBase {
 		KKPType r_kke[17][17][ColorNum][17][17];
 		KKPType r_ke[ColorNum][17][17];
 	};
-	// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
+	// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
 	KKPElements kkps;
 
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	// KKE
-	//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+	//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 	struct KKElements {
-		// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
-		KKType dummy; // ˆêŸŒ³”z—ñ‚É•ÏŠ·‚µ‚½‚Æ‚«A•„†‚Å += ‚ğ•\‚·‚æ‚¤‚É‚µ‚Ä‚¢‚é‚ªAindex = 0 ‚Ì‚Í•„†‚ğ•t‚¯‚ç‚ê‚È‚¢‚Ì‚ÅAƒ_ƒ~[‚ğ’u‚­B
+		// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
+		KKType dummy; // ä¸€æ¬¡å…ƒé…åˆ—ã«å¤‰æ›ã—ãŸã¨ãã€ç¬¦å·ã§ += ã‚’è¡¨ã™ã‚ˆã†ã«ã—ã¦ã„ã‚‹ãŒã€index = 0 ã®æ™‚ã¯ç¬¦å·ã‚’ä»˜ã‘ã‚‰ã‚Œãªã„ã®ã§ã€ãƒ€ãƒŸãƒ¼ã‚’ç½®ãã€‚
 		KKType kk[SquareNoLeftNum][SquareNum];
 		KKType k[SquareNoLeftNum];
 		KKType r_kk[17][17];
 	};
-	// iO‚‘Ojƒtƒ@ƒCƒ‹–¼‚É˜A“®‚µ‚Ä‚¢‚é‚Ì‚ÅA“ª‚É m_ ‚ğ•t‚¯‚Ä‚Í‚¢‚¯‚È‚¢™I
+	// ï¼ˆï¼¾ï½‘ï¼¾ï¼‰ãƒ•ã‚¡ã‚¤ãƒ«åã«é€£å‹•ã—ã¦ã„ã‚‹ã®ã§ã€é ­ã« m_ ã‚’ä»˜ã‘ã¦ã¯ã„ã‘ãªã„â˜†ï¼
 	KKElements kks;
 
-	// ‚±‚ê‚ç‚Íª‚Ìƒƒ“ƒo•Ï”‚ÉˆêŸŒ³”z—ñ‚Æ‚µ‚ÄƒAƒNƒZƒX‚·‚éˆ×‚Ì‚à‚ÌB
-	// ”z—ñ‚Ì—v‘f”‚Íã‚Ìstruct‚ÌƒTƒCƒY‚©‚ç•ª‚©‚é‚Í‚¸‚¾‚ª–³–¼struct‚È‚Ì‚Åsizeof()g‚¢‚É‚­‚¢‚©‚çg‚í‚È‚¢B
-	// æ“ª‚³‚¦•ª‚©‚ê‚Î—Ç‚¢‚Ì‚Å—v‘f”1‚Å—Ç‚¢B
+	// ã“ã‚Œã‚‰ã¯â†‘ã®ãƒ¡ãƒ³ãƒå¤‰æ•°ã«ä¸€æ¬¡å…ƒé…åˆ—ã¨ã—ã¦ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ç‚ºã®ã‚‚ã®ã€‚
+	// é…åˆ—ã®è¦ç´ æ•°ã¯ä¸Šã®structã®ã‚µã‚¤ã‚ºã‹ã‚‰åˆ†ã‹ã‚‹ã¯ãšã ãŒç„¡åstructãªã®ã§sizeof()ä½¿ã„ã«ãã„ã‹ã‚‰ä½¿ã‚ãªã„ã€‚
+	// å…ˆé ­ã•ãˆåˆ†ã‹ã‚Œã°è‰¯ã„ã®ã§è¦ç´ æ•°1ã§è‰¯ã„ã€‚
 	KPPType*	GetKppOneArrayFirst(const u64 i) { return reinterpret_cast<KPPType*>(&kpps) + i; }
 	KKPType*	GetKkpOneArrayFirst(const u64 i) { return reinterpret_cast<KKPType*>(&kkps) + i; }
 	KKType*		GetKkOneArrayFirst(const u64 i) { return reinterpret_cast<KKType*>(&kks) + i; }
 
-	// todo: ‚±‚ê‚ç‚â‚â‚±‚µ‚¢‚µ‰˜‚¢‚Ì‚Åg‚í‚È‚¢‚æ‚¤‚É‚·‚éB
-	//       Œ^‚É‚æ‚Á‚Ä‚Í kkps_begin_index ‚È‚Ç‚Ì’l‚ªˆÙ‚È‚éB
-	//       ‚½‚¾Aend - begin ‚ÌƒTƒCƒY‚ÍŒ^‚É‚æ‚ç‚¸ˆê’èB
+	// todo: ã“ã‚Œã‚‰ã‚„ã‚„ã“ã—ã„ã—æ±šã„ã®ã§ä½¿ã‚ãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
+	//       å‹ã«ã‚ˆã£ã¦ã¯ kkps_begin_index ãªã©ã®å€¤ãŒç•°ãªã‚‹ã€‚
+	//       ãŸã ã€end - begin ã®ã‚µã‚¤ã‚ºã¯å‹ã«ã‚ˆã‚‰ãšä¸€å®šã€‚
 	constexpr size_t GetKpps_end_index() const { return sizeof(kpps) / sizeof(KPPType); }
 	constexpr size_t GetKkps_end_index() const { return sizeof(kkps) / sizeof(KKPType); }
 	constexpr size_t GetKks_end_index() const { return sizeof(kks) / sizeof(KKType); }
@@ -130,13 +130,13 @@ struct EvaluaterBase {
 	static const int g_KKPIndicesMax = 130;
 	static const int g_KKIndicesMax = 7;
 
-	// KPP ‚ÉŠÖ‚·‚é‘Š‘ÎˆÊ’u‚È‚Ç‚ÌŸŒ³‚ğ—‚Æ‚µ‚½ˆÊ’u‚È‚Ç‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ‘S‚Ä•Ô‚·B
-	// •‰‚ÌƒCƒ“ƒfƒbƒNƒX‚ÍA³‚ÌƒCƒ“ƒfƒbƒNƒX‚É•ÏŠ·‚µ‚½ˆÊ’u‚Ì“_”‚ğˆø‚­–‚ğˆÓ–¡‚·‚éB
-	// 0 ‚Ì‚¾‚¯‚Í³•‰‚ª•s–¾‚¾‚ªA0 ‚Í•à‚Ì‚¿‹î 0 –‡‚ğˆÓ–¡‚µ‚Ä‚¢‚Ä–³Œø‚È’l‚È‚Ì‚Å–â‘è‚È‚µB
-	// ptrdiff_t ‚ÍƒCƒ“ƒfƒbƒNƒXAint ‚ÍŠñ—^‚Ì‘å‚«‚³BMaxWeight•ª‚Ì‚¢‚­‚Â‚©‚Å•\‹L‚·‚é‚±‚Æ‚É‚·‚éB
+	// KPP ã«é–¢ã™ã‚‹ç›¸å¯¾ä½ç½®ãªã©ã®æ¬¡å…ƒã‚’è½ã¨ã—ãŸä½ç½®ãªã©ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å…¨ã¦è¿”ã™ã€‚
+	// è² ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã¯ã€æ­£ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã«å¤‰æ›ã—ãŸä½ç½®ã®ç‚¹æ•°ã‚’å¼•ãäº‹ã‚’æ„å‘³ã™ã‚‹ã€‚
+	// 0 ã®æ™‚ã ã‘ã¯æ­£è² ãŒä¸æ˜ã ãŒã€0 ã¯æ­©ã®æŒã¡é§’ 0 æšã‚’æ„å‘³ã—ã¦ã„ã¦ç„¡åŠ¹ãªå€¤ãªã®ã§å•é¡Œãªã—ã€‚
+	// ptrdiff_t ã¯ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã€int ã¯å¯„ä¸ã®å¤§ãã•ã€‚MaxWeightåˆ†ã®ã„ãã¤ã‹ã§è¡¨è¨˜ã™ã‚‹ã“ã¨ã«ã™ã‚‹ã€‚
 	void CreateKppIndices(std::pair<ptrdiff_t, int> ret[g_KPPIndicesMax], Square ksq, int i, int j) {
 		int retIdx = 0;
-		// i == j ‚ÌKP—v‘f‚ÍKKP‚Ì•û‚Ås‚¤‚Ì‚ÅA‚±‚¿‚ç‚Å‚Í‰½‚à—LŒø‚Èindex‚ğ•Ô‚³‚È‚¢B
+		// i == j ã®KPè¦ç´ ã¯KKPã®æ–¹ã§è¡Œã†ã®ã§ã€ã“ã¡ã‚‰ã§ã¯ä½•ã‚‚æœ‰åŠ¹ãªindexã‚’è¿”ã•ãªã„ã€‚
 		if (i == j) {
 			ret[retIdx++] = std::make_pair(std::numeric_limits<ptrdiff_t>::max(), MaxWeight());
 			assert(retIdx <= g_KPPIndicesMax);
@@ -173,8 +173,8 @@ struct EvaluaterBase {
 
 		assert(i < j);
 		if (j < fe_hand_end) {
-			// i, j ‹¤‚É‚¿‹î
-			// ‘Š‘ÎˆÊ’u–³‚µB
+			// i, j å…±ã«æŒã¡é§’
+			// ç›¸å¯¾ä½ç½®ç„¡ã—ã€‚
 #if defined EVAL_PHASE3
 			ret[retIdx++] = std::make_pair(&kpps.pp[i][j] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
@@ -183,7 +183,7 @@ struct EvaluaterBase {
 #endif
 		}
 		else if (i < fe_hand_end) {
-			// i ‚¿‹îA j ”Õã
+			// i æŒã¡é§’ã€ j ç›¤ä¸Š
 			const int jbegin = UtilKppIndex::GetBegin(j);
 			const Piece jpiece = g_kppBoardIndexStartToPiece.value(jbegin);
 			const Square jsq = static_cast<Square>(j - jbegin);
@@ -214,7 +214,7 @@ struct EvaluaterBase {
 				if (kfile == FileE && E1 < jto)
 					jto = UtilSquare::InverseFile(jto);
 				const int distance = g_squareDistance.GetSquareDistance(jsq, jto);
-				// distance == 1 ‚Å 1/8 ‚Å 3bit ƒVƒtƒg‚É‚·‚é’ö“x‚ÌŠñ—^‚É‚·‚éB
+				// distance == 1 ã§ 1/8 ã§ 3bit ã‚·ãƒ•ãƒˆã«ã™ã‚‹ç¨‹åº¦ã®å¯„ä¸ã«ã™ã‚‹ã€‚
 #if defined EVAL_PHASE3
 				ret[retIdx++] = std::make_pair(&kpps.kpe[ksq][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 				ret[retIdx++] = std::make_pair(&kpps.xpe[kfile][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
@@ -235,7 +235,7 @@ struct EvaluaterBase {
 #endif
 		}
 		else {
-			// i, j ‹¤‚É”Õã
+			// i, j å…±ã«ç›¤ä¸Š
 			const int ibegin = UtilKppIndex::GetBegin(i);
 			const int jbegin = UtilKppIndex::GetBegin(j);
 			const Piece ipiece = g_kppBoardIndexStartToPiece.value(ibegin);
@@ -264,7 +264,7 @@ struct EvaluaterBase {
 				else
 					ret[retIdx++] = std::make_pair(&kpps.r_kpp_bb[ipiece][m_R_Mid + diff_file_ki][m_R_Mid + krank - irank][jpiece][m_R_Mid + diff_file_kj][m_R_Mid + krank - jrank] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
-				// “¯‚¶‹î‚Ìí—Ş‚Ì‚ÍA2‹î‚Ì‘Š‘ÎŠÖŒW‚Íã‰º‚ª‚Ç‚¿‚ç‚É‚È‚Á‚Ä‚à“¯‚¶“_”‚Å‚ ‚é‚×‚«B
+				// åŒã˜é§’ã®ç¨®é¡ã®æ™‚ã¯ã€2é§’ã®ç›¸å¯¾é–¢ä¿‚ã¯ä¸Šä¸‹ãŒã©ã¡ã‚‰ã«ãªã£ã¦ã‚‚åŒã˜ç‚¹æ•°ã§ã‚ã‚‹ã¹ãã€‚
 #if defined EVAL_PHASE2
 				ret[retIdx++] = std::make_pair(&kpps.r_pp_bb[ipiece][jpiece][m_R_Mid + -abs(ifile - jfile)][m_R_Mid + -abs(irank - jrank)] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
@@ -421,7 +421,7 @@ struct EvaluaterBase {
 							else if (icolor == jcolor && jto_tmp < ito_tmp)
 								std::swap(ito_tmp, jto_tmp);
 #if defined EVAL_PHASE1
-							// ee ‚Í”‚ª‘½‚­‚È‚éˆ×Ad‚İ‚ğX‚É¬‚³‚­‚·‚éB
+							// ee ã¯æ•°ãŒå¤šããªã‚‹ç‚ºã€é‡ã¿ã‚’æ›´ã«å°ã•ãã™ã‚‹ã€‚
 							ret[retIdx++] = std::make_pair(&kpps.kee[ksq][icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 							ret[retIdx++] = std::make_pair(&kpps.xee[kfile][icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 #endif
@@ -481,14 +481,14 @@ struct EvaluaterBase {
 #endif
 
 			if (ifile == FileE) {
-				// pp‚ÉŠÖ‚µ‚Äi‚ª5‹Ø‚È‚Ì‚Åj‚¾‚¯¶‰E”½“]‚µ‚Ä‚à\‚í‚È‚¢B
+				// ppã«é–¢ã—ã¦iãŒ5ç­‹ãªã®ã§jã ã‘å·¦å³åè»¢ã—ã¦ã‚‚æ§‹ã‚ãªã„ã€‚
 				j = UtilKppIndex::InverseFileIndexIfLefterThanMiddle(j);
 				if (j < i) std::swap(i, j);
 			}
 			else if ((E1 < isq)
 				|| (ibegin == jbegin && UtilSquare::InverseFile(jsq) < isq))
 			{
-				// pp‚ÉŠÖ‚µ‚Äi‚ğ¶‰E”½“]‚·‚é‚Ì‚Åj‚à¶‰E”½“]‚·‚éB
+				// ppã«é–¢ã—ã¦iã‚’å·¦å³åè»¢ã™ã‚‹ã®ã§jã‚‚å·¦å³åè»¢ã™ã‚‹ã€‚
 				i = UtilKppIndex::InverseFileIndexOnBoard(i);
 				j = UtilKppIndex::InverseFileIndexOnBoard(j);
 				if (j < i) std::swap(i, j);
@@ -675,7 +675,7 @@ struct EvaluaterBase {
 
 		auto kk_func = [this, &retIdx, &ret](Square ksq0, Square ksq1, int sign) {
 			{
-				// í‚É ksq0 < ksq1 ‚Æ‚È‚éƒe[ƒuƒ‹‚ÉƒAƒNƒZƒX‚·‚éˆ×‚Ì•ÏŠ·
+				// å¸¸ã« ksq0 < ksq1 ã¨ãªã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ã«ã‚¢ã‚¯ã‚»ã‚¹ã™ã‚‹ç‚ºã®å¤‰æ›
 				const Square ksq0Arr[] = {
 					ksq0,
 					UtilSquare::InverseFile(ksq0),
@@ -691,7 +691,7 @@ struct EvaluaterBase {
 					ksq1 = UtilSquare::Inverse(ksq1Arr[ksq0ArrIdx]);
 				}
 				else {
-					sign = -sign; // ksq0 ‚Æ ksq1 ‚ğ“ü‚ê‘Ö‚¦‚é‚Ì‚Å•„†”½“]
+					sign = -sign; // ksq0 ã¨ ksq1 ã‚’å…¥ã‚Œæ›¿ãˆã‚‹ã®ã§ç¬¦å·åè»¢
 					ksq0 = ksq1Arr[ksq1ArrIdx];
 					ksq1 = UtilSquare::Inverse(ksq0Arr[ksq1ArrIdx]);
 				}
@@ -716,7 +716,7 @@ struct EvaluaterBase {
 	}
 
 
-	void clear() { memset(this, 0, sizeof(*this)); } // float Œ^‚Æ‚©‚¾‚Æ‹KŠi“I‚É 0 ‚Í•ÛØ‚³‚ê‚È‚©‚Á‚½‹C‚ª‚·‚é‚ªÀ—pã–â‘è‚È‚¢‚¾‚ë‚¤B
+	void clear() { memset(this, 0, sizeof(*this)); } // float å‹ã¨ã‹ã ã¨è¦æ ¼çš„ã« 0 ã¯ä¿è¨¼ã•ã‚Œãªã‹ã£ãŸæ°—ãŒã™ã‚‹ãŒå®Ÿç”¨ä¸Šå•é¡Œãªã„ã ã‚ã†ã€‚
 
 
 };

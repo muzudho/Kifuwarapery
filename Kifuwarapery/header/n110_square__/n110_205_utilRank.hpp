@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n110_square__/n110_200_rank.hpp"
 
@@ -7,10 +7,10 @@ public:
 
 	static inline bool ContainsOf(const Rank r) { return (0 <= r) && (r < RankNum); }
 
-	// ã‰º•ÏŠ·
+	// ä¸Šä¸‹å¤‰æ›
 	static inline constexpr Rank Inverse(const Rank r) { return RankNum - 1 - r; }
 
-	// todo: ƒAƒ‹ƒtƒ@ƒxƒbƒg‚ªŽ«‘‡‚É•À‚ñ‚Å‚¢‚È‚¢ˆ—Œn‚ª‚ ‚é‚È‚ç‘Î‰ž‚·‚é‚±‚ÆB
+	// todo: ã‚¢ãƒ«ãƒ•ã‚¡ãƒ™ãƒƒãƒˆãŒè¾žæ›¸é †ã«ä¸¦ã‚“ã§ã„ãªã„å‡¦ç†ç³»ãŒã‚ã‚‹ãªã‚‰å¯¾å¿œã™ã‚‹ã“ã¨ã€‚
 	static inline char ToCharUSI(const Rank r) {
 		static_assert('a' + 1 == 'b', "");
 		static_assert('a' + 2 == 'c', "");

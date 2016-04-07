@@ -1,9 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include "n160_100_bitboard.hpp"
+#include "n160_120_bishopAttackBb.hpp"
+#include "n160_160_kingAttackBb.hpp"
 
-extern KingAttackBb g_kingAttackBb;
-extern BishopAttackBb g_bishopAttackBb;
+//extern KingAttackBb g_kingAttackBb;
+//extern BishopAttackBb g_bishopAttackBb;
 
 
 class HorseAttackBb {
@@ -18,4 +20,5 @@ public:
 };
 
 
-extern HorseAttackBb g_horseAttackBb;
+// クラス定義のあとに書くとビルドできるぜ☆（＾ｑ＾）
+extern const HorseAttackBb g_horseAttackBb;

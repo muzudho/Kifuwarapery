@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
@@ -6,7 +6,7 @@
 
 enum Bound {
 	BoundNone = 0,
-	BoundUpper = Binary< 1>::value, // fail low  ‚Å³‚µ‚¢ score ‚ª•ª‚©‚ç‚È‚¢Balpha ˆÈ‰º‚ªŠm’è‚Æ‚¢‚¤ˆÓ–¡B
-	BoundLower = Binary<10>::value, // fail high ‚Å³‚µ‚¢ score ‚ª•ª‚©‚ç‚È‚¢Bbeta ˆÈã‚ªŠm’è‚Æ‚¢‚¤ˆÓ–¡B
-	BoundExact = Binary<11>::value  // alpha ‚Æ beta ‚ÌŠÔ‚É score ‚ª‚ ‚éB
+	BoundUpper = Binary< 1>::value, // fail low  ã§æ­£ã—ã„ score ãŒåˆ†ã‹ã‚‰ãªã„ã€‚alpha ä»¥ä¸‹ãŒç¢ºå®šã¨ã„ã†æ„å‘³ã€‚
+	BoundLower = Binary<10>::value, // fail high ã§æ­£ã—ã„ score ãŒåˆ†ã‹ã‚‰ãªã„ã€‚beta ä»¥ä¸ŠãŒç¢ºå®šã¨ã„ã†æ„å‘³ã€‚
+	BoundExact = Binary<11>::value  // alpha ã¨ beta ã®é–“ã« score ãŒã‚ã‚‹ã€‚
 };

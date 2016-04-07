@@ -1,18 +1,18 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../header/n119_score___/n119_100_utilScore.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 
-// w‚µè‚ÆA•]‰¿’lB
+// æŒ‡ã—æ‰‹ã¨ã€è©•ä¾¡å€¤ã€‚
 class MoveScore {
 public:
-	// w‚µè
+	// æŒ‡ã—æ‰‹
 	Move move;
-	// •]‰¿’l
+	// è©•ä¾¡å€¤
 	enum Score score;
 public:
 	MoveScore(Move move, enum Score score);
 	
-	// w‚µè
+	// æŒ‡ã—æ‰‹
 	Move GetMove(void);
 };

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
@@ -9,7 +9,7 @@ using Ply = int;
 const Ply MaxPly = 128;
 const Ply MaxPlyPlus2 = MaxPly + 2;
 
-// •]‰¿’l
+// è©•ä¾¡å€¤
 enum Score {
 	ScoreZero = 0,
 	ScoreDraw = 0,

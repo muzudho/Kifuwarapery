@@ -1,4 +1,4 @@
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+﻿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"

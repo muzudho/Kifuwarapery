@@ -1,22 +1,22 @@
-#pragma once
+ï»¿#pragma once
 
 #include <chrono>	// std::chrono
 using namespace std;
 
-// ƒ~ƒŠ•b’PˆÊ‚ÌŠÔ‚ğ•\‚·ƒNƒ‰ƒX
+// ãƒŸãƒªç§’å˜ä½ã®æ™‚é–“ã‚’è¡¨ã™ã‚¯ãƒ©ã‚¹
 class Time {
 public:
 
-	// ƒXƒgƒbƒvEƒEƒHƒbƒ`‚ÌÄ‹N“®
+	// ã‚¹ãƒˆãƒƒãƒ—ãƒ»ã‚¦ã‚©ãƒƒãƒã®å†èµ·å‹•
 	void Restart();
 
-	// Œo‰ßŠÔ
+	// çµŒéæ™‚é–“
 	int Elapsed() const;
 
-	// Œ»İ‚ÅŠJn‚µ‚½ƒXƒgƒbƒvEƒEƒHƒbƒ`‚Ìæ“¾
+	// ç¾åœ¨æ™‚åˆ»ã§é–‹å§‹ã—ãŸã‚¹ãƒˆãƒƒãƒ—ãƒ»ã‚¦ã‚©ãƒƒãƒã®å–å¾—
 	static Time CurrentTime();
 
 private:
-	// ŠJnŠÔ
+	// é–‹å§‹æ™‚é–“
 	std::chrono::time_point<std::chrono::system_clock> m_start_;
 };

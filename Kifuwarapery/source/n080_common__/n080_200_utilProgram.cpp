@@ -1,24 +1,24 @@
-#include "../../header/n080_common__/n080_100_common.hpp"
+ï»¿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "..\..\header\n080_common__\n080_200_utilProgram.hpp"
-#include <windows.h> // ƒwƒbƒ_[Eƒtƒ@ƒCƒ‹‚É‘‚­‚ÆƒGƒ‰[‚É‚È‚éB
+#include <windows.h> // ãƒ˜ãƒƒãƒ€ãƒ¼ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãã¨ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã€‚
 
 void UtilProgram::ErrorBegin()
 {
-	SetLastError(NO_ERROR);		//ƒGƒ‰[î•ñ‚ğƒNƒŠƒA‚·‚é
+	SetLastError(NO_ERROR);		//ã‚¨ãƒ©ãƒ¼æƒ…å ±ã‚’ã‚¯ãƒªã‚¢ã™ã‚‹
 }
 
 void UtilProgram::ErrorEnd()
 {
 	LPVOID lpMsgBuf;
-	FormatMessage(				//ƒGƒ‰[•\¦•¶š—ñì¬
+	FormatMessage(				//ã‚¨ãƒ©ãƒ¼è¡¨ç¤ºæ–‡å­—åˆ—ä½œæˆ
 		FORMAT_MESSAGE_ALLOCATE_BUFFER |
 		FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS,
 		NULL, GetLastError(),
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 		(LPTSTR)&lpMsgBuf, 0, NULL);
-	//MessageBox(NULL, (const char*)lpMsgBuf, NULL, MB_OK);	//ƒƒbƒZ[ƒW•\¦
-	MessageBox(NULL, (LPCTSTR)lpMsgBuf, NULL, MB_OK);	//ƒƒbƒZ[ƒW•\¦
+	//MessageBox(NULL, (const char*)lpMsgBuf, NULL, MB_OK);	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
+	MessageBox(NULL, (LPCTSTR)lpMsgBuf, NULL, MB_OK);	//ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸è¡¨ç¤º
 	LocalFree(lpMsgBuf);
 }
 

@@ -1,55 +1,55 @@
-//#include <Windows.h>	// ƒtƒ@ƒCƒ‹^ƒfƒBƒŒƒNƒgƒŠ‘€ì—p
-//#include <shlwapi.h>	// ƒtƒ@ƒCƒ‹^ƒfƒBƒŒƒNƒgƒŠ‘€ì—p shlwapi.lib ‚Ö‚ÌƒŠƒ“ƒN‚ª•K—vB
+ï»¿//#include <Windows.h>	// ãƒ•ã‚¡ã‚¤ãƒ«ï¼ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ“ä½œç”¨
+//#include <shlwapi.h>	// ãƒ•ã‚¡ã‚¤ãƒ«ï¼ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ“ä½œç”¨ shlwapi.lib ã¸ã®ãƒªãƒ³ã‚¯ãŒå¿…è¦ã€‚
 #include "../../header/n080_common__/n080_200_utilProgram.hpp"
 #include "../../header/n260_evaluate/n260_490_KppCacheIo.hpp"
 #include "../../header/n260_evaluate/n260_500_evalStorage.hpp"
-#include <Windows.h>	// ƒtƒ@ƒCƒ‹^ƒfƒBƒŒƒNƒgƒŠ‘€ì—p
-#include <shlwapi.h>	// ƒtƒ@ƒCƒ‹^ƒfƒBƒŒƒNƒgƒŠ‘€ì—p shlwapi.lib ‚Ö‚ÌƒŠƒ“ƒN‚ª•K—vB
+#include <Windows.h>	// ãƒ•ã‚¡ã‚¤ãƒ«ï¼ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ“ä½œç”¨
+#include <shlwapi.h>	// ãƒ•ã‚¡ã‚¤ãƒ«ï¼ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªæ“ä½œç”¨ shlwapi.lib ã¸ã®ãƒªãƒ³ã‚¯ãŒå¿…è¦ã€‚
 
 
 bool KppCacheIo::SynthesizeLv3To2(const std::string & dirName, int k1)
 {
-#if !defined(SKIP_KPP_EVAL_LOOP) // KPP•]‰¿’lƒtƒ@ƒCƒ‹‚Ìì¬‚ğƒXƒLƒbƒv‚·‚éİ’è‚È‚çA‚±‚ÌŠÖ”‚ÍÀs‚µ‚Ü‚¹‚ñB
+#if !defined(SKIP_KPP_EVAL_LOOP) // KPPè©•ä¾¡å€¤ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆã‚’ã‚¹ã‚­ãƒƒãƒ—ã™ã‚‹è¨­å®šãªã‚‰ã€ã“ã®é–¢æ•°ã¯å®Ÿè¡Œã—ã¾ã›ã‚“ã€‚
 #if defined(MODE_CACHE_EVAL)
-	// Cache2ƒtƒ@ƒCƒ‹‚Ì—L–³‚ğ’²‚×‚Ü‚·B
+	// Cache2ãƒ•ã‚¡ã‚¤ãƒ«ã®æœ‰ç„¡ã‚’èª¿ã¹ã¾ã™ã€‚
 	std::string cache2Path = this->GetLv2FilePath(dirName, k1);
 	if (PathFileExistsA((LPCSTR)cache2Path.c_str()))
 	{
-		// ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚Á‚½ê‡‚Í OK ‚Å‚·Bfalse‚ğ•Ô‚µ‚Ä³íI—¹‚µ‚Ü‚·B
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã£ãŸå ´åˆã¯ OK ã§ã™ã€‚falseã‚’è¿”ã—ã¦æ­£å¸¸çµ‚äº†ã—ã¾ã™ã€‚
 		return false;
 	}
 	SYNCCOUT << "(Synthesize 1/3) Go KPP!: [" << cache2Path.c_str() << "]" << SYNCENDL;
 
-	// Cache3ƒtƒ@ƒCƒ‹‚ª 1548ŒÂ‚ ‚é‚©’²‚×‚Ü‚·B
+	// Cache3ãƒ•ã‚¡ã‚¤ãƒ«ãŒ 1548å€‹ã‚ã‚‹ã‹èª¿ã¹ã¾ã™ã€‚
 	for (int p1 = 0; p1 < fe_end; ++p1) {
 		std::string cache3Path = this->GetLv3FilePath(dirName, k1, p1);
 
 		if (!PathFileExistsA((LPCSTR)cache3Path.c_str()))
 		{
-			// ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢‚Ì‚Í OK ‚Å‚·Bfalse‚ğ•Ô‚µ‚Ä³íI—¹‚µ‚Ü‚·B
+			// ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã„ã®ã¯ OK ã§ã™ã€‚falseã‚’è¿”ã—ã¦æ­£å¸¸çµ‚äº†ã—ã¾ã™ã€‚
 			return false;
 		}
 	}
 	SYNCCOUT << "(Synthesize 2/3) [" << std::to_string(fe_end) << "] files exist. ok." << SYNCENDL;
 
-	// ‘‚«o‚µæ
+	// æ›¸ãå‡ºã—å…ˆ
 	std::ofstream output(cache2Path.c_str(), std::ios::binary);
 
-	// Cache3ƒtƒ@ƒCƒ‹‚ğ 1548ŒÂ“Ç‚İ‚İ‚Ü‚·B
+	// Cache3ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ 1548å€‹èª­ã¿è¾¼ã¿ã¾ã™ã€‚
 	for (int p1 = 0; p1 < fe_end; ++p1) {
 		std::string cache3Path = this->GetLv3FilePath(dirName, k1, p1);
 
 		if (!PathFileExistsA((LPCSTR)cache3Path.c_str()))
 		{
 			std::cerr << "Error : File not found. " << cache3Path.c_str() << std::endl;
-			//‚È‚ñ‚©I—¹ˆ—‚ğ“ü‚ê‚é
+			//ãªã‚“ã‹çµ‚äº†å‡¦ç†ã‚’å…¥ã‚Œã‚‹
 			return false;
 		}
 
 		std::ifstream input(cache3Path.c_str(), std::ios::binary);
 		if (input.fail()) {
 			std::cerr << "Error : Could not open" << std::endl;
-			//‚È‚ñ‚©I—¹ˆ—‚ğ“ü‚ê‚é
+			//ãªã‚“ã‹çµ‚äº†å‡¦ç†ã‚’å…¥ã‚Œã‚‹
 			return false;
 		}
 
@@ -58,26 +58,26 @@ bool KppCacheIo::SynthesizeLv3To2(const std::string & dirName, int k1)
 		char buffer[2];
 		for (;;) {// while (!input.eof()) {
 
-				  // “Ç
+				  // èª­è¾¼
 			input.read((char*)buffer, sizeof(s16));// 2bytes
 
-												   // ‘o
+												   // æ›¸å‡º
 			output.write((char*)buffer, sizeof(s16));// 2bytes
 
-													 // ƒCƒ“ƒNƒŠƒƒ“ƒgB
+													 // ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã€‚
 			z++;
 			if (z == 2) {
 				z = 0;
-				p2++;// ŒJ‚èã‚ª‚è
+				p2++;// ç¹°ã‚Šä¸ŠãŒã‚Š
 				if (p2 == fe_end) {
 					break;
 				}
 			}
 		}
 	}
-	// (^q^)SYNCCOUT ‚Ån‚ß‚½‚çASYNCENDL ‚ÅI‚í‚é‚±‚ÆB
+	// (^q^)SYNCCOUT ã§å§‹ã‚ãŸã‚‰ã€SYNCENDL ã§çµ‚ã‚ã‚‹ã“ã¨ã€‚
 	SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << SYNCENDL;
-	//~ SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << std::endl;
+	//Ã— SYNCCOUT << "(Synthesize 3/3) (^q^)File synthesized!" << std::endl;
 
 	return true;
 #else
@@ -88,7 +88,7 @@ bool KppCacheIo::SynthesizeLv3To2(const std::string & dirName, int k1)
 #endif
 }
 
-// KPP‚Ìƒtƒ@ƒCƒ‹•ªŠ„
+// KPPã®ãƒ•ã‚¡ã‚¤ãƒ«åˆ†å‰²
 bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std::array<s16, 2> kppArray[SquareNum][fe_end][fe_end])
 {
 	bool isError = false;
@@ -101,10 +101,10 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 
 	SYNCCOUT << "(WriteKppCache3Files 1/9) File Search: path3=[" << file3.c_str() << "]" << SYNCENDL;
 
-	// obj ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚Îì‚è‚Ü‚·B
+	// obj ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã‘ã‚Œã°ä½œã‚Šã¾ã™ã€‚
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
 	{
-		// ƒfƒBƒŒƒNƒgƒŠ[‚ª‚È‚¢‚Æ‚¢‚¤‚Ì‚Í³í“®ì‚Å‚·B
+		// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãƒ¼ãŒãªã„ã¨ã„ã†ã®ã¯æ­£å¸¸å‹•ä½œã§ã™ã€‚
 		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory. ok. : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
 
 		UtilProgram utilProgram;
@@ -118,7 +118,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 		}
 		else
 		{
-			// ƒGƒ‰[
+			// ã‚¨ãƒ©ãƒ¼
 			isError = true;
 
 			std::cerr << "(WriteKppCache3Files 4/9 error): Can not create directory : dir1=[" << dir1.c_str() << "]" << std::endl;
@@ -126,7 +126,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 		}
 	}
 
-	// Kpp[”š]ƒfƒBƒŒƒNƒgƒŠ‚ª‚È‚¯‚ê‚Îì‚è‚Ü‚·B
+	// Kpp[æ•°å­—]ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒãªã‘ã‚Œã°ä½œã‚Šã¾ã™ã€‚
 	if (!isError && !PathIsDirectoryA((LPCSTR)dir2.c_str()))
 	{
 		//SYNCCOUT << "Not found directory : path2=[" << dir2 << "]" << SYNCENDL;
@@ -136,7 +136,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 		}
 		else
 		{
-			// ƒGƒ‰[
+			// ã‚¨ãƒ©ãƒ¼
 			isError = true;
 			std::cerr << "(WriteKppCache3Files 6/9 error) Can not create directory : dir2=[" << dir2.c_str() << "]" << std::endl;
 		}
@@ -144,7 +144,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 
 	SYNCCOUT << "(WriteKppCache3Files 7/9)" << SYNCENDL;
 
-	// ƒtƒ@ƒCƒ‹‚Í–³‚¢‚Í‚¸B
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã¯ç„¡ã„ã¯ãšã€‚
 	if (!isError)
 	{
 		this->WriteLv3FilesBody(file3, k1, p1, kppArray);
@@ -160,7 +160,7 @@ void KppCacheIo::WriteLv3FilesBody(const std::string & cache3Filepath, int k1, i
 {
 	std::ofstream output(cache3Filepath, std::ios::binary);
 
-	//‘‚«‚Şƒtƒ@ƒCƒ‹Ši”[—p”z—ñ
+	//æ›¸ãè¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ç”¨é…åˆ—
 	// 2byte * 1548element = 3096byte
 	// 2element * 2byte * 1548element = 6192byte
 	char buffer[2];
@@ -168,7 +168,7 @@ void KppCacheIo::WriteLv3FilesBody(const std::string & cache3Filepath, int k1, i
 	int z = 0;
 	for (;;) {
 
-		// shortŒ^‚ğAcharŒ^‚Q‚Â‚É•ªŠ„‚µ‚Ü‚·B
+		// shortå‹ã‚’ã€charå‹ï¼’ã¤ã«åˆ†å‰²ã—ã¾ã™ã€‚
 		/*
 		buffer[0] = (char)(kppArray[k1][p1][p2][z] & 0xff);// 8bits
 		buffer[1] = (char)(kppArray[k1][p1][p2][z] >> 8 & 0xff);// 8bits
@@ -177,10 +177,10 @@ void KppCacheIo::WriteLv3FilesBody(const std::string & cache3Filepath, int k1, i
 		buffer[1] = (char)(kppArray[k1][p1][p2][z] & 0xff);// 8bits
 		output.write((char *)buffer, sizeof(s16));// 16bits
 
-		z++;// ƒCƒ“ƒNƒŠƒƒ“ƒgB
+		z++;// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã€‚
 		if (z == 2) {
 			z = 0;
-			p2++;// ŒJ‚èã‚ª‚è
+			p2++;// ç¹°ã‚Šä¸ŠãŒã‚Š
 			if (p2 == fe_end) {
 				break;
 			}
@@ -196,19 +196,19 @@ bool KppCacheIo::ReadLv2Files(const std::string & dirName, int k1, std::array<s1
 
 	if (!PathFileExistsA((LPCSTR)cache2Path.c_str()))
 	{
-		// ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢‚Ì‚Í OK ‚Å‚·Bfalse‚ğ•Ô‚µ‚Ä³íI—¹‚µ‚Ü‚·B
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã„ã®ã¯ OK ã§ã™ã€‚falseã‚’è¿”ã—ã¦æ­£å¸¸çµ‚äº†ã—ã¾ã™ã€‚
 		return false;
 	}
 
 	std::ifstream ifs(cache2Path.c_str(), std::ios::binary);
 	if (ifs.fail()) {
 		std::cerr << "Error : Could not open" << std::endl;
-		//‚È‚ñ‚©I—¹ˆ—‚ğ“ü‚ê‚é
+		//ãªã‚“ã‹çµ‚äº†å‡¦ç†ã‚’å…¥ã‚Œã‚‹
 		return false;
 	}
 	//SYNCCOUT << "(^q^)File opened." << std::endl;
 
-	//“Ç‚İ‚Şƒtƒ@ƒCƒ‹Ši”[—p”z—ñ
+	//èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ç”¨é…åˆ—
 	int p1 = 0;
 	int p2 = 0;
 	int z = 0;
@@ -219,14 +219,14 @@ bool KppCacheIo::ReadLv2Files(const std::string & dirName, int k1, std::array<s1
 
 		kppArray[k1][p1][p2][z] = *buffer;
 
-		// ƒCƒ“ƒNƒŠƒƒ“ƒgB
+		// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã€‚
 		z++;
 		if (z == 2) {
 			z = 0;
-			p2++;// ŒJ‚èã‚ª‚è
+			p2++;// ç¹°ã‚Šä¸ŠãŒã‚Š
 			if (p2 == fe_end) {
 				p2 = 0;
-				p1++;// ŒJ‚èã‚ª‚è
+				p1++;// ç¹°ã‚Šä¸ŠãŒã‚Š
 				if (p1 == fe_end) {
 					break;
 				}
@@ -248,18 +248,18 @@ bool KppCacheIo::ReadLv3Files(const std::string & dirName, int k1, int p1, std::
 
 	if (!PathFileExistsA((LPCSTR)catch3Path.c_str()))
 	{
-		// ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚ç‚È‚¢‚Ì‚Í OK ‚Å‚·Bfalse‚ğ•Ô‚µ‚Ä³íI—¹‚µ‚Ü‚·B
+		// ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚‰ãªã„ã®ã¯ OK ã§ã™ã€‚falseã‚’è¿”ã—ã¦æ­£å¸¸çµ‚äº†ã—ã¾ã™ã€‚
 		return false;
 	}
 
 	std::ifstream ifs(catch3Path.c_str(), std::ios::binary);
 	if (ifs.fail()) {
 		std::cerr << "Error : Could not open" << std::endl;
-		//‚È‚ñ‚©I—¹ˆ—‚ğ“ü‚ê‚é
+		//ãªã‚“ã‹çµ‚äº†å‡¦ç†ã‚’å…¥ã‚Œã‚‹
 		return false;
 	}
 
-	//“Ç‚İ‚Şƒtƒ@ƒCƒ‹Ši”[—p”z—ñ
+	//èª­ã¿è¾¼ã‚€ãƒ•ã‚¡ã‚¤ãƒ«æ ¼ç´ç”¨é…åˆ—
 	int p2 = 0;
 	int z = 0;
 	char buffer[2];
@@ -269,11 +269,11 @@ bool KppCacheIo::ReadLv3Files(const std::string & dirName, int k1, int p1, std::
 
 		kppArray[k1][p1][p2][z] = *buffer;
 
-		// ƒCƒ“ƒNƒŠƒƒ“ƒgB
+		// ã‚¤ãƒ³ã‚¯ãƒªãƒ¡ãƒ³ãƒˆã€‚
 		z++;
 		if (z == 2) {
 			z = 0;
-			p2++;// ŒJ‚èã‚ª‚è
+			p2++;// ç¹°ã‚Šä¸ŠãŒã‚Š
 			if (p2 == fe_end) {
 				break;
 			}

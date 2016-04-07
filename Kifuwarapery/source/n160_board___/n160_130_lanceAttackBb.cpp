@@ -1,27 +1,25 @@
-#include "../../header/n160_board___/n160_400_printBb.hpp"
+ï»¿#include "../../header/n160_board___/n160_108_slideBits.hpp"
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../../header/n160_board___/n160_400_printBb.hpp"
 
 
-extern const InFrontMaskBb g_inFrontMaskBb;
-
-
-// ‚±‚ê‚ç‚Íˆê“x’l‚ğİ’è‚µ‚½‚ç“ñ“x‚Æ•ÏX‚µ‚È‚¢B
-LanceAttackBb g_lanceAttackBb;//–{“–‚Íconst ‚É‚µ‚½‚¢‚ªA‚â‚è•û‚ª‚í‚©‚ç‚È‚¢™ C2373ƒGƒ‰[‚É‚È‚é‚ñ‚¾‚º™
+// ã“ã‚Œã‚‰ã¯ä¸€åº¦å€¤ã‚’è¨­å®šã—ãŸã‚‰äºŒåº¦ã¨å¤‰æ›´ã—ãªã„ã€‚
+LanceAttackBb g_lanceAttackBb;//æœ¬å½“ã¯const ã«ã—ãŸã„ãŒã€ã‚„ã‚Šæ–¹ãŒã‚ã‹ã‚‰ãªã„â˜† C2373ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã‚“ã ãœâ˜†
 
 
 void LanceAttackBb::Initialize()
 {
-	// LanceBlockMask, g_lanceAttack ‚Ì’l‚ğİ’è‚·‚éB
+	// LanceBlockMask, g_lanceAttack ã®å€¤ã‚’è¨­å®šã™ã‚‹ã€‚
 	for (Color c = Black; c < ColorNum; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			const Bitboard blockMask = this->LanceBlockMask(sq);
-			//const int num1s = blockMask.popCount(); // í‚É 7
+			//const int num1s = blockMask.popCount(); // å¸¸ã« 7
 			const int num1s = 7;
 			assert(num1s == blockMask.PopCount());
 			for (int i = 0; i < (1 << num1s); ++i) {
 				Bitboard occupied = g_setMaskBb.IndexToOccupied(i, num1s, blockMask);
-				g_lanceAttackBb.m_controllBb[c][sq][i] = this->LanceAttackCalc(c, sq, occupied);
+				this->m_controllBb[c][sq][i] = this->LanceAttackCalc(c, sq, occupied);
 			}
 		}
 	}
@@ -32,15 +30,15 @@ void LanceAttackBb::InitCheckTableLance() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_lanceAttackBb.m_lanceCheckTable_[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
+			this->m_lanceCheckTable_[c][sq] = this->GetControllBbToEdge(opp, sq);
 
 			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
-				g_lanceAttackBb.m_lanceCheckTable_[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
+				this->m_lanceCheckTable_[c][sq] |= this->GetControllBbToEdge(opp, checkSq);
 			}
-			g_lanceAttackBb.m_lanceCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
+			this->m_lanceCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
 		}
 	}
 }
@@ -49,22 +47,22 @@ void LanceAttackBb::InitCheckTableLance() {
 void LanceAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_lanceAttackBb.m_controllBbToEdge_[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), Black, sq);
-		g_lanceAttackBb.m_controllBbToEdge_[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), White, sq);
+		this->m_controllBbToEdge_[Black][sq] = this->GetControllBb(&Bitboard::CreateAllZeroBB(), Black, sq);
+		this->m_controllBbToEdge_[White][sq] = this->GetControllBb(&Bitboard::CreateAllZeroBB(), White, sq);
 	}
 }
 
 
-// square ‚Ìƒ}ƒX‚É‚¨‚¯‚éAáŠQ•¨‚ğ’²‚×‚é•K—v‚ª‚ ‚éêŠ‚ğ Bitboard ‚Å•Ô‚·B
-// lance ‚Ì‘O•û‚¾‚¯‚ğ’²‚×‚ê‚Î—Ç‚³‚»‚¤‚¾‚¯‚ÇARank8 ~ Rank2 ‚Ìó‘Ô‚ğ‚»‚Ì‚Ü‚Ü index ‚Ég‚¢‚½‚¢‚Ì‚ÅA
-// c•ûŒü‘S‚Ä(’[‚ğœ‚­)‚Ì occupied ‚ğ‘S‚Ä’²‚×‚éB
+// square ã®ãƒã‚¹ã«ãŠã‘ã‚‹ã€éšœå®³ç‰©ã‚’èª¿ã¹ã‚‹å¿…è¦ãŒã‚ã‚‹å ´æ‰€ã‚’ Bitboard ã§è¿”ã™ã€‚
+// lance ã®å‰æ–¹ã ã‘ã‚’èª¿ã¹ã‚Œã°è‰¯ã•ãã†ã ã‘ã©ã€Rank8 ~ Rank2 ã®çŠ¶æ…‹ã‚’ãã®ã¾ã¾ index ã«ä½¿ã„ãŸã„ã®ã§ã€
+// ç¸¦æ–¹å‘å…¨ã¦(ç«¯ã‚’é™¤ã)ã® occupied ã‚’å…¨ã¦èª¿ã¹ã‚‹ã€‚
 Bitboard LanceAttackBb::LanceBlockMask(const Square square) {
 	return g_fileMaskBb.GetSquareFileMask(square) & ~(g_rankMaskBb.GetRankMask<Rank1>() | g_rankMaskBb.GetRankMask<Rank9>());
 }
 
-// lance ‚Ì—˜‚«‚ğ•Ô‚·B
-// Ô‚Ì—˜‚«‚Íí‚É‚±‚ê‚ğg‚Á‚Ä‚à—Ç‚¢‚¯‚ÇA‚à‚¤­‚µ‘¬‚­‚·‚éˆ×‚ÉAƒe[ƒuƒ‹‰»‚·‚éˆ×‚¾‚¯‚Ég‚¤B
-// occupied  áŠQ•¨‚ª‚ ‚éƒ}ƒX‚ª 1 ‚Ì bitboard
+// lance ã®åˆ©ãã‚’è¿”ã™ã€‚
+// é¦™è»Šã®åˆ©ãã¯å¸¸ã«ã“ã‚Œã‚’ä½¿ã£ã¦ã‚‚è‰¯ã„ã‘ã©ã€ã‚‚ã†å°‘ã—é€Ÿãã™ã‚‹ç‚ºã«ã€ãƒ†ãƒ¼ãƒ–ãƒ«åŒ–ã™ã‚‹ç‚ºã ã‘ã«ä½¿ã†ã€‚
+// occupied  éšœå®³ç‰©ãŒã‚ã‚‹ãƒã‚¹ãŒ 1 ã® bitboard
 Bitboard LanceAttackBb::LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
 	return g_rookAttackBb.GetControllBb(&occupied, square) & g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(square));
 }

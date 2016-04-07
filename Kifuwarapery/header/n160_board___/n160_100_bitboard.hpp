@@ -1,8 +1,8 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include "../n110_square__/n110_500_utilSquare.hpp"
-#include "../n160_board___/n160_050_configBits.hpp"
+//#include "../n160_board___/n160_050_slideBits.hpp"
 
 
 class Bitboard {
@@ -13,8 +13,8 @@ private:
 		__m128i m_m_;
 	};
 #else
-	u64 m_p_[2];	// m_p_[0] : æè‚©‚çŒ©‚ÄA1ˆê‚©‚ç7‹ã‚Ü‚Å‚ğc‚É•À‚×‚½bit. 63bitg—p. right ‚ÆŒÄ‚ÔB
-					// m_p_[1] : æè‚©‚çŒ©‚ÄA8ˆê‚©‚ç1‹ã‚Ü‚Å‚ğc‚É•À‚×‚½bit. 18bitg—p. left  ‚ÆŒÄ‚ÔB
+	u64 m_p_[2];	// m_p_[0] : å…ˆæ‰‹ã‹ã‚‰è¦‹ã¦ã€1ä¸€ã‹ã‚‰7ä¹ã¾ã§ã‚’ç¸¦ã«ä¸¦ã¹ãŸbit. 63bitä½¿ç”¨. right ã¨å‘¼ã¶ã€‚
+					// m_p_[1] : å…ˆæ‰‹ã‹ã‚‰è¦‹ã¦ã€8ä¸€ã‹ã‚‰1ä¹ã¾ã§ã‚’ç¸¦ã«ä¸¦ã¹ãŸbit. 18bitä½¿ç”¨. left  ã¨å‘¼ã¶ã€‚
 #endif
 
 public:
@@ -35,13 +35,13 @@ public:
 
 	void SetP(const int index, const u64 val);
 
-	// ƒ}ƒWƒbƒNƒiƒ“ƒo[‚ğì‚é‚Ì‚Ég‚¤™
+	// ãƒã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ã‚’ä½œã‚‹ã®ã«ä½¿ã†â˜†
 	u64 MergeP() const;
 
-	// ‚Ç‚±‚©‚Éƒrƒbƒg‚ª—§‚Á‚Ä‚¢‚ê‚Î^™(IsNot0)
+	// ã©ã“ã‹ã«ãƒ“ãƒƒãƒˆãŒç«‹ã£ã¦ã„ã‚Œã°çœŸâ˜†(IsNot0)
 	bool Exists1Bit() const;
 
-	// ‚‘¬‰»‚ğƒ‰ƒbƒsƒ“ƒO™ ‚±‚ê‚ÍƒR[ƒh‚ªŒ©“ï‚­‚È‚é‚¯‚Çd•û‚È‚¢B
+	// é«˜é€ŸåŒ–ã‚’ãƒ©ãƒƒãƒ”ãƒ³ã‚°â˜† ã“ã‚Œã¯ã‚³ãƒ¼ãƒ‰ãŒè¦‹é›£ããªã‚‹ã‘ã©ä»•æ–¹ãªã„ã€‚
 	bool AndIsNot0( const Bitboard& bb)const;
 
 	Bitboard operator ~ () const;
@@ -70,39 +70,39 @@ public:
 
 	bool operator != (const Bitboard& rhs) const;
 
-	// ‚‘¬‰»‚ğƒ‰ƒbƒsƒ“ƒO™ ‚±‚ê‚ÍƒR[ƒh‚ªŒ©“ï‚­‚È‚é‚¯‚Çd•û‚È‚¢B
+	// é«˜é€ŸåŒ–ã‚’ãƒ©ãƒƒãƒ”ãƒ³ã‚°â˜† ã“ã‚Œã¯ã‚³ãƒ¼ãƒ‰ãŒè¦‹é›£ããªã‚‹ã‘ã©ä»•æ–¹ãªã„ã€‚
 	Bitboard AndEqualNot(const Bitboard& bb);
 
-	// ‚‘¬‰»‚ğƒ‰ƒbƒsƒ“ƒO™ ‚±‚ê‚ÍƒR[ƒh‚ªŒ©“ï‚­‚È‚é‚¯‚Çd•û‚È‚¢B
+	// é«˜é€ŸåŒ–ã‚’ãƒ©ãƒƒãƒ”ãƒ³ã‚°â˜† ã“ã‚Œã¯ã‚³ãƒ¼ãƒ‰ãŒè¦‹é›£ããªã‚‹ã‘ã©ä»•æ–¹ãªã„ã€‚
 	Bitboard NotThisAnd(const Bitboard& bb) const;
 
-	// Bitboard ‚Ì right ‘¤‚¾‚¯‚Ì—v‘f‚ğ’²‚×‚ÄAÅ‰‚É 1 ‚Å‚ ‚éƒ}ƒX‚Ì index ‚ğ•Ô‚·B
-	// ‚»‚Ìƒ}ƒX‚ğ 0 ‚É‚·‚éB
-	// Bitboard ‚Ì right ‘¤‚ª 0 ‚Å‚È‚¢‚±‚Æ‚ğ‘O’ñ‚É‚µ‚Ä‚¢‚éB
+	// Bitboard ã® right å´ã ã‘ã®è¦ç´ ã‚’èª¿ã¹ã¦ã€æœ€åˆã« 1 ã§ã‚ã‚‹ãƒã‚¹ã® index ã‚’è¿”ã™ã€‚
+	// ãã®ãƒã‚¹ã‚’ 0 ã«ã™ã‚‹ã€‚
+	// Bitboard ã® right å´ãŒ 0 ã§ãªã„ã“ã¨ã‚’å‰æã«ã—ã¦ã„ã‚‹ã€‚
 	FORCE_INLINE Square PopFirstOneRightFromI9() {
 		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(0)));
-		// LSB ‘¤‚ÌÅ‰‚Ì 1 ‚Ì bit ‚ğ 0 ‚É‚·‚é
+		// LSB å´ã®æœ€åˆã® 1 ã® bit ã‚’ 0 ã«ã™ã‚‹
 		this->m_p_[0] &= this->GetP(0) - 1;
 		return sq;
 	}
 
 
-	// Bitboard ‚Ì left ‘¤‚¾‚¯‚Ì—v‘f‚ğ’²‚×‚ÄAÅ‰‚É 1 ‚Å‚ ‚éƒ}ƒX‚Ì index ‚ğ•Ô‚·B
-	// ‚»‚Ìƒ}ƒX‚ğ 0 ‚É‚·‚éB
-	// Bitboard ‚Ì left ‘¤‚ª 0 ‚Å‚È‚¢‚±‚Æ‚ğ‘O’ñ‚É‚µ‚Ä‚¢‚éB
+	// Bitboard ã® left å´ã ã‘ã®è¦ç´ ã‚’èª¿ã¹ã¦ã€æœ€åˆã« 1 ã§ã‚ã‚‹ãƒã‚¹ã® index ã‚’è¿”ã™ã€‚
+	// ãã®ãƒã‚¹ã‚’ 0 ã«ã™ã‚‹ã€‚
+	// Bitboard ã® left å´ãŒ 0 ã§ãªã„ã“ã¨ã‚’å‰æã«ã—ã¦ã„ã‚‹ã€‚
 	FORCE_INLINE Square PopFirstOneLeftFromB9() {
 		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(1)) + 63);
-		// LSB ‘¤‚ÌÅ‰‚Ì 1 ‚Ì bit ‚ğ 0 ‚É‚·‚é
+		// LSB å´ã®æœ€åˆã® 1 ã® bit ã‚’ 0 ã«ã™ã‚‹
 		this->m_p_[1] &= this->GetP(1) - 1;
 		return sq;
 	}
 
 
-	// Bitboard ‚ğ I9 ‚©‚ç A1 ‚Ü‚Å’²‚×‚ÄAÅ‰‚É 1 ‚Å‚ ‚éƒ}ƒX‚Ì index ‚ğ•Ô‚·B
-	// ‚»‚Ìƒ}ƒX‚ğ 0 ‚É‚·‚éB
-	// Bitboard ‚ª allZeroBB() ‚Å‚È‚¢‚±‚Æ‚ğ‘O’ñ‚É‚µ‚Ä‚¢‚éB
-	// VC++ ‚Ì _BitScanForward() ‚Í“ü—Í‚ª 0 ‚Ì‚Æ‚«‚É 0 ‚ğ•Ô‚·d—l‚È‚Ì‚ÅA
-	// Å‰‚É 0 ‚Å‚È‚¢‚©”»’è‚·‚é‚Ì‚Í­‚µ‘¹B
+	// Bitboard ã‚’ I9 ã‹ã‚‰ A1 ã¾ã§èª¿ã¹ã¦ã€æœ€åˆã« 1 ã§ã‚ã‚‹ãƒã‚¹ã® index ã‚’è¿”ã™ã€‚
+	// ãã®ãƒã‚¹ã‚’ 0 ã«ã™ã‚‹ã€‚
+	// Bitboard ãŒ allZeroBB() ã§ãªã„ã“ã¨ã‚’å‰æã«ã—ã¦ã„ã‚‹ã€‚
+	// VC++ ã® _BitScanForward() ã¯å…¥åŠ›ãŒ 0 ã®ã¨ãã« 0 ã‚’è¿”ã™ä»•æ§˜ãªã®ã§ã€
+	// æœ€åˆã« 0 ã§ãªã„ã‹åˆ¤å®šã™ã‚‹ã®ã¯å°‘ã—æã€‚
 	FORCE_INLINE Square PopFirstOneFromI9()
 	{
 		if (this->GetP(0)) {
@@ -111,7 +111,7 @@ public:
 		return PopFirstOneLeftFromB9();
 	}
 
-	// •Ô‚·ˆÊ’u‚ğ 0 ‚É‚µ‚È‚¢ƒo[ƒWƒ‡ƒ“B
+	// è¿”ã™ä½ç½®ã‚’ 0 ã«ã—ãªã„ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã€‚
 	FORCE_INLINE Square GetFirstOneRightFromI9() const
 	{
 		return static_cast<Square>(firstOneFromLSB(this->GetP(0)));
@@ -130,15 +130,15 @@ public:
 		return GetFirstOneLeftFromB9();
 	}
 
-	// Bitboard ‚Ì 1 ‚Ì bit ‚ğ”‚¦‚éB
-	// Crossover ‚ÍAMergeP() ‚·‚é‚Æ 1 ‚Å‚ ‚é bit ‚ªd‚È‚é‰Â”\«‚ª‚ ‚é‚È‚ç true
+	// Bitboard ã® 1 ã® bit ã‚’æ•°ãˆã‚‹ã€‚
+	// Crossover ã¯ã€MergeP() ã™ã‚‹ã¨ 1 ã§ã‚ã‚‹ bit ãŒé‡ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãªã‚‰ true
 	template <bool Crossover = true>
 	int PopCount() const {
 		return (Crossover ? count1s(GetP(0)) + count1s(GetP(1)) : count1s(MergeP()));
 	}
 
-	// bit ‚ª 1 ‚Â‚¾‚¯—§‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğ”»’è‚·‚éB
-	// Crossover ‚ÍAMergeP() ‚·‚é‚Æ 1 ‚Å‚ ‚é bit ‚ªd‚È‚é‰Â”\«‚ª‚ ‚é‚È‚ç true
+	// bit ãŒ 1 ã¤ã ã‘ç«‹ã£ã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+	// Crossover ã¯ã€MergeP() ã™ã‚‹ã¨ 1 ã§ã‚ã‚‹ bit ãŒé‡ãªã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ãªã‚‰ true
 	template <bool Crossover = true>
 	bool IsOneBit() const {
 #if defined (HAVE_SSE42)
@@ -156,12 +156,12 @@ public:
 
 	void PrintTable(const int part) const;
 
-	// w’è‚µ‚½ˆÊ’u‚ª Bitboard ‚Ì‚Ç‚¿‚ç‚Ì u64 •Ï”‚Ì—v‘f‚©
+	// æŒ‡å®šã—ãŸä½ç½®ãŒ Bitboard ã®ã©ã¡ã‚‰ã® u64 å¤‰æ•°ã®è¦ç´ ã‹
 	static int Part(const Square sq);
 
 public://(^q^)
 
-	// ÀÛ‚Ég—p‚·‚é•”•ª‚Ì‘S‚Ä bit ‚ª—§‚Á‚Ä‚¢‚é Bitboard
+	// å®Ÿéš›ã«ä½¿ç”¨ã™ã‚‹éƒ¨åˆ†ã®å…¨ã¦ bit ãŒç«‹ã£ã¦ã„ã‚‹ Bitboard
 	static inline Bitboard CreateAllOneBB() {
 		return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff));
 	}
@@ -178,17 +178,17 @@ public://(^q^)
 
 #else
 	// magic bitboard.
-	// magic number ‚ğg‚Á‚Ä block ‚Ì–Í—l‚©‚ç—˜‚«‚Ìƒe[ƒuƒ‹‚Ö‚ÌƒCƒ“ƒfƒbƒNƒX‚ğZo
+	// magic number ã‚’ä½¿ã£ã¦ block ã®æ¨¡æ§˜ã‹ã‚‰åˆ©ãã®ãƒ†ãƒ¼ãƒ–ãƒ«ã¸ã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’ç®—å‡º
 	inline u64 OccupiedToIndex( const u64 magic, const int shiftBits) const {
 		return (this->MergeP() * magic) >> shiftBits;
 	}
 #endif
 
-	// Bitboard ‚Å’¼Ú—˜‚«‚ğ•Ô‚·ŠÖ”B
-	// 1’i–Ú‚É‚Í•à‚Í‘¶İ‚µ‚È‚¢‚Ì‚ÅA1bit ƒVƒtƒg‚Å•Ê‚Ì‹Ø‚És‚­‚±‚Æ‚Í‚È‚¢B
-	// ‚½‚¾‚µAfrom ‚É•àˆÈŠO‚Ì‹î‚Ì Bitboard ‚ğ“ü‚ê‚é‚ÆA•Ê‚Ì‹Ø‚Ìƒrƒbƒg‚ª—§‚Á‚Ä‚µ‚Ü‚¤‚±‚Æ‚ª‚ ‚é‚Ì‚ÅA
-	// •Ê‚Ì‹Ø‚Ìƒrƒbƒg‚ª—§‚½‚È‚¢‚©A—§‚Á‚Ä‚à–â‘è‚È‚¢‚©‚ğŠm”F‚µ‚Äg—p‚·‚é‚±‚ÆB
-	template <Color US> inline Bitboard PawnAttack() const { // this‚Ífrom
+	// Bitboard ã§ç›´æ¥åˆ©ãã‚’è¿”ã™é–¢æ•°ã€‚
+	// 1æ®µç›®ã«ã¯æ­©ã¯å­˜åœ¨ã—ãªã„ã®ã§ã€1bit ã‚·ãƒ•ãƒˆã§åˆ¥ã®ç­‹ã«è¡Œãã“ã¨ã¯ãªã„ã€‚
+	// ãŸã ã—ã€from ã«æ­©ä»¥å¤–ã®é§’ã® Bitboard ã‚’å…¥ã‚Œã‚‹ã¨ã€åˆ¥ã®ç­‹ã®ãƒ“ãƒƒãƒˆãŒç«‹ã£ã¦ã—ã¾ã†ã“ã¨ãŒã‚ã‚‹ã®ã§ã€
+	// åˆ¥ã®ç­‹ã®ãƒ“ãƒƒãƒˆãŒç«‹ãŸãªã„ã‹ã€ç«‹ã£ã¦ã‚‚å•é¡Œãªã„ã‹ã‚’ç¢ºèªã—ã¦ä½¿ç”¨ã™ã‚‹ã“ã¨ã€‚
+	template <Color US> inline Bitboard PawnAttack() const { // thisã¯from
 		return (US == Black ? ((*this) >> 1) : ((*this) << 1));
 	}
 

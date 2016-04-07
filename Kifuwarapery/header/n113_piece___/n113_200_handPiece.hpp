@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 
 #include "../n113_piece___/n113_155_utilPiece.hpp"
 
 
-// �������\���Ƃ��Ɏg�p����B
-// todo: HGold �� HRook �̌��Ɏ����Ă����APieceType �Ƃ̕ϊ����ȒP�ɏo����悤�ɂ���B
+// 持ち駒を表すときに使用する。
+// todo: HGold を HRook の後ろに持っていき、PieceType との変換を簡単に出来るようにする。
 enum HandPiece {
 	HPawn, HLance, HKnight, HSilver, HGold, HBishop, HRook, HandPieceNum
 };

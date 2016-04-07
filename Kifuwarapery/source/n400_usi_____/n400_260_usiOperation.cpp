@@ -1,4 +1,4 @@
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+ï»¿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
@@ -38,13 +38,13 @@ public:
 const StringToPieceTypeCSA g_stringToPieceTypeCSA;
 
 
-// l‚¦n‚ß‚é‚Ì‚Í‚±‚±B
+// è€ƒãˆå§‹ã‚ã‚‹ã®ã¯ã“ã“ã€‚
 void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 	LimitsType limits;
 	std::vector<Move> moves;
 	std::string token;
 
-	// go ‚É‚àí—Ş‚ª‚ ‚é™
+	// go ã«ã‚‚ç¨®é¡ãŒã‚ã‚‹â˜†
 	while (ssCmd >> token) {
 		if      (token == "ponder"     ) { limits.m_ponder = true; }
 		else if (token == "btime"      ) { ssCmd >> limits.m_time[Black]; }
@@ -52,7 +52,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 		else if (token == "infinite"   ) { limits.m_infinite = true; }
 		else if (token == "byoyomi" ||
 				 token == "movetime"   ) {
-			// btime wtime ‚ÌŒã‚É byoyomi ‚ª—ˆ‚é‘O’ñ‚É‚È‚Á‚Ä‚¢‚é‚Ì‚Å—Ç‚­‚È‚¢B
+			// btime wtime ã®å¾Œã« byoyomi ãŒæ¥ã‚‹å‰æã«ãªã£ã¦ã„ã‚‹ã®ã§è‰¯ããªã„ã€‚
 			ssCmd >> limits.m_moveTime;
 			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetSearcher()->m_options["Byoyomi_Margin"]; }
 		}
@@ -68,12 +68,12 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 	}
 	pos.GetSearcher()->m_searchMoves = moves;
 
-	// vl‚ğŠJn™
+	// æ€è€ƒã‚’é–‹å§‹â˜†
 	pos.GetSearcher()->m_threads.StartThinking(pos, limits, moves);
 }
 
 #if defined LEARN
-// ŠwK—pB’Êí‚Ì go ŒÄ‚Ño‚µ‚Í•¶š—ñ‚ğˆµ‚Á‚Ä‚ƒRƒXƒg‚È‚Ì‚ÅA‘å—Ê‚É’Tõ‚ÌŠJnAI—¹‚ğs‚¤ŠwK‚Å‚Í•Ê‚ÌŒÄ‚Ño‚µ•û‚É‚·‚éB
+// å­¦ç¿’ç”¨ã€‚é€šå¸¸ã® go å‘¼ã³å‡ºã—ã¯æ–‡å­—åˆ—ã‚’æ‰±ã£ã¦é«˜ã‚³ã‚¹ãƒˆãªã®ã§ã€å¤§é‡ã«æ¢ç´¢ã®é–‹å§‹ã€çµ‚äº†ã‚’è¡Œã†å­¦ç¿’ã§ã¯åˆ¥ã®å‘¼ã³å‡ºã—æ–¹ã«ã™ã‚‹ã€‚
 void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
 	LimitsType m_limits;
 	std::vector<Move> moves;
@@ -128,7 +128,7 @@ void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 
 	if (token == "startpos") {
 		sfen = g_DefaultStartPositionSFEN;
-		ssCmd >> token; // "moves" ‚ª“ü—Í‚³‚ê‚é‚Í‚¸B
+		ssCmd >> token; // "moves" ãŒå…¥åŠ›ã•ã‚Œã‚‹ã¯ãšã€‚
 	}
 	else if (token == "sfen") {
 		while (ssCmd >> token && token != "moves") {

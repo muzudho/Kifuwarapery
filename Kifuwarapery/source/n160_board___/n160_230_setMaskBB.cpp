@@ -1,11 +1,11 @@
-#include "../../header/n160_board___/n160_400_printBb.hpp"
+ï»¿#include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 
 
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-// ƒ}ƒXƒN
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-SetMaskBb g_setMaskBb;
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ãƒã‚¹ã‚¯
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+const SetMaskBb g_setMaskBb;
 
 
 void SetMaskBb::ClearBit(Bitboard* thisBitboard, const Square sq) const
@@ -34,11 +34,11 @@ void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq) const
 	*thisBitboard |= g_setMaskBb.m_setMaskBB_[sq];
 }
 
-// index, bits ‚Ìî•ñ‚ğŒ³‚É‚µ‚ÄAoccupied ‚Ì 1 ‚Ìbit ‚ğ ‚¢‚­‚Â‚© 0 ‚É‚·‚éB
-// index ‚Ì’l‚ğ, occupied ‚Ì 1‚Ìbit ‚ÌˆÊ’u‚É•ÏŠ·‚·‚éB
-// index   [0, 1<<bits) ‚Ì”ÍˆÍ‚Ìindex
+// index, bits ã®æƒ…å ±ã‚’å…ƒã«ã—ã¦ã€occupied ã® 1 ã®bit ã‚’ ã„ãã¤ã‹ 0 ã«ã™ã‚‹ã€‚
+// index ã®å€¤ã‚’, occupied ã® 1ã®bit ã®ä½ç½®ã«å¤‰æ›ã™ã‚‹ã€‚
+// index   [0, 1<<bits) ã®ç¯„å›²ã®index
 // bits    bit size
-// blockMask   —˜‚«‚Ì‚ ‚éƒ}ƒX‚ª 1 ‚Ìbitboard
+// blockMask   åˆ©ãã®ã‚ã‚‹ãƒã‚¹ãŒ 1 ã®bitboard
 // result  occupied
 Bitboard SetMaskBb::IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) const {
 	Bitboard tmpBlockMask = blockMask;

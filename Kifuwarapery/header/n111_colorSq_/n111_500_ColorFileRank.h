@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n110_square__/n110_500_utilSquare.hpp"
@@ -11,6 +11,6 @@ public:
 public:
 	ColorFileRank(Color color, File file, Rank rank);
 
-	// ƒ\[ƒg—p‚Ì”šB
+	// ã‚½ãƒ¼ãƒˆç”¨ã®æ•°å­—ã€‚
 	int GetOrder();
 };

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
@@ -6,13 +6,13 @@
 
 
 enum PieceType {
-	// Pro* ‚Í Œ³‚Ì ‹î‚Ìí—Ş‚É 8 ‚ğ‰ÁZ‚µ‚½‚à‚ÌB
+	// Pro* ã¯ å…ƒã® é§’ã®ç¨®é¡ã« 8 ã‚’åŠ ç®—ã—ãŸã‚‚ã®ã€‚
 	PTPromote = 8,
-	Occupied = 0, // Še PieceType ‚Ì or ‚ğ‚Æ‚Á‚½‚à‚ÌB
+	Occupied = 0, // å„ PieceType ã® or ã‚’ã¨ã£ãŸã‚‚ã®ã€‚
 	Pawn, Lance, Knight, Silver, Bishop, Rook, Gold, King,
 	ProPawn, ProLance, ProKnight, ProSilver, Horse, Dragon,
 	PieceTypeNum,
 
-	GoldHorseDragon // ’P‚Étemnplateˆø”‚Æ‚µ‚Äg—p
+	GoldHorseDragon // å˜ã«temnplateå¼•æ•°ã¨ã—ã¦ä½¿ç”¨
 };
 OverloadEnumOperators(PieceType);

@@ -1,13 +1,9 @@
-#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
+ï»¿#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
 #include "../../header/n160_board___/n160_150_rookAttackBb.hpp"
 #include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
 
 
-extern BishopAttackBb g_bishopAttackBb;
-extern RookAttackBb g_rookAttackBb;
-
-
-KingAttackBb g_kingAttackBb;//–{“–‚Íconst ‚É‚µ‚½‚¢‚ªA‚â‚è•û‚ª‚í‚©‚ç‚È‚¢™ C2373ƒGƒ‰[‚É‚È‚é‚ñ‚¾‚º™
+KingAttackBb g_kingAttackBb;//æœ¬å½“ã¯const ã«ã—ãŸã„ãŒã€ã‚„ã‚Šæ–¹ãŒã‚ã‹ã‚‰ãªã„â˜† C2373ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã‚“ã ãœâ˜†
 
 
 void KingAttackBb::Initialize()

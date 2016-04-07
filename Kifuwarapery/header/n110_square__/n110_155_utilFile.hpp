@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n110_square__/n110_150_file.hpp"
 
 class UtilFile {
 public:
-	// ¶‰E•ÏŠ·
+	// å·¦å³å¤‰æ›
 	static inline constexpr File Inverse(const File f) { return FileNum - 1 - f; }
 
 	static inline bool ContainsOf(const File f) { return (0 <= f) && (f < FileNum); }

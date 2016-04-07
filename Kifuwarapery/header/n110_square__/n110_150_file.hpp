@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../n110_square__/n110_100_square.hpp"
 

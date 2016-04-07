@@ -1,27 +1,98 @@
-#pragma once
+ï»¿#pragma once
 
-#include "n160_050_configBits.hpp"
 #include "n160_100_bitboard.hpp"
 #include "n160_130_lanceAttackBb.hpp"
 #include "n160_140_goldAttackBb.hpp"
-
-extern ConfigBits g_configBits;
-extern LanceAttackBb g_lanceAttackBb;
-extern GoldAttackBb g_goldAttackBb;
+#include "n160_150_rookAttackBb.hpp"
 
 
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-// ”ò
-//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// é£›
+//â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 class RookAttackBb {
 private:
-	// ƒƒ‚ƒŠß–ñ‚Ìˆ×A1ŽŸŒ³”z—ñ‚É‚µ‚Ä–³‘Ê‚ª–³‚¢‚æ‚¤‚É‚µ‚Ä‚¢‚éB
+
+
+	// å„ãƒžã‚¹ã®rookãŒåˆ©ãã‚’èª¿ã¹ã‚‹å¿…è¦ãŒã‚ã‚‹ãƒžã‚¹ã®æ•°
+	const int m_rookBlockBits_[SquareNum] = {
+		14, 13, 13, 13, 13, 13, 13, 13, 14,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		13, 12, 12, 12, 12, 12, 12, 12, 13,
+		14, 13, 13, 13, 13, 13, 13, 13, 14
+	};
+
+	// Magic Bitboard ã§åˆ©ãã‚’æ±‚ã‚ã‚‹éš›ã®ã‚·ãƒ•ãƒˆé‡
+	// g_rookShiftBits[17], g_rookShiftBits[53] ã¯ãƒžã‚¸ãƒƒã‚¯ãƒŠãƒ³ãƒãƒ¼ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸãŸã‚ã€
+	// ã‚·ãƒ•ãƒˆé‡ã‚’ 1 ã¤æ¸›ã‚‰ã™ã€‚(ãƒ†ãƒ¼ãƒ–ãƒ«ã‚µã‚¤ã‚ºã‚’ 2 å€ã«ã™ã‚‹ã€‚)
+	// ã“ã®æ–¹æ³•ã¯ issei_y ã•ã‚“ã«ç›¸è«‡ã—ãŸã¨ã“ã‚ã€æ•™ãˆã¦é ‚ã„ãŸæ–¹æ³•ã€‚
+	// PEXT Bitboardã‚’ä½¿ç”¨ã™ã‚‹éš›ã¯ã‚·ãƒ•ãƒˆé‡ã‚’æ¸›ã‚‰ã™å¿…è¦ãŒç„¡ã„ã€‚
+	const int m_rookShiftBits_[SquareNum] = {
+		50, 51, 51, 51, 51, 51, 51, 51, 50,
+#if defined HAVE_BMI2
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+#else
+		51, 52, 52, 52, 52, 52, 52, 52, 50, // [17]: 51 -> 50
+#endif
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+#if defined HAVE_BMI2
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+#else
+		51, 52, 52, 52, 52, 52, 52, 52, 50, // [53]: 51 -> 50
+#endif
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+		51, 52, 52, 52, 52, 52, 52, 52, 51,
+		50, 51, 51, 51, 51, 51, 51, 51, 50
+	};
+
+#if defined HAVE_BMI2
+#else
+	const u64 m_rookMagic_[SquareNum] = {
+		UINT64_C(0x140000400809300),  UINT64_C(0x1320000902000240), UINT64_C(0x8001910c008180),
+		UINT64_C(0x40020004401040),   UINT64_C(0x40010000d01120),   UINT64_C(0x80048020084050),
+		UINT64_C(0x40004000080228),   UINT64_C(0x400440000a2a0a),   UINT64_C(0x40003101010102),
+		UINT64_C(0x80c4200012108100), UINT64_C(0x4010c00204000c01), UINT64_C(0x220400103250002),
+		UINT64_C(0x2600200004001),    UINT64_C(0x40200052400020),   UINT64_C(0xc00100020020008),
+		UINT64_C(0x9080201000200004), UINT64_C(0x2200201000080004), UINT64_C(0x80804c0020200191),
+		UINT64_C(0x45383000009100),   UINT64_C(0x30002800020040),   UINT64_C(0x40104000988084),
+		UINT64_C(0x108001000800415),  UINT64_C(0x14005000400009),   UINT64_C(0xd21001001c00045),
+		UINT64_C(0xc0003000200024),   UINT64_C(0x40003000280004),   UINT64_C(0x40021000091102),
+		UINT64_C(0x2008a20408000d00), UINT64_C(0x2000100084010040), UINT64_C(0x144080008008001),
+		UINT64_C(0x50102400100026a2), UINT64_C(0x1040020008001010), UINT64_C(0x1200200028005010),
+		UINT64_C(0x4280030030020898), UINT64_C(0x480081410011004),  UINT64_C(0x34000040800110a),
+		UINT64_C(0x101000010c0021),   UINT64_C(0x9210800080082),    UINT64_C(0x6100002000400a7),
+		UINT64_C(0xa2240800900800c0), UINT64_C(0x9220082001000801), UINT64_C(0x1040008001140030),
+		UINT64_C(0x40002220040008),   UINT64_C(0x28000124008010c),  UINT64_C(0x40008404940002),
+		UINT64_C(0x40040800010200),   UINT64_C(0x90000809002100),   UINT64_C(0x2800080001000201),
+		UINT64_C(0x1400020001000201), UINT64_C(0x180081014018004),  UINT64_C(0x1100008000400201),
+		UINT64_C(0x80004000200201),   UINT64_C(0x420800010000201),  UINT64_C(0x2841c00080200209),
+		UINT64_C(0x120002401040001),  UINT64_C(0x14510000101000b),  UINT64_C(0x40080000808001),
+		UINT64_C(0x834000188048001),  UINT64_C(0x4001210000800205), UINT64_C(0x4889a8007400201),
+		UINT64_C(0x2080044080200062), UINT64_C(0x80004002861002),   UINT64_C(0xc00842049024),
+		UINT64_C(0x8040000202020011), UINT64_C(0x400404002c0100),   UINT64_C(0x2080028202000102),
+		UINT64_C(0x8100040800590224), UINT64_C(0x2040009004800010), UINT64_C(0x40045000400408),
+		UINT64_C(0x2200240020802008), UINT64_C(0x4080042002200204), UINT64_C(0x4000b0000a00a2),
+		UINT64_C(0xa600000810100),    UINT64_C(0x1410000d001180),   UINT64_C(0x2200101001080),
+		UINT64_C(0x100020014104e120), UINT64_C(0x2407200100004810), UINT64_C(0x80144000a0845050),
+		UINT64_C(0x1000200060030c18), UINT64_C(0x4004200020010102), UINT64_C(0x140600021010302)
+};
+#endif
+
+
+	// ãƒ¡ãƒ¢ãƒªç¯€ç´„ã®ç‚ºã€1æ¬¡å…ƒé…åˆ—ã«ã—ã¦ç„¡é§„ãŒç„¡ã„ã‚ˆã†ã«ã—ã¦ã„ã‚‹ã€‚
 #if defined HAVE_BMI2
 	Bitboard m_controllBb_[495616];
 #else
 	Bitboard m_controllBb_[512000];
 #endif
 
+	int		m_rookAttackIndex[SquareNum];
 	Bitboard m_rookBlockMask_[SquareNum];
 	Bitboard m_controllBbToEdge_[SquareNum];
 
@@ -33,27 +104,27 @@ public:
 	u64 findMagicRook(const Square sqare);
 #endif // #if defined FIND_MAGIC
 
-	// ‰Šú‰»—p
+	// åˆæœŸåŒ–ç”¨
 	Bitboard RookBlockMaskCalc(const Square square) const;
 	Bitboard RookAttackCalc(const Square square, const Bitboard& occupied) const;
 	void InitRookAttacks();
 
-	// áŠQ•¨‚ª–³‚¢‚Æ‚«‚Ì—˜‚«‚Ì Bitboard
-	// g_rookAttack, g_bishopAttack, g_lanceAttack ‚ðÝ’è‚µ‚Ä‚©‚çA‚±‚ÌŠÖ”‚ðŒÄ‚Ô‚±‚ÆB
+	// éšœå®³ç‰©ãŒç„¡ã„ã¨ãã®åˆ©ãã® Bitboard
+	// g_rookAttack, g_bishopAttack, g_lanceAttack ã‚’è¨­å®šã—ã¦ã‹ã‚‰ã€ã“ã®é–¢æ•°ã‚’å‘¼ã¶ã“ã¨ã€‚
 	void InitializeToEdge();
 
 	inline Bitboard GetControllBbToEdge(const Square sq) const {
 		return this->m_controllBbToEdge_[sq];
 	}
 
-	// ”òŽÔ‚Ìc‚¾‚¯‚Ì—˜‚«BŽÔ‚Ì—˜‚«‚ðŽg‚¢Aindex ‚ð‹¤’Ê‰»‚·‚é‚±‚Æ‚Å‚‘¬‰»‚µ‚Ä‚¢‚éB
+	// é£›è»Šã®ç¸¦ã ã‘ã®åˆ©ãã€‚é¦™è»Šã®åˆ©ãã‚’ä½¿ã„ã€index ã‚’å…±é€šåŒ–ã™ã‚‹ã“ã¨ã§é«˜é€ŸåŒ–ã—ã¦ã„ã‚‹ã€‚
 	inline Bitboard GetControllBbFile(const Bitboard* thisBitboard, const Square sq) const {
 		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> g_configBits.m_slide[sq]) & 127;
+		const int index = ((*thisBitboard).GetP(part) >> g_slideBits.m_slide[sq]) & 127;
 		return g_lanceAttackBb.m_controllBb[Black][sq][index] | g_lanceAttackBb.m_controllBb[White][sq][index];
 	}
 
-	// todo: ƒe[ƒuƒ‹ˆø‚«‚ðŒŸ“¢
+	// todo: ãƒ†ãƒ¼ãƒ–ãƒ«å¼•ãã‚’æ¤œè¨Ž
 	inline Bitboard RookStepAttacks(const Square sq) const {
 		return g_goldAttackBb.GetControllBb(Black, sq) & g_goldAttackBb.GetControllBb(White, sq);
 	}
@@ -67,8 +138,8 @@ public:
 		inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Square sq) const {
 			const Bitboard block((*thisBitboard) & this->m_rookBlockMask_[sq]);
 			return this->m_controllBb_[
-				g_configBits.m_rookAttackIndex[sq] +
-					block.OccupiedToIndex(g_configBits.m_rookMagic[sq], g_configBits.m_rookShiftBits[sq])
+				this->m_rookAttackIndex[sq] +
+					block.OccupiedToIndex(this->m_rookMagic_[sq], this->m_rookShiftBits_[sq])
 			];
 		}
 	#endif
@@ -76,4 +147,5 @@ public:
 };
 
 
+// ã‚¯ãƒ©ã‚¹å®šç¾©ã®ã‚ã¨ã«æ›¸ãã¨ãƒ“ãƒ«ãƒ‰ã§ãã‚‹ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 extern RookAttackBb g_rookAttackBb;

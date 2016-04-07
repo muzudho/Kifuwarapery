@@ -1,11 +1,11 @@
-#pragma once
+﻿#pragma once
 
 #include "../n226_movStack/n226_105_utilMoveStack.hpp"
 #include "../n276_genMove_/n276_100_moveType.hpp"
 #include "../n276_genMove_/n276_250_makePromoteMove.hpp"
 
 
-// MoveType �̑S�Ă̎w����𐶐�
+// MoveType の全ての指し手を生成
 template <MoveType MT>
 MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos);
 template <MoveType MT>

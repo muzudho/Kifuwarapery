@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 class Position;
@@ -10,12 +10,12 @@ public:
 	SplitPoint*		m_splitPoint;
 	Ply				m_ply;
 	Move			m_currentMove;
-	Move			m_excludedMove; // todo: ‚±‚ê‚Í•K—vH
+	Move			m_excludedMove; // todo: ã“ã‚Œã¯å¿…è¦ï¼Ÿ
 	Move			m_killers[2];
 	Depth			m_reduction;
 	Score			m_staticEval;
 	bool			m_skipNullMove;
-	EvalSum			m_staticEvalRaw;	// •]‰¿ŠÖ”‚Ì·•ªŒvZ—pA’l‚ª“ü‚Á‚Ä‚¢‚È‚¢‚Æ‚«‚Í [0] ‚ğ ScoreNotEvaluated ‚É‚µ‚Ä‚¨‚­B
-									// í‚É Black ‘¤‚©‚çŒ©‚½•]‰¿’l‚ğ“ü‚ê‚Ä‚¨‚­B
-									// 0: ‘o‹Ê‚É‘Î‚·‚é•]‰¿’l, 1: æè‹Ê‚É‘Î‚·‚é•]‰¿’l, 2: Œãè‹Ê‚É‘Î‚·‚é•]‰¿’l
+	EvalSum			m_staticEvalRaw;	// è©•ä¾¡é–¢æ•°ã®å·®åˆ†è¨ˆç®—ç”¨ã€å€¤ãŒå…¥ã£ã¦ã„ãªã„ã¨ãã¯ [0] ã‚’ ScoreNotEvaluated ã«ã—ã¦ãŠãã€‚
+									// å¸¸ã« Black å´ã‹ã‚‰è¦‹ãŸè©•ä¾¡å€¤ã‚’å…¥ã‚Œã¦ãŠãã€‚
+									// 0: åŒç‰ã«å¯¾ã™ã‚‹è©•ä¾¡å€¤, 1: å…ˆæ‰‹ç‰ã«å¯¾ã™ã‚‹è©•ä¾¡å€¤, 2: å¾Œæ‰‹ç‰ã«å¯¾ã™ã‚‹è©•ä¾¡å€¤
 };

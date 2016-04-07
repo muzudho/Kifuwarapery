@@ -1,11 +1,10 @@
-#include "../../header/n160_board___/n160_250_squareRelation.hpp"
+﻿#include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
 
 
-extern SquareRelation g_squareRelation;
-
 BetweenBb g_betweenBb;
+
 
 void BetweenBb::Initialize() {
 	for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
