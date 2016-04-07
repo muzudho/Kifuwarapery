@@ -2,6 +2,7 @@
 
 #include "../n080_common__/n080_105_time.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
+#include "../n220_position/n220_400_position.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
 #include "../n240_tt______/n240_300_tt.hpp"
@@ -18,7 +19,7 @@
 
 using namespace std;
 
-class Position;
+
 struct SplitPoint;
 
 using History = Stats<false>;

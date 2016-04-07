@@ -1,6 +1,10 @@
 #pragma once
 
+#include "../n220_position/n220_400_position.hpp"
 #include "n223_100_move.hpp"
+
+class Position;
+
 
 class UtilMove {
 public:

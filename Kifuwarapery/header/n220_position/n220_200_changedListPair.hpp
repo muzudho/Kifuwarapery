@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
 

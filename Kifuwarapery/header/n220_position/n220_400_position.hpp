@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include <stack>
 #include "../n116_hand____/n116_500_hand.hpp"
@@ -58,13 +58,13 @@ public:
 	}
 
 	Bitboard GetOccupiedBB() const { return this->GetBbOf(Occupied); }
-	// emptyBB() ‚æ‚è‚à‚í‚¸‚©‚É‘¬‚¢‚Í‚¸B
-	// emptyBB() ‚Æ‚ÍˆÙ‚È‚èA‘S‚­g—p‚µ‚È‚¢ˆÊ’u(0 ‚©‚ç”‚¦‚ÄAright ‚Ì 63bit–ÚAleft ‚Ì 18 ~ 63bit–Ú)
-	// ‚Ì bit ‚ª 1 ‚É‚È‚Á‚Ä‚à\‚í‚È‚¢‚Æ‚«A‚±‚¿‚ç‚ğg‚¤B
-	// todo: SSE‚Éƒrƒbƒg”½“]‚ª–³‚¢‚Ì‚ÅÀ‚Í‚»‚ñ‚È‚É‘¬‚­‚È‚¢‚Í‚¸B•s—vB
+	// emptyBB() ã‚ˆã‚Šã‚‚ã‚ãšã‹ã«é€Ÿã„ã¯ãšã€‚
+	// emptyBB() ã¨ã¯ç•°ãªã‚Šã€å…¨ãä½¿ç”¨ã—ãªã„ä½ç½®(0 ã‹ã‚‰æ•°ãˆã¦ã€right ã® 63bitç›®ã€left ã® 18 ~ 63bitç›®)
+	// ã® bit ãŒ 1 ã«ãªã£ã¦ã‚‚æ§‹ã‚ãªã„ã¨ãã€ã“ã¡ã‚‰ã‚’ä½¿ã†ã€‚
+	// todo: SSEã«ãƒ“ãƒƒãƒˆåè»¢ãŒç„¡ã„ã®ã§å®Ÿã¯ãã‚“ãªã«é€Ÿããªã„ã¯ãšã€‚ä¸è¦ã€‚
 	Bitboard GetNOccupiedBB() const { return ~GetOccupiedBB(); }
 	Bitboard GetEmptyBB() const { return GetOccupiedBB() ^ Bitboard::CreateAllOneBB(); }
-	// ‹àA¬‚è‹à ‚Ì Bitboard
+	// é‡‘ã€æˆã‚Šé‡‘ ã® Bitboard
 	Bitboard GetGoldsBB() const { return m_goldsBB_; }
 	Bitboard GetGoldsBB(const Color c) const { return GetGoldsBB() & this->GetBbOf(c); }
 
@@ -73,38 +73,38 @@ public:
 	// hand
 	Hand GetHand(const Color c) const { return m_hand_[c]; }
 
-	// turn() ‘¤‚ª pin ‚³‚ê‚Ä‚¢‚é Bitboard ‚ğ•Ô‚·B
-	// checkersBB ‚ªXV‚³‚ê‚Ä‚¢‚é•K—v‚ª‚ ‚éB
+	// turn() å´ãŒ pin ã•ã‚Œã¦ã„ã‚‹ Bitboard ã‚’è¿”ã™ã€‚
+	// checkersBB ãŒæ›´æ–°ã•ã‚Œã¦ã„ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 	Bitboard GetPinnedBB() const { return GetHiddenCheckers<true, true>(); }
-	// ŠÔ‚Ì‹î‚ğ“®‚©‚·‚±‚Æ‚ÅAturn() ‘¤‚ª‹ó‚«‰¤è‚ªo—ˆ‚é‹î‚ÌBitboard‚ğ•Ô‚·B
-	// checkersBB ‚ªXV‚³‚ê‚Ä‚¢‚é•K—v‚Í‚È‚¢B
-	// BetweenIsUs == true  : ŠÔ‚Ì‹î‚ª©‹îB
-	// BetweenIsUs == false : ŠÔ‚Ì‹î‚ª“G‹îB
+	// é–“ã®é§’ã‚’å‹•ã‹ã™ã“ã¨ã§ã€turn() å´ãŒç©ºãç‹æ‰‹ãŒå‡ºæ¥ã‚‹é§’ã®Bitboardã‚’è¿”ã™ã€‚
+	// checkersBB ãŒæ›´æ–°ã•ã‚Œã¦ã„ã‚‹å¿…è¦ã¯ãªã„ã€‚
+	// BetweenIsUs == true  : é–“ã®é§’ãŒè‡ªé§’ã€‚
+	// BetweenIsUs == false : é–“ã®é§’ãŒæ•µé§’ã€‚
 	template <bool BetweenIsUs = true>
 	Bitboard DiscoveredCheckBB() const { return GetHiddenCheckers<false, BetweenIsUs>(); }
 
-	// toFile ‚Æ“¯‚¶‹Ø‚É us ‚Ì•à‚ª‚È‚¢‚È‚ç true
+	// toFile ã¨åŒã˜ç­‹ã« us ã®æ­©ãŒãªã„ãªã‚‰ true
 	bool NoPawns(const Color us, const File toFile) const {
 		return !this->GetBbOf(Pawn, us).AndIsNot0(g_fileMaskBb.GetFileMask(toFile));
 	}
 	bool IsPawnDropCheckMate(const Color us, const Square sq) const;
 
-	// Pin‚³‚ê‚Ä‚¢‚éfrom‚Ì‹î‚ªto‚ÉˆÚ“®o—ˆ‚È‚¯‚ê‚Îtrue‚ğ•Ô‚·B
+	// Pinã•ã‚Œã¦ã„ã‚‹fromã®é§’ãŒtoã«ç§»å‹•å‡ºæ¥ãªã‘ã‚Œã°trueã‚’è¿”ã™ã€‚
 	template <bool IsKnight = false>
 	bool IsPinnedIllegal(const Square from, const Square to, const Square ksq, const Bitboard& pinned) const {
-		// Œj”n‚È‚ç‚Ç‚±‚É“®‚¢‚Ä‚à‘Ê–ÚB
+		// æ¡‚é¦¬ãªã‚‰ã©ã“ã«å‹•ã„ã¦ã‚‚é§„ç›®ã€‚
 		return g_setMaskBb.IsSet(&pinned,from) && (IsKnight || !g_squareRelation.IsAligned<true>(from, to, ksq));
 	}
-	// ‹ó‚«‰¤è‚©‚Ç‚¤‚©B
+	// ç©ºãç‹æ‰‹ã‹ã©ã†ã‹ã€‚
 	template <bool IsKnight = false>
 	bool IsDiscoveredCheck(const Square from, const Square to, const Square ksq, const Bitboard& dcBB) const {
-		// Œj”n‚È‚ç‚Ç‚±‚É“®‚¢‚Ä‚à‹ó‚«‰¤è‚É‚È‚éB
+		// æ¡‚é¦¬ãªã‚‰ã©ã“ã«å‹•ã„ã¦ã‚‚ç©ºãç‹æ‰‹ã«ãªã‚‹ã€‚
 		return g_setMaskBb.IsSet(&dcBB,from) && (IsKnight || !g_squareRelation.IsAligned<true>(from, to, ksq));
 	}
 
 	Bitboard GetCheckersBB() const { return m_st_->m_checkersBB; }
 	Bitboard GetPrevCheckersBB() const { return m_st_->m_previous->m_checkersBB; }
-	// ‰¤è‚ªŠ|‚©‚Á‚Ä‚¢‚é‚©B
+	// ç‹æ‰‹ãŒæ›ã‹ã£ã¦ã„ã‚‹ã‹ã€‚
 	bool InCheck() const { return GetCheckersBB().Exists1Bit(); }
 
 	Score GetMaterial() const { return m_st_->m_material; }
@@ -123,56 +123,56 @@ public:
 	Bitboard GetAttackersTo(const Color c, const Square sq) const { return GetAttackersTo(c, sq, GetOccupiedBB()); }
 	Bitboard GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
 	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
-	// todo: —˜‚«‚ğƒf[ƒ^‚Æ‚µ‚Ä‚Á‚½‚Æ‚«AattackersToIsNot0() ‚ğ‚‘¬‰»‚·‚é‚±‚ÆB
+	// todo: åˆ©ãã‚’ãƒ‡ãƒ¼ã‚¿ã¨ã—ã¦æŒã£ãŸã¨ãã€attackersToIsNot0() ã‚’é«˜é€ŸåŒ–ã™ã‚‹ã“ã¨ã€‚
 	bool IsAttackersToIsNot0(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
 	bool IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard& occupied) const {
 		return GetAttackersTo(c, sq, occupied).Exists1Bit();
 	}
-	// ˆÚ“®‰¤è‚ª–¡•û‚Ì—˜‚«‚Éx‚¦‚ç‚ê‚Ä‚¢‚é‚©Bfalse ‚È‚ç‘Šè‹Ê‚Åæ‚ê‚Î‹l‚Ü‚È‚¢B
+	// ç§»å‹•ç‹æ‰‹ãŒå‘³æ–¹ã®åˆ©ãã«æ”¯ãˆã‚‰ã‚Œã¦ã„ã‚‹ã‹ã€‚false ãªã‚‰ç›¸æ‰‹ç‰ã§å–ã‚Œã°è©°ã¾ãªã„ã€‚
 	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
-	// —˜‚«‚Ì¶¬
+	// åˆ©ãã®ç”Ÿæˆ
 
-	// ”CˆÓ‚Ì occupied ‚É‘Î‚·‚é—˜‚«‚ğ¶¬‚·‚éB
+	// ä»»æ„ã® occupied ã«å¯¾ã™ã‚‹åˆ©ãã‚’ç”Ÿæˆã™ã‚‹ã€‚
 	template <PieceType PT>
 	static Bitboard GetAttacksFrom(const Color c, const Square sq, const Bitboard& occupied);
 
-	// ”CˆÓ‚Ì occupied ‚É‘Î‚·‚é—˜‚«‚ğ¶¬‚·‚éB
+	// ä»»æ„ã® occupied ã«å¯¾ã™ã‚‹åˆ©ãã‚’ç”Ÿæˆã™ã‚‹ã€‚
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq, const Bitboard& occupied) const {
 		static_assert(PT == Bishop || PT == Rook || PT == Horse || PT == Dragon, "");
-		// Color ‚Í‰½‚Å‚à—Ç‚¢B
+		// Color ã¯ä½•ã§ã‚‚è‰¯ã„ã€‚
 		return GetAttacksFrom<PT>(ColorNum, sq, occupied);
 	}
 
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
-		static_assert(PT == Gold, ""); // Gold ˆÈŠO‚Í template “Áê‰»‚·‚éB
+		static_assert(PT == Gold, ""); // Gold ä»¥å¤–ã¯ template ç‰¹æ®ŠåŒ–ã™ã‚‹ã€‚
 		return g_goldAttackBb.GetControllBb(c, sq);
 	}
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq) const {
 		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "");
-		// Color ‚Í‰½‚Å‚à—Ç‚¢B
+		// Color ã¯ä½•ã§ã‚‚è‰¯ã„ã€‚
 		return GetAttacksFrom<PT>(ColorNum, sq);
 	}
 	Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const { return GetAttacksFrom(pt, c, sq, GetOccupiedBB()); }
 	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);
 
-	// Ÿ‚Ìè”Ô
+	// æ¬¡ã®æ‰‹ç•ª
 	Color GetTurn() const { return m_turn_; }
 
-	// pseudoLegal ‚Æ‚Í
-	// E‹Ê‚ª‘Šè‹î‚Ì—˜‚«‚ª‚ ‚éêŠ‚ÉˆÚ“®‚·‚é
-	// Epin ‚Ì‹î‚ğˆÚ“®‚³‚¹‚é
-	// E˜A‘±‰¤è‚Ìç“úè‚Ìè‚ğw‚·
-	// ‚±‚ê‚ç‚Ì”½‘¥è‚ğŠÜ‚ß‚½è‚Ì–‚Æ’è‹`‚·‚éB
-	// ‚æ‚Á‚ÄA‘Å‚¿•à‹l‚ß‚â“ñ•à‚Ìè‚Í pseudoLegal ‚Å‚Í–³‚¢B
+	// pseudoLegal ã¨ã¯
+	// ãƒ»ç‰ãŒç›¸æ‰‹é§’ã®åˆ©ããŒã‚ã‚‹å ´æ‰€ã«ç§»å‹•ã™ã‚‹
+	// ãƒ»pin ã®é§’ã‚’ç§»å‹•ã•ã›ã‚‹
+	// ãƒ»é€£ç¶šç‹æ‰‹ã®åƒæ—¥æ‰‹ã®æ‰‹ã‚’æŒ‡ã™
+	// ã“ã‚Œã‚‰ã®åå‰‡æ‰‹ã‚’å«ã‚ãŸæ‰‹ã®äº‹ã¨å®šç¾©ã™ã‚‹ã€‚
+	// ã‚ˆã£ã¦ã€æ‰“ã¡æ­©è©°ã‚ã‚„äºŒæ­©ã®æ‰‹ã¯ pseudoLegal ã§ã¯ç„¡ã„ã€‚
 	template <bool MUSTNOTDROP, bool FROMMUSTNOTBEKING>
 	bool IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const;
 
 	bool IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinned) const;
 
-	// checkPawnDrop : “ñ•à‚Æ‘Å‚¿•à‹l‚ß‚à’²‚×‚é‚È‚ç true
+	// checkPawnDrop : äºŒæ­©ã¨æ‰“ã¡æ­©è©°ã‚ã‚‚èª¿ã¹ã‚‹ãªã‚‰ true
 	bool MoveIsPseudoLegal(const Move move, const bool checkPawnDrop = false) const;
 
 #if !defined NDEBUG
@@ -245,12 +245,12 @@ public:
 	static void InitZobrist();
 
 	static Score GetPieceScore(const Piece pc) { return g_PieceScore[pc]; }
-	// Piece ‚ğ index ‚Æ‚µ‚Ä‚àA PieceType ‚ğ index ‚Æ‚µ‚Ä‚àA
-	// “¯‚¶’l‚ªæ“¾o—ˆ‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é‚Ì‚ÅAPieceType => Piece ‚Ö‚Ì•ÏŠ·‚Í•K—v‚È‚¢B
+	// Piece ã‚’ index ã¨ã—ã¦ã‚‚ã€ PieceType ã‚’ index ã¨ã—ã¦ã‚‚ã€
+	// åŒã˜å€¤ãŒå–å¾—å‡ºæ¥ã‚‹ã‚ˆã†ã«ã—ã¦ã„ã‚‹ã®ã§ã€PieceType => Piece ã¸ã®å¤‰æ›ã¯å¿…è¦ãªã„ã€‚
 	static Score GetPieceScore(const PieceType pt) { return g_PieceScore[pt]; }
 	static Score GetCapturePieceScore(const Piece pc) { return g_CapturePieceScore[pc]; }
-	// Piece ‚ğ index ‚Æ‚µ‚Ä‚àA PieceType ‚ğ index ‚Æ‚µ‚Ä‚àA
-	// “¯‚¶’l‚ªæ“¾o—ˆ‚é‚æ‚¤‚É‚µ‚Ä‚¢‚é‚Ì‚ÅAPieceType => Piece ‚Ö‚Ì•ÏŠ·‚Í•K—v‚È‚¢B
+	// Piece ã‚’ index ã¨ã—ã¦ã‚‚ã€ PieceType ã‚’ index ã¨ã—ã¦ã‚‚ã€
+	// åŒã˜å€¤ãŒå–å¾—å‡ºæ¥ã‚‹ã‚ˆã†ã«ã—ã¦ã„ã‚‹ã®ã§ã€PieceType => Piece ã¸ã®å¤‰æ›ã¯å¿…è¦ãªã„ã€‚
 	static Score GetCapturePieceScore(const PieceType pt) { return g_CapturePieceScore[pt]; }
 	static Score GetPromotePieceScore(const PieceType pt) {
 		assert(pt < Gold);
@@ -277,30 +277,30 @@ private:
 		SetHand(hp, c, num);
 	}
 
-	// è”Ô‘¤‚Ì‹Ê‚Ö check ‚µ‚Ä‚¢‚é‹î‚ğ‘S‚Ä’T‚µ‚Ä checkersBB_ ‚ÉƒZƒbƒg‚·‚éB
-	// ÅŒã‚Ìè‚ª‰½‚©Šo‚¦‚Ä‚¨‚¯‚ÎAattackersTo() ‚ğg—p‚µ‚È‚­‚Ä‚à—Ç‚¢‚Í‚¸‚ÅAˆ—‚ªŒy‚­‚È‚éB
+	// æ‰‹ç•ªå´ã®ç‰ã¸ check ã—ã¦ã„ã‚‹é§’ã‚’å…¨ã¦æ¢ã—ã¦ checkersBB_ ã«ã‚»ãƒƒãƒˆã™ã‚‹ã€‚
+	// æœ€å¾Œã®æ‰‹ãŒä½•ã‹è¦šãˆã¦ãŠã‘ã°ã€attackersTo() ã‚’ä½¿ç”¨ã—ãªãã¦ã‚‚è‰¯ã„ã¯ãšã§ã€å‡¦ç†ãŒè»½ããªã‚‹ã€‚
 	void FindCheckers() { m_st_->m_checkersBB = GetAttackersToExceptKing(UtilColor::OppositeColor(GetTurn()), GetKingSquare(GetTurn())); }
 
 	Score ComputeMaterial() const;
 
 	void XorBBs(const PieceType pt, const Square sq, const Color c);
 
-	// turn() ‘¤‚ª
-	// pin ‚³‚ê‚Ä(‚µ‚Ä)‚¢‚é‹î‚Ì Bitboard ‚ğ•Ô‚·B
-	// BetweenIsUs == true  : ŠÔ‚Ì‹î‚ª©‹îB
-	// BetweenIsUs == false : ŠÔ‚Ì‹î‚ª“G‹îB
+	// turn() å´ãŒ
+	// pin ã•ã‚Œã¦(ã—ã¦)ã„ã‚‹é§’ã® Bitboard ã‚’è¿”ã™ã€‚
+	// BetweenIsUs == true  : é–“ã®é§’ãŒè‡ªé§’ã€‚
+	// BetweenIsUs == false : é–“ã®é§’ãŒæ•µé§’ã€‚
 	template <bool FindPinned, bool BetweenIsUs>
 	Bitboard GetHiddenCheckers() const {
 		Bitboard result = Bitboard::CreateAllZeroBB();
 		const Color us = GetTurn();
 		const Color them = UtilColor::OppositeColor(us);
-		// pin ‚·‚é‰“Šu‹î
-		// ‚Ü‚¸‚Í©‹î‚©“G‹î‚©‚Å‘åG”c‚É”»•Ê
+		// pin ã™ã‚‹é éš”é§’
+		// ã¾ãšã¯è‡ªé§’ã‹æ•µé§’ã‹ã§å¤§é›‘æŠŠã«åˆ¤åˆ¥
 		Bitboard pinners = this->GetBbOf(FindPinned ? them : us);
 
 		const Square ksq = GetKingSquare(FindPinned ? us : them);
 
-		// áŠQ•¨‚ª–³‚¯‚ê‚Î‹Ê‚É“’Bo—ˆ‚é‹î‚ÌBitboard‚¾‚¯c‚·B
+		// éšœå®³ç‰©ãŒç„¡ã‘ã‚Œã°ç‰ã«åˆ°é”å‡ºæ¥ã‚‹é§’ã®Bitboardã ã‘æ®‹ã™ã€‚
 		pinners &=	(
 						this->GetBbOf(Lance) &
 						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? us : them), ksq)
@@ -316,10 +316,10 @@ private:
 
 		while (pinners.Exists1Bit()) {
 			const Square sq = pinners.PopFirstOneFromI9();
-			// pin ‚·‚é‰“Šu‹î‚Æ‹Ê‚ÌŠÔ‚É‚ ‚é‹î‚ÌˆÊ’u‚Ì Bitboard
+			// pin ã™ã‚‹é éš”é§’ã¨ç‰ã®é–“ã«ã‚ã‚‹é§’ã®ä½ç½®ã® Bitboard
 			const Bitboard between = g_betweenBb.GetBetweenBB(sq, ksq) & GetOccupiedBB();
 
-			// pin ‚·‚é‰“Šu‹î‚Æ‹Ê‚ÌŠÔ‚É‚ ‚é‹î‚ª1‚Â‚ÅA‚©‚ÂAˆø”‚ÌF‚Ì‚Æ‚«A‚»‚Ì‹î‚Í(‚ğ) pin ‚³‚ê‚Ä(‚µ‚Ä)‚¢‚éB
+			// pin ã™ã‚‹é éš”é§’ã¨ç‰ã®é–“ã«ã‚ã‚‹é§’ãŒ1ã¤ã§ã€ã‹ã¤ã€å¼•æ•°ã®è‰²ã®ã¨ãã€ãã®é§’ã¯(ã‚’) pin ã•ã‚Œã¦(ã—ã¦)ã„ã‚‹ã€‚
 			if (between.Exists1Bit()
 				&& between.IsOneBit<false>()
 				&& between.AndIsNot0( this->GetBbOf(BetweenIsUs ? us : them)))
@@ -347,17 +347,17 @@ private:
 	static Key GetZobHand(const HandPiece hp, const Color c) { return m_zobHand_[hp][c]; }
 
 
-	// byTypeBB ‚Í“GA–¡•û‚Ì‹î‚ğ‹æ•Ê‚µ‚È‚¢B
-	// byColorBB ‚Í‹î‚Ìí—Ş‚ğ‹æ•Ê‚µ‚È‚¢B
+	// byTypeBB ã¯æ•µã€å‘³æ–¹ã®é§’ã‚’åŒºåˆ¥ã—ãªã„ã€‚
+	// byColorBB ã¯é§’ã®ç¨®é¡ã‚’åŒºåˆ¥ã—ãªã„ã€‚
 	Bitboard m_byTypeBB_[PieceTypeNum];
 	Bitboard m_byColorBB_[ColorNum];
 	Bitboard m_goldsBB_;
 
-	// Šeƒ}ƒX‚Ìó‘Ô
+	// å„ãƒã‚¹ã®çŠ¶æ…‹
 	Piece m_piece_[SquareNum];
 	Square m_kingSquare_[ColorNum];
 
-	// è‹î
+	// æ‰‹é§’
 	Hand m_hand_[ColorNum];
 	Color m_turn_;
 
@@ -365,7 +365,7 @@ private:
 
 	StateInfo m_startState_;
 	StateInfo* m_st_;
-	// ŠÔŠÇ—‚Ég—p‚·‚éB
+	// æ™‚é–“ç®¡ç†ã«ä½¿ç”¨ã™ã‚‹ã€‚
 	Ply m_gamePly_;
 	Thread* m_thisThread_;
 	u64 m_nodes_;
@@ -375,5 +375,5 @@ private:
 	static Key m_zobrist_[PieceTypeNum][SquareNum][ColorNum];
 	static const Key m_zobTurn_ = 1;
 	static Key m_zobHand_[HandPieceNum][ColorNum];
-	static Key m_zobExclusion_; // todo: ‚±‚ê‚ª•K—v‚©A—vŒŸ“¢
+	static Key m_zobExclusion_; // todo: ã“ã‚ŒãŒå¿…è¦ã‹ã€è¦æ¤œè¨
 };

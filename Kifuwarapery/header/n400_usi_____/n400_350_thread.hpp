@@ -8,7 +8,7 @@ const int g_MaxThreads = 64;
 const int g_MaxSplitPointsPerThread = 8;
 
 struct Thread;
-struct SearchStack;
+class SearchStack;
 class MovePicker;
 
 enum NodeType {

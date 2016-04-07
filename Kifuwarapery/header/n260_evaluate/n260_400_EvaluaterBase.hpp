@@ -8,10 +8,6 @@
 
 
 
-//extern SquareDistance g_squareDistance;
-
-
-
 template <typename Tl, typename Tr>
 inline std::array<Tl, 2> operator += (std::array<Tl, 2>& lhs, const std::array<Tr, 2>& rhs) {
 	lhs[0] += rhs[0];

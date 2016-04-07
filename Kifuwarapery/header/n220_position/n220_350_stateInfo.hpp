@@ -1,20 +1,20 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n220_position/n220_300_stateInfoMin.hpp"
 
 
-// StateInfoMin ‚¾‚¯ memcpy ‚ÅƒRƒs[‚·‚é‚±‚Æ‚ ‚ ‚é‚Ì‚ÅA
-// Œp³‚ğg‚Á‚Ä‚¢‚éB
+// StateInfoMin ã ã‘ memcpy ã§ã‚³ãƒ”ãƒ¼ã™ã‚‹ã“ã¨ã‚ã‚ã‚‹ã®ã§ã€
+// ç¶™æ‰¿ã‚’ä½¿ã£ã¦ã„ã‚‹ã€‚
 struct StateInfo : public StateInfoMin {
 	Key m_boardKey;
 	Key m_handKey;
-	// è”Ô‘¤‚Ì‹Ê‚Ö check ‚µ‚Ä‚¢‚é‹î‚Ì Bitboard
+	// æ‰‹ç•ªå´ã®ç‰ã¸ check ã—ã¦ã„ã‚‹é§’ã® Bitboard
 	Bitboard m_checkersBB;
 	StateInfo* m_previous;
-	// è”Ô‘¤‚Ì‚¿‹î
+	// æ‰‹ç•ªå´ã®æŒã¡é§’
 	Hand m_hand;
-	// capturedPieceType ‚Í move.cap() ‚Åæ“¾o—ˆ‚é‚Ì‚Å•K—v–³‚¢B
+	// capturedPieceType ã¯ move.cap() ã§å–å¾—å‡ºæ¥ã‚‹ã®ã§å¿…è¦ç„¡ã„ã€‚
 	ChangedLists m_cl;
 
 	Key GetKey() const { return m_boardKey + m_handKey; }

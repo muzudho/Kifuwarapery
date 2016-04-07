@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n119_score___/n119_100_utilScore.hpp"
@@ -6,9 +6,9 @@
 
 // minimul stateinfo
 struct StateInfoMin {
-	Score m_material; // stocfish ‚Ì npMaterial ‚Í æèAŒãè‚Ì“_”‚ğ”z—ñ‚Å‚Á‚Ä‚¢‚é‚¯‚ÇA
-					// “Á‚É•ª‚¯‚é•K—v‚Í–³‚¢‹C‚ª‚·‚éB
+	Score m_material; // stocfish ã® npMaterial ã¯ å…ˆæ‰‹ã€å¾Œæ‰‹ã®ç‚¹æ•°ã‚’é…åˆ—ã§æŒã£ã¦ã„ã‚‹ã‘ã©ã€
+					// ç‰¹ã«åˆ†ã‘ã‚‹å¿…è¦ã¯ç„¡ã„æ°—ãŒã™ã‚‹ã€‚
 	int m_pliesFromNull;
-	int m_continuousCheck[ColorNum]; // Stockfish ‚É‚Í–³‚¢B
+	int m_continuousCheck[ColorNum]; // Stockfish ã«ã¯ç„¡ã„ã€‚
 };
 

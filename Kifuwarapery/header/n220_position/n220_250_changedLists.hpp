@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "../../header/n220_position/n220_200_changedListPair.hpp"
 
 struct ChangedLists {
-	ChangedListPair m_clistpair[2]; // ˆêè‚Å“®‚­‹î‚ÍÅ‘å2‚ÂB(“®‚­‹îAæ‚ç‚ê‚é‹î)
-	int m_listindex[2]; // ˆêè‚Å“®‚­‹î‚ÍÅ‘å2‚ÂB(“®‚­‹îAæ‚ç‚ê‚é‹î)
+	ChangedListPair m_clistpair[2]; // ä¸€æ‰‹ã§å‹•ãé§’ã¯æœ€å¤§2ã¤ã€‚(å‹•ãé§’ã€å–ã‚‰ã‚Œã‚‹é§’)
+	int m_listindex[2]; // ä¸€æ‰‹ã§å‹•ãé§’ã¯æœ€å¤§2ã¤ã€‚(å‹•ãé§’ã€å–ã‚‰ã‚Œã‚‹é§’)
 	size_t m_size;
 };
 
