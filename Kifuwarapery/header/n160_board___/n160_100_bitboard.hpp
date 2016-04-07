@@ -38,8 +38,8 @@ public:
 	// マジックナンバーを作るのに使う☆
 	u64 MergeP() const;
 
-	// どこかにビットが立っていれば真☆
-	bool IsNot0() const;
+	// どこかにビットが立っていれば真☆(IsNot0)
+	bool Exists1Bit() const;
 
 	// 高速化をラッピング☆ これはコードが見難くなるけど仕方ない。
 	bool AndIsNot0( const Bitboard& bb)const;
@@ -79,7 +79,7 @@ public:
 	// Bitboard の right 側だけの要素を調べて、最初に 1 であるマスの index を返す。
 	// そのマスを 0 にする。
 	// Bitboard の right 側が 0 でないことを前提にしている。
-	FORCE_INLINE Square FirstOneRightFromI9() {
+	FORCE_INLINE Square PopFirstOneRightFromI9() {
 		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(0)));
 		// LSB 側の最初の 1 の bit を 0 にする
 		this->m_p_[0] &= this->GetP(0) - 1;
@@ -90,7 +90,7 @@ public:
 	// Bitboard の left 側だけの要素を調べて、最初に 1 であるマスの index を返す。
 	// そのマスを 0 にする。
 	// Bitboard の left 側が 0 でないことを前提にしている。
-	FORCE_INLINE Square FirstOneLeftFromB9() {
+	FORCE_INLINE Square PopFirstOneLeftFromB9() {
 		const Square sq = static_cast<Square>(firstOneFromLSB(this->GetP(1)) + 63);
 		// LSB 側の最初の 1 の bit を 0 にする
 		this->m_p_[1] &= this->GetP(1) - 1;
@@ -103,31 +103,31 @@ public:
 	// Bitboard が allZeroBB() でないことを前提にしている。
 	// VC++ の _BitScanForward() は入力が 0 のときに 0 を返す仕様なので、
 	// 最初に 0 でないか判定するのは少し損。
-	FORCE_INLINE Square FirstOneFromI9()
+	FORCE_INLINE Square PopFirstOneFromI9()
 	{
 		if (this->GetP(0)) {
-			return FirstOneRightFromI9();
+			return PopFirstOneRightFromI9();
 		}
-		return FirstOneLeftFromB9();
+		return PopFirstOneLeftFromB9();
 	}
 
 	// 返す位置を 0 にしないバージョン。
-	FORCE_INLINE Square ConstFirstOneRightFromI9() const
+	FORCE_INLINE Square GetFirstOneRightFromI9() const
 	{
 		return static_cast<Square>(firstOneFromLSB(this->GetP(0)));
 	}
 
-	FORCE_INLINE Square ConstFirstOneLeftFromB9() const
+	FORCE_INLINE Square GetFirstOneLeftFromB9() const
 	{
 		return static_cast<Square>(firstOneFromLSB(this->GetP(1)) + 63);
 	}
 
-	FORCE_INLINE Square ConstFirstOneFromI9() const
+	FORCE_INLINE Square GetFirstOneFromI9() const
 	{
 		if (this->GetP(0)) {
-			return ConstFirstOneRightFromI9();
+			return GetFirstOneRightFromI9();
 		}
-		return ConstFirstOneLeftFromB9();
+		return GetFirstOneLeftFromB9();
 	}
 
 	// Bitboard の 1 の bit を数える。
@@ -144,7 +144,7 @@ public:
 #if defined (HAVE_SSE42)
 		return (this->PopCount<Crossover>() == 1);
 #else
-		if (!this->IsNot0()) {
+		if (!this->Exists1Bit()) {
 			return false;
 		}
 		else if (this->GetP(0)) {
@@ -162,9 +162,11 @@ public:
 public://(^q^)
 
 	// 実際に使用する部分の全て bit が立っている Bitboard
-	inline static Bitboard AllOneBB() { return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff)); }
+	static inline Bitboard CreateAllOneBB() {
+		return Bitboard(UINT64_C(0x7fffffffffffffff), UINT64_C(0x000000000003ffff));
+	}
 
-	inline static Bitboard AllZeroBB() { return Bitboard(0, 0); }
+	static inline Bitboard CreateAllZeroBB() { return Bitboard(0, 0); }
 
 public://(^q^)
 

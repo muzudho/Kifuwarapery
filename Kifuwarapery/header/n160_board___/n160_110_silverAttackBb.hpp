@@ -6,8 +6,9 @@
 // ‹â
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 class SilverAttackBb {
-public:
-	Bitboard m_controllBb[ColorNum][SquareNum];
+private:
+	Bitboard m_controllBb_[ColorNum][SquareNum];
+	Bitboard m_silverCheckTable_[ColorNum][SquareNum];
 
 public:
 
@@ -15,12 +16,11 @@ public:
 	void InitCheckTableSilver();
 
 	inline Bitboard GetControllBb(const Color c, const Square sq) const {
-		return this->m_controllBb[c][sq];
+		return this->m_controllBb_[c][sq];
 	}
 
-	Bitboard m_silverCheckTable[ColorNum][SquareNum];
 	inline Bitboard SilverCheckTable(const Color c, const Square sq) const {
-		return this->m_silverCheckTable[c][sq];
+		return this->m_silverCheckTable_[c][sq];
 	}
 };
 

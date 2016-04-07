@@ -198,7 +198,7 @@ namespace {
 				| (pos.GetAttacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.IsNot0() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).IsNot0()) {
+			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).Exists1Bit()) {
 				return true;
 			}
 		}
@@ -699,7 +699,7 @@ void Searcher::IdLoop(Position& pos) {
 void Searcher::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
-		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~BitboardMask::GetFileMask<FileA>() & ~BitboardMask::GetFileMask<FileI>();
+		const Bitboard mask = BitboardMask::GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
 		if ((GetPos.GetBbOf(Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			m_tt.Clear();

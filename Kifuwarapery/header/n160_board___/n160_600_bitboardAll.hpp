@@ -12,22 +12,22 @@
 #define FOREACH_BB(bb, sq, xxx)					\
 	do {										\
 		while (bb.GetP(0)) {					\
-			sq = bb.FirstOneRightFromI9();		\
+			sq = bb.PopFirstOneRightFromI9();		\
 			xxx;								\
 		}										\
 		while (bb.GetP(1)) {					\
-			sq = bb.FirstOneLeftFromB9();		\
+			sq = bb.PopFirstOneLeftFromB9();		\
 			xxx;								\
 		}										\
 	} while (false)
 
 template <typename T> FORCE_INLINE void foreachBB(Bitboard& bb, Square& sq, T t) {
 	while (bb.GetP(0)) {
-		sq = bb.FirstOneRightFromI9();
+		sq = bb.PopFirstOneRightFromI9();
 		t(0);
 	}
 	while (bb.GetP(1)) {
-		sq = bb.FirstOneLeftFromB9();
+		sq = bb.PopFirstOneLeftFromB9();
 		t(1);
 	}
 }

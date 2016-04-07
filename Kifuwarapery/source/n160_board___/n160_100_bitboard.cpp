@@ -7,9 +7,6 @@
 using namespace std;
 
 
-const Bitboard g_fileMask[FileNum] = {
-	g_FileIMask, g_FileHMask, g_FileGMask, g_FileFMask, g_FileEMask, g_FileDMask, g_FileCMask, g_FileBMask, g_FileAMask
-};
 
 const Bitboard g_rankMask[RankNum] = {
 	g_Rank9Mask, g_Rank8Mask, g_Rank7Mask, g_Rank6Mask, g_Rank5Mask, g_Rank4Mask, g_Rank3Mask, g_Rank2Mask, g_Rank1Mask
@@ -47,7 +44,7 @@ u64 Bitboard::MergeP() const
 	return this->GetP(0) | this->GetP(1);
 }
 
-bool Bitboard::IsNot0() const
+bool Bitboard::Exists1Bit() const
 {
 #ifdef HAVE_SSE4
 	return !(_mm_testz_si128(this->m_m_, _mm_set1_epi8(static_cast<char>(0xffu))));
@@ -61,7 +58,7 @@ bool Bitboard::AndIsNot0( const Bitboard & bb) const
 #ifdef HAVE_SSE4
 	return !(_mm_testz_si128(this->m_m_, bb.m_m_));
 #else
-	return (*this & bb).IsNot0();
+	return (*this & bb).Exists1Bit();
 #endif
 }
 

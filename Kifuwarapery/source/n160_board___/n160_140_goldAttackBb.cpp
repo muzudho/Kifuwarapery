@@ -14,20 +14,20 @@ void GoldAttackBb::Initialize()
 				g_kingAttackBb.GetControllBb(sq) &
 				BitboardMask::GetInFrontMask(c, UtilSquare::ToRank(sq))
 			) |
-			g_rookAttackBb.GetControllBb(&Bitboard::AllOneBB(), sq);
+			g_rookAttackBb.GetControllBb(&Bitboard::CreateAllOneBB(), sq);
 }
 
 void GoldAttackBb::InitCheckTableGold() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_goldAttackBb.m_goldCheckTable[c][sq] = Bitboard::AllZeroBB();
+			g_goldAttackBb.m_goldCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq);
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_goldAttackBb.m_goldCheckTable[c][sq] |= g_goldAttackBb.GetControllBb(opp, checkSq);
+			while (checkBB.Exists1Bit()) {
+				const Square checkSq = checkBB.PopFirstOneFromI9();
+				g_goldAttackBb.m_goldCheckTable_[c][sq] |= g_goldAttackBb.GetControllBb(opp, checkSq);
 			}
-			g_goldAttackBb.m_goldCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_goldAttackBb.GetControllBb(opp, sq));
+			g_goldAttackBb.m_goldCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_goldAttackBb.GetControllBb(opp, sq));
 		}
 	}
 }

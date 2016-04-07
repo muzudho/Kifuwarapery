@@ -13,7 +13,7 @@ public:
 		return g_rookAttackBb.GetControllBb(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 
-	inline Bitboard GetControllBbToEdge(const Square sq) {
+	inline Bitboard GetControllBbToEdge(const Square sq) const {
 		return g_rookAttackBb.GetControllBbToEdge(sq) | g_kingAttackBb.GetControllBb(sq);
 	}
 };

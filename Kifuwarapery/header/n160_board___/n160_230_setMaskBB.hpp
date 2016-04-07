@@ -6,8 +6,8 @@
 // マスク
 //────────────────────────────────────────────────────────────────────────────────
 class SetMaskBb {
-public:
-	Bitboard m_setMaskBB[SquareNum] = {//const
+private:
+	const Bitboard m_setMaskBB_[SquareNum] = {
 		Bitboard(UINT64_C(1) << 0,                 0),  // 0 , I9
 		Bitboard(UINT64_C(1) << 1,                 0),  // 1 , I8
 		Bitboard(UINT64_C(1) << 2,                 0),  // 2 , I7
@@ -94,23 +94,23 @@ public:
 public:
 
 	inline Bitboard GetSetMaskBb(const Square sq) const {
-		return this->m_setMaskBB[sq];
+		return this->m_setMaskBB_[sq];
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 論理演算
 	//────────────────────────────────────────────────────────────────────────────────
-	void ClearBit(Bitboard* thisBitboard, const Square sq);
+	void ClearBit(Bitboard* thisBitboard, const Square sq) const;
 
-	void XorBit(Bitboard* thisBitboard, const Square sq);
+	void XorBit(Bitboard* thisBitboard, const Square sq) const;
 
-	void XorBit(Bitboard* thisBitboard, const Square sq1, const Square sq2);
+	void XorBit(Bitboard* thisBitboard, const Square sq1, const Square sq2) const;
 
 	bool IsSet(const Bitboard* thisBitboard, const Square sq) const;
 
-	void SetBit(Bitboard* thisBitboard, const Square sq);
+	void SetBit(Bitboard* thisBitboard, const Square sq) const;
 
 public:
-	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask);
+	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) const;
 
 };

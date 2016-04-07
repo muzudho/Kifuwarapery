@@ -1,6 +1,11 @@
 #pragma once
 
+
+#include "n160_050_configBits.hpp"
 #include "n160_100_bitboard.hpp"
+
+
+extern ConfigBits g_configBits;
 
 
 //────────────────────────────────────────────────────────────────────────────────
@@ -10,8 +15,11 @@ class LanceAttackBb {
 public:
 	// メモリ節約をせず、無駄なメモリを持っている。
 	Bitboard m_controllBb[ColorNum][SquareNum][128];
-	Bitboard m_controllBbToEdge[ColorNum][SquareNum];
-	Bitboard m_lanceCheckTable[ColorNum][SquareNum];
+
+private:
+	// メモリ節約をせず、無駄なメモリを持っている。
+	Bitboard m_controllBbToEdge_[ColorNum][SquareNum];
+	Bitboard m_lanceCheckTable_[ColorNum][SquareNum];
 
 public:
 
@@ -25,16 +33,16 @@ public:
 	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
 	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Color c, const Square sq) const {
 		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> ConfigBits::m_slide[sq]) & 127;
+		const int index = ((*thisBitboard).GetP(part) >> g_configBits.m_slide[sq]) & 127;
 		return this->m_controllBb[c][sq][index];
 	}
 
 	inline Bitboard GetControllBbToEdge(const Color c, const Square sq) const {
-		return this->m_controllBbToEdge[c][sq];
+		return this->m_controllBbToEdge_[c][sq];
 	}
 
 	inline Bitboard LanceCheckTable(const Color c, const Square sq) const {
-		return this->m_lanceCheckTable[c][sq];
+		return this->m_lanceCheckTable_[c][sq];
 	}
 
 private:

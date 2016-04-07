@@ -5,16 +5,16 @@
 
 
 class SquareRelation {
-public:
+private:
 	// 2つの位置関係のテーブル
-	Direction m_squareRelation[SquareNum][SquareNum];
+	Direction m_squareRelation_[SquareNum][SquareNum];
 
 public:
 
 	void Initialize();
 
 	inline Direction GetSquareRelation(const Square sq1, const Square sq2) const {
-		return this->m_squareRelation[sq1][sq2];
+		return this->m_squareRelation_[sq1][sq2];
 	}
 
 

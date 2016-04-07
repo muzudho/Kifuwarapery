@@ -8,30 +8,30 @@
 SetMaskBb g_setMaskBb;
 
 
-void SetMaskBb::ClearBit(Bitboard* thisBitboard, const Square sq)
+void SetMaskBb::ClearBit(Bitboard* thisBitboard, const Square sq) const
 {
-	(*thisBitboard).AndEqualNot(this->m_setMaskBB[sq]);
+	(*thisBitboard).AndEqualNot(this->m_setMaskBB_[sq]);
 }
 
-void SetMaskBb::XorBit(Bitboard* thisBitboard, const Square sq)
+void SetMaskBb::XorBit(Bitboard* thisBitboard, const Square sq) const
 {
-	(*thisBitboard) ^= this->m_setMaskBB[sq];
+	(*thisBitboard) ^= this->m_setMaskBB_[sq];
 }
 
-void SetMaskBb::XorBit(Bitboard* thisBitboard, const Square sq1, const Square sq2)
+void SetMaskBb::XorBit(Bitboard* thisBitboard, const Square sq1, const Square sq2) const
 {
-	(*thisBitboard) ^= (this->m_setMaskBB[sq1] | this->m_setMaskBB[sq2]);
+	(*thisBitboard) ^= (this->m_setMaskBB_[sq1] | this->m_setMaskBB_[sq2]);
 }
 
 bool SetMaskBb::IsSet(const Bitboard* thisBitboard, const Square sq) const
 {
 	assert(UtilSquare::ContainsOf(sq));
-	return thisBitboard->AndIsNot0(g_setMaskBb.m_setMaskBB[sq]);
+	return thisBitboard->AndIsNot0(g_setMaskBb.m_setMaskBB_[sq]);
 }
 
-void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq)
+void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq) const
 {
-	*thisBitboard |= g_setMaskBb.m_setMaskBB[sq];
+	*thisBitboard |= g_setMaskBb.m_setMaskBB_[sq];
 }
 
 // index, bits の情報を元にして、occupied の 1 のbit を いくつか 0 にする。
@@ -40,11 +40,11 @@ void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq)
 // bits    bit size
 // blockMask   利きのあるマスが 1 のbitboard
 // result  occupied
-Bitboard SetMaskBb::IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) {
+Bitboard SetMaskBb::IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) const {
 	Bitboard tmpBlockMask = blockMask;
-	Bitboard result = Bitboard::AllZeroBB();
+	Bitboard result = Bitboard::CreateAllZeroBB();
 	for (int i = 0; i < bits; ++i) {
-		const Square sq = tmpBlockMask.FirstOneFromI9();
+		const Square sq = tmpBlockMask.PopFirstOneFromI9();
 		if (index & (1 << i))
 			this->SetBit(&result, sq);
 	}

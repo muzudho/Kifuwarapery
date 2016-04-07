@@ -3,17 +3,9 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_450_FileMaskBb.hpp"
 
 
-const Bitboard g_FileIMask = Bitboard(UINT64_C(0x1ff) << (9 * 0), 0);
-const Bitboard g_FileHMask = Bitboard(UINT64_C(0x1ff) << (9 * 1), 0);
-const Bitboard g_FileGMask = Bitboard(UINT64_C(0x1ff) << (9 * 2), 0);
-const Bitboard g_FileFMask = Bitboard(UINT64_C(0x1ff) << (9 * 3), 0);
-const Bitboard g_FileEMask = Bitboard(UINT64_C(0x1ff) << (9 * 4), 0);
-const Bitboard g_FileDMask = Bitboard(UINT64_C(0x1ff) << (9 * 5), 0);
-const Bitboard g_FileCMask = Bitboard(UINT64_C(0x1ff) << (9 * 6), 0);
-const Bitboard g_FileBMask = Bitboard(0, 0x1ff << (9 * 0));
-const Bitboard g_FileAMask = Bitboard(0, 0x1ff << (9 * 1));
 
 const Bitboard g_Rank9Mask = Bitboard(UINT64_C(0x40201008040201) << 0, 0x201 << 0);
 const Bitboard g_Rank8Mask = Bitboard(UINT64_C(0x40201008040201) << 1, 0x201 << 1);
@@ -25,7 +17,7 @@ const Bitboard g_Rank3Mask = Bitboard(UINT64_C(0x40201008040201) << 6, 0x201 << 
 const Bitboard g_Rank2Mask = Bitboard(UINT64_C(0x40201008040201) << 7, 0x201 << 7);
 const Bitboard g_Rank1Mask = Bitboard(UINT64_C(0x40201008040201) << 8, 0x201 << 8);
 
-extern const Bitboard g_fileMask[FileNum];
+//extern const FileMaskBb g_fileMaskBb;
 extern const Bitboard g_rankMask[RankNum];
 extern const Bitboard g_inFrontMask[ColorNum][RankNum];
 
@@ -33,21 +25,6 @@ extern const Bitboard g_inFrontMask[ColorNum][RankNum];
 
 class BitboardMask {
 public:
-	static inline Bitboard GetFileMask(const File f) { return g_fileMask[f]; }
-
-	template <File F>
-	static inline Bitboard GetFileMask() {
-		static_assert(FileI <= F && F <= FileA, "");
-		return (F == FileI ? g_FileIMask
-			: F == FileH ? g_FileHMask
-			: F == FileG ? g_FileGMask
-			: F == FileF ? g_FileFMask
-			: F == FileE ? g_FileEMask
-			: F == FileD ? g_FileDMask
-			: F == FileC ? g_FileCMask
-			: F == FileB ? g_FileBMask
-			: /*F == FileA ?*/ g_FileAMask);
-	}
 
 	static inline Bitboard GetRankMask(const Rank r) { return g_rankMask[r]; }
 
@@ -63,12 +40,6 @@ public:
 			: R == Rank3 ? g_Rank3Mask
 			: R == Rank2 ? g_Rank2Mask
 			: /*R == Rank1 ?*/ g_Rank1Mask);
-	}
-
-	// 直接テーブル引きすべきだと思う。
-	static inline Bitboard GetSquareFileMask(const Square sq) {
-		const File f = UtilSquare::ToFile(sq);
-		return BitboardMask::GetFileMask(f);
 	}
 
 	// 直接テーブル引きすべきだと思う。
@@ -106,7 +77,7 @@ public:
 };
 
 
-const Bitboard g_InFrontOfRank9Black = Bitboard::AllZeroBB();
+const Bitboard g_InFrontOfRank9Black = Bitboard::CreateAllZeroBB();
 const Bitboard g_InFrontOfRank8Black = BitboardMask::GetRankMask<Rank9>();
 const Bitboard g_InFrontOfRank7Black = g_InFrontOfRank8Black | BitboardMask::GetRankMask<Rank8>();
 const Bitboard g_InFrontOfRank6Black = g_InFrontOfRank7Black | BitboardMask::GetRankMask<Rank7>();
@@ -116,7 +87,7 @@ const Bitboard g_InFrontOfRank3Black = g_InFrontOfRank4Black | BitboardMask::Get
 const Bitboard g_InFrontOfRank2Black = g_InFrontOfRank3Black | BitboardMask::GetRankMask<Rank3>();
 const Bitboard g_InFrontOfRank1Black = g_InFrontOfRank2Black | BitboardMask::GetRankMask<Rank2>();
 
-const Bitboard g_InFrontOfRank1White = Bitboard::AllZeroBB();
+const Bitboard g_InFrontOfRank1White = Bitboard::CreateAllZeroBB();
 const Bitboard g_InFrontOfRank2White = BitboardMask::GetRankMask<Rank1>();
 const Bitboard g_InFrontOfRank3White = g_InFrontOfRank2White | BitboardMask::GetRankMask<Rank2>();
 const Bitboard g_InFrontOfRank4White = g_InFrontOfRank3White | BitboardMask::GetRankMask<Rank3>();

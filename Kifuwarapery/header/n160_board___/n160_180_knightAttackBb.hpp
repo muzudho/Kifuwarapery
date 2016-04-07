@@ -6,9 +6,9 @@
 // Œj
 //„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
 class KnightAttackBb {
-public:
-	Bitboard m_controllBb[ColorNum][SquareNum];
-	Bitboard m_knightCheckTable[ColorNum][SquareNum];
+private:
+	Bitboard m_controllBb_[ColorNum][SquareNum];
+	Bitboard m_knightCheckTable_[ColorNum][SquareNum];
 
 public:
 
@@ -16,10 +16,10 @@ public:
 	void InitCheckTableKnight();
 
 	inline Bitboard GetControllBb(const Color c, const Square sq) const {
-		return this->m_controllBb[c][sq];
+		return this->m_controllBb_[c][sq];
 	}
 
 	inline Bitboard KnightCheckTable(const Color c, const Square sq) const {
-		return this->m_knightCheckTable[c][sq];
+		return this->m_knightCheckTable_[c][sq];
 	}
 };

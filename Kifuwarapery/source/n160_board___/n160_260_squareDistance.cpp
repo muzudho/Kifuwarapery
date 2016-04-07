@@ -20,21 +20,21 @@ void SquareDistance::InitSquareDistance() {
 			switch (g_squareRelation.GetSquareRelation(sq0, sq1)) {
 			case DirecMisc:
 				// DirecMisc ‚ÈŠÖŒW‚Í‘S‚Ä‹——£ 1 ‚É‚µ‚Ä‚àKPEŠwK‚É‚Í–â‘è–³‚¢‚ñ‚¾‚¯‚ê‚ÇB
-				this->m_squareDistance[sq0][sq1] = 0;
+				this->m_squareDistance_[sq0][sq1] = 0;
 				if (g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(Black, sq0), sq1) || g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(White, sq0), sq1))
-				    this->m_squareDistance[sq0][sq1] = 1;
+				    this->m_squareDistance_[sq0][sq1] = 1;
 				break;
 			case DirecFile:
-				this->m_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
+				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
 				break;
 			case DirecRank:
-				this->m_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
+				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
 				break;
 			case DirecDiagNESW:
-				this->m_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
+				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
 				break;
 			case DirecDiagNWSE:
-				this->m_squareDistance[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
+				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
 				break;
 			default: UNREACHABLE;
 			}

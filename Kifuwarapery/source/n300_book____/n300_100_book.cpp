@@ -82,8 +82,8 @@ Key Book::GetBookKey(const Position& pos) {
 	Key key = 0;
 	Bitboard bb = pos.GetOccupiedBB();
 
-	while (bb.IsNot0()) {
-		const Square sq = bb.FirstOneFromI9();
+	while (bb.Exists1Bit()) {
+		const Square sq = bb.PopFirstOneFromI9();
 		key ^= m_ZobPiece[pos.GetPiece(sq)][sq];
 	}
 	const Hand hand = pos.GetHand(pos.GetTurn());

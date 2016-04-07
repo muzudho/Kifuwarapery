@@ -3,16 +3,22 @@
 #include <stack>
 #include "../n116_hand____/n116_500_hand.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
+#include "../n160_board___/n160_450_FileMaskBb.hpp"
 #include "../n160_board___/n160_500_bitboardMask.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_600_evalList.hpp"
 
+
+//extern const FileMaskBb g_fileMaskBb;
+
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
+
 
 class Move;
 struct Thread;
 struct Searcher;
+
 
 class Position {
 public:
@@ -57,7 +63,7 @@ public:
 	// の bit が 1 になっても構わないとき、こちらを使う。
 	// todo: SSEにビット反転が無いので実はそんなに速くないはず。不要。
 	Bitboard GetNOccupiedBB() const { return ~GetOccupiedBB(); }
-	Bitboard GetEmptyBB() const { return GetOccupiedBB() ^ Bitboard::AllOneBB(); }
+	Bitboard GetEmptyBB() const { return GetOccupiedBB() ^ Bitboard::CreateAllOneBB(); }
 	// 金、成り金 の Bitboard
 	Bitboard GetGoldsBB() const { return m_goldsBB_; }
 	Bitboard GetGoldsBB(const Color c) const { return GetGoldsBB() & this->GetBbOf(c); }
@@ -79,7 +85,7 @@ public:
 
 	// toFile と同じ筋に us の歩がないなら true
 	bool NoPawns(const Color us, const File toFile) const {
-		return !this->GetBbOf(Pawn, us).AndIsNot0( BitboardMask::GetFileMask(toFile));
+		return !this->GetBbOf(Pawn, us).AndIsNot0(g_fileMaskBb.GetFileMask(toFile));
 	}
 	bool IsPawnDropCheckMate(const Color us, const Square sq) const;
 
@@ -99,13 +105,13 @@ public:
 	Bitboard GetCheckersBB() const { return m_st_->m_checkersBB; }
 	Bitboard GetPrevCheckersBB() const { return m_st_->m_previous->m_checkersBB; }
 	// 王手が掛かっているか。
-	bool InCheck() const { return GetCheckersBB().IsNot0(); }
+	bool InCheck() const { return GetCheckersBB().Exists1Bit(); }
 
 	Score GetMaterial() const { return m_st_->m_material; }
 	Score GetMaterialDiff() const { return m_st_->m_material - m_st_->m_previous->m_material; }
 
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
-		assert(m_kingSquare_[c] == this->GetBbOf(King, c).ConstFirstOneFromI9());
+		assert(m_kingSquare_[c] == this->GetBbOf(King, c).GetFirstOneFromI9());
 		return m_kingSquare_[c];
 	}
 
@@ -118,12 +124,12 @@ public:
 	Bitboard GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
 	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
 	// todo: 利きをデータとして持ったとき、attackersToIsNot0() を高速化すること。
-	bool IsAttackersToIsNot0(const Color c, const Square sq) const { return GetAttackersTo(c, sq).IsNot0(); }
+	bool IsAttackersToIsNot0(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
 	bool IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard& occupied) const {
-		return GetAttackersTo(c, sq, occupied).IsNot0();
+		return GetAttackersTo(c, sq, occupied).Exists1Bit();
 	}
 	// 移動王手が味方の利きに支えられているか。false なら相手玉で取れば詰まない。
-	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const { return GetAttackersTo(c, sq).IsNot0(); }
+	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const { return GetAttackersTo(c, sq).Exists1Bit(); }
 	// 利きの生成
 
 	// 任意の occupied に対する利きを生成する。
@@ -285,7 +291,7 @@ private:
 	// BetweenIsUs == false : 間の駒が敵駒。
 	template <bool FindPinned, bool BetweenIsUs>
 	Bitboard GetHiddenCheckers() const {
-		Bitboard result = Bitboard::AllZeroBB();
+		Bitboard result = Bitboard::CreateAllZeroBB();
 		const Color us = GetTurn();
 		const Color them = UtilColor::OppositeColor(us);
 		// pin する遠隔駒
@@ -308,13 +314,13 @@ private:
 						g_bishopAttackBb.GetControllBbToEdge(ksq)
 					);
 
-		while (pinners.IsNot0()) {
-			const Square sq = pinners.FirstOneFromI9();
+		while (pinners.Exists1Bit()) {
+			const Square sq = pinners.PopFirstOneFromI9();
 			// pin する遠隔駒と玉の間にある駒の位置の Bitboard
 			const Bitboard between = g_betweenBb.GetBetweenBB(sq, ksq) & GetOccupiedBB();
 
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
-			if (between.IsNot0()
+			if (between.Exists1Bit()
 				&& between.IsOneBit<false>()
 				&& between.AndIsNot0( this->GetBbOf(BetweenIsUs ? us : them)))
 			{

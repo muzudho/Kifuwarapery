@@ -438,6 +438,9 @@
     <ClInclude Include="header\n160_board___\n160_250_squareRelation.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
+    <ClInclude Include="header\n160_board___\n160_450_FileMaskBb.hpp">
+      <Filter>header\n160_board___</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -600,6 +603,9 @@
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_250_squareRelation.cpp">
+      <Filter>source\n160_board___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n160_board___\n160_450_FileMaskBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
   </ItemGroup>

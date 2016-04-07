@@ -15,7 +15,7 @@ void KingAttackBb::Initialize()
 	for (Square sq = I9; sq < SquareNum; ++sq)
 	{
 		this->m_controllBb_[sq] =
-			g_rookAttackBb.GetControllBb(&Bitboard::AllOneBB(), sq) |
-			g_bishopAttackBb.BishopAttack(&Bitboard::AllOneBB(), sq);
+			g_rookAttackBb.GetControllBb(&Bitboard::CreateAllOneBB(), sq) |
+			g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllOneBB(), sq);
 	}
 }

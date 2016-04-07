@@ -1,8 +1,14 @@
+#include "../../header/n160_board___/n160_050_configBits.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
+#include "../../header/n160_board___/n160_450_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_500_bitboardMask.hpp"
 
 
+//extern const FileMaskBb g_fileMaskBb;
+
+
+extern ConfigBits g_configBits;
 extern SetMaskBb g_setMaskBb;
 
 
@@ -34,12 +40,12 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 		if (count1s((mask.MergeP() * magic) & UINT64_C(0xfff0000000000000)) < 6)
 			continue;
 
-		std::fill(std::begin(attackUsed), std::IsEnd(attackUsed), AllZeroBB());
+		std::fill(std::begin(attackUsed), std::IsEnd(attackUsed), CreateAllZeroBB());
 
 		for (int i = 0; !fail && i < (1 << num1s); ++i) {
 			const int shiftBits = g_rookShiftBits[square];
 			const u64 index = OccupiedToIndex(occupied[i], magic, shiftBits);
-			if (attackUsed[index] == AllZeroBB())
+			if (attackUsed[index] == CreateAllZeroBB())
 				attackUsed[index] = attack[i];
 			else if (attackUsed[index] != attack[i])
 				fail = true;
@@ -55,10 +61,10 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
-Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) {
-	Bitboard result = BitboardMask::GetSquareFileMask(square) ^ BitboardMask::GetSquareRankMask(square);
-	if (UtilSquare::ToFile(square) != FileA) { result &= ~BitboardMask::GetFileMask<FileA>(); }
-	if (UtilSquare::ToFile(square) != FileI) { result &= ~BitboardMask::GetFileMask<FileI>(); }
+Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) const {
+	Bitboard result = g_fileMaskBb.GetSquareFileMask(square) ^ BitboardMask::GetSquareRankMask(square);
+	if (UtilSquare::ToFile(square) != FileA) { result &= ~g_fileMaskBb.GetFileMask<FileA>(); }
+	if (UtilSquare::ToFile(square) != FileI) { result &= ~g_fileMaskBb.GetFileMask<FileI>(); }
 	if (UtilSquare::ToRank(square) != Rank1) { result &= ~BitboardMask::GetRankMask<Rank1>(); }
 	if (UtilSquare::ToRank(square) != Rank9) { result &= ~BitboardMask::GetRankMask<Rank9>(); }
 	return result;
@@ -67,9 +73,9 @@ Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) {
 
 // Rook or Bishop の利きの範囲を調べて bitboard で返す。
 // occupied  障害物があるマスが 1 の bitboard
-Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occupied) {
+Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occupied) const {
 	const SquareDelta deltaArray[2][4] = { { DeltaN, DeltaS, DeltaE, DeltaW },{ DeltaNE, DeltaSE, DeltaSW, DeltaNW } };
-	Bitboard result = Bitboard::AllZeroBB();
+	Bitboard result = Bitboard::CreateAllZeroBB();
 	for (SquareDelta delta : deltaArray[false/*isBishop*/]) {
 		for (Square sq = square + delta;
 		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
@@ -88,13 +94,13 @@ Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occup
 void RookAttackBb::InitRookAttacks()
 {
 	// 角か、飛車か
-	auto* attacks = g_rookAttackBb.m_controllBb;
-	auto* attackIndex = ConfigBits::m_rookAttackIndex;
-	auto* blockMask = g_rookAttackBb.m_rookBlockMask;
-	auto* shift = ConfigBits::m_rookShiftBits;
+	auto* attacks = g_rookAttackBb.m_controllBb_;
+	auto* attackIndex = g_configBits.m_rookAttackIndex;
+	auto* blockMask = g_rookAttackBb.m_rookBlockMask_;
+	auto* shift = g_configBits.m_rookShiftBits;
 #if defined HAVE_BMI2
 #else
-	auto* magic = ConfigBits::m_rookMagic;
+	auto* magic = g_configBits.m_rookMagic;
 #endif
 
 	// 各マスについて
@@ -103,7 +109,7 @@ void RookAttackBb::InitRookAttacks()
 		blockMask[sq] = this->RookBlockMaskCalc(sq);
 		attackIndex[sq] = index;
 
-		const int num1s = ConfigBits::m_rookBlockBits[sq];
+		const int num1s = g_configBits.m_rookBlockBits[sq];
 		for (int i = 0; i < (1 << num1s); ++i)
 		{
 			const Bitboard occupied = g_setMaskBb.IndexToOccupied(i, num1s, blockMask[sq]);
@@ -122,6 +128,6 @@ void RookAttackBb::InitRookAttacks()
 void RookAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_rookAttackBb.m_controllBbToEdge[sq] = g_rookAttackBb.GetControllBb(&Bitboard::AllZeroBB(), sq);
+		g_rookAttackBb.m_controllBbToEdge_[sq] = g_rookAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), sq);
 	}
 }

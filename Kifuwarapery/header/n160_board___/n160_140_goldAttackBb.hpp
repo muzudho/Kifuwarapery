@@ -9,9 +9,7 @@
 class GoldAttackBb {
 private:
 	Bitboard m_controllBb_[ColorNum][SquareNum];
-
-public:
-	Bitboard m_goldCheckTable[ColorNum][SquareNum];
+	Bitboard m_goldCheckTable_[ColorNum][SquareNum];
 
 public:
 
@@ -23,7 +21,7 @@ public:
 	}
 
 	inline Bitboard GoldCheckTable(const Color c, const Square sq) const {
-		return this->m_goldCheckTable[c][sq];
+		return this->m_goldCheckTable_[c][sq];
 	}
 
 };

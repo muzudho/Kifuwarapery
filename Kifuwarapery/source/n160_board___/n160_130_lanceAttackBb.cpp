@@ -1,9 +1,11 @@
 #include "../../header/n160_board___/n160_400_printBb.hpp"
+#include "../../header/n160_board___/n160_450_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_500_bitboardMask.hpp"
 
 
 // これらは一度値を設定したら二度と変更しない。
 LanceAttackBb g_lanceAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆
+//FileMaskBb g_fileMaskBb;
 
 
 void LanceAttackBb::Initialize()
@@ -28,15 +30,15 @@ void LanceAttackBb::InitCheckTableLance() {
 	for (Color c = Black; c < ColorNum; ++c) {
 		const Color opp = UtilColor::OppositeColor(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			g_lanceAttackBb.m_lanceCheckTable[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
+			g_lanceAttackBb.m_lanceCheckTable_[c][sq] = g_lanceAttackBb.GetControllBbToEdge(opp, sq);
 
 			const Bitboard TRank789BB = (c == Black ? BitboardMask::GetInFrontMask<Black, Rank6>() : BitboardMask::GetInFrontMask<White, Rank4>());
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
-			while (checkBB.IsNot0()) {
-				const Square checkSq = checkBB.FirstOneFromI9();
-				g_lanceAttackBb.m_lanceCheckTable[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
+			while (checkBB.Exists1Bit()) {
+				const Square checkSq = checkBB.PopFirstOneFromI9();
+				g_lanceAttackBb.m_lanceCheckTable_[c][sq] |= g_lanceAttackBb.GetControllBbToEdge(opp, checkSq);
 			}
-			g_lanceAttackBb.m_lanceCheckTable[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
+			g_lanceAttackBb.m_lanceCheckTable_[c][sq].AndEqualNot(g_setMaskBb.GetSetMaskBb(sq) | g_pawnAttackBb.GetControllBb(opp, sq));
 		}
 	}
 }
@@ -45,8 +47,8 @@ void LanceAttackBb::InitCheckTableLance() {
 void LanceAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_lanceAttackBb.m_controllBbToEdge[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), Black, sq);
-		g_lanceAttackBb.m_controllBbToEdge[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::AllZeroBB(), White, sq);
+		g_lanceAttackBb.m_controllBbToEdge_[Black][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), Black, sq);
+		g_lanceAttackBb.m_controllBbToEdge_[White][sq] = g_lanceAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), White, sq);
 	}
 }
 
@@ -55,7 +57,7 @@ void LanceAttackBb::InitializeToEdge()
 // lance の前方だけを調べれば良さそうだけど、Rank8 ~ Rank2 の状態をそのまま index に使いたいので、
 // 縦方向全て(端を除く)の occupied を全て調べる。
 Bitboard LanceAttackBb::LanceBlockMask(const Square square) {
-	return BitboardMask::GetSquareFileMask(square) & ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>());
+	return g_fileMaskBb.GetSquareFileMask(square) & ~(BitboardMask::GetRankMask<Rank1>() | BitboardMask::GetRankMask<Rank9>());
 }
 
 // lance の利きを返す。

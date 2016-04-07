@@ -8,7 +8,7 @@ class SquareDistance {
 private:
 
 	// 何かの駒で一手で行ける位置関係についての距離のテーブル。桂馬の位置は距離1とする。
-	int m_squareDistance[SquareNum][SquareNum];
+	int m_squareDistance_[SquareNum][SquareNum];
 
 public:
 
@@ -17,7 +17,7 @@ public:
 
 
 	inline int GetSquareDistance(const Square sq1, const Square sq2) const {
-		return this->m_squareDistance[sq1][sq2];
+		return this->m_squareDistance_[sq1][sq2];
 	}
 
 };
