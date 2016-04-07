@@ -617,5 +617,8 @@
     <ClCompile Include="source\n160_board___\n160_108_slideBits.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
+    <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
