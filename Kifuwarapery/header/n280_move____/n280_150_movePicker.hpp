@@ -1,8 +1,9 @@
 #pragma once
 
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../n220_position/n220_500_charToPieceUSI.hpp"
+#include "../n223_move____/n223_105_utilMove.hpp"
+#include "../n226_movStack/n226_100_moveStack.hpp"
+#include "../n320_searcher/n320_150_search.hpp"
 
 enum GenerateMovePhase {
 	MainSearch, PH_TacticalMoves0, PH_Killers, PH_NonTacticalMoves0, PH_NonTacticalMoves1, PH_BadCaptures,

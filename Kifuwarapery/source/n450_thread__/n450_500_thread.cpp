@@ -1,6 +1,6 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
-#include "../../header/n400_usi_____/n400_350_thread.hpp"
+#include "../../header/n450_thread__/n450_500_thread.hpp"
 
 namespace {
 	template <typename T> T* newThread(Searcher* s) {
@@ -219,10 +219,10 @@ void Thread::Split(Position& pos, SearchStack* ss, const Score alpha, const Scor
 	sp.m_bestScore = bestScore;
 	sp.m_pMovePicker = &mp;
 	sp.m_moveCount = moveCount;
-	sp.m_pos = &pos;
+	sp.m_position = &pos;
 	sp.m_nodes = 0;
 	sp.m_cutoff = false;
-	sp.m_ss = ss;
+	sp.m_searchStack = ss;
 
 	m_pSearcher->m_threads.m_mutex_.lock();
 	sp.m_mutex.lock();

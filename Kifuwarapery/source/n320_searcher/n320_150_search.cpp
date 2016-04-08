@@ -11,7 +11,7 @@
 #include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
-#include "../../header/n400_usi_____/n400_350_thread.hpp"
+#include "../../header/n450_thread__/n450_500_thread.hpp"
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
@@ -1711,9 +1711,9 @@ void Thread::IdleLoop() {
 			m_pSearcher->m_threads.m_mutex_.unlock();
 
 			SearchStack ss[MaxPlyPlus2];
-			Position pos(*sp->m_pos, this);
+			Position pos(*sp->m_position, this);
 
-			memcpy(ss, sp->m_ss - 1, 4 * sizeof(SearchStack));
+			memcpy(ss, sp->m_searchStack - 1, 4 * sizeof(SearchStack));
 			(ss+1)->m_splitPoint = sp;
 
 			sp->m_mutex.lock();

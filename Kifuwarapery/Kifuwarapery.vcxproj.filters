@@ -133,6 +133,12 @@
     <Filter Include="header\n500_learn___">
       <UniqueIdentifier>{9f69d673-c8f5-46e5-8658-a8ad57f34fba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n450_thread__">
+      <UniqueIdentifier>{3fb6f3ee-f426-4382-b2ae-da5d744a66bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n450_thread__">
+      <UniqueIdentifier>{513737b7-c031-4320-90e5-186023619924}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -160,9 +166,6 @@
       <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp">
-      <Filter>header\n400_usi_____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n400_usi_____\n400_350_thread.hpp">
       <Filter>header\n400_usi_____</Filter>
     </ClInclude>
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp">
@@ -447,6 +450,27 @@
     <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_500_thread.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_150_limitsType.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_250_thread.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_300_mainThread.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_350_timeThread.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -462,9 +486,6 @@
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
-      <Filter>source\n400_usi_____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n400_usi_____\n400_350_thread.cpp">
       <Filter>source\n400_usi_____</Filter>
     </ClCompile>
     <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
@@ -625,6 +646,9 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_150_kppIndexArray.cpp">
       <Filter>source\n260_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n450_thread__\n450_500_thread.cpp">
+      <Filter>source\n450_thread__</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
