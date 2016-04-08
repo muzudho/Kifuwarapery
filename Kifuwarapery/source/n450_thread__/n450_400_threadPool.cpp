@@ -34,8 +34,9 @@ void ThreadPool::Exit() {
 	deleteThread(m_timer_);
 #endif
 
-	for (auto elem : *this)
+	for (auto elem : *this) {
 		deleteThread(elem);
+	}
 }
 
 void ThreadPool::ReadUSIOptions(Searcher* s) {
@@ -75,8 +76,11 @@ void ThreadPool::WaitForThinkFinished() {
 	m_sleepCond_.wait(lock, [&] { return !(t->m_isThinking); });
 }
 
-void ThreadPool::StartThinking(const Position& pos, const LimitsType& limits,
-							   const std::vector<Move>& searchMoves)
+void ThreadPool::StartThinking(
+	const Position& pos,
+	const LimitsType& limits,
+	const std::vector<Move>& searchMoves
+)
 {
 #if defined LEARN
 #else
@@ -109,7 +113,7 @@ void ThreadPool::StartThinking(const Position& pos, const LimitsType& limits,
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
 	GetPos.GetSearcher()->Think();
 #else
-	GetMainThread()->m_isThinking = true;
-	GetMainThread()->NotifyOne();
+	this->GetMainThread()->m_isThinking = true;
+	this->GetMainThread()->NotifyOne();
 #endif
 }

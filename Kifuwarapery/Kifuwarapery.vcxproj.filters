@@ -471,6 +471,9 @@
     <ClInclude Include="header\n450_thread__\n450_350_timerThread.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp">
+      <Filter>header\n280_move____</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -140,6 +140,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <ForcedIncludeFiles>stdafx.h</ForcedIncludeFiles>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -228,6 +229,7 @@
     <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_200_promoteMode.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp" />
+    <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp" />
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp" />
     <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />

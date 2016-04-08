@@ -3,18 +3,8 @@
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"
+#include "../n280_move____/n280_140_generateMovePhase.hpp"
 #include "../n320_searcher/n320_150_search.hpp"
-
-enum GenerateMovePhase {
-	MainSearch, PH_TacticalMoves0, PH_Killers, PH_NonTacticalMoves0, PH_NonTacticalMoves1, PH_BadCaptures,
-	EvasionSearch, PH_Evasions,
-	QSearch, PH_QCaptures0,
-	QEvasionSearch, PH_QEvasions,
-	ProbCut, PH_TacticalMoves1,
-	QRecapture, PH_QCaptures1,
-	PH_Stop
-};
-OverloadEnumOperators(GenerateMovePhase); // ++phase_ の為。
 
 class MovePicker {
 public:
