@@ -8,7 +8,7 @@
 #include "n450_200_splitPoint.hpp"
 #include "n450_250_thread.hpp"
 #include "n450_300_mainThread.hpp"
-#include "n450_350_timeThread.hpp"
+#include "n450_350_timerThread.hpp"
 
 const int g_MaxThreads = 64;
 

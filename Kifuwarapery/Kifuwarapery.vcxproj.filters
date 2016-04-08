@@ -465,10 +465,10 @@
     <ClInclude Include="header\n450_thread__\n450_300_mainThread.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_350_timeThread.hpp">
+    <ClInclude Include="header\n450_thread__\n450_400_threadPool.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_400_threadPool.hpp">
+    <ClInclude Include="header\n450_thread__\n450_350_timerThread.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
   </ItemGroup>
@@ -651,6 +651,12 @@
       <Filter>source\n450_thread__</Filter>
     </ClCompile>
     <ClCompile Include="source\n450_thread__\n450_400_threadPool.cpp">
+      <Filter>source\n450_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n450_thread__\n450_350_timerThread.cpp">
+      <Filter>source\n450_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n450_thread__\n450_300_mainThread.cpp">
       <Filter>source\n450_thread__</Filter>
     </ClCompile>
   </ItemGroup>
