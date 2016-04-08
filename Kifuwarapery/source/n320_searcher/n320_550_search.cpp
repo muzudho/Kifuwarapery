@@ -8,7 +8,8 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_500_futilityMargins.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
@@ -23,7 +24,7 @@ FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
 	for (size_t i = 0; i < size(); ++i) {
 		(*this)[i]->m_maxPly = 0;
 	}
-	m_isSleepWhileIdle_ = s->m_options["Use_Sleeping_Threads"];
+	m_isSleepWhileIdle_ = s->m_engineOptions["Use_Sleeping_Threads"];
 }
 // 一箇所でしか呼ばないので、FORCE_INLINE
 FORCE_INLINE void ThreadPool::Sleep() {
@@ -32,10 +33,10 @@ FORCE_INLINE void ThreadPool::Sleep() {
 
 void Searcher::Init() {
 	EngineOptionSetup engineOptionSetup;
-	engineOptionSetup.Initialize( &m_options, this);
+	engineOptionSetup.Initialize( &m_engineOptions, this);
 
 	this->m_threads.Init(this);
-	this->m_tt.SetSize(this->m_options["USI_Hash"]);
+	this->m_tt.SetSize(this->m_engineOptions["USI_Hash"]);
 }
 
 namespace {
@@ -46,18 +47,19 @@ namespace {
 		return static_cast<Score>(512 + 16 * static_cast<int>(d));
 	}
 
-	Score FutilityMargins[16][64]; // [depth][moveCount]
+
+	// Search関数で使う。
 	inline Score futilityMargin(const Depth depth, const int moveCount) {
 		return (depth < 7 * OnePly ?
-				FutilityMargins[std::max(depth, Depth1)][std::min(moveCount, 63)]
+				g_futilityMargins.m_FutilityMargins[std::max(depth, Depth1)][std::min(moveCount, 63)]
 				: 2 * ScoreInfinite);
 	}
 
-	int FutilityMoveCounts[32];    // [depth]
+	int g_FutilityMoveCounts[32];    // [depth]
 
-	s8 Reductions[2][64][64]; // [pv][depth][moveNumber]
+	s8 g_Reductions[2][64][64]; // [pv][depth][moveNumber]
 	template <bool PVNode> inline Depth reduction(const Depth depth, const int moveCount) {
-		return static_cast<Depth>(Reductions[PVNode][std::min(Depth(depth/OnePly), Depth(63))][std::min(moveCount, 63)]);
+		return static_cast<Depth>(g_Reductions[PVNode][std::min(Depth(depth/OnePly), Depth(63))][std::min(moveCount, 63)]);
 	}
 
 	// checkTime() を呼び出す最大間隔(msec)
@@ -498,10 +500,10 @@ void Searcher::IdLoop(Position& pos) {
 	m_history.Clear();
 	m_gains.Clear();
 
-	m_pvSize = m_options["MultiPV"];
-	Skill skill(m_options["Skill_Level"], m_options["Max_Random_Score_Diff"]);
+	m_pvSize = m_engineOptions["MultiPV"];
+	Skill skill(m_engineOptions["Skill_Level"], m_engineOptions["Max_Random_Score_Diff"]);
 
-	if (m_options["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
+	if (m_engineOptions["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
 		skill.max_random_score_diff = ScoreZero;
 		m_pvSize = 1;
 		assert(!skill.enabled()); // level による設定が出来るようになるまでは、これで良い。
@@ -971,10 +973,10 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	if (!PVNode
 		&& !ss->m_skipNullMove
 		&& depth < 4 * OnePly
-		&& beta <= eval - FutilityMargins[depth][0]
+		&& beta <= eval - g_futilityMargins.m_FutilityMargins[depth][0]
 		&& abs(beta) < ScoreMateInMaxPly)
 	{
-		return eval - FutilityMargins[depth][0];
+		return eval - g_futilityMargins.m_FutilityMargins[depth][0];
 	}
 
 	// step8
@@ -1183,7 +1185,7 @@ split_point_start:
 			assert(move != ttMove);
 			// move count based pruning
 			if (depth < 16 * OnePly
-				&& FutilityMoveCounts[depth] <= moveCount
+				&& g_FutilityMoveCounts[depth] <= moveCount
 				&& (threatMove.IsNone() || !refutes(pos, move, threatMove)))
 			{
 				if (SPNode) {
@@ -1310,7 +1312,7 @@ split_point_start:
 					|| (bishopInDangerFlag == BlackBishopInDangerIn78 && GetMove.ToCSA() == "0032KA")
 					|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && GetMove.ToCSA() == "0078KA"))
 				{
-					rm.m_score_ -= m_options["Danger_Demerit_Score"];
+					rm.m_score_ -= m_engineOptions["Danger_Demerit_Score"];
 				}
 #endif
 				rm.ExtractPvFromTT(pos);
@@ -1463,30 +1465,25 @@ void RootMove::InsertPvInTT(Position& pos) {
 
 void InitSearchTable() {
 	// todo: パラメータは改善の余地あり。
-	int d;  // depth (ONE_PLY == 2)
-	int hd; // half depth (ONE_PLY == 1)
-	int mc; // moveCount
 
 	// Init reductions array
-	for (hd = 1; hd < 64; hd++) {
-		for (mc = 1; mc < 64; mc++) {
-			double    pvRed = log(double(hd)) * log(double(mc)) / 3.0;
-			double nonPVRed = 0.33 + log(double(hd)) * log(double(mc)) / 2.25;
-			Reductions[1][hd][mc] = (int8_t) (   pvRed >= 1.0 ? floor(   pvRed * int(OnePly)) : 0);
-			Reductions[0][hd][mc] = (int8_t) (nonPVRed >= 1.0 ? floor(nonPVRed * int(OnePly)) : 0);
+	//int iHalfDepth; // half depth (ONE_PLY == 1)
+	//int iMoveCount; // moveCount
+	for (int iHalfDepth = 1; iHalfDepth < 64; iHalfDepth++) {
+		for (int iMoveCount = 1; iMoveCount < 64; iMoveCount++) {
+			double    pvRed = log(double(iHalfDepth)) * log(double(iMoveCount)) / 3.0;
+			double nonPVRed = 0.33 + log(double(iHalfDepth)) * log(double(iMoveCount)) / 2.25;
+			g_Reductions[1][iHalfDepth][iMoveCount] = (int8_t) (   pvRed >= 1.0 ? floor(   pvRed * int(OnePly)) : 0);
+			g_Reductions[0][iHalfDepth][iMoveCount] = (int8_t) (nonPVRed >= 1.0 ? floor(nonPVRed * int(OnePly)) : 0);
 		}
 	}
 
-	for (d = 1; d < 16; ++d) {
-		for (mc = 0; mc < 64; ++mc) {
-			FutilityMargins[d][mc] = static_cast<Score>(112 * static_cast<int>(log(static_cast<double>(d*d)/2) / log(2.0) + 1.001)
-														- 8 * mc + 45);
-		}
-	}
+	g_futilityMargins.Initialize();
 
 	// initOptions futility move counts
-	for (d = 0; d < 32; ++d) {
-		FutilityMoveCounts[d] = static_cast<int>(3.001 + 0.3 * pow(static_cast<double>(d), 1.8));
+	//int iDepth;  // depth (ONE_PLY == 2)
+	for (int iDepth = 0; iDepth < 32; ++iDepth) {
+		g_FutilityMoveCounts[iDepth] = static_cast<int>(3.001 + 0.3 * pow(static_cast<double>(iDepth), 1.8));
 	}
 }
 
@@ -1546,7 +1543,7 @@ void Searcher::Think() {
 	static Book book;
 	Position& pos = m_rootPosition;
 	m_timeManager.Init(m_limits, pos.GetGamePly(), pos.GetTurn(), this);
-	std::uniform_int_distribution<int> dist(m_options["Min_Book_Ply"], m_options["Max_Book_Ply"]);
+	std::uniform_int_distribution<int> dist(m_engineOptions["Min_Book_Ply"], m_engineOptions["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
 	bool nyugyokuWin = false;
@@ -1562,11 +1559,11 @@ void Searcher::Think() {
 #if defined LEARN
 	m_threads[0]->m_searching = true;
 #else
-	m_tt.SetSize(m_options["USI_Hash"]); // operator int() 呼び出し。
+	m_tt.SetSize(m_engineOptions["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
-	if (m_options["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScore bookMoveScore = book.GetProbe(pos, m_options["Book_File"], m_options["Best_Book_Move"]);
+	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
+		const MoveScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
 			!bookMoveScore.move.IsNone()
 			&&
@@ -1778,10 +1775,10 @@ void Searcher::SetOption(std::istringstream& ssCmd) {
 		value += " " + token;
 	}
 
-	if (!m_options.IsLegalOption(name)) {
+	if (!m_engineOptions.IsLegalOption(name)) {
 		std::cout << "No such option: " << name << std::endl;
 	}
 	else {
-		m_options[name] = value;
+		m_engineOptions[name] = value;
 	}
 }

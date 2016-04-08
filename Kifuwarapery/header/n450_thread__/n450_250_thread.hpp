@@ -9,7 +9,7 @@
 #include "n450_200_splitPoint.hpp"
 
 class MovePicker;	//#include "../n280_move____/n280_150_movePicker.hpp"
-class SearchStack;	//#include "../n320_searcher/n320_150_search.hpp"
+class SearchStack;
 class Searcher;
 //struct SplitPoint;
 class Position;

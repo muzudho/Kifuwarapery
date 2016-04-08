@@ -4,7 +4,7 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_245_engineOption.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
@@ -136,7 +136,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 		else if (token == "usi") {
 			SYNCCOUT << "id name " << MyName
 				<< "\nid author Hiraoka Takuya"
-				<< "\n" << searcher.m_options
+				<< "\n" << searcher.m_engineOptions
 				<< "\nusiok" << SYNCENDL;
 		}
 		else if (token == "go") {
@@ -175,10 +175,10 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 	//────────────────────────────────────────────────────────────────────────────────
 
 	// 評価値ファイルを書き出す指定なら
-	if (searcher.m_options["Write_Synthesized_Eval"])
+	if (searcher.m_engineOptions["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
-		KkKkpKppStorage1::WriteSynthesized(searcher.m_options["Eval_Dir"]);
+		KkKkpKppStorage1::WriteSynthesized(searcher.m_engineOptions["Eval_Dir"]);
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────

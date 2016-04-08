@@ -1,7 +1,7 @@
 #include <algorithm> // std::min
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 
 namespace {
@@ -110,11 +110,11 @@ void TimeManager::PvInstability(const int currChanges, const int prevChanges) {
 }
 
 void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
-	const int emergencyMoveHorizon = searcher->m_options["Emergency_Move_Horizon"];
-	const int emergencyBaseTime    = searcher->m_options["Emergency_Base_Time"];
-	const int emergencyMoveTime    = searcher->m_options["Emergency_Move_Time"];
-	const int minThinkingTime      = searcher->m_options["Minimum_Thinking_Time"];
-    const int slowMover            = searcher->m_options["Slow_Mover"];
+	const int emergencyMoveHorizon = searcher->m_engineOptions["Emergency_Move_Horizon"];
+	const int emergencyBaseTime    = searcher->m_engineOptions["Emergency_Base_Time"];
+	const int emergencyMoveTime    = searcher->m_engineOptions["Emergency_Move_Time"];
+	const int minThinkingTime      = searcher->m_engineOptions["Minimum_Thinking_Time"];
+    const int slowMover            = searcher->m_engineOptions["Slow_Mover"];
 
 	m_unstablePVExtraTime_ = 0;
 	m_optimumSearchTime_ = m_maximumSearchTime_ = limits.m_time[us];
@@ -139,7 +139,7 @@ void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us,
 		m_maximumSearchTime_ = std::min(m_maximumSearchTime_, t2);
 	}
 
-	if (searcher->m_options["USI_Ponder"]) {
+	if (searcher->m_engineOptions["USI_Ponder"]) {
 		m_optimumSearchTime_ += m_optimumSearchTime_ / 4;
 	}
 

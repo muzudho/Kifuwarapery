@@ -1,5 +1,5 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
@@ -40,8 +40,8 @@ void ThreadPool::Exit() {
 }
 
 void ThreadPool::ReadUSIOptions(Searcher* s) {
-	m_maxThreadsPerSplitPoint_ = s->m_options["Max_Threads_per_Split_Point"];
-	const size_t requested   = s->m_options["Threads"];
+	m_maxThreadsPerSplitPoint_ = s->m_engineOptions["Max_Threads_per_Split_Point"];
+	const size_t requested   = s->m_engineOptions["Threads"];
 	m_minimumSplitDepth_ = (requested < 6 ? 4 : (requested < 8 ? 5 : 7)) * OnePly;
 
 	assert(0 < requested);

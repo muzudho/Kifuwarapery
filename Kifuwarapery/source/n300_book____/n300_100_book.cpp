@@ -1,7 +1,7 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
@@ -102,7 +102,7 @@ MoveScore Book::GetProbe(const Position& pos, const std::string& fName, const bo
 	u32 sum = 0;
 	Move move = Move::GetMoveNone();
 	const Key key = GetBookKey(pos);
-	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->m_options["Min_Book_Score"]));
+	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->m_engineOptions["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {

@@ -4,7 +4,7 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 
@@ -54,7 +54,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 				 token == "movetime"   ) {
 			// btime wtime の後に byoyomi が来る前提になっているので良くない。
 			ssCmd >> limits.m_moveTime;
-			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetSearcher()->m_options["Byoyomi_Margin"]; }
+			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetSearcher()->m_engineOptions["Byoyomi_Margin"]; }
 		}
 		else if (token == "depth"      ) { ssCmd >> limits.m_depth; }
 		else if (token == "nodes"      ) { ssCmd >> limits.m_nodes; }

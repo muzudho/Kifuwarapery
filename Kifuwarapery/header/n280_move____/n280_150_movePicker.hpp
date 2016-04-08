@@ -4,7 +4,7 @@
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"
 #include "../n280_move____/n280_140_generateMovePhase.hpp"
-#include "../n320_searcher/n320_150_search.hpp"
+#include "../n320_searcher/n320_550_search.hpp"
 
 class MovePicker {
 public:

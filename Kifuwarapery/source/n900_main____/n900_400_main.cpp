@@ -12,7 +12,7 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_150_search.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 #include "..\..\header\n900_main____/n900_300_usiLoop.hpp"
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
@@ -101,7 +101,7 @@ void Main01::Initialize()
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(this->searcher->m_options["Eval_Dir"], true);
+	std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(this->searcher->m_engineOptions["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 }

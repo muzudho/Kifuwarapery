@@ -4,7 +4,7 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n240_tt______/n240_300_tt.hpp"
-#include "../n320_searcher/n320_150_search.hpp"
+#include "../n320_searcher/n320_550_search.hpp"
 #include "../n450_thread__/n450_400_threadPool.hpp"
 
 

@@ -168,7 +168,7 @@ struct BookMoveData {
 class Learner {
 public:
 	void learn(Position& GetPos, std::istringstream& ssCmd) {
-		eval_.initOptions(GetPos.GetSearcher()->m_options["Eval_Dir"], false);
+		eval_.initOptions(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -316,11 +316,11 @@ private:
 		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.m_size());
 	}
 	void setLearnOptions(Searcher& s) {
-		std::string m_options[] = {"name Threads value 1",
+		std::string m_engineOptions[] = {"name Threads value 1",
 								 "name MultiPV value 1",
 								 "name OwnBook value false",
 								 "name Max_Random_Score_Diff value 0"};
-		for (auto& str : m_options) {
+		for (auto& str : m_engineOptions) {
 			std::istringstream is(str);
 			s.SetOption(is);
 		}
@@ -543,8 +543,8 @@ private:
 			lowerDimension(parse2EvalBase_, parse2Data_.params);
 			setUpdateMask(step);
 			std::cout << "update eval ... " << std::flush;
-			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->m_options["Eval_Dir"]);
-			else             updateEval<false>(GetPos.GetSearcher()->m_options["Eval_Dir"]);
+			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
+			else             updateEval<false>(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
 			std::cout << "done" << std::endl;
 			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
 			Print();
