@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <fstream>//std::ifstream
-#include <array>//std::array
 #include "../n260_evaluate/n260_490_KppCacheIo.hpp"
 #include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
 
@@ -58,110 +56,175 @@ struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::ar
 
 
 	static bool ReadSynthesized(const std::string& dirName) {
+#define FOO(x) {														\
+			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
+			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
+			else     return false;										\
+		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KPP_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KPP), sizeof(KPP));
-			else     return false;
-		}
+		FOO(KPP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KKP_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KKP), sizeof(KKP));
-			else     return false;
-		}
+		FOO(KKP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KK_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KK), sizeof(KK));
-			else     return false;
-		}
+		FOO(KK);
 #endif
 
+#undef FOO
 		return true;
 	}
 
 
 	static void WriteSynthesized(const std::string& dirName) {
+#define FOO(x) {														\
+			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_synthesized.bin").c_str(), std::ios::binary); \
+			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
+		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KPP_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KPP), sizeof(KPP));
-		}
+		FOO(KPP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KKP_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KKP), sizeof(KKP));
-		}
+		FOO(KKP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KK_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KK), sizeof(KK));
-		}
+		FOO(KK);
 #endif
+
+#undef FOO
 	}
 
 
 	static void ReadSomeSynthesized(const std::string& dirName) {
+#define FOO(x) {														\
+			std::ifstream ifs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
+			if (ifs) ifs.read(reinterpret_cast<char*>(x), sizeof(x));	\
+			else     memset(x, 0, sizeof(x));							\
+		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KPP_some_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KPP), sizeof(KPP));
-			else     memset(KPP, 0, sizeof(KPP));
-		}
+		FOO(KPP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KKP_some_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KKP), sizeof(KKP));
-			else     memset(KKP, 0, sizeof(KKP));
-		}
+		FOO(KKP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		{
-			std::ifstream ifs((AppendSlashIfNone(dirName) + "KK_some_synthesized.bin").c_str(), std::ios::binary);
-			if (ifs) ifs.read(reinterpret_cast<char*>(KK), sizeof(KK));
-			else     memset(KK, 0, sizeof(KK));
-		}
+		FOO(KK);
 #endif
+
+#undef FOO
 	}
 
 
 	static void WriteSomeSynthesized(const std::string& dirName) {
+#define FOO(x) {														\
+			std::ofstream ofs((AppendSlashIfNone(dirName) + #x "_some_synthesized.bin").c_str(), std::ios::binary); \
+			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
+		}
 
 		//ALL_SYNTHESIZED_EVAL
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KPP
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KPP_some_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KPP), sizeof(KPP));
-		}
+		FOO(KPP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KKP
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KKP_some_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KKP), sizeof(KKP));
-		}
+		FOO(KKP);
 #endif
 #ifndef SKIP_LONG_LONG_TIME_EVAL_KK
-		{
-			std::ofstream ofs((AppendSlashIfNone(dirName) + "KK_some_synthesized.bin").c_str(), std::ios::binary);
-			ofs.write(reinterpret_cast<char*>(KK), sizeof(KK));
-		}
+		FOO(KK);
 #endif
+
+#undef FOO
 	}
 
 
+#if defined EVAL_PHASE1
+	// フェーズ１の定義ここから
+#define BASE_PHASE1 {								\
+		FOO(kpps.kee);								\
+		FOO(kpps.r_kpe_b);							\
+		FOO(kpps.r_kpe_h);							\
+		FOO(kpps.r_kee);							\
+		FOO(kpps.xee);								\
+		FOO(kpps.yee);								\
+		FOO(kpps.pe);								\
+		FOO(kpps.ee);								\
+		FOO(kpps.r_pe_b);							\
+		FOO(kpps.r_pe_h);							\
+		FOO(kpps.r_ee);								\
+		FOO(kkps.ke);								\
+		FOO(kkps.r_kke);							\
+		FOO(kkps.r_ke);								\
+		FOO(kks.k);									\
+	}
+	// フェーズ１の定義ここまで
+#else
+#define BASE_PHASE1
+#endif
 
+
+#if defined EVAL_PHASE2
+#define BASE_PHASE2 {								\
+		FOO(kpps.r_pp_bb);							\
+		FOO(kpps.r_pp_hb);							\
+		FOO(kkps.r_kp_b);							\
+		FOO(kkps.r_kp_h);							\
+		FOO(kks.r_kk);								\
+	}
+#else
+#define BASE_PHASE2
+#endif
+
+
+#if defined EVAL_PHASE3
+#define BASE_PHASE3 {								\
+		FOO(kpps.r_kpp_bb);							\
+		FOO(kpps.r_kpp_hb);							\
+		FOO(kpps.pp);								\
+		FOO(kpps.kpe);								\
+		FOO(kpps.xpe);								\
+		FOO(kpps.ype);								\
+		FOO(kkps.kp);								\
+		FOO(kkps.r_kkp_b);							\
+		FOO(kkps.r_kkp_h);							\
+		FOO(kkps.kke);								\
+		FOO(kks.kk);								\
+	}
+#else
+#define BASE_PHASE3
+#endif
+
+
+#if defined EVAL_PHASE4
+#define BASE_PHASE4 {								\
+		FOO(kpps.kpp);								\
+		FOO(kpps.xpp);								\
+		FOO(kpps.ypp);								\
+		FOO(kkps.kkp);								\
+	}
+#else
+#define BASE_PHASE4
+#endif
+
+
+	// フェーズ１～４に展開されます。
+#define READ_BASE_EVAL {						\
+		BASE_PHASE1;							\
+		BASE_PHASE2;							\
+		BASE_PHASE3;							\
+		BASE_PHASE4;							\
+	}
+
+#define WRITE_BASE_EVAL {						\
+		BASE_PHASE1;							\
+		BASE_PHASE2;							\
+		BASE_PHASE3;							\
+		BASE_PHASE4;							\
+	}
 
 	// .bin ファイルを読み込む。
 	void ReadBins(const std::string& dirName) {
@@ -174,187 +237,26 @@ struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::ar
 		// 関数定義ここまで
 
 		// フェーズ１～４に展開されます。
-#if defined EVAL_PHASE1
-		FOO(kpps.kee);
-		FOO(kpps.r_kpe_b);
-		FOO(kpps.r_kpe_h);
-		FOO(kpps.r_kee);
-		FOO(kpps.xee);
-		FOO(kpps.yee);
-		FOO(kpps.pe);
-		FOO(kpps.ee);
-		FOO(kpps.r_pe_b);
-		FOO(kpps.r_pe_h);
-		FOO(kpps.r_ee);
-		FOO(kkps.ke);
-		FOO(kkps.r_kke);
-		FOO(kkps.r_ke);
-		FOO(kks.k);
-#endif
-#if defined EVAL_PHASE2
-		FOO(kpps.r_pp_bb);
-		FOO(kpps.r_pp_hb);
-		FOO(kkps.r_kp_b);
-		FOO(kkps.r_kp_h);
-		FOO(kks.r_kk);
-#endif
-#if defined EVAL_PHASE3
-		FOO(kpps.r_kpp_bb);
-		FOO(kpps.r_kpp_hb);
-		FOO(kpps.pp);
-		FOO(kpps.kpe);
-		FOO(kpps.xpe);
-		FOO(kpps.ype);
-		FOO(kkps.kp);
-		FOO(kkps.r_kkp_b);
-		FOO(kkps.r_kkp_h);
-		FOO(kkps.kke);
-		FOO(kks.kk);
-#endif
-#if defined EVAL_PHASE4
-		FOO(kpps.kpp);
-		FOO(kpps.xpp);
-		FOO(kpps.ypp);
-		FOO(kkps.kkp);
-#endif
+		READ_BASE_EVAL;
 
 		// 関数定義を廃棄
 #undef FOO
 	}
 
 
-	void Write1(const std::string& dirName, void* evalArray, std::string fileName) {
-		std::ofstream ofs((AppendSlashIfNone(dirName) + fileName +".bin").c_str(), std::ios::binary);
-		ofs.write(reinterpret_cast<char*>(evalArray), sizeof(evalArray));
-	}
-
-#define TO_STRING(VariableName) # VariableName
-
 	void Write(const std::string& dirName) {
 #define FOO(x) {														\
 			std::ofstream ofs((AppendSlashIfNone(dirName) + #x ".bin").c_str(), std::ios::binary); \
 			ofs.write(reinterpret_cast<char*>(x), sizeof(x));			\
 		}
-
-		// フェーズ１～４に展開されます。
-#if defined EVAL_PHASE1
-		Write1(dirName, kpps.kee, TO_STRING(kpps.kee));
-		Write1(dirName, kpps.r_kpe_b, TO_STRING(kpps.r_kpe_b));
-		Write1(dirName, kpps.r_kpe_h, TO_STRING(kpps.r_kpe_h));
-		Write1(dirName, kpps.r_kee, TO_STRING(kpps.r_kee));
-		Write1(dirName, kpps.xee, TO_STRING(kpps.xee));
-		Write1(dirName, kpps.yee, TO_STRING(kpps.yee));
-		Write1(dirName, kpps.pe, TO_STRING(kpps.pe));
-		Write1(dirName, kpps.ee, TO_STRING(kpps.ee));
-		Write1(dirName, kpps.r_pe_b, TO_STRING(kpps.r_pe_b));
-		Write1(dirName, kpps.r_pe_h, TO_STRING(kpps.r_pe_h));
-		Write1(dirName, kpps.r_ee, TO_STRING(kpps.r_ee));
-		Write1(dirName, kkps.ke, TO_STRING(kkps.ke));
-		Write1(dirName, kkps.r_kke, TO_STRING(kkps.r_kke));
-		Write1(dirName, kkps.r_ke, TO_STRING(kkps.r_ke));
-		Write1(dirName, kks.k, TO_STRING(kks.k));
-#endif
-#if defined EVAL_PHASE2
-		Write1(dirName, kpps.r_pp_bb, TO_STRING(kpps.r_pp_bb));
-		Write1(dirName, kpps.r_pp_hb, TO_STRING(kpps.r_pp_hb));
-		Write1(dirName, kkps.r_kp_b, TO_STRING(kkps.r_kp_b));
-		Write1(dirName, kkps.r_kp_h, TO_STRING(kkps.r_kp_h));
-		Write1(dirName, kks.r_kk, TO_STRING(kks.r_kk));
-#endif
-#if defined EVAL_PHASE3
-		Write1(dirName, kpps.r_kpp_bb, TO_STRING(kpps.r_kpp_bb));
-		Write1(dirName, kpps.r_kpp_hb, TO_STRING(kpps.r_kpp_hb));
-		Write1(dirName, kpps.pp, TO_STRING(kpps.pp));
-		Write1(dirName, kpps.kpe, TO_STRING(kpps.kpe));
-		Write1(dirName, kpps.xpe, TO_STRING(kpps.xpe));
-		Write1(dirName, kpps.ype, TO_STRING(kpps.ype));
-		Write1(dirName, kkps.kp, TO_STRING(kkps.kp));
-		Write1(dirName, kkps.r_kkp_b, TO_STRING(kkps.r_kkp_b));
-		Write1(dirName, kkps.r_kkp_h, TO_STRING(kkps.r_kkp_h));
-		Write1(dirName, kkps.kke, TO_STRING(kkps.kke));
-		Write1(dirName, kks.kk, TO_STRING(kks.kk));
-#endif
-#if defined EVAL_PHASE4
-		Write1(dirName, kpps.kpp, TO_STRING(kpps.kpp));
-		Write1(dirName, kpps.xpp, TO_STRING(kpps.xpp));
-		Write1(dirName, kpps.ypp, TO_STRING(kpps.ypp));
-		Write1(dirName, kkps.kkp, TO_STRING(kkps.kkp));
-#endif
+		WRITE_BASE_EVAL;
 #undef FOO
 	}
 
+#undef READ_BASE_EVAL
+#undef WRITE_BASE_EVAL
+
 public:
-
-
-	void Set1Kpp(std::pair<ptrdiff_t, int>* indices, std::array<s64, 2> sum) {
-		int size = sizeof(indices);
-		for (int i = 0; i < size; i++) {
-			std::pair<ptrdiff_t, int> indexAndWeight = indices[i];
-
-			if (indexAndWeight.first == std::numeric_limits<ptrdiff_t>::max())
-			{
-				break;
-			}
-
-			if (0 <= indexAndWeight.first) {
-				sum[0] += static_cast<s64>((*GetKppOneArrayFirst(indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKppOneArrayFirst(indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-			else {
-				sum[0] -= static_cast<s64>((*GetKppOneArrayFirst(-indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKppOneArrayFirst(-indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-		}
-
-		sum[0] /= MaxWeight();
-		sum[1] /= MaxWeight() * TurnWeight();
-	}
-	void Set1Kkp(std::pair<ptrdiff_t, int>* indices, std::array<s64, 2> sum) {
-		int size = sizeof(indices);
-		for (int i = 0; i < size; i++) {
-			std::pair<ptrdiff_t, int> indexAndWeight = indices[i];
-
-			if (indexAndWeight.first == std::numeric_limits<ptrdiff_t>::max())
-			{
-				break;
-			}
-
-			if (0 <= indexAndWeight.first) {
-				sum[0] += static_cast<s64>((*GetKkpOneArrayFirst(indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKkpOneArrayFirst(indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-			else {
-				sum[0] -= static_cast<s64>((*GetKkpOneArrayFirst(-indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKkpOneArrayFirst(-indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-		}
-
-		sum[0] /= MaxWeight();
-		sum[1] /= MaxWeight() * TurnWeight();
-	}
-	void Set1Kk(std::pair<ptrdiff_t, int>* indices, std::array<s64, 2> sum) {
-		int size = sizeof(indices);
-		for (int i = 0; i < size; i++) {
-			std::pair<ptrdiff_t, int> indexAndWeight = indices[i];
-
-			if (indexAndWeight.first == std::numeric_limits<ptrdiff_t>::max())
-			{
-				break;
-			}
-
-			if (0 <= indexAndWeight.first) {
-				sum[0] += static_cast<s64>((*GetKkOneArrayFirst(indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKkOneArrayFirst(indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-			else {
-				sum[0] -= static_cast<s64>((*GetKkOneArrayFirst(-indexAndWeight.first))[0]) * indexAndWeight.second;
-				sum[1] += static_cast<s64>((*GetKkOneArrayFirst(-indexAndWeight.first))[1]) * indexAndWeight.second;
-			}
-		}
-
-		sum[0] /= MaxWeight();
-		sum[1] /= MaxWeight() * TurnWeight();
-	}
 
 	void SetEvaluate(const std::string& dirName) {
 		KppCacheIo kppCacheIo;
@@ -362,6 +264,20 @@ public:
 #if !defined LEARN
 		SYNCCOUT << "info string START setting eval table" << SYNCENDL;
 #endif
+#define FOO(indices, oneArray, sum)										\
+		for (auto indexAndWeight : indices) {							\
+			if (indexAndWeight.first == std::numeric_limits<ptrdiff_t>::max()) break; \
+			if (0 <= indexAndWeight.first) {							\
+				sum[0] += static_cast<s64>((*oneArray( indexAndWeight.first))[0]) * indexAndWeight.second; \
+				sum[1] += static_cast<s64>((*oneArray( indexAndWeight.first))[1]) * indexAndWeight.second; \
+			}															\
+			else {														\
+				sum[0] -= static_cast<s64>((*oneArray(-indexAndWeight.first))[0]) * indexAndWeight.second; \
+				sum[1] += static_cast<s64>((*oneArray(-indexAndWeight.first))[1]) * indexAndWeight.second; \
+			}															\
+		}																\
+		sum[0] /= MaxWeight();											\
+		sum[1] /= MaxWeight() * TurnWeight();
 
 #if defined _OPENMP
 #pragma omp parallel
@@ -471,7 +387,7 @@ public:
 
 								this->CreateKppIndices(indices, static_cast<Square>(k1), p1, p2);
 								std::array<s64, 2> sum = { {} };
-								Set1Kpp(indices, sum);//FOO(indices, GetKppOneArrayFirst, sum);
+								FOO(indices, GetKppOneArrayFirst, sum);
 								KPP[k1][p1][p2] += sum;
 							}
 							// （＾ｑ＾）ここでファイルを作成したいと思うんだぜ☆
@@ -523,7 +439,7 @@ public:
 
 						this->CreateKkpIndices(indices, static_cast<Square>(ksq0), ksq1, p1);
 						std::array<s64, 2> sum = {{}};
-						Set1Kkp(indices, sum);//FOO(indices, GetKkpOneArrayFirst, sum);
+						FOO(indices, GetKkpOneArrayFirst, sum);
 						KKP[ksq0][ksq1][p1] += sum;
 					}
 				}
@@ -551,7 +467,7 @@ public:
 
 					this->CreateKkIndices(indices, static_cast<Square>(ksq0), ksq1);
 					std::array<s64, 2> sum = {{}};
-					Set1Kk(indices, sum);//FOO(indices, GetKkOneArrayFirst, sum);
+					FOO(indices, GetKkOneArrayFirst, sum);
 					KK[ksq0][ksq1][0] += sum[0] / 2;
 					KK[ksq0][ksq1][1] += sum[1] / 2;
 					#if defined USE_K_FIX_OFFSET
@@ -561,6 +477,7 @@ public:
 			}
 		}
 #endif //KK
+		#undef FOO
 
 
 #if !defined LEARN
