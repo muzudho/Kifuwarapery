@@ -1,4 +1,4 @@
-﻿#include "../../header/n320_searcher/n320_500_futilityMargins.hpp"
+﻿#include "../../header/n320_searcher/n320_510_futilityMargins.hpp"
 
 
 //Score g_FutilityMargins[16][64]; // [depth][moveCount]

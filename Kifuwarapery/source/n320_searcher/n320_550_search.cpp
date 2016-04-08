@@ -8,7 +8,8 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"
-#include "../../header/n320_searcher/n320_500_futilityMargins.hpp"
+#include "../../header/n320_searcher/n320_500_reductions.hpp"
+#include "../../header/n320_searcher/n320_510_futilityMargins.hpp"
 #include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
@@ -48,19 +49,8 @@ namespace {
 	}
 
 
-	// Search関数で使う。
-	inline Score futilityMargin(const Depth depth, const int moveCount) {
-		return (depth < 7 * OnePly ?
-				g_futilityMargins.m_FutilityMargins[std::max(depth, Depth1)][std::min(moveCount, 63)]
-				: 2 * ScoreInfinite);
-	}
 
 	int g_FutilityMoveCounts[32];    // [depth]
-
-	s8 g_Reductions[2][64][64]; // [pv][depth][moveNumber]
-	template <bool PVNode> inline Depth reduction(const Depth depth, const int moveCount) {
-		return static_cast<Depth>(g_Reductions[PVNode][std::min(Depth(depth/OnePly), Depth(63))][std::min(moveCount, 63)]);
-	}
 
 	// checkTime() を呼び出す最大間隔(msec)
 	const int TimerResolution = 5;
@@ -1195,9 +1185,9 @@ split_point_start:
 			}
 
 			// score based pruning
-			const Depth predictedDepth = newDepth - reduction<PVNode>(depth, moveCount);
+			const Depth predictedDepth = newDepth - g_reductions.reduction<PVNode>(depth, moveCount);
 			// gain を 2倍にする。
-			const Score futilityScore = ss->m_staticEval + futilityMargin(predictedDepth, moveCount)
+			const Score futilityScore = ss->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
 				+ 2 * m_gains.GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 
 			if (futilityScore < beta) {
@@ -1246,7 +1236,7 @@ split_point_start:
 			&& ss->m_killers[0] != move
 			&& ss->m_killers[1] != move)
 		{
-			ss->m_reduction = reduction<PVNode>(depth, moveCount);
+			ss->m_reduction = g_reductions.reduction<PVNode>(depth, moveCount);
 			if (!PVNode && cutNode) {
 				ss->m_reduction += OnePly;
 			}
@@ -1466,17 +1456,7 @@ void RootMove::InsertPvInTT(Position& pos) {
 void InitSearchTable() {
 	// todo: パラメータは改善の余地あり。
 
-	// Init reductions array
-	//int iHalfDepth; // half depth (ONE_PLY == 1)
-	//int iMoveCount; // moveCount
-	for (int iHalfDepth = 1; iHalfDepth < 64; iHalfDepth++) {
-		for (int iMoveCount = 1; iMoveCount < 64; iMoveCount++) {
-			double    pvRed = log(double(iHalfDepth)) * log(double(iMoveCount)) / 3.0;
-			double nonPVRed = 0.33 + log(double(iHalfDepth)) * log(double(iMoveCount)) / 2.25;
-			g_Reductions[1][iHalfDepth][iMoveCount] = (int8_t) (   pvRed >= 1.0 ? floor(   pvRed * int(OnePly)) : 0);
-			g_Reductions[0][iHalfDepth][iMoveCount] = (int8_t) (nonPVRed >= 1.0 ? floor(nonPVRed * int(OnePly)) : 0);
-		}
-	}
+	g_reductions.Initialize();
 
 	g_futilityMargins.Initialize();
 

@@ -474,7 +474,10 @@
     <ClInclude Include="header\n320_searcher\n320_550_search.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_500_futilityMargins.hpp">
+    <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_500_reductions.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
   </ItemGroup>
@@ -665,7 +668,10 @@
     <ClCompile Include="source\n320_searcher\n320_550_search.cpp">
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_500_futilityMargins.cpp">
+    <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp">
+      <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_searcher\n320_500_reductions.cpp">
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
   </ItemGroup>
