@@ -2,7 +2,7 @@
 
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n260_evaluate/n260_700_evaluate.hpp"
-#include "../n450_thread__/n450_500_thread.hpp"
+#include "../n450_thread__/n450_400_threadPool.hpp"
 
 #if defined LEARN
 

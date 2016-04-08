@@ -450,9 +450,6 @@
     <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_500_thread.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
@@ -469,6 +466,9 @@
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_350_timeThread.hpp">
+      <Filter>header\n450_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_thread__\n450_400_threadPool.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
   </ItemGroup>
@@ -647,7 +647,10 @@
     <ClCompile Include="source\n260_evaluate\n260_150_kppIndexArray.cpp">
       <Filter>source\n260_evaluate</Filter>
     </ClCompile>
-    <ClCompile Include="source\n450_thread__\n450_500_thread.cpp">
+    <ClCompile Include="source\n450_thread__\n450_250_thread.cpp">
+      <Filter>source\n450_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n450_thread__\n450_400_threadPool.cpp">
       <Filter>source\n450_thread__</Filter>
     </ClCompile>
   </ItemGroup>

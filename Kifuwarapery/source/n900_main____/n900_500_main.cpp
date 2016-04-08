@@ -3,7 +3,7 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
-#include "../../header/n450_thread__/n450_500_thread.hpp"
+#include "../../header/n450_thread__/n450_400_threadPool.hpp"
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
 
 #if defined FIND_MAGIC

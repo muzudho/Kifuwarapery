@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../n220_position/n220_400_position.hpp"
+#include "../n260_evaluate/n260_600_EvalSum.hpp"
 
 
 struct SplitPoint;

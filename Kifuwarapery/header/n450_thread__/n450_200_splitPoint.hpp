@@ -1,8 +1,8 @@
-#pragma once
+Ôªø#pragma once
 
 
 #include "../n220_position/n220_400_position.hpp"
-
+#include "../n320_searcher/n320_125_searchStack.hpp"
 
 
 class MovePicker;	//#include "../n280_move____/n280_150_movePicker.hpp"
@@ -10,7 +10,7 @@ struct Thread;
 
 
 struct SplitPoint {
-	// ã«ñ Ç©Åô
+	// Â±ÄÈù¢„Åã‚òÜ
 	const Position*		m_position;
 
 	const SearchStack*	m_searchStack;

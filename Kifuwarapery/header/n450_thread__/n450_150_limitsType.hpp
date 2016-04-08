@@ -1,6 +1,6 @@
-#pragma once
+ï»¿#pragma once
 
-// ŠÔ‚â’Tõ[‚³‚Ì§ŒÀ‚ğŠi”[‚·‚éˆ×‚Ì\‘¢‘Ì
+// æ™‚é–“ã‚„æ¢ç´¢æ·±ã•ã®åˆ¶é™ã‚’æ ¼ç´ã™ã‚‹ç‚ºã®æ§‹é€ ä½“
 struct LimitsType {
 
 	LimitsType() { memset(this, 0, sizeof(LimitsType)); }

@@ -4,7 +4,7 @@
 #include "../../header/n320_searcher/n320_150_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
-#include "../../header/n450_thread__/n450_500_thread.hpp"
+#include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
 Key Book::m_ZobPiece[PieceNone][SquareNum];

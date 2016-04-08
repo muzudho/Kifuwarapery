@@ -1,20 +1,21 @@
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
 #include "../../header/n320_searcher/n320_150_search.hpp"
-#include "../../header/n450_thread__/n450_500_thread.hpp"
+#include "../../header/n450_thread__/n450_250_thread.hpp"
+#include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
-namespace {
-	template <typename T> T* newThread(Searcher* s) {
-		T* th = new T(s);
-		th->m_handle = std::thread(&Thread::IdleLoop, th); // move constructor
-		return th;
-	}
-	void deleteThread(Thread* th) {
-		th->m_exit = true;
-		th->NotifyOne();
-		th->m_handle.join(); // Wait for thread termination
-		delete th;
-	}
+//namespace {
+template <typename T> T* newThread(Searcher* s) {
+	T* th = new T(s);
+	th->m_handle = std::thread(&Thread::IdleLoop, th); // move constructor
+	return th;
 }
+void deleteThread(Thread* th) {
+	th->m_exit = true;
+	th->NotifyOne();
+	th->m_handle.join(); // Wait for thread termination
+	delete th;
+}
+//}
 
 Thread::Thread(Searcher* s) /*: splitPoints()*/ {
 	m_pSearcher = s;
@@ -192,9 +193,20 @@ void ThreadPool::StartThinking(const Position& pos, const LimitsType& limits,
 }
 
 template <bool Fake>
-void Thread::Split(Position& pos, SearchStack* ss, const Score alpha, const Score beta, Score& bestScore,
-				   Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-				   MovePicker& mp, const NodeType nodeType, const bool cutNode)
+void Thread::Split(
+	Position& pos,
+	SearchStack* ss,
+	const Score alpha,
+	const Score beta,
+	Score& bestScore,
+	Move& bestMove,
+	const Depth depth,
+	const Move threatMove,
+	const int moveCount,
+	MovePicker& mp,
+	const NodeType nodeType,
+	const bool cutNode
+)
 {
 	assert(pos.IsOK());
 	assert(bestScore <= alpha && alpha < beta && beta <= ScoreInfinite);
