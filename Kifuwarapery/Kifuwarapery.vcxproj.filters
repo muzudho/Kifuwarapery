@@ -480,6 +480,9 @@
     <ClInclude Include="header\n320_searcher\n320_500_reductions.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -672,6 +675,9 @@
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
     <ClCompile Include="source\n320_searcher\n320_500_reductions.cpp">
+      <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp">
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
   </ItemGroup>

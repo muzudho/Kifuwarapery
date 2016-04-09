@@ -245,6 +245,7 @@
     <ClInclude Include="header\n320_searcher\n320_140_stats.hpp" />
     <ClInclude Include="header\n320_searcher\n320_500_reductions.hpp" />
     <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp" />
+    <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp" />
     <ClInclude Include="header\n320_searcher\n320_550_search.hpp" />
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp" />
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
@@ -315,6 +316,7 @@
     <ClCompile Include="source\n300_book____\n300_100_book.cpp" />
     <ClCompile Include="source\n320_searcher\n320_500_reductions.cpp" />
     <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp" />
+    <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp" />
     <ClCompile Include="source\n320_searcher\n320_550_search.cpp" />
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp" />
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />

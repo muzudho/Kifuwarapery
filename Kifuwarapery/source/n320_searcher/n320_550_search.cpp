@@ -10,6 +10,7 @@
 #include "../../header/n300_book____/n300_100_book.hpp"
 #include "../../header/n320_searcher/n320_500_reductions.hpp"
 #include "../../header/n320_searcher/n320_510_futilityMargins.hpp"
+#include "../../header/n320_searcher/n320_520_futilityMoveCounts.hpp"
 #include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
@@ -19,18 +20,6 @@
 extern const InFrontMaskBb g_inFrontMaskBb;
 
 
-
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
-	for (size_t i = 0; i < size(); ++i) {
-		(*this)[i]->m_maxPly = 0;
-	}
-	m_isSleepWhileIdle_ = s->m_engineOptions["Use_Sleeping_Threads"];
-}
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::Sleep() {
-	m_isSleepWhileIdle_ = true;
-}
 
 void Searcher::Init() {
 	EngineOptionSetup engineOptionSetup;
@@ -47,10 +36,6 @@ namespace {
 	inline Score razorMargin(const Depth d) {
 		return static_cast<Score>(512 + 16 * static_cast<int>(d));
 	}
-
-
-
-	int g_FutilityMoveCounts[32];    // [depth]
 
 	// checkTime() を呼び出す最大間隔(msec)
 	const int TimerResolution = 5;
@@ -1175,7 +1160,7 @@ split_point_start:
 			assert(move != ttMove);
 			// move count based pruning
 			if (depth < 16 * OnePly
-				&& g_FutilityMoveCounts[depth] <= moveCount
+				&& g_futilityMoveCounts.m_futilityMoveCounts[depth] <= moveCount
 				&& (threatMove.IsNone() || !refutes(pos, move, threatMove)))
 			{
 				if (SPNode) {
@@ -1463,7 +1448,7 @@ void InitSearchTable() {
 	// initOptions futility move counts
 	//int iDepth;  // depth (ONE_PLY == 2)
 	for (int iDepth = 0; iDepth < 32; ++iDepth) {
-		g_FutilityMoveCounts[iDepth] = static_cast<int>(3.001 + 0.3 * pow(static_cast<double>(iDepth), 1.8));
+		g_futilityMoveCounts.m_futilityMoveCounts[iDepth] = static_cast<int>(3.001 + 0.3 * pow(static_cast<double>(iDepth), 1.8));
 	}
 }
 
