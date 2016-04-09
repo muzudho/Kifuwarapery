@@ -9,8 +9,12 @@
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
 #include "../../header/n500_learn___/n500_500_learner.hpp"
+#include "..\..\header\n360_egOption/n360_230_engineOptionable.hpp"
 #include "..\..\header\n360_egOption\n360_300_engineOptionSetup.hpp"
+
+
 #include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+//class Searcher;
 
 
 // 初期化の値を取ってくるのに使います。

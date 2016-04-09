@@ -64,9 +64,6 @@
     <Filter Include="header\n300_book____">
       <UniqueIdentifier>{9398154d-0646-456d-8741-9bdd8a09d72c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n300_book____">
-      <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n320_searcher">
       <UniqueIdentifier>{0587b6a8-4775-4004-915f-f3f1e17b09a5}</UniqueIdentifier>
     </Filter>
@@ -138,6 +135,9 @@
     </Filter>
     <Filter Include="source\n450_thread__">
       <UniqueIdentifier>{513737b7-c031-4320-90e5-186023619924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n276_genMove_\n300_book____">
+      <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -678,7 +678,7 @@
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
     <ClCompile Include="source\n300_book____\n300_500_book.cpp">
-      <Filter>source\n300_book____</Filter>
+      <Filter>source\n276_genMove_\n300_book____</Filter>
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_200_searcher.cpp">
       <Filter>source\n900_main____</Filter>

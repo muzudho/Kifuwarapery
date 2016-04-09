@@ -13,12 +13,11 @@
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 #include "..\..\header\n900_main____/n900_300_usiLoop.hpp"
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 
-//extern SquareRelation g_squareRelation;
 
 
 Main01::Main01()

@@ -1,6 +1,8 @@
 #include "../../header/n450_thread__/n450_250_thread.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
+
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+//class Searcher;
 
 
 Thread::Thread(Searcher* s) /*: splitPoints()*/ {

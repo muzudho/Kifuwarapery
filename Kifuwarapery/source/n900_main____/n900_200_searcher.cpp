@@ -1,6 +1,7 @@
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n226_movStack/n226_105_utilMoveStack.hpp"
@@ -15,7 +16,10 @@
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+
+
+#include "../../header/n900_main____/n900_200_searcher.hpp"
+
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
@@ -1521,7 +1525,7 @@ void Searcher::Think() {
 	static Book book;
 	Position& pos = m_rootPosition;
 	m_timeManager.Init(m_limits, pos.GetGamePly(), pos.GetTurn(), this);
-	std::uniform_int_distribution<int> dist(m_engineOptions["Min_Book_Ply"], m_engineOptions["Max_Book_Ply"]);
+	std::uniform_int_distribution<int> dist(this->m_engineOptions["Min_Book_Ply"], this->m_engineOptions["Max_Book_Ply"]);
 	const Ply book_ply = dist(g_randomTimeSeed);
 
 	bool nyugyokuWin = false;

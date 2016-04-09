@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 #include <map>
+#include <string>
+//#include <utility>	//std::end か☆？
+//#include <iostream>	//std::end か☆？
 #include "../n360_egOption/n360_230_engineOptionable.hpp"
 
 

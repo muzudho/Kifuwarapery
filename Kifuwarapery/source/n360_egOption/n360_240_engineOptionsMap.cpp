@@ -5,8 +5,10 @@
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
+
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+//class Searcher;
 
 
 bool CaseInsensitiveLess::operator () (const std::string& s1, const std::string& s2) const {

@@ -5,7 +5,7 @@
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n240_tt______/n240_300_tt.hpp"
 #include "../n450_thread__/n450_400_threadPool.hpp"
-#include "../n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+#include "../n900_main____/n900_200_searcher.hpp"
 
 
 class Main01 {

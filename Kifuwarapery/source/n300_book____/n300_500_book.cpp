@@ -7,7 +7,11 @@
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
+
+
 #include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+//class Searcher;
+
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
 Key Book::m_ZobPiece[PieceNone][SquareNum];

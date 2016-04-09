@@ -1,6 +1,10 @@
 ﻿#pragma once
 
 
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n113_piece___/n113_200_handPiece.hpp"
+
+
 // 評価関数テーブルのオフセット。
 // f_xxx が味方の駒、e_xxx が敵の駒
 // Bonanza の影響で持ち駒 0 の場合のインデックスが存在するが、参照する事は無い。
@@ -46,3 +50,6 @@ enum {
 
 const int g_FVScale = 32;
 
+
+extern const int kppArray[31];//(^q^)
+extern const int kppHandArray[ColorNum][HandPieceNum];//(^q^)

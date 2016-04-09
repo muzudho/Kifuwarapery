@@ -4,8 +4,7 @@
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
-
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 class UsiLoop {

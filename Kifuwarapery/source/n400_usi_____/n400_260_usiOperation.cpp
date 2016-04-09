@@ -6,8 +6,10 @@
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
+
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+//class Searcher;
 
 
 class StringToPieceTypeCSA : public std::map<std::string, PieceType> {
