@@ -2,7 +2,6 @@
 
 
 #include "../n110_square__/n110_500_utilSquare.hpp"
-//#include "../n160_board___/n160_050_slideBits.hpp"
 
 
 class Bitboard {

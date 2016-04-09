@@ -336,12 +336,6 @@
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n220_position\n220_400_position.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n220_position\n220_600_evalList.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
@@ -483,6 +477,12 @@
     <ClInclude Include="header\n110_square__\n110_400_squareRelation.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
+    <ClInclude Include="header\n220_position\n220_600_position.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_400_evalList.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -563,14 +563,8 @@
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
       <Filter>source\n111_colorSq_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n220_position\n220_400_position.cpp">
-      <Filter>source\n220_position</Filter>
-    </ClCompile>
     <ClCompile Include="source\n223_move____\n223_100_move.cpp">
       <Filter>source\n223_move____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n220_position\n220_600_evalList.cpp">
-      <Filter>source\n220_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp">
       <Filter>source\n223_move____</Filter>
@@ -679,6 +673,12 @@
     </ClCompile>
     <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp">
       <Filter>source\n110_square___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_600_position.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_400_evalList.cpp">
+      <Filter>source\n220_position</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

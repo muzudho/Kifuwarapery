@@ -1,11 +1,9 @@
 ﻿#pragma once
 
 #include "n160_100_bitboard.hpp"
-#include "n160_160_kingAttackBb.hpp"
 #include "n160_150_rookAttackBb.hpp"
+#include "n160_160_kingAttackBb.hpp"
 
-//extern KingAttackBb g_kingAttackBb;
-//extern RookAttackBb g_rookAttackBb;
 
 
 class DragonAttackBb {

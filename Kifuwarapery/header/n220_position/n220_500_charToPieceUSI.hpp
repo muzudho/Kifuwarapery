@@ -10,8 +10,8 @@
 #include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
 #include "../../header/n160_board___/n160_600_bitboardAll.hpp"
 #include "../../header/n119_score___/n119_200_pieceScore.hpp"
-#include "../../header/n220_position/n220_400_position.hpp"
-#include "../../header/n220_position/n220_600_evalList.hpp"
+#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_400_evalList.hpp"
 
 
 const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

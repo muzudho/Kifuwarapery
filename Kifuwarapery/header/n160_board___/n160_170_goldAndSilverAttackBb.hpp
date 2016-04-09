@@ -4,8 +4,6 @@
 #include "n160_110_silverAttackBb.hpp"
 #include "n160_140_goldAttackBb.hpp"
 
-//extern SilverAttackBb g_silverAttackBb;
-//extern GoldAttackBb g_goldAttackBb;
 
 
 class GoldAndSilverAttackBb {

@@ -2,7 +2,7 @@
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
-#include "../../header/n220_position/n220_400_position.hpp"
+#include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"

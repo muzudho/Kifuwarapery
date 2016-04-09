@@ -3,7 +3,6 @@
 
 #include "n160_100_bitboard.hpp"
 #include "n160_110_silverAttackBb.hpp"
-#include "n160_150_rookAttackBb.hpp"
 
 
 //────────────────────────────────────────────────────────────────────────────────

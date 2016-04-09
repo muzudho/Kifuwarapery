@@ -4,7 +4,7 @@
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../n119_score___/n119_200_pieceScore.hpp"
-#include "../n220_position/n220_400_position.hpp"
+#include "../n220_position/n220_600_position.hpp"
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n260_evaluate/n260_600_EvalSum.hpp"
 

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "../../header/n110_square__/n110_100_square.hpp"
+#include "../n110_square__/n110_100_square.hpp"
 
 
 class SquareDistance {

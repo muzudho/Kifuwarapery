@@ -7,7 +7,7 @@
 #include "../n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
-#include "../n220_position/n220_600_evalList.hpp"
+#include "../n220_position/n220_400_evalList.hpp"
 
 
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
@@ -16,6 +16,7 @@ using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 class Move;
 struct Thread;
 struct Searcher;
+//class EvalList;
 
 
 class Position {
