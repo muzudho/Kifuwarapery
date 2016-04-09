@@ -1,9 +1,14 @@
 #include <algorithm> // std::min
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
-#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
-#include "../../header/n450_thread__/n450_150_limitsType.hpp"
+
+#include "../../header/n320_searcher/n320_550_searcher.hpp"				//TODO: これを外すのがむずかしい。
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"		//TODO: これを外すのがむずかしい。
+#include "../../header/n450_thread__/n450_150_limitsType.hpp"			//TODO: これを外すのがむずかしい。
+
+
+//class Searcher;
+
 
 namespace {
 #if 1

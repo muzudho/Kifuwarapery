@@ -1,11 +1,7 @@
-﻿#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_tt______/n240_300_tt.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
-#include "../../header/n300_book____/n300_500_book.hpp"
-#include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
-#include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
+﻿
+#include "../../header/n320_searcher/n320_550_searcher.hpp"			//TODO: これを外すのがむずかしい。
+ 
+#include "../../header/n360_egOption/n360_230_engineOptionable.hpp"	//TODO: これを外すのがむずかしい。
 
 
 EngineOptionable::EngineOptionable(const char* v, Fn* f, Searcher* s) :

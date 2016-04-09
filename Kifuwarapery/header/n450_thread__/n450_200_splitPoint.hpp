@@ -3,6 +3,7 @@
 
 #include "../n220_position/n220_600_position.hpp"
 #include "../n320_searcher/n320_125_searchStack.hpp"
+#include "../n450_thread__/n450_100_nodeType.hpp"
 
 
 class MovePicker;	//#include "../n320_searcher/n320_540_movePicker.hpp"

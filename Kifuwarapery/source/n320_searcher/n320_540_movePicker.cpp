@@ -1,13 +1,16 @@
+#include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_300_stats.hpp"
+#include "../../header/n320_searcher/n320_125_searchStack.hpp"
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp" // これを外すのは難しい。using History = Stats<false>;で。
-#include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n450_thread__/n450_200_splitPoint.hpp"
+//#include "../../header/n450_thread__/n450_400_threadPool.hpp" // これを外すのは難しい。
 
 
+using History = Stats<false>;
 
 
 MovePicker::MovePicker(
@@ -172,8 +175,9 @@ template <> Move MovePicker::GetNextMove<false>() {
 	} while (true);
 }
 
-template <> Move MovePicker::GetNextMove<true>() {
-	return m_ss_->m_splitPoint->m_pMovePicker->GetNextMove<false>();
+template <>
+Move MovePicker::GetNextMove<true>() {
+	return this->m_ss_->m_splitPoint->m_pMovePicker->GetNextMove<false>();
 }
 
 const Score LVATable[PieceTypeNum] = {

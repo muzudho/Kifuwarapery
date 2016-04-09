@@ -5,17 +5,22 @@
 #include "../n226_movStack/n226_100_moveStack.hpp"
 #include "../n280_move____/n280_140_generateMovePhase.hpp"
 #include "../n280_move____/n280_300_stats.hpp"
-#include "../n320_searcher/n320_550_searcher.hpp" // これを外すのは難しい。using History = Stats<false>;で。
+#include "../n320_searcher/n320_125_searchStack.hpp"
 
 
-//class Stats;
-//using History = Stats<false>;
+using History = Stats<false>;
 
 
 class MovePicker {
 public:
-	MovePicker(const Position& pos, const Move ttm, const Depth depth,
-			   const History& history, SearchStack* searchStack, const Score beta);
+	MovePicker(
+		const Position& pos,
+		const Move ttm,
+		const Depth depth,
+		const History& history,
+		SearchStack* searchStack,
+		const Score beta
+	);
 	MovePicker(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq);
 	MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt);
 

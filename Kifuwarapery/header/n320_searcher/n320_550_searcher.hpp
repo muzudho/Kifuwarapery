@@ -14,8 +14,7 @@
 #include "../n320_searcher/n320_134_bishopInDangerFlag.hpp"
 #include "../n320_searcher/n320_137_rootMove.hpp"
 
-#include "../n360_egOption/n360_230_engineOptionable.hpp"
-#include "../n360_egOption/n360_240_engineOptionsMap.hpp"
+#include "../n360_egOption/n360_240_engineOptionsMap.hpp"	//TODO: これを外すのがむずかしい。
 #include "../n450_thread__/n450_400_threadPool.hpp"			//TODO: これを外すのがむずかしい。
 
 using namespace std;
