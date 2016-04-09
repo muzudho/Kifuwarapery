@@ -2,7 +2,7 @@
 
 #include "../n220_position/n220_500_charToPieceUSI.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
-#include "../n280_move____/n280_200_mt64bit.hpp"
+#include "../n280_move____/n280_500_mt64bit.hpp"
 
 struct BookEntry {
 	Key		m_key;

@@ -7,7 +7,7 @@
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
-#include "../../header/n280_move____/n280_200_mt64bit.hpp"
+#include "../../header/n280_move____/n280_500_mt64bit.hpp"
 #include "../../header/n320_searcher/n320_550_search.hpp"
 
 

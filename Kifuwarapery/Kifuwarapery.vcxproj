@@ -230,8 +230,8 @@
     <ClInclude Include="header\n276_genMove_\n276_120_promoteMode.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_140_makePromoteMove.hpp" />
     <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp" />
-    <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp" />
-    <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp" />
+    <ClInclude Include="header\n280_move____\n280_300_stats.hpp" />
+    <ClInclude Include="header\n280_move____\n280_500_mt64bit.hpp" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
@@ -242,10 +242,10 @@
     <ClInclude Include="header\n320_searcher\n320_131_inaniwaFlag.hpp" />
     <ClInclude Include="header\n320_searcher\n320_134_bishopInDangerFlag.hpp" />
     <ClInclude Include="header\n320_searcher\n320_137_rootMove.hpp" />
-    <ClInclude Include="header\n320_searcher\n320_140_stats.hpp" />
     <ClInclude Include="header\n320_searcher\n320_500_reductions.hpp" />
     <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp" />
     <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp" />
+    <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp" />
     <ClInclude Include="header\n320_searcher\n320_550_search.hpp" />
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp" />
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
@@ -311,12 +311,12 @@
     <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp" />
     <ClCompile Include="source\n276_genMove_\n276_150_moveList.cpp" />
     <ClCompile Include="source\n276_genMove_\n276_500_generateMoves.cpp" />
-    <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp" />
-    <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp" />
+    <ClCompile Include="source\n280_move____\n280_500_mt64bit.cpp" />
     <ClCompile Include="source\n300_book____\n300_100_book.cpp" />
     <ClCompile Include="source\n320_searcher\n320_500_reductions.cpp" />
     <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp" />
     <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp" />
+    <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp" />
     <ClCompile Include="source\n320_searcher\n320_550_search.cpp" />
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp" />
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />

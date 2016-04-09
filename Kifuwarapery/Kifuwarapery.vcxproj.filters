@@ -156,12 +156,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp">
-      <Filter>header\n280_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp">
-      <Filter>header\n280_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
       <Filter>header\n400_usi_____</Filter>
     </ClInclude>
@@ -217,9 +211,6 @@
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_137_rootMove.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_140_stats.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
     <ClInclude Include="header\n276_genMove_\n276_100_moveType.hpp">
@@ -483,16 +474,19 @@
     <ClInclude Include="header\n276_genMove_\n276_140_makePromoteMove.hpp">
       <Filter>header\n276_genMove_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_500_mt64bit.hpp">
+      <Filter>header\n280_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n280_move____\n280_300_stats.hpp">
+      <Filter>header\n280_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
       <Filter>source</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n280_move____\n280_150_movePicker.cpp">
-      <Filter>source\n280_move____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n280_move____\n280_200_mt64bit.cpp">
-      <Filter>source\n280_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
       <Filter>source\n160_board___</Filter>
@@ -679,6 +673,12 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp">
       <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n280_move____\n280_500_mt64bit.cpp">
+      <Filter>source\n280_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp">
+      <Filter>source\n320_searcher</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

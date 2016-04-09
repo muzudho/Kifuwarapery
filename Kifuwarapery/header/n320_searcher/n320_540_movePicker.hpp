@@ -4,7 +4,13 @@
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"
 #include "../n280_move____/n280_140_generateMovePhase.hpp"
-#include "../n320_searcher/n320_550_search.hpp"
+#include "../n280_move____/n280_300_stats.hpp"
+#include "../n320_searcher/n320_550_search.hpp" // これを外すのは難しい。using History = Stats<false>;で。
+
+
+//class Stats;
+//using History = Stats<false>;
+
 
 class MovePicker {
 public:

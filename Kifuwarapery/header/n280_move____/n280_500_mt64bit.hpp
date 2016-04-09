@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../n080_common__/n080_100_common.hpp"
 
 // 64bit のランダムな値を返す為のクラス
 class MT64bit : public std::mt19937_64 {

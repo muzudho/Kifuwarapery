@@ -2,12 +2,22 @@
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
-#include "../../header/n280_move____/n280_150_movePicker.hpp"
+#include "../../header/n280_move____/n280_300_stats.hpp"
+#include "../../header/n320_searcher/n320_540_movePicker.hpp"
+#include "../../header/n320_searcher/n320_550_search.hpp" // これを外すのは難しい。using History = Stats<false>;で。
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 
-MovePicker::MovePicker(const Position& pos, const Move ttm, const Depth depth,
-					   const History& history, SearchStack* searchStack, const Score beta)
+
+
+MovePicker::MovePicker(
+	const Position& pos,
+	const Move ttm,
+	const Depth depth,
+	const History& history,
+	SearchStack* searchStack,
+	const Score beta
+)
 	: m_pos_(pos), m_history_(history), m_depth_(depth)
 {
 	assert(Depth0 < depth);

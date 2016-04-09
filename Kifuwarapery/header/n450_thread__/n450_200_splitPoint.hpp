@@ -5,7 +5,7 @@
 #include "../n320_searcher/n320_125_searchStack.hpp"
 
 
-class MovePicker;	//#include "../n280_move____/n280_150_movePicker.hpp"
+class MovePicker;	//#include "../n320_searcher/n320_540_movePicker.hpp"
 struct Thread;
 
 
