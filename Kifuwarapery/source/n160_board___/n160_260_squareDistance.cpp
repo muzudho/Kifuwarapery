@@ -1,7 +1,7 @@
 ﻿#include "../../header/n105_color___/n105_100_color.hpp"
+#include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n160_board___/n160_260_squareDistance.hpp"
 
 

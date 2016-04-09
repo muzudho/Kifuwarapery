@@ -423,9 +423,6 @@
     <ClInclude Include="header\n160_board___\n160_260_squareDistance.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_250_squareRelation.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_102_fileMaskBb.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -482,6 +479,9 @@
     </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp">
       <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_400_squareRelation.hpp">
+      <Filter>header\n110_square__</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -635,9 +635,6 @@
     <ClCompile Include="source\n160_board___\n160_260_squareDistance.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_250_squareRelation.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n160_board___\n160_102_fileMaskBb.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
@@ -679,6 +676,9 @@
     </ClCompile>
     <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp">
       <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp">
+      <Filter>source\n110_square___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

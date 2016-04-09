@@ -1,4 +1,4 @@
-﻿#include "../../header/n160_board___/n160_250_squareRelation.hpp"
+﻿#include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
 

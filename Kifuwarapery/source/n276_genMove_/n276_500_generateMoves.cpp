@@ -1,5 +1,5 @@
 #include "../../header/n105_color___/n105_500_utilColor.hpp"
-#include "../../header/n160_board___/n160_250_squareRelation.hpp"
+#include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"

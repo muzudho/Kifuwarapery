@@ -1,4 +1,5 @@
 ﻿#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
 #include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
@@ -8,7 +9,6 @@
 #include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
 #include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
 #include "../../header/n160_board___/n160_190_pawnAttackBb.hpp"
-#include "../../header/n160_board___/n160_250_squareRelation.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n300_book____/n300_100_book.hpp"

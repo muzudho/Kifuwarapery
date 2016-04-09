@@ -4,17 +4,6 @@
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
-	for (size_t i = 0; i < size(); ++i) {
-		(*this)[i]->m_maxPly = 0;
-	}
-	m_isSleepWhileIdle_ = s->m_engineOptions["Use_Sleeping_Threads"];
-}
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::Sleep() {
-	m_isSleepWhileIdle_ = true;
-}
 
 
 //namespace {
