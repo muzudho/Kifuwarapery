@@ -1,8 +1,8 @@
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 
 

@@ -6,14 +6,8 @@
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
-/*
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
-#include "../../header/n450_thread__/n450_400_threadPool.hpp"
-*/
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
 Key Book::m_ZobPiece[PieceNone][SquareNum];

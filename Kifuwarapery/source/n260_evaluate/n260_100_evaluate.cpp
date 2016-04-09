@@ -1,7 +1,8 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;
 

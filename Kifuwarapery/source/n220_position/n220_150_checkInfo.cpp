@@ -8,7 +8,7 @@
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 
 CheckInfo::CheckInfo(const Position& pos) {

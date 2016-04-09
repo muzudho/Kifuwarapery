@@ -423,9 +423,6 @@
     <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_150_limitsType.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
@@ -477,14 +474,17 @@
     <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_550_searcher.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n300_book____\n300_500_book.hpp">
       <Filter>header\n300_book____</Filter>
     </ClInclude>
     <ClInclude Include="header\n300_book____\n300_400_bookEntry.hpp">
       <Filter>header\n300_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n900_main____\n900_200_searcher.hpp">
+      <Filter>header\n900_main____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -677,11 +677,11 @@
     <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp">
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_550_searcher.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n300_book____\n300_500_book.cpp">
       <Filter>source\n300_book____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_200_searcher.cpp">
+      <Filter>source\n900_main____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

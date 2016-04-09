@@ -12,10 +12,10 @@
 #include "../../header/n320_searcher/n320_510_futilityMargins.hpp"
 #include "../../header/n320_searcher/n320_520_futilityMoveCounts.hpp"
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_300_engineOptionSetup.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;

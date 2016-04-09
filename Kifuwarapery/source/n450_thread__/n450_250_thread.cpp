@@ -1,5 +1,5 @@
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: ‚±‚ê‚ğŠO‚·‚Ì‚ª‚Ş‚¸‚©‚µ‚¢B
 
 
 

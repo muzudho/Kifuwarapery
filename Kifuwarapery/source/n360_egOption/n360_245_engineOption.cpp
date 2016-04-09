@@ -4,9 +4,9 @@
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n360_egOption/n360_245_engineOption.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
 
 
 

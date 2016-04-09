@@ -207,6 +207,7 @@
     <ClInclude Include="header\n220_position\n220_600_position.hpp" />
     <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
+    <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp" />
     <ClInclude Include="header\n223_move____\n223_100_move.hpp" />
     <ClInclude Include="header\n223_move____\n223_105_utilMove.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
@@ -247,7 +248,6 @@
     <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp" />
     <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp" />
     <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp" />
-    <ClInclude Include="header\n320_searcher\n320_550_searcher.hpp" />
     <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp" />
     <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp" />
     <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp" />
@@ -255,13 +255,13 @@
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
     <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp" />
-    <ClInclude Include="header\n450_thread__\n450_150_limitsType.hpp" />
     <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp" />
     <ClInclude Include="header\n450_thread__\n450_250_thread.hpp" />
     <ClInclude Include="header\n450_thread__\n450_300_mainThread.hpp" />
     <ClInclude Include="header\n450_thread__\n450_350_timerThread.hpp" />
     <ClInclude Include="header\n450_thread__\n450_400_threadPool.hpp" />
     <ClInclude Include="header\n500_learn___\n500_500_learner.hpp" />
+    <ClInclude Include="header\n900_main____\n900_200_searcher.hpp" />
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -318,7 +318,6 @@
     <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp" />
     <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp" />
     <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp" />
-    <ClCompile Include="source\n320_searcher\n320_550_searcher.cpp" />
     <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp" />
     <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp" />
     <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp" />
@@ -329,6 +328,7 @@
     <ClCompile Include="source\n450_thread__\n450_300_mainThread.cpp" />
     <ClCompile Include="source\n450_thread__\n450_350_timerThread.cpp" />
     <ClCompile Include="source\n450_thread__\n450_400_threadPool.cpp" />
+    <ClCompile Include="source\n900_main____\n900_200_searcher.cpp" />
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp" />
     <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
     <ClCompile Include="source\n900_main____\n900_500_main.cpp" />
