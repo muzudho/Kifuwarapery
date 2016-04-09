@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n320_searcher/n320_550_search.hpp"
+#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
 

@@ -1,6 +1,6 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
-#include "../../header/n320_searcher/n320_550_search.hpp"
+#include "../../header/n320_searcher/n320_550_searcher.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;

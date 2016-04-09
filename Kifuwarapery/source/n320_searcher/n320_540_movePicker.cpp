@@ -4,7 +4,7 @@
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_300_stats.hpp"
 #include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n320_searcher/n320_550_search.hpp" // これを外すのは難しい。using History = Stats<false>;で。
+#include "../../header/n320_searcher/n320_550_searcher.hpp" // これを外すのは難しい。using History = Stats<false>;で。
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 

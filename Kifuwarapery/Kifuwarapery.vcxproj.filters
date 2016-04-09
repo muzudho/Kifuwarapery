@@ -195,9 +195,6 @@
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n300_book____\n300_100_book.hpp">
-      <Filter>header\n300_book____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_125_searchStack.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
@@ -447,9 +444,6 @@
     <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp">
       <Filter>header\n280_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_550_search.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
@@ -482,6 +476,15 @@
     </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp">
       <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_550_searcher.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_book____\n300_500_book.hpp">
+      <Filter>header\n300_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_book____\n300_400_bookEntry.hpp">
+      <Filter>header\n300_book____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -532,9 +535,6 @@
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp">
       <Filter>source\n900_main____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n300_book____\n300_100_book.cpp">
-      <Filter>source\n300_book____</Filter>
     </ClCompile>
     <ClCompile Include="source\n276_genMove_\n276_500_generateMoves.cpp">
       <Filter>source\n276_genMove_</Filter>
@@ -653,9 +653,6 @@
     <ClCompile Include="source\n450_thread__\n450_300_mainThread.cpp">
       <Filter>source\n450_thread__</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_550_search.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp">
       <Filter>source\n320_searcher</Filter>
     </ClCompile>
@@ -679,6 +676,12 @@
     </ClCompile>
     <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp">
       <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n320_searcher\n320_550_searcher.cpp">
+      <Filter>source\n320_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_book____\n300_500_book.cpp">
+      <Filter>source\n300_book____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
