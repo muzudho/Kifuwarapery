@@ -1,6 +1,9 @@
 ﻿#pragma once
 
 
+#include "../n223_move____/n223_100_move.hpp"
+
+
 struct MoveStack {
 	Move move;
 	int score;

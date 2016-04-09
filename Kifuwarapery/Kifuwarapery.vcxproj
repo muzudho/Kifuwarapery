@@ -227,8 +227,8 @@
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_100_moveType.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp" />
-    <ClInclude Include="header\n276_genMove_\n276_200_promoteMode.hpp" />
-    <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_120_promoteMode.hpp" />
+    <ClInclude Include="header\n276_genMove_\n276_140_makePromoteMove.hpp" />
     <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp" />
     <ClInclude Include="header\n280_move____\n280_150_movePicker.hpp" />
     <ClInclude Include="header\n280_move____\n280_200_mt64bit.hpp" />

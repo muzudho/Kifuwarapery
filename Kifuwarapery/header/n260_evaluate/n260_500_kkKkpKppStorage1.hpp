@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../n260_evaluate/n260_490_KppCacheIo.hpp"
 #include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
+#include "../n260_evaluate/n260_490_KppCacheIo.hpp"
 
 
 struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {

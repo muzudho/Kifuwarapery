@@ -16,7 +16,6 @@ using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 class Move;
 struct Thread;
 struct Searcher;
-//class EvalList;
 
 
 class Position {

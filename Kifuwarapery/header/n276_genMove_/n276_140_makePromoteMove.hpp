@@ -3,7 +3,8 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"
-#include "../n276_genMove_/n276_200_promoteMode.hpp"
+#include "../n276_genMove_/n276_100_moveType.hpp"
+#include "../n276_genMove_/n276_120_promoteMode.hpp"
 
 
 // MoveType によって指し手生成関数を使い分ける。

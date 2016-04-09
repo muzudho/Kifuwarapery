@@ -228,12 +228,6 @@
     <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp">
       <Filter>header\n276_genMove_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n276_genMove_\n276_200_promoteMode.hpp">
-      <Filter>header\n276_genMove_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n276_genMove_\n276_250_makePromoteMove.hpp">
-      <Filter>header\n276_genMove_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
@@ -482,6 +476,12 @@
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp">
       <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_120_promoteMode.hpp">
+      <Filter>header\n276_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n276_genMove_\n276_140_makePromoteMove.hpp">
+      <Filter>header\n276_genMove_</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

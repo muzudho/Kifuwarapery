@@ -1,8 +1,7 @@
-#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
+#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n320_searcher/n320_550_search.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_350_timerThread.hpp"
-//#include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 
 void TimerThread::IdleLoop() {

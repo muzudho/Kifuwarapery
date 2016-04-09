@@ -1,7 +1,7 @@
 #include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
-#include "../../header/n276_genMove_/n276_250_makePromoteMove.hpp"
+#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_150_movePicker.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 

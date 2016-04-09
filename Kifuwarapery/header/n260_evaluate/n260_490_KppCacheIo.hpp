@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../header/n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
+#include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
 
 class KppCacheIo {
 public:

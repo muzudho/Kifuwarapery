@@ -2,7 +2,7 @@
 
 #include "../n226_movStack/n226_105_utilMoveStack.hpp"
 #include "../n276_genMove_/n276_100_moveType.hpp"
-#include "../n276_genMove_/n276_250_makePromoteMove.hpp"
+#include "../n276_genMove_/n276_140_makePromoteMove.hpp"
 
 
 // MoveType の全ての指し手を生成
