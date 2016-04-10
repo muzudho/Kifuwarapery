@@ -91,12 +91,6 @@
     <Filter Include="header\n113_piece___">
       <UniqueIdentifier>{888784f3-27a1-44c9-975c-141d36552a64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n116_hand____">
-      <UniqueIdentifier>{23b824cb-ddf1-4ed7-b976-90817fea480a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n116_hand____">
-      <UniqueIdentifier>{1af9527b-7b4e-4f09-82c2-336142a783af}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n111_colorSq_">
       <UniqueIdentifier>{ad69c688-6d89-4ccb-8822-e18ef2b04e06}</UniqueIdentifier>
     </Filter>
@@ -284,9 +278,6 @@
     </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp">
       <Filter>header\n113_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n116_hand____\n116_500_hand.hpp">
-      <Filter>header\n116_hand____</Filter>
     </ClInclude>
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
       <Filter>header\n111_colorSq_</Filter>
@@ -486,6 +477,9 @@
     <ClInclude Include="header\n300_book____\n300_100_mt64bit.hpp">
       <Filter>header\n300_book____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_500_hand.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -544,9 +538,6 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp">
       <Filter>source\n260_evaluate</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n116_hand____\n116_500_hand.cpp">
-      <Filter>source\n116_hand____</Filter>
     </ClCompile>
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
       <Filter>source\n111_colorSq_</Filter>
@@ -687,6 +678,9 @@
       <Filter>source\n110_square___</Filter>
     </ClCompile>
     <ClCompile Include="source\n113_piece___\n113_200_handPiece.cpp">
+      <Filter>source\n113_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n113_piece___\n113_500_hand.cpp">
       <Filter>source\n113_piece___</Filter>
     </ClCompile>
   </ItemGroup>

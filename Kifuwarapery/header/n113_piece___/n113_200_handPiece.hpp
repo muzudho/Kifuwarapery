@@ -1,10 +1,6 @@
 ﻿#pragma once
 
 #include "../n113_piece___/n113_100_pieceType.hpp"
-#include "../n113_piece___/n113_200_handPiece.hpp"
-
-//#include "../n116_hand____/n116_500_hand.hpp" // TODO:
-//class Hand;
 
 
 // 持ち駒を表すときに使用する。

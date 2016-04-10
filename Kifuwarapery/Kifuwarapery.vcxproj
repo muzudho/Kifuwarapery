@@ -171,7 +171,7 @@
     <ClInclude Include="header\n113_piece___\n113_155_utilPiece.hpp" />
     <ClInclude Include="header\n113_piece___\n113_200_handPiece.hpp" />
     <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp" />
-    <ClInclude Include="header\n116_hand____\n116_500_hand.hpp" />
+    <ClInclude Include="header\n113_piece___\n113_500_hand.hpp" />
     <ClInclude Include="header\n119_score___\n119_050_bound.hpp" />
     <ClInclude Include="header\n119_score___\n119_055_utilBound.hpp" />
     <ClInclude Include="header\n119_score___\n119_090_score.hpp" />
@@ -276,7 +276,7 @@
     <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp" />
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp" />
     <ClCompile Include="source\n113_piece___\n113_200_handPiece.cpp" />
-    <ClCompile Include="source\n116_hand____\n116_500_hand.cpp" />
+    <ClCompile Include="source\n113_piece___\n113_500_hand.cpp" />
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp" />
     <ClCompile Include="source\n160_board___\n160_108_slideBits.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />

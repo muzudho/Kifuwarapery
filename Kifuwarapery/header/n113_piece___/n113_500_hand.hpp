@@ -1,8 +1,7 @@
 #pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-//#include "../n113_piece___/n113_200_handPiece.hpp"
-#include "../n113_piece___/n113_205_utilHandPiece.hpp"
+#include "../n113_piece___/n113_200_handPiece.hpp"
 
 // 手駒
 // 手駒の状態 (32bit に pack する)

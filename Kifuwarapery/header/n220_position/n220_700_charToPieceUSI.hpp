@@ -5,7 +5,7 @@
 #include <map>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../n116_hand____/n116_500_hand.hpp"
+#include "../n113_piece___/n113_500_hand.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
 #include "../n160_board___/n160_160_kingAttackBb.hpp"
 #include "../n160_board___/n160_600_bitboardAll.hpp"
