@@ -1,30 +1,23 @@
 #pragma once
 
+#include <string>
+#include <sstream>
 #include "../n080_common__/n080_105_time.hpp"
-#include "../n119_score___/n119_200_pieceScore.hpp"
-#include "../n220_position/n220_600_position.hpp"
-#include "../n223_move____/n223_105_utilMove.hpp"
-#include "../n223_move____/n223_300_moveScore.hpp"
-#include "../n240_tt______/n240_300_tt.hpp"
 #include "../n270_timeMng_/n270_100_timeManager.hpp"
 #include "../n280_move____/n280_300_stats.hpp"
-#include "../n320_searcher/n320_125_searchStack.hpp"
 #include "../n320_searcher/n320_128_signalsType.hpp"
-#include "../n320_searcher/n320_131_inaniwaFlag.hpp"
-#include "../n320_searcher/n320_134_bishopInDangerFlag.hpp"
 #include "../n320_searcher/n320_137_rootMove.hpp"
 #include "../n360_egOption/n360_240_engineOptionsMap.hpp"
+#include "../n450_thread__/n450_200_splitPoint.hpp"
 #include "../n450_thread__/n450_400_threadPool.hpp"
 
 using namespace std;
 
-
-struct SplitPoint;
-
 using History = Stats<false>;
 using Gains   = Stats<true>;
 
-class TranspositionTable;
+
+
 
 // 検索のための構造体？
 class Searcher {

@@ -1,20 +1,9 @@
 ﻿#include <algorithm>	// std::min,std::max
 #include <sstream>      // std::istringstream
-#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
-#include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_tt______/n240_300_tt.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluateEnum.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
-
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 Key Position::m_zobrist_[PieceTypeNum][SquareNum][ColorNum];

@@ -272,10 +272,8 @@
     <ClCompile Include="source\n080_common__\n080_105_time.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp" />
-    <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp" />
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp" />
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp" />
-    <ClCompile Include="source\n119_score___\n119_100_utilScore.cpp" />
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp" />
     <ClCompile Include="source\n160_board___\n160_108_slideBits.cpp" />
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp" />

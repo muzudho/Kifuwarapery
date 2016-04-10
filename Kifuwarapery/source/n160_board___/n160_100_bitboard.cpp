@@ -2,7 +2,7 @@
 #include <iostream>	// std::cout
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
-#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
+#include "../../header/n160_board___/n160_100_bitboard.hpp"
 
 using namespace std;
 

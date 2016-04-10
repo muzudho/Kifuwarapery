@@ -1,9 +1,9 @@
 ﻿#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
-#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
-#include "../../header/n160_board___/n160_140_goldAttackBb.hpp"
-#include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
-#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"	// TODO:これを消すのが難しい
+#include "../../header/n160_board___/n160_140_goldAttackBb.hpp"		// TODO:これを消すのが難しい
+#include "../../header/n160_board___/n160_160_kingAttackBb.hpp"		// TODO:これを消すのが難しい
+#include "../../header/n160_board___/n160_230_setMaskBb.hpp"		// TODO:これを消すのが難しい
 
 
 SilverAttackBb g_silverAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆

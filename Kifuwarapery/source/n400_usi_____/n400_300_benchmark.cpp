@@ -6,10 +6,7 @@
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"
-
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。

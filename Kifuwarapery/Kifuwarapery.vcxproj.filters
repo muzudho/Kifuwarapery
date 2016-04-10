@@ -548,9 +548,6 @@
     <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
-    <ClCompile Include="source\n110_square\n110_500_utilSquare.cpp">
-      <Filter>source\n110_square___</Filter>
-    </ClCompile>
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp">
       <Filter>source\n116_hand____</Filter>
     </ClCompile>
@@ -568,9 +565,6 @@
     </ClCompile>
     <ClCompile Include="source\n240_tt______\n240_300_tt.cpp">
       <Filter>source\n240_tt______</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n119_score___\n119_100_utilScore.cpp">
-      <Filter>source\n119_score___</Filter>
     </ClCompile>
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
       <Filter>source\n119_score___</Filter>

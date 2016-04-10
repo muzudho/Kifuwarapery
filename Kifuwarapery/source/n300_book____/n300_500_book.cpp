@@ -1,18 +1,10 @@
 #include <algorithm>	//std::max
 #include <sstream>
-#include "../../header/n110_square__/n110_100_square.hpp"
-#include "../../header/n113_piece___/n113_150_piece.hpp"
-#include "../../header/n113_piece___/n113_200_handPiece.hpp"
-#include "../../header/n119_score___/n119_090_score.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
-
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。

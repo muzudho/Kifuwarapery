@@ -1,9 +1,6 @@
 ﻿#include <string>
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
-
 
 bool CaseInsensitiveLess::operator () (const std::string& s1, const std::string& s2) const {
 	for (size_t i = 0; i < s1.size() && i < s2.size(); ++i) {

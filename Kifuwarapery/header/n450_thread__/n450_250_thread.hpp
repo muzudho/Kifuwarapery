@@ -8,10 +8,9 @@
 #include "n450_100_nodeType.hpp"
 #include "n450_200_splitPoint.hpp"
 
-class MovePicker;	//#include "../n320_searcher/n320_540_movePicker.hpp"
+class MovePicker;
 class SearchStack;
 class Searcher;
-//struct SplitPoint;
 class Position;
 
 

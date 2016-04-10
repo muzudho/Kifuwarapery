@@ -1,5 +1,6 @@
 ﻿#include "..\..\header\n080_common__\n080_105_time.hpp"
 
+
 void Time::Restart()
 {
 	this->m_start_ = std::chrono::system_clock::now();

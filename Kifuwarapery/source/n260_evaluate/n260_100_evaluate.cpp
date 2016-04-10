@@ -3,9 +3,7 @@
 #include "../../header/n260_evaluate/n260_700_evaluate.hpp"
 #include "../../header/n320_searcher/n320_125_searchStack.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
-
-
-class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;

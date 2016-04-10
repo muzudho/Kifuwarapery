@@ -1,19 +1,25 @@
+#include <mutex>
+#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n223_move____/n223_100_move.hpp"
+#include "../../header/n223_move____/n223_200_depth.hpp"
+#include "../../header/n320_searcher/n320_540_movePicker.hpp"
+#include "../../header/n450_thread__/n450_100_nodeType.hpp"
+#include "../../header/n450_thread__/n450_200_splitPoint.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 ‚±‚ê‚ðŠO‚·‚Ì‚ª‚Þ‚¸‚©‚µ‚¢B
-//class Searcher;
-
-
-Thread::Thread(Searcher* s) /*: splitPoints()*/ {
-	m_pSearcher = s;
+Thread::Thread(Searcher* searcher) /*: splitPoints()*/ {
+	m_pSearcher = searcher;
 	m_exit = false;
 	m_searching = false;
 	m_splitPointsSize = 0;
 	m_maxPly = 0;
 	m_activeSplitPoint = nullptr;
 	m_activePosition = nullptr;
-	m_idx = s->m_threads.size();
+	m_idx = searcher->m_threads.size();
 }
 
 void Thread::NotifyOne() {

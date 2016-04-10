@@ -1,15 +1,12 @@
+#include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
+#include "../../header/n276_genMove_/n276_100_moveType.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
-#include "../../header/n320_searcher/n320_128_signalsType.hpp"
 #include "../../header/n320_searcher/n320_137_rootMove.hpp"
-#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
 
 
 //namespace {

@@ -1,11 +1,8 @@
 #include <algorithm> // std::min
-#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
-//class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 namespace {

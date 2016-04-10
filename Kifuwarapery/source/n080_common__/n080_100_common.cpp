@@ -1,5 +1,6 @@
 ﻿#include "../../header/n080_common__/n080_100_common.hpp"
 
+
 #if defined LEARN
 Eraser SYNCCOUT;
 Eraser SYNCENDL;

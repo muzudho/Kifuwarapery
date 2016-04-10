@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 
-struct Thread;
+#include "n450_250_thread.hpp"
+
 class Searcher;
 
 

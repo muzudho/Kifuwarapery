@@ -1,10 +1,7 @@
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_300_mainThread.hpp"
-
-
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 ‚±‚ê‚ğŠO‚·‚Ì‚ª‚Ş‚¸‚©‚µ‚¢B
-//class Searcher;
+#include "../../header/n900_main____/n900_200_searcher.hpp"
 
 
 void MainThread::IdleLoop() {
