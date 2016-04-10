@@ -1,4 +1,10 @@
-﻿#include "../../header/n223_move____/n223_105_utilMove.hpp"
+﻿#include <string>
+#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n110_square__/n110_100_square.hpp"
+#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n113_piece___/n113_100_pieceType.hpp"
+#include "../../header/n113_piece___/n113_200_handPiece.hpp"
+#include "../../header/n223_move____/n223_100_move.hpp"
 
 namespace {
 	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};

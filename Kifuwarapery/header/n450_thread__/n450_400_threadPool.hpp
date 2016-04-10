@@ -3,7 +3,7 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n223_move____/n223_050_limitsType.hpp"
 #include "../n240_tt______/n240_300_tt.hpp"
-#include "../n260_evaluate/n260_700_evaluate.hpp"
+#include "../n260_evaluate/n260_700_evaluation09.hpp"
 #include "n450_100_nodeType.hpp"
 #include "n450_200_splitPoint.hpp"
 #include "n450_250_thread.hpp"
@@ -15,6 +15,7 @@ const int g_MaxThreads = 64;
 struct Thread;
 class SearchStack;
 class MovePicker;
+class Searcher;
 
 
 class ThreadPool : public std::vector<Thread*> {

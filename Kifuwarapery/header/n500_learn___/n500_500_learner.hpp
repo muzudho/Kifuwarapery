@@ -1,10 +1,12 @@
 #pragma once
 
-#include "../n220_position/n220_500_charToPieceUSI.hpp"
-#include "../n260_evaluate/n260_700_evaluate.hpp"
-#include "../n450_thread__/n450_400_threadPool.hpp"
-
 #if defined LEARN
+
+#include "../n220_position/n220_500_charToPieceUSI.hpp"
+#include "../n260_evaluate/n260_700_evaluation09.hpp"
+#include "../n450_thread__/n450_400_threadPool.hpp"
+class Searcher;
+
 
 #if 0
 #define PRINT_PV(x) x

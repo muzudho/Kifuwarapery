@@ -2,6 +2,7 @@
 
 
 struct Thread;
+class Searcher;
 
 
 struct MainThread : public Thread {

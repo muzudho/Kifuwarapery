@@ -1,8 +1,9 @@
 ﻿#pragma once
 
-#include "../n260_evaluate/n260_700_evaluate.hpp"
+#include "../n260_evaluate/n260_700_evaluation09.hpp"
 
 struct LimitsType;
+class Searcher;
 
 class TimeManager {
 public:

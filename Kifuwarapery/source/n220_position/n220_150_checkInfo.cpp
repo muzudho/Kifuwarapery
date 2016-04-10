@@ -1,29 +1,26 @@
-﻿#include <sstream>      // std::istringstream
-#include "../../header/n110_square__/n110_400_squareRelation.hpp"
-#include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+﻿#include "../../header/n105_color___/n105_100_color.hpp"
+#include "../../header/n105_color___/n105_500_utilColor.hpp"
+#include "../../header/n110_square__/n110_100_square.hpp"
+#include "../../header/n113_piece___/n113_100_pieceType.hpp"
+#include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n240_tt______/n240_300_tt.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
-#include "../../header/n280_move____/n280_500_mt64bit.hpp"
+#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"	// TODO:これを外すのが難しい。
 
+CheckInfo::CheckInfo(const Position& position) {
+	const Color them = UtilColor::OppositeColor(position.GetTurn());
+	const Square ksq = position.GetKingSquare(them);
 
-CheckInfo::CheckInfo(const Position& pos) {
-	const Color them = UtilColor::OppositeColor(pos.GetTurn());
-	const Square ksq = pos.GetKingSquare(them);
+	m_pinned = position.GetPinnedBB();
+	m_dcBB = position.DiscoveredCheckBB();
 
-	m_pinned = pos.GetPinnedBB();
-	m_dcBB = pos.DiscoveredCheckBB();
-
-	m_checkBB[Pawn] = pos.GetAttacksFrom<Pawn  >(them, ksq);
-	m_checkBB[Lance] = pos.GetAttacksFrom<Lance >(them, ksq);
-	m_checkBB[Knight] = pos.GetAttacksFrom<Knight>(them, ksq);
-	m_checkBB[Silver] = pos.GetAttacksFrom<Silver>(them, ksq);
-	m_checkBB[Bishop] = pos.GetAttacksFrom<Bishop>(ksq);
-	m_checkBB[Rook] = pos.GetAttacksFrom<Rook  >(ksq);
-	m_checkBB[Gold] = pos.GetAttacksFrom<Gold  >(them, ksq);
+	m_checkBB[Pawn] = position.GetAttacksFrom<Pawn  >(them, ksq);
+	m_checkBB[Lance] = position.GetAttacksFrom<Lance >(them, ksq);
+	m_checkBB[Knight] = position.GetAttacksFrom<Knight>(them, ksq);
+	m_checkBB[Silver] = position.GetAttacksFrom<Silver>(them, ksq);
+	m_checkBB[Bishop] = position.GetAttacksFrom<Bishop>(ksq);
+	m_checkBB[Rook] = position.GetAttacksFrom<Rook  >(ksq);
+	m_checkBB[Gold] = position.GetAttacksFrom<Gold  >(them, ksq);
 	m_checkBB[King] = Bitboard::CreateAllZeroBB();
 	// todo: ここで AVX2 使えそう。
 	//       checkBB のreadアクセスは switch (pt) で場合分けして、余計なコピー減らした方が良いかも。
@@ -31,6 +28,6 @@ CheckInfo::CheckInfo(const Position& pos) {
 	m_checkBB[ProLance] = m_checkBB[Gold];
 	m_checkBB[ProKnight] = m_checkBB[Gold];
 	m_checkBB[ProSilver] = m_checkBB[Gold];
-	m_checkBB[Horse] = m_checkBB[Bishop] | pos.GetAttacksFrom<King>(ksq);
-	m_checkBB[Dragon] = m_checkBB[Rook] | pos.GetAttacksFrom<King>(ksq);
+	m_checkBB[Horse] = m_checkBB[Bishop] | position.GetAttacksFrom<King>(ksq);
+	m_checkBB[Dragon] = m_checkBB[Rook] | position.GetAttacksFrom<King>(ksq);
 }

@@ -4,6 +4,7 @@
 #include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 #include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 
+class Searcher;
 
 
 
