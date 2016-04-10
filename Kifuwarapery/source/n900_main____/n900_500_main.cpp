@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"

@@ -3,15 +3,15 @@
 #include <stack>
 #include <memory>
 #include <map>
-#include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../../header/n116_hand____/n116_500_hand.hpp"
-#include "../../header/n160_board___/n160_400_printBb.hpp"
-#include "../../header/n160_board___/n160_160_kingAttackBb.hpp"
-#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
-#include "../../header/n119_score___/n119_200_pieceScore.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
-#include "../../header/n220_position/n220_400_evalList.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n113_piece___/n113_205_utilHandPiece.hpp"
+#include "../n116_hand____/n116_500_hand.hpp"
+#include "../n160_board___/n160_400_printBb.hpp"
+#include "../n160_board___/n160_160_kingAttackBb.hpp"
+#include "../n160_board___/n160_600_bitboardAll.hpp"
+#include "../n119_score___/n119_200_pieceScore.hpp"
+#include "../n220_position/n220_400_evalList.hpp"
+#include "../n220_position/n220_600_position.hpp" //TODO:
 
 
 const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

@@ -1,6 +1,6 @@
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"

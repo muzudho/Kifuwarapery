@@ -205,7 +205,7 @@
     <ClInclude Include="header\n220_position\n220_300_stateInfoMin.hpp" />
     <ClInclude Include="header\n220_position\n220_350_stateInfo.hpp" />
     <ClInclude Include="header\n220_position\n220_600_position.hpp" />
-    <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp" />
+    <ClInclude Include="header\n220_position\n220_700_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
     <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp" />
     <ClInclude Include="header\n223_move____\n223_100_move.hpp" />
@@ -298,7 +298,7 @@
     <ClCompile Include="source\n160_board___\n160_106_inFrontMaskBb.cpp" />
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp" />
     <ClCompile Include="source\n220_position\n220_600_position.cpp" />
-    <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp" />
+    <ClCompile Include="source\n220_position\n220_700_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_100_move.cpp" />
     <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp" />

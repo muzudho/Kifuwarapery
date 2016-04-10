@@ -243,9 +243,6 @@
     <ClInclude Include="header\n220_position\n220_350_stateInfo.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n220_position\n220_500_charToPieceUSI.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n105_color___\n105_100_color.hpp">
       <Filter>header\n105_color___</Filter>
     </ClInclude>
@@ -486,6 +483,9 @@
     <ClInclude Include="header\n260_evaluate\n260_700_evaluation09.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
+    <ClInclude Include="header\n220_position\n220_700_charToPieceUSI.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -544,9 +544,6 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp">
       <Filter>source\n260_evaluate</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n220_position\n220_500_charToPieceUSI.cpp">
-      <Filter>source\n220_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n116_hand____\n116_500_hand.cpp">
       <Filter>source\n116_hand____</Filter>
@@ -679,6 +676,9 @@
     </ClCompile>
     <ClCompile Include="source\n260_evaluate\n260_700_evaluation09.cpp">
       <Filter>source\n260_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_700_charToPieceUSI.cpp">
+      <Filter>source\n220_position</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

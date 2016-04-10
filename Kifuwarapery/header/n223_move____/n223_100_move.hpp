@@ -2,7 +2,7 @@
 
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
-#include "../../header/n220_position/n220_500_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 
 // xxxxxxxx xxxxxxxx xxxxxxxx x1111111  移動先
 // xxxxxxxx xxxxxxxx xx111111 1xxxxxxx  移動元。駒打ちの際には、PieceType + SquareNum - 1

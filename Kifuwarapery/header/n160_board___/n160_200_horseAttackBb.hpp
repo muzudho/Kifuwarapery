@@ -4,8 +4,6 @@
 #include "n160_120_bishopAttackBb.hpp"
 #include "n160_160_kingAttackBb.hpp"
 
-//extern KingAttackBb g_kingAttackBb;
-//extern BishopAttackBb g_bishopAttackBb;
 
 
 class HorseAttackBb {
