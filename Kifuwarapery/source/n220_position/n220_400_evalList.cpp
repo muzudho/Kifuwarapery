@@ -1,5 +1,6 @@
 ﻿#include "../../header/n220_position/n220_400_evalList.hpp"
 #include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluation09.hpp"
 
 const Square g_HandPieceToSquareHand[ColorNum][HandPieceNum] = {

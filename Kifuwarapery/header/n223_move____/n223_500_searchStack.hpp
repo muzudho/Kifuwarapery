@@ -1,13 +1,12 @@
 ﻿#pragma once
 
-#include "../n080_common__/n080_100_common.hpp"
-#include "../n220_position/n220_600_position.hpp"
-#include "../n223_move____/n223_105_utilMove.hpp"
+#include "../n119_score___/n119_090_score.hpp"	//Ply,Score
+#include "../n119_score___/n119_500_EvalSum.hpp"
+#include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
-#include "../n260_evaluate/n260_600_EvalSum.hpp"
 
 
-struct SplitPoint;
+struct SplitPoint;//450_200
 
 
 class SearchStack {

@@ -192,9 +192,6 @@
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_125_searchStack.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_128_signalsType.hpp">
       <Filter>header\n320_searcher</Filter>
     </ClInclude>
@@ -217,9 +214,6 @@
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_600_EvalSum.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp">
@@ -414,9 +408,6 @@
     <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
@@ -485,6 +476,15 @@
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_700_charToPieceUSI.hpp">
       <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n320_searcher\n320_100_nodeType.hpp">
+      <Filter>header\n320_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,12 +4,12 @@
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../n119_score___/n119_200_pieceScore.hpp"
+#include "../n119_score___/n119_500_EvalSum.hpp"
 #include "../n220_position/n220_600_position.hpp"
 #include "../n220_position/n220_700_charToPieceUSI.hpp"
-#include "../n260_evaluate/n260_600_EvalSum.hpp"
 
 
-class SearchStack;
+class SearchStack;//320_125
 
 const size_t EvaluateTableSize = 0x400000; // 134MB
 //const size_t EvaluateTableSize = 0x10000000; // 8GB

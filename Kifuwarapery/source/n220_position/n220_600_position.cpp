@@ -2,6 +2,7 @@
 #include <sstream>      // std::istringstream
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 

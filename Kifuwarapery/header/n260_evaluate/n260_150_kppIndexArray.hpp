@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <algorithm> //std::upper_bound
-#include "../../header/n110_square__/n110_500_utilSquare.hpp"
-#include "../../header/n260_evaluate/n260_100_evaluateEnum.hpp"
+#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n260_evaluate/n260_100_evaluateEnum.hpp"
 
 
 

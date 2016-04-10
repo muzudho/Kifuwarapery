@@ -131,10 +131,12 @@ void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us,
 	m_optimumSearchTime_ = m_maximumSearchTime_ = limits.m_time[us];
 
 	for (
+		// ムーブス・ツー・ゴー
 		int hypMTG = 1;
 		hypMTG <= (limits.m_movesToGo ? std::min(limits.m_movesToGo, MoveHorizon) : MoveHorizon);
 		++hypMTG
 	) {
+		// マイ・タイム
 		int hypMyTime =
 			limits.m_time[us]
 			+ limits.m_increment[us] * (hypMTG - 1)

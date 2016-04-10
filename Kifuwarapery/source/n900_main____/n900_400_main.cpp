@@ -11,6 +11,7 @@
 #include "../../header/n160_board___/n160_190_pawnAttackBb.hpp"
 #include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"

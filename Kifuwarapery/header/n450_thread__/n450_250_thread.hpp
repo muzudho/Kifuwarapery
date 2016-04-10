@@ -5,7 +5,7 @@
 #include "../n119_score___/n119_090_score.hpp"
 #include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
-#include "n450_100_nodeType.hpp"
+#include "../n320_searcher/n320_100_nodeType.hpp"
 #include "n450_200_splitPoint.hpp"
 
 class MovePicker;

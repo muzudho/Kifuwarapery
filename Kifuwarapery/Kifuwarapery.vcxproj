@@ -177,6 +177,7 @@
     <ClInclude Include="header\n119_score___\n119_090_score.hpp" />
     <ClInclude Include="header\n119_score___\n119_100_utilScore.hpp" />
     <ClInclude Include="header\n119_score___\n119_200_pieceScore.hpp" />
+    <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp" />
     <ClInclude Include="header\n160_board___\n160_108_slideBits.hpp" />
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp" />
     <ClInclude Include="header\n160_board___\n160_110_silverAttackBb.hpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="header\n223_move____\n223_105_utilMove.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
     <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp" />
+    <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp" />
     <ClInclude Include="header\n226_movStack\n226_100_moveStack.hpp" />
     <ClInclude Include="header\n226_movStack\n226_105_utilMoveStack.hpp" />
     <ClInclude Include="header\n240_tt______\n240_280_tTEntry.hpp" />
@@ -223,7 +225,6 @@
     <ClInclude Include="header\n260_evaluate\n260_400_KkKkpKppStorageBase.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp" />
-    <ClInclude Include="header\n260_evaluate\n260_600_EvalSum.hpp" />
     <ClInclude Include="header\n260_evaluate\n260_700_evaluation09.hpp" />
     <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp" />
     <ClInclude Include="header\n276_genMove_\n276_100_moveType.hpp" />
@@ -239,7 +240,7 @@
     <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp" />
     <ClInclude Include="header\n300_book____\n300_400_bookEntry.hpp" />
     <ClInclude Include="header\n300_book____\n300_500_book.hpp" />
-    <ClInclude Include="header\n320_searcher\n320_125_searchStack.hpp" />
+    <ClInclude Include="header\n320_searcher\n320_100_nodeType.hpp" />
     <ClInclude Include="header\n320_searcher\n320_128_signalsType.hpp" />
     <ClInclude Include="header\n320_searcher\n320_131_inaniwaFlag.hpp" />
     <ClInclude Include="header\n320_searcher\n320_134_bishopInDangerFlag.hpp" />
@@ -254,7 +255,6 @@
     <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp" />
     <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp" />
-    <ClInclude Include="header\n450_thread__\n450_100_nodeType.hpp" />
     <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp" />
     <ClInclude Include="header\n450_thread__\n450_250_thread.hpp" />
     <ClInclude Include="header\n450_thread__\n450_300_mainThread.hpp" />

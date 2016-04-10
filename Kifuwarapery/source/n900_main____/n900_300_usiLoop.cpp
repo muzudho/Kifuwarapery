@@ -1,6 +1,7 @@
 ﻿#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n240_tt______/n240_300_tt.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"

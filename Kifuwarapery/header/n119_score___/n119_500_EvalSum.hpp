@@ -1,11 +1,9 @@
 ﻿#pragma once
 
-#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
+#include <array>
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n105_color___/n105_100_color.hpp"
 
-
-extern const int kppArray[31];
-extern const int kkpArray[15];
-extern const int kppHandArray[ColorNum][HandPieceNum];
 
 struct EvalSum {
 #if defined USE_AVX2_EVAL

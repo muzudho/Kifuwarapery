@@ -13,7 +13,10 @@ struct LimitsType {
 
 	int m_time[ColorNum];
 	int m_increment[ColorNum];
+
+	// どこで設定しているのか☆（＾ｑ＾）
 	int m_movesToGo;
+
 	Ply m_depth;
 	u32 m_nodes;
 	int m_moveTime;
