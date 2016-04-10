@@ -11,7 +11,7 @@
 #include "../n160_board___/n160_600_bitboardAll.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
-#include "../n220_position/n220_600_position.hpp" //TODO:
+#include "../n220_position/n220_600_position.hpp"
 
 
 const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b - 1";

@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "../n080_common__/n080_100_common.hpp"
 #include "../n220_position/n220_600_position.hpp"
+#include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n260_evaluate/n260_600_EvalSum.hpp"
 

@@ -3,7 +3,6 @@
 #include "../n220_position/n220_600_position.hpp"
 #include "n223_100_move.hpp"
 
-class Position;
 
 
 class UtilMove {
