@@ -1,6 +1,7 @@
 ﻿#include <algorithm>	// std::min,std::max
 #include <sstream>      // std::istringstream
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
+#include "../../header/n113_piece___/n113_155_utilPiece.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n300_book____/n300_100_mt64bit.hpp"

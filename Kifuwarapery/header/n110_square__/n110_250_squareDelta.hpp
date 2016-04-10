@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "../n110_square__/n110_205_utilRank.hpp"
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
+
 
 enum SquareDelta {
 	DeltaNothing = 0, // 同一の Square にあるとき

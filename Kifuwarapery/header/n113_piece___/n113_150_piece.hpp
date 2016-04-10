@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "../n113_piece___/n113_105_utilPieceType.hpp"
 
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
 
 enum Piece {

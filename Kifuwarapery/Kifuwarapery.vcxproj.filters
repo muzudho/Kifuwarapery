@@ -136,6 +136,9 @@
     <Filter Include="source\n276_genMove_\n300_book____">
       <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\n113_piece___">
+      <UniqueIdentifier>{fc08e5bd-009b-4f03-b2de-4152da217d37}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -676,6 +679,15 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_700_charToPieceUSI.cpp">
       <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n110_square\n110_150_file.cpp">
+      <Filter>source\n110_square___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n110_square\n110_200_rank.cpp">
+      <Filter>source\n110_square___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n113_piece___\n113_200_handPiece.cpp">
+      <Filter>source\n113_piece___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -58,7 +58,9 @@ using namespace std;
 
 #define DEBUGCERR(x) std::cerr << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << std::endl;
 
+//────────────────────────────────────────────────────────────────────────────────
 // bit幅を指定する必要があるときは、以下の型を使用する。
+//────────────────────────────────────────────────────────────────────────────────
 using s8  =  int8_t;
 using u8  = uint8_t;
 using s16 =  int16_t;
@@ -68,7 +70,9 @@ using u32 = uint32_t;
 using s64 =  int64_t;
 using u64 = uint64_t;
 
-// Binary表記
+//────────────────────────────────────────────────────────────────────────────────
+// 2進数表記
+//────────────────────────────────────────────────────────────────────────────────
 // Binary<11110>::value とすれば、30 となる。
 // 符合なし64bitなので19桁まで表記可能。
 template <u64 n> struct Binary {
@@ -143,8 +147,9 @@ inline int count1s(u64 x) //任意の値の1のビットの数を数える。( x
 }
 #endif
 
-// for debug
-// 2進表示
+//────────────────────────────────────────────────────────────────────────────────
+// (デバッグ用)2進表示
+//────────────────────────────────────────────────────────────────────────────────
 template <typename T>
 inline std::string putb(const T value, const int msb = sizeof(T)*8 - 1, const int lsb = 0) {
 	std::string str;
@@ -157,6 +162,9 @@ inline std::string putb(const T value, const int msb = sizeof(T)*8 - 1, const in
 	return str;
 }
 
+//────────────────────────────────────────────────────────────────────────────────
+// 同期入出力
+//────────────────────────────────────────────────────────────────────────────────
 enum SyncCout {
 	IOLock,
 	IOUnlock
@@ -189,7 +197,9 @@ template <> struct Unroller<0> {
 
 const size_t CacheLineSize = 64; // 64byte
 
+//────────────────────────────────────────────────────────────────────────────────
 // Stockfish ほとんどそのまま
+//────────────────────────────────────────────────────────────────────────────────
 template <typename T> inline void prefetch(T* addr) {
 #if defined HAVE_SSE2 || defined HAVE_SSE4
 #if defined(__INTEL_COMPILER)

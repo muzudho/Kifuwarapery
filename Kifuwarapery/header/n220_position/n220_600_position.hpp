@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <stack>
+#include "../n113_piece___/n113_150_piece.hpp"
 #include "../n116_hand____/n116_500_hand.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
 #include "../n160_board___/n160_102_FileMaskBb.hpp"

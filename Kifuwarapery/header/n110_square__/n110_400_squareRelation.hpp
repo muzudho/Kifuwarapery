@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "../n110_square__/n110_100_square.hpp"
 #include "../n110_square__/n110_300_direction.hpp"
 
 

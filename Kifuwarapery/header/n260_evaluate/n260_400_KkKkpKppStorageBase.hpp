@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-#include "../n160_board___/n160_260_squareDistance.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
+#include "../n113_piece___/n113_155_utilPiece.hpp"
+#include "../n160_board___/n160_260_squareDistance.hpp"
 #include "../n220_position/n220_700_charToPieceUSI.hpp"
 #include "../n260_evaluate/n260_150_kppIndexArray.hpp"
 #include "../n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
@@ -437,7 +438,7 @@ struct KkKkpKppStorageBase {
 							if (jColorFileRank.GetOrder() < iColorFileRank.GetOrder())
 								std::swap(iColorFileRank, jColorFileRank);
 #if defined EVAL_PHASE1
-							ret[retIdx++] = std::make_pair(&kpps.r_kee[iColorFileRank.color][m_R_Mid + iColorFileRank.file][m_R_Mid + iColorFileRank.rank][jColorFileRank.color][m_R_Mid + jColorFileRank.file][m_R_Mid + jColorFileRank.rank] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
+							ret[retIdx++] = std::make_pair(&kpps.r_kee[iColorFileRank.m_color][m_R_Mid + iColorFileRank.m_file][m_R_Mid + iColorFileRank.m_rank][jColorFileRank.m_color][m_R_Mid + jColorFileRank.m_file][m_R_Mid + jColorFileRank.m_rank] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 #endif
 						}
 						Square ito_tmp = ito;

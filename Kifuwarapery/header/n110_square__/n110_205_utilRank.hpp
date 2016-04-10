@@ -2,6 +2,7 @@
 
 #include "../n110_square__/n110_200_rank.hpp"
 
+
 class UtilRank {
 public:
 
@@ -22,7 +23,11 @@ public:
 		static_assert('a' + 8 == 'i', "");
 		return 'a' + r;
 	}
+
 	static inline char ToCharCSA(const Rank r) { return '1' + r; }
+
 	static inline Rank FromCharCSA(const char c) { return static_cast<Rank>(c - '1'); }
+
 	static inline Rank FromCharUSI(const char c) { return static_cast<Rank>(c - 'a'); }
+
 };

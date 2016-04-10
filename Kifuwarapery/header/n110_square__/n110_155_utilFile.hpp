@@ -2,6 +2,7 @@
 
 #include "../n110_square__/n110_150_file.hpp"
 
+
 class UtilFile {
 public:
 	// 左右変換

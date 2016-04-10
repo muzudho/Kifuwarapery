@@ -3,12 +3,12 @@
 
 ColorFileRank::ColorFileRank(Color color, File file, Rank rank)
 {
-	this->color = color;
-	this->file = file;
-	this->rank = rank;
+	this->m_color = color;
+	this->m_file = file;
+	this->m_rank = rank;
 }
 
 int ColorFileRank::GetOrder()
 {
-	return this->color*10000 + this->file*100 + this->rank;
+	return this->m_color*10000 + this->m_file*100 + this->m_rank;
 }

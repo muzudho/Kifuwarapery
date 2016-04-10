@@ -80,7 +80,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 #if defined MPI_LEARN
 	boost::mpi::environment  env(argc, argv);
 	boost::mpi::communicator world;
-	if (world.rank() != 0) {
+	if (world.m_rank() != 0) {
 		learn(GetPos, env, world);
 		return;
 	}

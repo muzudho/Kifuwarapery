@@ -2,6 +2,7 @@
 
 #include "../n105_color___/n105_100_color.hpp"
 #include "../n113_piece___/n113_100_pieceType.hpp"
+#include "../n113_piece___/n113_105_utilPieceType.hpp"	// g_isSliderVal
 #include "../n113_piece___/n113_150_piece.hpp"
 
 

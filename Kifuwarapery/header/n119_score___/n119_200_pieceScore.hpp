@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../n113_piece___/n113_150_piece.hpp"
 #include "../n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../n119_score___/n119_100_utilScore.hpp"
 

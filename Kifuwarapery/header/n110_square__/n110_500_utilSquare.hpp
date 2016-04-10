@@ -2,6 +2,12 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n110_square__/n110_150_file.hpp"
+#include "../n110_square__/n110_155_utilFile.hpp"
+#include "../n110_square__/n110_200_rank.hpp"
+#include "../n110_square__/n110_205_utilRank.hpp"
+#include "../n110_square__/n110_250_squareDelta.hpp"
 #include "../n110_square__/n110_300_direction.hpp"
 
 
@@ -25,6 +31,7 @@ public:
 
 	// s が Square の中に含まれているか判定
 	static inline bool ContainsOf(const Square s) { return (0 <= s) && (s < SquareNum); }
+
 	// File, Rank のどちらかがおかしいかも知れない時は、
 	// こちらを使う。
 	// こちらの方が遅いが、どんな File, Rank にも対応している。
@@ -38,15 +45,13 @@ public:
 	// 速度が必要な場面で使用する。
 	static inline Rank ToRank(const Square s) {
 		assert(UtilSquare::ContainsOf(s));
-		return SquareToRank[s];
+		return g_squareToRank[s];
 	}
+
 	static inline File ToFile(const Square s) {
 		assert(UtilSquare::ContainsOf(s));
-		return SquareToFile[s];
+		return g_squareToFile[s];
 	}
-
-
-
 
 	static inline std::string ToStringUSI(const Square sq) {
 		const Rank r = UtilSquare::ToRank(sq);
@@ -55,8 +60,6 @@ public:
 		return std::string(ch);
 	}
 
-
-
 	static inline std::string ToStringCSA(const Square sq) {
 		const Rank r = UtilSquare::ToRank(sq);
 		const File f = UtilSquare::ToFile(sq);
@@ -64,9 +67,9 @@ public:
 		return std::string(ch);
 	}
 
-
 	// 後手の位置を先手の位置へ変換
 	static inline constexpr Square Inverse(const Square sq) { return SquareNum - 1 - sq; }
+
 	// Square の左右だけ変換
 	static inline Square InverseFile(const Square sq) { return UtilSquare::FromFileRank(UtilFile::Inverse(UtilSquare::ToFile(sq)), UtilSquare::ToRank(sq)); }
 

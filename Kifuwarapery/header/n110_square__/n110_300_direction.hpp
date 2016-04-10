@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n110_square__/n110_250_squareDelta.hpp"
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
 
 // 位置関係、方向
