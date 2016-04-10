@@ -2,6 +2,7 @@
 
 #include "../n260_evaluate/n260_400_KkKkpKppStorageBase.hpp"
 
+
 class KppCacheIo {
 public:
 	std::string GetLv2FilePath(const std::string& dirName, int k1);

@@ -1,11 +1,11 @@
 #pragma once
 
 #include "../n220_position/n220_700_charToPieceUSI.hpp"
+#include "../n223_move____/n223_030_generateMovePhase.hpp"
+#include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"
-#include "../n280_move____/n280_140_generateMovePhase.hpp"
-#include "../n280_move____/n280_300_stats.hpp"
 
 
 using History = Stats<false>;

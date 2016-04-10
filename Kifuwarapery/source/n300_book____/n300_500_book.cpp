@@ -1,6 +1,6 @@
 #include <algorithm>	//std::max
 #include <sstream>
-#include "../../header/n280_move____/n280_500_mt64bit.hpp"
+#include "../../header/n300_book____/n300_100_mt64bit.hpp"
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"

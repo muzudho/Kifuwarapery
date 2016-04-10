@@ -4,12 +4,11 @@
 #include "../n080_common__/n080_100_common.hpp"	//Mutexなど
 #include "../n119_score___/n119_090_score.hpp"
 #include "../n220_position/n220_600_position.hpp"
+#include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
-#include "../n320_searcher/n320_100_nodeType.hpp"
-#include "../n320_searcher/n320_540_movePicker.hpp"
-//class MovePicker;	//#include "../n320_searcher/n320_540_movePicker.hpp"
+#include "../n226_movStack/n226_500_movePicker.hpp"
 
 
 struct Thread;

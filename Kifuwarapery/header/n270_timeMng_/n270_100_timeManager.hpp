@@ -1,9 +1,10 @@
 ﻿#pragma once
 
+#include "../n223_move____/n223_050_limitsType.hpp"
 #include "../n260_evaluate/n260_700_evaluation09.hpp"
 
-struct LimitsType;
 class Searcher;
+
 
 class TimeManager {
 public:

@@ -1,12 +1,12 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
+#include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
+#include "../../header/n226_movStack/n226_500_movePicker.hpp"
+#include "../../header/n226_movStack/n226_600_splitPoint.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
-#include "../../header/n280_move____/n280_300_stats.hpp"
-#include "../../header/n320_searcher/n320_540_movePicker.hpp"
-#include "../../header/n450_thread__/n450_200_splitPoint.hpp"
 
 
 using History = Stats<false>;

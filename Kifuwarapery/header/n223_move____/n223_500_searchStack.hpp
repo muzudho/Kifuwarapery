@@ -5,8 +5,7 @@
 #include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 
-
-struct SplitPoint;//450_200
+struct SplitPoint;// SearchStack,MovePicker,SplitPoint が三つ巴になっている☆（＾ｑ＾）
 
 
 class SearchStack {

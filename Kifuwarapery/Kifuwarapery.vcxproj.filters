@@ -11,9 +11,6 @@
     <Filter Include="header\n160_board___">
       <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n280_move____">
-      <UniqueIdentifier>{37a80da1-467b-41cc-84a6-871c075668df}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n400_usi_____">
       <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
     </Filter>
@@ -408,9 +405,6 @@
     <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
       <Filter>header\n260_evaluate</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_200_splitPoint.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_250_thread.hpp">
       <Filter>header\n450_thread__</Filter>
     </ClInclude>
@@ -422,9 +416,6 @@
     </ClInclude>
     <ClInclude Include="header\n450_thread__\n450_350_timerThread.hpp">
       <Filter>header\n450_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_140_generateMovePhase.hpp">
-      <Filter>header\n280_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp">
       <Filter>header\n320_searcher</Filter>
@@ -450,15 +441,6 @@
     <ClInclude Include="header\n276_genMove_\n276_140_makePromoteMove.hpp">
       <Filter>header\n276_genMove_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_500_mt64bit.hpp">
-      <Filter>header\n280_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n280_move____\n280_300_stats.hpp">
-      <Filter>header\n280_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_540_movePicker.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n300_book____\n300_500_book.hpp">
       <Filter>header\n300_book____</Filter>
     </ClInclude>
@@ -477,14 +459,29 @@
     <ClInclude Include="header\n220_position\n220_700_charToPieceUSI.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_100_nodeType.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp">
       <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_030_generateMovePhase.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n226_movStack\n226_500_movePicker.hpp">
+      <Filter>header\n226_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n226_movStack\n226_600_splitPoint.hpp">
+      <Filter>header\n226_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_book____\n300_100_mt64bit.hpp">
+      <Filter>header\n300_book____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

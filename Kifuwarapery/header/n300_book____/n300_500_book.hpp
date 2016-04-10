@@ -4,7 +4,7 @@
 #include <fstream>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
-#include "../n280_move____/n280_500_mt64bit.hpp"
+#include "../n300_book____/n300_100_mt64bit.hpp"
 
 
 class Book : private std::ifstream {

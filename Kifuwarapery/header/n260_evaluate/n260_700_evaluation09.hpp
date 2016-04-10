@@ -8,8 +8,9 @@
 #include "../n220_position/n220_600_position.hpp"
 #include "../n220_position/n220_700_charToPieceUSI.hpp"
 
+#include "../n223_move____/n223_500_searchStack.hpp"
 
-class SearchStack;//320_125
+
 
 const size_t EvaluateTableSize = 0x400000; // 134MB
 //const size_t EvaluateTableSize = 0x10000000; // 8GB
