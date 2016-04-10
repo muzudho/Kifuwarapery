@@ -8,7 +8,7 @@
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
 //class Searcher;
 
 

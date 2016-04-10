@@ -2,8 +2,7 @@
 #include "../../header/n360_egOption/n360_230_engineOptionable.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
-//class Searcher;
+class Searcher;
 
 
 EngineOptionable::EngineOptionable(const char* v, Fn* f, Searcher* s) :

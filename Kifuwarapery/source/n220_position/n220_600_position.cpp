@@ -1,4 +1,5 @@
-﻿#include <sstream>      // std::istringstream
+﻿#include <algorithm>	// std::min,std::max
+#include <sstream>      // std::istringstream
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
@@ -12,7 +13,7 @@
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
 //class Searcher;
 
 

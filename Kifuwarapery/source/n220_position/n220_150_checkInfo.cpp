@@ -10,10 +10,6 @@
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 
 
-//#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
-//class Searcher;
-
-
 CheckInfo::CheckInfo(const Position& pos) {
 	const Color them = UtilColor::OppositeColor(pos.GetTurn());
 	const Square ksq = pos.GetKingSquare(them);

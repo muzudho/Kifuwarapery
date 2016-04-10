@@ -1,10 +1,14 @@
+#include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
+#include "../../header/n320_searcher/n320_128_signalsType.hpp"
+#include "../../header/n320_searcher/n320_137_rootMove.hpp"
+#include "../../header/n360_egOption/n360_240_engineOptionsMap.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
 //class Searcher;
 
 
@@ -44,15 +48,15 @@ void ThreadPool::Exit() {
 	}
 }
 
-void ThreadPool::ReadUSIOptions(Searcher* s) {
-	m_maxThreadsPerSplitPoint_ = s->m_engineOptions["Max_Threads_per_Split_Point"];
-	const size_t requested   = s->m_engineOptions["Threads"];
+void ThreadPool::ReadUSIOptions(Searcher* searcher) {
+	m_maxThreadsPerSplitPoint_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
+	const size_t requested   = searcher->m_engineOptions["Threads"];
 	m_minimumSplitDepth_ = (requested < 6 ? 4 : (requested < 8 ? 5 : 7)) * OnePly;
 
 	assert(0 < requested);
 
 	while (size() < requested) {
-		push_back(newThread<Thread>(s));
+		push_back(newThread<Thread>(searcher));
 	}
 
 	while (requested < size()) {
@@ -82,7 +86,7 @@ void ThreadPool::WaitForThinkFinished() {
 }
 
 void ThreadPool::StartThinking(
-	const Position& pos,
+	const Position& position,
 	const LimitsType& limits,
 	const std::vector<Move>& searchMoves
 )
@@ -91,25 +95,25 @@ void ThreadPool::StartThinking(
 #else
 	WaitForThinkFinished();
 #endif
-	pos.GetSearcher()->m_searchTimer.Restart();
+	position.GetSearcher()->m_searchTimer.Restart();
 
-	pos.GetSearcher()->m_signals.m_stopOnPonderHit = pos.GetSearcher()->m_signals.m_firstRootMove = false;
-	pos.GetSearcher()->m_signals.m_stop = pos.GetSearcher()->m_signals.m_failedLowAtRoot = false;
+	position.GetSearcher()->m_signals.m_stopOnPonderHit = position.GetSearcher()->m_signals.m_firstRootMove = false;
+	position.GetSearcher()->m_signals.m_stop = position.GetSearcher()->m_signals.m_failedLowAtRoot = false;
 
-	pos.GetSearcher()->m_rootPosition = pos;
-	pos.GetSearcher()->m_limits = limits;
-	pos.GetSearcher()->m_rootMoves.clear();
+	position.GetSearcher()->m_rootPosition = position;
+	position.GetSearcher()->m_limits = limits;
+	position.GetSearcher()->m_rootMoves.clear();
 
 #if defined LEARN
 	// searchMoves を直接使う。
 	GetPos.GetSearcher()->m_rootMoves.push_back(RootMove(m_searchMoves[0]));
 #else
 	const MoveType MT = Legal;
-	for (MoveList<MT> ml(pos); !ml.IsEnd(); ++ml) {
+	for (MoveList<MT> ml(position); !ml.IsEnd(); ++ml) {
 		if (searchMoves.empty()
 			|| std::find(searchMoves.begin(), searchMoves.end(), ml.GetMove()) != searchMoves.end())
 		{
-			pos.GetSearcher()->m_rootMoves.push_back(RootMove(ml.GetMove()));
+			position.GetSearcher()->m_rootMoves.push_back(RootMove(ml.GetMove()));
 		}
 	}
 #endif

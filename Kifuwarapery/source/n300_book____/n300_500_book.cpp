@@ -1,7 +1,9 @@
+#include <algorithm>	//std::max
 #include <sstream>
 #include "../../header/n110_square__/n110_100_square.hpp"
 #include "../../header/n113_piece___/n113_150_piece.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
+#include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n280_move____/n280_500_mt64bit.hpp"
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
@@ -9,7 +11,7 @@
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 
 
-#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO: これを外すのがむずかしい。
+#include "../../header/n900_main____/n900_200_searcher.hpp"		//TODO:1 これを外すのがむずかしい。
 //class Searcher;
 
 
@@ -104,13 +106,13 @@ Key Book::GetBookKey(const Position& pos) {
 	return key;
 }
 
-MoveScore Book::GetProbe(const Position& pos, const std::string& fName, const bool pickBest) {
+MoveScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
 	Move move = Move::GetMoveNone();
-	const Key key = GetBookKey(pos);
-	const Score min_book_score = static_cast<Score>(static_cast<int>(pos.GetSearcher()->m_engineOptions["Min_Book_Score"]));
+	const Key key = this->GetBookKey(position);
+	const Score min_book_score = static_cast<Score>(static_cast<int>(position.GetSearcher()->m_engineOptions["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
@@ -138,13 +140,13 @@ MoveScore Book::GetProbe(const Position& pos, const std::string& fName, const bo
 			}
 			else {
 				const Square from = tmp.From();
-				const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
+				const PieceType ptFrom = UtilPiece::ToPieceType(position.GetPiece(from));
 				const bool promo = tmp.IsPromotion();
 				if (promo) {
-					move = UtilMove::MakeCapturePromoteMove(ptFrom, from, to, pos);
+					move = UtilMove::MakeCapturePromoteMove(ptFrom, from, to, position);
 				}
 				else {
-					move = UtilMove::MakeCaptureMove(ptFrom, from, to, pos);
+					move = UtilMove::MakeCaptureMove(ptFrom, from, to, position);
 				}
 			}
 			score = entry.m_score;
