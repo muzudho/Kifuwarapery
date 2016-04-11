@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 
 

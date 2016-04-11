@@ -105,7 +105,9 @@ public:
 
 	// 初期化用
 	Bitboard RookBlockMaskCalc(const Square square) const;
+
 	Bitboard RookAttackCalc(const Square square, const Bitboard& occupied) const;
+
 	void InitRookAttacks();
 
 	// 障害物が無いときの利きの Bitboard

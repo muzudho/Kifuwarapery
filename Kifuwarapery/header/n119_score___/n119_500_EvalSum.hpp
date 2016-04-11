@@ -26,9 +26,9 @@ struct EvalSum {
 	}
 #endif
 	EvalSum() {}
-	s32 sum(const Color c) const {
-		const s32 scoreBoard = p[0][0] - p[1][0] + p[2][0];
-		const s32 scoreTurn = p[0][1] + p[1][1] + p[2][1];
+	s32 GetSum(const Color c) const {
+		const s32 scoreBoard = m_p[0][0] - m_p[1][0] + m_p[2][0];
+		const s32 scoreTurn = m_p[0][1] + m_p[1][1] + m_p[2][1];
 		return (c == Black ? scoreBoard : -scoreBoard) + scoreTurn;
 	}
 	EvalSum& operator += (const EvalSum& rhs) {
@@ -38,12 +38,12 @@ struct EvalSum {
 		m[0] = _mm_add_epi32(m[0], rhs.m[0]);
 		m[1] = _mm_add_epi32(m[1], rhs.m[1]);
 #else
-		p[0][0] += rhs.p[0][0];
-		p[0][1] += rhs.p[0][1];
-		p[1][0] += rhs.p[1][0];
-		p[1][1] += rhs.p[1][1];
-		p[2][0] += rhs.p[2][0];
-		p[2][1] += rhs.p[2][1];
+		m_p[0][0] += rhs.m_p[0][0];
+		m_p[0][1] += rhs.m_p[0][1];
+		m_p[1][0] += rhs.m_p[1][0];
+		m_p[1][1] += rhs.m_p[1][1];
+		m_p[2][0] += rhs.m_p[2][0];
+		m_p[2][1] += rhs.m_p[2][1];
 #endif
 		return *this;
 	}
@@ -54,12 +54,12 @@ struct EvalSum {
 		m[0] = _mm_sub_epi32(m[0], rhs.m[0]);
 		m[1] = _mm_sub_epi32(m[1], rhs.m[1]);
 #else
-		p[0][0] -= rhs.p[0][0];
-		p[0][1] -= rhs.p[0][1];
-		p[1][0] -= rhs.p[1][0];
-		p[1][1] -= rhs.p[1][1];
-		p[2][0] -= rhs.p[2][0];
-		p[2][1] -= rhs.p[2][1];
+		m_p[0][0] -= rhs.m_p[0][0];
+		m_p[0][1] -= rhs.m_p[0][1];
+		m_p[1][0] -= rhs.m_p[1][0];
+		m_p[1][1] -= rhs.m_p[1][1];
+		m_p[2][0] -= rhs.m_p[2][0];
+		m_p[2][1] -= rhs.m_p[2][1];
 #endif
 		return *this;
 	}
@@ -67,20 +67,23 @@ struct EvalSum {
 	EvalSum operator - (const EvalSum& rhs) const { return EvalSum(*this) -= rhs; }
 
 	// ehash 用。
-	void encode() {
+	void Encode() {
 #if defined USE_AVX2_EVAL
 		// EvalSum は atomic にコピーされるので key が合っていればデータも合っている。
 #else
-		key ^= data[0] ^ data[1] ^ data[2];
+		m_key ^= m_data[0] ^ m_data[1] ^ m_data[2];
 #endif
 	}
-	void decode() { encode(); }
+	void Decode() {
+		// 反転するだけだからエンコードと同じ。
+		this->Encode();
+	}
 
 	union {
-		std::array<std::array<s32, 2>, 3> p;
+		std::array<std::array<s32, 2>, 3> m_p;
 		struct {
-			u64 data[3];
-			u64 key; // ehash用。
+			u64 m_data[3];
+			u64 m_key; // ehash用。
 		};
 #if defined USE_AVX2_EVAL
 		__m256i mm;

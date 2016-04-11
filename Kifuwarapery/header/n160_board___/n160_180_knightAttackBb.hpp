@@ -7,12 +7,15 @@
 //────────────────────────────────────────────────────────────────────────────────
 class KnightAttackBb {
 private:
+
 	Bitboard m_controllBb_[ColorNum][SquareNum];
+
 	Bitboard m_knightCheckTable_[ColorNum][SquareNum];
 
 public:
 
 	void Initialize();
+
 	void InitCheckTableKnight();
 
 	inline Bitboard GetControllBb(const Color c, const Square sq) const {

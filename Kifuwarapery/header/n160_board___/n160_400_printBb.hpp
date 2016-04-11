@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "n160_100_bitboard.hpp"
+/*
 #include "n160_110_silverAttackBb.hpp"
 #include "n160_120_bishopAttackBb.hpp"
 #include "n160_130_lanceAttackBb.hpp"
@@ -15,7 +16,7 @@
 #include "n160_220_queenAttackBb.hpp"
 #include "n160_230_setMaskBb.hpp"
 #include "n160_240_betweenBb.hpp"
-
+*/
 
 
 class PrintBb {

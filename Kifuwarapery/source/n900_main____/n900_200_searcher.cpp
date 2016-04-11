@@ -1,5 +1,7 @@
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
+#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
@@ -307,7 +309,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	ss->m_currentMove = bestMove = Move::GetMoveNone();
 	ss->m_ply = (ss-1)->m_ply + 1;
 
-	if (MaxPly < ss->m_ply) {
+	if (g_maxPly < ss->m_ply) {
 		return ScoreDraw;
 	}
 
@@ -426,7 +428,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		ss->m_currentMove = move;
 
 		pos.DoMove(move, st, ci, givesCheck);
-		(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+		(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 		score = (givesCheck ? -Qsearch<NT, true>(pos, ss+1, -beta, -alpha, depth - OnePly)
 				 : -Qsearch<NT, false>(pos, ss+1, -beta, -alpha, depth - OnePly));
 		pos.UndoMove(move);
@@ -466,7 +468,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 // iterative deepening loop
 void Searcher::IdLoop(Position& pos) {
-	SearchStack ss[MaxPlyPlus2];
+	SearchStack ss[g_maxPlyPlus2];
 	Ply depth;
 	Ply prevBestMoveChanges;
 	Score bestScore = -ScoreInfinite;
@@ -534,7 +536,7 @@ void Searcher::IdLoop(Position& pos) {
 #endif
 
 	// 反復深化で探索を行う。
-	while (++depth <= MaxPly && !m_signals.m_stop && (!m_limits.m_depth || depth <= m_limits.m_depth)) {
+	while (++depth <= g_maxPly && !m_signals.m_stop && (!m_limits.m_depth || depth <= m_limits.m_depth)) {
 		// 前回の iteration の結果を全てコピー
 		for (size_t i = 0; i < m_rootMoves.size(); ++i) {
 			m_rootMoves[i].m_prevScore_ = m_rootMoves[i].m_score_;
@@ -566,13 +568,13 @@ void Searcher::IdLoop(Position& pos) {
 			// fail high/low になったなら、今度は window 幅を広げて、再探索を行う。
 			while (true) {
 				// 探索を行う。
-				ss->m_staticEvalRaw.p[0][0] = (ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				ss->m_staticEvalRaw.m_p[0][0] = (ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 				bestScore = Search<Root>(pos, ss + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 				// 先頭が最善手になるようにソート
 				UtilMoveStack::InsertionSort(m_rootMoves.begin() + m_pvIdx, m_rootMoves.end());
 
 				for (size_t i = 0; i <= m_pvIdx; ++i) {
-					ss->m_staticEvalRaw.p[0][0] = (ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+					ss->m_staticEvalRaw.m_p[0][0] = (ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 					m_rootMoves[i].InsertPvInTT(pos);
 				}
 
@@ -666,7 +668,7 @@ void Searcher::IdLoop(Position& pos) {
 					|| m_timeManager.AvailableTime() * 40 / 100 < m_searchTimer.Elapsed()))
 			{
 				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
-				(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 				(ss+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
 				(ss+1)->m_skipNullMove = true;
 				const Score s = Search<NonPV>(pos, ss+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
@@ -841,7 +843,7 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		// step2
 		// stop と最大探索深さのチェック
 		switch (pos.IsDraw(16)) {
-		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= MaxPly) { break; }
+		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= g_maxPly) { break; }
 		case RepetitionDraw     : return ScoreDraw;
 		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);
 		case RepetitionLose     : return UtilScore::MatedIn(ss->m_ply);
@@ -1047,7 +1049,7 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				ss->m_currentMove = move;
 				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
-				(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 				score = -Search<NonPV>(pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
 				pos.UndoMove(move);
 				if (rbeta <= score) {
@@ -1225,7 +1227,7 @@ split_point_start:
 
 		// step14
 		pos.DoMove(move, st, ci, givesCheck);
-		(ss+1)->m_staticEvalRaw.p[0][0] = ScoreNotEvaluated;
+		(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 
 		// step15
 		// LMR
@@ -1399,7 +1401,7 @@ split_point_start:
 }
 
 void RootMove::ExtractPvFromTT(Position& pos) {
-	StateInfo state[MaxPlyPlus2];
+	StateInfo state[g_maxPlyPlus2];
 	StateInfo* st = state;
 	TTEntry* tte;
 	Ply ply = 0;
@@ -1420,7 +1422,7 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
 		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
 		   && pos.IsPseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
-		   && ply < MaxPly
+		   && ply < g_maxPly
 		   && (!pos.IsDraw(20) || ply < 6));
 
 	m_pv_.push_back(Move::GetMoveNone());
@@ -1430,7 +1432,7 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 }
 
 void RootMove::InsertPvInTT(Position& pos) {
-	StateInfo state[MaxPlyPlus2];
+	StateInfo state[g_maxPlyPlus2];
 	StateInfo* st = state;
 	TTEntry* tte;
 	Ply ply = 0;
@@ -1687,7 +1689,7 @@ void Thread::IdleLoop() {
 			SplitPoint* sp = m_activeSplitPoint;
 			m_pSearcher->m_threads.m_mutex_.unlock();
 
-			SearchStack ss[MaxPlyPlus2];
+			SearchStack ss[g_maxPlyPlus2];
 			Position pos(*sp->m_position, this);
 
 			memcpy(ss, sp->m_searchStack - 1, 4 * sizeof(SearchStack));

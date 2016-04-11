@@ -1,5 +1,9 @@
 ﻿#include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
+#include "../../header/n160_board___/n160_140_goldAttackBb.hpp"
+#include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
+#include "../../header/n160_board___/n160_190_pawnAttackBb.hpp"
 
 
 KnightAttackBb g_knightAttackBb;//本当はconst にしたいが、やり方がわからない☆ C2373エラーになるんだぜ☆

@@ -77,16 +77,16 @@ inline void lowerDimension(KkKkpKppStorageBase<std::array<std::atomic<float>, 2>
 										 std::array<std::atomic<float>, 2>,
 										 std::array<std::atomic<float>, 2> >& base, const RawEvaluater& raw)
 {
-#define FOO(indices, oneArray, sum)										\
+#define FOO(indices, oneArray, GetSum)										\
 	for (auto indexAndWeight : indices) {								\
 		if (indexAndWeight.first == std::numeric_limits<ptrdiff_t>::max()) break; \
 		if (0 <= indexAndWeight.first) {								\
-			atomicAdd((*oneArray( indexAndWeight.first))[0], sum[0] * indexAndWeight.second / base.MaxWeight()); \
-			atomicAdd((*oneArray( indexAndWeight.first))[1], sum[1] * indexAndWeight.second / base.MaxWeight()); \
+			atomicAdd((*oneArray( indexAndWeight.first))[0], GetSum[0] * indexAndWeight.second / base.MaxWeight()); \
+			atomicAdd((*oneArray( indexAndWeight.first))[1], GetSum[1] * indexAndWeight.second / base.MaxWeight()); \
 		}																\
 		else {															\
-			atomicSub((*oneArray(-indexAndWeight.first))[0], sum[0] * indexAndWeight.second / base.MaxWeight()); \
-			atomicAdd((*oneArray(-indexAndWeight.first))[1], sum[1] * indexAndWeight.second / base.MaxWeight()); \
+			atomicSub((*oneArray(-indexAndWeight.first))[0], GetSum[0] * indexAndWeight.second / base.MaxWeight()); \
+			atomicAdd((*oneArray(-indexAndWeight.first))[1], GetSum[1] * indexAndWeight.second / base.MaxWeight()); \
 		}																\
 	}
 

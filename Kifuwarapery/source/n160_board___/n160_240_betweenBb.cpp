@@ -1,6 +1,9 @@
 ﻿#include "../../header/n110_square__/n110_400_squareRelation.hpp"
-#include "../../header/n160_board___/n160_400_printBb.hpp"
+#include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"
+#include "../../header/n160_board___/n160_150_rookAttackBb.hpp"
+#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
+#include "../../header/n160_board___/n160_400_printBb.hpp"
 
 
 BetweenBb g_betweenBb;
