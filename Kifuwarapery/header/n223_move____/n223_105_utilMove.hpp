@@ -8,12 +8,15 @@
 
 class UtilMove {
 public:
+
 	// 成り flag
 	static inline Move GetPromoteFlag() { return static_cast<Move>(Move::m_PromoteFlag); }
+
 	static inline Move GetMoveNone() { return static_cast<Move>(Move::m_MoveNone); }
 
 	// 移動先から指し手に変換
 	static inline Move To2Move(const Square to) { return static_cast<Move>(to << 0); }
+
 	// 移動元から指し手に変換
 	static inline Move From2Move(const Square from) { return static_cast<Move>(from << 7); }
 
@@ -32,6 +35,7 @@ public:
 
 	// 取った駒の種類から指し手に変換
 	static inline Move GetCapturedPieceType2Move(const PieceType captured) { return static_cast<Move>(captured << 20); }
+
 	// 移動先と、Position から 取った駒の種類を判別し、指し手に変換
 	// 駒を取らないときは、0 (MoveNone) を返す。
 	static inline Move GetCapturedPieceType2Move(const Square to, const Position& pos) {
@@ -58,6 +62,5 @@ public:
 	// 駒打ちの makeMove()
 	// todo: PieceType を HandPiece に変更
 	static inline Move MakeDropMove(const PieceType pt, const Square to) { return UtilMove::From2Move(UtilMove::GetDrop2From(pt)) | UtilMove::To2Move(to); }
-
 
 };

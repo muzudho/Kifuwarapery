@@ -2,11 +2,11 @@
 
 MoveScore::MoveScore(Move move, Score score)
 {
-	this->move = move;
-	this->score = score;
+	this->m_move = move;
+	this->m_score = score;
 }
 
 Move MoveScore::GetMove(void)
 {
-	return this->move;
+	return this->m_move;
 }

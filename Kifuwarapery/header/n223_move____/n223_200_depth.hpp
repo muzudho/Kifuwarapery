@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../../header/n080_common__/n080_150_overloadEnumOperators.hpp"
+#include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
 
 enum Depth {

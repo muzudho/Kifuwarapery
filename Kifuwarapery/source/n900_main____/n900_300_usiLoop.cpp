@@ -24,7 +24,7 @@ void measureGenerateMoves(const Position& pos) {
 	MoveStack legalMoves[g_MaxLegalMoves];
 	for (int i = 0; i < g_MaxLegalMoves; ++i)
 	{
-		legalMoves[i].move = UtilMove::GetMoveNone();
+		legalMoves[i].m_move = UtilMove::GetMoveNone();
 	}
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;
@@ -53,7 +53,7 @@ void measureGenerateMoves(const Position& pos) {
 	const ptrdiff_t count = pms - &legalMoves[0];
 	std::cout << "num of moves = " << count << std::endl;
 	for (int i = 0; i < count; ++i) {
-		std::cout << legalMoves[i].move.ToCSA() << ", ";
+		std::cout << legalMoves[i].m_move.ToCSA() << ", ";
 	}
 	std::cout << std::endl;
 }

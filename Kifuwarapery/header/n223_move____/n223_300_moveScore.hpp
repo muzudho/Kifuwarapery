@@ -7,13 +7,18 @@
 // 指し手と、評価値。
 class MoveScore {
 public:
+
 	// 指し手
-	Move move;
+	Move m_move;
+
 	// 評価値
-	enum Score score;
+	enum Score m_score;
+
 public:
+
 	MoveScore(Move move, enum Score score);
 	
 	// 指し手
 	Move GetMove(void);
+
 };

@@ -1,4 +1,5 @@
-﻿#include <algorithm>	// std::min,std::max
+﻿#include <iostream>		// std::cout
+#include <algorithm>	// std::min,std::max
 #include <sstream>      // std::istringstream
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n113_piece___/n113_155_utilPiece.hpp"
@@ -7,6 +8,8 @@
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
 #include "../../header/n220_position/n220_600_position.hpp"
 #include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
+#include "../../header/n276_genMove_/n276_100_moveType.hpp"
+#include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n300_book____/n300_100_mt64bit.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 
@@ -1693,7 +1696,7 @@ bool Position::IsOK() const {
 
 	++failedStep;
 	if (debugStateHand) {
-		if (m_st_->m_hand != m_hand(GetTurn())) {
+		if (m_st_->m_hand != this->GetHand(GetTurn())) {
 			goto incorrect_position;
 		}
 	}
@@ -1703,12 +1706,12 @@ bool Position::IsOK() const {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			const Piece pc = GetPiece(sq);
 			if (pc == Empty) {
-				if (!GetEmptyBB().IsSet(sq)) {
+				if (!g_setMaskBb.IsSet( &GetEmptyBB(), sq) ) {
 					goto incorrect_position;
 				}
 			}
 			else {
-				if (!GetBbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)).IsSet(sq)) {
+				if (!g_setMaskBb.IsSet( &GetBbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)), sq) ) {
 					goto incorrect_position;
 				}
 			}
@@ -1717,7 +1720,7 @@ bool Position::IsOK() const {
 
 	++failedStep;
 	if (debugMaterial) {
-		if (m_material() != ComputeMaterial()) {
+		if (this->GetMaterial() != ComputeMaterial()) {
 			goto incorrect_position;
 		}
 	}
@@ -1991,9 +1994,9 @@ void Position::Set(const std::string& sfen, Thread* th) {
 		else if (token == '+') {
 			promoteFlag = Promoted;
 		}
-		else if (g_charToPieceUSI.isLegalChar(token)) {
+		else if (g_charToPieceUSI.IsLegalChar(token)) {
 			if (UtilSquare::ContainsOf(sq)) {
-				SetPiece(g_charToPieceUSI.value(token) + promoteFlag, sq);
+				SetPiece(g_charToPieceUSI.GetValue(token) + promoteFlag, sq);
 				promoteFlag = UnPromoted;
 				sq += DeltaE;
 			}
@@ -2030,9 +2033,9 @@ void Position::Set(const std::string& sfen, Thread* th) {
 		else if (isdigit(token)) {
 			digits = digits * 10 + token - '0';
 		}
-		else if (g_charToPieceUSI.isLegalChar(token)) {
+		else if (g_charToPieceUSI.IsLegalChar(token)) {
 			// 持ち駒を32bit に pack する
-			const Piece piece = g_charToPieceUSI.value(token);
+			const Piece piece = g_charToPieceUSI.GetValue(token);
 			SetHand(piece, (digits == 0 ? 1 : digits));
 
 			digits = 0;

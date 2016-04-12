@@ -12,6 +12,7 @@
 
 class UtilMoveStack {
 public:
+
 	// 汎用的な insertion sort. 要素数が少ない時、高速にソートできる。
 	// 降順(大きいものが先頭付近に集まる)
 	// *(first - 1) に 番兵(sentinel) として MAX 値が入っていると仮定して高速化してある。

@@ -27,12 +27,12 @@ namespace {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
-					(*moveStackList++).move = MakePromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).m_move = MakePromoteMove<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)
-						(*moveStackList++).move = MakeNonPromoteMove<MT>(PT, from, to, pos);
+						(*moveStackList++).m_move = MakeNonPromoteMove<MT>(PT, from, to, pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
-					(*moveStackList++).move = MakeNonPromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(PT, from, to, pos);
 			}
 		}
 		return moveStackList;
@@ -74,7 +74,7 @@ namespace {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, pawnDropCheckSquare);
+						(*moveStackList++).m_move = UtilMove::MakeDropMove(Pawn, pawnDropCheckSquare);
 					}
 					g_setMaskBb.XorBit(&toBB,pawnDropCheckSquare);
 				}
@@ -82,7 +82,7 @@ namespace {
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-				(*moveStackList++).move = UtilMove::MakeDropMove(Pawn, to);
+				(*moveStackList++).m_move = UtilMove::MakeDropMove(Pawn, to);
 			});
 		}
 
@@ -112,10 +112,10 @@ namespace {
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
 			switch (haveHandNum - noKnightLanceIdx) {
 			case 0: break; // 桂馬、香車 以外の持ち駒がない。
-			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
+			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 
@@ -123,11 +123,11 @@ namespace {
 			// 二段目に対して、桂馬以外の指し手を生成。
 			switch (haveHandNum - noKnightIdx) {
 			case 0: break; // 桂馬 以外の持ち駒がない。
-			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
+			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 
@@ -135,12 +135,12 @@ namespace {
 			toBB = target & ~(TRank8BB | TRank9BB);
 			switch (haveHandNum) {
 			case 0: assert(false); break; // 最適化の為のダミー
-			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
+			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
 			default: UNREACHABLE;
 			}
 		}
@@ -163,7 +163,7 @@ namespace {
 				Bitboard toBB = pos.GetAttacksFrom(pt, US, from) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
-					(*moveStackList++).move = MakeNonPromoteMove<MT>(pt, from, to, pos);
+					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(pt, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -189,11 +189,11 @@ namespace {
 					Square to;
 					FOREACH_BB(toOn789BB, to, {
 						const Square from = to + TDeltaS;
-					(*moveStackList++).move = MakePromoteMove<MT>(Pawn, from, to, pos);
+					(*moveStackList++).m_move = MakePromoteMove<MT>(Pawn, from, to, pos);
 					if (MT == NonEvasion || ALL) {
 						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
 						if (UtilSquare::ToRank(to) != TRank9) {
-							(*moveStackList++).move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
+							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
 						}
 					}
 					});
@@ -208,7 +208,7 @@ namespace {
 			Square to;
 			FOREACH_BB(toBB, to, {
 				const Square from = to + TDeltaS;
-			(*moveStackList++).move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
+			(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Pawn, from, to, pos);
 			});
 			return moveStackList;
 		}
@@ -228,18 +228,18 @@ namespace {
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
 						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 						if (toCanPromote) {
-							(*moveStackList++).move = MakePromoteMove<MT>(Lance, from, to, pos);
+							(*moveStackList++).m_move = MakePromoteMove<MT>(Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
 								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1段目の不成は省く
-									(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
+									(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
 								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2段目の不成を省く
-									(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
+									(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 							}
 						}
 						else
-							(*moveStackList++).move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
+							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Lance, from, to, pos);
 					}
 					// 駒取り対象は必ず一つ以下なので、loop は不要。最適化で do while が無くなると良い。
 				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.Exists1Bit());
@@ -260,12 +260,12 @@ namespace {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (toCanPromote) {
-						(*moveStackList++).move = MakePromoteMove<MT>(Knight, from, to, pos);
+						(*moveStackList++).m_move = MakePromoteMove<MT>(Knight, from, to, pos);
 						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
-							(*moveStackList++).move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
+							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
 					}
 					else
-						(*moveStackList++).move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
+						(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Knight, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -285,8 +285,8 @@ namespace {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (fromCanPromote | toCanPromote)
-						(*moveStackList++).move = MakePromoteMove<MT>(Silver, from, to, pos);
-					(*moveStackList++).move = MakeNonPromoteMove<MT>(Silver, from, to, pos);
+						(*moveStackList++).m_move = MakePromoteMove<MT>(Silver, from, to, pos);
+					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(Silver, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -316,7 +316,7 @@ namespace {
 			Bitboard toBB = pos.GetAttacksFrom<King>(US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				(*moveStackList++).move = MakeNonPromoteMove<MT>(King, from, to, pos);
+				(*moveStackList++).m_move = MakeNonPromoteMove<MT>(King, from, to, pos);
 			}
 			return moveStackList;
 		}
@@ -333,12 +333,12 @@ namespace {
 			switch (pt) {
 			case Empty: assert(false); break; // 最適化の為のダミー
 			case Pawn: case Lance: case Knight: case Silver: case Bishop: case Rook:
-				(*moveStackList++).move = ((UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))) ?
+				(*moveStackList++).m_move = ((UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))) ?
 					MakePromoteMove<Capture>(pt, from, to, pos) :
 					MakeNonPromoteMove<Capture>(pt, from, to, pos));
 				break;
 			case Gold: case King: case ProPawn: case ProLance: case ProKnight: case ProSilver: case Horse: case Dragon:
-				(*moveStackList++).move = MakeNonPromoteMove<Capture>(pt, from, to, pos);
+				(*moveStackList++).m_move = MakeNonPromoteMove<Capture>(pt, from, to, pos);
 				break;
 			default: UNREACHABLE;
 			}
@@ -492,7 +492,7 @@ namespace {
 				const Square to = bb.PopFirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 				// attackersTo() が重いので、movePicker か search で合法手か調べる。
-				(*moveStackList++).move = MakeNonPromoteMove<Capture>(King, ksq, to, pos);
+				(*moveStackList++).m_move = MakeNonPromoteMove<Capture>(King, ksq, to, pos);
 			}
 
 			// 両王手なら、玉を移動するしか回避方法は無い。
@@ -563,8 +563,8 @@ namespace {
 
 			// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
 			while (curr != moveStackList) {
-				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->move, pinned)) {
-					curr->move = (--moveStackList)->move;
+				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
+					curr->m_move = (--moveStackList)->m_move;
 				}
 				else {
 					++curr;
@@ -589,8 +589,8 @@ namespace {
 
 			// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
 			while (curr != moveStackList) {
-				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->move, pinned)) {
-					curr->move = (--moveStackList)->move;
+				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
+					curr->m_move = (--moveStackList)->m_move;
 				}
 				else {
 					++curr;

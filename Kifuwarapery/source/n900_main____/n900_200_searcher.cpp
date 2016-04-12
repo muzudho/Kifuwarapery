@@ -1547,21 +1547,21 @@ void Searcher::Think() {
 	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
 		const MoveScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
-			!bookMoveScore.move.IsNone()
+			!bookMoveScore.m_move.IsNone()
 			&&
 			std::find(
 				m_rootMoves.begin(),
 				m_rootMoves.end(),
-				bookMoveScore.move
+				bookMoveScore.m_move
 			) != m_rootMoves.end()
 		)
 		{
 			std::swap(m_rootMoves[0], *std::find(m_rootMoves.begin(),
 											   m_rootMoves.end(),
-											   bookMoveScore.move));
+											   bookMoveScore.m_move));
 			SYNCCOUT << "info"
-					 << " score " << scoreToUSI(bookMoveScore.score)
-					 << " pv " << bookMoveScore.move.ToUSI()
+					 << " score " << scoreToUSI(bookMoveScore.m_score)
+					 << " pv " << bookMoveScore.m_move.ToUSI()
 					 << SYNCENDL;
 
 			goto finalize;

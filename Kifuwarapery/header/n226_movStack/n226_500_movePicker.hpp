@@ -13,6 +13,7 @@ using History = Stats<false>;
 
 class MovePicker {
 public:
+
 	MovePicker(
 		const Position& pos,
 		const Move ttm,
@@ -21,7 +22,9 @@ public:
 		SearchStack* searchStack,
 		const Score beta
 	);
+
 	MovePicker(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq);
+
 	MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt);
 
 	template <bool SPNODE>
@@ -56,19 +59,33 @@ private:
 
 
 	const Position&		m_pos_;
+
 	const History&		m_history_;
+
 	SearchStack*		m_ss_;
+
 	Depth				m_depth_;
+
 	Move				m_ttMove_; // transposition table move
+
 	MoveStack			m_killerMoves_[2];
+
 	Square				m_recaptureSquare_;
+
 	int					m_captureThreshold_; // int で良いのか？
+
 	GenerateMovePhase	m_phase_;
+
 	MoveStack*			m_currMove_;
+
 	MoveStack*			m_lastMove_;
+
 	MoveStack*			m_lastNonCapture_;
+
 	MoveStack*			m_endBadCaptures_;
+
 	// std::array にした方が良さそう。
 	MoveStack			m_legalMoves_[g_MaxLegalMoves];
+
 };
 

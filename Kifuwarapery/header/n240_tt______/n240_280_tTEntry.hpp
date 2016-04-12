@@ -7,6 +7,7 @@
 
 class TTEntry {
 public:
+
 	u32   GetKey() const;
 
 	Depth GetDepth() const;
@@ -28,11 +29,19 @@ public:
 		const Score evalScore);
 
 private:
+
 	u32 m_key32_;
+
 	u16 m_move16_;
+
 	u8 m_bound_;
+
 	u8 m_generation8_;
+
 	s16 m_score16_;
+
 	s16 m_depth16_;
+
 	s16 m_evalScore_;
+
 };

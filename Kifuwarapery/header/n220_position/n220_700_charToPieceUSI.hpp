@@ -48,6 +48,7 @@ const int g_MaxLegalMoves = 593 + 1;
 
 class CharToPieceUSI : public std::map<char, Piece> {
 public:
+
 	CharToPieceUSI() {
 		(*this)['P'] = BPawn;   (*this)['p'] = WPawn;
 		(*this)['L'] = BLance;  (*this)['l'] = WLance;
@@ -58,8 +59,13 @@ public:
 		(*this)['G'] = BGold;   (*this)['g'] = WGold;
 		(*this)['K'] = BKing;   (*this)['k'] = WKing;
 	}
-	Piece value(char c) const      { return this->find(c)->second; }
-	bool isLegalChar(char c) const { return (this->find(c) != this->end()); }
+
+	Piece GetValue(char c) const      { return this->find(c)->second; }
+
+	bool IsLegalChar(char c) const { return (this->find(c) != this->end()); }
+
 };
+
+
 extern const CharToPieceUSI g_charToPieceUSI;
 

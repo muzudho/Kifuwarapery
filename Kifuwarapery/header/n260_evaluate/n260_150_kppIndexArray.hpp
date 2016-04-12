@@ -34,7 +34,7 @@ public:
 
 
 	inline static int KppBlackIndexToWhiteBegin(const int i) {
-		assert(kppIndexIsBlack(i));
+		assert(UtilKppIndex::IsBlack(i));
 		return *std::upper_bound(std::begin(g_arrKPPIndex), std::end(g_arrKPPIndex), i);
 	}
 

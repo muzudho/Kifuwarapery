@@ -1,7 +1,9 @@
 ﻿#pragma once
 
-#include "../n223_move____/n223_105_utilMove.hpp"
+#include <vector>
+#include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
+#include "../n226_movStack/n226_600_splitPoint.hpp"
 
 
 
@@ -15,8 +17,8 @@ public:
 		m_pv_.push_back(Move::GetMoveNone());
 	}
 
-	explicit RootMove(const MoveScore m) : m_score_(m.score), m_prevScore_(-ScoreInfinite) {
-		m_pv_.push_back(m.move);
+	explicit RootMove(const MoveScore m) : m_score_(m.m_score), m_prevScore_(-ScoreInfinite) {
+		m_pv_.push_back(m.m_move);
 		m_pv_.push_back(Move::GetMoveNone());
 	}
 

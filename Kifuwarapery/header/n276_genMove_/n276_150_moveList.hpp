@@ -21,11 +21,11 @@ public:
 
 	bool IsEnd() const { return (m_curr_ == m_last_); }
 
-	Move GetMove() const { return m_curr_->move; }
+	Move GetMove() const { return m_curr_->m_move; }
 	size_t GetSize() const { return static_cast<size_t>(m_last_ - m_moveStackList_); }
 	bool Contains(const Move move) const {
 		for (const MoveStack* it(m_moveStackList_); it != m_last_; ++it) {
-			if (it->move == move) {
+			if (it->m_move == move) {
 				return true;
 			}
 		}

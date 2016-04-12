@@ -70,7 +70,9 @@ public:
 	ConditionVariable m_sleepCond_;
 
 private:
+
 	TimerThread* m_timer_;
+
 	Depth m_minimumSplitDepth_;
 };
 

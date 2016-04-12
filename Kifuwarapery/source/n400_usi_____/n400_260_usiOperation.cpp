@@ -1,6 +1,9 @@
 ﻿#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n223_move____/n223_100_move.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
+#include "../../header/n276_genMove_/n276_100_moveType.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
+#include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 
@@ -150,9 +153,9 @@ void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 
 Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr) {
 	Move move;
-	if (g_charToPieceUSI.isLegalChar(moveStr[0])) {
+	if (g_charToPieceUSI.IsLegalChar(moveStr[0])) {
 		// drop
-		const PieceType ptTo = UtilPiece::ToPieceType(g_charToPieceUSI.value(moveStr[0]));
+		const PieceType ptTo = UtilPiece::ToPieceType(g_charToPieceUSI.GetValue(moveStr[0]));
 		if (moveStr[1] != '*') {
 			return Move::GetMoveNone();
 		}

@@ -24,7 +24,7 @@ MovePicker::MovePicker(
 {
 	assert(Depth0 < depth);
 
-	m_legalMoves_[0].score = INT_MAX; // 番兵のセット
+	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 	m_currMove_ = m_lastMove_ = GetFirstMove();
 	m_captureThreshold_ = 0;
 	m_endBadCaptures_ = m_legalMoves_ + g_MaxLegalMoves - 1;
@@ -36,8 +36,8 @@ MovePicker::MovePicker(
 	else {
 		m_phase_ = MainSearch;
 
-		m_killerMoves_[0].move = searchStack->m_killers[0];
-		m_killerMoves_[1].move = searchStack->m_killers[1];
+		m_killerMoves_[0].m_move = searchStack->m_killers[0];
+		m_killerMoves_[1].m_move = searchStack->m_killers[1];
 
 		if (m_ss_ != nullptr && m_ss_->m_staticEval < beta - g_CapturePawnScore && depth < 3 * OnePly) {
 			m_captureThreshold_ = -g_CapturePawnScore;
@@ -56,7 +56,7 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 	: m_pos_(pos), m_history_(history), m_currMove_(GetFirstMove()), m_lastMove_(GetFirstMove())
 {
 	assert(depth <= Depth0);
-	m_legalMoves_[0].score = INT_MAX; // 番兵のセット
+	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 
 	if (pos.InCheck())
 		m_phase_ = QEvasionSearch;
@@ -78,7 +78,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 {
 	assert(!pos.InCheck());
 
-	m_legalMoves_[0].score = INT_MAX; // 番兵のセット
+	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 	m_phase_ = ProbCut;
 
 	m_captureThreshold_ = pos.GetCapturePieceScore(pt);
@@ -108,20 +108,20 @@ template <> Move MovePicker::GetNextMove<false>() {
 
 		case PH_TacticalMoves0:
 			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
-			if (ms->move != m_ttMove_) {
+			if (ms->m_move != m_ttMove_) {
 				assert(m_captureThreshold_ <= 0);
 
-				if (m_captureThreshold_ <= GetPos().GetSee(ms->move)) {
-					return ms->move;
+				if (m_captureThreshold_ <= GetPos().GetSee(ms->m_move)) {
+					return ms->m_move;
 				}
 
 				// 後ろから SEE の点数が高い順に並ぶようにする。
-				(m_endBadCaptures_--)->move = ms->move;
+				(m_endBadCaptures_--)->m_move = ms->m_move;
 			}
 			break;
 
 		case PH_Killers:
-			move = (m_currMove_++)->move;
+			move = (m_currMove_++)->m_move;
 			if (!move.IsNone()
 				&& move != m_ttMove_
 				&& GetPos().MoveIsPseudoLegal(move, true)
@@ -133,10 +133,10 @@ template <> Move MovePicker::GetNextMove<false>() {
 
 		case PH_NonTacticalMoves0:
 		case PH_NonTacticalMoves1:
-			move = (m_currMove_++)->move;
+			move = (m_currMove_++)->m_move;
 			if (move != m_ttMove_
-				&& move != m_killerMoves_[0].move
-				&& move != m_killerMoves_[1].move
+				&& move != m_killerMoves_[0].m_move
+				&& move != m_killerMoves_[1].m_move
 				)
 			{
 				return move;
@@ -144,10 +144,10 @@ template <> Move MovePicker::GetNextMove<false>() {
 			break;
 
 		case PH_BadCaptures:
-			return (m_currMove_--)->move;
+			return (m_currMove_--)->m_move;
 
 		case PH_Evasions: case PH_QEvasions: case PH_QCaptures0:
-			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->move;
+			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
 			if (move != m_ttMove_) {
 				return move;
 			}
@@ -156,13 +156,13 @@ template <> Move MovePicker::GetNextMove<false>() {
 		case PH_TacticalMoves1:
 			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
 			// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
-			if (ms->move != m_ttMove_ && m_captureThreshold_ < GetPos().GetSee(ms->move)) {
-				return ms->move;
+			if (ms->m_move != m_ttMove_ && m_captureThreshold_ < GetPos().GetSee(ms->m_move)) {
+				return ms->m_move;
 			}
 			break;
 
 		case PH_QCaptures1:
-			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->move;
+			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
 			assert(move.To() == m_recaptureSquare_);
 			return move;
 
@@ -187,15 +187,15 @@ inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 
 void MovePicker::ScoreCaptures() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
-		const Move move = curr->move;
-		curr->score = Position::GetPieceScore(GetPos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
+		const Move move = curr->m_move;
+		curr->m_score = Position::GetPieceScore(GetPos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
 	}
 }
 
 template <bool IsDrop> void MovePicker::ScoreNonCapturesMinusPro() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
-		const Move move = curr->move;
-		curr->score =
+		const Move move = curr->m_move;
+		curr->m_score =
 			GetHistory().GetValue(IsDrop,
 				UtilPiece::FromColorAndPieceType(GetPos().GetTurn(),
 													 (IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
@@ -205,25 +205,25 @@ template <bool IsDrop> void MovePicker::ScoreNonCapturesMinusPro() {
 
 void MovePicker::ScoreEvasions() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
-		const Move move = curr->move;
+		const Move move = curr->m_move;
 		const Score seeScore = GetPos().GetSeeSign(move);
 		if (seeScore < 0) {
-			curr->score = seeScore - History::m_MaxScore;
+			curr->m_score = seeScore - History::m_MaxScore;
 		}
 		else if (move.IsCaptureOrPromotion()) {
-			curr->score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
+			curr->m_score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			if (move.IsPromotion()) {
 				const PieceType pt = UtilPiece::ToPieceType(GetPos().GetPiece(move.From()));
-				curr->score += GetPos().GetPromotePieceScore(pt);
+				curr->m_score += GetPos().GetPromotePieceScore(pt);
 			}
 		}
 		else {
-			curr->score = GetHistory().GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
+			curr->m_score = GetHistory().GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 		}
 	}
 }
 
-struct HasPositiveScore { bool operator () (const MoveStack& ms) { return 0 < ms.score; } };
+struct HasPositiveScore { bool operator () (const MoveStack& ms) { return 0 < ms.m_score; } };
 
 void MovePicker::GoNextPhase() {
 	m_currMove_ = GetFirstMove(); // legalMoves_[0] は番兵

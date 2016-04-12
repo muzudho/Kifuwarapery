@@ -39,7 +39,7 @@ void TranspositionTable::Store(const Key posKey, const Score score, const Bound 
 		depth = Depth0;
 	}
 
-	for (int i = 0; i < g_ClusterSize; ++i, ++tte) {
+	for (int i = 0; i < g_clusterSize; ++i, ++tte) {
 		// 置換表が空か、keyが同じな古い情報が入っているとき
 		if (!tte->GetKey() || tte->GetKey() == posKeyHigh32) {
 			// move が無いなら、とりあえず古い情報でも良いので、他の指し手を保存する。
@@ -70,7 +70,7 @@ TTEntry* TranspositionTable::Probe(const Key posKey) const {
 
 	// firstEntry() で、posKey の下位 (size() - 1) ビットを hash key に使用した。
 	// ここでは posKey の上位 32bit が 保存されている hash key と同じか調べる。
-	for (int i = 0; i < g_ClusterSize; ++i, ++tte) {
+	for (int i = 0; i < g_clusterSize; ++i, ++tte) {
 		if (tte->GetKey() == posKeyHigh32) {
 			return tte;
 		}
