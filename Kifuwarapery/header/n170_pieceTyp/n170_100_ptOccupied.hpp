@@ -14,7 +14,7 @@ public:
 	}
 
 	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		return g_nullBitboard;
+		return Bitboard::CreateAllZeroBB();
 	}
 
 };

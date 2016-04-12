@@ -339,6 +339,7 @@
     <ClCompile Include="source\n170_pieceTyp\n170_240_ptDragon.cpp" />
     <ClCompile Include="source\n170_pieceTyp\n170_250_ptPieceTypeNum.cpp" />
     <ClCompile Include="source\n170_pieceTyp\n170_260_ptGoldHorseDragon.cpp" />
+    <ClCompile Include="source\n170_pieceTyp\n170_500_ptArray.cpp" />
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp" />
     <ClCompile Include="source\n220_position\n220_650_position.cpp" />
     <ClCompile Include="source\n220_position\n220_660_utilAttack.cpp" />

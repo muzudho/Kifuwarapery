@@ -1,14 +1,17 @@
 #include "../../header/n105_color___/n105_500_utilColor.hpp"
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
+#include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n170_pieceTyp/n170_070_ptAbstract.hpp"
 #include "../../header/n170_pieceTyp/n170_500_ptArray.hpp"
 #include "../../header/n220_position/n220_660_utilAttack.hpp"
 #include "../../header/n226_movStack/n226_100_moveStack.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 
 
+//extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
 extern const InFrontMaskBb g_inFrontMaskBb;
 extern SquareRelation g_squareRelation;
 

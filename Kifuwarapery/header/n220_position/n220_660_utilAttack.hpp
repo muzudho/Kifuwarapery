@@ -9,7 +9,6 @@
 class UtilAttack {
 public:
 
-	// position と関係ないのでは？
-	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);
+	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);//inline にするには、positon と utilAttackの依存関係の解消が必要☆（＾ｑ＾）
 
 };

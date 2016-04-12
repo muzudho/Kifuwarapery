@@ -1,14 +1,19 @@
 ﻿#pragma once
 
 #include <stack>
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_150_piece.hpp"
 #include "../n113_piece___/n113_500_hand.hpp"
-#include "../n160_board___/n160_400_printBb.hpp"
+#include "../n119_score___/n119_200_pieceScore.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_102_FileMaskBb.hpp"
 #include "../n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../n160_board___/n160_240_betweenBb.hpp"
+#include "../n160_board___/n160_400_printBb.hpp"
+#include "../n170_pieceTyp/n170_070_ptAbstract.hpp"
 #include "../n170_pieceTyp/n170_170_ptGold.hpp"
-#include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
 
