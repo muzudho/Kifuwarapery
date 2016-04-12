@@ -13,7 +13,7 @@ public:
 		return PieceType::N04_Silver;
 	}
 
-	inline Bitboard GetAttacksFrom(const Color c, const Square sq) const {
+	inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const {
 		return g_nullBitboard;
 	}
 

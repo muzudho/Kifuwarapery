@@ -4,6 +4,7 @@
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_190_pawnAttackBb.hpp"
 #include "n170_070_ptAbstract.hpp"
 
 class PtPawn : PtAbstract {
@@ -13,8 +14,8 @@ public:
 		return PieceType::N01_Pawn;
 	}
 
-	inline Bitboard GetAttacksFrom(const Color c, const Square sq) const {
-		return g_nullBitboard;
+	inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const {
+		return g_pawnAttackBb.GetControllBb(c, sq);;
 	}
 
 };
