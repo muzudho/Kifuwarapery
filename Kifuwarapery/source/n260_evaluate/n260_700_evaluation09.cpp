@@ -2,7 +2,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_400_evalList.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
 #include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluation09.hpp"

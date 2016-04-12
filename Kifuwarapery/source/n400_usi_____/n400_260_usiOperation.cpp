@@ -1,4 +1,4 @@
-﻿#include "../../header/n220_position/n220_600_position.hpp"
+﻿#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_100_move.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n276_genMove_/n276_100_moveType.hpp"

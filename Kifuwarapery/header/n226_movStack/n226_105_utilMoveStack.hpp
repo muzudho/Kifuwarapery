@@ -4,7 +4,7 @@
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n113_piece___/n113_100_pieceType.hpp"
 #include "../n113_piece___/n113_105_utilPieceType.hpp"
-#include "../n220_position/n220_600_position.hpp"
+#include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"
 #include "../n226_movStack/n226_100_moveStack.hpp"

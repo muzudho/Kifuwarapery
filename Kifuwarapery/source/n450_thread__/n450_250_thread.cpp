@@ -1,7 +1,7 @@
 #include <mutex>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n119_score___/n119_090_score.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_100_move.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"

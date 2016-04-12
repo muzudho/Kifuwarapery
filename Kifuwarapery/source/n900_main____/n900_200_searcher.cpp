@@ -2,8 +2,8 @@
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n226_movStack/n226_105_utilMoveStack.hpp"
@@ -194,8 +194,8 @@ namespace {
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
 				(pos.GetAttacksFrom<Lance>(them, m2to, occ) & pos.GetBbOf(Lance, us))
-				| (pos.GetAttacksFrom<Rook  >(m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
-				| (pos.GetAttacksFrom<Bishop>(m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
+				| (pos.GetAttacksFrom<Rook  >(Color::ColorNum, m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
+				| (pos.GetAttacksFrom<Bishop>(Color::ColorNum, m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
 			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).Exists1Bit()) {

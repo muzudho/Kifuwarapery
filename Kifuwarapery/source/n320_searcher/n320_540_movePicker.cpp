@@ -1,5 +1,5 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
-#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_105_utilMove.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"

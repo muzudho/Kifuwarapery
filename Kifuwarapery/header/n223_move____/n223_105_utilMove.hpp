@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../n113_piece___/n113_155_utilPiece.hpp"
-#include "../n220_position/n220_600_position.hpp"
+#include "../n220_position/n220_650_position.hpp"
 #include "n223_100_move.hpp"
 
 

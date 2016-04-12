@@ -4,7 +4,7 @@
 #include "../../header/n113_piece___/n113_100_pieceType.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"	// TODO:これを外すのが難しい。
 
 CheckInfo::CheckInfo(const Position& position) {

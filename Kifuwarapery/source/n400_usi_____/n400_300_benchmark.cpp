@@ -1,8 +1,8 @@
 #include <fstream>
 #include <sstream>
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n220_position/n220_700_charToPieceUSI.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n400_usi_____/n400_300_benchmark.hpp"

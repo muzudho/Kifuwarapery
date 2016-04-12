@@ -5,8 +5,8 @@
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n119_score___/n119_500_EvalSum.hpp"
-#include "../n220_position/n220_600_position.hpp"
-#include "../n220_position/n220_700_charToPieceUSI.hpp"
+#include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_750_charToPieceUSI.hpp"
 
 #include "../n223_move____/n223_500_searchStack.hpp"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../n220_position/n220_700_charToPieceUSI.hpp"
+#include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n223_move____/n223_030_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_105_utilMove.hpp"

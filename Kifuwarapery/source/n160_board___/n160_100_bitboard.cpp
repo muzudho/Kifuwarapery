@@ -1,4 +1,3 @@
-// (^q^)外部に公開されているメソッドあり。
 #include <iostream>	// std::cout
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
@@ -6,6 +5,9 @@
 
 using namespace std;
 
+
+// (^q^)追加☆
+//Bitboard g_nullBitboard;
 
 
 Bitboard::Bitboard(const u64 v0, const u64 v1)

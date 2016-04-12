@@ -423,9 +423,6 @@
     <ClInclude Include="header\n110_square__\n110_400_squareRelation.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n220_position\n220_600_position.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
@@ -449,9 +446,6 @@
     </ClInclude>
     <ClInclude Include="header\n260_evaluate\n260_700_evaluation09.hpp">
       <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n220_position\n220_700_charToPieceUSI.hpp">
-      <Filter>header\n220_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
@@ -479,6 +473,12 @@
     </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_500_hand.hpp">
       <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_750_charToPieceUSI.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_650_position.hpp">
+      <Filter>header\n220_position</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -647,9 +647,6 @@
     <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp">
       <Filter>source\n110_square___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n220_position\n220_600_position.cpp">
-      <Filter>source\n220_position</Filter>
-    </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
@@ -668,9 +665,6 @@
     <ClCompile Include="source\n260_evaluate\n260_700_evaluation09.cpp">
       <Filter>source\n260_evaluate</Filter>
     </ClCompile>
-    <ClCompile Include="source\n220_position\n220_700_charToPieceUSI.cpp">
-      <Filter>source\n220_position</Filter>
-    </ClCompile>
     <ClCompile Include="source\n110_square\n110_150_file.cpp">
       <Filter>source\n110_square___</Filter>
     </ClCompile>
@@ -682,6 +676,12 @@
     </ClCompile>
     <ClCompile Include="source\n113_piece___\n113_500_hand.cpp">
       <Filter>source\n113_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_650_position.cpp">
+      <Filter>source\n220_position</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

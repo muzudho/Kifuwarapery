@@ -3,7 +3,7 @@
 #include <thread>	//std::thread
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n119_score___/n119_090_score.hpp"
-#include "../n220_position/n220_600_position.hpp"
+#include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_100_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"

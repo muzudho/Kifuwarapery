@@ -6,7 +6,7 @@
 #include "../../header/n160_board___/n160_170_goldAndSilverAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
-#include "../../header/n220_position/n220_600_position.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "../../header/n276_genMove_/n276_100_moveType.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
@@ -20,13 +20,8 @@ Key Position::m_zobExclusion_;
 
 
 
-Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const
-{
-	return GetAttacksFrom(pt, c, sq, GetOccupiedBB());
-}
-
-Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) {
-	switch (pt) {
+Bitboard Position::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {
+	switch (pType) {
 	case Occupied:  return Bitboard::CreateAllZeroBB();
 	case Pawn:      return g_pawnAttackBb.GetControllBb(c, sq);
 	case Lance:     return g_lanceAttackBb.GetControllBb(&occupied, c, sq);
@@ -34,10 +29,10 @@ Bitboard Position::GetAttacksFrom(const PieceType pt, const Color c, const Squar
 	case Silver:    return g_silverAttackBb.GetControllBb(c, sq);
 	case Bishop:    return g_bishopAttackBb.BishopAttack(&occupied, sq);
 	case Rook:      return g_rookAttackBb.GetControllBb(&occupied, sq);
-	case Gold:
-	case ProPawn:
-	case ProLance:
-	case ProKnight:
+	case Gold:		// thru
+	case ProPawn:	// thru
+	case ProLance:	// thru
+	case ProKnight:	// thru
 	case ProSilver: return g_goldAttackBb.GetControllBb(c, sq);
 	case King:      return g_kingAttackBb.GetControllBb(sq);
 	case Horse:     return g_horseAttackBb.GetControllBb(&occupied, sq);
@@ -169,7 +164,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 			return false;
 		}
 
-		if (!g_setMaskBb.IsSet(&GetAttacksFrom(ptFrom, us, from), to)) {
+		if (!g_setMaskBb.IsSet( &this->GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
 			return false;
 		}
 
@@ -905,7 +900,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、王手した駒が pin されていない
-						if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
+						if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(Color::ColorNum, to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -941,7 +936,7 @@ silver_drop_end:
 					do {
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
+							if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(Color::ColorNum, to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -971,7 +966,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
+							if (!canKingEscape(*this, US, to, GetAttacksFrom<Dragon>(Color::ColorNum, to, GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq)))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -2250,8 +2245,8 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 			| (GetAttacksFrom<Silver>(White, sq) & this->GetBbOf(Silver))
 			| (GetAttacksFrom<Gold  >(White, sq) & golds))
 			& this->GetBbOf(Black))
-		| (GetAttacksFrom<Bishop>(sq, occupied) & this->GetBbOf(Bishop, Horse))
-		| (GetAttacksFrom<Rook  >(sq, occupied) & this->GetBbOf(Rook, Dragon))
+		| (GetAttacksFrom<Bishop>(Color::ColorNum, sq, occupied) & this->GetBbOf(Bishop, Horse))
+		| (GetAttacksFrom<Rook  >(Color::ColorNum, sq, occupied) & this->GetBbOf(Rook, Dragon))
 		| (GetAttacksFrom<King  >(sq) & this->GetBbOf(King, Horse, Dragon));
 }
 
@@ -2268,8 +2263,8 @@ Bitboard Position::GetAttackersTo(const Color c, const Square sq, const Bitboard
 		| (GetAttacksFrom<Knight>(opposite, sq) & this->GetBbOf(Knight))
 		| (GetAttacksFrom<Silver>(opposite, sq) & this->GetBbOf(Silver))
 		| (GetAttacksFrom<Gold  >(opposite, sq) & GetGoldsBB())
-		| (GetAttacksFrom<Bishop>(sq, occupied) & this->GetBbOf(Bishop, Horse))
-		| (GetAttacksFrom<Rook  >(sq, occupied) & this->GetBbOf(Rook, Dragon))
+		| (GetAttacksFrom<Bishop>(Color::ColorNum, sq, occupied) & this->GetBbOf(Bishop, Horse))
+		| (GetAttacksFrom<Rook  >(Color::ColorNum, sq, occupied) & this->GetBbOf(Rook, Dragon))
 		| (GetAttacksFrom<King  >(sq) & this->GetBbOf(King, Horse, Dragon)))
 		& this->GetBbOf(c);
 }

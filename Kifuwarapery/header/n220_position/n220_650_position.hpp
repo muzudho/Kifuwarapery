@@ -142,34 +142,32 @@ public:
 	bool IsUnDropCheckIsSupported(const Color c, const Square sq) const;
 	// 利きの生成
 
+
+
 	// 任意の occupied に対する利きを生成する。
+	// 角飛馬竜は Color は何でもいいので ColorNum を入れている。
+	// 金のみ、occupiedビットボードは不要☆（＾ｑ＾）
 	template <PieceType PT>
 	static Bitboard GetAttacksFrom(const Color c, const Square sq, const Bitboard& occupied);
 
-	// 任意の occupied に対する利きを生成する。
-	template <PieceType PT>
-	Bitboard GetAttacksFrom(const Square sq, const Bitboard& occupied) const {
-		static_assert(PT == Bishop || PT == Rook || PT == Horse || PT == Dragon, "");
-		// Color は何でも良い。
-		return GetAttacksFrom<PT>(ColorNum, sq, occupied);
-	}
 
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
-		static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
+		static_assert(PT == Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
+		//static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
 		return g_goldAttackBb.GetControllBb(c, sq);
 	}
 
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq) const {
-		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "");
+		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "角飛玉馬竜しか、これを使ってはいけない？（＾ｑ＾）");
 		// Color は何でも良い。
 		return GetAttacksFrom<PT>(ColorNum, sq);
 	}
 
-	Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq) const;
-
 	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);
+
+
 
 	// 次の手番
 	Color GetTurn() const;

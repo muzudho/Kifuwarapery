@@ -4,7 +4,7 @@
 #include "../n113_piece___/n113_155_utilPiece.hpp"
 #include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n160_board___/n160_260_squareDistance.hpp"
-#include "../n220_position/n220_700_charToPieceUSI.hpp"
+#include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n260_evaluate/n260_150_kppIndexArray.hpp"
 #include "../n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
 
