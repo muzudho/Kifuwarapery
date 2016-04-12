@@ -3,6 +3,7 @@
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n220_position/n220_660_utilAttack.hpp"
 #include "../../header/n226_movStack/n226_100_moveStack.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 
@@ -160,7 +161,7 @@ namespace {
 				const Square from = fromBB.PopFirstOneFromI9();
 				// from にある駒の種類を判別
 				const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
-				Bitboard toBB = pos.GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
+				Bitboard toBB = UtilAttack::GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(pt, from, to, pos);
@@ -326,7 +327,7 @@ namespace {
 	FORCE_INLINE MoveStack* generateRecaptureMoves(
 		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
 	) {
-		Bitboard fromBB = pos.GetAttackersTo(us, to);
+		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));

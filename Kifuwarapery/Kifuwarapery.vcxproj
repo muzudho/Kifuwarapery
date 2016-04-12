@@ -206,6 +206,7 @@
     <ClInclude Include="header\n220_position\n220_300_stateInfoMin.hpp" />
     <ClInclude Include="header\n220_position\n220_350_stateInfo.hpp" />
     <ClInclude Include="header\n220_position\n220_650_position.hpp" />
+    <ClInclude Include="header\n220_position\n220_660_utilAttack.hpp" />
     <ClInclude Include="header\n220_position\n220_750_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
     <ClInclude Include="header\n223_move____\n223_030_generateMovePhase.hpp" />
@@ -301,6 +302,7 @@
     <ClCompile Include="source\n160_board___\n160_106_inFrontMaskBb.cpp" />
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp" />
     <ClCompile Include="source\n220_position\n220_650_position.cpp" />
+    <ClCompile Include="source\n220_position\n220_660_utilAttack.cpp" />
     <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_100_move.cpp" />

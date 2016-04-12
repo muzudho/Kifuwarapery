@@ -20,29 +20,6 @@ Key Position::m_zobExclusion_;
 
 
 
-Bitboard Position::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {
-	switch (pType) {
-	case Occupied:  return Bitboard::CreateAllZeroBB();
-	case Pawn:      return g_pawnAttackBb.GetControllBb(c, sq);
-	case Lance:     return g_lanceAttackBb.GetControllBb(&occupied, c, sq);
-	case Knight:    return g_knightAttackBb.GetControllBb(c, sq);
-	case Silver:    return g_silverAttackBb.GetControllBb(c, sq);
-	case Bishop:    return g_bishopAttackBb.BishopAttack(&occupied, sq);
-	case Rook:      return g_rookAttackBb.GetControllBb(&occupied, sq);
-	case Gold:		// thru
-	case ProPawn:	// thru
-	case ProLance:	// thru
-	case ProKnight:	// thru
-	case ProSilver: return g_goldAttackBb.GetControllBb(c, sq);
-	case King:      return g_kingAttackBb.GetControllBb(sq);
-	case Horse:     return g_horseAttackBb.GetControllBb(&occupied, sq);
-	case Dragon:    return g_dragonAttackBb.GetControllBb(&occupied, sq);
-	default:        UNREACHABLE;
-	}
-	UNREACHABLE;
-	return Bitboard::CreateAllOneBB();
-}
-
 Color Position::GetTurn() const
 {
 	return m_turn_;
@@ -164,7 +141,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 			return false;
 		}
 
-		if (!g_setMaskBb.IsSet( &this->GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
+		if (!g_setMaskBb.IsSet( &UtilAttack::GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
 			return false;
 		}
 
@@ -553,18 +530,18 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 	Color turn = UtilColor::OppositeColor(this->GetTurn());
 	Score swapList[32];
 	if (move.IsDrop()) {
-		opponentAttackers = GetAttackersTo(turn, to, occ);
+		opponentAttackers = this->GetAttackersTo(turn, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			return ScoreZero;
 		}
-		attackers = opponentAttackers | GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
 		swapList[0] = ScoreZero;
 		ptCaptured = move.GetPieceTypeDropped();
 	}
 	else {
 		from = move.From();
 		g_setMaskBb.XorBit(&occ, from);
-		opponentAttackers = GetAttackersTo(turn, to, occ);
+		opponentAttackers = this->GetAttackersTo(turn, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			if (move.IsPromotion()) {
 				const PieceType ptFrom = move.GetPieceTypeFrom();
@@ -572,7 +549,7 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 			}
 			return GetCapturePieceScore(move.GetCap());
 		}
-		attackers = opponentAttackers | GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
 		swapList[0] = GetCapturePieceScore(move.GetCap());
 		ptCaptured = move.GetPieceTypeFrom();
 		if (move.IsPromotion()) {
@@ -1670,7 +1647,7 @@ bool Position::IsOK() const {
 		const Color us = GetTurn();
 		const Color them = UtilColor::OppositeColor(us);
 		const Square ksq = GetKingSquare(them);
-		if (GetAttackersTo(us, ksq).Exists1Bit()) {
+		if (this->GetAttackersTo(us, ksq).Exists1Bit()) {
 			goto incorrect_position;
 		}
 	}
@@ -2250,11 +2227,6 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 		| (GetAttacksFrom<King  >(sq) & this->GetBbOf(King, Horse, Dragon));
 }
 
-Bitboard Position::GetAttackersTo(const Color c, const Square sq) const
-{
-	return GetAttackersTo(c, sq, GetOccupiedBB());
-}
-
 // occupied を Position::occupiedBB() 以外のものを使用する場合に使用する。
 Bitboard Position::GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const {
 	const Color opposite = UtilColor::OppositeColor(c);
@@ -2284,17 +2256,17 @@ Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) cons
 
 bool Position::IsAttackersToIsNot0(const Color c, const Square sq) const
 {
-	return GetAttackersTo(c, sq).Exists1Bit();
+	return this->GetAttackersTo(c, sq, this->GetOccupiedBB()).Exists1Bit();
 }
 
 bool Position::IsAttackersToIsNot0(const Color c, const Square sq, const Bitboard & occupied) const
 {
-	return GetAttackersTo(c, sq, occupied).Exists1Bit();
+	return this->GetAttackersTo(c, sq, occupied).Exists1Bit();
 }
 
 bool Position::IsUnDropCheckIsSupported(const Color c, const Square sq) const
 {
-	return GetAttackersTo(c, sq).Exists1Bit();
+	return this->GetAttackersTo(c, sq, this->GetOccupiedBB()).Exists1Bit();
 }
 
 void Position::FindCheckers()

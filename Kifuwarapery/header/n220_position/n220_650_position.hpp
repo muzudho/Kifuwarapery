@@ -127,8 +127,6 @@ public:
 	// attacks
 	Bitboard GetAttackersTo(const Square sq, const Bitboard& occupied) const;
 
-	Bitboard GetAttackersTo(const Color c, const Square sq) const;
-
 	Bitboard GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
 
 	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
@@ -146,11 +144,11 @@ public:
 
 	// 任意の occupied に対する利きを生成する。
 	// 角飛馬竜は Color は何でもいいので ColorNum を入れている。
-	// 金のみ、occupiedビットボードは不要☆（＾ｑ＾）
 	template <PieceType PT>
 	static Bitboard GetAttacksFrom(const Color c, const Square sq, const Bitboard& occupied);
 
 
+	// 金のみ、occupiedビットボードは不要☆（＾ｑ＾）
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
@@ -164,9 +162,6 @@ public:
 		// Color は何でも良い。
 		return GetAttacksFrom<PT>(ColorNum, sq);
 	}
-
-	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);
-
 
 
 	// 次の手番

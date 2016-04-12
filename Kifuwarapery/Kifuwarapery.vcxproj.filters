@@ -480,6 +480,9 @@
     <ClInclude Include="header\n220_position\n220_650_position.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
+    <ClInclude Include="header\n220_position\n220_660_utilAttack.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -681,6 +684,9 @@
       <Filter>source\n220_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_650_position.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_660_utilAttack.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
   </ItemGroup>
