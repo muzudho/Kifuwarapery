@@ -2,7 +2,7 @@
 
 #include <algorithm> //std::swap std::max_element
 #include "../n110_square__/n110_100_square.hpp"
-#include "../n113_piece___/n113_100_pieceType.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_105_utilPieceType.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_100_move.hpp"

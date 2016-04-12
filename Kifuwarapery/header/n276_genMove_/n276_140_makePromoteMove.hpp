@@ -12,7 +12,7 @@
 template <MoveType MT, PromoteMode PM>
 inline Move GetSelectedMakeMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
 	static_assert(PM == Promote || PM == NonPromote, "");
-	assert(!((pt == Gold || pt == King || MT == Drop) && PM == Promote));
+	assert(!((pt == N07_Gold || pt == N08_King || MT == Drop) && PM == Promote));
 	Move move = ((MT == NonCapture || MT == NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMove::MakeCaptureMove(pt, from, to, pos));
 	if (PM == Promote) {
 		move |= UtilMove::GetPromoteFlag();

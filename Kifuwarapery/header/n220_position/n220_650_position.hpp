@@ -116,7 +116,7 @@ public:
 	Score GetMaterialDiff() const;
 
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
-		assert(m_kingSquare_[c] == this->GetBbOf(King, c).GetFirstOneFromI9());
+		assert(m_kingSquare_[c] == this->GetBbOf(N08_King, c).GetFirstOneFromI9());
 		return m_kingSquare_[c];
 	}
 
@@ -151,14 +151,14 @@ public:
 	// 金のみ、occupiedビットボードは不要☆（＾ｑ＾）
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
-		static_assert(PT == Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
+		static_assert(PT == N07_Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
 		//static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
 		return g_goldAttackBb.GetControllBb(c, sq);
 	}
 
 	template <PieceType PT>
 	Bitboard GetAttacksFrom(const Square sq) const {
-		static_assert(PT == Bishop || PT == Rook || PT == King || PT == Horse || PT == Dragon, "角飛玉馬竜しか、これを使ってはいけない？（＾ｑ＾）");
+		static_assert(PT == N05_Bishop || PT == N06_Rook || PT == N08_King || PT == N13_Horse || PT == N14_Dragon, "角飛玉馬竜しか、これを使ってはいけない？（＾ｑ＾）");
 		// Color は何でも良い。
 		return GetAttacksFrom<PT>(ColorNum, sq);
 	}
@@ -311,15 +311,15 @@ private:
 
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
 		pinners &=	(
-						this->GetBbOf(Lance) &
+						this->GetBbOf(N02_Lance) &
 						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? us : them), ksq)
 					) |
 					(
-						this->GetBbOf(Rook, Dragon) &
+						this->GetBbOf(N06_Rook, N14_Dragon) &
 						g_rookAttackBb.GetControllBbToEdge(ksq)
 					) |
 					(
-						this->GetBbOf(Bishop, Horse) &
+						this->GetBbOf(N05_Bishop, N13_Horse) &
 						g_bishopAttackBb.GetControllBbToEdge(ksq)
 					);
 
@@ -362,7 +362,7 @@ private:
 
 	// byTypeBB は敵、味方の駒を区別しない。
 	// byColorBB は駒の種類を区別しない。
-	Bitboard m_byTypeBB_[PieceTypeNum];
+	Bitboard m_byTypeBB_[N15_PieceTypeNum];
 
 	Bitboard m_byColorBB_[ColorNum];
 
@@ -393,7 +393,7 @@ private:
 
 	Searcher* m_searcher_;
 
-	static Key m_zobrist_[PieceTypeNum][SquareNum][ColorNum];
+	static Key m_zobrist_[N15_PieceTypeNum][SquareNum][ColorNum];
 
 	static const Key m_zobTurn_ = 1;
 

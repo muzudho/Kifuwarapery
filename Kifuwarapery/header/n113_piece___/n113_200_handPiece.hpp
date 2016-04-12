@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../n113_piece___/n113_100_pieceType.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 
 
 // 持ち駒を表すときに使用する。
@@ -11,6 +11,6 @@ enum HandPiece {
 OverloadEnumOperators(HandPiece);
 
 
-extern const HandPiece g_pieceTypeToHandPieceTable[PieceTypeNum];
+extern const HandPiece g_pieceTypeToHandPieceTable[N15_PieceTypeNum];
 
 

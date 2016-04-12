@@ -179,7 +179,7 @@ Move MovePicker::GetNextMove<true>() {
 	return this->m_ss_->m_splitPoint->m_pMovePicker->GetNextMove<false>();
 }
 
-const Score LVATable[PieceTypeNum] = {
+const Score LVATable[N15_PieceTypeNum] = {
 	Score(0), Score(1), Score(2), Score(3), Score(4), Score(7), Score(8), Score(6), Score(10000),
 	Score(5), Score(5), Score(5), Score(5), Score(9), Score(10)
 };

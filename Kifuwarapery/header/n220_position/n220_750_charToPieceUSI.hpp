@@ -26,21 +26,21 @@ const std::string g_DefaultStartPositionSFEN = "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/
 
 
 
-template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq, const Bitboard& occupied) { return g_lanceAttackBb.GetControllBb	(&occupied, c, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq, const Bitboard& occupied) { return g_bishopAttackBb.BishopAttack	(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq, const Bitboard& occupied) { return g_rookAttackBb.GetControllBb		(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq, const Bitboard& occupied) { return g_horseAttackBb.GetControllBb		(&occupied, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return g_dragonAttackBb.GetControllBb		(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N02_Lance >(const Color c, const Square sq, const Bitboard& occupied) { return g_lanceAttackBb.GetControllBb	(&occupied, c, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N05_Bishop>(const Color  , const Square sq, const Bitboard& occupied) { return g_bishopAttackBb.BishopAttack	(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N06_Rook  >(const Color  , const Square sq, const Bitboard& occupied) { return g_rookAttackBb.GetControllBb		(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N13_Horse >(const Color  , const Square sq, const Bitboard& occupied) { return g_horseAttackBb.GetControllBb		(&occupied, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N14_Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return g_dragonAttackBb.GetControllBb		(&occupied, sq); }
 
-template <> inline Bitboard Position::GetAttacksFrom<Pawn  >(const Color c, const Square sq) const { return g_pawnAttackBb.GetControllBb		(c, sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Lance >(const Color c, const Square sq) const { return g_lanceAttackBb.GetControllBb	(&GetOccupiedBB(), c, sq); }
-template <> inline Bitboard Position::GetAttacksFrom<Knight>(const Color c, const Square sq) const { return g_knightAttackBb.GetControllBb	(c, sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Silver>(const Color c, const Square sq) const { return g_silverAttackBb.GetControllBb	(c, sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Bishop>(const Color  , const Square sq) const { return g_bishopAttackBb.BishopAttack	(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<Rook  >(const Color  , const Square sq) const { return g_rookAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<King  >(const Color  , const Square sq) const { return g_kingAttackBb.GetControllBb	(   sq					); }
-template <> inline Bitboard Position::GetAttacksFrom<Horse >(const Color  , const Square sq) const { return g_horseAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
-template <> inline Bitboard Position::GetAttacksFrom<Dragon>(const Color  , const Square sq) const { return g_dragonAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<N01_Pawn  >(const Color c, const Square sq) const { return g_pawnAttackBb.GetControllBb		(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<N02_Lance >(const Color c, const Square sq) const { return g_lanceAttackBb.GetControllBb	(&GetOccupiedBB(), c, sq); }
+template <> inline Bitboard Position::GetAttacksFrom<N03_Knight>(const Color c, const Square sq) const { return g_knightAttackBb.GetControllBb	(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<N04_Silver>(const Color c, const Square sq) const { return g_silverAttackBb.GetControllBb	(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<N05_Bishop>(const Color  , const Square sq) const { return g_bishopAttackBb.BishopAttack	(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<N06_Rook  >(const Color  , const Square sq) const { return g_rookAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<N08_King  >(const Color  , const Square sq) const { return g_kingAttackBb.GetControllBb	(   sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<N13_Horse >(const Color  , const Square sq) const { return g_horseAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
+template <> inline Bitboard Position::GetAttacksFrom<N14_Dragon>(const Color  , const Square sq) const { return g_dragonAttackBb.GetControllBb		(&GetOccupiedBB(),   sq	); }
 
 // position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
 // の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。

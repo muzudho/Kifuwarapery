@@ -11,20 +11,20 @@
 class StringToPieceTypeCSA : public std::map<std::string, PieceType> {
 public:
 	StringToPieceTypeCSA() {
-		(*this)["FU"] = Pawn;
-		(*this)["KY"] = Lance;
-		(*this)["KE"] = Knight;
-		(*this)["GI"] = Silver;
-		(*this)["KA"] = Bishop;
-		(*this)["HI"] = Rook;
-		(*this)["KI"] = Gold;
-		(*this)["OU"] = King;
-		(*this)["TO"] = ProPawn;
-		(*this)["NY"] = ProLance;
-		(*this)["NK"] = ProKnight;
-		(*this)["NG"] = ProSilver;
-		(*this)["UM"] = Horse;
-		(*this)["RY"] = Dragon;
+		(*this)["FU"] = N01_Pawn;
+		(*this)["KY"] = N02_Lance;
+		(*this)["KE"] = N03_Knight;
+		(*this)["GI"] = N04_Silver;
+		(*this)["KA"] = N05_Bishop;
+		(*this)["HI"] = N06_Rook;
+		(*this)["KI"] = N07_Gold;
+		(*this)["OU"] = N08_King;
+		(*this)["TO"] = N09_ProPawn;
+		(*this)["NY"] = N10_ProLance;
+		(*this)["NK"] = N11_ProKnight;
+		(*this)["NG"] = N12_ProSilver;
+		(*this)["UM"] = N13_Horse;
+		(*this)["RY"] = N14_Dragon;
 	}
 	PieceType value(const std::string& str) const {
 		return this->find(str)->second;

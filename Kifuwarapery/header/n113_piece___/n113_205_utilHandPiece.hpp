@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../n113_piece___/n113_100_pieceType.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_200_handPiece.hpp"
 
 

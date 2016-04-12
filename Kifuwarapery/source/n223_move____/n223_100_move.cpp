@@ -2,7 +2,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_100_square.hpp"
 #include "../../header/n110_square__/n110_500_utilSquare.hpp"
-#include "../../header/n113_piece___/n113_100_pieceType.hpp"
+#include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
 #include "../../header/n223_move____/n223_100_move.hpp"
 
@@ -10,7 +10,7 @@ namespace {
 	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};
 	inline std::string handPieceToString(const HandPiece hp) { return HandPieceToStringTable[hp]; }
 
-	const std::string PieceTypeToStringTable[PieceTypeNum] = {
+	const std::string PieceTypeToStringTable[N15_PieceTypeNum] = {
 		"", "FU", "KY", "KE", "GI", "KA", "HI", "KI", "OU", "TO", "NY", "NK", "NG", "UM", "RY"
 	};
 	inline std::string pieceTypeToString(const PieceType pt) { return PieceTypeToStringTable[pt]; }
@@ -88,7 +88,7 @@ bool Move::IsCaptureOrPromotion() const
 
 bool Move::IsCaptureOrPawnPromotion() const
 {
-	return IsCapture() || (IsPromotion() && GetPieceTypeFrom() == Pawn);
+	return IsCapture() || (IsPromotion() && GetPieceTypeFrom() == N01_Pawn);
 }
 
 PieceType Move::GetPieceTypeDropped() const

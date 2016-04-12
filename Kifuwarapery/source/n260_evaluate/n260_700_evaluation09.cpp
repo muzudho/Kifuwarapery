@@ -131,7 +131,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 	const Move lastMove = (ss - 1)->m_currentMove;
 	assert(lastMove != Move::GetMoveNull());
 
-	if (lastMove.GetPieceTypeFrom() == King) {
+	if (lastMove.GetPieceTypeFrom() == N08_King) {
 		EvalSum diff = (ss - 1)->m_staticEvalRaw; // ñ{ìñÇÕ diff Ç≈ÇÕÇ»Ç¢ÇÃÇ≈ñºëOÇ™ó«Ç≠Ç»Ç¢ÅB
 		const Square sq_bk = pos.GetKingSquare(Black);
 		const Square sq_wk = pos.GetKingSquare(White);
@@ -244,16 +244,16 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 		nlist += 1;
 		});
 	};
-	func(pos.GetBbOf(Pawn), f_pawn, e_pawn);
-	func(pos.GetBbOf(Lance), f_lance, e_lance);
-	func(pos.GetBbOf(Knight), f_knight, e_knight);
-	func(pos.GetBbOf(Silver), f_silver, e_silver);
+	func(pos.GetBbOf(N01_Pawn), f_pawn, e_pawn);
+	func(pos.GetBbOf(N02_Lance), f_lance, e_lance);
+	func(pos.GetBbOf(N03_Knight), f_knight, e_knight);
+	func(pos.GetBbOf(N04_Silver), f_silver, e_silver);
 	const Bitboard goldsBB = pos.GetGoldsBB();
 	func(goldsBB, f_gold, e_gold);
-	func(pos.GetBbOf(Bishop), f_bishop, e_bishop);
-	func(pos.GetBbOf(Horse), f_horse, e_horse);
-	func(pos.GetBbOf(Rook), f_rook, e_rook);
-	func(pos.GetBbOf(Dragon), f_dragon, e_dragon);
+	func(pos.GetBbOf(N05_Bishop), f_bishop, e_bishop);
+	func(pos.GetBbOf(N13_Horse), f_horse, e_horse);
+	func(pos.GetBbOf(N06_Rook), f_rook, e_rook);
+	func(pos.GetBbOf(N14_Dragon), f_dragon, e_dragon);
 
 	return nlist;
 }

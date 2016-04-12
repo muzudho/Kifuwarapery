@@ -168,7 +168,7 @@ namespace {
 		const PieceType m2ptFrom = second.GetPieceTypeFrom();
 		if (second.IsCaptureOrPromotion()
 			&& ((pos.GetPieceScore(second.GetCap()) <= pos.GetPieceScore(m2ptFrom))
-				|| m2ptFrom == King))
+				|| m2ptFrom == N08_King))
 		{
 			// first により、新たに m2to に当たりになる駒があるなら true
 			assert(!second.IsDrop());
@@ -194,9 +194,9 @@ namespace {
 			const Color them = UtilColor::OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
-				(pos.GetAttacksFrom<Lance>(them, m2to, occ) & pos.GetBbOf(Lance, us))
-				| (pos.GetAttacksFrom<Rook  >(Color::ColorNum, m2to, occ) & pos.GetBbOf(Rook, Dragon, us))
-				| (pos.GetAttacksFrom<Bishop>(Color::ColorNum, m2to, occ) & pos.GetBbOf(Bishop, Horse, us));
+				(pos.GetAttacksFrom<N02_Lance>(them, m2to, occ) & pos.GetBbOf(N02_Lance, us))
+				| (pos.GetAttacksFrom<N06_Rook  >(Color::ColorNum, m2to, occ) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
+				| (pos.GetAttacksFrom<N05_Bishop>(Color::ColorNum, m2to, occ) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
 			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).Exists1Bit()) {
@@ -416,7 +416,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		if (!PVNode
 			&& (!INCHECK || evasionPrunable)
 			&& move != ttMove
-			&& (!move.IsPromotion() || move.GetPieceTypeFrom() != Pawn)
+			&& (!move.IsPromotion() || move.GetPieceTypeFrom() != N01_Pawn)
 			&& pos.GetSeeSign(move) < 0)
 		{
 			continue;
@@ -701,7 +701,7 @@ void Searcher::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
-		if ((GetPos.GetBbOf(Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
+		if ((GetPos.GetBbOf(N01_Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			m_tt.Clear();
 		}
@@ -713,11 +713,11 @@ void Searcher::detectBishopInDanger(const Position& GetPos) {
 	if (bishopInDangerFlag == NotBishopInDanger && GetPos.GetGamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(GetPos.GetTurn());
 		if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
-			&& GetPos.GetBbOf(Silver, them).IsSet(InverseIfWhite(them, H3))
-			&& (GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F2))
-				|| GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, F3))
-				|| GetPos.GetBbOf(King  , them).IsSet(InverseIfWhite(them, E1)))
-			&& GetPos.GetBbOf(Pawn  , them).IsSet(InverseIfWhite(them, G3))
+			&& GetPos.GetBbOf(N04_Silver, them).IsSet(InverseIfWhite(them, H3))
+			&& (GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, F2))
+				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, F3))
+				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, E1)))
+			&& GetPos.GetBbOf(N01_Pawn  , them).IsSet(InverseIfWhite(them, G3))
 			&& GetPos.GetPiece(InverseIfWhite(them, H2)) == Empty
 			&& GetPos.GetPiece(InverseIfWhite(them, G2)) == Empty
 			&& GetPos.GetPiece(InverseIfWhite(them, G1)) == Empty)
@@ -732,13 +732,13 @@ void Searcher::detectBishopInDanger(const Position& GetPos) {
 				 && GetPos.GetPiece(InverseIfWhite(them, D2)) == Empty
 				 && GetPos.GetPiece(InverseIfWhite(them, D1)) == Empty
 				 && GetPos.GetPiece(InverseIfWhite(them, A2)) == Empty
-				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == Silver
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B2))) == Silver)
-				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == Knight
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B1))) == Knight)
-				 && ((UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E2))) == Gold
-					  && UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == King)
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == Gold))
+				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N04_Silver
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B2))) == N04_Silver)
+				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N03_Knight
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B1))) == N03_Knight)
+				 && ((UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E2))) == N07_Gold
+					  && UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == N08_King)
+					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == N07_Gold))
 		{
 			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
@@ -1483,15 +1483,15 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
-	if (!pos.GetBbOf(King, us).AndIsNot0(opponentsField))
+	if (!pos.GetBbOf(N08_King, us).AndIsNot0(opponentsField))
 		return false;
 
 	// 三 宣言側が、大駒5点小駒1点で計算して
 	//     先手の場合28点以上の持点がある。
 	//     後手の場合27点以上の持点がある。
 	//     点数の対象となるのは、宣言側の持駒と敵陣三段目以内に存在する玉を除く宣言側の駒のみである。
-	const Bitboard bigBB = pos.GetBbOf(Rook, Dragon, Bishop, Horse) & opponentsField & pos.GetBbOf(us);
-	const Bitboard smallBB = (pos.GetBbOf(Pawn, Lance, Knight, Silver) | pos.GetGoldsBB()) & opponentsField & pos.GetBbOf(us);
+	const Bitboard bigBB = pos.GetBbOf(N06_Rook, N14_Dragon, N05_Bishop, N13_Horse) & opponentsField & pos.GetBbOf(us);
+	const Bitboard smallBB = (pos.GetBbOf(N01_Pawn, N02_Lance, N03_Knight, N04_Silver) | pos.GetGoldsBB()) & opponentsField & pos.GetBbOf(us);
 	const Hand hand = pos.GetHand(us);
 	const int val = (bigBB.PopCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
 		+ smallBB.PopCount()
