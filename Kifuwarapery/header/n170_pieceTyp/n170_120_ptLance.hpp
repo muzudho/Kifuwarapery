@@ -14,7 +14,7 @@ public:
 		return PieceType::N02_Lance;
 	}
 
-	inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const {
+	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
 		return g_lanceAttackBb.GetControllBb(&occupied, c, sq);;
 	}
 

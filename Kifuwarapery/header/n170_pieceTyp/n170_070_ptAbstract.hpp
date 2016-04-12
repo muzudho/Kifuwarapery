@@ -10,6 +10,6 @@ public:
 
 	virtual inline PieceType GetNumber() const = 0;
 
-	virtual inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const = 0;
+	virtual inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const = 0;
 
 };

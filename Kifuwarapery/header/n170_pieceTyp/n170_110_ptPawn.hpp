@@ -14,7 +14,7 @@ public:
 		return PieceType::N01_Pawn;
 	}
 
-	inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const {
+	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
 		return g_pawnAttackBb.GetControllBb(c, sq);;
 	}
 

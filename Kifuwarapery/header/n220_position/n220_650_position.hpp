@@ -7,6 +7,7 @@
 #include "../n160_board___/n160_102_FileMaskBb.hpp"
 #include "../n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../n160_board___/n160_240_betweenBb.hpp"
+#include "../n170_pieceTyp/n170_170_ptGold.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
@@ -153,7 +154,7 @@ public:
 	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
 		static_assert(PT == N07_Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
 		//static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
-		return g_goldAttackBb.GetControllBb(c, sq);
+		return g_ptGold.GetAttacks2From(g_nullBitboard, c, sq);
 	}
 
 	template <PieceType PT>

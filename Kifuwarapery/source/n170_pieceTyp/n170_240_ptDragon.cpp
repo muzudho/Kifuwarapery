@@ -3,4 +3,4 @@
 #include "../../header/n170_pieceTyp/n170_240_ptDragon.hpp"
 
 
-extern PtDragon g_ptDragon;
+PtDragon g_ptDragon;

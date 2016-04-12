@@ -13,7 +13,7 @@ public:
 		return PieceType::N10_ProLance;
 	}
 
-	inline Bitboard GetAttacksFrom(const Bitboard& occupied, const Color c, const Square sq) const {
+	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
 		return g_nullBitboard;
 	}
 
