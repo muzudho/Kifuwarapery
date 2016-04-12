@@ -18,6 +18,7 @@
 #include "../n160_board___/n160_210_dragonAttackBb.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
 #include "../n160_board___/n160_600_bitboardAll.hpp"
+#include "../n170_pieceTyp/n170_110_ptPawn.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
 #include "../n220_position/n220_650_position.hpp"
 
@@ -32,7 +33,7 @@ template <> inline Bitboard Position::GetAttacksFrom<N06_Rook  >(const Color  , 
 template <> inline Bitboard Position::GetAttacksFrom<N13_Horse >(const Color  , const Square sq, const Bitboard& occupied) { return g_horseAttackBb.GetControllBb		(&occupied, sq); }
 template <> inline Bitboard Position::GetAttacksFrom<N14_Dragon>(const Color  , const Square sq, const Bitboard& occupied) { return g_dragonAttackBb.GetControllBb		(&occupied, sq); }
 
-template <> inline Bitboard Position::GetAttacksFrom<N01_Pawn  >(const Color c, const Square sq) const { return g_pawnAttackBb.GetControllBb		(c, sq					); }
+template <> inline Bitboard Position::GetAttacksFrom<N01_Pawn  >(const Color c, const Square sq) const { return g_pawnAttackBb.GetControllBb(c, sq); }
 template <> inline Bitboard Position::GetAttacksFrom<N02_Lance >(const Color c, const Square sq) const { return g_lanceAttackBb.GetControllBb	(&GetOccupiedBB(), c, sq); }
 template <> inline Bitboard Position::GetAttacksFrom<N03_Knight>(const Color c, const Square sq) const { return g_knightAttackBb.GetControllBb	(c, sq					); }
 template <> inline Bitboard Position::GetAttacksFrom<N04_Silver>(const Color c, const Square sq) const { return g_silverAttackBb.GetControllBb	(c, sq					); }

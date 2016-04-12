@@ -7,7 +7,7 @@ using namespace std;
 
 
 // (^q^)追加☆
-//Bitboard g_nullBitboard;
+Bitboard g_nullBitboard;
 
 
 Bitboard::Bitboard(const u64 v0, const u64 v1)

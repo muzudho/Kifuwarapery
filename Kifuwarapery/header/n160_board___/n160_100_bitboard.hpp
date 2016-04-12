@@ -195,4 +195,4 @@ public://(^q^)
 
 
 // (^q^)追加☆
-//extern Bitboard g_nullBitboard;
+extern Bitboard g_nullBitboard;
