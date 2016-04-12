@@ -3,6 +3,7 @@
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n170_pieceTyp/n170_500_ptArray.hpp"
 #include "../../header/n220_position/n220_660_utilAttack.hpp"
 #include "../../header/n226_movStack/n226_100_moveStack.hpp"
 #include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
@@ -23,7 +24,7 @@ namespace {
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-			Bitboard toBB = pos.GetAttacksFrom<PT>(US, from) & target;
+			Bitboard toBB = g_ptArray[PT]->GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
@@ -222,7 +223,7 @@ namespace {
 			Bitboard fromBB = pos.GetBbOf(N02_Lance, US);
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = pos.GetAttacksFrom<N02_Lance>(US, from) & target;
+				Bitboard toBB = g_ptLance.GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
 				do {
 					if (toBB.Exists1Bit()) {
 						// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
@@ -256,7 +257,7 @@ namespace {
 			Bitboard fromBB = pos.GetBbOf(N03_Knight, US);
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = pos.GetAttacksFrom<N03_Knight>(US, from) & target;
+				Bitboard toBB = g_ptKnight.GetAttacks2From(g_nullBitboard, US, from) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
@@ -281,7 +282,7 @@ namespace {
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
 				const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-				Bitboard toBB = pos.GetAttacksFrom<N04_Silver>(US, from) & target;
+				Bitboard toBB = g_ptSilver.GetAttacks2From(g_nullBitboard, US, from) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
@@ -314,7 +315,7 @@ namespace {
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
 			const Square from = pos.GetKingSquare(US);
-			Bitboard toBB = pos.GetAttacksFrom<N08_King>(US, from) & target;
+			Bitboard toBB = g_ptKing.GetAttacks2From(g_nullBitboard, US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N08_King, from, to, pos);
@@ -447,7 +448,7 @@ namespace {
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
-				bannedKingToBB |= pos.GetAttacksFrom<N14_Dragon>(checkSq);
+				bannedKingToBB |= g_ptDragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
 			}
 			else {
 				bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);

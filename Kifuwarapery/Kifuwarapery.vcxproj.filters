@@ -136,9 +136,6 @@
     <Filter Include="header\n112_pieceTyp">
       <UniqueIdentifier>{9466ea2f-370b-4b47-87f6-abdc998b88e5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n112_pieceTyp">
-      <UniqueIdentifier>{746b9eac-ccd2-4dc8-a218-98d27f778f17}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n170_pieceTyp">
       <UniqueIdentifier>{f5c887bd-48f5-424c-8883-40d3c72f14d4}</UniqueIdentifier>
     </Filter>
@@ -495,9 +492,6 @@
     <ClInclude Include="header\n112_pieceTyp\n112_050_pieceType.hpp">
       <Filter>header\n112_pieceTyp</Filter>
     </ClInclude>
-    <ClInclude Include="header\n112_pieceTyp\n112_500_ptArray.hpp">
-      <Filter>header\n112_pieceTyp</Filter>
-    </ClInclude>
     <ClInclude Include="header\n170_pieceTyp\n170_070_ptAbstract.hpp">
       <Filter>header\n170_pieceTyp</Filter>
     </ClInclude>
@@ -553,6 +547,9 @@
       <Filter>header\n170_pieceTyp</Filter>
     </ClInclude>
     <ClInclude Include="header\n170_pieceTyp\n170_260_ptGoldHorseDragon.hpp">
+      <Filter>header\n170_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n170_pieceTyp\n170_500_ptArray.hpp">
       <Filter>header\n170_pieceTyp</Filter>
     </ClInclude>
   </ItemGroup>
@@ -760,9 +757,6 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_660_utilAttack.cpp">
       <Filter>source\n220_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n112_pieceTyp\n112_500_ptArray.cpp">
-      <Filter>source\n112_pieceTyp</Filter>
     </ClCompile>
     <ClCompile Include="source\n170_pieceTyp\n170_070_ptAbstract.cpp">
       <Filter>source\n170_pieceTyp</Filter>

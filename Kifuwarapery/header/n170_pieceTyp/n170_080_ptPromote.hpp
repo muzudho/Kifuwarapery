@@ -6,7 +6,7 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "n170_070_ptAbstract.hpp"
 
-class PtPromote : PtAbstract {
+class PtPromote : public PtAbstract {
 public:
 
 	inline PieceType GetNumber() const {

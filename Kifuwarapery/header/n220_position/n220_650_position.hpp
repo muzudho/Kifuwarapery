@@ -143,27 +143,6 @@ public:
 
 
 
-	// 任意の occupied に対する利きを生成する。
-	// 角飛馬竜は Color は何でもいいので ColorNum を入れている。
-	template <PieceType PT>
-	static Bitboard GetAttacksFrom(const Color c, const Square sq, const Bitboard& occupied);
-
-
-	// 金のみ、occupiedビットボードは不要☆（＾ｑ＾）
-	template <PieceType PT>
-	Bitboard GetAttacksFrom(const Color c, const Square sq) const {
-		static_assert(PT == N07_Gold, "金しか、これを使ってはいけない？（＾ｑ＾）"); // Gold 以外は template 特殊化する。
-		//static_assert(PT == Gold, ""); // Gold 以外は template 特殊化する。
-		return g_ptGold.GetAttacks2From(g_nullBitboard, c, sq);
-	}
-
-	template <PieceType PT>
-	Bitboard GetAttacksFrom(const Square sq) const {
-		static_assert(PT == N05_Bishop || PT == N06_Rook || PT == N08_King || PT == N13_Horse || PT == N14_Dragon, "角飛玉馬竜しか、これを使ってはいけない？（＾ｑ＾）");
-		// Color は何でも良い。
-		return GetAttacksFrom<PT>(ColorNum, sq);
-	}
-
 
 	// 次の手番
 	Color GetTurn() const;

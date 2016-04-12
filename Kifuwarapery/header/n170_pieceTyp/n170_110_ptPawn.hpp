@@ -7,7 +7,7 @@
 #include "../n160_board___/n160_190_pawnAttackBb.hpp"
 #include "n170_070_ptAbstract.hpp"
 
-class PtPawn : PtAbstract {
+class PtPawn : public PtAbstract {
 public:
 
 	inline PieceType GetNumber() const {

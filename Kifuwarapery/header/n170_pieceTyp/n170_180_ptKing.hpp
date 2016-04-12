@@ -7,7 +7,7 @@
 #include "../n160_board___/n160_160_kingAttackBb.hpp"
 #include "n170_070_ptAbstract.hpp"
 
-class PtKing : PtAbstract {
+class PtKing : public PtAbstract {
 public:
 
 	inline PieceType GetNumber() const {
