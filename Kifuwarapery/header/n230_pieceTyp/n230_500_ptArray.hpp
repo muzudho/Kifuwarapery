@@ -2,7 +2,6 @@
 
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n230_pieceTyp/n230_070_ptAbstract.hpp"
-//*
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n230_pieceTyp/n230_070_ptAbstract.hpp"
 #include "../../header/n230_pieceTyp/n230_100_ptOccupied.hpp"
@@ -21,27 +20,6 @@
 #include "../../header/n230_pieceTyp/n230_230_ptHorse.hpp"
 #include "../../header/n230_pieceTyp/n230_240_ptDragon.hpp"
 #include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
-//*/
 
 
 extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
-
-/*
-PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
-	&g_ptOccupied,
-	&g_ptPawn,
-	&g_ptLance,
-	&g_ptKnight,
-	&g_ptSilver,
-	&g_ptBishop,
-	&g_ptRook,
-	&g_ptGold,
-	&g_ptKing,
-	&g_ptProPawn,
-	&g_ptProLance,
-	&g_ptProKnight,
-	&g_ptProSilver,
-	&g_ptHorse,
-	&g_ptDragon
-};
-//*/

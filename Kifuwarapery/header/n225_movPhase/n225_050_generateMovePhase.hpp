@@ -21,6 +21,7 @@ enum GenerateMovePhase {
 	N13_PH_TacticalMoves1,
 	N14_QRecapture,
 	N15_PH_QCaptures1,
-	N16_PH_Stop
+	N16_PH_Stop,
+	GenerateMovePhaseNum	//(^q^)’Ç‰Á™
 };
 OverloadEnumOperators(GenerateMovePhase); // ++phase_ ‚Ìˆ×B

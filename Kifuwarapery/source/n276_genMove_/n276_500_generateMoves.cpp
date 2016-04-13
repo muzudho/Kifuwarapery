@@ -29,7 +29,6 @@
 #include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
 
 
-//extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
 extern const InFrontMaskBb g_inFrontMaskBb;
 extern SquareRelation g_squareRelation;
 

@@ -103,9 +103,6 @@
     <Filter Include="source\n223_move____">
       <UniqueIdentifier>{04934408-75af-4da9-b9c6-26fbedbbda5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n226_movStack">
-      <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n240_tt______">
       <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
     </Filter>
@@ -148,9 +145,6 @@
     <Filter Include="source\n230_pieceTyp">
       <UniqueIdentifier>{d246aceb-580d-4ee5-8266-44212b5e919e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n226_movStack">
-      <UniqueIdentifier>{ad9fc7a6-680b-4f05-a3bf-3eb6c76fa2f7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n225_movPhase">
       <UniqueIdentifier>{7db253da-80a6-4f9e-bab7-82b9306b8a24}</UniqueIdentifier>
     </Filter>
@@ -162,6 +156,12 @@
     </Filter>
     <Filter Include="source\n227_movPhase">
       <UniqueIdentifier>{70e0543a-956c-42a4-b7d8-b2da092e80aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n228_movStack">
+      <UniqueIdentifier>{ad9fc7a6-680b-4f05-a3bf-3eb6c76fa2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n228_movStack">
+      <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -305,9 +305,6 @@
     </ClInclude>
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
       <Filter>header\n111_colorSq_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n226_movStack\n226_105_utilMoveStack.hpp">
-      <Filter>header\n226_movStack</Filter>
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp">
       <Filter>header\n223_move____</Filter>
@@ -468,12 +465,6 @@
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n226_movStack\n226_500_movePicker.hpp">
-      <Filter>header\n226_movStack</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n226_movStack\n226_600_splitPoint.hpp">
-      <Filter>header\n226_movStack</Filter>
-    </ClInclude>
     <ClInclude Include="header\n300_book____\n300_100_mt64bit.hpp">
       <Filter>header\n300_book____</Filter>
     </ClInclude>
@@ -609,9 +600,6 @@
     <ClInclude Include="header\n227_movPhase\n227_200_qEvasionSearch.hpp">
       <Filter>header\n227_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n227_movPhase\n227_210_phQEvasion.hpp">
-      <Filter>header\n227_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n227_movPhase\n227_220_probCut.hpp">
       <Filter>header\n227_movPhase</Filter>
     </ClInclude>
@@ -630,7 +618,22 @@
     <ClInclude Include="header\n227_movPhase\n227_070_movePhaseAbstract.hpp">
       <Filter>header\n227_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n227_movPhase\n227_500_movePhaseNum.hpp">
+    <ClInclude Include="header\n228_movStack\n228_500_movePicker.hpp">
+      <Filter>header\n228_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n228_movStack\n228_600_splitPoint.hpp">
+      <Filter>header\n228_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_665_utilMoveStack.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_210_phQEvasions.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_270_movePhaseNum.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_500_movePhaseArray.hpp">
       <Filter>header\n227_movPhase</Filter>
     </ClInclude>
   </ItemGroup>
@@ -899,9 +902,6 @@
     <ClCompile Include="source\n230_pieceTyp\n230_260_ptGoldHorseDragon.cpp">
       <Filter>source\n230_pieceTyp</Filter>
     </ClCompile>
-    <ClCompile Include="source\n226_movStack\n226_500_movePicker.cpp">
-      <Filter>source\n226_movStack</Filter>
-    </ClCompile>
     <ClCompile Include="source\n227_movPhase\n227_100_mainSearch.cpp">
       <Filter>source\n227_movPhase</Filter>
     </ClCompile>
@@ -935,9 +935,6 @@
     <ClCompile Include="source\n227_movPhase\n227_200_qEvasionSearch.cpp">
       <Filter>source\n227_movPhase</Filter>
     </ClCompile>
-    <ClCompile Include="source\n227_movPhase\n227_210_phQEvasion.cpp">
-      <Filter>source\n227_movPhase</Filter>
-    </ClCompile>
     <ClCompile Include="source\n227_movPhase\n227_220_probCut.cpp">
       <Filter>source\n227_movPhase</Filter>
     </ClCompile>
@@ -956,7 +953,16 @@
     <ClCompile Include="source\n227_movPhase\n227_070_movePhaseAbstract.cpp">
       <Filter>source\n227_movPhase</Filter>
     </ClCompile>
-    <ClCompile Include="source\n227_movPhase\n227_500_movePhaseNum.cpp">
+    <ClCompile Include="source\n228_movStack\n228_500_movePicker.cpp">
+      <Filter>source\n228_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_210_phQEvasions.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_270_movePhaseNum.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_500_movePhaseArray.cpp">
       <Filter>source\n227_movPhase</Filter>
     </ClCompile>
   </ItemGroup>

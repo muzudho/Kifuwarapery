@@ -8,6 +8,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_utilMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_660_utilMovePos.hpp"
 
 
 class UtilMoveStack {

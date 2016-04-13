@@ -3,7 +3,7 @@
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
-#include "../n226_movStack/n226_105_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMoveStack.hpp"
 
 
 // MoveType の全ての指し手を生成

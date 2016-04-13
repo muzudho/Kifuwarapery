@@ -4,7 +4,7 @@
 #include <sstream>
 #include "../n080_common__/n080_105_time.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
-#include "../n226_movStack/n226_600_splitPoint.hpp"
+#include "../n228_movStack/n228_600_splitPoint.hpp"
 #include "../n270_timeMng_/n270_100_timeManager.hpp"
 #include "../n320_searcher/n320_128_signalsType.hpp"
 #include "../n320_searcher/n320_137_rootMove.hpp"

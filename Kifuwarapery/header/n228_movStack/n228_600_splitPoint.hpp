@@ -8,7 +8,7 @@
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
-#include "../n226_movStack/n226_500_movePicker.hpp"
+#include "../n228_movStack/n228_500_movePicker.hpp"
 
 
 struct Thread;

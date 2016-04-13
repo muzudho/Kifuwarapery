@@ -5,9 +5,29 @@
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
-#include "../../header/n226_movStack/n226_500_movePicker.hpp"
-#include "../../header/n226_movStack/n226_600_splitPoint.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
+
+#include "../../header/n227_movPhase/n227_100_mainSearch.hpp"
+#include "../../header/n227_movPhase/n227_110_phTacticalMoves0.hpp"
+#include "../../header/n227_movPhase/n227_120_phKillers.hpp"
+#include "../../header/n227_movPhase/n227_130_phNonTacticalMoves0.hpp"
+#include "../../header/n227_movPhase/n227_140_phNonTacticalMoves1.hpp"
+#include "../../header/n227_movPhase/n227_150_phBadCaptures.hpp"
+#include "../../header/n227_movPhase/n227_160_evasionSearch.hpp"
+#include "../../header/n227_movPhase/n227_170_phEvasions.hpp"
+#include "../../header/n227_movPhase/n227_180_qSearch.hpp"
+#include "../../header/n227_movPhase/n227_190_phQCaptures0.hpp"
+#include "../../header/n227_movPhase/n227_200_qEvasionSearch.hpp"
+#include "../../header/n227_movPhase/n227_210_phQEvasions.hpp"
+#include "../../header/n227_movPhase/n227_220_probCut.hpp"
+#include "../../header/n227_movPhase/n227_230_phTacticalMoves1.hpp"
+#include "../../header/n227_movPhase/n227_240_qRecapture.hpp"
+#include "../../header/n227_movPhase/n227_250_phQCaptures1.hpp"
+#include "../../header/n227_movPhase/n227_260_phStop.hpp"
+#include "../../header/n227_movPhase/n227_500_movePhaseArray.hpp"
+
+#include "../../header/n228_movStack/n228_500_movePicker.hpp"
+#include "../../header/n228_movStack/n228_600_splitPoint.hpp"
 
 
 using History = Stats<false>;
@@ -93,7 +113,8 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 }
 
 template <> Move MovePicker::GetNextMove<false>() {
-	MoveStack* ms;
+	bool isGotNext;
+	Move resultMove;
 	Move move;
 	do {
 		// lastMove() に達したら次の phase に移る。
@@ -101,84 +122,35 @@ template <> Move MovePicker::GetNextMove<false>() {
 			GoNextPhase();
 		}
 
+		isGotNext = g_movePhaseArray[GetPhase()]->GetNext2Move(resultMove, *this);
+
+		/*
 		switch (GetPhase()) {
-
-		case N00_MainSearch:
-		case N06_EvasionSearch:
-		case N08_QSearch:
-		case N10_QEvasionSearch:
-		case N12_ProbCut:
-			++m_currMove_;
-			return m_ttMove_;
-
-		case N01_PH_TacticalMoves0:
-			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
-			if (ms->m_move != m_ttMove_) {
-				assert(m_captureThreshold_ <= 0);
-
-				if (m_captureThreshold_ <= GetPos().GetSee(ms->m_move)) {
-					return ms->m_move;
-				}
-
-				// 後ろから SEE の点数が高い順に並ぶようにする。
-				(m_endBadCaptures_--)->m_move = ms->m_move;
-			}
-			break;
-
-		case N02_PH_Killers:
-			move = (m_currMove_++)->m_move;
-			if (!move.IsNone()
-				&& move != m_ttMove_
-				&& GetPos().MoveIsPseudoLegal(move, true)
-				&& GetPos().GetPiece(move.To()) == Empty)
-			{
-				return move;
-			}
-			break;
-
-		case N03_PH_NonTacticalMoves0:
-		case N04_PH_NonTacticalMoves1:
-			move = (m_currMove_++)->m_move;
-			if (move != m_ttMove_
-				&& move != m_killerMoves_[0].m_move
-				&& move != m_killerMoves_[1].m_move
-				)
-			{
-				return move;
-			}
-			break;
-
-		case N05_PH_BadCaptures:
-			return (m_currMove_--)->m_move;
-
-		case N07_PH_Evasions:
-		case N11_PH_QEvasions:
-		case N09_PH_QCaptures0:
-			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
-			if (move != m_ttMove_) {
-				return move;
-			}
-			break;
-
-		case N13_PH_TacticalMoves1:
-			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
-			// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
-			if (ms->m_move != m_ttMove_ && m_captureThreshold_ < GetPos().GetSee(ms->m_move)) {
-				return ms->m_move;
-			}
-			break;
-
-		case N15_PH_QCaptures1:
-			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
-			assert(move.To() == m_recaptureSquare_);
-			return move;
-
-		case N16_PH_Stop:
-			return Move::GetMoveNone();
-
+		case N00_MainSearch:			isGotNext = g_mainSearch.GetNext2Move(resultMove, *this); break;
+		case N01_PH_TacticalMoves0:		isGotNext = g_phTacticalMoves0.GetNext2Move(resultMove, *this); break;
+		case N02_PH_Killers:			isGotNext = g_phKillers.GetNext2Move(resultMove, *this); break;
+		case N03_PH_NonTacticalMoves0:	isGotNext = g_phNonTacticalMoves0.GetNext2Move(resultMove, *this); break;
+		case N04_PH_NonTacticalMoves1:	isGotNext = g_phNonTacticalMoves1.GetNext2Move(resultMove, *this); break;
+		case N05_PH_BadCaptures:		isGotNext = g_phBadCaptures.GetNext2Move(resultMove, *this); break;
+		case N06_EvasionSearch:			isGotNext = g_evasionSearch.GetNext2Move(resultMove, *this); break;
+		case N07_PH_Evasions:			isGotNext = g_phEvasions.GetNext2Move(resultMove, *this); break;
+		case N08_QSearch:				isGotNext = g_qSearch.GetNext2Move(resultMove, *this); break;
+		case N09_PH_QCaptures0:			isGotNext = g_phQCaptures0.GetNext2Move(resultMove, *this); break;
+		case N10_QEvasionSearch:		isGotNext = g_qEvasionSearch.GetNext2Move(resultMove, *this); break;
+		case N11_PH_QEvasions:			isGotNext = g_phQEvasions.GetNext2Move(resultMove, *this); break;
+		case N12_ProbCut:				isGotNext = g_probCut.GetNext2Move(resultMove, *this); break;
+		case N13_PH_TacticalMoves1:		isGotNext = g_phTacticalMoves1.GetNext2Move(resultMove, *this); break;
+		case N15_PH_QCaptures1:			isGotNext = g_phQCaptures1.GetNext2Move(resultMove, *this); break;
+		case N16_PH_Stop:				isGotNext = g_phStop.GetNext2Move(resultMove, *this); break;
 		default:
 			UNREACHABLE;
 		}
+		*/
+
+		if (isGotNext) {
+			return resultMove;
+		}
+
 	} while (true);
 }
 

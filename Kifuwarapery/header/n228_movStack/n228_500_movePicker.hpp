@@ -31,6 +31,33 @@ public:
 	template <bool SPNODE>
 	Move GetNextMove();
 
+	inline void IncrementCurMove() {
+		++this->m_currMove_;
+	};
+
+	inline void DecrementCurMove() {
+		--this->m_currMove_;
+	};
+
+	inline Move GetTranspositionTableMove() {
+		return this->m_ttMove_;
+	}
+
+	MoveStack* GetCurrMove() const { return this->m_currMove_; }
+
+	MoveStack* GetLastMove() const { return this->m_lastMove_; }
+
+	const Position& GetPos() const { return this->m_pos_; }
+
+	int GetCaptureThreshold() const { return this->m_captureThreshold_; }
+
+	MoveStack* GetEndBadCaptures() const { return this->m_endBadCaptures_; }
+	void DecrementEndBadCaptures() { this->m_endBadCaptures_--; }
+
+	MoveStack GetKillerMove(int index) const { return this->m_killerMoves_[index]; }
+
+	Square GetRecaptureSquare()const { return this->m_recaptureSquare_; }
+
 private:
 
 	void ScoreCaptures();
@@ -44,15 +71,7 @@ private:
 
 	MoveStack* GetFirstMove() { return &m_legalMoves_[1]; } // [0] は番兵
 
-	MoveStack* GetCurrMove() const { return m_currMove_; }
-
-	MoveStack* GetLastMove() const { return m_lastMove_; }
-
 	MoveStack* GetLastNonCapture() const { return m_lastNonCapture_; }
-
-	MoveStack* GetEndBadCaptures() const { return m_endBadCaptures_; }
-
-	const Position& GetPos() const { return m_pos_; }
 
 	GenerateMovePhase GetPhase() const { return m_phase_; }
 

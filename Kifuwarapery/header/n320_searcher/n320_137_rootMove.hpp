@@ -3,7 +3,7 @@
 #include <vector>
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
-#include "../n226_movStack/n226_600_splitPoint.hpp"
+#include "../n228_movStack/n228_600_splitPoint.hpp"
 
 
 
