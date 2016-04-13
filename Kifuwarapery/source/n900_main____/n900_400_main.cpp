@@ -37,9 +37,9 @@ void Main01::Initialize()
 	// ビットボードとテーブルの初期化☆（＾ｑ＾）
 	//────────────────────────────────────────────────────────────────────────────────
 	{
-		SYNCCOUT << "(^q^)main(1/6): (long time)initTable!" << SYNCENDL;
+		SYNCCOUT << "(^q^)main(1/6): initTable!" << SYNCENDL;//長い時間
 #ifndef SKIP_LONG_TIME_EVAL
-		SYNCCOUT << "(^q^)I1: SKIP! (long time)InitRookAttacks!" << SYNCENDL;
+		SYNCCOUT << "(^q^)I1: InitRookAttacks!" << SYNCENDL;//長い時間
 		g_rookAttackBb.InitRookAttacks();
 #endif
 

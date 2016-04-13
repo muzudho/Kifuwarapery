@@ -113,39 +113,14 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 }
 
 template <> Move MovePicker::GetNextMove<false>() {
-	bool isGotNext;
-	Move resultMove;
-	Move move;
 	do {
 		// lastMove() に達したら次の phase に移る。
 		while (GetCurrMove() == GetLastMove()) {
 			GoNextPhase();
 		}
 
-		isGotNext = g_movePhaseArray[GetPhase()]->GetNext2Move(resultMove, *this);
-
-		/*
-		switch (GetPhase()) {
-		case N00_MainSearch:			isGotNext = g_mainSearch.GetNext2Move(resultMove, *this); break;
-		case N01_PH_TacticalMoves0:		isGotNext = g_phTacticalMoves0.GetNext2Move(resultMove, *this); break;
-		case N02_PH_Killers:			isGotNext = g_phKillers.GetNext2Move(resultMove, *this); break;
-		case N03_PH_NonTacticalMoves0:	isGotNext = g_phNonTacticalMoves0.GetNext2Move(resultMove, *this); break;
-		case N04_PH_NonTacticalMoves1:	isGotNext = g_phNonTacticalMoves1.GetNext2Move(resultMove, *this); break;
-		case N05_PH_BadCaptures:		isGotNext = g_phBadCaptures.GetNext2Move(resultMove, *this); break;
-		case N06_EvasionSearch:			isGotNext = g_evasionSearch.GetNext2Move(resultMove, *this); break;
-		case N07_PH_Evasions:			isGotNext = g_phEvasions.GetNext2Move(resultMove, *this); break;
-		case N08_QSearch:				isGotNext = g_qSearch.GetNext2Move(resultMove, *this); break;
-		case N09_PH_QCaptures0:			isGotNext = g_phQCaptures0.GetNext2Move(resultMove, *this); break;
-		case N10_QEvasionSearch:		isGotNext = g_qEvasionSearch.GetNext2Move(resultMove, *this); break;
-		case N11_PH_QEvasions:			isGotNext = g_phQEvasions.GetNext2Move(resultMove, *this); break;
-		case N12_ProbCut:				isGotNext = g_probCut.GetNext2Move(resultMove, *this); break;
-		case N13_PH_TacticalMoves1:		isGotNext = g_phTacticalMoves1.GetNext2Move(resultMove, *this); break;
-		case N15_PH_QCaptures1:			isGotNext = g_phQCaptures1.GetNext2Move(resultMove, *this); break;
-		case N16_PH_Stop:				isGotNext = g_phStop.GetNext2Move(resultMove, *this); break;
-		default:
-			UNREACHABLE;
-		}
-		*/
+		Move resultMove;
+		bool isGotNext = g_movePhaseArray[GetPhase()]->GetNext2Move(resultMove, *this);
 
 		if (isGotNext) {
 			return resultMove;
@@ -210,7 +185,8 @@ void MovePicker::GoNextPhase() {
 	++m_phase_;
 
 	switch (GetPhase()) {
-	case N01_PH_TacticalMoves0: case N13_PH_TacticalMoves1:
+	case N01_PH_TacticalMoves0:
+	case N13_PH_TacticalMoves1:
 		m_lastMove_ = generateMoves<CapturePlusPro>(GetCurrMove(), GetPos());
 		ScoreCaptures();
 		return;
