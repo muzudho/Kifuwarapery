@@ -3,8 +3,8 @@
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
-#include "../../header/n230_pieceTyp/n230_070_ptAbstract.hpp"
-#include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
 // ’è‹`™iO‚‘Oj

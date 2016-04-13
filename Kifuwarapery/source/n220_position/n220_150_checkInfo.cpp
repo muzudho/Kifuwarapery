@@ -6,14 +6,14 @@
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n230_pieceTyp/n230_110_ptPawn.hpp"
-#include "../../header/n230_pieceTyp/n230_120_ptLance.hpp"
-#include "../../header/n230_pieceTyp/n230_130_ptKnight.hpp"
-#include "../../header/n230_pieceTyp/n230_140_ptSilver.hpp"
-#include "../../header/n230_pieceTyp/n230_150_ptBishop.hpp"
-#include "../../header/n230_pieceTyp/n230_160_ptRook.hpp"
-#include "../../header/n230_pieceTyp/n230_170_ptGold.hpp"
-#include "../../header/n230_pieceTyp/n230_180_ptKing.hpp"
+#include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"
+#include "../../header/n350_pieceTyp/n350_120_ptLance.hpp"
+#include "../../header/n350_pieceTyp/n350_130_ptKnight.hpp"
+#include "../../header/n350_pieceTyp/n350_140_ptSilver.hpp"
+#include "../../header/n350_pieceTyp/n350_150_ptBishop.hpp"
+#include "../../header/n350_pieceTyp/n350_160_ptRook.hpp"
+#include "../../header/n350_pieceTyp/n350_170_ptGold.hpp"
+#include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
 
 CheckInfo::CheckInfo(const Position& position) {
 	const Color them = UtilColor::OppositeColor(position.GetTurn());

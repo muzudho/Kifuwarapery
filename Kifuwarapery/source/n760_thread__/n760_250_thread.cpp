@@ -5,8 +5,8 @@
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"
-#include "../../header/n228_movStack/n228_500_movePicker.hpp"
-#include "../../header/n228_movStack/n228_600_splitPoint.hpp"
+#include "../../header/n440_movStack/n440_500_movePicker.hpp"
+#include "../../header/n640_searcher/n640_440_splitPoint.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 
