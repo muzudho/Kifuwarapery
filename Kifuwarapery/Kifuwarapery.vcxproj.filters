@@ -148,6 +148,21 @@
     <Filter Include="source\n230_pieceTyp">
       <UniqueIdentifier>{d246aceb-580d-4ee5-8266-44212b5e919e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\n226_movStack">
+      <UniqueIdentifier>{ad9fc7a6-680b-4f05-a3bf-3eb6c76fa2f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n225_movPhase">
+      <UniqueIdentifier>{7db253da-80a6-4f9e-bab7-82b9306b8a24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n225_movPhase">
+      <UniqueIdentifier>{9ba7289c-c609-4377-98bb-ea76463ae119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n227_movPhase">
+      <UniqueIdentifier>{daf839cb-47fc-48d5-a157-1b279a85d725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n227_movPhase">
+      <UniqueIdentifier>{70e0543a-956c-42a4-b7d8-b2da092e80aa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -450,9 +465,6 @@
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_030_generateMovePhase.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
@@ -560,6 +572,66 @@
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_670_makePromoteMove.hpp">
       <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp">
+      <Filter>header\n225_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_100_mainSearch.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_110_phTacticalMoves0.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_120_phKillers.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_130_phNonTacticalMoves0.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_140_phNonTacticalMoves1.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_150_phBadCaptures.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_160_evasionSearch.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_170_phEvasions.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_180_qSearch.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_190_phQCaptures0.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_200_qEvasionSearch.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_210_phQEvasion.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_220_probCut.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_230_phTacticalMoves1.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_240_qRecapture.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_250_phQCaptures1.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_260_phStop.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_070_movePhaseAbstract.hpp">
+      <Filter>header\n227_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n227_movPhase\n227_500_movePhaseNum.hpp">
+      <Filter>header\n227_movPhase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -734,9 +806,6 @@
     <ClCompile Include="source\n280_move____\n280_500_mt64bit.cpp">
       <Filter>source\n280_move____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_540_movePicker.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n300_book____\n300_500_book.cpp">
       <Filter>source\n276_genMove_\n300_book____</Filter>
     </ClCompile>
@@ -829,6 +898,66 @@
     </ClCompile>
     <ClCompile Include="source\n230_pieceTyp\n230_260_ptGoldHorseDragon.cpp">
       <Filter>source\n230_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n226_movStack\n226_500_movePicker.cpp">
+      <Filter>source\n226_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_100_mainSearch.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_110_phTacticalMoves0.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_120_phKillers.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_130_phNonTacticalMoves0.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_140_phNonTacticalMoves1.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_150_phBadCaptures.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_160_evasionSearch.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_170_phEvasions.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_180_qSearch.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_190_phQCaptures0.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_200_qEvasionSearch.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_210_phQEvasion.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_220_probCut.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_230_phTacticalMoves1.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_240_qRecapture.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_250_phQCaptures1.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_260_phStop.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_070_movePhaseAbstract.cpp">
+      <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n227_movPhase\n227_500_movePhaseNum.cpp">
+      <Filter>source\n227_movPhase</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

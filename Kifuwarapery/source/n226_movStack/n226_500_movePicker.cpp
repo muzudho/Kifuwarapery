@@ -32,10 +32,10 @@ MovePicker::MovePicker(
 	m_ss_ = searchStack;
 
 	if (pos.InCheck()) {
-		m_phase_ = EvasionSearch;
+		m_phase_ = N06_EvasionSearch;
 	}
 	else {
-		m_phase_ = MainSearch;
+		m_phase_ = N00_MainSearch;
 
 		m_killerMoves_[0].m_move = searchStack->m_killers[0];
 		m_killerMoves_[1].m_move = searchStack->m_killers[1];
@@ -60,12 +60,12 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 
 	if (pos.InCheck())
-		m_phase_ = QEvasionSearch;
+		m_phase_ = N10_QEvasionSearch;
 	// todo: ここで Stockfish は qcheck がある。
 	else if (DepthQRecaptures < depth)
-		m_phase_ = QSearch;
+		m_phase_ = N08_QSearch;
 	else {
-		m_phase_ = QRecapture;
+		m_phase_ = N14_QRecapture;
 		m_recaptureSquare_ = sq;
 		ttm = Move::GetMoveNone();
 	}
@@ -80,7 +80,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 	assert(!pos.InCheck());
 
 	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
-	m_phase_ = ProbCut;
+	m_phase_ = N12_ProbCut;
 
 	m_captureThreshold_ = pos.GetCapturePieceScore(pt);
 	m_ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::GetMoveNone());
@@ -103,11 +103,15 @@ template <> Move MovePicker::GetNextMove<false>() {
 
 		switch (GetPhase()) {
 
-		case MainSearch: case EvasionSearch: case QSearch: case QEvasionSearch: case ProbCut:
+		case N00_MainSearch:
+		case N06_EvasionSearch:
+		case N08_QSearch:
+		case N10_QEvasionSearch:
+		case N12_ProbCut:
 			++m_currMove_;
 			return m_ttMove_;
 
-		case PH_TacticalMoves0:
+		case N01_PH_TacticalMoves0:
 			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
 			if (ms->m_move != m_ttMove_) {
 				assert(m_captureThreshold_ <= 0);
@@ -121,7 +125,7 @@ template <> Move MovePicker::GetNextMove<false>() {
 			}
 			break;
 
-		case PH_Killers:
+		case N02_PH_Killers:
 			move = (m_currMove_++)->m_move;
 			if (!move.IsNone()
 				&& move != m_ttMove_
@@ -132,8 +136,8 @@ template <> Move MovePicker::GetNextMove<false>() {
 			}
 			break;
 
-		case PH_NonTacticalMoves0:
-		case PH_NonTacticalMoves1:
+		case N03_PH_NonTacticalMoves0:
+		case N04_PH_NonTacticalMoves1:
 			move = (m_currMove_++)->m_move;
 			if (move != m_ttMove_
 				&& move != m_killerMoves_[0].m_move
@@ -144,17 +148,19 @@ template <> Move MovePicker::GetNextMove<false>() {
 			}
 			break;
 
-		case PH_BadCaptures:
+		case N05_PH_BadCaptures:
 			return (m_currMove_--)->m_move;
 
-		case PH_Evasions: case PH_QEvasions: case PH_QCaptures0:
+		case N07_PH_Evasions:
+		case N11_PH_QEvasions:
+		case N09_PH_QCaptures0:
 			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
 			if (move != m_ttMove_) {
 				return move;
 			}
 			break;
 
-		case PH_TacticalMoves1:
+		case N13_PH_TacticalMoves1:
 			ms = UtilMoveStack::PickBest(m_currMove_++, GetLastMove());
 			// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
 			if (ms->m_move != m_ttMove_ && m_captureThreshold_ < GetPos().GetSee(ms->m_move)) {
@@ -162,13 +168,14 @@ template <> Move MovePicker::GetNextMove<false>() {
 			}
 			break;
 
-		case PH_QCaptures1:
+		case N15_PH_QCaptures1:
 			move = UtilMoveStack::PickBest(m_currMove_++, GetLastMove())->m_move;
 			assert(move.To() == m_recaptureSquare_);
 			return move;
 
-		case PH_Stop:
+		case N16_PH_Stop:
 			return Move::GetMoveNone();
+
 		default:
 			UNREACHABLE;
 		}
@@ -231,17 +238,17 @@ void MovePicker::GoNextPhase() {
 	++m_phase_;
 
 	switch (GetPhase()) {
-	case PH_TacticalMoves0: case PH_TacticalMoves1:
+	case N01_PH_TacticalMoves0: case N13_PH_TacticalMoves1:
 		m_lastMove_ = generateMoves<CapturePlusPro>(GetCurrMove(), GetPos());
 		ScoreCaptures();
 		return;
 
-	case PH_Killers:
+	case N02_PH_Killers:
 		m_currMove_ = m_killerMoves_;
 		m_lastMove_ = GetCurrMove() + 2;
 		return;
 
-	case PH_NonTacticalMoves0:
+	case N03_PH_NonTacticalMoves0:
 		m_lastMove_ = generateMoves<NonCaptureMinusPro>(GetCurrMove(), GetPos());
 		ScoreNonCapturesMinusPro<false>();
 		m_currMove_ = GetLastMove();
@@ -253,7 +260,7 @@ void MovePicker::GoNextPhase() {
 		UtilMoveStack::InsertionSort<MoveStack*, true>(GetCurrMove(), GetLastMove());
 		return;
 
-	case PH_NonTacticalMoves1:
+	case N04_PH_NonTacticalMoves1:
 		m_currMove_ = GetLastMove();
 		m_lastMove_ = GetLastNonCapture();
 		if (static_cast<Depth>(3 * OnePly) <= m_depth_) {
@@ -261,34 +268,34 @@ void MovePicker::GoNextPhase() {
 		}
 		return;
 
-	case PH_BadCaptures:
+	case N05_PH_BadCaptures:
 		m_currMove_ = m_legalMoves_ + g_MaxLegalMoves - 1;
 		m_lastMove_ = m_endBadCaptures_;
 		return;
 
-	case PH_Evasions:
-	case PH_QEvasions:
+	case N07_PH_Evasions:
+	case N11_PH_QEvasions:
 		m_lastMove_ = generateMoves<Evasion>(GetCurrMove(), GetPos());
 		if (GetCurrMove() + 1 < GetLastMove()) {
 			ScoreEvasions();
 		}
 		return;
 
-	case PH_QCaptures0:
+	case N09_PH_QCaptures0:
 		m_lastMove_ = generateMoves<CapturePlusPro>(GetFirstMove(), GetPos());
 		ScoreCaptures();
 		return;
 
-	case PH_QCaptures1:
+	case N15_PH_QCaptures1:
 		m_lastMove_ = generateMoves<Recapture>(GetFirstMove(), GetPos(), m_recaptureSquare_);
 		ScoreCaptures();
 		return;
 
-	case EvasionSearch: case QSearch: case QEvasionSearch: case QRecapture: case ProbCut:
+	case N06_EvasionSearch: case N08_QSearch: case N10_QEvasionSearch: case N14_QRecapture: case N12_ProbCut:
 		// これが無いと、MainSearch の後に EvasionSearch が始まったりしてしまう。
-		m_phase_ = PH_Stop;
+		m_phase_ = N16_PH_Stop;
 
-	case PH_Stop:
+	case N16_PH_Stop:
 		m_lastMove_ = GetCurrMove() + 1;
 		return;
 

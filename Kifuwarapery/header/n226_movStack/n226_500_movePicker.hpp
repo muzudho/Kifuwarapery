@@ -4,7 +4,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_utilMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
-#include "../n223_move____/n223_030_generateMovePhase.hpp"
+#include "../n225_movPhase/n225_050_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
 
