@@ -8,12 +8,12 @@
 
 class UtilAttack {
 public:
-	//inline にするには、positon と utilAttackの依存関係の解消が必要☆（＾ｑ＾）
+	// TODO: inline にするには、positon と utilAttackの依存関係の解消が必要☆？（＾ｑ＾）
 	//static
 	//inline
-	Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied) const;
+	static Bitboard GetAttacksFrom(const PieceType pt, const Color c, const Square sq, const Bitboard& occupied);//const
 
 };
 
 
-extern UtilAttack g_utilAttack;
+//extern UtilAttack g_utilAttack;

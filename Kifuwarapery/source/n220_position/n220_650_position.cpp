@@ -159,7 +159,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 			return false;
 		}
 
-		if (!g_setMaskBb.IsSet( &g_utilAttack.GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
+		if (!g_setMaskBb.IsSet( &UtilAttack::GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
 			return false;
 		}
 

@@ -8,10 +8,10 @@
 
 
 // 定義☆（＾ｑ＾）
-UtilAttack g_utilAttack;
+//UtilAttack g_utilAttack;
 
 
-Bitboard UtilAttack::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) const {
+Bitboard UtilAttack::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {//const
 	// FIXME: 配列の範囲チェックをしてないぜ☆（＾ｑ＾）
 	return g_ptArray[pType]->GetAttacks2From(occupied, c, sq);
 }

@@ -183,7 +183,7 @@ namespace {
 				const Square from = fromBB.PopFirstOneFromI9();
 				// from にある駒の種類を判別
 				const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
-				Bitboard toBB = g_utilAttack.GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
+				Bitboard toBB = UtilAttack::GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(pt, from, to, pos);

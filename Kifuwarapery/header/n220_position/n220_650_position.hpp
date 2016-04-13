@@ -19,8 +19,6 @@
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
 #include "../n220_position/n220_640_utilAttack.hpp"
-//#include "../n230_pieceTyp/n230_070_ptAbstract.hpp"
-//#include "../n230_pieceTyp/n230_170_ptGold.hpp"
 
 
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;

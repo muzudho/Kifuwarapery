@@ -129,7 +129,7 @@ namespace {
 		const PieceType m1pt = first.GetPieceTypeFromOrDropped();
 		const Color us = pos.GetTurn();
 		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(m2from));
-		const Bitboard m1att = g_utilAttack.GetAttacksFrom(m1pt, us, m1to, occ);
+		const Bitboard m1att = UtilAttack::GetAttacksFrom(m1pt, us, m1to, occ);
 		if (g_setMaskBb.IsSet(&m1att, m2to)) {
 			return true;
 		}
@@ -189,7 +189,7 @@ namespace {
 				occ ^= g_setMaskBb.GetSetMaskBb(m1from);
 			}
 
-			if (g_setMaskBb.IsSet(&g_utilAttack.GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
+			if (g_setMaskBb.IsSet(&UtilAttack::GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
 				return true;
 			}
 
