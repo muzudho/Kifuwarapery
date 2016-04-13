@@ -28,7 +28,12 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
+		movePicker.SetCurrMove(movePicker.GetLastMove());
+		movePicker.SetLastMove(movePicker.GetLastNonCapture());
 
+		if (static_cast<Depth>(3 * OnePly) <= movePicker.GetDepth() ) {
+			std::sort(movePicker.GetCurrMove(), movePicker.GetLastMove(), std::greater<MoveStack>());
+		}
 	}
 
 };

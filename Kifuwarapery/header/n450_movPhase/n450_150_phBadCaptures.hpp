@@ -21,7 +21,8 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-
+		movePicker.SetCurrMove(movePicker.GetLegalMoves() + g_MaxLegalMoves - 1 );
+		movePicker.SetLastMove(movePicker.GetEndBadCaptures());
 	}
 
 };

@@ -20,7 +20,8 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-
+		// これが無いと、MainSearch の後に EvasionSearch が始まったりしてしまう。
+		movePicker.SetPhase(GenerateMovePhase::N16_PH_Stop);
 	}
 
 };

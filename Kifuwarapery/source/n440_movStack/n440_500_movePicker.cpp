@@ -1,11 +1,13 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
+#include "../../header/n165_movStack/n165_500_moveStack.hpp"
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_680_moveList.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
+#include "../../header/n440_movStack/n440_500_movePicker.hpp"
 
 #include "../../header/n450_movPhase/n450_100_mainSearch.hpp"
 #include "../../header/n450_movPhase/n450_110_phTacticalMoves0.hpp"
@@ -25,11 +27,10 @@
 #include "../../header/n450_movPhase/n450_250_phQCaptures1.hpp"
 #include "../../header/n450_movPhase/n450_260_phStop.hpp"
 #include "../../header/n450_movPhase/n450_500_movePhaseArray.hpp"
-#include "../../header/n440_movStack/n440_500_movePicker.hpp"
 
 
 #include "../../header/n640_searcher/n640_440_splitPoint.hpp"	// 持ち合いになっているが .cpp だからいいかだぜ☆（＾ｑ＾）
-//struct SplitPoint;
+
 
 
 using History = Stats<false>;
@@ -149,17 +150,6 @@ void MovePicker::ScoreCaptures() {
 	}
 }
 
-template <bool IsDrop> void MovePicker::ScoreNonCapturesMinusPro() {
-	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
-		const Move move = curr->m_move;
-		curr->m_score =
-			GetHistory().GetValue(IsDrop,
-				UtilPiece::FromColorAndPieceType(GetPos().GetTurn(),
-													 (IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
-							move.To());
-	}
-}
-
 void MovePicker::ScoreEvasions() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->m_move;
@@ -180,15 +170,37 @@ void MovePicker::ScoreEvasions() {
 	}
 }
 
-struct HasPositiveScore { bool operator () (const MoveStack& ms) { return 0 < ms.m_score; } };
-
 void MovePicker::GoNextPhase() {
 	m_currMove_ = GetFirstMove(); // legalMoves_[0] は番兵
 	++m_phase_;
 
+	//g_movePhaseArray[GetPhase()]->GoNext2Phase(*this);
+
+	/*
 	switch (GetPhase()) {
-	case N01_PH_TacticalMoves0:
-	case N13_PH_TacticalMoves1:
+	case N01_PH_TacticalMoves0:		g_phTacticalMoves0.GoNext2Phase(*this); return;
+	case N13_PH_TacticalMoves1:		g_phTacticalMoves0.GoNext2Phase(*this); return;
+	case N02_PH_Killers:			g_phKillers.GoNext2Phase(*this); return;
+	case N03_PH_NonTacticalMoves0:	g_phNonTacticalMoves0.GoNext2Phase(*this); return;
+	case N04_PH_NonTacticalMoves1:	g_phNonTacticalMoves1.GoNext2Phase(*this); return;
+	case N05_PH_BadCaptures:		g_phBadCaptures.GoNext2Phase(*this); return;
+	case N07_PH_Evasions:			g_phEvasions.GoNext2Phase(*this); return;
+	case N11_PH_QEvasions:			g_phQEvasions.GoNext2Phase(*this); return;
+	case N09_PH_QCaptures0:			g_phQCaptures0.GoNext2Phase(*this); return;
+	case N15_PH_QCaptures1:			g_phQCaptures0.GoNext2Phase(*this); return;
+	case N06_EvasionSearch:			g_evasionSearch.GoNext2Phase(*this); return;
+	case N08_QSearch:				g_qSearch.GoNext2Phase(*this); return;
+	case N10_QEvasionSearch:		g_qEvasionSearch.GoNext2Phase(*this); return;
+	case N14_QRecapture:			g_qRecapture.GoNext2Phase(*this); return;
+	case N12_ProbCut:				g_probCut.GoNext2Phase(*this); return;
+	case N16_PH_Stop:				g_phStop.GoNext2Phase(*this); return;
+
+	default: UNREACHABLE;
+	}
+	*/
+
+	switch (GetPhase()) {
+	case N01_PH_TacticalMoves0: case N13_PH_TacticalMoves1:
 		m_lastMove_ = generateMoves<CapturePlusPro>(GetCurrMove(), GetPos());
 		ScoreCaptures();
 		return;
@@ -251,4 +263,5 @@ void MovePicker::GoNextPhase() {
 
 	default: UNREACHABLE;
 	}
+
 }

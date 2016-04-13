@@ -20,7 +20,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-
+		UNREACHABLE;
 	}
 
 };

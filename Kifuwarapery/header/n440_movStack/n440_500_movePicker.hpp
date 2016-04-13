@@ -44,9 +44,14 @@ public:
 	}
 
 	MoveStack* GetCurrMove() const { return this->m_currMove_; }
+	void SetCurrMove(MoveStack* value) { this->m_currMove_ = value; }
 
 	MoveStack* GetLastMove() const { return this->m_lastMove_; }
 	void SetLastMove(MoveStack* value) { this->m_lastMove_ = value; }
+	void SetLastMoveAndLastNonCaputre(MoveStack* value) {
+		this->m_lastMove_ = value;
+		this->m_lastNonCapture_ = value;
+	}
 
 	const Position& GetPos() const { return this->m_pos_; }
 
@@ -55,25 +60,48 @@ public:
 	MoveStack* GetEndBadCaptures() const { return this->m_endBadCaptures_; }
 	void DecrementEndBadCaptures() { this->m_endBadCaptures_--; }
 
+	MoveStack* GetKillerMoves() const { return (MoveStack*)this->m_killerMoves_; }
 	MoveStack GetKillerMove(int index) const { return this->m_killerMoves_[index]; }
 
 	Square GetRecaptureSquare()const { return this->m_recaptureSquare_; }
 
-	// もともと本当はプライベート・メソッド☆
-	void ScoreCaptures();
+	Depth GetDepth() const { return this->m_depth_; }
 
-private:
+	MoveStack* GetLegalMoves() { return this->m_legalMoves_; }
 
+	void SetPhase(GenerateMovePhase value) { this->m_phase_ = value; }
+
+
+public:// もともと本当はプライベート・メソッド☆
+
+	//template <bool IsDrop> void ScoreNonCapturesMinusPro();
 	template <bool IsDrop>
-	void ScoreNonCapturesMinusPro();
+	void MovePicker::ScoreNonCapturesMinusPro() {
+		for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
+			const Move move = curr->m_move;
+			curr->m_score =
+				GetHistory().GetValue(IsDrop,
+					UtilPiece::FromColorAndPieceType(GetPos().GetTurn(),
+						(IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
+					move.To());
+		}
+	}
 
-	void ScoreEvasions();
-
-	void GoNextPhase();
+	void ScoreCaptures();
 
 	MoveStack* GetFirstMove() { return &m_legalMoves_[1]; } // [0] は番兵
 
 	MoveStack* GetLastNonCapture() const { return m_lastNonCapture_; }
+
+	void ScoreEvasions();
+
+private:
+
+
+
+	void GoNextPhase();
+
+
 
 	GenerateMovePhase GetPhase() const { return m_phase_; }
 

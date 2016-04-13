@@ -157,6 +157,9 @@
     <Filter Include="source\n350_pieceTyp">
       <UniqueIdentifier>{d246aceb-580d-4ee5-8266-44212b5e919e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n360_genMove_">
+      <UniqueIdentifier>{a249484b-fd82-4fde-8283-32c301522d21}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -629,6 +632,12 @@
     </ClInclude>
     <ClInclude Include="header\n350_pieceTyp\n350_500_ptArray.hpp">
       <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_genMove_\n360_500_generateMoves.hpp">
+      <Filter>header\n360_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
+      <Filter>header\n440_movStack</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -249,6 +249,8 @@
     <ClInclude Include="header\n350_pieceTyp\n350_250_ptPieceTypeNum.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_260_ptGoldHorseDragon.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_500_ptArray.hpp" />
+    <ClInclude Include="header\n360_genMove_\n360_500_generateMoves.hpp" />
+    <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp" />
     <ClInclude Include="header\n440_movStack\n440_500_movePicker.hpp" />
     <ClInclude Include="header\n450_movPhase\n450_070_movePhaseAbstract.hpp" />
     <ClInclude Include="header\n450_movPhase\n450_100_mainSearch.hpp" />

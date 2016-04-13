@@ -28,7 +28,8 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-
+		movePicker.SetCurrMove(movePicker.GetKillerMoves());//m_currMove_ = m_killerMoves_;
+		movePicker.SetLastMove(movePicker.GetCurrMove() + 2);
 	}
 
 };

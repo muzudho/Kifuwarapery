@@ -19,7 +19,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-
+		movePicker.SetLastMove(movePicker.GetCurrMove() + 1);
 	}
 
 };
