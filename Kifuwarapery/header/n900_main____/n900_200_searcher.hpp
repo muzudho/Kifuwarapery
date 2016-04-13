@@ -5,11 +5,11 @@
 #include "../n080_common__/n080_105_time.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n228_movStack/n228_600_splitPoint.hpp"
-#include "../n270_timeMng_/n270_100_timeManager.hpp"
-#include "../n320_searcher/n320_128_signalsType.hpp"
-#include "../n320_searcher/n320_137_rootMove.hpp"
-#include "../n360_egOption/n360_240_engineOptionsMap.hpp"
-#include "../n450_thread__/n450_400_threadPool.hpp"
+#include "../n560_timeMng_/n560_500_timeManager.hpp"
+#include "../n640_searcher/n640_128_signalsType.hpp"
+#include "../n640_searcher/n640_137_rootMove.hpp"
+#include "../n680_egOption/n680_240_engineOptionsMap.hpp"
+#include "../n760_thread__/n760_400_threadPool.hpp"
 
 using namespace std;
 

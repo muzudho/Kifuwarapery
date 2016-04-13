@@ -46,6 +46,7 @@ public:
 	MoveStack* GetCurrMove() const { return this->m_currMove_; }
 
 	MoveStack* GetLastMove() const { return this->m_lastMove_; }
+	void SetLastMove(MoveStack* value) { this->m_lastMove_ = value; }
 
 	const Position& GetPos() const { return this->m_pos_; }
 
@@ -58,9 +59,10 @@ public:
 
 	Square GetRecaptureSquare()const { return this->m_recaptureSquare_; }
 
-private:
-
+	// もともと本当はプライベート・メソッド☆
 	void ScoreCaptures();
+
+private:
 
 	template <bool IsDrop>
 	void ScoreNonCapturesMinusPro();

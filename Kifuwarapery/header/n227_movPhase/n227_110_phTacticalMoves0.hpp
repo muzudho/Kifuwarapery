@@ -33,6 +33,13 @@ public:
 		return false;
 	};
 
+	void GoNext2Phase(MovePicker& movePicker) {
+		/*TODO:
+		movePicker.SetLastMove( generateMoves<CapturePlusPro>(movePicker.GetCurrMove(), movePicker.GetPos()) );
+		movePicker.ScoreCaptures();
+		*/
+	}
+
 };
 
 

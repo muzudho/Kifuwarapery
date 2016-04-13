@@ -25,9 +25,9 @@
 #include "../../header/n230_pieceTyp/n230_170_ptGold.hpp"
 #include "../../header/n230_pieceTyp/n230_230_ptHorse.hpp"
 #include "../../header/n230_pieceTyp/n230_240_ptDragon.hpp"
-#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
-#include "../../header/n276_genMove_/n276_150_moveList.hpp"
-#include "../../header/n300_book____/n300_100_mt64bit.hpp"
+#include "../../header/n220_position/n220_680_moveList.hpp"
+#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
+#include "../../header/n600_book____/n600_100_mt64bit.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 //*/
 

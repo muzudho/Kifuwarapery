@@ -18,6 +18,10 @@ public:
 		return false;
 	};
 
+	void GoNext2Phase(MovePicker& movePicker) {
+
+	}
+
 };
 
 

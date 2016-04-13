@@ -10,23 +10,6 @@
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n230_pieceTyp/n230_070_ptAbstract.hpp"
-#include "../../header/n230_pieceTyp/n230_100_ptOccupied.hpp"
-#include "../../header/n230_pieceTyp/n230_110_ptPawn.hpp"
-#include "../../header/n230_pieceTyp/n230_120_ptLance.hpp"
-#include "../../header/n230_pieceTyp/n230_130_ptKnight.hpp"
-#include "../../header/n230_pieceTyp/n230_140_ptSilver.hpp"
-#include "../../header/n230_pieceTyp/n230_150_ptBishop.hpp"
-#include "../../header/n230_pieceTyp/n230_160_ptRook.hpp"
-#include "../../header/n230_pieceTyp/n230_170_ptGold.hpp"
-#include "../../header/n230_pieceTyp/n230_180_ptKing.hpp"
-#include "../../header/n230_pieceTyp/n230_190_ptProPawn.hpp"
-#include "../../header/n230_pieceTyp/n230_200_ptProLance.hpp"
-#include "../../header/n230_pieceTyp/n230_210_ptProKnight.hpp"
-#include "../../header/n230_pieceTyp/n230_220_ptProSilver.hpp"
-#include "../../header/n230_pieceTyp/n230_230_ptHorse.hpp"
-#include "../../header/n230_pieceTyp/n230_240_ptDragon.hpp"
-#include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
@@ -351,21 +334,6 @@ namespace {
 		}
 	};
 
-	// pin は省かない。
-	FORCE_INLINE MoveStack* generateRecaptureMoves(
-		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
-	) {
-		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
-		while (fromBB.Exists1Bit()) {
-			const Square from = fromBB.PopFirstOneFromI9();
-			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
-
-			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
-			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
-		}
-		return moveStackList;
-	}
-
 	// 指し手生成 functor
 	// テンプレート引数が複数あり、部分特殊化したかったので、関数ではなく、struct にした。
 	// ALL == true のとき、歩、飛、角の不成、香の2段目の不成、香の3段目の駒を取らない不成も生成する。
@@ -630,10 +598,52 @@ MoveStack* generateMoves(
 		GenerateMoves<MT, Black>()(moveStackList, pos) : GenerateMoves<MT, White>()(moveStackList, pos));
 }
 
+
+
+
+
+#include "../../header/n230_pieceTyp/n230_070_ptAbstract.hpp"
+#include "../../header/n230_pieceTyp/n230_100_ptOccupied.hpp"
+#include "../../header/n230_pieceTyp/n230_110_ptPawn.hpp"
+#include "../../header/n230_pieceTyp/n230_120_ptLance.hpp"
+#include "../../header/n230_pieceTyp/n230_130_ptKnight.hpp"
+#include "../../header/n230_pieceTyp/n230_140_ptSilver.hpp"
+#include "../../header/n230_pieceTyp/n230_150_ptBishop.hpp"
+#include "../../header/n230_pieceTyp/n230_160_ptRook.hpp"
+#include "../../header/n230_pieceTyp/n230_170_ptGold.hpp"
+#include "../../header/n230_pieceTyp/n230_180_ptKing.hpp"
+#include "../../header/n230_pieceTyp/n230_190_ptProPawn.hpp"
+#include "../../header/n230_pieceTyp/n230_200_ptProLance.hpp"
+#include "../../header/n230_pieceTyp/n230_210_ptProKnight.hpp"
+#include "../../header/n230_pieceTyp/n230_220_ptProSilver.hpp"
+#include "../../header/n230_pieceTyp/n230_230_ptHorse.hpp"
+#include "../../header/n230_pieceTyp/n230_240_ptDragon.hpp"
+#include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
+
+
+namespace {
+
+	// pin は省かない。
+	FORCE_INLINE MoveStack* generateRecaptureMoves(
+		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
+		) {
+		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
+		while (fromBB.Exists1Bit()) {
+			const Square from = fromBB.PopFirstOneFromI9();
+			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
+
+			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
+			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+		}
+		return moveStackList;
+	}
+}
+
+
 template <MoveType MT>
 MoveStack* generateMoves(
 	MoveStack* moveStackList, const Position& pos, const Square to
-) {
+	) {
 	return generateRecaptureMoves(moveStackList, pos, to, pos.GetTurn());
 }
 

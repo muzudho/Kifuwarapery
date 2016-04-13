@@ -14,4 +14,6 @@ public:
 
 	virtual bool GetNext2Move( Move& resultMove, MovePicker& movePicker) const = 0;
 
+	virtual void GoNext2Phase(MovePicker& movePicker) = 0;
+
 };

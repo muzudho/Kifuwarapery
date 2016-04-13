@@ -1,7 +1,7 @@
 ﻿#include "../../header/n220_position/n220_400_evalList.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
-#include "../../header/n260_evaluate/n260_700_evaluation09.hpp"
+#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
+#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 
 const Square g_HandPieceToSquareHand[ColorNum][HandPieceNum] = {
 	{B_hand_pawn, B_hand_lance, B_hand_knight, B_hand_silver, B_hand_gold, B_hand_bishop, B_hand_rook},

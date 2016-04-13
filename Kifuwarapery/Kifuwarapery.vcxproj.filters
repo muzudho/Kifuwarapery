@@ -11,18 +11,6 @@
     <Filter Include="header\n160_board___">
       <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n400_usi_____">
-      <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n360_egOption">
-      <UniqueIdentifier>{03559da1-325e-40b3-86e8-cea32f1da61b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n270_timeMng_">
-      <UniqueIdentifier>{d17405d0-df1b-41eb-8c04-83a2914943fa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n260_evaluate">
-      <UniqueIdentifier>{e910259a-f02f-4ce7-87bf-60338c2c47b8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n900_main____">
       <UniqueIdentifier>{dd42631b-4183-489a-a416-f3388e205141}</UniqueIdentifier>
     </Filter>
@@ -45,30 +33,6 @@
     </Filter>
     <Filter Include="source\n900_main____">
       <UniqueIdentifier>{e740a81a-9ed3-4c4b-8cd4-0e85d49331d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n400_usi_____">
-      <UniqueIdentifier>{65666d01-0eb5-44dc-8663-a4c71889e1a1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n360_egOption">
-      <UniqueIdentifier>{33c05404-3b57-44c4-9228-d6d3c8baf0bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n270_timeMng_">
-      <UniqueIdentifier>{21b60163-171b-446b-a8ee-bfb0adf7b02c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n260_evaluate">
-      <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n300_book____">
-      <UniqueIdentifier>{9398154d-0646-456d-8741-9bdd8a09d72c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n320_searcher">
-      <UniqueIdentifier>{0587b6a8-4775-4004-915f-f3f1e17b09a5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n320_searcher">
-      <UniqueIdentifier>{7a2abed9-850d-4f93-b902-3aeb6a75648a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n276_genMove_">
-      <UniqueIdentifier>{2310143e-4ceb-409e-ad1e-b27c7e780302}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n276_genMove_">
       <UniqueIdentifier>{af043c7c-3557-4655-9b9e-62012adf618d}</UniqueIdentifier>
@@ -103,29 +67,11 @@
     <Filter Include="source\n223_move____">
       <UniqueIdentifier>{04934408-75af-4da9-b9c6-26fbedbbda5f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n240_tt______">
-      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n240_tt______">
-      <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n119_score___">
       <UniqueIdentifier>{913bd94e-3d3f-4824-95ee-8c4e1c087715}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n119_score___">
       <UniqueIdentifier>{c514d6ec-9111-441d-840e-179e321ff59e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n500_learn___">
-      <UniqueIdentifier>{9f69d673-c8f5-46e5-8658-a8ad57f34fba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n450_thread__">
-      <UniqueIdentifier>{3fb6f3ee-f426-4382-b2ae-da5d744a66bb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n450_thread__">
-      <UniqueIdentifier>{513737b7-c031-4320-90e5-186023619924}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n276_genMove_\n300_book____">
-      <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n113_piece___">
       <UniqueIdentifier>{fc08e5bd-009b-4f03-b2de-4152da217d37}</UniqueIdentifier>
@@ -163,6 +109,57 @@
     <Filter Include="header\n228_movStack">
       <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n800_learn___">
+      <UniqueIdentifier>{9f69d673-c8f5-46e5-8658-a8ad57f34fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n760_thread__">
+      <UniqueIdentifier>{513737b7-c031-4320-90e5-186023619924}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n760_thread__">
+      <UniqueIdentifier>{3fb6f3ee-f426-4382-b2ae-da5d744a66bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n720_usi_____">
+      <UniqueIdentifier>{65666d01-0eb5-44dc-8663-a4c71889e1a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n720_usi_____">
+      <UniqueIdentifier>{696888f0-a298-4c80-9651-2e3f78e27ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n680_egOption">
+      <UniqueIdentifier>{03559da1-325e-40b3-86e8-cea32f1da61b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n680_egOption">
+      <UniqueIdentifier>{33c05404-3b57-44c4-9228-d6d3c8baf0bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n640_searcher">
+      <UniqueIdentifier>{7a2abed9-850d-4f93-b902-3aeb6a75648a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n640_searcher">
+      <UniqueIdentifier>{0587b6a8-4775-4004-915f-f3f1e17b09a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n600_book____">
+      <UniqueIdentifier>{be0669d1-7afc-43e9-ac66-647de8dbdac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n600_book____">
+      <UniqueIdentifier>{9398154d-0646-456d-8741-9bdd8a09d72c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n560_timeMng_">
+      <UniqueIdentifier>{d17405d0-df1b-41eb-8c04-83a2914943fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n560_timeMng_">
+      <UniqueIdentifier>{21b60163-171b-446b-a8ee-bfb0adf7b02c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n520_evaluate">
+      <UniqueIdentifier>{e910259a-f02f-4ce7-87bf-60338c2c47b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n520_evaluate">
+      <UniqueIdentifier>{e012ac4c-fcb4-4a48-ae01-0b884d10e0b0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n480_tt______">
+      <UniqueIdentifier>{70336d3a-1621-46c7-a5af-df631ac9d67a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n480_tt______">
+      <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -180,27 +177,6 @@
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n400_usi_____\n400_260_usiOperation.hpp">
-      <Filter>header\n400_usi_____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n400_usi_____\n400_300_benchmark.hpp">
-      <Filter>header\n400_usi_____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n360_egOption\n360_230_engineOptionable.hpp">
-      <Filter>header\n360_egOption</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n360_egOption\n360_240_engineOptionsMap.hpp">
-      <Filter>header\n360_egOption</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n360_egOption\n360_245_engineOption.hpp">
-      <Filter>header\n360_egOption</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n360_egOption\n360_300_engineOptionSetup.hpp">
-      <Filter>header\n360_egOption</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n270_timeMng_\n270_100_timeManager.hpp">
-      <Filter>header\n270_timeMng_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
@@ -215,30 +191,6 @@
     </ClInclude>
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp">
       <Filter>header\n900_main____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_128_signalsType.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_131_inaniwaFlag.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_134_bishopInDangerFlag.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_137_rootMove.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n276_genMove_\n276_150_moveList.hpp">
-      <Filter>header\n276_genMove_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_100_evaluateEnum.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_300_KPPBoardIndexStartToPiece.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_490_KppCacheIo.hpp">
-      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_100_repetitionType.hpp">
       <Filter>header\n220_position</Filter>
@@ -311,18 +263,6 @@
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp">
       <Filter>header\n223_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_tt______\n240_280_tTEntry.hpp">
-      <Filter>header\n240_tt______</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_tt______\n240_285_tTCluster.hpp">
-      <Filter>header\n240_tt______</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n240_tt______\n240_300_tt.hpp">
-      <Filter>header\n240_tt______</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_150_kppIndexArray.hpp">
-      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_050_bound.hpp">
       <Filter>header\n119_score___</Filter>
@@ -402,56 +342,17 @@
     <ClInclude Include="header\n160_board___\n160_108_slideBits.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n500_learn___\n500_500_learner.hpp">
-      <Filter>header\n500_learn___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_400_KkKkpKppStorageBase.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_500_kkKkpKppStorage1.hpp">
-      <Filter>header\n260_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_250_thread.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_300_mainThread.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_400_threadPool.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_thread__\n450_350_timerThread.hpp">
-      <Filter>header\n450_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_510_futilityMargins.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_500_reductions.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n320_searcher\n320_520_futilityMoveCounts.hpp">
-      <Filter>header\n320_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n110_square__\n110_400_squareRelation.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n300_book____\n300_500_book.hpp">
-      <Filter>header\n300_book____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n300_book____\n300_400_bookEntry.hpp">
-      <Filter>header\n300_book____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n900_main____\n900_200_searcher.hpp">
       <Filter>header\n900_main____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n260_evaluate\n260_700_evaluation09.hpp">
-      <Filter>header\n260_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
@@ -464,9 +365,6 @@
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
       <Filter>header\n223_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n300_book____\n300_100_mt64bit.hpp">
-      <Filter>header\n300_book____</Filter>
     </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_500_hand.hpp">
       <Filter>header\n113_piece___</Filter>
@@ -636,6 +534,105 @@
     <ClInclude Include="header\n227_movPhase\n227_500_movePhaseArray.hpp">
       <Filter>header\n227_movPhase</Filter>
     </ClInclude>
+    <ClInclude Include="header\n220_position\n220_680_moveList.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n800_learn___\n800_500_learner.hpp">
+      <Filter>header\n800_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_250_thread.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_300_mainThread.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_350_timerThread.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_400_threadPool.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp">
+      <Filter>header\n720_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n720_usi_____\n720_300_benchmark.hpp">
+      <Filter>header\n720_usi_____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n680_egOption\n680_230_engineOptionable.hpp">
+      <Filter>header\n680_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n680_egOption\n680_240_engineOptionsMap.hpp">
+      <Filter>header\n680_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n680_egOption\n680_245_engineOption.hpp">
+      <Filter>header\n680_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n680_egOption\n680_300_engineOptionSetup.hpp">
+      <Filter>header\n680_egOption</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_128_signalsType.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_131_inaniwaFlag.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_134_bishopInDangerFlag.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_137_rootMove.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_500_reductions.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_510_futilityMargins.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_520_futilityMoveCounts.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n600_book____\n600_100_mt64bit.hpp">
+      <Filter>header\n600_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n600_book____\n600_400_bookEntry.hpp">
+      <Filter>header\n600_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n600_book____\n600_500_book.hpp">
+      <Filter>header\n600_book____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n560_timeMng_\n560_500_timeManager.hpp">
+      <Filter>header\n560_timeMng_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_100_evaluateEnum.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_150_kppIndexArray.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_300_KPPBoardIndexStartToPiece.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_400_KkKkpKppStorageBase.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_490_KppCacheIo.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_500_kkKkpKppStorage1.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n520_evaluate\n520_700_evaluation09.hpp">
+      <Filter>header\n520_evaluate</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n480_tt______\n480_280_tTEntry.hpp">
+      <Filter>header\n480_tt______</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n480_tt______\n480_285_tTCluster.hpp">
+      <Filter>header\n480_tt______</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n480_tt______\n480_300_tt.hpp">
+      <Filter>header\n480_tt______</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -643,30 +640,6 @@
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_100_bitboard.cpp">
       <Filter>source\n160_board___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n400_usi_____\n400_300_benchmark.cpp">
-      <Filter>source\n400_usi_____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n400_usi_____\n400_260_usiOperation.cpp">
-      <Filter>source\n400_usi_____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n360_egOption\n360_230_engineOptionable.cpp">
-      <Filter>source\n360_egOption</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n360_egOption\n360_240_engineOptionsMap.cpp">
-      <Filter>source\n360_egOption</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n360_egOption\n360_245_engineOption.cpp">
-      <Filter>source\n360_egOption</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n360_egOption\n360_300_engineOptionSetup.cpp">
-      <Filter>source\n360_egOption</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n270_timeMng_\n270_100_timeManager.cpp">
-      <Filter>source\n270_timeMng_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n260_evaluate\n260_100_evaluate.cpp">
-      <Filter>source\n260_evaluate</Filter>
     </ClCompile>
     <ClCompile Include="source\n080_common__\n080_100_common.cpp">
       <Filter>source\n080_common</Filter>
@@ -689,12 +662,6 @@
     <ClCompile Include="source\n276_genMove_\n276_500_generateMoves.cpp">
       <Filter>source\n276_genMove_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n276_genMove_\n276_150_moveList.cpp">
-      <Filter>source\n276_genMove_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n260_evaluate\n260_490_KppCacheIo.cpp">
-      <Filter>source\n260_evaluate</Filter>
-    </ClCompile>
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
       <Filter>source\n111_colorSq_</Filter>
     </ClCompile>
@@ -703,12 +670,6 @@
     </ClCompile>
     <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp">
       <Filter>source\n223_move____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_tt______\n240_280_tTEntry.cpp">
-      <Filter>source\n240_tt______</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n240_tt______\n240_300_tt.cpp">
-      <Filter>source\n240_tt______</Filter>
     </ClCompile>
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
       <Filter>source\n119_score___</Filter>
@@ -776,30 +737,6 @@
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp">
       <Filter>source\n220_position</Filter>
     </ClCompile>
-    <ClCompile Include="source\n260_evaluate\n260_150_kppIndexArray.cpp">
-      <Filter>source\n260_evaluate</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n450_thread__\n450_250_thread.cpp">
-      <Filter>source\n450_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n450_thread__\n450_400_threadPool.cpp">
-      <Filter>source\n450_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n450_thread__\n450_350_timerThread.cpp">
-      <Filter>source\n450_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n450_thread__\n450_300_mainThread.cpp">
-      <Filter>source\n450_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_510_futilityMargins.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_500_reductions.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n320_searcher\n320_520_futilityMoveCounts.cpp">
-      <Filter>source\n320_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n110_square\n110_400_squareRelation.cpp">
       <Filter>source\n110_square___</Filter>
     </ClCompile>
@@ -809,14 +746,8 @@
     <ClCompile Include="source\n280_move____\n280_500_mt64bit.cpp">
       <Filter>source\n280_move____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n300_book____\n300_500_book.cpp">
-      <Filter>source\n276_genMove_\n300_book____</Filter>
-    </ClCompile>
     <ClCompile Include="source\n900_main____\n900_200_searcher.cpp">
       <Filter>source\n900_main____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n260_evaluate\n260_700_evaluation09.cpp">
-      <Filter>source\n260_evaluate</Filter>
     </ClCompile>
     <ClCompile Include="source\n110_square\n110_150_file.cpp">
       <Filter>source\n110_square___</Filter>
@@ -964,6 +895,72 @@
     </ClCompile>
     <ClCompile Include="source\n227_movPhase\n227_500_movePhaseArray.cpp">
       <Filter>source\n227_movPhase</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n220_position\n220_680_moveList.cpp">
+      <Filter>source\n220_position</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_250_thread.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_300_mainThread.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_350_timerThread.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_400_threadPool.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp">
+      <Filter>source\n720_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n720_usi_____\n720_300_benchmark.cpp">
+      <Filter>source\n720_usi_____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n680_egOption\n680_230_engineOptionable.cpp">
+      <Filter>source\n680_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n680_egOption\n680_240_engineOptionsMap.cpp">
+      <Filter>source\n680_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n680_egOption\n680_245_engineOption.cpp">
+      <Filter>source\n680_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n680_egOption\n680_300_engineOptionSetup.cpp">
+      <Filter>source\n680_egOption</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n640_searcher\n640_500_reductions.cpp">
+      <Filter>source\n640_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n640_searcher\n640_510_futilityMargins.cpp">
+      <Filter>source\n640_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n640_searcher\n640_520_futilityMoveCounts.cpp">
+      <Filter>source\n640_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n600_book____\n600_500_book.cpp">
+      <Filter>source\n600_book____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n560_timeMng_\n560_500_timeManager.cpp">
+      <Filter>source\n560_timeMng_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n520_evaluate\n520_100_evaluate.cpp">
+      <Filter>source\n520_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n520_evaluate\n520_150_kppIndexArray.cpp">
+      <Filter>source\n520_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n520_evaluate\n520_490_KppCacheIo.cpp">
+      <Filter>source\n520_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n520_evaluate\n520_700_evaluation09.cpp">
+      <Filter>source\n520_evaluate</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n480_tt______\n480_280_tTEntry.cpp">
+      <Filter>source\n480_tt______</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n480_tt______\n480_300_tt.cpp">
+      <Filter>source\n480_tt______</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-#include "../../header/n300_book____/n300_100_mt64bit.hpp"
+#include "../../header/n600_book____/n600_100_mt64bit.hpp"
 
 
 //MT64bit g_mt64bit(std::chrono::system_clock::now().time_since_epoch().count());
