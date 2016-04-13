@@ -1,4 +1,5 @@
-﻿#include "../../header/n160_board___/n160_400_printBb.hpp"
+﻿#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 
 

@@ -1,6 +1,6 @@
+#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
-#include "../../header/n276_genMove_/n276_100_moveType.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n320_searcher/n320_137_rootMove.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"

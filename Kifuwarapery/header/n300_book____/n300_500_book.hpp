@@ -1,10 +1,16 @@
 #pragma once
 
 
+#include <string>
+#include <sstream>
 #include <fstream>
 #include "../n080_common__/n080_100_common.hpp"
+#include "../n113_piece___/n113_150_piece.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
 #include "../n300_book____/n300_100_mt64bit.hpp"
+
+
+class Position;
 
 
 class Book : private std::ifstream {

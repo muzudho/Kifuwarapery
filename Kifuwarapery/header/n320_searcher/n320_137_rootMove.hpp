@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <vector>
-#include "../n223_move____/n223_100_move.hpp"
+#include "../n165_movStack/n165_400_move.hpp"
 #include "../n223_move____/n223_300_moveScore.hpp"
 #include "../n226_movStack/n226_600_splitPoint.hpp"
 

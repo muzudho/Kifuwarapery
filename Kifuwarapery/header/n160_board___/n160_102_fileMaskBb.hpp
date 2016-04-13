@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 
+#include "../n110_square__/n110_150_file.hpp"
+#include "../n110_square__/n110_500_utilSquare.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 
 

@@ -1,4 +1,5 @@
-﻿#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
+﻿#include "../../header/n165_movStack/n165_400_move.hpp"
+#include "../../header/n260_evaluate/n260_500_kkKkpKppStorage1.hpp"
 #include "..\..\header\n360_egOption/n360_245_engineOption.hpp"
 #include "..\..\header\n360_egOption\n360_300_engineOptionSetup.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"

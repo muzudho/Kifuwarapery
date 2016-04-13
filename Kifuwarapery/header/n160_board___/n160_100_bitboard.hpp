@@ -1,7 +1,8 @@
 ﻿#pragma once
 
-
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n110_square__/n110_100_square.hpp"
 
 
 class Bitboard {

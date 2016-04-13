@@ -1,14 +1,32 @@
 #include "../../header/n105_color___/n105_500_utilColor.hpp"
+#include "../../header/n110_square__/n110_250_squareDelta.hpp"
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n170_pieceTyp/n170_070_ptAbstract.hpp"
-#include "../../header/n170_pieceTyp/n170_500_ptArray.hpp"
-#include "../../header/n220_position/n220_660_utilAttack.hpp"
-#include "../../header/n226_movStack/n226_100_moveStack.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
+#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
+#include "../../header/n165_movStack/n165_500_moveStack.hpp"
+#include "../../header/n220_position/n220_640_utilAttack.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
+#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
+#include "../../header/n230_pieceTyp/n230_070_ptAbstract.hpp"
+#include "../../header/n230_pieceTyp/n230_100_ptOccupied.hpp"
+#include "../../header/n230_pieceTyp/n230_110_ptPawn.hpp"
+#include "../../header/n230_pieceTyp/n230_120_ptLance.hpp"
+#include "../../header/n230_pieceTyp/n230_130_ptKnight.hpp"
+#include "../../header/n230_pieceTyp/n230_140_ptSilver.hpp"
+#include "../../header/n230_pieceTyp/n230_150_ptBishop.hpp"
+#include "../../header/n230_pieceTyp/n230_160_ptRook.hpp"
+#include "../../header/n230_pieceTyp/n230_170_ptGold.hpp"
+#include "../../header/n230_pieceTyp/n230_180_ptKing.hpp"
+#include "../../header/n230_pieceTyp/n230_190_ptProPawn.hpp"
+#include "../../header/n230_pieceTyp/n230_200_ptProLance.hpp"
+#include "../../header/n230_pieceTyp/n230_210_ptProKnight.hpp"
+#include "../../header/n230_pieceTyp/n230_220_ptProSilver.hpp"
+#include "../../header/n230_pieceTyp/n230_230_ptHorse.hpp"
+#include "../../header/n230_pieceTyp/n230_240_ptDragon.hpp"
+#include "../../header/n230_pieceTyp/n230_500_ptArray.hpp"
 
 
 //extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
@@ -32,12 +50,12 @@ namespace {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
-					(*moveStackList++).m_move = MakePromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)
-						(*moveStackList++).m_move = MakeNonPromoteMove<MT>(PT, from, to, pos);
+						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(PT, from, to, pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
-					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(PT, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(PT, from, to, pos);
 			}
 		}
 		return moveStackList;
@@ -165,17 +183,19 @@ namespace {
 				const Square from = fromBB.PopFirstOneFromI9();
 				// from にある駒の種類を判別
 				const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
-				Bitboard toBB = UtilAttack::GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
+				Bitboard toBB = g_utilAttack.GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
-					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(pt, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(pt, from, to, pos);
 				}
 			}
 			return moveStackList;
 		}
 	};
 	// 歩の場合
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
+
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
@@ -190,17 +210,20 @@ namespace {
 			if (MT != NonCaptureMinusPro) {
 				Bitboard toOn789BB = toBB & TRank789BB;
 				if (toOn789BB.Exists1Bit()) {
+
 					toBB.AndEqualNot(TRank789BB);
+
 					Square to;
+
 					FOREACH_BB(toOn789BB, to, {
 						const Square from = to + TDeltaS;
-					(*moveStackList++).m_move = MakePromoteMove<MT>(N01_Pawn, from, to, pos);
-					if (MT == NonEvasion || ALL) {
-						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-						if (UtilSquare::ToRank(to) != TRank9) {
-							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
+						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N01_Pawn, from, to, pos);
+						if (MT == NonEvasion || ALL) {
+							const Rank TRank9 = (US == Black ? Rank9 : Rank1);
+							if (UtilSquare::ToRank(to) != TRank9) {
+								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
+							}
 						}
-					}
 					});
 				}
 			}
@@ -213,11 +236,13 @@ namespace {
 			Square to;
 			FOREACH_BB(toBB, to, {
 				const Square from = to + TDeltaS;
-			(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
+				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
 			});
+
 			return moveStackList;
-		}
-	};
+		}//演算子のオーバーロードの定義？
+	};//struct
+
 	// 香車の場合
 	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
@@ -233,18 +258,18 @@ namespace {
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
 						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 						if (toCanPromote) {
-							(*moveStackList++).m_move = MakePromoteMove<MT>(N02_Lance, from, to, pos);
+							(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N02_Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
 								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1段目の不成は省く
-									(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
+									(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 							}
 							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
 								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2段目の不成を省く
-									(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
+									(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 							}
 						}
 						else
-							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
+							(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 					}
 					// 駒取り対象は必ず一つ以下なので、loop は不要。最適化で do while が無くなると良い。
 				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.Exists1Bit());
@@ -265,12 +290,12 @@ namespace {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (toCanPromote) {
-						(*moveStackList++).m_move = MakePromoteMove<MT>(N03_Knight, from, to, pos);
+						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N03_Knight, from, to, pos);
 						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
-							(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
+							(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
 					}
 					else
-						(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
+						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -290,8 +315,8 @@ namespace {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (fromCanPromote | toCanPromote)
-						(*moveStackList++).m_move = MakePromoteMove<MT>(N04_Silver, from, to, pos);
-					(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N04_Silver, from, to, pos);
+						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N04_Silver, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N04_Silver, from, to, pos);
 				}
 			}
 			return moveStackList;
@@ -321,7 +346,7 @@ namespace {
 			Bitboard toBB = g_ptKing.GetAttacks2From(g_nullBitboard, US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				(*moveStackList++).m_move = MakeNonPromoteMove<MT>(N08_King, from, to, pos);
+				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N08_King, from, to, pos);
 			}
 			return moveStackList;
 		}
@@ -334,19 +359,10 @@ namespace {
 		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
-			switch (pt) {
-			case Empty: assert(false); break; // 最適化の為のダミー
-			case N01_Pawn: case N02_Lance: case N03_Knight: case N04_Silver: case N05_Bishop: case N06_Rook:
-				(*moveStackList++).m_move = ((UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))) ?
-					MakePromoteMove<Capture>(pt, from, to, pos) :
-					MakeNonPromoteMove<Capture>(pt, from, to, pos));
-				break;
-			case N07_Gold: case N08_King: case N09_ProPawn: case N10_ProLance: case N11_ProKnight: case N12_ProSilver: case N13_Horse: case N14_Dragon:
-				(*moveStackList++).m_move = MakeNonPromoteMove<Capture>(pt, from, to, pos);
-				break;
-			default: UNREACHABLE;
-			}
+			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
+
+			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
+			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
 	}
@@ -497,7 +513,7 @@ namespace {
 				const Square to = bb.PopFirstOneFromI9();
 				// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 				// attackersTo() が重いので、movePicker か search で合法手か調べる。
-				(*moveStackList++).m_move = MakeNonPromoteMove<Capture>(N08_King, ksq, to, pos);
+				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<Capture>(N08_King, ksq, to, pos);
 			}
 
 			// 両王手なら、玉を移動するしか回避方法は無い。

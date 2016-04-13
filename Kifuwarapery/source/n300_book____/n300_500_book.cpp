@@ -1,5 +1,6 @@
 #include <algorithm>	//std::max
 #include <sstream>
+#include "../../header/n220_position/n220_660_utilMovePos.hpp"
 #include "../../header/n300_book____/n300_100_mt64bit.hpp"
 #include "../../header/n300_book____/n300_400_bookEntry.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
@@ -135,10 +136,10 @@ MoveScore Book::GetProbe(const Position& position, const std::string& fName, con
 				const PieceType ptFrom = UtilPiece::ToPieceType(position.GetPiece(from));
 				const bool promo = tmp.IsPromotion();
 				if (promo) {
-					move = UtilMove::MakeCapturePromoteMove(ptFrom, from, to, position);
+					move = UtilMovePos::MakeCapturePromoteMove(ptFrom, from, to, position);
 				}
 				else {
-					move = UtilMove::MakeCaptureMove(ptFrom, from, to, position);
+					move = UtilMovePos::MakeCaptureMove(ptFrom, from, to, position);
 				}
 			}
 			score = entry.m_score;

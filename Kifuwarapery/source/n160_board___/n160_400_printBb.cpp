@@ -1,4 +1,7 @@
 ﻿#include <iostream>
+#include "../../header/n110_square__/n110_150_file.hpp"
+#include "../../header/n110_square__/n110_200_rank.hpp"
+#include "../../header/n110_square__/n110_500_utilSquare.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 

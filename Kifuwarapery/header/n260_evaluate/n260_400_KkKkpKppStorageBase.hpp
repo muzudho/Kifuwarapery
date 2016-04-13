@@ -1,10 +1,14 @@
 ﻿#pragma once
 
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n110_square__/n110_100_square.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_155_utilPiece.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n160_board___/n160_260_squareDistance.hpp"
-#include "../n220_position/n220_660_utilAttack.hpp"
+#include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n260_evaluate/n260_150_kppIndexArray.hpp"
 #include "../n260_evaluate/n260_300_KPPBoardIndexStartToPiece.hpp"
@@ -207,7 +211,7 @@ struct KkKkpKppStorageBase {
 			const Color jcolor = UtilPiece::ToColor(jpiece);
 			const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 			Bitboard jtoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
-				UtilAttack::GetAttacksFrom(jpt, jcolor, jsq, g_setMaskBb.GetSetMaskBb(ksq)));
+				g_utilAttack.GetAttacksFrom(jpt, jcolor, jsq, g_setMaskBb.GetSetMaskBb(ksq)));
 			while (jtoBB.Exists1Bit()) {
 				Square jto = jtoBB.PopFirstOneFromI9();
 				if (kfile == FileE && E1 < jto)
@@ -290,7 +294,7 @@ struct KkKkpKppStorageBase {
 				const Color jicolor = UtilPiece::ToColor(jipiece);
 				const PieceType jipt = UtilPiece::ToPieceType(jipiece);
 				const Bitboard mask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(ijsq);
-				Bitboard jitoBB = mask.NotThisAnd(UtilAttack::GetAttacksFrom(jipt, jicolor, jisq, mask));
+				Bitboard jitoBB = mask.NotThisAnd(g_utilAttack.GetAttacksFrom(jipt, jicolor, jisq, mask));
 				while (jitoBB.Exists1Bit()) {
 					Square jito = jitoBB.PopFirstOneFromI9();
 					Square ijsq_tmp = ijsq;
@@ -386,8 +390,8 @@ struct KkKkpKppStorageBase {
 				const PieceType jpt = UtilPiece::ToPieceType(jpiece);
 				const Bitboard imask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(jsq);
 				const Bitboard jmask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(isq);
-				Bitboard itoBB = imask.NotThisAnd(UtilAttack::GetAttacksFrom(jpt, icolor, isq, imask));
-				Bitboard jtoBB = jmask.NotThisAnd(UtilAttack::GetAttacksFrom(jpt, jcolor, jsq, jmask));
+				Bitboard itoBB = imask.NotThisAnd(g_utilAttack.GetAttacksFrom(jpt, icolor, isq, imask));
+				Bitboard jtoBB = jmask.NotThisAnd(g_utilAttack.GetAttacksFrom(jpt, jcolor, jsq, jmask));
 				while (itoBB.Exists1Bit()) {
 					const Square ito = itoBB.PopFirstOneFromI9();
 					const int itodistance = g_squareDistance.GetSquareDistance(isq, ito);
@@ -540,7 +544,7 @@ struct KkKkpKppStorageBase {
 					const PieceType ipt = UtilPiece::ToPieceType(ipiece);
 					const Color icolor = UtilPiece::ToColor(ipiece);
 					Bitboard itoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
-						UtilAttack::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
+						g_utilAttack.GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 					while (itoBB.Exists1Bit()) {
 						Square ito = itoBB.PopFirstOneFromI9();
 						const int distance = g_squareDistance.GetSquareDistance(isq, ito);
@@ -559,7 +563,7 @@ struct KkKkpKppStorageBase {
 				const Color icolor = UtilPiece::ToColor(ipiece);
 
 				Bitboard itoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
-					UtilAttack::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
+					g_utilAttack.GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 				while (itoBB.Exists1Bit()) {
 					Square ito = itoBB.PopFirstOneFromI9();
 					const int distance = g_squareDistance.GetSquareDistance(isq, ito);
@@ -625,7 +629,7 @@ struct KkKkpKppStorageBase {
 			const Color icolor = UtilPiece::ToColor(ipiece);
 			const PieceType ipt = UtilPiece::ToPieceType(ipiece);
 			const Bitboard mask = g_setMaskBb.GetSetMaskBb(ksq0) | g_setMaskBb.GetSetMaskBb(ksq1);
-			Bitboard itoBB = mask.NotThisAnd(UtilAttack::GetAttacksFrom(ipt, icolor, isq, mask));
+			Bitboard itoBB = mask.NotThisAnd(g_utilAttack.GetAttacksFrom(ipt, icolor, isq, mask));
 			while (itoBB.Exists1Bit()) {
 				Square ito = itoBB.PopFirstOneFromI9();
 				const int distance = g_squareDistance.GetSquareDistance(isq, ito);

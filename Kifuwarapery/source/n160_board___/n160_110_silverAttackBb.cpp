@@ -1,4 +1,5 @@
-﻿#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
+﻿#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
 #include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"	// TODO:これを消すのが難しい
 #include "../../header/n160_board___/n160_140_goldAttackBb.hpp"		// TODO:これを消すのが難しい

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n119_score___/n119_090_score.hpp"
-#include "../n223_move____/n223_100_move.hpp"
+#include "../n165_movStack/n165_400_move.hpp"
 
 
 // 指し手と、評価値。

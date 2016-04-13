@@ -1,8 +1,8 @@
-﻿#include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n223_move____/n223_100_move.hpp"
-#include "../../header/n223_move____/n223_105_utilMove.hpp"
-#include "../../header/n276_genMove_/n276_100_moveType.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
+﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
+#include "../../header/n165_movStack/n165_400_move.hpp"
+#include "../../header/n165_movStack/n165_600_utilMove.hpp"
+#include "../../header/n220_position/n220_650_position.hpp"
+#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n276_genMove_/n276_150_moveList.hpp"
 #include "../../header/n400_usi_____/n400_260_usiOperation.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
@@ -181,13 +181,13 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = MakeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.MakeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return Move::GetMoveNone();
 			}
-			move = MakePromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.MakePromoteMove2<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();
@@ -232,11 +232,11 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = MakeNonPromoteMove<Capture>(ptFrom, from, to, pos);
+			move = g_makePromoteMove.MakeNonPromoteMove<Capture>(ptFrom, from, to, pos);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = MakePromoteMove<Capture>(ptFrom, from, to, pos);
+			move = g_makePromoteMove.MakePromoteMove2<Capture>(ptFrom, from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();

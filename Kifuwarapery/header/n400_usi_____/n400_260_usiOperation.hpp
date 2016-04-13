@@ -1,6 +1,14 @@
 ﻿#pragma once
 
 
+#include <string>
+#include <sstream>
+//#include "../n080_common__/n080_100_common.hpp"
+#include "../n220_position/n220_650_position.hpp"
+
+using namespace std;
+
+
 class UsiOperation {
 public:
 

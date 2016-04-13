@@ -1,9 +1,11 @@
+#include <iostream>
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_660_utilAttack.hpp"
+#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
@@ -11,7 +13,6 @@
 #include "../../header/n226_movStack/n226_500_movePicker.hpp"
 #include "../../header/n260_evaluate/n260_700_evaluation09.hpp"
 #include "../../header/n270_timeMng_/n270_100_timeManager.hpp"
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
 #include "../../header/n300_book____/n300_500_book.hpp"
 #include "../../header/n320_searcher/n320_500_reductions.hpp"
 #include "../../header/n320_searcher/n320_510_futilityMargins.hpp"
@@ -21,6 +22,7 @@
 #include "../../header/n450_thread__/n450_400_threadPool.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
 
+using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
@@ -127,7 +129,7 @@ namespace {
 		const PieceType m1pt = first.GetPieceTypeFromOrDropped();
 		const Color us = pos.GetTurn();
 		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(m2from));
-		const Bitboard m1att = UtilAttack::GetAttacksFrom(m1pt, us, m1to, occ);
+		const Bitboard m1att = g_utilAttack.GetAttacksFrom(m1pt, us, m1to, occ);
 		if (g_setMaskBb.IsSet(&m1att, m2to)) {
 			return true;
 		}
@@ -187,7 +189,7 @@ namespace {
 				occ ^= g_setMaskBb.GetSetMaskBb(m1from);
 			}
 
-			if (g_setMaskBb.IsSet(&UtilAttack::GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
+			if (g_setMaskBb.IsSet(&g_utilAttack.GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
 				return true;
 			}
 

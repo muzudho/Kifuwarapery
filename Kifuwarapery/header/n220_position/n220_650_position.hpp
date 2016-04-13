@@ -1,27 +1,31 @@
 ﻿#pragma once
 
 #include <stack>
+#include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_100_color.hpp"
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_150_piece.hpp"
 #include "../n113_piece___/n113_500_hand.hpp"
+#include "../n119_score___/n119_090_score.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_102_FileMaskBb.hpp"
 #include "../n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../n160_board___/n160_240_betweenBb.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
-#include "../n170_pieceTyp/n170_070_ptAbstract.hpp"
-#include "../n170_pieceTyp/n170_170_ptGold.hpp"
+#include "../n165_movStack/n165_400_move.hpp"
+#include "../n220_position/n220_150_checkInfo.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_400_evalList.hpp"
+#include "../n220_position/n220_640_utilAttack.hpp"
+//#include "../n230_pieceTyp/n230_070_ptAbstract.hpp"
+//#include "../n230_pieceTyp/n230_170_ptGold.hpp"
 
 
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
 
-class Move;
 struct Thread;
 class Searcher;
 

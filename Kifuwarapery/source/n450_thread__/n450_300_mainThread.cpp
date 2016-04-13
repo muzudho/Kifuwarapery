@@ -1,4 +1,4 @@
-#include "../../header/n276_genMove_/n276_140_makePromoteMove.hpp"
+#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n450_thread__/n450_250_thread.hpp"
 #include "../../header/n450_thread__/n450_300_mainThread.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
