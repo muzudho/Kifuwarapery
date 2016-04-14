@@ -14,43 +14,46 @@ class DropMakerHand5 : public DropMakerAbstract {
 public:
 
 	void MakeDropMovesToRank9ExceptNL(
-		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6],
+		const Bitboard& target,
+		const Bitboard TRank9BB,
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6],
 		int noKnightLanceIdx
 	) const {
 		UNREACHABLE;
 	}
 
 	void MakeDropMovesToRank8ExceptN(
-		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6],
+		const Bitboard& target,
+		const Bitboard TRank8BB,
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6],
 		int noKnightIdx
 	) const {
+		Bitboard toBB = target & TRank8BB;
 		Square to;
-		FOREACH_BB(
-			toBB,
-			to,
-			{
-				Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); });
-			}
-		);
+		FOREACH_BB(	toBB, to, {
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
+		});
 	}
 
 	void MakeDropMovesToRank1234567(
 		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6]
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6]
 	) const {
 		Square to;
-		FOREACH_BB(
-			toBB,
-			to,
-			{
-				Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); });
-			}
-		);
+		FOREACH_BB( toBB, to, {
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
+			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
+		});
 	}
 
 };

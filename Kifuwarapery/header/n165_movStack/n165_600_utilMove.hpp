@@ -44,7 +44,9 @@ public:
 
 	// 駒打ちの makeMove()
 	// todo: PieceType を HandPiece に変更
-	static inline Move MakeDropMove(const PieceType pt, const Square to) { return UtilMove::From2Move(UtilMove::GetDrop2From(pt)) | UtilMove::To2Move(to); }
+	static inline Move MakeDropMove(const PieceType pt, const Square to) {
+		return UtilMove::From2Move(UtilMove::GetDrop2From(pt)) | UtilMove::To2Move(to);
+	}
 
 
 

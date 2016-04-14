@@ -12,24 +12,26 @@
 class DropMakerAbstract {
 public:
 
-	virtual void MakeDropMovesToRank9ExceptNL(
-		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6],
+	virtual inline void MakeDropMovesToRank9ExceptNL(
+		const Bitboard& target,
+		const Bitboard TRank9BB,
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6],
 		int noKnightLanceIdx
 	) const = 0;
 
-	virtual void MakeDropMovesToRank8ExceptN(
-		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6],
+	virtual inline void MakeDropMovesToRank8ExceptN(
+		const Bitboard& target,
+		const Bitboard TRank8BB,
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6],
 		int noKnightIdx
 		) const = 0;
 
-	virtual void MakeDropMovesToRank1234567(
-		Bitboard& toBB,
-		MoveStack* moveStackList,
-		PieceType haveHand[6]
+	virtual inline void MakeDropMovesToRank1234567(
+		Bitboard& toBB,	// const
+		MoveStack* pMoveStackList,
+		const PieceType haveHand[6]
 		) const = 0;
 
 };
