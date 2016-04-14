@@ -5,9 +5,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="header\n080_common__">
-      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n160_board___">
       <UniqueIdentifier>{7b7d8a2f-48b0-4741-8d05-d4f779029769}</UniqueIdentifier>
     </Filter>
@@ -166,6 +163,9 @@
     <Filter Include="header\n358_dropMake">
       <UniqueIdentifier>{4e94f1d8-6fd4-49f3-8e71-bdfb94a9eb03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n105_color___\n080_common__">
+      <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -175,22 +175,22 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp">
-      <Filter>header\n080_common__</Filter>
+      <Filter>header\n105_color___\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_100_common.hpp">
-      <Filter>header\n080_common__</Filter>
+      <Filter>header\n105_color___\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
-      <Filter>header\n080_common__</Filter>
+      <Filter>header\n105_color___\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
-      <Filter>header\n080_common__</Filter>
+      <Filter>header\n105_color___\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_105_time.hpp">
-      <Filter>header\n080_common__</Filter>
+      <Filter>header\n105_color___\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp">
       <Filter>header\n900_main____</Filter>
