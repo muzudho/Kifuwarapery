@@ -80,8 +80,9 @@ namespace {
 	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって switch で展開している。
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
-	template <Color US>
-	MoveStack* generateDropMoves(
+	//template <Color US>
+	MoveStack* generateDropMoves_color(
+		Color US,
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target
@@ -95,7 +96,7 @@ namespace {
 			// 一段目には打てない
 
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			toBB.AndEqualNot(g_rankMaskBb.GetRankMask<TRank9>());
+			toBB.AndEqualNot(g_rankMaskBb.GetRankMask_rank(TRank9));
 
 			// 二歩の回避
 			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, US);
@@ -146,8 +147,8 @@ namespace {
 
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask<TRank8>();
-			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask<TRank9>();
+			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask_rank(TRank8);
+			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask_rank(TRank9);
 
 			
 			/*
@@ -376,89 +377,65 @@ namespace {
 			case 1:
 			{
 				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 2:
 			{
 				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 3:
 			{
 				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 4:
 			{
 				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			default:
@@ -477,116 +454,86 @@ namespace {
 			case 1:
 			{
 				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 2:
 			{
 				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 3:
 			{
 				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 4:
 			{
 				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 5:
 			{
 				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
+				}
 				break;
 			}
 			default:
@@ -605,145 +552,109 @@ namespace {
 			case 1:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 2:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 3:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 4:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 5:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			case 6:
 			{
 				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-							pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-						};
-					}
-				} while (false);
+				while (toBB.GetP(0)) {
+					Square iTo = toBB.PopFirstOneRightFromI9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
+				while (toBB.GetP(1)) {
+					Square iTo = toBB.PopFirstOneLeftFromB9();
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
+					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
+				}
 				break;
 			}
 			default:
@@ -2619,7 +2530,7 @@ namespace {
 			MoveStack* pMovestack, const Position& pos
 			) {
 			const Bitboard target = pos.GetEmptyBB();
-			pMovestack = generateDropMoves<US>(pMovestack, pos, target);
+			pMovestack = generateDropMoves_color(US, pMovestack, pos, target);
 			return pMovestack;
 		}
 	};
@@ -2777,7 +2688,7 @@ namespace {
 			pMovestack = GeneratePieceMoves<Evasion, N16_GoldHorseDragon, US, ALL>()(pMovestack, pos, target2, ksq);
 
 			if (target1.Exists1Bit()) {
-				pMovestack = generateDropMoves<US>(pMovestack, pos, target1);
+				pMovestack = generateDropMoves_color(US, pMovestack, pos, target1);
 			}
 
 			return pMovestack;
@@ -2794,7 +2705,8 @@ namespace {
 			) {
 			Bitboard target = pos.GetEmptyBB();
 
-			pMovestack = generateDropMoves<US>(pMovestack, pos, target);
+			pMovestack = generateDropMoves_color(US, pMovestack, pos, target);
+
 			target |= pos.GetBbOf(UtilColor::OppositeColor(US));
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
 

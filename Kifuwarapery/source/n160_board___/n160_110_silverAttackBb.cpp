@@ -40,7 +40,7 @@ void SilverAttackBb::InitCheckTableSilver() {
 				this->m_silverCheckTable_[c][sq] |= (this->GetControllBb(opp, checkSq) & TRank789BB);
 			}
 
-			const Bitboard TRank6BB = (c == Black ? g_rankMaskBb.GetRankMask<Rank6>() : g_rankMaskBb.GetRankMask<Rank4>());
+			const Bitboard TRank6BB = (c == Black ? g_rankMaskBb.GetRankMask_rank(Rank6) : g_rankMaskBb.GetRankMask_rank(Rank4));
 			// 移動先が3段目で、4段目に移動したときも、成ることが出来る。
 			checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {

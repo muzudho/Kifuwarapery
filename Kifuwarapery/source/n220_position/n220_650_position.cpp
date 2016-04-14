@@ -348,18 +348,24 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
 				switch (g_squareRelation.GetSquareRelation(from, ksq)) {
+
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
+
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
 					m_st_->m_checkersBB |= g_rookAttackBb.GetControllBbFile(&this->GetOccupiedBB(), from) & this->GetBbOf(us);
 					break;
+
 				case DirecRank:
 					m_st_->m_checkersBB |= g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N06_Rook, N14_Dragon, us);
 					break;
+
 				case DirecDiagNESW: case DirecDiagNWSE:
 					m_st_->m_checkersBB |= g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N05_Bishop, N13_Horse, us);
 					break;
+
 				default: UNREACHABLE;
+
 				}
 			}
 			m_st_->m_continuousCheck[us] += 2;

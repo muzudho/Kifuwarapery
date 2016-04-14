@@ -846,13 +846,21 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		// step2
 		// stop と最大探索深さのチェック
 		switch (pos.IsDraw(16)) {
+
 		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= g_maxPly) { break; }
+
 		case RepetitionDraw     : return ScoreDraw;
+
 		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);
+
 		case RepetitionLose     : return UtilScore::MatedIn(ss->m_ply);
+
 		case RepetitionSuperior : if (ss->m_ply != 2) { return ScoreMateInMaxPly; } break;
+
 		case RepetitionInferior : if (ss->m_ply != 2) { return ScoreMatedInMaxPly; } break;
+
 		default                 : UNREACHABLE;
+
 		}
 
 		// step3
@@ -1705,10 +1713,15 @@ void Thread::IdleLoop() {
 			m_activePosition = &pos;
 
 			switch (sp->m_nodeType) {
+
 			case Root : m_pSearcher->Search<SplitPointRoot >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
+
 			case PV   : m_pSearcher->Search<SplitPointPV   >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
+
 			case NonPV: m_pSearcher->Search<SplitPointNonPV>(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
+
 			default   : UNREACHABLE;
+
 			}
 
 			assert(m_searching);
