@@ -160,6 +160,12 @@
     <Filter Include="header\n360_genMove_">
       <UniqueIdentifier>{a249484b-fd82-4fde-8283-32c301522d21}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\n358_dropMake">
+      <UniqueIdentifier>{8a8036d6-ed46-4688-a199-1f54332cf5b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n358_dropMake">
+      <UniqueIdentifier>{4e94f1d8-6fd4-49f3-8e71-bdfb94a9eb03}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -639,6 +645,33 @@
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
       <Filter>header\n440_movStack</Filter>
     </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_070_dropMakerAbstract.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_100_dropMakerHand0.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_110_dropMakerHand1.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_120_dropMakerHand2.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_130_dropMakerHand3.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_140_dropMakerHand4.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_150_dropMakerHand5.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_160_dropMakerHand6.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_500_dropMakerArray.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -967,6 +1000,33 @@
     </ClCompile>
     <ClCompile Include="source\n350_pieceTyp\n350_500_ptArray.cpp">
       <Filter>source\n350_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_070_dropMakerAbstract.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_100_dropMakerHand0.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_110_dropMakerHand1.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_120_dropMakerHand2.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_130_dropMakerHand3.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_140_dropMakerHand4.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_150_dropMakerHand5.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_160_dropMakerHand6.cpp">
+      <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n358_dropMake\n358_500_dropMakerArray.cpp">
+      <Filter>source\n358_dropMake</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

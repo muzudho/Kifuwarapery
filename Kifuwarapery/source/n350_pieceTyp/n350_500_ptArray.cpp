@@ -1,4 +1,3 @@
-//*
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_100_ptOccupied.hpp"
@@ -36,5 +35,3 @@ PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
 	&g_ptHorse,
 	&g_ptDragon
 };
-
-//*/

@@ -1,37 +1,46 @@
 #pragma once
 
-#include "../../header/n105_color___/n105_500_utilColor.hpp"
-#include "../../header/n110_square__/n110_250_squareDelta.hpp"
-#include "../../header/n110_square__/n110_400_squareRelation.hpp"
-#include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
-#include "../../header/n160_board___/n160_102_FileMaskBb.hpp"
-#include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
-#include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n160_board___/n160_600_bitboardAll.hpp"
-#include "../../header/n165_movStack/n165_500_moveStack.hpp"
-#include "../../header/n220_position/n220_640_utilAttack.hpp"
-#include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
+#include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n110_square__/n110_250_squareDelta.hpp"
+#include "../n110_square__/n110_400_squareRelation.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
+#include "../n160_board___/n160_102_FileMaskBb.hpp"
+#include "../n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../n160_board___/n160_230_setMaskBb.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_600_bitboardAll.hpp"
+#include "../n165_movStack/n165_500_moveStack.hpp"
+#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n220_position/n220_640_utilAttack.hpp"
+#include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_670_makePromoteMove.hpp"
 
-#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
-#include "../../header/n350_pieceTyp/n350_100_ptOccupied.hpp"
-#include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"
-#include "../../header/n350_pieceTyp/n350_120_ptLance.hpp"
-#include "../../header/n350_pieceTyp/n350_130_ptKnight.hpp"
-#include "../../header/n350_pieceTyp/n350_140_ptSilver.hpp"
-#include "../../header/n350_pieceTyp/n350_150_ptBishop.hpp"
-#include "../../header/n350_pieceTyp/n350_160_ptRook.hpp"
-#include "../../header/n350_pieceTyp/n350_170_ptGold.hpp"
-#include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
-#include "../../header/n350_pieceTyp/n350_190_ptProPawn.hpp"
-#include "../../header/n350_pieceTyp/n350_200_ptProLance.hpp"
-#include "../../header/n350_pieceTyp/n350_210_ptProKnight.hpp"
-#include "../../header/n350_pieceTyp/n350_220_ptProSilver.hpp"
-#include "../../header/n350_pieceTyp/n350_230_ptHorse.hpp"
-#include "../../header/n350_pieceTyp/n350_240_ptDragon.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
-
-#include "../../header/n360_genMove_/n360_500_generateMoves.hpp"
+#include "../n350_pieceTyp/n350_070_ptAbstract.hpp"
+#include "../n350_pieceTyp/n350_100_ptOccupied.hpp"
+#include "../n350_pieceTyp/n350_110_ptPawn.hpp"
+#include "../n350_pieceTyp/n350_120_ptLance.hpp"
+#include "../n350_pieceTyp/n350_130_ptKnight.hpp"
+#include "../n350_pieceTyp/n350_140_ptSilver.hpp"
+#include "../n350_pieceTyp/n350_150_ptBishop.hpp"
+#include "../n350_pieceTyp/n350_160_ptRook.hpp"
+#include "../n350_pieceTyp/n350_170_ptGold.hpp"
+#include "../n350_pieceTyp/n350_180_ptKing.hpp"
+#include "../n350_pieceTyp/n350_190_ptProPawn.hpp"
+#include "../n350_pieceTyp/n350_200_ptProLance.hpp"
+#include "../n350_pieceTyp/n350_210_ptProKnight.hpp"
+#include "../n350_pieceTyp/n350_220_ptProSilver.hpp"
+#include "../n350_pieceTyp/n350_230_ptHorse.hpp"
+#include "../n350_pieceTyp/n350_240_ptDragon.hpp"
+#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n358_dropMake/n358_100_dropMakerHand0.hpp"
+#include "../n358_dropMake/n358_110_dropMakerHand1.hpp"
+#include "../n358_dropMake/n358_120_dropMakerHand2.hpp"
+#include "../n358_dropMake/n358_130_dropMakerHand3.hpp"
+#include "../n358_dropMake/n358_140_dropMakerHand4.hpp"
+#include "../n358_dropMake/n358_150_dropMakerHand5.hpp"
+#include "../n358_dropMake/n358_160_dropMakerHand6.hpp"
+#include "../n358_dropMake/n358_500_dropMakerArray.hpp"
+#include "../n360_genMove_/n360_500_generateMoves.hpp"
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
@@ -134,42 +143,20 @@ namespace {
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask<TRank9>();
 
 			Bitboard toBB;
-			Square to;
 			// 桂馬、香車 以外の持ち駒があれば、
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: break; // 桂馬、香車 以外の持ち駒がない。
-			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			default: UNREACHABLE;
-			}
+			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
+			toBB = target & TRank9BB;
+			g_dropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL( toBB, moveStackList, haveHand, noKnightLanceIdx);
 
 			// 桂馬以外の持ち駒があれば、
 			// 二段目に対して、桂馬以外の指し手を生成。
-			switch (haveHandNum - noKnightIdx) {
-			case 0: break; // 桂馬 以外の持ち駒がない。
-			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			default: UNREACHABLE;
-			}
+			toBB = target & TRank8BB;
+			g_dropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN( toBB, moveStackList, haveHand, noKnightIdx);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: assert(false); break; // 最適化の為のダミー
-			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			default: UNREACHABLE;
-			}
+			g_dropMakerArray[haveHandNum]->MakeDropMovesToRank1234567( toBB, moveStackList, haveHand);
 		}
 
 		return moveStackList;
