@@ -26,11 +26,11 @@ public:
 		const Direction direc = SquareRelation::GetSquareRelation(from, ksq);
 
 		if (FROM_KSQ_NEVER_BE_DIRECMISC) {
-			assert(direc != DirecMisc);
+			assert(direc != N00_DirecMisc);
 			return (direc == SquareRelation::GetSquareRelation(from, to));
 		}
 		else {
-			return (direc != DirecMisc && direc == SquareRelation::GetSquareRelation(from, to));
+			return (direc != N00_DirecMisc && direc == SquareRelation::GetSquareRelation(from, to));
 		}
 	}
 

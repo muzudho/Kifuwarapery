@@ -845,7 +845,7 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	if (!RootNode) {
 		// step2
 		// stop と最大探索深さのチェック
-		switch (pos.IsDraw(16)) {
+		switch (pos.IsDraw(16)) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= g_maxPly) { break; }
 		case RepetitionDraw     : return ScoreDraw;
 		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);

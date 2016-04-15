@@ -14,8 +14,8 @@
 #include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
+#include "../../header/n220_position/n220_680_moveList.hpp"
 
-//*
 #include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"
 #include "../../header/n350_pieceTyp/n350_120_ptLance.hpp"
 #include "../../header/n350_pieceTyp/n350_130_ptKnight.hpp"
@@ -25,11 +25,12 @@
 #include "../../header/n350_pieceTyp/n350_170_ptGold.hpp"
 #include "../../header/n350_pieceTyp/n350_230_ptHorse.hpp"
 #include "../../header/n350_pieceTyp/n350_240_ptDragon.hpp"
-#include "../../header/n220_position/n220_680_moveList.hpp"
+#include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
+
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
 #include "../../header/n900_main____/n900_200_searcher.hpp"
-//*/
+
 
 
 Key Position::m_zobrist_[N15_PieceTypeNum][SquareNum][ColorNum];
@@ -347,20 +348,29 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			// Discovery checks
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
-				switch (g_squareRelation.GetSquareRelation(from, ksq)) {
-				case DirecMisc: assert(false); break; // 最適化の為のダミー
-				case DirecFile:
+
+				g_bonaDirArray[g_squareRelation.GetSquareRelation(from, ksq)]->Do2Move(*this, from, ksq, us);
+
+				/*
+				switch (g_squareRelation.GetSquareRelation(from, ksq))
+				{
+				case N00_DirecMisc:
+					assert(false); // 最適化の為のダミー
+					break;
+				case N02_DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
 					m_st_->m_checkersBB |= g_rookAttackBb.GetControllBbFile(&this->GetOccupiedBB(), from) & this->GetBbOf(us);
 					break;
-				case DirecRank:
+				case N03_DirecRank:
 					m_st_->m_checkersBB |= g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N06_Rook, N14_Dragon, us);
 					break;
-				case DirecDiagNESW: case DirecDiagNWSE:
+				case N04_DirecDiagNESW: case N05_DirecDiagNWSE:
 					m_st_->m_checkersBB |= g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N05_Bishop, N13_Horse, us);
 					break;
-				default: UNREACHABLE;
+				default:
+					UNREACHABLE;
 				}
+				*/
 			}
 			m_st_->m_continuousCheck[us] += 2;
 		}

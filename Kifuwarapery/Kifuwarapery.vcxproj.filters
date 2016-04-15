@@ -166,6 +166,30 @@
     <Filter Include="header\n080_common__">
       <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n163_sqDistan">
+      <UniqueIdentifier>{d1f85262-f929-426e-ab77-ec43f8760a0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n163_sqDistan">
+      <UniqueIdentifier>{dad1da8d-2da1-4b6f-8acd-5b2bb4b08143}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n162_bonaDir_">
+      <UniqueIdentifier>{dafff2af-9957-43f5-a516-2b88aeac65ff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n162_bonaDir_">
+      <UniqueIdentifier>{27fc7adf-735d-47d6-96e7-e7dc38f774b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n161_sqDistan">
+      <UniqueIdentifier>{add68fa2-907c-4127-ac6e-ee8a1b43c541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n161_sqDistan">
+      <UniqueIdentifier>{1b7d148b-da5c-4c66-84a8-9754f2f4d20b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n351_bonaDir_">
+      <UniqueIdentifier>{ad51cf7c-b83f-44dc-b619-29341477ae8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n351_bonaDir_">
+      <UniqueIdentifier>{9f4a4109-6904-4184-9f85-212103e17706}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -331,9 +355,6 @@
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_150_rookAttackBb.hpp">
-      <Filter>header\n160_board___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n160_board___\n160_260_squareDistance.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_102_fileMaskBb.hpp">
@@ -672,6 +693,36 @@
     <ClInclude Include="header\n358_dropMake\n358_500_dropMakerArray.hpp">
       <Filter>header\n358_dropMake</Filter>
     </ClInclude>
+    <ClInclude Include="header\n162_bonaDir_\n162_070_bonaDirAbstract.hpp">
+      <Filter>header\n162_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n163_sqDistan\n163_600_utilSquareDistance.hpp">
+      <Filter>header\n163_sqDistan</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n161_sqDistan\n161_500_squareDistance.hpp">
+      <Filter>header\n161_sqDistan</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_140_direcDiagNESW.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_090_nullBonaDir.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_100_direcMisc.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_120_direcFile.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_130_direcRank.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_150_direcDiagNWSE.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -753,9 +804,6 @@
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_150_rookAttackBb.cpp">
-      <Filter>source\n160_board___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n160_board___\n160_260_squareDistance.cpp">
       <Filter>source\n160_board___</Filter>
     </ClCompile>
     <ClCompile Include="source\n160_board___\n160_102_fileMaskBb.cpp">
@@ -1027,6 +1075,36 @@
     </ClCompile>
     <ClCompile Include="source\n358_dropMake\n358_500_dropMakerArray.cpp">
       <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n162_bonaDir_\n162_070_bonaDirAbstract.cpp">
+      <Filter>source\n162_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n163_sqDistan\n163_600_utilSquareDistance.cpp">
+      <Filter>source\n163_sqDistan</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n161_sqDistan\n161_500_squareDistance.cpp">
+      <Filter>source\n161_sqDistan</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_090_nullBonaDir.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_100_direcMisc.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_120_direcFile.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_130_direcRank.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_140_direcDiagNESW.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_150_direcDiagNWSE.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

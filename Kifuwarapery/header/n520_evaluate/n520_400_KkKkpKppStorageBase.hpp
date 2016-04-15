@@ -7,7 +7,7 @@
 #include "../n113_piece___/n113_155_utilPiece.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_230_setMaskBb.hpp"
-#include "../n160_board___/n160_260_squareDistance.hpp"
+#include "../n161_sqDistan/n161_500_squareDistance.hpp"
 #include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n520_evaluate/n520_150_kppIndexArray.hpp"

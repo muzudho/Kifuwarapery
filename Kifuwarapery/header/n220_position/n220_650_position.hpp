@@ -264,6 +264,9 @@ public:
 
 	static Score GetPromotePieceScore(const PieceType pt);
 
+	// メンバーを変更するのに使われる。
+	inline StateInfo* GetStateInfo() { return m_st_; }
+
 private:
 
 	void Clear();

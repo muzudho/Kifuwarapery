@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include "../n105_color___/n105_500_utilColor.hpp"
@@ -50,7 +50,7 @@ extern SquareRelation g_squareRelation;
 
 
 namespace {
-	// Šp, ”òÔ‚Ìê‡
+	// è§’, é£›è»Šã®å ´åˆ
 	template <MoveType MT, PieceType PT, Color US, bool ALL>
 	FORCE_INLINE MoveStack* generateBishopOrRookMoves(
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -69,7 +69,7 @@ namespace {
 					if (MT == NonEvasion || ALL)
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(PT, from, to, pos);
 				}
-				else // ŠpA”òÔ‚Í¬‚ê‚é‚È‚ç¬‚èA•s¬‚Í¶¬‚µ‚È‚¢B
+				else // è§’ã€é£›è»Šã¯æˆã‚Œã‚‹ãªã‚‰æˆã‚Šã€ä¸æˆã¯ç”Ÿæˆã—ãªã„ã€‚
 					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(PT, from, to, pos);
 			}
 		}
@@ -78,10 +78,10 @@ namespace {
 
 
 
-	// ‹î‘Å‚¿‚Ìê‡
-	// •àˆÈŠO‚Ì‚¿‹î‚ÍAloop ‚Ì‘O‚É‚¿‹î‚Ìí—Ş‚Ì”‚É‚æ‚Á‚Ä switch ‚Å“WŠJ‚µ‚Ä‚¢‚éB
-	// ƒ‹[ƒv‚Ì“WŠJ‚ÍƒR[ƒh‚ª–c‚êã‚ª‚é–‚É‚æ‚éƒLƒƒƒbƒVƒ…ƒqƒbƒg—¦‚Ì’á‰º‚ÆA‰‰Z‰ñ”‚Ìƒoƒ‰ƒ“ƒX‚ğæ‚Á‚ÄŒˆ‚ß‚é•K—v‚ª‚ ‚éB
-	// NPS‚É‰e‹¿‚ªo‚È‚¢‚È‚çƒVƒ“ƒvƒ‹‚É‚µ‚½•û‚ª—Ç‚³‚»‚¤B
+	// é§’æ‰“ã¡ã®å ´åˆ
+	// æ­©ä»¥å¤–ã®æŒã¡é§’ã¯ã€loop ã®å‰ã«æŒã¡é§’ã®ç¨®é¡ã®æ•°ã«ã‚ˆã£ã¦ switch ã§å±•é–‹ã—ã¦ã„ã‚‹ã€‚
+	// ãƒ«ãƒ¼ãƒ—ã®å±•é–‹ã¯ã‚³ãƒ¼ãƒ‰ãŒè†¨ã‚Œä¸ŠãŒã‚‹äº‹ã«ã‚ˆã‚‹ã‚­ãƒ£ãƒƒã‚·ãƒ¥ãƒ’ãƒƒãƒˆç‡ã®ä½ä¸‹ã¨ã€æ¼”ç®—å›æ•°ã®ãƒãƒ©ãƒ³ã‚¹ã‚’å–ã£ã¦æ±ºã‚ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
+	// NPSã«å½±éŸ¿ãŒå‡ºãªã„ãªã‚‰ã‚·ãƒ³ãƒ—ãƒ«ã«ã—ãŸæ–¹ãŒè‰¯ã•ãã†ã€‚
 	template <Color US>
 	MoveStack* generateDropMoves(
 		MoveStack* pMovestack,
@@ -90,35 +90,35 @@ namespace {
 	) {
 		const Hand hand = pos.GetHand(US);
 
-		// ‚Ü‚¸A•à‚É‘Î‚µ‚Äw‚µè‚ğ¶¬
+		// ã¾ãšã€æ­©ã«å¯¾ã—ã¦æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆ
 		if (hand.Exists<HPawn>()) {
 
 			Bitboard toBB = target;
-			// ˆê’i–Ú‚É‚Í‘Å‚Ä‚È‚¢
+			// ä¸€æ®µç›®ã«ã¯æ‰“ã¦ãªã„
 
 			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
 			toBB.AndEqualNot(g_rankMaskBb.GetRankMask<TRank9>());
 
-			// “ñ•à‚Ì‰ñ”ğ
+			// äºŒæ­©ã®å›é¿
 			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, US);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
 				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
 			});
 
-			// ‘Å‚¿•à‹l‚ß‚Ì‰ñ”ğ
+			// æ‰“ã¡æ­©è©°ã‚ã®å›é¿
 			const Rank TRank1 = (US == Black ? Rank1 : Rank9);
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
-			// ‘Šè‹Ê‚ª‹ã’i–Ú‚È‚çA•à‚Å‰¤èo—ˆ‚È‚¢‚Ì‚ÅA‘Å‚¿•à‹l‚ß‚ğ’²‚×‚é•K—v‚Í‚È‚¢B
+			// ç›¸æ‰‹ç‰ãŒä¹æ®µç›®ãªã‚‰ã€æ­©ã§ç‹æ‰‹å‡ºæ¥ãªã„ã®ã§ã€æ‰“ã¡æ­©è©°ã‚ã‚’èª¿ã¹ã‚‹å¿…è¦ã¯ãªã„ã€‚
 			if (UtilSquare::ToRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
 				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
-						// ‚±‚±‚Å clearBit ‚¾‚¯‚µ‚Ä MakeMove ‚µ‚È‚¢‚±‚Æ‚ào—ˆ‚éB
-						// w‚µè‚ª¶¬‚³‚ê‚é‡”Ô‚ª•Ï‚í‚èA‰¤è‚ªæ‚É¶¬‚³‚ê‚é‚ªAŒã‚Å–â‘è‚É‚È‚ç‚È‚¢‚©?
+						// ã“ã“ã§ clearBit ã ã‘ã—ã¦ MakeMove ã—ãªã„ã“ã¨ã‚‚å‡ºæ¥ã‚‹ã€‚
+						// æŒ‡ã—æ‰‹ãŒç”Ÿæˆã•ã‚Œã‚‹é †ç•ªãŒå¤‰ã‚ã‚Šã€ç‹æ‰‹ãŒå…ˆã«ç”Ÿæˆã•ã‚Œã‚‹ãŒã€å¾Œã§å•é¡Œã«ãªã‚‰ãªã„ã‹?
 						(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
 					}
 					g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
@@ -131,16 +131,16 @@ namespace {
 			});
 		}
 
-		// •à ˆÈŠO‚Ì‹î‚ğ‚Á‚Ä‚¢‚é‚©
+		// æ­© ä»¥å¤–ã®é§’ã‚’æŒã£ã¦ã„ã‚‹ã‹
 		if (hand.ExceptPawnExists()) {
-			PieceType haveHandArr[6]; // •àˆÈŠO‚Ì‚¿‹îBvector g‚¢‚½‚¢‚¯‚ÇA‘¬“x‚ğ‹‚ß‚é‚Ì‚Åg‚í‚È‚¢B
-			int haveHandNum = 0; // ‚¿‹î‚Ì‹î‚Ìí—Ş‚Ì”
+			PieceType haveHandArr[6]; // æ­©ä»¥å¤–ã®æŒã¡é§’ã€‚vector ä½¿ã„ãŸã„ã‘ã©ã€é€Ÿåº¦ã‚’æ±‚ã‚ã‚‹ã®ã§ä½¿ã‚ãªã„ã€‚
+			int haveHandNum = 0; // æŒã¡é§’ã®é§’ã®ç¨®é¡ã®æ•°
 
-								 // Œj”nAÔA‚»‚êˆÈŠO‚Ì‡”Ô‚ÅŠi”[‚·‚éB(‹î‚ğ‘Å‚Ä‚éˆÊ’u‚ªŒÀ’è“I‚È‡)
+								 // æ¡‚é¦¬ã€é¦™è»Šã€ãã‚Œä»¥å¤–ã®é †ç•ªã§æ ¼ç´ã™ã‚‹ã€‚(é§’ã‚’æ‰“ã¦ã‚‹ä½ç½®ãŒé™å®šçš„ãªé †)
 			if (hand.Exists<HKnight>()) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
-			const int noKnightIdx = haveHandNum; // Œj”n‚ğœ‚­‹î‚Åƒ‹[ƒv‚·‚é‚Æ‚«‚Ìƒ‹[ƒv‚Ì‰Šú’l
+			const int noKnightIdx = haveHandNum; // æ¡‚é¦¬ã‚’é™¤ãé§’ã§ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã¨ãã®ãƒ«ãƒ¼ãƒ—ã®åˆæœŸå€¤
 			if (hand.Exists<HLance >()) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
-			const int noKnightLanceIdx = haveHandNum; // Œj”n, Ô‚ğœ‚­‹î‚Åƒ‹[ƒv‚·‚é‚Æ‚«‚Ìƒ‹[ƒv‚Ì‰Šú’l
+			const int noKnightLanceIdx = haveHandNum; // æ¡‚é¦¬, é¦™è»Šã‚’é™¤ãé§’ã§ãƒ«ãƒ¼ãƒ—ã™ã‚‹ã¨ãã®ãƒ«ãƒ¼ãƒ—ã®åˆæœŸå€¤
 			if (hand.Exists<HSilver>()) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
 			if (hand.Exists<HGold  >()) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
 			if (hand.Exists<HBishop>()) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
@@ -152,228 +152,28 @@ namespace {
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask<TRank9>();
 
 			
-			/*
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			// FIXME: ”z—ñ‚Ì”ÍˆÍƒ`ƒFƒbƒN‚µ‚Ä‚È‚¢‚º™iO‚‘Oj
+			/* TODO: ã“ã†ã—ãŸã‹ã£ãŸã‚“ã ãŒã€templateã®ä¸­ã§ã¯å‹•ã‹ãªã„ãœâ˜†
+			// æ¡‚é¦¬ã€é¦™è»Š ä»¥å¤–ã®æŒã¡é§’ãŒã‚ã‚Œã°ã€
+			// ä¸€æ®µç›®ã«å¯¾ã—ã¦ã€æ¡‚é¦¬ã€é¦™è»Šä»¥å¤–ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
+			// FIXME: é…åˆ—ã®ç¯„å›²ãƒã‚§ãƒƒã‚¯ã—ã¦ãªã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			g_dropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx);
 
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
+			// æ¡‚é¦¬ä»¥å¤–ã®æŒã¡é§’ãŒã‚ã‚Œã°ã€
+			// äºŒæ®µç›®ã«å¯¾ã—ã¦ã€æ¡‚é¦¬ä»¥å¤–ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
 			g_dropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx);
 
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
+			// ä¸€ã€äºŒæ®µç›®ä»¥å¤–ã«å¯¾ã—ã¦ã€å…¨ã¦ã®æŒã¡é§’ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
 			Bitboard toBB = target & ~(TRank8BB | TRank9BB);
 			g_dropMakerArray[haveHandNum]->MakeDropMovesToRank1234567( toBB, pMoveStackList, haveHand);
 			*/
-
-			/*
-			Bitboard toBB;
-			Square to;
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: g_dropMakerHand0.MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx); break;
-			case 1: g_dropMakerHand1.MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx); break;
-			case 2: g_dropMakerHand2.MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx); break;
-			case 3: g_dropMakerHand3.MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx); break;
-			case 4: g_dropMakerHand4.MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMoveStackList, haveHand, noKnightLanceIdx); break;
-			default: UNREACHABLE;
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0: g_dropMakerHand0.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			case 1: g_dropMakerHand1.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			case 2: g_dropMakerHand2.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			case 3: g_dropMakerHand3.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			case 4: g_dropMakerHand4.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			case 5: g_dropMakerHand5.MakeDropMovesToRank8ExceptN(target, TRank8BB, pMoveStackList, haveHand, noKnightIdx); break;
-			default: UNREACHABLE;
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: g_dropMakerHand0.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 1: g_dropMakerHand1.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 2: g_dropMakerHand2.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 3: g_dropMakerHand3.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 4: g_dropMakerHand4.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 5: g_dropMakerHand5.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			case 6: g_dropMakerHand6.MakeDropMovesToRank1234567(toBB, pMoveStackList, haveHand); break;
-			default: UNREACHABLE;
-			}
-			*/
-
-			/*NG
-			Bitboard toBB;
-			Square to;
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: Func0A(); break;
-			case 1: Func1A(target, TRank9BB, haveHand, pMoveStackList, noKnightLanceIdx); break;
-			case 2: Func2A(target, TRank9BB, haveHand, pMoveStackList, noKnightLanceIdx); break;
-			case 3: Func3A(target, TRank9BB, haveHand, pMoveStackList, noKnightLanceIdx); break;
-			case 4: Func4A(target, TRank9BB, haveHand, pMoveStackList, noKnightLanceIdx); break;
-			default: UNREACHABLE;
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0: Func0B(); break;
-			case 1: Func1B(target, TRank8BB, haveHand, pMoveStackList, noKnightIdx); break;
-			case 2: Func2B(target, TRank8BB, haveHand, pMoveStackList, noKnightIdx); break;
-			case 3: Func3B(target, TRank8BB, haveHand, pMoveStackList, noKnightIdx); break;
-			case 4: Func4B(target, TRank8BB, haveHand, pMoveStackList, noKnightIdx); break;
-			case 5: Func5B(target, TRank8BB, haveHand, pMoveStackList, noKnightIdx); break;
-			default: UNREACHABLE;
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: Func0C(); break;
-			case 1: Func1C(toBB, haveHand, pMoveStackList); break;
-			case 2: Func2C(toBB, haveHand, pMoveStackList); break;
-			case 3: Func3C(toBB, haveHand, pMoveStackList); break;
-			case 4: Func4C(toBB, haveHand, pMoveStackList); break;
-			case 5: Func5C(toBB, haveHand, pMoveStackList); break;
-			case 6: Func6C(toBB, haveHand, pMoveStackList); break;
-			default: UNREACHABLE;
-			}
-			*/
 			
-			/*
-			//Square iTo;// ƒ‹[ƒvƒJƒEƒ“ƒ^‚ğŒ“‚Ë‚éB
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
+			//Square iTo;// ãƒ«ãƒ¼ãƒ—ã‚«ã‚¦ãƒ³ã‚¿ã‚’å…¼ã­ã‚‹ã€‚
+			// æ¡‚é¦¬ã€é¦™è»Š ä»¥å¤–ã®æŒã¡é§’ãŒã‚ã‚Œã°ã€
+			// ä¸€æ®µç›®ã«å¯¾ã—ã¦ã€æ¡‚é¦¬ã€é¦™è»Šä»¥å¤–ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
+			switch (haveHandNum - noKnightLanceIdx) {//templateã®ä¸­ãªã®ã§æ”¹é€ ã—ã«ãã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			case 0:
 			{
-				Func0A();
-				break;
-			}
-			case 1:
-			{
-				Func1A(target, TRank9BB, haveHandArr, pMovestack, noKnightLanceIdx);
-				break;
-			}
-			case 2:
-			{
-				Func2A(target, TRank9BB, haveHandArr, pMovestack, noKnightLanceIdx);
-				break;
-			}
-			case 3:
-			{
-				Func3A(target, TRank9BB, haveHandArr, pMovestack, noKnightLanceIdx);
-				break;
-			}
-			case 4:
-			{
-				Func4A(target, TRank9BB, haveHandArr, pMovestack, noKnightLanceIdx);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0:
-			{
-				Func0B();
-				break;
-			}
-			case 1:
-			{
-				Func1B(target, TRank8BB, haveHandArr, pMovestack, noKnightIdx);
-				break;
-			}
-			case 2:
-			{
-				Func2B(target, TRank8BB, haveHandArr, pMovestack, noKnightIdx);
-				break;
-			}
-			case 3:
-			{
-				Func3B(target, TRank8BB, haveHandArr, pMovestack, noKnightIdx);
-				break;
-			}
-			case 4:
-			{
-				Func4B(target, TRank8BB, haveHandArr, pMovestack, noKnightIdx);
-				break;
-			}
-			case 5:
-			{
-				Func5B(target, TRank8BB, haveHandArr, pMovestack, noKnightIdx);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			//Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0:
-			{
-				Func0C();
-				break;
-			}
-			case 1:
-			{
-				Func1C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			case 2:
-			{
-				Func2C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			case 3:
-			{
-				Func3C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			case 4:
-			{
-				Func4C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			case 5:
-			{
-				Func5C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			case 6:
-			{
-				Func6C(target, TRank8BB, TRank9BB, haveHandArr, pMovestack);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-			*/
-
-			//Square iTo;// ƒ‹[ƒvƒJƒEƒ“ƒ^‚ğŒ“‚Ë‚éB
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0:
-			{
-				break; // Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
+				break; // æ¡‚é¦¬ã€é¦™è»Š ä»¥å¤–ã®æŒã¡é§’ãŒãªã„ã€‚
 			}
 			case 1:
 			{
@@ -469,12 +269,12 @@ namespace {
 			}
 			}
 
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
+			// æ¡‚é¦¬ä»¥å¤–ã®æŒã¡é§’ãŒã‚ã‚Œã°ã€
+			// äºŒæ®µç›®ã«å¯¾ã—ã¦ã€æ¡‚é¦¬ä»¥å¤–ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
+			switch (haveHandNum - noKnightIdx) {//templateã®ä¸­ãªã®ã§æ”¹é€ ã—ã«ãã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			case 0:
 			{
-				break; // Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
+				break; // æ¡‚é¦¬ ä»¥å¤–ã®æŒã¡é§’ãŒãªã„ã€‚
 			}
 			case 1:
 			{
@@ -597,12 +397,12 @@ namespace {
 			}
 			}
 
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
+			// ä¸€ã€äºŒæ®µç›®ä»¥å¤–ã«å¯¾ã—ã¦ã€å…¨ã¦ã®æŒã¡é§’ã®æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã€‚
 			//Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
+			switch (haveHandNum) {//templateã®ä¸­ãªã®ã§æ”¹é€ ã—ã«ãã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			case 0:
 			{
-				assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
+				assert(false); break; // æœ€é©åŒ–ã®ç‚ºã®ãƒ€ãƒŸãƒ¼
 			}
 			case 1:
 			{
@@ -753,1652 +553,23 @@ namespace {
 				UNREACHABLE;
 			}
 			}
-
-			/* OK
-			//Square iTo;// ƒ‹[ƒvƒJƒEƒ“ƒ^‚ğŒ“‚Ë‚éB
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0:
-			{
-				break; // Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			}
-			case 1:
-			{
-				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 2:
-			{
-				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 3:
-			{
-				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 4:
-			{
-				Bitboard toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0:
-			{
-				break; // Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			}
-			case 1:
-			{
-				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 2:
-			{
-				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 3:
-			{
-				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 4:
-			{
-				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 5:
-			{
-				Bitboard toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			//Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0:
-			{
-				assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-			}
-			case 1:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 2:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 3:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 4:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 5:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			case 6:
-			{
-				Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-				do {
-					while (toBB.GetP(0)) {
-						Square iTo = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-					while (toBB.GetP(1)) {
-						Square iTo = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-						};
-					}
-				} while (false);
-				break;
-			}
-			default:
-			{
-				UNREACHABLE;
-			}
-			}
-			*/
-
-			/* OK
-			Bitboard toBB;
-			Square to;
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: break; // Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 2: toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 3: toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 4: toBB = target & TRank9BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			default: UNREACHABLE;
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0: break; // Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 2: toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 3: toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 4: toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 5: toBB = target & TRank8BB;
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-						};
-					}
-				} while (false);
-				break;
-			default: UNREACHABLE;
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-			case 1:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 2:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 3:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 4:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 5:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			case 6:
-				do {
-					while (toBB.GetP(0)) {
-						to = toBB.PopFirstOneRightFromI9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-					while (toBB.GetP(1)) {
-						to = toBB.PopFirstOneLeftFromB9();
-						{
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-							(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-						};
-					}
-				} while (false);
-				break;
-			default: UNREACHABLE;
-			}
-			*/
-
-			/*ok
-			Bitboard toBB;
-			Square to;
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: break; // Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-			}); break;
-			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-			}); break;
-			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-			}); break;
-			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-			}); break;
-			default: UNREACHABLE;
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0: break; // Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-			}); break;
-			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-			}); break;
-			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-			}); break;
-			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-			}); break;
-			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-			}); break;
-			default: UNREACHABLE;
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-			case 1: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			case 2: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			case 3: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			case 4: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			case 5: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			case 6: FOREACH_BB(toBB, to, {
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-				(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-			}); break;
-			default: UNREACHABLE;
-			}
-			*/
-
-			/*ok
-			Bitboard toBB;
-			Square to;
-			// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// ˆê’i–Ú‚É‘Î‚µ‚ÄAŒj”nAÔˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightLanceIdx) {
-			case 0: break; // Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank9BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + i], to); }); }); break;
-			default: UNREACHABLE;
-			}
-
-			// Œj”nˆÈŠO‚Ì‚¿‹î‚ª‚ ‚ê‚ÎA
-			// “ñ’i–Ú‚É‘Î‚µ‚ÄAŒj”nˆÈŠO‚Ìw‚µè‚ğ¶¬B
-			switch (haveHandNum - noKnightIdx) {
-			case 0: break; // Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-			case 1: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 2: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 3: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 4: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			case 5: toBB = target & TRank8BB; FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + i], to); }); }); break;
-			default: UNREACHABLE;
-			}
-
-			// ˆêA“ñ’i–ÚˆÈŠO‚É‘Î‚µ‚ÄA‘S‚Ä‚Ì‚¿‹î‚Ìw‚µè‚ğ¶¬B
-			toBB = target & ~(TRank8BB | TRank9BB);
-			switch (haveHandNum) {
-			case 0: assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-			case 1: FOREACH_BB(toBB, to, { Unroller<1>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 2: FOREACH_BB(toBB, to, { Unroller<2>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 3: FOREACH_BB(toBB, to, { Unroller<3>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 4: FOREACH_BB(toBB, to, { Unroller<4>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 5: FOREACH_BB(toBB, to, { Unroller<5>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			case 6: FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); }); break;
-			default: UNREACHABLE;
-			}
-			*/
 		}
 
 		return pMovestack;
 	}
 
 
-	static void Func0A()
-	{
-		// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	static void Func0B()
-	{
-		// Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	static void Func0C()
-	{
-		assert(false); // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-	}
-	static void Func1A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func1B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func1C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-	static void Func2A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func2B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func2C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-	static void Func3A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func3B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func3C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-	static void Func4A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func4B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func4C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-	static void Func5B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHandArr[6], MoveStack* pMovestack, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-		}
-	}
-	static void Func5C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-	static void Func6C(const Bitboard& target, const Bitboard& TRank8BB, const Bitboard& TRank9BB, PieceType haveHandArr[6], MoveStack* pMovestack)
-	{
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		while (toBB.GetP(0)) {
-			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-		while (toBB.GetP(1)) {
-			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[5], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[4], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo); pMovestack++;
-			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-		}
-	}
-
-
-	/*NG
-	void Func0A()
-	{
-		// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	void Func0B()
-	{
-		// Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	void Func0C()
-	{
-		assert(false);// Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-	}
-	void Func1A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func1B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func1C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func2A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func2B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func2C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func3A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func3B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func3C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func4A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func4B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func4C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func5B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func5C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	void Func6C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		do {
-			while (toBB.GetP(0)) {
-				to = toBB.PopFirstOneRightFromI9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-			while (toBB.GetP(1)) {
-				to = toBB.PopFirstOneLeftFromB9();
-				{
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-					(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-				};
-			}
-		} while (false);
-	}
-	*/
-
-	/*NG
-	void Func0A()
-	{
-		// Œj”nAÔ ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	void Func0B()
-	{
-		// Œj”n ˆÈŠO‚Ì‚¿‹î‚ª‚È‚¢B
-	}
-	void Func0C()
-	{
-		assert(false);// Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
-	}
-	void Func1A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-		});
-	}
-	void Func1B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-		});
-	}
-	void Func1C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	void Func2A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-		});
-	}
-	void Func2B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-		});
-	}
-	void Func2C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	void Func3A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-		});
-	}
-	void Func3B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-		});
-	}
-	void Func3C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	void Func4A(const Bitboard& target, const Bitboard& TRank9BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightLanceIdx)
-	{
-		Bitboard toBB = target & TRank9BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightLanceIdx + 0], to);
-		});
-	}
-	void Func4B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-		});
-	}
-	void Func4C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	void Func5B(const Bitboard& target, const Bitboard& TRank8BB, PieceType haveHand[6], MoveStack* pMoveStackList, const int noKnightIdx)
-	{
-		Bitboard toBB = target & TRank8BB;
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 4], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[noKnightIdx + 0], to);
-		});
-	}
-	void Func5C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	void Func6C(Bitboard& toBB, PieceType haveHand[6], MoveStack* pMoveStackList)
-	{
-		Square to;
-		FOREACH_BB(toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
-	}
-	*/
-
-	// ‹à, ¬‚è‹àA”nA—³‚Ìw‚µè¶¬
+	// é‡‘, æˆã‚Šé‡‘ã€é¦¬ã€ç«œã®æŒ‡ã—æ‰‹ç”Ÿæˆ
 	template <MoveType MT, PieceType PT, Color US, bool ALL> struct GeneratePieceMoves {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
 			static_assert(PT == N16_GoldHorseDragon, "");
-			// ‹àA¬‹àA”nA—³‚Ìbitboard‚ğ‚Ü‚Æ‚ß‚Äˆµ‚¤B
+			// é‡‘ã€æˆé‡‘ã€é¦¬ã€ç«œã®bitboardã‚’ã¾ã¨ã‚ã¦æ‰±ã†ã€‚
 			Bitboard fromBB = (pos.GetGoldsBB() | pos.GetBbOf(N13_Horse, N14_Dragon)) & pos.GetBbOf(US);
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				// from ‚É‚ ‚é‹î‚Ìí—Ş‚ğ”»•Ê
+				// from ã«ã‚ã‚‹é§’ã®ç¨®é¡ã‚’åˆ¤åˆ¥
 				const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
 				Bitboard toBB = UtilAttack::GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
 				while (toBB.Exists1Bit()) {
@@ -2409,21 +580,21 @@ namespace {
 			return moveStackList;
 		}
 	};
-	// •à‚Ìê‡
+	// æ­©ã®å ´åˆ
 	template <MoveType MT, Color US, bool ALL>
 	struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
 
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
-			// Txxx ‚ÍæèAŒãè‚Ìî•ñ‚ğ‹zû‚µ‚½•Ï”B”š‚Íæè‚É‡‚í‚¹‚Ä‚¢‚éB
+			// Txxx ã¯å…ˆæ‰‹ã€å¾Œæ‰‹ã®æƒ…å ±ã‚’å¸åã—ãŸå¤‰æ•°ã€‚æ•°å­—ã¯å…ˆæ‰‹ã«åˆã‚ã›ã¦ã„ã‚‹ã€‚
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
 			const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
 			Bitboard toBB = pos.GetBbOf(N01_Pawn, US).PawnAttack<US>() & target;
 
-			// ¬‚è
+			// æˆã‚Š
 			if (MT != NonCaptureMinusPro) {
 				Bitboard toOn789BB = toBB & TRank789BB;
 				if (toOn789BB.Exists1Bit()) {
@@ -2448,8 +619,8 @@ namespace {
 				assert(!(target & TRank789BB).Exists1Bit());
 			}
 
-			// c‚è(•s¬)
-			// toBB ‚Í 8~4 ’i–Ú‚Ü‚ÅB
+			// æ®‹ã‚Š(ä¸æˆ)
+			// toBB ã¯ 8~4 æ®µç›®ã¾ã§ã€‚
 			Square to;
 			FOREACH_BB(toBB, to, {
 				const Square from = to + TDeltaS;
@@ -2457,10 +628,10 @@ namespace {
 			});
 
 			return moveStackList;
-		}//‰‰Zq‚ÌƒI[ƒo[ƒ[ƒh‚Ì’è‹`H
+		}//æ¼”ç®—å­ã®ã‚ªãƒ¼ãƒãƒ¼ãƒ­ãƒ¼ãƒ‰ã®å®šç¾©ï¼Ÿ
 	};//struct
 
-	  // Ô‚Ìê‡
+	  // é¦™è»Šã®å ´åˆ
 	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -2471,30 +642,30 @@ namespace {
 				Bitboard toBB = g_ptLance.GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
 				do {
 					if (toBB.Exists1Bit()) {
-						// ‹îæ‚è‘ÎÛ‚Í•K‚¸ˆê‚ÂˆÈ‰º‚È‚Ì‚ÅAtoBB ‚Ìƒrƒbƒg‚ğ 0 ‚É‚·‚é•K—v‚ª‚È‚¢B
+						// é§’å–ã‚Šå¯¾è±¡ã¯å¿…ãšä¸€ã¤ä»¥ä¸‹ãªã®ã§ã€toBB ã®ãƒ“ãƒƒãƒˆã‚’ 0 ã«ã™ã‚‹å¿…è¦ãŒãªã„ã€‚
 						const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
 						const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 						if (toCanPromote) {
 							(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N02_Lance, from, to, pos);
 							if (MT == NonEvasion || ALL) {
-								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1’i–Ú‚Ì•s¬‚ÍÈ‚­
+								if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1æ®µç›®ã®ä¸æˆã¯çœã
 									(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 							}
-							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // ‹î‚ğæ‚ç‚È‚¢3’i–Ú‚Ì•s¬‚ğÈ‚­
-								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2’i–Ú‚Ì•s¬‚ğÈ‚­
+							else if (MT != NonCapture && MT != NonCaptureMinusPro) { // é§’ã‚’å–ã‚‰ãªã„3æ®µç›®ã®ä¸æˆã‚’çœã
+								if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2æ®µç›®ã®ä¸æˆã‚’çœã
 									(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 							}
 						}
 						else
 							(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 					}
-					// ‹îæ‚è‘ÎÛ‚Í•K‚¸ˆê‚ÂˆÈ‰º‚È‚Ì‚ÅAloop ‚Í•s—vBÅ“K‰»‚Å do while ‚ª–³‚­‚È‚é‚Æ—Ç‚¢B
+					// é§’å–ã‚Šå¯¾è±¡ã¯å¿…ãšä¸€ã¤ä»¥ä¸‹ãªã®ã§ã€loop ã¯ä¸è¦ã€‚æœ€é©åŒ–ã§ do while ãŒç„¡ããªã‚‹ã¨è‰¯ã„ã€‚
 				} while (!(MT == Capture || MT == CapturePlusPro) && toBB.Exists1Bit());
 			}
 			return moveStackList;
 		}
 	};
-	// Œj”n‚Ìê‡
+	// æ¡‚é¦¬ã®å ´åˆ
 	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N03_Knight, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -2508,7 +679,7 @@ namespace {
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N03_Knight, from, to, pos);
-						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2’i–Ú‚Ì•s¬‚ÍÈ‚­
+						if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2æ®µç›®ã®ä¸æˆã¯çœã
 							(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
 					}
 					else
@@ -2518,7 +689,7 @@ namespace {
 			return moveStackList;
 		}
 	};
-	// ‹â‚Ìê‡
+	// éŠ€ã®å ´åˆ
 	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N04_Silver, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -2553,8 +724,8 @@ namespace {
 			return generateBishopOrRookMoves<MT, N06_Rook, US, ALL>(moveStackList, pos, target, ksq);
 		}
 	};
-	// ‹Ê‚Ìê‡
-	// •K‚¸”Õã‚É 1 –‡‚¾‚¯‚ ‚é‚±‚Æ‚ğ‘O’ñ‚É‚·‚é‚±‚Æ‚ÅAwhile ƒ‹[ƒv‚ğ 1 ‚Â–³‚­‚µ‚Ä‚‘¬‰»‚µ‚Ä‚¢‚éB
+	// ç‰ã®å ´åˆ
+	// å¿…ãšç›¤ä¸Šã« 1 æšã ã‘ã‚ã‚‹ã“ã¨ã‚’å‰æã«ã™ã‚‹ã“ã¨ã§ã€while ãƒ«ãƒ¼ãƒ—ã‚’ 1 ã¤ç„¡ãã—ã¦é«˜é€ŸåŒ–ã—ã¦ã„ã‚‹ã€‚
 	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N08_King, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -2569,16 +740,16 @@ namespace {
 		}
 	};
 
-	// w‚µè¶¬ functor
-	// ƒeƒ“ƒvƒŒ[ƒgˆø”‚ª•¡”‚ ‚èA•”•ª“Áê‰»‚µ‚½‚©‚Á‚½‚Ì‚ÅAŠÖ”‚Å‚Í‚È‚­Astruct ‚É‚µ‚½B
-	// ALL == true ‚Ì‚Æ‚«A•àA”òAŠp‚Ì•s¬A‚Ì2’i–Ú‚Ì•s¬A‚Ì3’i–Ú‚Ì‹î‚ğæ‚ç‚È‚¢•s¬‚à¶¬‚·‚éB
+	// æŒ‡ã—æ‰‹ç”Ÿæˆ functor
+	// ãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆå¼•æ•°ãŒè¤‡æ•°ã‚ã‚Šã€éƒ¨åˆ†ç‰¹æ®ŠåŒ–ã—ãŸã‹ã£ãŸã®ã§ã€é–¢æ•°ã§ã¯ãªãã€struct ã«ã—ãŸã€‚
+	// ALL == true ã®ã¨ãã€æ­©ã€é£›ã€è§’ã®ä¸æˆã€é¦™ã®2æ®µç›®ã®ä¸æˆã€é¦™ã®3æ®µç›®ã®é§’ã‚’å–ã‚‰ãªã„ä¸æˆã‚‚ç”Ÿæˆã™ã‚‹ã€‚
 	template <MoveType MT, Color US, bool ALL = false>
 	struct GenerateMoves {
 		MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos
 			) {
 			static_assert(MT == Capture || MT == NonCapture || MT == CapturePlusPro || MT == NonCaptureMinusPro, "");
-			// Txxx ‚ÍæèAŒãè‚Ìî•ñ‚ğ‹zû‚µ‚½•Ï”B”š‚Íæè‚É‡‚í‚¹‚Ä‚¢‚éB
+			// Txxx ã¯å…ˆæ‰‹ã€å¾Œæ‰‹ã®æƒ…å ±ã‚’å¸åã—ãŸå¤‰æ•°ã€‚æ•°å­—ã¯å…ˆæ‰‹ã«åˆã‚ã›ã¦ã„ã‚‹ã€‚
 			const Rank TRank6 = (US == Black ? Rank6 : Rank4);
 			const Rank TRank7 = (US == Black ? Rank7 : Rank3);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
@@ -2613,8 +784,8 @@ namespace {
 		}
 	};
 
-	// •”•ª“Áê‰»
-	// ‹î‘Å‚¿¶¬
+	// éƒ¨åˆ†ç‰¹æ®ŠåŒ–
+	// é§’æ‰“ã¡ç”Ÿæˆ
 	template <Color US>
 	struct GenerateMoves<Drop, US> {
 		FORCE_INLINE MoveStack* operator () (
@@ -2626,12 +797,12 @@ namespace {
 		}
 	};
 
-	// checkSq ‚É‚ ‚é‹î‚Å‰¤è‚³‚ê‚½‚Æ‚«A‹Ê‚Í‚»‚Ì‹î‚Ì—˜‚«‚ÌˆÊ’u‚É‚ÍˆÚ“®‚Å‚«‚È‚¢‚Ì‚ÅAˆÚ“®‚Å‚«‚È‚¢ˆÊ’u‚ğ bannnedKingToBB ‚ÉŠi”[‚·‚éB
-	// —¼‰¤è‚Ì‚Æ‚«‚É‚Í“ñ“x˜A‘±‚ÅŒÄ‚Î‚ê‚é‚½‚ßA= ‚Å‚Í‚È‚­ |= ‚ğg—p‚µ‚Ä‚¢‚éB
-	// Å‰‚ÉŒÄ‚Î‚ê‚½‚Æ‚«‚ÍAbannedKingToBB == allZeroBB() ‚Å‚ ‚éB
-	// todo: FOECE_INLINE ‚Æ template È‚¢‚ÄNPS”äŠr
+	// checkSq ã«ã‚ã‚‹é§’ã§ç‹æ‰‹ã•ã‚ŒãŸã¨ãã€ç‰ã¯ãã®é§’ã®åˆ©ãã®ä½ç½®ã«ã¯ç§»å‹•ã§ããªã„ã®ã§ã€ç§»å‹•ã§ããªã„ä½ç½®ã‚’ bannnedKingToBB ã«æ ¼ç´ã™ã‚‹ã€‚
+	// ä¸¡ç‹æ‰‹ã®ã¨ãã«ã¯äºŒåº¦é€£ç¶šã§å‘¼ã°ã‚Œã‚‹ãŸã‚ã€= ã§ã¯ãªã |= ã‚’ä½¿ç”¨ã—ã¦ã„ã‚‹ã€‚
+	// æœ€åˆã«å‘¼ã°ã‚ŒãŸã¨ãã¯ã€bannedKingToBB == allZeroBB() ã§ã‚ã‚‹ã€‚
+	// todo: FOECE_INLINE ã¨ template çœã„ã¦NPSæ¯”è¼ƒ
 	//
-	// •‚©”’‚ÅŠÖ”‚ğ‚Q‚Â—pˆÓ‚µ‚¿‚áƒ_ƒ‚È‚Ì‚©‚¾‚º™HiO‚‘OjH
+	// é»’ã‹ç™½ã§é–¢æ•°ã‚’ï¼’ã¤ç”¨æ„ã—ã¡ã‚ƒãƒ€ãƒ¡ãªã®ã‹ã ãœâ˜†ï¼Ÿï¼ˆï¼¾ï½‘ï¼¾ï¼‰ï¼Ÿ
 	//
 	template <Color THEM>
 	FORCE_INLINE void makeBannedKingTo(
@@ -2642,20 +813,20 @@ namespace {
 	) {
 
 		//
-		// (^q^)•‚©”’‚©‚ÅÅ‰‚É•ª‚¯‚¿‚áƒ_ƒ‚È‚Ì‚©‚¾‚º™H
+		// (^q^)é»’ã‹ç™½ã‹ã§æœ€åˆã«åˆ†ã‘ã¡ã‚ƒãƒ€ãƒ¡ãªã®ã‹ã ãœâ˜†ï¼Ÿ
 		//
-		switch (pos.GetPiece(checkSq))
+		switch (pos.GetPiece(checkSq))//templateã®ä¸­ãªã®ã§æ”¹é€ ã—ã«ãã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 		{
 
-		// (^q^)ƒrƒbƒg‚ª 0 ‚Ì‚Æ‚«™H
-		//		case Empty: assert(false); break; // Å“K‰»‚Ìˆ×‚Ìƒ_ƒ~[
+		// (^q^)ãƒ“ãƒƒãƒˆãŒ 0 ã®ã¨ãâ˜†ï¼Ÿ
+		//		case Empty: assert(false); break; // æœ€é©åŒ–ã®ç‚ºã®ãƒ€ãƒŸãƒ¼
 
-		// (^q^)F‚ª•‚È‚ç BPawnA‚»‚¤‚Å‚È‚¯‚ê‚Î WPawn ‚ÌƒP[ƒX‚¾‚º™
+		// (^q^)è‰²ãŒé»’ãªã‚‰ BPawnã€ãã†ã§ãªã‘ã‚Œã° WPawn ã®ã‚±ãƒ¼ã‚¹ã ãœâ˜†
 		case (THEM == Black ? BPawn : WPawn) :
-		// (^q^)F‚ª•‚È‚ç BKnightA‚»‚¤‚Å‚È‚¯‚ê‚Î WKnight ‚ÌƒP[ƒX‚¾‚º™
+		// (^q^)è‰²ãŒé»’ãªã‚‰ BKnightã€ãã†ã§ãªã‘ã‚Œã° WKnight ã®ã‚±ãƒ¼ã‚¹ã ãœâ˜†
 		case (THEM == Black ? BKnight : WKnight) :
-			// •àAŒj”n‚Å‰¤è‚µ‚½‚Æ‚«‚ÍA‚Ç‚±‚Ö“¦‚°‚Ä‚àA‚»‚Ì‹î‚Åæ‚ç‚ê‚é‚±‚Æ‚Í‚È‚¢B
-			// ‚æ‚Á‚ÄA‚±‚±‚Å‚Í‰½‚à‚µ‚È‚¢B
+			// æ­©ã€æ¡‚é¦¬ã§ç‹æ‰‹ã—ãŸã¨ãã¯ã€ã©ã“ã¸é€ƒã’ã¦ã‚‚ã€ãã®é§’ã§å–ã‚‰ã‚Œã‚‹ã“ã¨ã¯ãªã„ã€‚
+			// ã‚ˆã£ã¦ã€ã“ã“ã§ã¯ä½•ã‚‚ã—ãªã„ã€‚
 			assert(
 				pos.GetPiece(checkSq) == (THEM == Black ? BPawn : WPawn) ||
 				pos.GetPiece(checkSq) == (THEM == Black ? BKnight : WKnight)
@@ -2695,9 +866,9 @@ namespace {
 			break;
 
 		case (THEM == Black ? BDragon : WDragon) :
-			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & DirecDiag) {
-				// Î‚ß‚©‚ç‰¤è‚µ‚½‚Æ‚«‚ÍA‹Ê‚ÌˆÚ“®æ‚Æ‰¤è‚µ‚½‹î‚ÌŠÔ‚É‹î‚ª‚ ‚é‚±‚Æ‚ª‚ ‚é‚Ì‚ÅA
-				// dragonAttackToEdge(checkSq) ‚Íg‚¦‚È‚¢B
+			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
+				// æ–œã‚ã‹ã‚‰ç‹æ‰‹ã—ãŸã¨ãã¯ã€ç‰ã®ç§»å‹•å…ˆã¨ç‹æ‰‹ã—ãŸé§’ã®é–“ã«é§’ãŒã‚ã‚‹ã“ã¨ãŒã‚ã‚‹ã®ã§ã€
+				// dragonAttackToEdge(checkSq) ã¯ä½¿ãˆãªã„ã€‚
 				bannedKingToBB |= g_ptDragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
 			}
 			else {
@@ -2709,11 +880,11 @@ namespace {
 		}
 	}
 
-	// •”•ª“Áê‰»
-	// ‰¤è‰ñ”ğ¶¬
-	// ‰¤è‚ğ‚µ‚Ä‚¢‚é‹î‚É‚æ‚é‰¤è‚Í”ğ‚¯‚é‚ªA
-	// ‹Ê‚ÌˆÚ“®æ‚É“G‚Ì—˜‚«‚ª‚ ‚éê‡‚ÆApin‚³‚ê‚Ä‚¢‚é–¡•û‚Ì‹î‚ğ“®‚©‚µ‚½ê‡A”ñ‡–@è‚ğ¶¬‚·‚éB
-	// ‚»‚Ì‚½‚ßApseudo legal ‚Å‚ ‚éB
+	// éƒ¨åˆ†ç‰¹æ®ŠåŒ–
+	// ç‹æ‰‹å›é¿ç”Ÿæˆ
+	// ç‹æ‰‹ã‚’ã—ã¦ã„ã‚‹é§’ã«ã‚ˆã‚‹ç‹æ‰‹ã¯é¿ã‘ã‚‹ãŒã€
+	// ç‰ã®ç§»å‹•å…ˆã«æ•µã®åˆ©ããŒã‚ã‚‹å ´åˆã¨ã€pinã•ã‚Œã¦ã„ã‚‹å‘³æ–¹ã®é§’ã‚’å‹•ã‹ã—ãŸå ´åˆã€éåˆæ³•æ‰‹ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+	// ãã®ãŸã‚ã€pseudo legal ã§ã‚ã‚‹ã€‚
 	template <Color US, bool ALL> struct GenerateMoves<Evasion, US, ALL> {
 		/*FORCE_INLINE*/ MoveStack* operator () (
 			MoveStack* pMovestack,
@@ -2724,7 +895,7 @@ namespace {
 
 			const Square ksq = pos.GetKingSquare(US);
 
-			// ‘Šè‚ÌF™
+			// ç›¸æ‰‹ã®è‰²â˜†
 			const Color Them = UtilColor::OppositeColor(US);
 
 			const Bitboard checkers = pos.GetCheckersBB();
@@ -2733,41 +904,41 @@ namespace {
 			int checkersNum = 0;
 			Square checkSq;
 
-			// ‹Ê‚ª“¦‚°‚ç‚ê‚È‚¢ˆÊ’u‚Ì bitboard ‚ğ¶¬‚·‚éB
-			// â‘Î‚É‰¤è‚ªŠ|‚©‚Á‚Ä‚¢‚é‚Ì‚ÅAwhile ‚Å‚Í‚È‚­Ado while
+			// ç‰ãŒé€ƒã’ã‚‰ã‚Œãªã„ä½ç½®ã® bitboard ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+			// çµ¶å¯¾ã«ç‹æ‰‹ãŒæ›ã‹ã£ã¦ã„ã‚‹ã®ã§ã€while ã§ã¯ãªãã€do while
 			do {
 
-				// Å‰‚Éƒrƒbƒg‚ª—§‚Á‚Ä‚¢‚½ƒ}ƒX™
+				// æœ€åˆã«ãƒ“ãƒƒãƒˆãŒç«‹ã£ã¦ã„ãŸãƒã‚¹â˜†
 				checkSq = bb.PopFirstOneFromI9();
 
 				assert(UtilPiece::ToColor(pos.GetPiece(checkSq)) == Them);
 
-				// ƒJƒEƒ“ƒgƒAƒbƒv™
+				// ã‚«ã‚¦ãƒ³ãƒˆã‚¢ãƒƒãƒ—â˜†
 				++checkersNum;
 
-				// ”’‚©•‚©‚É‚æ‚Á‚Ä•ª‚¯‚Ä‚¢‚é™
+				// ç™½ã‹é»’ã‹ã«ã‚ˆã£ã¦åˆ†ã‘ã¦ã„ã‚‹â˜†
 				makeBannedKingTo<Them>(bannedKingToBB, pos, checkSq, ksq);
 
 			} while (bb.Exists1Bit());
 
 
-			// ‹Ê‚ªˆÚ“®o—ˆ‚éˆÚ“®æ‚ğŠi”[B
+			// ç‰ãŒç§»å‹•å‡ºæ¥ã‚‹ç§»å‹•å…ˆã‚’æ ¼ç´ã€‚
 			bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(US).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
 			while (bb.Exists1Bit()) {
 				const Square to = bb.PopFirstOneFromI9();
-				// ˆÚ“®æ‚É‘Šè‹î‚Ì—˜‚«‚ª‚ ‚é‚©’²‚×‚¸‚Éw‚µè‚ğ¶¬‚·‚éB
-				// attackersTo() ‚ªd‚¢‚Ì‚ÅAmovePicker ‚© search ‚Å‡–@è‚©’²‚×‚éB
+				// ç§»å‹•å…ˆã«ç›¸æ‰‹é§’ã®åˆ©ããŒã‚ã‚‹ã‹èª¿ã¹ãšã«æŒ‡ã—æ‰‹ã‚’ç”Ÿæˆã™ã‚‹ã€‚
+				// attackersTo() ãŒé‡ã„ã®ã§ã€movePicker ã‹ search ã§åˆæ³•æ‰‹ã‹èª¿ã¹ã‚‹ã€‚
 				(*pMovestack++).m_move = g_makePromoteMove.MakeNonPromoteMove<Capture>(N08_King, ksq, to, pos);
 			}
 
-			// —¼‰¤è‚È‚çA‹Ê‚ğˆÚ“®‚·‚é‚µ‚©‰ñ”ğ•û–@‚Í–³‚¢B
-			// ‹Ê‚ÌˆÚ“®‚Í¶¬‚µ‚½‚Ì‚ÅA‚±‚±‚ÅI—¹
+			// ä¸¡ç‹æ‰‹ãªã‚‰ã€ç‰ã‚’ç§»å‹•ã™ã‚‹ã—ã‹å›é¿æ–¹æ³•ã¯ç„¡ã„ã€‚
+			// ç‰ã®ç§»å‹•ã¯ç”Ÿæˆã—ãŸã®ã§ã€ã“ã“ã§çµ‚äº†
 			if (1 < checkersNum) {
 				return pMovestack;
 			}
 
-			// ‰¤è‚µ‚Ä‚¢‚é‹î‚ğ‹ÊˆÈŠO‚Åæ‚éè‚Ì¶¬B
-			// pin ‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Í movePicker ‚© search ‚Å’²‚×‚éB
+			// ç‹æ‰‹ã—ã¦ã„ã‚‹é§’ã‚’ç‰ä»¥å¤–ã§å–ã‚‹æ‰‹ã®ç”Ÿæˆã€‚
+			// pin ã•ã‚Œã¦ã„ã‚‹ã‹ã©ã†ã‹ã¯ movePicker ã‹ search ã§èª¿ã¹ã‚‹ã€‚
 			const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
 			pMovestack = GeneratePieceMoves<Evasion, N01_Pawn, US, ALL>()(pMovestack, pos, target2, ksq);
@@ -2786,10 +957,10 @@ namespace {
 		}
 	};
 
-	// •”•ª“Áê‰»
-	// ‰¤è‚ªŠ|‚©‚Á‚Ä‚¢‚È‚¢‚Æ‚«‚Ìw‚µè¶¬
-	// ‚±‚ê‚É‚ÍA‹Ê‚ª‘Šè‹î‚Ì—˜‚«‚Ì‚ ‚é’n“_‚ÉˆÚ“®‚·‚é©Eè‚ÆApin ‚³‚ê‚Ä‚¢‚é‹î‚ğ“®‚©‚·©Eè‚ğŠÜ‚ŞB
-	// ‚±‚±‚Å¶¬‚µ‚½è‚Í pseudo legal
+	// éƒ¨åˆ†ç‰¹æ®ŠåŒ–
+	// ç‹æ‰‹ãŒæ›ã‹ã£ã¦ã„ãªã„ã¨ãã®æŒ‡ã—æ‰‹ç”Ÿæˆ
+	// ã“ã‚Œã«ã¯ã€ç‰ãŒç›¸æ‰‹é§’ã®åˆ©ãã®ã‚ã‚‹åœ°ç‚¹ã«ç§»å‹•ã™ã‚‹è‡ªæ®ºæ‰‹ã¨ã€pin ã•ã‚Œã¦ã„ã‚‹é§’ã‚’å‹•ã‹ã™è‡ªæ®ºæ‰‹ã‚’å«ã‚€ã€‚
+	// ã“ã“ã§ç”Ÿæˆã—ãŸæ‰‹ã¯ pseudo legal
 	template <Color US> struct GenerateMoves<NonEvasion, US> {
 		/*FORCE_INLINE*/ MoveStack* operator () (
 			MoveStack* pMovestack, const Position& pos
@@ -2813,9 +984,9 @@ namespace {
 		}
 	};
 
-	// •”•ª“Áê‰»
-	// ˜A‘±‰¤è‚Ìç“úèˆÈŠO‚Ì”½‘¥è‚ğ”rœ‚µ‚½‡–@è¶¬
-	// ‚»‚ñ‚È‚É‘¬“x‚ª—v‹‚³‚ê‚é‚Æ‚±‚ë‚Å‚ÍŒÄ‚Î‚È‚¢B
+	// éƒ¨åˆ†ç‰¹æ®ŠåŒ–
+	// é€£ç¶šç‹æ‰‹ã®åƒæ—¥æ‰‹ä»¥å¤–ã®åå‰‡æ‰‹ã‚’æ’é™¤ã—ãŸåˆæ³•æ‰‹ç”Ÿæˆ
+	// ãã‚“ãªã«é€Ÿåº¦ãŒè¦æ±‚ã•ã‚Œã‚‹ã¨ã“ã‚ã§ã¯å‘¼ã°ãªã„ã€‚
 	template <Color US> struct GenerateMoves<Legal, US> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos
@@ -2826,7 +997,7 @@ namespace {
 			moveStackList = pos.InCheck() ?
 				GenerateMoves<Evasion, US>()(moveStackList, pos) : GenerateMoves<NonEvasion, US>()(moveStackList, pos);
 
-			// ‹Ê‚ÌˆÚ“®‚É‚æ‚é©Eè‚ÆApin‚³‚ê‚Ä‚¢‚é‹î‚ÌˆÚ“®‚É‚æ‚é©Eè‚ğíœ
+			// ç‰ã®ç§»å‹•ã«ã‚ˆã‚‹è‡ªæ®ºæ‰‹ã¨ã€pinã•ã‚Œã¦ã„ã‚‹é§’ã®ç§»å‹•ã«ã‚ˆã‚‹è‡ªæ®ºæ‰‹ã‚’å‰Šé™¤
 			while (curr != moveStackList) {
 				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
 					curr->m_move = (--moveStackList)->m_move;
@@ -2840,8 +1011,8 @@ namespace {
 		}
 	};
 
-	// •”•ª“Áê‰»
-	// Evasion ‚Ì‚Æ‚«‚É•àA”òAŠp‚ÆA‚Ì2’i–Ú‚Ì•s¬‚à¶¬‚·‚éB
+	// éƒ¨åˆ†ç‰¹æ®ŠåŒ–
+	// Evasion ã®ã¨ãã«æ­©ã€é£›ã€è§’ã¨ã€é¦™ã®2æ®µç›®ã®ä¸æˆã‚‚ç”Ÿæˆã™ã‚‹ã€‚
 	template <Color US> struct GenerateMoves<LegalAll, US> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos
@@ -2852,7 +1023,7 @@ namespace {
 			moveStackList = pos.InCheck() ?
 				GenerateMoves<Evasion, US, true>()(moveStackList, pos) : GenerateMoves<NonEvasion, US>()(moveStackList, pos);
 
-			// ‹Ê‚ÌˆÚ“®‚É‚æ‚é©Eè‚ÆApin‚³‚ê‚Ä‚¢‚é‹î‚ÌˆÚ“®‚É‚æ‚é©Eè‚ğíœ
+			// ç‰ã®ç§»å‹•ã«ã‚ˆã‚‹è‡ªæ®ºæ‰‹ã¨ã€pinã•ã‚Œã¦ã„ã‚‹é§’ã®ç§»å‹•ã«ã‚ˆã‚‹è‡ªæ®ºæ‰‹ã‚’å‰Šé™¤
 			while (curr != moveStackList) {
 				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
 					curr->m_move = (--moveStackList)->m_move;
@@ -2882,7 +1053,7 @@ MoveStack* generateMoves(
 
 namespace {
 
-	// pin ‚ÍÈ‚©‚È‚¢B
+	// pin ã¯çœã‹ãªã„ã€‚
 	FORCE_INLINE MoveStack* generateRecaptureMoves(
 		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
 		) {
@@ -2891,7 +1062,7 @@ namespace {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
 
-			// TODO: ”z—ñ‚ÌƒŠƒ~ƒbƒgƒ`ƒFƒbƒN‚ğ‚µ‚Ä‚È‚¢‚º™iO‚‘Oj
+			// TODO: é…åˆ—ã®ãƒªãƒŸãƒƒãƒˆãƒã‚§ãƒƒã‚¯ã‚’ã—ã¦ãªã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
@@ -2907,11 +1078,11 @@ MoveStack* generateMoves(
 }
 
 
-// –¾¦“I‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‰»
-// ‚±‚ê‚ª–³‚¢‚ÆA‘¼‚Ìƒtƒ@ƒCƒ‹‚©‚çŒÄ‚ñ‚¾‚ÉA
-// À‘Ì‚ª–³‚¢‚½‚ß‚ÉƒŠƒ“ƒNƒGƒ‰[‚É‚È‚éB
-// ‚¿‚È‚İ‚ÉA“Áê‰»‚³‚ê‚½ƒeƒ“ƒvƒŒ[ƒgŠÖ”‚ÍA–¾¦“I‚ÈƒCƒ“ƒXƒ^ƒ“ƒX‰»‚Ì•K—v‚Í‚È‚¢B
-// À‘•‚ğ cpp ‚É’u‚­‚±‚Æ‚ÅAƒRƒ“ƒpƒCƒ‹ŠÔ‚Ì’Zk‚ªo—ˆ‚éB
+// æ˜ç¤ºçš„ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–
+// ã“ã‚ŒãŒç„¡ã„ã¨ã€ä»–ã®ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰å‘¼ã‚“ã æ™‚ã«ã€
+// å®Ÿä½“ãŒç„¡ã„ãŸã‚ã«ãƒªãƒ³ã‚¯ã‚¨ãƒ©ãƒ¼ã«ãªã‚‹ã€‚
+// ã¡ãªã¿ã«ã€ç‰¹æ®ŠåŒ–ã•ã‚ŒãŸãƒ†ãƒ³ãƒ—ãƒ¬ãƒ¼ãƒˆé–¢æ•°ã¯ã€æ˜ç¤ºçš„ãªã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹åŒ–ã®å¿…è¦ã¯ãªã„ã€‚
+// å®Ÿè£…ã‚’ cpp ã«ç½®ãã“ã¨ã§ã€ã‚³ãƒ³ãƒ‘ã‚¤ãƒ«æ™‚é–“ã®çŸ­ç¸®ãŒå‡ºæ¥ã‚‹ã€‚
 //template MoveStack* generateMoves<Capture           >(MoveStack* moveStackList, const Position& pos);
 //template MoveStack* generateMoves<NonCapture        >(MoveStack* moveStackList, const Position& pos);
 template MoveStack* generateMoves<Drop              >(MoveStack* moveStackList, const Position& pos);

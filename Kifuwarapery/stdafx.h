@@ -33,7 +33,7 @@
 #include <array>
 #include <atomic>
 #include <cstdio>
-#include <cstdlib>
+#include <cstdlib>	// abs()
 #include <cstring>
 #include <climits>
 #include <cassert>

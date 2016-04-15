@@ -13,8 +13,9 @@ private:
 public:
 
 
-	void InitSquareDistance();
-
+	inline void SetValue(const Square sq1, const Square sq2, int value) {
+		this->m_squareDistance_[sq1][sq2] = value;
+	}
 
 	inline int GetSquareDistance(const Square sq1, const Square sq2) const {
 		return this->m_squareDistance_[sq1][sq2];

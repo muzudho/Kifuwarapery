@@ -7,6 +7,7 @@
 // StateInfoMin だけ memcpy でコピーすることああるので、
 // 継承を使っている。
 struct StateInfo : public StateInfoMin {
+public://(^q^)修飾子追加☆m_checkersBBを公開したいんだぜ☆
 	Key m_boardKey;
 	Key m_handKey;
 	// 手番側の玉へ check している駒の Bitboard
