@@ -3,7 +3,7 @@
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n480_tt______/n480_300_tt.hpp"
 #include "../../header/n760_thread__/n760_400_threadPool.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 #include "..\..\header\n900_main____\n900_400_main01.hpp"
 
 

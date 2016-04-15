@@ -29,7 +29,7 @@
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 
@@ -348,29 +348,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			// Discovery checks
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
-
 				g_bonaDirArray[g_squareRelation.GetSquareRelation(from, ksq)]->Do2Move(*this, from, ksq, us);
-
-				/*
-				switch (g_squareRelation.GetSquareRelation(from, ksq))
-				{
-				case N00_DirecMisc:
-					assert(false); // 最適化の為のダミー
-					break;
-				case N02_DirecFile:
-					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
-					m_st_->m_checkersBB |= g_rookAttackBb.GetControllBbFile(&this->GetOccupiedBB(), from) & this->GetBbOf(us);
-					break;
-				case N03_DirecRank:
-					m_st_->m_checkersBB |= g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N06_Rook, N14_Dragon, us);
-					break;
-				case N04_DirecDiagNESW: case N05_DirecDiagNWSE:
-					m_st_->m_checkersBB |= g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N05_Bishop, N13_Horse, us);
-					break;
-				default:
-					UNREACHABLE;
-				}
-				*/
 			}
 			m_st_->m_continuousCheck[us] += 2;
 		}

@@ -1,7 +1,7 @@
 ﻿#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n760_thread__/n760_300_mainThread.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 void MainThread::IdleLoop() {

@@ -2,7 +2,7 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 namespace {

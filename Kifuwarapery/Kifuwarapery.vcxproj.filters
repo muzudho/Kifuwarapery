@@ -190,6 +190,24 @@
     <Filter Include="source\n351_bonaDir_">
       <UniqueIdentifier>{9f4a4109-6904-4184-9f85-212103e17706}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n885_searcher">
+      <UniqueIdentifier>{d7ff7c2e-f562-42cc-8f12-6930ad79c43e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n885_searcher">
+      <UniqueIdentifier>{9ce0590a-7a3d-4d4a-8c9c-fefe2f61d93c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n883_search__">
+      <UniqueIdentifier>{12f8086c-e13c-4268-92e4-0a5751f5846d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n883_nodeType">
+      <UniqueIdentifier>{3845759c-eaf6-48cf-a64c-c96beef0726e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n887_nodeType">
+      <UniqueIdentifier>{549f93ec-2a97-48a3-8e8a-f8de23e28b00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n887_nodeType">
+      <UniqueIdentifier>{151492f8-26d1-4d9b-ba6d-4cec723db3e1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -377,9 +395,6 @@
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp">
       <Filter>header\n223_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n900_main____\n900_200_searcher.hpp">
-      <Filter>header\n900_main____</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
@@ -723,6 +738,24 @@
     <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
       <Filter>header\n351_bonaDir_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_500_searcher.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp">
+      <Filter>header\n883_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_100_nodeTypeRoot.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_110_nodeTypePv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_120_nodeTypeNonPv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -826,9 +859,6 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp">
       <Filter>source\n220_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n900_main____\n900_200_searcher.cpp">
-      <Filter>source\n900_main____</Filter>
     </ClCompile>
     <ClCompile Include="source\n110_square\n110_150_file.cpp">
       <Filter>source\n110_square___</Filter>
@@ -1105,6 +1135,24 @@
     </ClCompile>
     <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
       <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_500_searcher.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n883_nodeType\n883_500_nodeTypeAbstract.cpp">
+      <Filter>source\n883_search__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_100_nodeTypeRoot.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_110_nodeTypePv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_120_nodeTypeNonPv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp">
+      <Filter>source\n887_nodeType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

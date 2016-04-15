@@ -1,11 +1,12 @@
-﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
+﻿#include <map>
+#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_680_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 class StringToPieceTypeCSA : public std::map<std::string, PieceType> {

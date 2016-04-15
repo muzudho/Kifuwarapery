@@ -12,34 +12,7 @@
 void UtilSquareDistance::InitSquareDistance(SquareDistance& squareDistance) {
 	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
-
 			g_bonaDirArray[g_squareRelation.GetSquareRelation(sq0, sq1)]->InitializeSquareDistance(squareDistance, sq0, sq1);
-
-			/*
-			switch (g_squareRelation.GetSquareRelation(sq0, sq1)) {
-			case N00_DirecMisc:
-				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
-				this->m_squareDistance_[sq0][sq1] = 0;
-				if (g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(Black, sq0), sq1) ||
-					g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(White, sq0), sq1))
-				    this->m_squareDistance_[sq0][sq1] = 1;
-				break;
-			case N02_DirecFile:
-				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(SquareDelta::DeltaN));
-				break;
-			case N03_DirecRank:
-				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(SquareDelta::DeltaE));
-				break;
-			case N04_DirecDiagNESW:
-				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(SquareDelta::DeltaNE));
-				break;
-			case N05_DirecDiagNWSE:
-				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(SquareDelta::DeltaNW));
-				break;
-			default: UNREACHABLE;
-			}
-			*/
-
 		}
 	}
 }

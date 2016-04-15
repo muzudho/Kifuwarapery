@@ -1,5 +1,10 @@
 ﻿#pragma once
 
 enum NodeType {
-	Root, PV, NonPV, SplitPointRoot, SplitPointPV, SplitPointNonPV
+	N00_Root,
+	N01_PV,
+	N02_NonPV,
+	SplitPointRoot,
+	SplitPointPV,
+	SplitPointNonPV
 };

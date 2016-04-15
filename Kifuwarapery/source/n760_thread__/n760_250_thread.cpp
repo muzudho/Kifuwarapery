@@ -8,7 +8,7 @@
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n640_searcher/n640_440_splitPoint.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 Thread::Thread(Searcher* searcher) /*: splitPoints()*/ {

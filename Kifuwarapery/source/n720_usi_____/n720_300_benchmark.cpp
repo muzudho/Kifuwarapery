@@ -7,7 +7,7 @@
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
-#include "../../header/n900_main____/n900_200_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。
