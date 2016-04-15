@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "n080_050_ifdef.hpp"
 

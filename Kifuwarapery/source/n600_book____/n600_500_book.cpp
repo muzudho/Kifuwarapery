@@ -1,4 +1,4 @@
-#include <algorithm>	//std::max
+﻿#include <algorithm>	//std::max
 #include <sstream>
 #include "../../header/n220_position/n220_660_utilMovePos.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
@@ -99,7 +99,7 @@ Key Book::GetBookKey(const Position& pos) {
 	return key;
 }
 
-MoveScoreindex Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
+MoveScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
@@ -109,7 +109,7 @@ MoveScoreindex Book::GetProbe(const Position& position, const std::string& fName
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
-		return MoveScoreindex(Move::GetMoveNone(), ScoreNone);
+		return MoveScore(Move::GetMoveNone(), ScoreNone);
 	}
 
 	Binary_search(key);
@@ -146,7 +146,7 @@ MoveScoreindex Book::GetProbe(const Position& position, const std::string& fName
 		}
 	}
 
-	return MoveScoreindex(move, score);
+	return MoveScore(move, score);
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {

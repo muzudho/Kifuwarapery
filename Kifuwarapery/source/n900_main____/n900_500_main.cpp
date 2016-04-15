@@ -1,4 +1,4 @@
-#include "../../header/n080_common__/n080_100_common.hpp"
+﻿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n480_tt______/n480_300_tt.hpp"

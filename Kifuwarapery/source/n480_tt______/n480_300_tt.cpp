@@ -1,4 +1,4 @@
-#include <algorithm>
+﻿#include <algorithm>
 #include "../../header/n480_tt______/n480_300_tt.hpp"
 
 void TranspositionTable::SetSize(const size_t mbSize) { // Mega Byte 指定

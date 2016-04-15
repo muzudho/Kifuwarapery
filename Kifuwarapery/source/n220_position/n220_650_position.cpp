@@ -348,24 +348,18 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			const Square ksq = GetKingSquare(UtilColor::OppositeColor(us));
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
 				switch (g_squareRelation.GetSquareRelation(from, ksq)) {
-
 				case DirecMisc: assert(false); break; // 最適化の為のダミー
-
 				case DirecFile:
 					// from の位置から縦に利きを調べると相手玉と、空き王手している駒に当たっているはず。味方の駒が空き王手している駒。
 					m_st_->m_checkersBB |= g_rookAttackBb.GetControllBbFile(&this->GetOccupiedBB(), from) & this->GetBbOf(us);
 					break;
-
 				case DirecRank:
 					m_st_->m_checkersBB |= g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N06_Rook, N14_Dragon, us);
 					break;
-
 				case DirecDiagNESW: case DirecDiagNWSE:
 					m_st_->m_checkersBB |= g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, ksq) & this->GetBbOf(N05_Bishop, N13_Horse, us);
 					break;
-
 				default: UNREACHABLE;
-
 				}
 			}
 			m_st_->m_continuousCheck[us] += 2;
@@ -918,7 +912,7 @@ silver_drop_end:
 
 	// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 	const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-	const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(US, TRank6);
+	const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
 	{
 		// 飛車による移動
 		Bitboard fromBB = GetBbOf(N06_Rook, US);
@@ -1155,7 +1149,7 @@ silver_drop_end:
 		Bitboard fromBB = GetBbOf(N04_Silver, US) & g_silverAttackBb.SilverCheckTable(US, ksq);
 		if (fromBB.Exists1Bit()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
-			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask(Them, TRank6);
+			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask<Them, TRank6>();
 			const Bitboard chkBB = g_ptSilver.GetAttacks2From(g_nullBitboard, Them, ksq);
 			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq);
 
@@ -1355,8 +1349,7 @@ silver_drop_end:
 			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From( g_nullBitboard, Them, ksq) & TRank789BB;
 			// 玉の前方1マスのみ。
 			// 玉が 1 段目にいるときは、成のみで良いので省く。
-			const Bitboard chkBB = g_ptPawn.GetAttacks2From(g_nullBitboard, Them, ksq)
-				& g_inFrontMaskBb.GetInFrontMask(Them, TRank8);
+			const Bitboard chkBB = g_ptPawn.GetAttacks2From(g_nullBitboard, Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
 
 			do {
 				const Square from = fromBB.PopFirstOneFromI9();
@@ -1423,10 +1416,8 @@ silver_drop_end:
 			// 玉が敵陣にいないと成で王手になることはない。
 			if (UtilSquare::IsInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
-				const Bitboard toBB_promo = moveTarget &
-					g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq) &
-					TRank789BB;
-				Bitboard fromBB_promo = fromBB & toBB_promo.PawnAttack(Them);
+				const Bitboard toBB_promo = moveTarget & g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq) & TRank789BB;
+				Bitboard fromBB_promo = fromBB & toBB_promo.PawnAttack<Them>();
 				while (fromBB_promo.Exists1Bit()) {
 					const Square from = fromBB_promo.PopFirstOneFromI9();
 					const Square to = from + TDeltaN;
@@ -1456,7 +1447,7 @@ silver_drop_end:
 			const Square from = to + TDeltaS;
 			if (g_setMaskBb.IsSet(&fromBB, from) && !g_setMaskBb.IsSet(&GetBbOf(US), to)) {
 				// 玉が 1, 2 段目にいるなら、成りで王手出来るので不成は調べない。
-				if (UtilSquare::IsBehind<Rank8, Rank2>(US, krank)) {
+				if (UtilSquare::IsBehind<US, Rank8, Rank2>(krank)) {
 					XorBBs(N01_Pawn, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();

@@ -1,4 +1,4 @@
-#include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
+﻿#include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_100_ptOccupied.hpp"
 #include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"

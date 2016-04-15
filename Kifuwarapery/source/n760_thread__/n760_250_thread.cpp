@@ -1,4 +1,4 @@
-#include <mutex>
+ï»¿#include <mutex>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
@@ -36,13 +36,13 @@ bool Thread::CutoffOccurred() const {
 	return false;
 }
 
-// master ‚Æ“¯‚¶ thread ‚Å‚ ‚é‚©‚ğ”»’è
+// master ã¨åŒã˜ thread ã§ã‚ã‚‹ã‹ã‚’åˆ¤å®š
 bool Thread::IsAvailableTo(Thread* master) const {
 	if (m_searching) {
 		return false;
 	}
 
-	// ƒ[ƒJƒ‹ƒRƒs[‚µA“r’†‚Å’l‚ª•Ï‚í‚ç‚È‚¢‚æ‚¤‚É‚·‚éB
+	// ãƒ­ãƒ¼ã‚«ãƒ«ã‚³ãƒ”ãƒ¼ã—ã€é€”ä¸­ã§å€¤ãŒå¤‰ã‚ã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹ã€‚
 	const int spCount = m_splitPointsSize;
 	return !spCount || (m_SplitPoints[spCount - 1].m_slavesMask & (UINT64_C(1) << master->m_idx));
 }
@@ -104,7 +104,7 @@ void Thread::Split(
 	m_activeSplitPoint = &sp;
 	m_activePosition = nullptr;
 
-	// thisThread ‚ªí‚ÉŠÜ‚Ü‚ê‚é‚Ì‚Å 1
+	// thisThread ãŒå¸¸ã«å«ã¾ã‚Œã‚‹ã®ã§ 1
 	size_t slavesCount = 1;
 	Thread* slave;
 

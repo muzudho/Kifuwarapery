@@ -1,4 +1,4 @@
-#include <array>
+ï»¿#include <array>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_400_evalList.hpp"
@@ -132,7 +132,7 @@ bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
 	assert(lastMove != Move::GetMoveNull());
 
 	if (lastMove.GetPieceTypeFrom() == N08_King) {
-		EvalSum diff = (ss - 1)->m_staticEvalRaw; // –{“–‚Í diff ‚Å‚Í‚È‚¢‚Ì‚Å–¼‘O‚ª—Ç‚­‚È‚¢B
+		EvalSum diff = (ss - 1)->m_staticEvalRaw; // æœ¬å½“ã¯ diff ã§ã¯ãªã„ã®ã§åå‰ãŒè‰¯ããªã„ã€‚
 		const Square sq_bk = pos.GetKingSquare(Black);
 		const Square sq_wk = pos.GetKingSquare(White);
 		diff.m_p[2] = KkKkpKppStorage1::KK[sq_bk][sq_wk];
@@ -297,7 +297,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 		GetSum.GetP[2] += KkKkpKppStorage1::KKP[sq_bk][sq_wk][k0];
 	}
 #else
-	// loop ŠJŽn‚ð i = 1 ‚©‚ç‚É‚µ‚ÄAi = 0 ‚Ì•ª‚ÌKKP‚ðæ‚É‘«‚·B
+	// loop é–‹å§‹ã‚’ i = 1 ã‹ã‚‰ã«ã—ã¦ã€i = 0 ã®åˆ†ã®KKPã‚’å…ˆã«è¶³ã™ã€‚
 	sum.m_p[2] += KkKkpKppStorage1::KKP[sq_bk][sq_wk][list0[0]];
 	sum.m_p[0][0] = 0;
 	sum.m_p[0][1] = 0;
@@ -330,7 +330,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 
 
 
-// todo: –³–¼–¼‘O‹óŠÔ‚É“ü‚ê‚éB
+// todo: ç„¡ååå‰ç©ºé–“ã«å…¥ã‚Œã‚‹ã€‚
 Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	int list0[EvalList::m_ListSize];
 	int list1[EvalList::m_ListSize];
@@ -408,7 +408,7 @@ Score Evaluation09::evaluate(Position& pos, SearchStack* ss) {
 	}
 
 	const Key keyExcludeTurn = pos.GetKeyExcludeTurn();
-	EvaluateHashEntry entry = *g_evalTable[keyExcludeTurn]; // atomic ‚Éƒf[ƒ^‚ðŽæ“¾‚·‚é•K—v‚ª‚ ‚éB
+	EvaluateHashEntry entry = *g_evalTable[keyExcludeTurn]; // atomic ã«ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—ã™ã‚‹å¿…è¦ãŒã‚ã‚‹ã€‚
 	entry.Decode();
 	if (entry.m_key == keyExcludeTurn) {
 		ss->m_staticEvalRaw = entry;

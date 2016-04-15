@@ -35,9 +35,9 @@ public:
 		return this->m_rankMask[r];
 	}
 
-	//template <Rank R>
-	inline Bitboard GetRankMask_rank(Rank R) const {
-		//static_assert(Rank9 <= R && R <= Rank1, "");
+	template <Rank R>
+	inline Bitboard GetRankMask() const {
+		static_assert(Rank9 <= R && R <= Rank1, "");
 		return (R == Rank9 ? this->m_9
 			: R == Rank8 ? this->m_8
 			: R == Rank7 ? this->m_7

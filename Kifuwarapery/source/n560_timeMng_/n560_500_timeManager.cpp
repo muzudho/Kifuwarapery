@@ -1,4 +1,4 @@
-#include <algorithm> // std::min
+﻿#include <algorithm> // std::min
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"

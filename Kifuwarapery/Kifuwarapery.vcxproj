@@ -222,7 +222,7 @@
     <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp" />
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
-    <ClInclude Include="header\n223_move____\n223_300_moveScoreindex.hpp" />
+    <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp" />
     <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp" />
     <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
@@ -360,7 +360,7 @@
     <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_100_move.cpp" />
-    <ClCompile Include="source\n223_move____\n223_300_MoveScoreindex.cpp" />
+    <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_070_ptAbstract.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_080_ptPromote.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_100_ptOccupied.cpp" />

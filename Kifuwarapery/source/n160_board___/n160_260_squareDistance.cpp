@@ -14,32 +14,25 @@ void SquareDistance::InitSquareDistance() {
 	for (Square sq0 = I9; sq0 < SquareNum; ++sq0) {
 		for (Square sq1 = I9; sq1 < SquareNum; ++sq1) {
 			switch (g_squareRelation.GetSquareRelation(sq0, sq1)) {
-
 			case DirecMisc:
 				// DirecMisc な関係は全て距離 1 にしてもKPE学習には問題無いんだけれど。
 				this->m_squareDistance_[sq0][sq1] = 0;
 				if (g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(Black, sq0), sq1) || g_setMaskBb.IsSet(&g_knightAttackBb.GetControllBb(White, sq0), sq1))
 				    this->m_squareDistance_[sq0][sq1] = 1;
 				break;
-
 			case DirecFile:
 				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaN));
 				break;
-
 			case DirecRank:
 				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaE));
 				break;
-
 			case DirecDiagNESW:
 				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNE));
 				break;
-
 			case DirecDiagNWSE:
 				this->m_squareDistance_[sq0][sq1] = abs(static_cast<int>(sq0 - sq1) / static_cast<int>(DeltaNW));
 				break;
-
 			default: UNREACHABLE;
-
 			}
 		}
 	}

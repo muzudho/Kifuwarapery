@@ -1,4 +1,4 @@
-#include "../../header/n105_color___/n105_100_color.hpp"
+ï»¿#include "../../header/n105_color___/n105_100_color.hpp"
 #include "../../header/n110_square__/n110_100_square.hpp"
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
@@ -7,11 +7,11 @@
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-// ’è‹`™iO‚‘Oj
+// å®šç¾©â˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 //UtilAttack g_utilAttack;
 
 
 Bitboard UtilAttack::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {//const
-	// FIXME: ”z—ñ‚Ì”ÍˆÍƒ`ƒFƒbƒN‚ð‚µ‚Ä‚È‚¢‚º™iO‚‘Oj
+	// FIXME: é…åˆ—ã®ç¯„å›²ãƒã‚§ãƒƒã‚¯ã‚’ã—ã¦ãªã„ãœâ˜†ï¼ˆï¼¾ï½‘ï¼¾ï¼‰
 	return g_ptArray[pType]->GetAttacks2From(occupied, c, sq);
 }

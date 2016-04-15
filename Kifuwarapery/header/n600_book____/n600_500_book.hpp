@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include <string>
@@ -6,7 +6,7 @@
 #include <fstream>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n113_piece___/n113_150_piece.hpp"
-#include "../n223_move____/n223_300_moveScoreindex.hpp"
+#include "../n223_move____/n223_300_moveScore.hpp"
 #include "../n600_book____/n600_100_mt64bit.hpp"
 
 
@@ -18,7 +18,7 @@ public:
 
 	Book() : m_random_(std::chrono::system_clock::now().time_since_epoch().count()) {}
 
-	MoveScoreindex GetProbe(const Position& pos, const std::string& fName, const bool pickBest);
+	MoveScore GetProbe(const Position& pos, const std::string& fName, const bool pickBest);
 
 	static void Init();
 

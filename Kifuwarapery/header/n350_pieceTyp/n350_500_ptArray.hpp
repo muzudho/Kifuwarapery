@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"

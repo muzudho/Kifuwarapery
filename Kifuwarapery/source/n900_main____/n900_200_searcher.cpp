@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include "../../header/n080_common__/n080_105_time.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
@@ -8,7 +8,8 @@
 #include "../../header/n220_position/n220_665_utilMoveStack.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_300_moveScoreindex.hpp"
+#include "../../header/n223_move____/n223_300_moveScore.hpp"
+#include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
@@ -845,21 +846,13 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 		// step2
 		// stop と最大探索深さのチェック
 		switch (pos.IsDraw(16)) {
-
 		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= g_maxPly) { break; }
-
 		case RepetitionDraw     : return ScoreDraw;
-
 		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);
-
 		case RepetitionLose     : return UtilScore::MatedIn(ss->m_ply);
-
 		case RepetitionSuperior : if (ss->m_ply != 2) { return ScoreMateInMaxPly; } break;
-
 		case RepetitionInferior : if (ss->m_ply != 2) { return ScoreMatedInMaxPly; } break;
-
 		default                 : UNREACHABLE;
-
 		}
 
 		// step3
@@ -1489,10 +1482,7 @@ bool nyugyoku(const Position& pos) {
 
 	const Color us = pos.GetTurn();
 	// 敵陣のマスク
-	const Bitboard opponentsField = (us == Black ?
-		g_inFrontMaskBb.GetInFrontMask(Black, Rank6) :
-		g_inFrontMaskBb.GetInFrontMask(White, Rank4)
-	);
+	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.GetBbOf(N08_King, us).AndIsNot0(opponentsField))
@@ -1558,7 +1548,7 @@ void Searcher::Think() {
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScoreindex bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
+		const MoveScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&
@@ -1715,15 +1705,10 @@ void Thread::IdleLoop() {
 			m_activePosition = &pos;
 
 			switch (sp->m_nodeType) {
-
 			case Root : m_pSearcher->Search<SplitPointRoot >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
-
 			case PV   : m_pSearcher->Search<SplitPointPV   >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
-
 			case NonPV: m_pSearcher->Search<SplitPointNonPV>(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode); break;
-
 			default   : UNREACHABLE;
-
 			}
 
 			assert(m_searching);

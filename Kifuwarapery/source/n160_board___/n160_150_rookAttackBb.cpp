@@ -59,8 +59,8 @@ Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) const {
 	Bitboard result = g_fileMaskBb.GetSquareFileMask(square) ^ g_rankMaskBb.GetSquareRankMask(square);
 	if (UtilSquare::ToFile(square) != FileA) { result &= ~g_fileMaskBb.GetFileMask<FileA>(); }
 	if (UtilSquare::ToFile(square) != FileI) { result &= ~g_fileMaskBb.GetFileMask<FileI>(); }
-	if (UtilSquare::ToRank(square) != Rank1) { result &= ~g_rankMaskBb.GetRankMask_rank(Rank1); }
-	if (UtilSquare::ToRank(square) != Rank9) { result &= ~g_rankMaskBb.GetRankMask_rank(Rank9); }
+	if (UtilSquare::ToRank(square) != Rank1) { result &= ~g_rankMaskBb.GetRankMask<Rank1>(); }
+	if (UtilSquare::ToRank(square) != Rank9) { result &= ~g_rankMaskBb.GetRankMask<Rank9>(); }
 	return result;
 }
 

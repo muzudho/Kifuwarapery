@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_500_utilColor.hpp"
@@ -20,8 +20,8 @@ public:
 	template <Color US, Rank BRANK, Rank WRANK>
 	static inline bool IsInFrontOf(const Rank target) { return (US == Black ? (target < BRANK) : (WRANK < target)); }
 
-	template <Rank BRANK, Rank WRANK>
-	static inline bool IsBehind(Color US, const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
+	template <Color US, Rank BRANK, Rank WRANK>
+	static inline bool IsBehind(const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
 
 	template <Color US, File BFILE, File WFILE>
 	static inline bool IsLeftOf(const File target) { return (US == Black ? (BFILE < target) : (target < WFILE)); }

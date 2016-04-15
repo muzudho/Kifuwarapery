@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+
 #include <stack>
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_100_color.hpp"

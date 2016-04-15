@@ -1,4 +1,4 @@
-#include "../../header/n080_common__/n080_100_common.hpp"
+﻿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
 #include "../../header/n113_piece___/n113_500_hand.hpp"
 

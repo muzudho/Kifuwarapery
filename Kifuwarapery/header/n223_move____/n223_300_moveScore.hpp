@@ -5,7 +5,7 @@
 
 
 // 指し手と、評価値。
-class MoveScoreindex {
+class MoveScore {
 public:
 
 	// 指し手
@@ -16,7 +16,7 @@ public:
 
 public:
 
-	MoveScoreindex(Move move, enum Score score);
+	MoveScore(Move move, enum Score score);
 	
 	// 指し手
 	Move GetMove(void);

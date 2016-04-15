@@ -63,8 +63,8 @@ Bitboard BishopAttackBb::BishopBlockMaskCalc(const Square square) const {
 			g_setMaskBb.SetBit(&result, sq);
 	}
 	result &= ~(
-		g_rankMaskBb.GetRankMask_rank(Rank1) |
-		g_rankMaskBb.GetRankMask_rank(Rank9) |
+		g_rankMaskBb.GetRankMask<Rank1>() |
+		g_rankMaskBb.GetRankMask<Rank9>() |
 		g_fileMaskBb.GetFileMask<FileA>() |
 		g_fileMaskBb.GetFileMask<FileI>()
 	);
