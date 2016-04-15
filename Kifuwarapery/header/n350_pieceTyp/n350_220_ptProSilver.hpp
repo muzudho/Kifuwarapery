@@ -35,7 +35,7 @@ public:
 		const Square to,
 		const Color us
 		) {
-		(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<Capture>(this->GetNumber(), from, to, pos);
+		(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove_mt(Capture, this->GetNumber(), from, to, pos);
 	}
 
 };

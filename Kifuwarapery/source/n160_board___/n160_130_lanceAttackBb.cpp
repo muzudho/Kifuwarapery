@@ -37,7 +37,10 @@ void LanceAttackBb::InitCheckTableLance() {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_lanceCheckTable_[c][sq] = this->GetControllBbToEdge(opp, sq);
 
-			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (c == Black ?
+				g_inFrontMaskBb.GetInFrontMask(Black, Rank6) :
+				g_inFrontMaskBb.GetInFrontMask(White, Rank4)
+			);
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();

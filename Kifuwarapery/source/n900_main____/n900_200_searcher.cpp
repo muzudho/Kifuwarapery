@@ -8,8 +8,7 @@
 #include "../../header/n220_position/n220_665_utilMoveStack.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n223_move____/n223_300_moveScore.hpp"
-#include "../../header/n223_move____/n223_300_moveScore.hpp"
+#include "../../header/n223_move____/n223_300_moveScoreindex.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
@@ -1490,7 +1489,10 @@ bool nyugyoku(const Position& pos) {
 
 	const Color us = pos.GetTurn();
 	// 敵陣のマスク
-	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
+	const Bitboard opponentsField = (us == Black ?
+		g_inFrontMaskBb.GetInFrontMask(Black, Rank6) :
+		g_inFrontMaskBb.GetInFrontMask(White, Rank4)
+	);
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.GetBbOf(N08_King, us).AndIsNot0(opponentsField))
@@ -1556,7 +1558,7 @@ void Searcher::Think() {
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
+		const MoveScoreindex bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&

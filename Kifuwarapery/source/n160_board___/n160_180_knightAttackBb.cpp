@@ -42,7 +42,10 @@ void KnightAttackBb::InitCheckTableKnight() {
 				this->m_knightCheckTable_[color][sq] |= this->GetControllBb(opponent, checkSq);
 			}
 
-			const Bitboard TRank789BB = (color == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (color == Black ?
+				g_inFrontMaskBb.GetInFrontMask(Black, Rank6) :
+				g_inFrontMaskBb.GetInFrontMask(White, Rank4)
+			);
 			checkBB = g_goldAttackBb.GetControllBb(opponent, sq) & TRank789BB;
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();

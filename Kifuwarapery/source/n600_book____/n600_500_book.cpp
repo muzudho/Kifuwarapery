@@ -99,7 +99,7 @@ Key Book::GetBookKey(const Position& pos) {
 	return key;
 }
 
-MoveScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
+MoveScoreindex Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
@@ -109,7 +109,7 @@ MoveScore Book::GetProbe(const Position& position, const std::string& fName, con
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
-		return MoveScore(Move::GetMoveNone(), ScoreNone);
+		return MoveScoreindex(Move::GetMoveNone(), ScoreNone);
 	}
 
 	Binary_search(key);
@@ -146,7 +146,7 @@ MoveScore Book::GetProbe(const Position& position, const std::string& fName, con
 		}
 	}
 
-	return MoveScore(move, score);
+	return MoveScoreindex(move, score);
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {

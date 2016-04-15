@@ -66,11 +66,10 @@ public:
 	inline Bitboard GetInFrontMask(const Color c, const Rank r) const {
 		return this->m_inFrontMask[c][r];
 	}
-
-	template <Color C, Rank R>
-	inline Bitboard GetInFrontMask() const {
-		static_assert(C == Black || C == White, "");
-		static_assert(Rank9 <= R && R <= Rank1, "");
+	/*
+	inline Bitboard GetInFrontMask(Color C, Rank R) const {
+		assert(C == Black || C == White, "");
+		assert(Rank9 <= R && R <= Rank1, "");
 		return (C == Black ? (R == Rank9 ? this->m_ofRank9Black
 			: R == Rank8 ? this->m_ofRank8Black
 			: R == Rank7 ? this->m_ofRank7Black
@@ -79,7 +78,7 @@ public:
 			: R == Rank4 ? this->m_ofRank4Black
 			: R == Rank3 ? this->m_ofRank3Black
 			: R == Rank2 ? this->m_ofRank2Black
-			: /*R == Rank1 ?*/ this->m_ofRank1Black)
+			: this->m_ofRank1Black)//R == Rank1 ?
 			: (R == Rank9 ? this->m_ofRank9White
 				: R == Rank8 ? this->m_ofRank8White
 				: R == Rank7 ? this->m_ofRank7White
@@ -88,8 +87,9 @@ public:
 				: R == Rank4 ? this->m_ofRank4White
 				: R == Rank3 ? this->m_ofRank3White
 				: R == Rank2 ? this->m_ofRank2White
-				: /*R == Rank1 ?*/ this->m_ofRank1White));
+				: this->m_ofRank1White));//R == Rank1 ?
 	}
+	*/
 
 };
 

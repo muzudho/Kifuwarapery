@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n223_move____/n223_300_moveScore.hpp"
+#include "../n223_move____/n223_300_moveScoreindex.hpp"
 
 
 #include "n640_440_splitPoint.hpp"
@@ -20,7 +20,7 @@ public:
 		m_pv_.push_back(Move::GetMoveNone());
 	}
 
-	explicit RootMove(const MoveScore m) : m_score_(m.m_score), m_prevScore_(-ScoreInfinite) {
+	explicit RootMove(const MoveScoreindex m) : m_score_(m.m_score), m_prevScore_(-ScoreInfinite) {
 		m_pv_.push_back(m.m_move);
 		m_pv_.push_back(Move::GetMoveNone());
 	}

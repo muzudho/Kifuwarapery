@@ -26,7 +26,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(generateMoves<Evasion>(movePicker.GetCurrMove(), movePicker.GetPos()));
+		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_mt3(Evasion, movePicker.GetCurrMove(), movePicker.GetPos()));
 		if (movePicker.GetCurrMove() + 1 < movePicker.GetLastMove()) {
 			movePicker.ScoreEvasions();
 		}

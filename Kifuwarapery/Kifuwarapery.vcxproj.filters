@@ -163,7 +163,7 @@
     <Filter Include="header\n358_dropMake">
       <UniqueIdentifier>{4e94f1d8-6fd4-49f3-8e71-bdfb94a9eb03}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n105_color___\n080_common__">
+    <Filter Include="header\n080_common__">
       <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -175,22 +175,22 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp">
-      <Filter>header\n105_color___\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_100_common.hpp">
-      <Filter>header\n105_color___\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp">
-      <Filter>header\n105_color___\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n160_board___\n160_100_bitboard.hpp">
       <Filter>header\n160_board___</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
-      <Filter>header\n105_color___\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n080_common__\n080_105_time.hpp">
-      <Filter>header\n105_color___\n080_common__</Filter>
+      <Filter>header\n080_common__</Filter>
     </ClInclude>
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp">
       <Filter>header\n900_main____</Filter>
@@ -265,9 +265,6 @@
       <Filter>header\n111_colorSq_</Filter>
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_050_bound.hpp">
@@ -672,6 +669,9 @@
     <ClInclude Include="header\n358_dropMake\n358_500_dropMakerArray.hpp">
       <Filter>header\n358_dropMake</Filter>
     </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_300_moveScoreindex.hpp">
+      <Filter>header\n223_move____</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -702,9 +702,6 @@
       <Filter>source\n111_colorSq_</Filter>
     </ClCompile>
     <ClCompile Include="source\n223_move____\n223_100_move.cpp">
-      <Filter>source\n223_move____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp">
       <Filter>source\n223_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
@@ -1027,6 +1024,9 @@
     </ClCompile>
     <ClCompile Include="source\n358_dropMake\n358_500_dropMakerArray.cpp">
       <Filter>source\n358_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n223_move____\n223_300_MoveScoreindex.cpp">
+      <Filter>source\n223_move____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

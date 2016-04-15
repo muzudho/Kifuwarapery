@@ -1,4 +1,6 @@
-﻿#include "../../header/n450_movPhase/n450_100_mainSearch.hpp"
+﻿#include "../../header/n225_movPhase/n225_050_generateMovePhase.hpp"
+#include "../../header/n360_genMove_/n360_500_generateMoves.hpp"
+#include "../../header/n450_movPhase/n450_100_mainSearch.hpp"
 #include "../../header/n450_movPhase/n450_110_phTacticalMoves0.hpp"
 #include "../../header/n450_movPhase/n450_120_phKillers.hpp"
 #include "../../header/n450_movPhase/n450_130_phNonTacticalMoves0.hpp"
