@@ -450,9 +450,6 @@
     <ClInclude Include="header\n220_position\n220_665_utilMoveStack.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n220_position\n220_680_moveList.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp">
       <Filter>header\n800_learn___</Filter>
     </ClInclude>
@@ -756,6 +753,12 @@
     <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp">
       <Filter>header\n887_nodeType</Filter>
     </ClInclude>
+    <ClInclude Include="header\n360_genMove_\n360_800_moveGenerator200.hpp">
+      <Filter>header\n360_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n360_genMove_\n360_900_moveList.hpp">
+      <Filter>header\n360_genMove_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -883,9 +886,6 @@
     </ClCompile>
     <ClCompile Include="source\n165_movStack\n165_700_makePromoteMove.cpp">
       <Filter>source\n165_movStack</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n220_position\n220_680_moveList.cpp">
-      <Filter>source\n220_position</Filter>
     </ClCompile>
     <ClCompile Include="source\n760_thread__\n760_250_thread.cpp">
       <Filter>source\n760_thread__</Filter>
@@ -1153,6 +1153,9 @@
     </ClCompile>
     <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp">
       <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n360_genMove_\n360_900_moveList.cpp">
+      <Filter>source\n360_genMove_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

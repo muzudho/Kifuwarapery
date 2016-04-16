@@ -13,40 +13,42 @@
 class DropMakerHand6 : public DropMakerAbstract {
 public:
 
-	void MakeDropMovesToRank9ExceptNL(
+	static void MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard TRank9BB,
-		MoveStack* pMoveStackList,
+		MoveStack* moveStackList,
 		const PieceType haveHand[6],
 		int noKnightLanceIdx
-	) const {
+	) {
 		UNREACHABLE;
 	}
 
-	void MakeDropMovesToRank8ExceptN(
+	static void MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard TRank8BB,
-		MoveStack* pMoveStackList,
+		MoveStack* moveStackList,
 		const PieceType haveHand[6],
 		int noKnightIdx
-	) const {
+	) {
 		UNREACHABLE;
 	}
 
-	void MakeDropMovesToRank1234567(
+	static void MakeDropMovesToRank1234567(
 		Bitboard& toBB,
-		MoveStack* pMoveStackList,
+		MoveStack* moveStackList,
 		const PieceType haveHand[6]
-	) const {
+	) {
 		Square to;
-		FOREACH_BB( toBB, to, {
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
-			(*pMoveStackList++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
-		});
+		FOREACH_BB(toBB, to, { Unroller<6>()([&](const int i) { (*moveStackList++).m_move = UtilMove::MakeDropMove(haveHand[i], to); }); });
+		//Square to;
+		//FOREACH_BB( toBB, to, {
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[5], to);
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[4], to);
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[3], to);
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[2], to);
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
+		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
+		//});
 	}
 
 };

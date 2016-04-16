@@ -1708,23 +1708,8 @@ void Thread::IdleLoop() {
 			m_activePosition = &pos;
 
 
-
 			g_nodeTypeArray[sp->m_nodeType]->GoSearch(*m_pSearcher, pos, ss, *sp);
-			/*
-			switch (sp->m_nodeType) {
-			case N00_Root :
-				m_pSearcher->Search<SplitPointRoot >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode);
-				break;
-			case N01_PV   :
-				m_pSearcher->Search<SplitPointPV   >(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode);
-				break;
-			case N02_NonPV:
-				m_pSearcher->Search<SplitPointNonPV>(pos, ss + 1, sp->m_alpha, sp->m_beta, sp->m_depth, sp->m_cutNode);
-				break;
-			default   :
-				UNREACHABLE;
-			}
-			*/
+
 
 			assert(m_searching);
 			m_searching = false;

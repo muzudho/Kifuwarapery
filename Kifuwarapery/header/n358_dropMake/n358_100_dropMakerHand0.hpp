@@ -12,31 +12,31 @@
 
 class DropMakerHand0 : public DropMakerAbstract {
 public:
-	void MakeDropMovesToRank9ExceptNL(
+	static void MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard TRank9BB,
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightLanceIdx
-	) const {
+	) {
 		// 桂馬、香車 以外の持ち駒がない。
 	}
 
-	void MakeDropMovesToRank8ExceptN(
+	static void MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard TRank8BB,
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightIdx
-		) const {
+	) {
 		// 桂馬 以外の持ち駒がない。
 	}
 
-	void MakeDropMovesToRank1234567(
+	static void MakeDropMovesToRank1234567(
 		Bitboard& toBB,
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6]
-		) const {
+		) {
 		assert(false); // 最適化の為のダミー
 	}
 

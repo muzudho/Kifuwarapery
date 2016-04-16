@@ -3,10 +3,10 @@
 #include "../../header/n165_movStack/n165_500_moveStack.hpp"
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n220_position/n220_680_moveList.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
+#include "../../header/n360_genMove_/n360_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 
 #include "../../header/n450_movPhase/n450_100_mainSearch.hpp"

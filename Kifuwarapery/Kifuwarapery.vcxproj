@@ -217,7 +217,6 @@
     <ClInclude Include="header\n220_position\n220_660_utilMovePos.hpp" />
     <ClInclude Include="header\n220_position\n220_665_utilMoveStack.hpp" />
     <ClInclude Include="header\n220_position\n220_670_makePromoteMove.hpp" />
-    <ClInclude Include="header\n220_position\n220_680_moveList.hpp" />
     <ClInclude Include="header\n220_position\n220_750_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp" />
@@ -268,6 +267,8 @@
     <ClInclude Include="header\n358_dropMake\n358_160_dropMakerHand6.hpp" />
     <ClInclude Include="header\n358_dropMake\n358_500_dropMakerArray.hpp" />
     <ClInclude Include="header\n360_genMove_\n360_500_generateMoves.hpp" />
+    <ClInclude Include="header\n360_genMove_\n360_800_moveGenerator200.hpp" />
+    <ClInclude Include="header\n360_genMove_\n360_900_moveList.hpp" />
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp" />
     <ClInclude Include="header\n440_movStack\n440_500_movePicker.hpp" />
     <ClInclude Include="header\n450_movPhase\n450_070_movePhaseAbstract.hpp" />
@@ -372,7 +373,6 @@
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp" />
     <ClCompile Include="source\n220_position\n220_650_position.cpp" />
     <ClCompile Include="source\n220_position\n220_640_utilAttack.cpp" />
-    <ClCompile Include="source\n220_position\n220_680_moveList.cpp" />
     <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_100_move.cpp" />
@@ -414,6 +414,7 @@
     <ClCompile Include="source\n358_dropMake\n358_160_dropMakerHand6.cpp" />
     <ClCompile Include="source\n358_dropMake\n358_500_dropMakerArray.cpp" />
     <ClCompile Include="source\n360_genMove_\n360_500_generateMoves.cpp" />
+    <ClCompile Include="source\n360_genMove_\n360_900_moveList.cpp" />
     <ClCompile Include="source\n440_movStack\n440_500_movePicker.cpp" />
     <ClCompile Include="source\n450_movPhase\n450_070_movePhaseAbstract.cpp" />
     <ClCompile Include="source\n450_movPhase\n450_100_mainSearch.cpp" />

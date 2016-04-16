@@ -4,19 +4,23 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n360_genMOve_/n360_800_moveGenerator200.hpp"
 
-
+/*
 // MoveType の全ての指し手を生成
 template <MoveType MT>
-MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos);
+MoveStack* MoveGenerator200::GenerateMoves_2(MoveStack* moveStackList, const Position& pos);
 template <MoveType MT>
-MoveStack* generateMoves(MoveStack* moveStackList, const Position& pos, const Square to);
+MoveStack* MoveGenerator200::GenerateMoves_3(MoveStack* moveStackList, const Position& pos, const Square to);
+*/
+
 
 template <MoveType MT>
 class MoveList {
 public:
 
-	explicit MoveList(const Position& pos) : m_curr_(m_moveStackList_), m_last_(generateMoves<MT>(m_moveStackList_, pos)) {}
+	explicit MoveList(const Position& pos) :
+		m_curr_(m_moveStackList_), m_last_(MoveGenerator200::GenerateMoves_2<MT>(m_moveStackList_, pos)) {}
 
 	void operator ++ () { ++m_curr_; }
 

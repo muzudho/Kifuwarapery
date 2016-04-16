@@ -6,6 +6,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n360_genMove_/n360_500_generateMoves.hpp"
+#include "../n360_genMove_/n360_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_500_movePicker.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
@@ -37,7 +38,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove( generateMoves<CapturePlusPro>(movePicker.GetCurrMove(), movePicker.GetPos()) );
+		movePicker.SetLastMove( MoveGenerator200::GenerateMoves_2<CapturePlusPro>(movePicker.GetCurrMove(), movePicker.GetPos()) );
 		movePicker.ScoreCaptures();
 	}
 

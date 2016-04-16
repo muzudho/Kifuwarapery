@@ -2,8 +2,9 @@
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n220_position/n220_680_moveList.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
+#include "../../header/n360_genMove_/n360_800_moveGenerator200.hpp"
+#include "../../header/n360_genMove_/n360_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n480_tt______/n480_300_tt.hpp"
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
@@ -34,15 +35,15 @@ void measureGenerateMoves(const Position& pos) {
 	if (pos.InCheck()) {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = generateMoves<Evasion>(pms, pos);
+			pms = MoveGenerator200::GenerateMoves_2<Evasion>(pms, pos);
 		}
 	}
 	else {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = generateMoves<CapturePlusPro>(pms, pos);
-			pms = generateMoves<NonCaptureMinusPro>(pms, pos);
-			pms = generateMoves<Drop>(pms, pos);
+			pms = MoveGenerator200::GenerateMoves_2<CapturePlusPro>(pms, pos);
+			pms = MoveGenerator200::GenerateMoves_2<NonCaptureMinusPro>(pms, pos);
+			pms = MoveGenerator200::GenerateMoves_2<Drop>(pms, pos);
 			//			pms = generateMoves<PseudoLegal>(pms, pos);
 			//			pms = generateMoves<Legal>(pms, pos);
 		}

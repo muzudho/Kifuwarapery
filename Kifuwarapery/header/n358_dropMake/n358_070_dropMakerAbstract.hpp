@@ -12,27 +12,39 @@
 class DropMakerAbstract {
 public:
 
-	virtual inline void MakeDropMovesToRank9ExceptNL(
+	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
+	static void MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard TRank9BB,
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightLanceIdx
-	) const = 0;
+	) {
+		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
+		UNREACHABLE;
+	};
 
-	virtual inline void MakeDropMovesToRank8ExceptN(
+	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
+	static void MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard TRank8BB,
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightIdx
-		) const = 0;
+	) {
+		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
+		UNREACHABLE;
+	};
 
-	virtual inline void MakeDropMovesToRank1234567(
+	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
+	static void MakeDropMovesToRank1234567(
 		Bitboard& toBB,	// const
-		MoveStack* pMoveStackList,
+		MoveStack* pMovestack,
 		const PieceType haveHand[6]
-		) const = 0;
+	) {
+		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
+		UNREACHABLE;
+	};
 
 };
 
