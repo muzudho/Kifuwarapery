@@ -2,6 +2,8 @@
 
 
 #include "../n113_piece___/n113_150_piece.hpp"
+#include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
+#include "../n376_genMoveP/n376_500_pieceArray.hpp"
 #include "n374_500_generateMoves.hpp"
 
 
@@ -756,6 +758,7 @@ private:
 		}
 	};
 
+	//*
 	// checkSq にある駒で王手されたとき、玉はその駒の利きの位置には移動できないので、移動できない位置を bannnedKingToBB に格納する。
 	// 両王手のときには二度連続で呼ばれるため、= ではなく |= を使用している。
 	// 最初に呼ばれたときは、bannedKingToBB == allZeroBB() である。
@@ -901,6 +904,7 @@ private:
 			UNREACHABLE;
 		}
 	}
+	//*/
 
 	// 部分特殊化
 	// 王手回避生成
@@ -938,11 +942,21 @@ private:
 				// カウントアップ☆
 				++checkersNum;
 
+				
+				// checkSq にある駒で王手されたとき、玉はその駒の利きの位置には移動できないので、
+				// 移動できない位置を bannnedKingToBB に格納する。
+				// 両王手のときには二度連続で呼ばれるため、= ではなく |= を使用している。
+				// 最初に呼ばれたときは、bannedKingToBB == allZeroBB() である。
+				// todo: FOECE_INLINE と template 省いてNPS比較
+				//無理 (PieceAbstract::*(PieceArray::m_makeBanned2KingTo[pos.GetPiece(checkSq)]))(bannedKingToBB, pos, checkSq, ksq);
+				//PieceArray::m_pieceAbstractArray[pos.GetPiece(checkSq)].MakeBanned2KingTo(bannedKingToBB, pos, checkSq, ksq);
+				//*
 				// 白か黒かによって分けている☆
 				(Them == Black ?
 					MoveGenerator200::DoMakeBannedKingTo_black(bannedKingToBB, pos, checkSq, ksq) :
 					MoveGenerator200::DoMakeBannedKingTo_white(bannedKingToBB, pos, checkSq, ksq)
 				);
+				//*/
 
 			} while (bb.Exists1Bit());
 
