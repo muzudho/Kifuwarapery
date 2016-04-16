@@ -202,8 +202,8 @@ namespace {
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
 				(PieceTypeArray::m_lance.GetAttacks2From(occ, them, m2to) & pos.GetBbOf(N02_Lance, us))
-				| (g_ptRook.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
-				| (g_ptBishop.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
+				| (PieceTypeArray::m_rook.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
+				| (PieceTypeArray::m_bishop.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
 			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).Exists1Bit()) {

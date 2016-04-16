@@ -871,7 +871,7 @@ silver_drop_end:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// 遠隔王手は考えない。
-			Bitboard toBB = moveTarget & g_ptDragon.GetAttacks2From( this->GetOccupiedBB(), Color::ColorNum, from);
+			Bitboard toBB = moveTarget & PieceTypeArray::m_dragon.GetAttacks2From( this->GetOccupiedBB(), Color::ColorNum, from);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N14_Dragon, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -884,7 +884,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、王手した駒が pin されていない
-						if (!canKingEscape(*this, US, to, g_ptDragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
+						if (!canKingEscape(*this, US, to, PieceTypeArray::m_dragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -911,7 +911,7 @@ silver_drop_end:
 			fromBB.AndEqualNot(TRank789BB);
 			do {
 				const Square from = fromOn789BB.PopFirstOneFromI9();
-				Bitboard toBB = moveTarget & g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum,from);
+				Bitboard toBB = moveTarget & PieceTypeArray::m_rook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum,from);
 				if (toBB.Exists1Bit()) {
 					XorBBs(N06_Rook, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -920,7 +920,7 @@ silver_drop_end:
 					do {
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, g_ptDragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_dragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -938,7 +938,7 @@ silver_drop_end:
 		// from が 4~9 段目
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			Bitboard toBB = moveTarget & g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from) & (g_rookAttackBb.RookStepAttacks(ksq) | TRank789BB);
+			Bitboard toBB = moveTarget & PieceTypeArray::m_rook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from) & (g_rookAttackBb.RookStepAttacks(ksq) | TRank789BB);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N06_Rook, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -950,7 +950,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, g_ptDragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_dragon.GetAttacks2From(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -988,7 +988,7 @@ silver_drop_end:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// 遠隔王手は考えない。
-			Bitboard toBB = moveTarget & g_ptHorse.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from);
+			Bitboard toBB = moveTarget & PieceTypeArray::m_horse.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N13_Horse, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -1025,7 +1025,7 @@ silver_drop_end:
 			fromBB.AndEqualNot(TRank789BB);
 			do {
 				const Square from = fromOn789BB.PopFirstOneFromI9();
-				Bitboard toBB = moveTarget & g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum,from);
+				Bitboard toBB = moveTarget & PieceTypeArray::m_bishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum,from);
 				if (toBB.Exists1Bit()) {
 					XorBBs(N05_Bishop, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -1052,7 +1052,7 @@ silver_drop_end:
 		// from が 4~9 段目
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			Bitboard toBB = moveTarget & g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from) & (g_bishopAttackBb.BishopStepAttacks(ksq) | TRank789BB);
+			Bitboard toBB = moveTarget & PieceTypeArray::m_bishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, from) & (g_bishopAttackBb.BishopStepAttacks(ksq) | TRank789BB);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N05_Bishop, from, US);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -1101,7 +1101,7 @@ silver_drop_end:
 		Bitboard fromBB = GetGoldsBB(US) & g_goldAttackBb.GoldCheckTable(US, ksq);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			Bitboard toBB = moveTarget & g_ptGold.GetAttacks2From(g_nullBitboard, US, from) & g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq);
+			Bitboard toBB = moveTarget & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, from) & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq);
 			if (toBB.Exists1Bit()) {
 				const PieceType pt = UtilPiece::ToPieceType(GetPiece(from));
 				XorBBs(pt, from, US);
@@ -1116,7 +1116,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、動かした駒が pin されていない)
-						if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard, US, to))
+						if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1139,8 +1139,8 @@ silver_drop_end:
 		if (fromBB.Exists1Bit()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask<Them, TRank6>();
-			const Bitboard chkBB = g_ptSilver.GetAttacks2From(g_nullBitboard, Them, ksq);
-			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq);
+			const Bitboard chkBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, Them, ksq);
+			const Bitboard chkBB_promo = PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq);
 
 			Bitboard fromOn789BB = fromBB & TRank789BB;
 			// from が敵陣
@@ -1148,7 +1148,7 @@ silver_drop_end:
 				fromBB.AndEqualNot(TRank789BB);
 				do {
 					const Square from = fromOn789BB.PopFirstOneFromI9();
-					Bitboard toBB = moveTarget & g_ptSilver.GetAttacks2From(g_nullBitboard, US, from);
+					Bitboard toBB = moveTarget & PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, from);
 					Bitboard toBB_promo = toBB & chkBB_promo;
 
 					toBB &= chkBB;
@@ -1161,7 +1161,7 @@ silver_drop_end:
 							const Square to = toBB_promo.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 成り
-								if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard, US, to))
+								if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, to))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1179,7 +1179,7 @@ silver_drop_end:
 							const Square to = toBB.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 不成
-								if (!canKingEscape(*this, US, to, g_ptSilver.GetAttacks2From(g_nullBitboard, US, to))
+								if (!canKingEscape(*this, US, to, PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, to))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1201,7 +1201,7 @@ silver_drop_end:
 				fromBB.AndEqualNot(TRank1_5BB);
 				do {
 					const Square from = fromOn1_5BB.PopFirstOneFromI9();
-					Bitboard toBB = moveTarget & g_ptSilver.GetAttacks2From( g_nullBitboard, US, from) & chkBB;
+					Bitboard toBB = moveTarget & PieceTypeArray::m_silver.GetAttacks2From( g_nullBitboard, US, from) & chkBB;
 
 					if (toBB.Exists1Bit()) {
 						XorBBs(N04_Silver, from, US);
@@ -1212,7 +1212,7 @@ silver_drop_end:
 							const Square to = toBB.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 不成
-								if (!canKingEscape(*this, US, to, g_ptSilver.GetAttacks2From(g_nullBitboard, US, to))
+								if (!canKingEscape(*this, US, to, PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, to))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1232,7 +1232,7 @@ silver_drop_end:
 			// 前進するときは成れるが、後退するときは成れない。
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = moveTarget & g_ptSilver.GetAttacks2From(g_nullBitboard, US, from);
+				Bitboard toBB = moveTarget & PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, from);
 				Bitboard toBB_promo = toBB & TRank789BB & chkBB_promo; // 3 段目にしか成れない。
 
 				toBB &= chkBB;
@@ -1245,7 +1245,7 @@ silver_drop_end:
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
-							if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard, US, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1260,7 +1260,7 @@ silver_drop_end:
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 不成
-							if (!canKingEscape(*this, US, to, g_ptSilver.GetAttacks2From(g_nullBitboard,US, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard,US, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1281,7 +1281,7 @@ silver_drop_end:
 		// 桂による移動
 		Bitboard fromBB = GetBbOf(N03_Knight, US) & g_knightAttackBb.KnightCheckTable(US, ksq);
 		if (fromBB.Exists1Bit()) {
-			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From(g_nullBitboard,Them, ksq) & TRank789BB;
+			const Bitboard chkBB_promo = PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard,Them, ksq) & TRank789BB;
 			const Bitboard chkBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard,Them, ksq);
 
 			do {
@@ -1298,7 +1298,7 @@ silver_drop_end:
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
-							if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard,US, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard,US, to))
 								&& (IsDiscoveredCheck<true>(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
@@ -1335,7 +1335,7 @@ silver_drop_end:
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
-			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From( g_nullBitboard, Them, ksq) & TRank789BB;
+			const Bitboard chkBB_promo = PieceTypeArray::m_gold.GetAttacks2From( g_nullBitboard, Them, ksq) & TRank789BB;
 			// 玉の前方1マスのみ。
 			// 玉が 1 段目にいるときは、成のみで良いので省く。
 			const Bitboard chkBB = PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
@@ -1357,7 +1357,7 @@ silver_drop_end:
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
-							if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard, US, to))
+							if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1405,7 +1405,7 @@ silver_drop_end:
 			// 玉が敵陣にいないと成で王手になることはない。
 			if (UtilSquare::IsInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
-				const Bitboard toBB_promo = moveTarget & g_ptGold.GetAttacks2From(g_nullBitboard, Them, ksq) & TRank789BB;
+				const Bitboard toBB_promo = moveTarget & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq) & TRank789BB;
 				Bitboard fromBB_promo = fromBB & toBB_promo.PawnAttack<Them>();
 				while (fromBB_promo.Exists1Bit()) {
 					const Square from = fromBB_promo.PopFirstOneFromI9();
@@ -1417,7 +1417,7 @@ silver_drop_end:
 					// to の位置の Bitboard は canKingEscape の中で更新する。
 					if (IsUnDropCheckIsSupported(US, to)) {
 						// 成り
-						if (!canKingEscape(*this, US, to, g_ptGold.GetAttacks2From(g_nullBitboard, US, to))
+						if (!canKingEscape(*this, US, to, PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -2222,18 +2222,18 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 	return (((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N01_Pawn))
 		| (PieceTypeArray::m_lance.GetAttacks2From(occupied, Black, sq) & this->GetBbOf(N02_Lance))
 		| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N03_Knight))
-		| (g_ptSilver.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N04_Silver))
-		| (g_ptGold.GetAttacks2From(g_nullBitboard, Black, sq) & golds))
+		| (PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N04_Silver))
+		| (PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Black, sq) & golds))
 		& this->GetBbOf(White))
 		| (((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N01_Pawn))
 			| (PieceTypeArray::m_lance.GetAttacks2From(occupied, White, sq) & this->GetBbOf(N02_Lance))
 			| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N03_Knight))
-			| (g_ptSilver.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N04_Silver))
-			| (g_ptGold.GetAttacks2From(g_nullBitboard, White, sq) & golds))
+			| (PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N04_Silver))
+			| (PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, White, sq) & golds))
 			& this->GetBbOf(Black))
-		| (g_ptBishop.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
-		| (g_ptRook.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon))
-		| (g_ptKing.GetAttacks2From(g_nullBitboard, Color::ColorNum, sq) & this->GetBbOf(N08_King, N13_Horse, N14_Dragon));
+		| (PieceTypeArray::m_bishop.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
+		| (PieceTypeArray::m_rook.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon))
+		| (PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, Color::ColorNum, sq) & this->GetBbOf(N08_King, N13_Horse, N14_Dragon));
 }
 
 // occupied を Position::occupiedBB() 以外のものを使用する場合に使用する。
@@ -2242,11 +2242,11 @@ Bitboard Position::GetAttackersTo(const Color c, const Square sq, const Bitboard
 	return ((PieceTypeArray::m_pawn.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
 		| (PieceTypeArray::m_lance.GetAttacks2From(occupied, opposite, sq) & this->GetBbOf(N02_Lance))
 		| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
-		| (g_ptSilver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver))
-		| (g_ptGold.GetAttacks2From(g_nullBitboard, opposite, sq) & GetGoldsBB())
-		| (g_ptBishop.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
-		| (g_ptRook.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon))
-		| (g_ptKing.GetAttacks2From(g_nullBitboard, Color::ColorNum, sq) & this->GetBbOf(N08_King, N13_Horse, N14_Dragon)))
+		| (PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver))
+		| (PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, opposite, sq) & GetGoldsBB())
+		| (PieceTypeArray::m_bishop.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
+		| (PieceTypeArray::m_rook.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon))
+		| (PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, Color::ColorNum, sq) & this->GetBbOf(N08_King, N13_Horse, N14_Dragon)))
 		& this->GetBbOf(c);
 }
 
@@ -2256,10 +2256,10 @@ Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) cons
 	return ((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
 		| (PieceTypeArray::m_lance.GetAttacks2From( this->GetOccupiedBB(), opposite, sq) & this->GetBbOf(N02_Lance))
 		| (PieceTypeArray::m_knight.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
-		| (g_ptSilver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver, N14_Dragon))
-		| (g_ptGold.GetAttacks2From(g_nullBitboard, opposite, sq) & (GetGoldsBB() | this->GetBbOf(N13_Horse)))
-		| (g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
-		| (g_ptRook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon)))
+		| (PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver, N14_Dragon))
+		| (PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, opposite, sq) & (GetGoldsBB() | this->GetBbOf(N13_Horse)))
+		| (PieceTypeArray::m_bishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
+		| (PieceTypeArray::m_rook.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, sq) & this->GetBbOf(N06_Rook, N14_Dragon)))
 		& this->GetBbOf(c);
 }
 

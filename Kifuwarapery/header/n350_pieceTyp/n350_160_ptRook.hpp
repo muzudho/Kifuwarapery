@@ -14,9 +14,6 @@
 #include "n350_070_ptAbstract.hpp"
 
 
-//class Position;
-
-
 class PtRook : public PtAbstract {
 public:
 
@@ -45,6 +42,3 @@ public:
 	}
 
 };
-
-
-extern PtRook g_ptRook;

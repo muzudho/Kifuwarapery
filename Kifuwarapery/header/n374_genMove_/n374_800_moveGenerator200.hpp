@@ -665,7 +665,7 @@ private:
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
 				const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-				Bitboard toBB = g_ptSilver.GetAttacks2From(g_nullBitboard, US, from) & target;
+				Bitboard toBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, from) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
@@ -701,7 +701,7 @@ private:
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
 			const Square from = pos.GetKingSquare(US);
-			Bitboard toBB = g_ptKing.GetAttacks2From(g_nullBitboard, US, from) & target;
+			Bitboard toBB = PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N08_King, from, to, pos);
@@ -832,7 +832,7 @@ private:
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
-				bannedKingToBB |= g_ptDragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+				bannedKingToBB |= PieceTypeArray::m_dragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
 			}
 			else {
 				bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
@@ -903,7 +903,7 @@ private:
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
-				bannedKingToBB |= g_ptDragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+				bannedKingToBB |= PieceTypeArray::m_dragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
 			}
 			else {
 				bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);

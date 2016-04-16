@@ -1,6 +1,6 @@
 #pragma once
 
-//*TODO:
+
 #include "../n105_color___/n105_100_color.hpp"
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
@@ -10,8 +10,6 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "n350_070_ptAbstract.hpp"
-
-
 
 
 class PtGold : public PtAbstract {
@@ -37,7 +35,3 @@ public:
 	}
 
 };
-
-
-extern PtGold g_ptGold;
-//*/

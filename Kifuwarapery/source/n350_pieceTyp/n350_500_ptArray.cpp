@@ -23,17 +23,17 @@ const PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
 	&PieceTypeArray::m_pawn,
 	&PieceTypeArray::m_lance,
 	&PieceTypeArray::m_knight,
-	&g_ptSilver,
-	&g_ptBishop,
-	&g_ptRook,
-	&g_ptGold,
-	&g_ptKing,
-	&g_ptProPawn,
-	&g_ptProLance,
-	&g_ptProKnight,
-	&g_ptProSilver,
-	&g_ptHorse,
-	&g_ptDragon
+	&PieceTypeArray::m_silver,
+	&PieceTypeArray::m_bishop,
+	&PieceTypeArray::m_rook,
+	&PieceTypeArray::m_gold,
+	&PieceTypeArray::m_king,
+	&PieceTypeArray::m_proPawn,
+	&PieceTypeArray::m_proLance,
+	&PieceTypeArray::m_proKnight,
+	&PieceTypeArray::m_proSilver,
+	&PieceTypeArray::m_horse,
+	&PieceTypeArray::m_dragon
 };
 
 

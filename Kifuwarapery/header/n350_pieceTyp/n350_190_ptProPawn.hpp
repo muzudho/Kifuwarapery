@@ -13,9 +13,6 @@
 #include "n350_070_ptAbstract.hpp"
 
 
-//class Position;
-
-
 class PtProPawn : public PtAbstract {
 public:
 
@@ -39,6 +36,3 @@ public:
 	}
 
 };
-
-
-extern PtProPawn g_ptProPawn;

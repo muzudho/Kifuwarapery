@@ -26,10 +26,10 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_checkBB[N01_Pawn] = PieceTypeArray::m_pawn.GetAttacks2From( g_nullBitboard, them, ksq);
 	m_checkBB[N02_Lance] = PieceTypeArray::m_lance.GetAttacks2From( position.GetOccupiedBB(), them, ksq);
 	m_checkBB[N03_Knight] = PieceTypeArray::m_knight.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N04_Silver] = g_ptSilver.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N05_Bishop] = g_ptBishop.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);//Colorは使ってない。
-	m_checkBB[N06_Rook] = g_ptRook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);
-	m_checkBB[N07_Gold] = g_ptGold.GetAttacks2From( g_nullBitboard, them, ksq);
+	m_checkBB[N04_Silver] = PieceTypeArray::m_silver.GetAttacks2From( g_nullBitboard, them, ksq);
+	m_checkBB[N05_Bishop] = PieceTypeArray::m_bishop.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);//Colorは使ってない。
+	m_checkBB[N06_Rook] = PieceTypeArray::m_rook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);
+	m_checkBB[N07_Gold] = PieceTypeArray::m_gold.GetAttacks2From( g_nullBitboard, them, ksq);
 	m_checkBB[N08_King] = Bitboard::CreateAllZeroBB();
 	// todo: ここで AVX2 使えそう。
 	//       checkBB のreadアクセスは switch (pt) で場合分けして、余計なコピー減らした方が良いかも。
@@ -37,6 +37,6 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_checkBB[N10_ProLance] = m_checkBB[N07_Gold];
 	m_checkBB[N11_ProKnight] = m_checkBB[N07_Gold];
 	m_checkBB[N12_ProSilver] = m_checkBB[N07_Gold];
-	m_checkBB[N13_Horse] = m_checkBB[N05_Bishop] | g_ptKing.GetAttacks2From( g_nullBitboard, Color::ColorNum, ksq);
-	m_checkBB[N14_Dragon] = m_checkBB[N06_Rook] | g_ptKing.GetAttacks2From(g_nullBitboard, Color::ColorNum, ksq);
+	m_checkBB[N13_Horse] = m_checkBB[N05_Bishop] | PieceTypeArray::m_king.GetAttacks2From( g_nullBitboard, Color::ColorNum, ksq);
+	m_checkBB[N14_Dragon] = m_checkBB[N06_Rook] | PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, Color::ColorNum, ksq);
 }

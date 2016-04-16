@@ -9,7 +9,7 @@
 #include "../n161_sqDistan/n161_500_squareDistance.hpp"
 #include "../n162_bonaDir_/n162_070_bonaDirAbstract.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_160_ptRook.hpp"
+#include "../n350_pieceTyp/n350_500_ptArray.hpp"
 
 
 class DirecRank : public BonaDirAbstract {
@@ -23,7 +23,7 @@ public:
 
 	void Do2Move(Position& position, Square from, const Square ksq, const Color us) const {
 		position.GetStateInfo()->m_checkersBB |=
-			g_ptRook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq) &
+			PieceTypeArray::m_rook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq) &
 			position.GetBbOf(PieceType::N06_Rook, PieceType::N14_Dragon, us);
 	}
 
