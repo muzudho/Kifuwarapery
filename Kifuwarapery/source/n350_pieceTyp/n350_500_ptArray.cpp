@@ -18,25 +18,6 @@
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-const PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
-	&g_ptOccupied,
-	&PieceTypeArray::m_pawn,
-	&PieceTypeArray::m_lance,
-	&PieceTypeArray::m_knight,
-	&PieceTypeArray::m_silver,
-	&PieceTypeArray::m_bishop,
-	&PieceTypeArray::m_rook,
-	&PieceTypeArray::m_gold,
-	&PieceTypeArray::m_king,
-	&PieceTypeArray::m_proPawn,
-	&PieceTypeArray::m_proLance,
-	&PieceTypeArray::m_proKnight,
-	&PieceTypeArray::m_proSilver,
-	&PieceTypeArray::m_horse,
-	&PieceTypeArray::m_dragon
-};
-
-
 const PtOccupied PieceTypeArray::m_occupied = PtOccupied();
 const PtPawn PieceTypeArray::m_pawn = PtPawn();
 const PtLance PieceTypeArray::m_lance = PtLance();
@@ -53,20 +34,20 @@ const PtProSilver PieceTypeArray::m_proSilver = PtProSilver();
 const PtHorse PieceTypeArray::m_horse = PtHorse();
 const PtDragon PieceTypeArray::m_dragon = PtDragon();
 
-const PtAbstract PieceTypeArray::m_ptArray[PieceType::N15_PieceTypeNum] = {
-	PieceTypeArray::m_occupied,
-	PieceTypeArray::m_pawn,
-	PieceTypeArray::m_lance,
-	PieceTypeArray::m_knight,
-	PieceTypeArray::m_silver,
-	PieceTypeArray::m_bishop,
-	PieceTypeArray::m_rook,
-	PieceTypeArray::m_gold,
-	PieceTypeArray::m_king,
-	PieceTypeArray::m_proPawn,
-	PieceTypeArray::m_proLance,
-	PieceTypeArray::m_proKnight,
-	PieceTypeArray::m_proSilver,
-	PieceTypeArray::m_horse,
-	PieceTypeArray::m_dragon
+const PtAbstract* PieceTypeArray::m_ptArray[PieceType::N15_PieceTypeNum] = {
+	&PieceTypeArray::m_occupied,
+	&PieceTypeArray::m_pawn,
+	&PieceTypeArray::m_lance,
+	&PieceTypeArray::m_knight,
+	&PieceTypeArray::m_silver,
+	&PieceTypeArray::m_bishop,
+	&PieceTypeArray::m_rook,
+	&PieceTypeArray::m_gold,
+	&PieceTypeArray::m_king,
+	&PieceTypeArray::m_proPawn,
+	&PieceTypeArray::m_proLance,
+	&PieceTypeArray::m_proKnight,
+	&PieceTypeArray::m_proSilver,
+	&PieceTypeArray::m_horse,
+	&PieceTypeArray::m_dragon
 };

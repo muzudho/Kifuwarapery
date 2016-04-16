@@ -23,9 +23,6 @@
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-extern const PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
-
-
 class PieceTypeArray {
 public:
 
@@ -45,6 +42,6 @@ public:
 	static const PtHorse m_horse;
 	static const PtDragon m_dragon;
 
-	static const PtAbstract m_ptArray[PieceType::N15_PieceTypeNum];
+	static const PtAbstract* m_ptArray[PieceType::N15_PieceTypeNum];
 
 };

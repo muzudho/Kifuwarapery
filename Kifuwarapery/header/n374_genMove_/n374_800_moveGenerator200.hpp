@@ -20,7 +20,7 @@ private:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-			Bitboard toBB = g_ptArray[PT]->GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
+			Bitboard toBB = PieceTypeArray::m_ptArray[PT]->GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
@@ -1111,7 +1111,7 @@ public:
 			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
-			PieceTypeArray::m_ptArray[pieceType].Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+			PieceTypeArray::m_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 			//g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
