@@ -23,7 +23,7 @@
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
+extern const PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
 
 
 class PieceTypeArray {

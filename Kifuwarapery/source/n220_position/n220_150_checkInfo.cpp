@@ -14,6 +14,7 @@
 #include "../../header/n350_pieceTyp/n350_160_ptRook.hpp"
 #include "../../header/n350_pieceTyp/n350_170_ptGold.hpp"
 #include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 CheckInfo::CheckInfo(const Position& position) {
 	const Color them = UtilColor::OppositeColor(position.GetTurn());
@@ -22,9 +23,9 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_pinned = position.GetPinnedBB();
 	m_dcBB = position.DiscoveredCheckBB();
 
-	m_checkBB[N01_Pawn] = g_ptPawn.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N02_Lance] = g_ptLance.GetAttacks2From( position.GetOccupiedBB(), them, ksq);
-	m_checkBB[N03_Knight] = g_ptKnight.GetAttacks2From( g_nullBitboard, them, ksq);
+	m_checkBB[N01_Pawn] = PieceTypeArray::m_pawn.GetAttacks2From( g_nullBitboard, them, ksq);
+	m_checkBB[N02_Lance] = PieceTypeArray::m_lance.GetAttacks2From( position.GetOccupiedBB(), them, ksq);
+	m_checkBB[N03_Knight] = PieceTypeArray::m_knight.GetAttacks2From( g_nullBitboard, them, ksq);
 	m_checkBB[N04_Silver] = g_ptSilver.GetAttacks2From( g_nullBitboard, them, ksq);
 	m_checkBB[N05_Bishop] = g_ptBishop.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);//Colorは使ってない。
 	m_checkBB[N06_Rook] = g_ptRook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);

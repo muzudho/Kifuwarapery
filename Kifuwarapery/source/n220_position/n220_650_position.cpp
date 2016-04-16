@@ -12,6 +12,7 @@
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n160_board___/n160_240_betweenBb.hpp"
 #include "../../header/n165_movStack/n165_300_moveType.hpp"
+#include "../../header/n220_position/n220_100_repetitionType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 
@@ -1281,11 +1282,11 @@ silver_drop_end:
 		Bitboard fromBB = GetBbOf(N03_Knight, US) & g_knightAttackBb.KnightCheckTable(US, ksq);
 		if (fromBB.Exists1Bit()) {
 			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From(g_nullBitboard,Them, ksq) & TRank789BB;
-			const Bitboard chkBB = g_ptKnight.GetAttacks2From(g_nullBitboard,Them, ksq);
+			const Bitboard chkBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard,Them, ksq);
 
 			do {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = GetBbOf(US).NotThisAnd(g_ptKnight.GetAttacks2From(g_nullBitboard,US, from));
+				Bitboard toBB = GetBbOf(US).NotThisAnd(PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard,US, from));
 				Bitboard toBB_promo = toBB & chkBB_promo;
 				toBB &= chkBB;
 				if ((toBB_promo | toBB).Exists1Bit()) {
@@ -1337,11 +1338,11 @@ silver_drop_end:
 			const Bitboard chkBB_promo = g_ptGold.GetAttacks2From( g_nullBitboard, Them, ksq) & TRank789BB;
 			// 玉の前方1マスのみ。
 			// 玉が 1 段目にいるときは、成のみで良いので省く。
-			const Bitboard chkBB = g_ptPawn.GetAttacks2From(g_nullBitboard, Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
+			const Bitboard chkBB = PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
 
 			do {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = moveTarget & g_ptLance.GetAttacks2From(this->GetOccupiedBB(), US, from);
+				Bitboard toBB = moveTarget & PieceTypeArray::m_lance.GetAttacks2From(this->GetOccupiedBB(), US, from);
 				Bitboard toBB_promo = toBB & chkBB_promo;
 
 				toBB &= chkBB;
@@ -2218,15 +2219,15 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 
 	const Bitboard golds = GetGoldsBB();
 
-	return (((g_ptPawn.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N01_Pawn))
-		| (g_ptLance.GetAttacks2From(occupied, Black, sq) & this->GetBbOf(N02_Lance))
-		| (g_ptKnight.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N03_Knight))
+	return (((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N01_Pawn))
+		| (PieceTypeArray::m_lance.GetAttacks2From(occupied, Black, sq) & this->GetBbOf(N02_Lance))
+		| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N03_Knight))
 		| (g_ptSilver.GetAttacks2From(g_nullBitboard, Black, sq) & this->GetBbOf(N04_Silver))
 		| (g_ptGold.GetAttacks2From(g_nullBitboard, Black, sq) & golds))
 		& this->GetBbOf(White))
-		| (((g_ptPawn.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N01_Pawn))
-			| (g_ptLance.GetAttacks2From(occupied, White, sq) & this->GetBbOf(N02_Lance))
-			| (g_ptKnight.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N03_Knight))
+		| (((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N01_Pawn))
+			| (PieceTypeArray::m_lance.GetAttacks2From(occupied, White, sq) & this->GetBbOf(N02_Lance))
+			| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N03_Knight))
 			| (g_ptSilver.GetAttacks2From(g_nullBitboard, White, sq) & this->GetBbOf(N04_Silver))
 			| (g_ptGold.GetAttacks2From(g_nullBitboard, White, sq) & golds))
 			& this->GetBbOf(Black))
@@ -2238,9 +2239,9 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 // occupied を Position::occupiedBB() 以外のものを使用する場合に使用する。
 Bitboard Position::GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const {
 	const Color opposite = UtilColor::OppositeColor(c);
-	return (( g_ptPawn.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
-		| ( g_ptLance.GetAttacks2From(occupied, opposite, sq) & this->GetBbOf(N02_Lance))
-		| ( g_ptKnight.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
+	return ((PieceTypeArray::m_pawn.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
+		| (PieceTypeArray::m_lance.GetAttacks2From(occupied, opposite, sq) & this->GetBbOf(N02_Lance))
+		| (PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
 		| (g_ptSilver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver))
 		| (g_ptGold.GetAttacks2From(g_nullBitboard, opposite, sq) & GetGoldsBB())
 		| (g_ptBishop.GetAttacks2From(occupied, Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))
@@ -2252,9 +2253,9 @@ Bitboard Position::GetAttackersTo(const Color c, const Square sq, const Bitboard
 // 玉以外で sq へ移動可能な c 側の駒の Bitboard を返す。
 Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) const {
 	const Color opposite = UtilColor::OppositeColor(c);
-	return (( g_ptPawn.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
-		| ( g_ptLance.GetAttacks2From( this->GetOccupiedBB(), opposite, sq) & this->GetBbOf(N02_Lance))
-		| (g_ptKnight.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
+	return ((PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N01_Pawn))
+		| (PieceTypeArray::m_lance.GetAttacks2From( this->GetOccupiedBB(), opposite, sq) & this->GetBbOf(N02_Lance))
+		| (PieceTypeArray::m_knight.GetAttacks2From( g_nullBitboard, opposite, sq) & this->GetBbOf(N03_Knight))
 		| (g_ptSilver.GetAttacks2From(g_nullBitboard, opposite, sq) & this->GetBbOf(N04_Silver, N14_Dragon))
 		| (g_ptGold.GetAttacks2From(g_nullBitboard, opposite, sq) & (GetGoldsBB() | this->GetBbOf(N13_Horse)))
 		| (g_ptBishop.GetAttacks2From(this->GetOccupiedBB(), Color::ColorNum, sq) & this->GetBbOf(N05_Bishop, N13_Horse))

@@ -18,11 +18,11 @@
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
+const PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
 	&g_ptOccupied,
-	&g_ptPawn,
-	&g_ptLance,
-	&g_ptKnight,
+	&PieceTypeArray::m_pawn,
+	&PieceTypeArray::m_lance,
+	&PieceTypeArray::m_knight,
 	&g_ptSilver,
 	&g_ptBishop,
 	&g_ptRook,

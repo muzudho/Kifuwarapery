@@ -45,6 +45,3 @@ public:
 	}
 
 };
-
-
-extern PtLance g_ptLance;

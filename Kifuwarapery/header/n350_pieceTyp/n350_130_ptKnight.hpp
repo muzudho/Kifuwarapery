@@ -1,5 +1,6 @@
 #pragma once
 
+
 #include "../n105_color___/n105_100_color.hpp"
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n110_square__/n110_500_utilSquare.hpp"
@@ -12,9 +13,6 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "n350_070_ptAbstract.hpp"
-
-
-//class Position;
 
 
 class PtKnight : public PtAbstract {
@@ -45,6 +43,3 @@ public:
 	}
 
 };
-
-
-extern PtKnight g_ptKnight;

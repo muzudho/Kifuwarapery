@@ -16,6 +16,7 @@
 #include "../n160_board___/n160_240_betweenBb.hpp"
 #include "../n160_board___/n160_400_printBb.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
+#include "../n220_position/n220_100_repetitionType.hpp"
 #include "../n220_position/n220_150_checkInfo.hpp"
 #include "../n220_position/n220_350_stateInfo.hpp"
 #include "../n220_position/n220_400_evalList.hpp"

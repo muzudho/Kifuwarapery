@@ -3,6 +3,7 @@
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n220_position/n220_100_repetitionType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_665_utilMoveStack.hpp"
@@ -11,6 +12,7 @@
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
@@ -199,7 +201,7 @@ namespace {
 			const Color them = UtilColor::OppositeColor(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const Bitboard xray =
-				(g_ptLance.GetAttacks2From(occ, them, m2to) & pos.GetBbOf(N02_Lance, us))
+				(PieceTypeArray::m_lance.GetAttacks2From(occ, them, m2to) & pos.GetBbOf(N02_Lance, us))
 				| (g_ptRook.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
 				| (g_ptBishop.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
 

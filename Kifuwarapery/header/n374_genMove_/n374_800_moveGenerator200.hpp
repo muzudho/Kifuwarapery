@@ -604,7 +604,7 @@ private:
 			Bitboard fromBB = pos.GetBbOf(N02_Lance, US);
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = g_ptLance.GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
+				Bitboard toBB = PieceTypeArray::m_lance.GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
 				do {
 					if (toBB.Exists1Bit()) {
 						// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
@@ -639,7 +639,7 @@ private:
 			Bitboard fromBB = pos.GetBbOf(N03_Knight, US);
 			while (fromBB.Exists1Bit()) {
 				const Square from = fromBB.PopFirstOneFromI9();
-				Bitboard toBB = g_ptKnight.GetAttacks2From(g_nullBitboard, US, from) & target;
+				Bitboard toBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, US, from) & target;
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
