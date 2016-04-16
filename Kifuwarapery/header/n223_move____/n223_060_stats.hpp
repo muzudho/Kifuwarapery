@@ -13,7 +13,7 @@ public:
 	void Clear() { memset(this->m_table_, 0, sizeof(this->m_table_)); }
 
 	Score GetValue(const bool isDrop, const Piece pc, const Square to) const {
-		assert(0 < pc && pc < PieceNone);
+		assert(0 < pc && pc < N31_PieceNone);
 		assert(UtilSquare::ContainsOf(to));
 		return this->m_table_[isDrop][pc][to];
 	}
@@ -29,6 +29,6 @@ public:
 
 private:
 	// [isDrop][piece][square] とする。
-	Score m_table_[2][PieceNone][SquareNum];
+	Score m_table_[2][N31_PieceNone][SquareNum];
 };
 

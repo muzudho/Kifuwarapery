@@ -9,29 +9,29 @@
 
 struct KPPBoardIndexStartToPiece : public std::unordered_map<int, Piece> {
 	KPPBoardIndexStartToPiece() {
-		(*this)[f_pawn] = BPawn;
-		(*this)[e_pawn] = WPawn;
-		(*this)[f_lance] = BLance;
-		(*this)[e_lance] = WLance;
-		(*this)[f_knight] = BKnight;
-		(*this)[e_knight] = WKnight;
-		(*this)[f_silver] = BSilver;
-		(*this)[e_silver] = WSilver;
-		(*this)[f_gold] = BGold;
-		(*this)[e_gold] = WGold;
-		(*this)[f_bishop] = BBishop;
-		(*this)[e_bishop] = WBishop;
-		(*this)[f_horse] = BHorse;
-		(*this)[e_horse] = WHorse;
-		(*this)[f_rook] = BRook;
-		(*this)[e_rook] = WRook;
-		(*this)[f_dragon] = BDragon;
-		(*this)[e_dragon] = WDragon;
+		(*this)[f_pawn] = N01_BPawn;
+		(*this)[e_pawn] = N17_WPawn;
+		(*this)[f_lance] = N02_BLance;
+		(*this)[e_lance] = N18_WLance;
+		(*this)[f_knight] = N03_BKnight;
+		(*this)[e_knight] = N19_WKnight;
+		(*this)[f_silver] = N04_BSilver;
+		(*this)[e_silver] = N20_WSilver;
+		(*this)[f_gold] = N07_BGold;
+		(*this)[e_gold] = N23_WGold;
+		(*this)[f_bishop] = N05_BBishop;
+		(*this)[e_bishop] = N21_WBishop;
+		(*this)[f_horse] = N13_BHorse;
+		(*this)[e_horse] = N29_WHorse;
+		(*this)[f_rook] = N06_BRook;
+		(*this)[e_rook] = N22_WRook;
+		(*this)[f_dragon] = N14_BDragon;
+		(*this)[e_dragon] = N30_WDragon;
 	}
 	Piece value(const int i) const {
 		const auto it = find(i);
 		if (it == std::end(*this))
-			return PieceNone;
+			return N31_PieceNone;
 		return it->second;
 	}
 };

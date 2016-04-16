@@ -44,7 +44,7 @@ const Score g_PromoteRookScore      = g_DragonScore    - g_RookScore;
 
 const Score g_ScoreKnownWin = g_KingScore;
 
-extern const Score g_PieceScore[PieceNone];
-extern const Score g_CapturePieceScore[PieceNone];
+extern const Score g_PieceScore[N31_PieceNone];
+extern const Score g_CapturePieceScore[N31_PieceNone];
 extern const Score g_PromotePieceScore[7];
 

@@ -38,7 +38,7 @@ private:
 
 	size_t			m_size_;
 
-	static Key m_ZobPiece[PieceNone][SquareNum];
+	static Key m_ZobPiece[N31_PieceNone][SquareNum];
 
 	static Key m_ZobHand[HandPieceNum][19];
 

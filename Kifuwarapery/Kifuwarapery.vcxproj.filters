@@ -145,17 +145,11 @@
     <Filter Include="source\n450_movPhase">
       <UniqueIdentifier>{70e0543a-956c-42a4-b7d8-b2da092e80aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n360_genMove_">
-      <UniqueIdentifier>{af043c7c-3557-4655-9b9e-62012adf618d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n350_pieceTyp">
       <UniqueIdentifier>{6e24cefb-b320-47af-83c6-03f9d5829406}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n350_pieceTyp">
       <UniqueIdentifier>{d246aceb-580d-4ee5-8266-44212b5e919e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n360_genMove_">
-      <UniqueIdentifier>{a249484b-fd82-4fde-8283-32c301522d21}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n358_dropMake">
       <UniqueIdentifier>{8a8036d6-ed46-4688-a199-1f54332cf5b1}</UniqueIdentifier>
@@ -207,6 +201,24 @@
     </Filter>
     <Filter Include="source\n887_nodeType">
       <UniqueIdentifier>{151492f8-26d1-4d9b-ba6d-4cec723db3e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n376_genMoveP">
+      <UniqueIdentifier>{96719bae-98bd-4c24-b8ac-8231158fda83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n376_genMoveP">
+      <UniqueIdentifier>{14e2a46f-9a32-4e09-b61c-dc68f380aade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n374_genMove_">
+      <UniqueIdentifier>{a249484b-fd82-4fde-8283-32c301522d21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n374_genMove_">
+      <UniqueIdentifier>{af043c7c-3557-4655-9b9e-62012adf618d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n372_genMoveP">
+      <UniqueIdentifier>{d6120d15-fee6-4234-a3c8-0f12e9801996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n372_genMoveP">
+      <UniqueIdentifier>{9b060656-b5ee-4dba-9036-f39b11ae405a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -672,9 +684,6 @@
     <ClInclude Include="header\n350_pieceTyp\n350_500_ptArray.hpp">
       <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
-    <ClInclude Include="header\n360_genMove_\n360_500_generateMoves.hpp">
-      <Filter>header\n360_genMove_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
       <Filter>header\n440_movStack</Filter>
     </ClInclude>
@@ -753,11 +762,113 @@
     <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp">
       <Filter>header\n887_nodeType</Filter>
     </ClInclude>
-    <ClInclude Include="header\n360_genMove_\n360_800_moveGenerator200.hpp">
-      <Filter>header\n360_genMove_</Filter>
+    <ClInclude Include="header\n374_genMove_\n374_500_generateMoves.hpp">
+      <Filter>header\n374_genMove_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n360_genMove_\n360_900_moveList.hpp">
-      <Filter>header\n360_genMove_</Filter>
+    <ClInclude Include="header\n374_genMove_\n374_800_moveGenerator200.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_900_moveList.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n372_genMoveP\n372_070_pieceAbstract.hpp">
+      <Filter>header\n372_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_080_pieceNull.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_100_pieceEmpty.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_110_pieceBPawn.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_120_pieceBLance.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_130_pieceBKnight.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_140_pieceBSilver.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_150_pieceBBishop.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_160_pieceBRook.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_170_pieceBGold.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_180_pieceBKing.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_190_pieceBProPawn.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_200_pieceBProLance.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_210_pieceBProKnight.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_220_pieceBProSilver.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_230_pieceBHorse.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_240_pieceBDragon.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_270_pieceWPawn.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_280_pieceWLance.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_290_pieceWKnight.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_300_pieceWSilver.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_310_pieceWBishop.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_320_pieceWRook.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_330_pieceWGold.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_340_pieceWKing.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_350_pieceWProPawn.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_360_pieceWProLance.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_370_pieceWProKnight.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_380_pieceWProSilver.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_390_pieceWHorse.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_400_pieceWDragon.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_410_pieceNone.hpp">
+      <Filter>header\n376_genMoveP</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n376_genMoveP\n376_500_pieceArray.hpp">
+      <Filter>header\n376_genMoveP</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1016,9 +1127,6 @@
     <ClCompile Include="source\n450_movPhase\n450_500_movePhaseArray.cpp">
       <Filter>source\n450_movPhase</Filter>
     </ClCompile>
-    <ClCompile Include="source\n360_genMove_\n360_500_generateMoves.cpp">
-      <Filter>source\n360_genMove_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n350_pieceTyp\n350_070_ptAbstract.cpp">
       <Filter>source\n350_pieceTyp</Filter>
     </ClCompile>
@@ -1154,8 +1262,110 @@
     <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp">
       <Filter>source\n887_nodeType</Filter>
     </ClCompile>
-    <ClCompile Include="source\n360_genMove_\n360_900_moveList.cpp">
-      <Filter>source\n360_genMove_</Filter>
+    <ClCompile Include="source\n374_genMove_\n374_500_generateMoves.cpp">
+      <Filter>source\n374_genMove_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n374_genMove_\n374_900_moveList.cpp">
+      <Filter>source\n374_genMove_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n372_genMoveP\n372_070_pieceAbstract.cpp">
+      <Filter>source\n372_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_080_pieceNull.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_100_pieceEmpty.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_110_pieceBPawn.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_120_pieceBLance.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_130_pieceBKnight.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_140_pieceBSilver.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_150_pieceBBishop.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_160_pieceBRook.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_170_pieceBGold.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_180_pieceBKing.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_190_pieceBProPawn.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_200_pieceBProLance.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_210_pieceBProKnight.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_220_pieceBProSilver.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_230_pieceBHorse.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_240_pieceBDragon.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_270_pieceWPawn.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_280_pieceWLance.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_290_pieceWKnight.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_300_pieceWSilver.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_310_pieceWBishop.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_320_pieceWRook.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_330_pieceWGold.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_340_pieceWKing.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_350_pieceWProPawn.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_360_pieceWProLance.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_370_pieceWProKnight.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_380_pieceWProSilver.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_390_pieceWHorse.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_400_pieceWDragon.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_410_pieceNone.cpp">
+      <Filter>source\n376_genMoveP</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n376_genMoveP\n376_500_pieceArray.cpp">
+      <Filter>source\n376_genMoveP</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

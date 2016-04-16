@@ -723,20 +723,20 @@ void Searcher::detectBishopInDanger(const Position& GetPos) {
 				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, F3))
 				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, E1)))
 			&& GetPos.GetBbOf(N01_Pawn  , them).IsSet(InverseIfWhite(them, G3))
-			&& GetPos.GetPiece(InverseIfWhite(them, H2)) == Empty
-			&& GetPos.GetPiece(InverseIfWhite(them, G2)) == Empty
-			&& GetPos.GetPiece(InverseIfWhite(them, G1)) == Empty)
+			&& GetPos.GetPiece(InverseIfWhite(them, H2)) == N00_Empty
+			&& GetPos.GetPiece(InverseIfWhite(them, G2)) == N00_Empty
+			&& GetPos.GetPiece(InverseIfWhite(them, G1)) == N00_Empty)
 		{
 			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
 		else if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
 				 && GetPos.m_hand(them).Exists<HBishop>()
-				 && GetPos.GetPiece(InverseIfWhite(them, C2)) == Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, C1)) == Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, D2)) == Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, D1)) == Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, A2)) == Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, C2)) == N00_Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, C1)) == N00_Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, D2)) == N00_Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, D1)) == N00_Empty
+				 && GetPos.GetPiece(InverseIfWhite(them, A2)) == N00_Empty
 				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N04_Silver
 					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B2))) == N04_Silver)
 				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N03_Knight

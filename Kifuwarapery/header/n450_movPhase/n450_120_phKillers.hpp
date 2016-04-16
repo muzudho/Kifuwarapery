@@ -19,7 +19,7 @@ public:
 		if (!move.IsNone()
 			&& move != movePicker.GetTranspositionTableMove()
 			&& movePicker.GetPos().MoveIsPseudoLegal(move, true)
-			&& movePicker.GetPos().GetPiece(move.To()) == Empty)
+			&& movePicker.GetPos().GetPiece(move.To()) == N00_Empty)
 		{
 			resultMove = move;
 			return true;

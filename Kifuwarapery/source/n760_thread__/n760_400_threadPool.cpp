@@ -1,7 +1,7 @@
 ﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
-#include "../../header/n360_genMove_/n360_900_moveList.hpp"
+#include "../../header/n374_genMove_/n374_900_moveList.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n760_thread__/n760_400_threadPool.hpp"

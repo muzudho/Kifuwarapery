@@ -9,13 +9,13 @@
 
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。
-Key Book::m_ZobPiece[PieceNone][SquareNum];
+Key Book::m_ZobPiece[N31_PieceNone][SquareNum];
 Key Book::m_ZobHand[HandPieceNum][19]; // 持ち駒の同一種類の駒の数ごと
 Key Book::m_ZobTurn;
 
 
 void Book::Init() {
-	for (Piece p = Empty; p < PieceNone; ++p) {
+	for (Piece p = N00_Empty; p < N31_PieceNone; ++p) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			m_ZobPiece[p][sq] = m_mt64bit_.GetRandom();
 		}

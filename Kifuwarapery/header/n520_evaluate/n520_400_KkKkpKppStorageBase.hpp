@@ -53,19 +53,19 @@ struct KkKkpKppStorageBase {
 
 		KPPType kpp[SquareNoLeftNum][fe_end][fe_end];
 		// 相対位置は[file][rank]の順
-		KPPType r_kpp_bb[PieceNone][17][17][PieceNone][17][17];
-		KPPType r_kpp_hb[fe_hand_end][PieceNone][17][17];
+		KPPType r_kpp_bb[N31_PieceNone][17][17][N31_PieceNone][17][17];
+		KPPType r_kpp_hb[fe_hand_end][N31_PieceNone][17][17];
 		KPPType xpp[FileNoLeftNum][fe_end][fe_end];
 		KPPType ypp[RankNum][fe_end][fe_end];
 		KPPType pp[fe_end][fe_end];
-		KPPType r_pp_bb[PieceNone][PieceNone][17][17];
-		KPPType r_pp_hb[fe_hand_end][PieceNone];
+		KPPType r_pp_bb[N31_PieceNone][N31_PieceNone][17][17];
+		KPPType r_pp_hb[fe_hand_end][N31_PieceNone];
 
 		// e は Effect の頭文字で利きを表す。(Control = 利き という説もあり。)
 		// todo: 玉の利きは全く無視しているけれど、それで良いのか？
 		KPPType kpe[SquareNoLeftNum][fe_end][ColorNum][SquareNum];
 		KPPType kee[SquareNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_kpe_b[PieceNone][17][17][ColorNum][17][17];
+		KPPType r_kpe_b[N31_PieceNone][17][17][ColorNum][17][17];
 		KPPType r_kpe_h[fe_hand_end][ColorNum][17][17];
 		KPPType r_kee[ColorNum][17][17][ColorNum][17][17];
 		KPPType xpe[FileNoLeftNum][fe_end][ColorNum][SquareNum];
@@ -74,7 +74,7 @@ struct KkKkpKppStorageBase {
 		KPPType yee[RankNum][ColorNum][SquareNum][ColorNum][SquareNum];
 		KPPType pe[fe_end][ColorNum][SquareNum];
 		KPPType ee[ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_pe_b[PieceNone][ColorNum][17][17];
+		KPPType r_pe_b[N31_PieceNone][ColorNum][17][17];
 		KPPType r_pe_h[fe_hand_end][ColorNum];
 		KPPType r_ee[ColorNum][ColorNum][17][17];
 	};
@@ -89,9 +89,9 @@ struct KkKkpKppStorageBase {
 		KKPType dummy; // 一次元配列に変換したとき、符号で += を表すようにしているが、index = 0 の時は符号を付けられないので、ダミーを置く。
 		KKPType kkp[SquareNoLeftNum][SquareNum][fe_end];
 		KKPType kp[SquareNoLeftNum][fe_end];
-		KKPType r_kkp_b[17][17][PieceNone][17][17];
+		KKPType r_kkp_b[17][17][N31_PieceNone][17][17];
 		KKPType r_kkp_h[17][17][fe_hand_end];
-		KKPType r_kp_b[PieceNone][17][17];
+		KKPType r_kp_b[N31_PieceNone][17][17];
 		KKPType r_kp_h[fe_hand_end];
 
 		KKPType kke[SquareNoLeftNum][SquareNum][ColorNum][SquareNum];

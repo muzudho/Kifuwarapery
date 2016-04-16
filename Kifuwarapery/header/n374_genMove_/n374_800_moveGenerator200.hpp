@@ -2,7 +2,7 @@
 
 
 #include "../n113_piece___/n113_150_piece.hpp"
-#include "n360_500_generateMoves.hpp"
+#include "n374_500_generateMoves.hpp"
 
 
 class MoveGenerator200 {
@@ -72,7 +72,7 @@ private:
 			if (UtilSquare::ToRank(ksq) != TRank1) {
 				const Square pawnDropCheckSquare = ksq + TDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == Empty) {
+				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
 					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
@@ -781,47 +781,42 @@ private:
 			// (^q^)ビットが 0 のとき☆？
 			//		case Empty: assert(false); break; // 最適化の為のダミー
 
-			// (^q^)色が黒なら BPawn、そうでなければ WPawn のケースだぜ☆
-		case Piece::BPawn:
-			// (^q^)色が黒なら BKnight、そうでなければ WKnight のケースだぜ☆
-		case Piece::BKnight:
+		case Piece::N01_BPawn:
+		case Piece::N03_BKnight:
 			// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 			// よって、ここでは何もしない。
-			assert(
-				pos.GetPiece(checkSq) == BPawn ||
-				pos.GetPiece(checkSq) == BKnight
-				);
+			assert(	pos.GetPiece(checkSq) == N01_BPawn ||pos.GetPiece(checkSq) == N03_BKnight	);
 			break;
 
-		case Piece::BLance:
+		case Piece::N02_BLance:
 			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::Black, checkSq);
 			break;
 
-		case Piece::BSilver:
+		case Piece::N04_BSilver:
 			bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::Black, checkSq);
 			break;
 
-		case Piece::BGold:
-		case Piece::BProPawn:
-		case Piece::BProLance:
-		case Piece::BProKnight:
-		case Piece::BProSilver:
+		case Piece::N07_BGold:
+		case Piece::N09_BProPawn:
+		case Piece::N10_BProLance:
+		case Piece::N11_BProKnight:
+		case Piece::N12_BProSilver:
 			bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::Black, checkSq);
 			break;
 
-		case Piece::BBishop:
+		case Piece::N05_BBishop:
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::BHorse:
+		case Piece::N13_BHorse:
 			bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::BRook:
+		case Piece::N06_BRook:
 			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::BDragon:
+		case Piece::N14_BDragon:
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
@@ -853,46 +848,46 @@ private:
 			//		case Empty: assert(false); break; // 最適化の為のダミー
 
 			// (^q^)色が黒なら BPawn、そうでなければ WPawn のケースだぜ☆
-		case Piece::WPawn:
+		case Piece::N17_WPawn:
 			// (^q^)色が黒なら BKnight、そうでなければ WKnight のケースだぜ☆
-		case Piece::WKnight:
+		case Piece::N19_WKnight:
 			// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 			// よって、ここでは何もしない。
 			assert(
-				pos.GetPiece(checkSq) == WPawn ||
-				pos.GetPiece(checkSq) == WKnight
+				pos.GetPiece(checkSq) == N17_WPawn ||
+				pos.GetPiece(checkSq) == N19_WKnight
 				);
 			break;
 
-		case Piece::WLance:
+		case Piece::N18_WLance:
 			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::White, checkSq);
 			break;
 
-		case Piece::WSilver:
+		case Piece::N20_WSilver:
 			bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::White, checkSq);
 			break;
 
-		case Piece::WGold:
-		case Piece::WProPawn:
-		case Piece::WProLance:
-		case Piece::WProKnight:
-		case Piece::WProSilver:
+		case Piece::N23_WGold:
+		case Piece::N25_WProPawn:
+		case Piece::N26_WProLance:
+		case Piece::N27_WProKnight:
+		case Piece::N28_WProSilver:
 			bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::White, checkSq);
 			break;
 
-		case Piece::WBishop:
+		case Piece::N21_WBishop:
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::WHorse:
+		case Piece::N29_WHorse:
 			bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::WRook:
+		case Piece::N22_WRook:
 			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case Piece::WDragon:
+		case Piece::N30_WDragon:
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。

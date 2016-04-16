@@ -19,7 +19,7 @@ public:
 
 
 	static inline Color ToColor(const Piece p) {
-		assert(p != Empty);
+		assert(p != N00_Empty);
 		return static_cast<Color>(p >> 4);
 	}
 

@@ -25,7 +25,7 @@
 #include "../../header/n350_pieceTyp/n350_230_ptHorse.hpp"
 #include "../../header/n350_pieceTyp/n350_240_ptDragon.hpp"
 #include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
-#include "../../header/n360_genMove_/n360_900_moveList.hpp"
+#include "../../header/n374_genMove_/n374_900_moveList.hpp"
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
@@ -120,7 +120,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	if (move.IsDrop()) {
 		const PieceType ptFrom = move.GetPieceTypeDropped();
-		if (!GetHand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != Empty) {
+		if (!GetHand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != N00_Empty) {
 			return false;
 		}
 
@@ -275,7 +275,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptFrom], from);
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptTo], to);
 		g_setMaskBb.XorBit(&m_byColorBB_[us], from, to);
-		m_piece_[from] = Empty;
+		m_piece_[from] = N00_Empty;
 		m_piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
 		boardKey -= GetZobrist(ptFrom, from, us);
 		boardKey += GetZobrist(ptTo, to, us);
@@ -382,7 +382,7 @@ void Position::UndoMove(const Move move) {
 		const PieceType ptTo = move.GetPieceTypeDropped();
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptTo], to);
 		g_setMaskBb.XorBit(&m_byColorBB_[us], to);
-		m_piece_[to] = Empty;
+		m_piece_[to] = N00_Empty;
 
 		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
 		m_hand_[us].PlusOne(hp);
@@ -433,7 +433,7 @@ void Position::UndoMove(const Move move) {
 		else {
 			// 駒を取らないときは、UtilPiece::colorAndPieceTypeToPiece(us, ptCaptured) は 0 または 16 になる。
 			// 16 になると困るので、駒を取らないときは明示的に Empty にする。
-			m_piece_[to] = Empty;
+			m_piece_[to] = N00_Empty;
 		}
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptFrom], from);
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptTo], to);
@@ -762,7 +762,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
 	else if (ourHand.Exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
 		const Square to = ksq + TDeltaS;
-		if (GetPiece(to) == Empty && IsAttackersToIsNot0(US, to)) {
+		if (GetPiece(to) == N00_Empty && IsAttackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
@@ -1549,7 +1549,7 @@ Score Position::GetPromotePieceScore(const PieceType pt)
 
 // Print() で使う。
 namespace {
-	const char* PieceToCharCSATable[PieceNone] = {
+	const char* PieceToCharCSATable[N31_PieceNone] = {
 		" * ", "+FU", "+KY", "+KE", "+GI", "+KA", "+HI", "+KI", "+OU", "+TO", "+NY", "+NK", "+NG", "+UM", "+RY", "", "",
 		"-FU", "-KY", "-KE", "-GI", "-KA", "-HI", "-KI", "-OU", "-TO", "-NY", "-NK", "-NG", "-UM", "-RY"
 	};
@@ -1635,10 +1635,10 @@ bool Position::IsOK() const {
 			goto incorrect_position;
 		}
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			if (GetPiece(sq) == BKing) {
+			if (GetPiece(sq) == N08_BKing) {
 				++kingCount[Black];
 			}
-			if (GetPiece(sq) == WKing) {
+			if (GetPiece(sq) == N24_WKing) {
 				++kingCount[White];
 			}
 		}
@@ -1683,7 +1683,7 @@ bool Position::IsOK() const {
 	if (debugPiece) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			const Piece pc = GetPiece(sq);
-			if (pc == Empty) {
+			if (pc == N00_Empty) {
 				if (!g_setMaskBb.IsSet( &GetEmptyBB(), sq) ) {
 					goto incorrect_position;
 				}
@@ -1738,7 +1738,7 @@ void Position::SetEvalList()
 Key Position::GetComputeBoardKey() const {
 	Key result = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		if (GetPiece(sq) != Empty) {
+		if (GetPiece(sq) != N00_Empty) {
 			result += GetZobrist(UtilPiece::ToPieceType(GetPiece(sq)), sq, UtilPiece::ToColor(GetPiece(sq)));
 		}
 	}

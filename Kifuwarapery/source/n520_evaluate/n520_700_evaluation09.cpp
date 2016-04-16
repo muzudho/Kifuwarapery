@@ -80,35 +80,35 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 Score Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 	Score GetScore = ScoreZero;
 	if (GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsBlack) {
-		if (GetPos.GetPiece(B9) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(H9) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(A7) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(I7) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(C7) == WKnight) { GetScore += 400 * g_FVScale; }
-		if (GetPos.GetPiece(G7) == WKnight) { GetScore += 400 * g_FVScale; }
-		if (GetPos.GetPiece(B5) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(H5) == WKnight) { GetScore += 700 * g_FVScale; }
-		if (GetPos.GetPiece(D5) == WKnight) { GetScore += 100 * g_FVScale; }
-		if (GetPos.GetPiece(F5) == WKnight) { GetScore += 100 * g_FVScale; }
-		if (GetPos.GetPiece(E3) == BPawn) { GetScore += 200 * g_FVScale; }
-		if (GetPos.GetPiece(E4) == BPawn) { GetScore += 200 * g_FVScale; }
-		if (GetPos.GetPiece(E5) == BPawn) { GetScore += 200 * g_FVScale; }
+		if (GetPos.GetPiece(B9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(H9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(A7) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(I7) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(C7) == N19_WKnight) { GetScore += 400 * g_FVScale; }
+		if (GetPos.GetPiece(G7) == N19_WKnight) { GetScore += 400 * g_FVScale; }
+		if (GetPos.GetPiece(B5) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(H5) == N19_WKnight) { GetScore += 700 * g_FVScale; }
+		if (GetPos.GetPiece(D5) == N19_WKnight) { GetScore += 100 * g_FVScale; }
+		if (GetPos.GetPiece(F5) == N19_WKnight) { GetScore += 100 * g_FVScale; }
+		if (GetPos.GetPiece(E3) == N01_BPawn) { GetScore += 200 * g_FVScale; }
+		if (GetPos.GetPiece(E4) == N01_BPawn) { GetScore += 200 * g_FVScale; }
+		if (GetPos.GetPiece(E5) == N01_BPawn) { GetScore += 200 * g_FVScale; }
 }
 	else {
 		assert(GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsWhite);
-		if (GetPos.GetPiece(B1) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(H1) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(A3) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(I3) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(C3) == BKnight) { GetScore -= 400 * g_FVScale; }
-		if (GetPos.GetPiece(G3) == BKnight) { GetScore -= 400 * g_FVScale; }
-		if (GetPos.GetPiece(B5) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(H5) == BKnight) { GetScore -= 700 * g_FVScale; }
-		if (GetPos.GetPiece(D5) == BKnight) { GetScore -= 100 * g_FVScale; }
-		if (GetPos.GetPiece(F5) == BKnight) { GetScore -= 100 * g_FVScale; }
-		if (GetPos.GetPiece(E7) == WPawn) { GetScore -= 200 * g_FVScale; }
-		if (GetPos.GetPiece(E6) == WPawn) { GetScore -= 200 * g_FVScale; }
-		if (GetPos.GetPiece(E5) == WPawn) { GetScore -= 200 * g_FVScale; }
+		if (GetPos.GetPiece(B1) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(H1) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(A3) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(I3) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(C3) == N03_BKnight) { GetScore -= 400 * g_FVScale; }
+		if (GetPos.GetPiece(G3) == N03_BKnight) { GetScore -= 400 * g_FVScale; }
+		if (GetPos.GetPiece(B5) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(H5) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
+		if (GetPos.GetPiece(D5) == N03_BKnight) { GetScore -= 100 * g_FVScale; }
+		if (GetPos.GetPiece(F5) == N03_BKnight) { GetScore -= 100 * g_FVScale; }
+		if (GetPos.GetPiece(E7) == N17_WPawn) { GetScore -= 200 * g_FVScale; }
+		if (GetPos.GetPiece(E6) == N17_WPawn) { GetScore -= 200 * g_FVScale; }
+		if (GetPos.GetPiece(E5) == N17_WPawn) { GetScore -= 200 * g_FVScale; }
 	}
 	return GetScore;
 }
