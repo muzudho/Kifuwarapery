@@ -1005,12 +1005,15 @@ public:
 			GenerateMoves<MT, Black>()(moveStackList, pos) : GenerateMoves<MT, White>()(moveStackList, pos));
 	}
 
-private:
+public:
 
 	// pin は省かない。
-	static FORCE_INLINE MoveStack* generateRecaptureMoves(
-		MoveStack* moveStackList, const Position& pos, const Square to, const Color us
+	template <MoveType MT>
+	static MoveStack* GenerateMoves_3(
+		MoveStack* moveStackList, const Position& pos, const Square to
 	) {
+		const Color us = pos.GetTurn();
+
 		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
@@ -1020,15 +1023,6 @@ private:
 			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
-	}
-
-public:
-
-	template <MoveType MT>
-	static MoveStack* GenerateMoves_3(
-		MoveStack* moveStackList, const Position& pos, const Square to
-	) {
-		return generateRecaptureMoves(moveStackList, pos, to, pos.GetTurn());
 	}
 
 };
