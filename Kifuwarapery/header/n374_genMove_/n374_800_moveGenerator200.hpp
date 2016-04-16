@@ -2,6 +2,7 @@
 
 
 #include "../n113_piece___/n113_150_piece.hpp"
+#include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
 #include "../n376_genMoveP/n376_500_pieceArray.hpp"
 #include "n374_500_generateMoves.hpp"
@@ -1092,13 +1093,13 @@ public:
 		MoveStack* moveStackList, const Position& pos
 	) {
 		return (pos.GetTurn() == Black ?
-			GenerateMoves<MT, Black>()(moveStackList, pos) : GenerateMoves<MT, White>()(moveStackList, pos));
+			GenerateMoves<MT, Black>()(moveStackList, pos) :
+			GenerateMoves<MT, White>()(moveStackList, pos));
 	}
 
-public:
 
 	// pin は省かない。
-	template <MoveType MT>
+	//template <MoveType MT>
 	static MoveStack* GenerateMoves_3(
 		MoveStack* moveStackList, const Position& pos, const Square to
 	) {
@@ -1110,7 +1111,8 @@ public:
 			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
-			g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+			PieceTypeArray::m_ptArray[pieceType].Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+			//g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
 	}

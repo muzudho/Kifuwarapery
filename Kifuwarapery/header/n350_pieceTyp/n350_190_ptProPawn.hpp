@@ -34,7 +34,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) {
+		) const {
 		(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<Capture>(this->GetNumber(), from, to, pos);
 	}
 

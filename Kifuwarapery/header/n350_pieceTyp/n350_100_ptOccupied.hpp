@@ -32,7 +32,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) {
+		) const {
 			// 最適化の為のダミー
 			assert(false);
 	}

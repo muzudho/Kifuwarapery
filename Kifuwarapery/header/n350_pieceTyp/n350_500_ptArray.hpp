@@ -24,3 +24,27 @@
 
 
 extern PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum];
+
+
+class PieceTypeArray {
+public:
+
+	static const PtOccupied m_occupied;
+	static const PtPawn m_pawn;
+	static const PtLance m_lance;
+	static const PtKnight m_knight;
+	static const PtSilver m_silver;
+	static const PtBishop m_bishop;
+	static const PtRook m_rook;
+	static const PtGold m_gold;
+	static const PtKing m_king;
+	static const PtProPawn m_proPawn;
+	static const PtProLance m_proLance;
+	static const PtProKnight m_proKnight;
+	static const PtProSilver m_proSilver;
+	static const PtHorse m_horse;
+	static const PtDragon m_dragon;
+
+	static const PtAbstract m_ptArray[PieceType::N15_PieceTypeNum];
+
+};

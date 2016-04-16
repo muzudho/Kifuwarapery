@@ -14,9 +14,13 @@
 class PtAbstract {
 public:
 
-	virtual inline PieceType GetNumber() const = 0;
+	virtual inline PieceType GetNumber() const {
+		UNREACHABLE;
+	};// = 0;
 
-	virtual inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const = 0;
+	virtual inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
+		UNREACHABLE;
+	};// = 0;
 
 	// pin ÇÕè»Ç©Ç»Ç¢ÅB
 	virtual FORCE_INLINE void Generate2RecaptureMoves(
@@ -25,7 +29,9 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) = 0;
+		) const {
+		UNREACHABLE;
+	};// = 0;
 
 
 };

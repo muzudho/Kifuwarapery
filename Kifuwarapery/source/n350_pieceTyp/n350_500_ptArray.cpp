@@ -35,3 +35,38 @@ PtAbstract* g_ptArray[PieceType::N15_PieceTypeNum] = {
 	&g_ptHorse,
 	&g_ptDragon
 };
+
+
+const PtOccupied PieceTypeArray::m_occupied = PtOccupied();
+const PtPawn PieceTypeArray::m_pawn = PtPawn();
+const PtLance PieceTypeArray::m_lance = PtLance();
+const PtKnight PieceTypeArray::m_knight = PtKnight();
+const PtSilver PieceTypeArray::m_silver = PtSilver();
+const PtBishop PieceTypeArray::m_bishop = PtBishop();
+const PtRook PieceTypeArray::m_rook = PtRook();
+const PtGold PieceTypeArray::m_gold = PtGold();
+const PtKing PieceTypeArray::m_king = PtKing();
+const PtProPawn PieceTypeArray::m_proPawn = PtProPawn();
+const PtProLance PieceTypeArray::m_proLance = PtProLance();
+const PtProKnight PieceTypeArray::m_proKnight = PtProKnight();
+const PtProSilver PieceTypeArray::m_proSilver = PtProSilver();
+const PtHorse PieceTypeArray::m_horse = PtHorse();
+const PtDragon PieceTypeArray::m_dragon = PtDragon();
+
+const PtAbstract PieceTypeArray::m_ptArray[PieceType::N15_PieceTypeNum] = {
+	PieceTypeArray::m_occupied,
+	PieceTypeArray::m_pawn,
+	PieceTypeArray::m_lance,
+	PieceTypeArray::m_knight,
+	PieceTypeArray::m_silver,
+	PieceTypeArray::m_bishop,
+	PieceTypeArray::m_rook,
+	PieceTypeArray::m_gold,
+	PieceTypeArray::m_king,
+	PieceTypeArray::m_proPawn,
+	PieceTypeArray::m_proLance,
+	PieceTypeArray::m_proKnight,
+	PieceTypeArray::m_proSilver,
+	PieceTypeArray::m_horse,
+	PieceTypeArray::m_dragon
+};

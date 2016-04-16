@@ -35,7 +35,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) {
+		) const {
 		(*moveStackList++).m_move = (
 			(UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))
 				) ?

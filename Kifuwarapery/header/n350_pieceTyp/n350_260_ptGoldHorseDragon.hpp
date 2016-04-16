@@ -34,7 +34,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) {
+		) const {
 		return;
 	}
 

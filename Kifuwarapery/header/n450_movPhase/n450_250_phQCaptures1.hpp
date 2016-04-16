@@ -26,7 +26,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_3<Recapture>(movePicker.GetFirstMove(), movePicker.GetPos(), movePicker.GetRecaptureSquare()));
+		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_3(movePicker.GetFirstMove(), movePicker.GetPos(), movePicker.GetRecaptureSquare()));//<Recapture>
 		movePicker.ScoreCaptures();
 	}
 
