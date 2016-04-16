@@ -64,6 +64,3 @@ public:
 };
 
 
-extern DropMakerHand2 g_dropMakerHand2;
-
-

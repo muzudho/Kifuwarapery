@@ -8,13 +8,12 @@
 #include "../../header/n358_dropMake/n358_160_dropMakerHand6.hpp"
 #include "../../header/n358_dropMake/n358_500_dropMakerArray.hpp"
 
-
-DropMakerAbstract* g_dropMakerArray[7] = {
-	&g_dropMakerHand0,
-	&g_dropMakerHand1,
-	&g_dropMakerHand2,
-	&g_dropMakerHand3,
-	&g_dropMakerHand4,
-	&g_dropMakerHand5,
-	&g_dropMakerHand6
+const DropMakerAbstract DropMakerArray::m_dropMakerArray[] = {
+	DropMakerHand0(),
+	DropMakerHand1(),
+	DropMakerHand2(),
+	DropMakerHand3(),
+	DropMakerHand4(),
+	DropMakerHand5(),
+	DropMakerHand6()
 };

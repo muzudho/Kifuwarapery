@@ -52,8 +52,3 @@ public:
 	}
 
 };
-
-
-extern DropMakerHand6 g_dropMakerHand6;
-
-

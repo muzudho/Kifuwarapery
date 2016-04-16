@@ -42,7 +42,3 @@ public:
 
 };
 
-
-extern DropMakerHand0 g_dropMakerHand0;
-
-

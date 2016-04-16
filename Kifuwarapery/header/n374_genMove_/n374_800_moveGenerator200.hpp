@@ -41,13 +41,14 @@ private:
 	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって switch で展開している。
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
-	template <Color US>
+	//template <Color US>
 	static MoveStack* generateDropMoves(
+		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target
-		) {
-		const Hand hand = pos.GetHand(US);
+	) {
+		const Hand hand = pos.GetHand(us);
 
 		// まず、歩に対して指し手を生成
 		if (hand.Exists<HPawn>()) {
@@ -55,27 +56,27 @@ private:
 			Bitboard toBB = target;
 			// 一段目には打てない
 
-			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			toBB.AndEqualNot(g_rankMaskBb.GetRankMask<TRank9>());
+			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
 
 			// 二歩の回避
-			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, US);
+			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, us);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
 				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
 			});
 
 			// 打ち歩詰めの回避
-			const Rank TRank1 = (US == Black ? Rank1 : Rank9);
-			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
+			const Rank tRank1 = (us == Black ? Rank1 : Rank9);
+			const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
+			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
-			if (UtilSquare::ToRank(ksq) != TRank1) {
-				const Square pawnDropCheckSquare = ksq + TDeltaS;
+			if (UtilSquare::ToRank(ksq) != tRank1) {
+				const Square pawnDropCheckSquare = ksq + tDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
 				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
-					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
+					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
@@ -105,10 +106,10 @@ private:
 			if (hand.Exists<HBishop>()) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
 			if (hand.Exists<HRook  >()) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
 
-			const Rank TRank8 = (US == Black ? Rank8 : Rank2);
-			const Rank TRank9 = (US == Black ? Rank9 : Rank1);
-			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask<TRank8>();
-			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask<TRank9>();
+			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
+			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
+			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
 
 			/* FIXME: 駒の打ち込みが見えないぜ☆！（＾ｑ＾）
@@ -116,15 +117,15 @@ private:
 			// 桂馬、香車 以外の持ち駒があれば、
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
 			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
-			g_dropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMovestack, haveHandArr, noKnightLanceIdx);
+			DropMakerArray::m_dropMakerArray[haveHandNum - noKnightLanceIdx].MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMovestack, haveHandArr, noKnightLanceIdx);
 
 			// 桂馬以外の持ち駒があれば、
 			// 二段目に対して、桂馬以外の指し手を生成。
-			g_dropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(target, TRank8BB, pMovestack, haveHandArr, noKnightIdx);
+			DropMakerArray::m_dropMakerArray[haveHandNum - noKnightIdx].MakeDropMovesToRank8ExceptN(target, TRank8BB, pMovestack, haveHandArr, noKnightIdx);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 			Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-			g_dropMakerArray[haveHandNum]->MakeDropMovesToRank1234567( toBB, pMovestack, haveHandArr);
+			DropMakerArray::m_dropMakerArray[haveHandNum].MakeDropMovesToRank1234567( toBB, pMovestack, haveHandArr);
 			//*/
 
 			//* OK
@@ -522,7 +523,8 @@ private:
 
 
 	// 金, 成り金、馬、竜の指し手生成
-	template <MoveType MT, PieceType PT, Color US, bool ALL> struct GeneratePieceMoves {
+	template <MoveType MT, PieceType PT, Color US, bool ALL>
+	struct GeneratePieceMoves {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
@@ -593,7 +595,8 @@ private:
 	};//struct
 
 	  // 香車の場合
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
@@ -627,7 +630,8 @@ private:
 		}
 	};
 	// 桂馬の場合
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N03_Knight, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N03_Knight, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
@@ -651,7 +655,8 @@ private:
 		}
 	};
 	// 銀の場合
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N04_Silver, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N04_Silver, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
@@ -671,14 +676,16 @@ private:
 			return moveStackList;
 		}
 	};
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N05_Bishop, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N05_Bishop, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
 			) {
 			return generateBishopOrRookMoves<MT, N05_Bishop, US, ALL>(moveStackList, pos, target, ksq);
 		}
 	};
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N06_Rook, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N06_Rook, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
 			) {
@@ -687,7 +694,8 @@ private:
 	};
 	// 玉の場合
 	// 必ず盤上に 1 枚だけあることを前提にすることで、while ループを 1 つ無くして高速化している。
-	template <MoveType MT, Color US, bool ALL> struct GeneratePieceMoves<MT, N08_King, US, ALL> {
+	template <MoveType MT, Color US, bool ALL>
+	struct GeneratePieceMoves<MT, N08_King, US, ALL> {
 		FORCE_INLINE MoveStack* operator () (
 			MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 			) {
@@ -753,7 +761,7 @@ private:
 			MoveStack* pMovestack, const Position& pos
 			) {
 			const Bitboard target = pos.GetEmptyBB();
-			pMovestack = generateDropMoves<US>(pMovestack, pos, target);
+			pMovestack = generateDropMoves(US, pMovestack, pos, target);//<US>
 			return pMovestack;
 		}
 	};
@@ -911,7 +919,8 @@ private:
 	// 王手をしている駒による王手は避けるが、
 	// 玉の移動先に敵の利きがある場合と、pinされている味方の駒を動かした場合、非合法手を生成する。
 	// そのため、pseudo legal である。
-	template <Color US, bool ALL> struct GenerateMoves<Evasion, US, ALL> {
+	template <Color US, bool ALL>
+	struct GenerateMoves<Evasion, US, ALL> {
 		/*FORCE_INLINE*/ MoveStack* operator () (
 			MoveStack* pMovestack,
 			const Position& pos
@@ -989,7 +998,7 @@ private:
 			pMovestack = GeneratePieceMoves<Evasion, N16_GoldHorseDragon, US, ALL>()(pMovestack, pos, target2, ksq);
 
 			if (target1.Exists1Bit()) {
-				pMovestack = generateDropMoves<US>(pMovestack, pos, target1);
+				pMovestack = generateDropMoves(US, pMovestack, pos, target1);//<US>
 			}
 
 			return pMovestack;
@@ -1006,7 +1015,7 @@ private:
 			) {
 			Bitboard target = pos.GetEmptyBB();
 
-			pMovestack = generateDropMoves<US>(pMovestack, pos, target);
+			pMovestack = generateDropMoves(US, pMovestack, pos, target);//<US>
 			target |= pos.GetBbOf(UtilColor::OppositeColor(US));
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
 

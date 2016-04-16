@@ -4,4 +4,9 @@
 #include "n358_070_dropMakerAbstract.hpp"
 
 
-extern DropMakerAbstract* g_dropMakerArray[7];
+class DropMakerArray {
+public:
+
+	static const DropMakerAbstract m_dropMakerArray[];
+
+};

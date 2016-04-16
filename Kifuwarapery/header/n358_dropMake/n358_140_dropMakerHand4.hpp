@@ -68,8 +68,3 @@ public:
 	}
 
 };
-
-
-extern DropMakerHand4 g_dropMakerHand4;
-
-
