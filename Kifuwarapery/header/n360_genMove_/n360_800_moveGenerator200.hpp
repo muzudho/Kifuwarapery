@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "../n113_piece___/n113_150_piece.hpp"
 #include "n360_500_generateMoves.hpp"
 
 
@@ -762,8 +763,9 @@ private:
 	//
 	// 黒か白で関数を２つ用意しちゃダメなのかだぜ☆？（＾ｑ＾）？
 	//
-	template <Color THEM>
-	static FORCE_INLINE void makeBannedKingTo(
+	//(THEM == Black ? BPawn : WPawn)
+	//template <Color THEM>
+	static FORCE_INLINE void DoMakeBannedKingTo_black(
 		Bitboard& bannedKingToBB,
 		const Position& pos,
 		const Square checkSq,
@@ -780,50 +782,117 @@ private:
 			//		case Empty: assert(false); break; // 最適化の為のダミー
 
 			// (^q^)色が黒なら BPawn、そうでなければ WPawn のケースだぜ☆
-		case (THEM == Black ? BPawn : WPawn) :
+		case Piece::BPawn:
 			// (^q^)色が黒なら BKnight、そうでなければ WKnight のケースだぜ☆
-		case (THEM == Black ? BKnight : WKnight) :
+		case Piece::BKnight:
 			// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 			// よって、ここでは何もしない。
 			assert(
-				pos.GetPiece(checkSq) == (THEM == Black ? BPawn : WPawn) ||
-				pos.GetPiece(checkSq) == (THEM == Black ? BKnight : WKnight)
+				pos.GetPiece(checkSq) == BPawn ||
+				pos.GetPiece(checkSq) == BKnight
 				);
 			break;
 
-		case (THEM == Black ? BLance : WLance) :
-			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(THEM, checkSq);
+		case Piece::BLance:
+			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::Black, checkSq);
 			break;
 
-		case (THEM == Black ? BSilver : WSilver) :
-			bannedKingToBB |= g_silverAttackBb.GetControllBb(THEM, checkSq);
+		case Piece::BSilver:
+			bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::Black, checkSq);
 			break;
 
-		case (THEM == Black ? BGold : WGold) :
-
-		case (THEM == Black ? BProPawn : WProPawn) :
-
-		case (THEM == Black ? BProLance : WProLance) :
-
-		case (THEM == Black ? BProKnight : WProKnight) :
-
-		case (THEM == Black ? BProSilver : WProSilver) :
-			bannedKingToBB |= g_goldAttackBb.GetControllBb(THEM, checkSq);
+		case Piece::BGold:
+		case Piece::BProPawn:
+		case Piece::BProLance:
+		case Piece::BProKnight:
+		case Piece::BProSilver:
+			bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::Black, checkSq);
 			break;
 
-		case (THEM == Black ? BBishop : WBishop) :
+		case Piece::BBishop:
 			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case (THEM == Black ? BHorse : WHorse) :
+		case Piece::BHorse:
 			bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case (THEM == Black ? BRook : WRook) :
+		case Piece::BRook:
 			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
 			break;
 
-		case (THEM == Black ? BDragon : WDragon) :
+		case Piece::BDragon:
+			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
+				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
+				// dragonAttackToEdge(checkSq) は使えない。
+				bannedKingToBB |= g_ptDragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+			}
+			else {
+				bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
+			}
+			break;
+		default:
+			UNREACHABLE;
+		}
+	}
+	//template <Color THEM>
+	static FORCE_INLINE void DoMakeBannedKingTo_white(
+		Bitboard& bannedKingToBB,
+		const Position& pos,
+		const Square checkSq,
+		const Square ksq
+		) {
+
+		//
+		// (^q^)黒か白かで最初に分けちゃダメなのかだぜ☆？
+		//
+		switch (pos.GetPiece(checkSq))//templateの中なので改造しにくいぜ☆（＾ｑ＾）
+		{
+
+			// (^q^)ビットが 0 のとき☆？
+			//		case Empty: assert(false); break; // 最適化の為のダミー
+
+			// (^q^)色が黒なら BPawn、そうでなければ WPawn のケースだぜ☆
+		case Piece::WPawn:
+			// (^q^)色が黒なら BKnight、そうでなければ WKnight のケースだぜ☆
+		case Piece::WKnight:
+			// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
+			// よって、ここでは何もしない。
+			assert(
+				pos.GetPiece(checkSq) == WPawn ||
+				pos.GetPiece(checkSq) == WKnight
+				);
+			break;
+
+		case Piece::WLance:
+			bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::White, checkSq);
+			break;
+
+		case Piece::WSilver:
+			bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::White, checkSq);
+			break;
+
+		case Piece::WGold:
+		case Piece::WProPawn:
+		case Piece::WProLance:
+		case Piece::WProKnight:
+		case Piece::WProSilver:
+			bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::White, checkSq);
+			break;
+
+		case Piece::WBishop:
+			bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
+			break;
+
+		case Piece::WHorse:
+			bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
+			break;
+
+		case Piece::WRook:
+			bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
+			break;
+
+		case Piece::WDragon:
 			if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 				// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 				// dragonAttackToEdge(checkSq) は使えない。
@@ -875,7 +944,10 @@ private:
 				++checkersNum;
 
 				// 白か黒かによって分けている☆
-				makeBannedKingTo<Them>(bannedKingToBB, pos, checkSq, ksq);
+				(Them == Black ?
+					MoveGenerator200::DoMakeBannedKingTo_black(bannedKingToBB, pos, checkSq, ksq) :
+					MoveGenerator200::DoMakeBannedKingTo_white(bannedKingToBB, pos, checkSq, ksq)
+				);
 
 			} while (bb.Exists1Bit());
 
