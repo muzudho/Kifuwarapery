@@ -762,9 +762,6 @@
     <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp">
       <Filter>header\n887_nodeType</Filter>
     </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_500_generateMoves.hpp">
-      <Filter>header\n374_genMove_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_800_moveGenerator200.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
@@ -874,6 +871,18 @@
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_650_bannedKingToMaker.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_550_bishopRookMovesGenerator.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_050_generateMoves.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_780_MoveGenerator100.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
   </ItemGroup>

@@ -42,7 +42,7 @@
 #include "../n358_dropMake/n358_150_dropMakerHand5.hpp"
 #include "../n358_dropMake/n358_160_dropMakerHand6.hpp"
 #include "../n358_dropMake/n358_500_dropMakerArray.hpp"
-#include "../n374_genMove_/n374_500_generateMoves.hpp"
+#include "n374_050_generateMoves.hpp"
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;

@@ -18,22 +18,22 @@
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
-// デフォルト・コンストラクタは省略ｄけいるのだろうかなんだぜ☆？（＾ｑ＾）？
+// デフォルト・コンストラクタは代入を省略できるぜ☆（＾ｑ＾）
 const PtOccupied PieceTypeArray::m_occupied;// = PtOccupied();
-const PtPawn PieceTypeArray::m_pawn;// = PtPawn();
-const PtLance PieceTypeArray::m_lance;// = PtLance();
-const PtKnight PieceTypeArray::m_knight;// = PtKnight();
-const PtSilver PieceTypeArray::m_silver;// = PtSilver();
-const PtBishop PieceTypeArray::m_bishop;// = PtBishop();
-const PtRook PieceTypeArray::m_rook;// = PtRook();
-const PtGold PieceTypeArray::m_gold;// = PtGold();
-const PtKing PieceTypeArray::m_king;// = PtKing();
-const PtProPawn PieceTypeArray::m_proPawn;// = PtProPawn();
-const PtProLance PieceTypeArray::m_proLance;// = PtProLance();
-const PtProKnight PieceTypeArray::m_proKnight;// = PtProKnight();
-const PtProSilver PieceTypeArray::m_proSilver;// = PtProSilver();
-const PtHorse PieceTypeArray::m_horse;// = PtHorse();
-const PtDragon PieceTypeArray::m_dragon;// = PtDragon();
+const PtPawn PieceTypeArray::m_pawn;
+const PtLance PieceTypeArray::m_lance;
+const PtKnight PieceTypeArray::m_knight;
+const PtSilver PieceTypeArray::m_silver;
+const PtBishop PieceTypeArray::m_bishop;
+const PtRook PieceTypeArray::m_rook;
+const PtGold PieceTypeArray::m_gold;
+const PtKing PieceTypeArray::m_king;
+const PtProPawn PieceTypeArray::m_proPawn;
+const PtProLance PieceTypeArray::m_proLance;
+const PtProKnight PieceTypeArray::m_proKnight;
+const PtProSilver PieceTypeArray::m_proSilver;
+const PtHorse PieceTypeArray::m_horse;
+const PtDragon PieceTypeArray::m_dragon;
 
 // ポインタの配列にするのが正解☆（＾ｑ＾）
 const PtAbstract* PieceTypeArray::m_ptArray[PieceType::N15_PieceTypeNum] = {
