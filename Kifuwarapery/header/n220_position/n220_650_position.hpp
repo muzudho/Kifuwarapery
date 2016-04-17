@@ -93,7 +93,9 @@ public:
 	// BetweenIsUs == true  : 間の駒が自駒。
 	// BetweenIsUs == false : 間の駒が敵駒。
 	template <bool BetweenIsUs = true>
-	Bitboard DiscoveredCheckBB() const { return GetHiddenCheckers<false, BetweenIsUs>(); }
+	Bitboard DiscoveredCheckBB() const {
+		return GetHiddenCheckers<false, BetweenIsUs>();
+	}
 
 	// toFile と同じ筋に us の歩がないなら true
 	bool NoPawns(const Color us, const File toFile) const;

@@ -23,7 +23,15 @@ public:
 	static MoveStack* GenerateMoves_2(
 		MoveStack* moveStackList, const Position& pos
 	) {
-		return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
+		switch(MT){
+		case LegalAll:
+		{
+			return MoveGenerator100::GenerateMoves_LegalAll(pos.GetTurn(), moveStackList, pos);
+		}
+		break;
+		default:
+			return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
+		}
 	}
 
 

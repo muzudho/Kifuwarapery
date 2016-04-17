@@ -216,32 +216,30 @@ public:
 
 	// 部分特殊化
 	// Evasion のときに歩、飛、角と、香の2段目の不成も生成する。
-	template <>
-	struct GenerateMoves<LegalAll> {
-		FORCE_INLINE MoveStack* operator () (
-			Color us,
-			MoveStack* moveStackList, const Position& pos
-		) {
-			MoveStack* curr = moveStackList;
-			const Bitboard pinned = pos.GetPinnedBB();
+	static MoveStack* GenerateMoves_LegalAll(
+		Color us,
+		MoveStack* moveStackList, const Position& pos
+	) {
+		MoveStack* curr = moveStackList;
+		const Bitboard pinned = pos.GetPinnedBB();
 
-			moveStackList = pos.InCheck() ?
-				GenerateMoves<Evasion, true>()(us, moveStackList, pos) :
-				GenerateMoves<NonEvasion>()(us,moveStackList, pos);
+		moveStackList = pos.InCheck() ?
+			GenerateMoves<Evasion, true>()(us, moveStackList, pos) :
+			GenerateMoves<NonEvasion>()(us,moveStackList, pos);
 
-			// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
-			while (curr != moveStackList) {
-				if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
-					curr->m_move = (--moveStackList)->m_move;
-				}
-				else {
-					++curr;
-				}
+		// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
+		while (curr != moveStackList) {
+			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
+				curr->m_move = (--moveStackList)->m_move;
 			}
-
-			return moveStackList;
+			else {
+				++curr;
+			}
 		}
-	};
+
+		return moveStackList;
+	}
+
 
 };
 
