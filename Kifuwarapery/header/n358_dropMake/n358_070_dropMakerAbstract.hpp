@@ -15,7 +15,7 @@ public:
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	static void MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
-		const Bitboard TRank9BB,
+		const Bitboard& TRank9BB,
 		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightLanceIdx
@@ -27,7 +27,7 @@ public:
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	static void MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
-		const Bitboard TRank8BB,
+		const Bitboard& TRank8BB,
 		MoveStack* pMovestack,
 		const PieceType haveHand[6],
 		int noKnightIdx

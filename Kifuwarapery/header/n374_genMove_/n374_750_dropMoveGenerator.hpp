@@ -22,9 +22,28 @@ public:
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target
-		) {
+	) {
 		const Hand hand = pos.GetHand(us);
 
+		return Func001(
+			us,
+			pMovestack,
+			pos,
+			target,
+			hand
+		);
+	}
+
+
+	// 練習☆（＾ｑ＾）
+	static MoveStack* Func001(
+		Color us,
+		MoveStack* pMovestack,
+		const Position& pos,
+		const Bitboard& target,
+		const Hand hand
+	)
+	{
 		// まず、歩に対して指し手を生成
 		if (Hand::Exists_HPawn(hand)) {
 
@@ -495,5 +514,4 @@ public:
 
 		return pMovestack;
 	}
-
 };
