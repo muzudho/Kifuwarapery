@@ -39,75 +39,71 @@
 //────────────────────────────────────────────────────────────────────────────────
 // 静的メンバの実体
 //────────────────────────────────────────────────────────────────────────────────
-/*
-const void* PieceArray::m_makeBanned2KingTo[] = {//32
-	PieceEmpty::MakeBanned2KingTo,	//[0]
-	PieceBPawn::MakeBanned2KingTo,
-	PieceBLance::MakeBanned2KingTo,
-	PieceBKnight::MakeBanned2KingTo,
-	PieceBSilver::MakeBanned2KingTo,
-	PieceBBishop::MakeBanned2KingTo,//[5]
-	PieceBRook::MakeBanned2KingTo,
-	PieceBGold::MakeBanned2KingTo,
-	PieceBKing::MakeBanned2KingTo,
-	PieceBProPawn::MakeBanned2KingTo,
-	PieceBProLance::MakeBanned2KingTo,//[10]
-	PieceBProKnight::MakeBanned2KingTo,
-	PieceBProSilver::MakeBanned2KingTo,
-	PieceBHorse::MakeBanned2KingTo,
-	PieceBDragon::MakeBanned2KingTo,//[14]
-	PieceNull::MakeBanned2KingTo,//[15]
-	PieceNull::MakeBanned2KingTo,//[16]
-	PieceWPawn::MakeBanned2KingTo,
-	PieceWLance::MakeBanned2KingTo,
-	PieceWKnight::MakeBanned2KingTo,
-	PieceWSilver::MakeBanned2KingTo,//[20]
-	PieceWBishop::MakeBanned2KingTo,
-	PieceWRook::MakeBanned2KingTo,
-	PieceWGold::MakeBanned2KingTo,
-	PieceWKing::MakeBanned2KingTo,
-	PieceWProPawn::MakeBanned2KingTo,//[25]
-	PieceWProLance::MakeBanned2KingTo,
-	PieceWProKnight::MakeBanned2KingTo,
-	PieceWProSilver::MakeBanned2KingTo,
-	PieceWHorse::MakeBanned2KingTo,
-	PieceWDragon::MakeBanned2KingTo,//[30]
-	PieceNone::MakeBanned2KingTo//[31]
-};
-//*/
 //*
+const PieceEmpty PieceArray::m_pieceEmpty;// = PieceEmpty();	//[0]
+const PieceBPawn PieceArray::m_pieceBPawn;// = PieceBPawn();
+const PieceBLance PieceArray::m_pieceBLance;// = PieceBLance();
+const PieceBKnight PieceArray::m_pieceBKnight;// = PieceBKnight();
+const PieceBSilver PieceArray::m_pieceBSilver;// = PieceBSilver();
+const PieceBBishop PieceArray::m_pieceBBishop;// = PieceBBishop();//[5]
+const PieceBRook PieceArray::m_pieceBRook;// = PieceBRook();
+const PieceBGold PieceArray::m_pieceBGold;// = PieceBGold();
+const PieceBKing PieceArray::m_pieceBKing;// = PieceBKing();
+const PieceBProPawn PieceArray::m_pieceBProPawn;// = PieceBProPawn();
+const PieceBProLance PieceArray::m_pieceBProLance;// = PieceBProLance();//[10]
+const PieceBProKnight PieceArray::m_pieceBProKnight;// = PieceBProKnight();
+const PieceBProSilver PieceArray::m_pieceBProSilver;// = PieceBProSilver();
+const PieceBHorse PieceArray::m_pieceBHorse;// = PieceBHorse();
+const PieceBDragon PieceArray::m_pieceBDragon;// = PieceBDragon();//[14]
+const PieceNull PieceArray::m_pieceNull;// = PieceNull();//[15],[16]
+const PieceWPawn PieceArray::m_pieceWPawn;// = PieceWPawn();
+const PieceWLance PieceArray::m_pieceWLance;// = PieceWLance();
+const PieceWKnight PieceArray::m_pieceWKnight;// = PieceWKnight();
+const PieceWSilver PieceArray::m_pieceWSilver;// = PieceWSilver();//[20]
+const PieceWBishop PieceArray::m_pieceWBishop;// = PieceWBishop();
+const PieceWRook PieceArray::m_pieceWRook;// = PieceWRook();
+const PieceWGold PieceArray::m_pieceWGold;// = PieceWGold();
+const PieceWKing PieceArray::m_pieceWKing;// = PieceWKing();
+const PieceWProPawn PieceArray::m_pieceWProPawn;// = PieceWProPawn();//[25]
+const PieceWProLance PieceArray::m_pieceWProLance;// = PieceWProLance();
+const PieceWProKnight PieceArray::m_pieceWProKnight;// = PieceWProKnight();
+const PieceWProSilver PieceArray::m_pieceWProSilver;// = PieceWProSilver();
+const PieceWHorse PieceArray::m_pieceWHorse;// = PieceWHorse();
+const PieceWDragon PieceArray::m_pieceWDragon;// = PieceWDragon();//[30]
+const PieceNone PieceArray::m_pieceNone;// = PieceNone();//[31]
+
 const PieceAbstract PieceArray::m_pieceAbstractArray[] = {//32
-	PieceEmpty(),	//[0]
-	PieceBPawn(),
-	PieceBLance(),
-	PieceBKnight(),
-	PieceBSilver(),
-	PieceBBishop(),//[5]
-	PieceBRook(),
-	PieceBGold(),
-	PieceBKing(),
-	PieceBProPawn(),
-	PieceBProLance(),//[10]
-	PieceBProKnight(),
-	PieceBProSilver(),
-	PieceBHorse(),
-	PieceBDragon(),//[14]
-	PieceNull(),//[15]
-	PieceNull(),//[16]
-	PieceWPawn(),
-	PieceWLance(),
-	PieceWKnight(),
-	PieceWSilver(),//[20]
-	PieceWBishop(),
-	PieceWRook(),
-	PieceWGold(),
-	PieceWKing(),
-	PieceWProPawn(),//[25]
-	PieceWProLance(),
-	PieceWProKnight(),
-	PieceWProSilver(),
-	PieceWHorse(),
-	PieceWDragon(),//[30]
-	PieceNone()//[31]
+	PieceArray::m_pieceEmpty,	//[0]
+	PieceArray::m_pieceBPawn,
+	PieceArray::m_pieceBLance,
+	PieceArray::m_pieceBKnight,
+	PieceArray::m_pieceBSilver,
+	PieceArray::m_pieceBBishop,//[5]
+	PieceArray::m_pieceBRook,
+	PieceArray::m_pieceBGold,
+	PieceArray::m_pieceBKing,
+	PieceArray::m_pieceBProPawn,
+	PieceArray::m_pieceBProLance,//[10]
+	PieceArray::m_pieceBProKnight,
+	PieceArray::m_pieceBProSilver,
+	PieceArray::m_pieceBHorse,
+	PieceArray::m_pieceBDragon,//[14]
+	PieceArray::m_pieceNull,//[15]欠番
+	PieceArray::m_pieceNull,//[16]欠番
+	PieceArray::m_pieceWPawn,
+	PieceArray::m_pieceWLance,
+	PieceArray::m_pieceWKnight,
+	PieceArray::m_pieceWSilver,//[20]
+	PieceArray::m_pieceWBishop,
+	PieceArray::m_pieceWRook,
+	PieceArray::m_pieceWGold,
+	PieceArray::m_pieceWKing,
+	PieceArray::m_pieceWProPawn,//[25]
+	PieceArray::m_pieceWProLance,
+	PieceArray::m_pieceWProKnight,
+	PieceArray::m_pieceWProSilver,
+	PieceArray::m_pieceWHorse,
+	PieceArray::m_pieceWDragon,//[30]
+	PieceArray::m_pieceNone//[31]
 };
 //*/

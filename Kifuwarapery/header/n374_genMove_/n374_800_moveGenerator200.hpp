@@ -329,7 +329,6 @@ private:
 				// 両王手のときには二度連続で呼ばれるため、= ではなく |= を使用している。
 				// 最初に呼ばれたときは、bannedKingToBB == allZeroBB() である。
 				// todo: FOECE_INLINE と template 省いてNPS比較
-				//無理 (PieceAbstract::*(PieceArray::m_makeBanned2KingTo[pos.GetPiece(checkSq)]))(bannedKingToBB, pos, checkSq, ksq);
 				//PieceArray::m_pieceAbstractArray[pos.GetPiece(checkSq)].MakeBanned2KingTo(bannedKingToBB, pos, checkSq, ksq);
 				//*
 				// 白か黒かによって分けている☆
