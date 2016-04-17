@@ -11,19 +11,19 @@
 
 
 // 金, 成り金、馬、竜の指し手生成
-template <MoveType MT, PieceType PT, Color US, bool ALL>
+template <MoveType MT, PieceType PT, Color us, bool ALL>
 struct GeneratePieceMoves {
 	FORCE_INLINE MoveStack* operator () (
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		) {
 		static_assert(PT == N16_GoldHorseDragon, "");
 		// 金、成金、馬、竜のbitboardをまとめて扱う。
-		Bitboard fromBB = (pos.GetGoldsBB() | pos.GetBbOf(N13_Horse, N14_Dragon)) & pos.GetBbOf(US);
+		Bitboard fromBB = (pos.GetGoldsBB() | pos.GetBbOf(N13_Horse, N14_Dragon)) & pos.GetBbOf(us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// from にある駒の種類を判別
 			const PieceType pt = UtilPiece::ToPieceType(pos.GetPiece(from));
-			Bitboard toBB = UtilAttack::GetAttacksFrom(pt, US, from, pos.GetOccupiedBB()) & target;
+			Bitboard toBB = UtilAttack::GetAttacksFrom(pt, us, from, pos.GetOccupiedBB()) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(pt, from, to, pos);
@@ -43,7 +43,7 @@ struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
 		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
 		const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-		Bitboard toBB = pos.GetBbOf(N01_Pawn, US).PawnAttack<US>() & target;
+		Bitboard toBB = Bitboard:: PawnAttack(pos.GetBbOf(N01_Pawn, US), US) & target;
 
 		// 成り
 		if (MT != NonCaptureMinusPro) {

@@ -1406,7 +1406,7 @@ silver_drop_end:
 			if (UtilSquare::IsInFrontOf<US, Rank6, Rank4>(krank)) {
 				// 成った時に王手になる位置
 				const Bitboard toBB_promo = moveTarget & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq) & TRank789BB;
-				Bitboard fromBB_promo = fromBB & toBB_promo.PawnAttack<Them>();
+				Bitboard fromBB_promo = fromBB & Bitboard::PawnAttack(toBB_promo, Them);
 				while (fromBB_promo.Exists1Bit()) {
 					const Square from = fromBB_promo.PopFirstOneFromI9();
 					const Square to = from + TDeltaN;
