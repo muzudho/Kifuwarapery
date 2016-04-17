@@ -24,19 +24,45 @@ public:
 		MoveStack* moveStackList, const Position& pos
 	) {
 		switch(MT){
+		case Capture:
+		case NonCapture:
+		case CapturePlusPro:
+		case NonCaptureMinusPro:
+		{
+			return MoveGenerator100::GenerateMoves_mt1(MT, pos.GetTurn(), moveStackList, pos);
+		}
+		break;
+		case Drop:
+		{
+			return MoveGenerator100::GenerateMoves_Drop(pos.GetTurn(), moveStackList, pos);
+		}
+		case Evasion:
+		{
+			return MoveGenerator100::GenerateMoves_Evasion(pos.GetTurn(), false/*FIXME:*/, moveStackList, pos);
+		}
+		case NonEvasion:
+		{
+			return MoveGenerator100::GenerateMoves_NonEvasion(pos.GetTurn(), moveStackList, pos);
+		}
+		break;
+		case Legal:
+		{
+			return MoveGenerator100::GenerateMoves_Legal(pos.GetTurn(), moveStackList, pos);
+		}
+		break;
 		case LegalAll:
 		{
 			return MoveGenerator100::GenerateMoves_LegalAll(pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		default:
-			return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
+			UNREACHABLE;
+			//return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
 		}
 	}
 
 
 	// pin は省かない。
-	//template <MoveType MT>
 	static MoveStack* GenerateMoves_3(
 		MoveStack* moveStackList, const Position& pos, const Square to
 	) {
