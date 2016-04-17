@@ -22,9 +22,7 @@ public:
 	static MoveStack* GenerateMoves_2(
 		MoveStack* moveStackList, const Position& pos
 	) {
-		return (pos.GetTurn() == Black ?
-			MoveGenerator100::GenerateMoves<MT, Black>()(moveStackList, pos) :
-			MoveGenerator100::GenerateMoves<MT, White>()(moveStackList, pos));
+		return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
 	}
 
 
@@ -42,7 +40,6 @@ public:
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
 			PieceTypeArray::m_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
-			//g_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
 	}
