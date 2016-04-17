@@ -12,15 +12,15 @@
 
 
 // 金, 成り金、馬、竜の指し手生成
-template <PieceType PT>
-struct GeneratePieceMoves {
+struct GeneratePieceMoves_pt {
 	FORCE_INLINE MoveStack* operator () (
+		PieceType pt1,
 		MoveType mt,
 		Color us,
 		bool all,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 	) {
-		static_assert(PT == N16_GoldHorseDragon, "");
+		assert(pt1 == N16_GoldHorseDragon, "");
 		// 金、成金、馬、竜のbitboardをまとめて扱う。
 		Bitboard fromBB = (pos.GetGoldsBB() | pos.GetBbOf(N13_Horse, N14_Dragon)) & pos.GetBbOf(us);
 		while (fromBB.Exists1Bit()) {
@@ -38,8 +38,7 @@ struct GeneratePieceMoves {
 };
 
 // 歩の場合
-template <>
-struct GeneratePieceMoves<N01_Pawn> {
+struct GeneratePieceMoves_N01_Pawn {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -91,8 +90,7 @@ struct GeneratePieceMoves<N01_Pawn> {
 };//struct
 
  // 香車の場合
-template <>
-struct GeneratePieceMoves<N02_Lance> {
+struct GeneratePieceMoves_N02_Lance {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -130,8 +128,7 @@ struct GeneratePieceMoves<N02_Lance> {
 };
 
 // 桂馬の場合
-template <>
-struct GeneratePieceMoves<N03_Knight> {
+struct GeneratePieceMoves_N03_Knight {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -159,8 +156,7 @@ struct GeneratePieceMoves<N03_Knight> {
 };
 
 // 銀の場合
-template <>
-struct GeneratePieceMoves<N04_Silver> {
+struct GeneratePieceMoves_N04_Silver {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -185,8 +181,7 @@ struct GeneratePieceMoves<N04_Silver> {
 };
 
 // 角の動き☆？
-template <>
-struct GeneratePieceMoves<N05_Bishop> {
+struct GeneratePieceMoves_N05_Bishop {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -198,8 +193,7 @@ struct GeneratePieceMoves<N05_Bishop> {
 };
 
 // 飛車の動き☆？
-template <>
-struct GeneratePieceMoves<N06_Rook> {
+struct GeneratePieceMoves_N06_Rook {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
@@ -212,8 +206,7 @@ struct GeneratePieceMoves<N06_Rook> {
 
 // 玉の場合
 // 必ず盤上に 1 枚だけあることを前提にすることで、while ループを 1 つ無くして高速化している。
-template <>
-struct GeneratePieceMoves<N08_King> {
+struct GeneratePieceMoves_N08_King {
 	FORCE_INLINE MoveStack* operator () (
 		MoveType mt,
 		Color us,
