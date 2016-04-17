@@ -12,7 +12,7 @@ class MoveList {
 public:
 
 	explicit MoveList(const Position& pos) :
-		m_curr_(m_moveStackList_), m_last_(MoveGenerator200::GenerateMoves_2<MT>(m_moveStackList_, pos)) {}
+		m_curr_(m_moveStackList_), m_last_(MoveGenerator200::GenerateMoves_2(MT,m_moveStackList_, pos)) {}
 
 	void operator ++ () { ++m_curr_; }
 

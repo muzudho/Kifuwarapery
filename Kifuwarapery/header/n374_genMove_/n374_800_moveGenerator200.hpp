@@ -19,17 +19,17 @@
 class MoveGenerator200 {
 public:
 
-	template <MoveType MT>
 	static MoveStack* GenerateMoves_2(
+		MoveType mt,
 		MoveStack* moveStackList, const Position& pos
 	) {
-		switch(MT){
+		switch(mt){
 		case Capture:
 		case NonCapture:
 		case CapturePlusPro:
 		case NonCaptureMinusPro:
 		{
-			return MoveGenerator100::GenerateMoves_mt1(MT, pos.GetTurn(), moveStackList, pos);
+			return MoveGenerator100::GenerateMoves_mt1(mt, pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		case Drop:

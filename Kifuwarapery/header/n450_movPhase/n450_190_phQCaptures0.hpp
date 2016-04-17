@@ -28,7 +28,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_2<CapturePlusPro>(movePicker.GetFirstMove(), movePicker.GetPos()));
+		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_2(CapturePlusPro,movePicker.GetFirstMove(), movePicker.GetPos()));
 		movePicker.ScoreCaptures();
 	}
 
