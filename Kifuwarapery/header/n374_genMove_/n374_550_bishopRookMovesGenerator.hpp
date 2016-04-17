@@ -17,19 +17,20 @@ class BishopRookMovesGenerator {
 public:
 
 	// 角, 飛車の共通処理☆
-	template <MoveType MT, PieceType PT, Color US, bool ALL>
+	template <MoveType MT, PieceType PT, bool ALL>
 	static FORCE_INLINE MoveStack* GenerateBishopOrRookMoves(
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
 		)
 	{
-		Bitboard fromBB = pos.GetBbOf(PT, US);
+		Bitboard fromBB = pos.GetBbOf(PT, us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-			Bitboard toBB = PieceTypeArray::m_ptArray[PT]->GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
+			const bool fromCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(from));
+			Bitboard toBB = PieceTypeArray::m_ptArray[PT]->GetAttacks2From(pos.GetOccupiedBB(), us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
 					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(PT, from, to, pos);
 					if (MT == NonEvasion || ALL)

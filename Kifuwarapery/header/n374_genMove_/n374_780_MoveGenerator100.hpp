@@ -35,14 +35,14 @@ public:
 				Bitboard::CreateAllOneBB(); // error
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
 
-			moveStackList = GeneratePieceMoves<MT, N01_Pawn, US, ALL>()(moveStackList, pos, targetPawn, ksq);
-			moveStackList = GeneratePieceMoves<MT, N02_Lance, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N03_Knight, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N04_Silver, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N05_Bishop, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N06_Rook, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N16_GoldHorseDragon, US, ALL>()(moveStackList, pos, targetOther, ksq);
-			moveStackList = GeneratePieceMoves<MT, N08_King, US, ALL>()(moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N01_Pawn, ALL>()(US, moveStackList, pos, targetPawn, ksq);
+			moveStackList = GeneratePieceMoves<MT, N02_Lance, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N03_Knight, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N04_Silver, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N05_Bishop, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N06_Rook, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N16_GoldHorseDragon, ALL>()(US, moveStackList, pos, targetOther, ksq);
+			moveStackList = GeneratePieceMoves<MT, N08_King, ALL>()(US, moveStackList, pos, targetOther, ksq);
 
 			return moveStackList;
 		}
@@ -136,13 +136,13 @@ public:
 			// pin Ç≥ÇÍÇƒÇ¢ÇÈÇ©Ç«Ç§Ç©ÇÕ movePicker Ç© search Ç≈í≤Ç◊ÇÈÅB
 			const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 			const Bitboard target2 = target1 | checkers;
-			pMovestack = GeneratePieceMoves<Evasion, N01_Pawn, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N02_Lance, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N03_Knight, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N04_Silver, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N05_Bishop, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N06_Rook, US, ALL>()(pMovestack, pos, target2, ksq);
-			pMovestack = GeneratePieceMoves<Evasion, N16_GoldHorseDragon, US, ALL>()(pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N01_Pawn, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N02_Lance, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N03_Knight, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N04_Silver, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N05_Bishop, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N06_Rook, ALL>()(US, pMovestack, pos, target2, ksq);
+			pMovestack = GeneratePieceMoves<Evasion, N16_GoldHorseDragon, ALL>()(US, pMovestack, pos, target2, ksq);
 
 			if (target1.Exists1Bit()) {
 				pMovestack = DropMoveGenerator::GenerateDropMoves(US, pMovestack, pos, target1);//<US>
@@ -167,14 +167,14 @@ public:
 			target |= pos.GetBbOf(UtilColor::OppositeColor(US));
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(US));
 
-			pMovestack = GeneratePieceMoves<NonEvasion, N01_Pawn, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N02_Lance, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N03_Knight, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N04_Silver, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N05_Bishop, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N06_Rook, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N16_GoldHorseDragon, US, false>()(pMovestack, pos, target, ksq);
-			pMovestack = GeneratePieceMoves<NonEvasion, N08_King, US, false>()(pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N01_Pawn, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N02_Lance, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N03_Knight, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N04_Silver, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N05_Bishop, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N06_Rook, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N16_GoldHorseDragon, false>()(US, pMovestack, pos, target, ksq);
+			pMovestack = GeneratePieceMoves<NonEvasion, N08_King, false>()(US, pMovestack, pos, target, ksq);
 
 			return pMovestack;
 		}

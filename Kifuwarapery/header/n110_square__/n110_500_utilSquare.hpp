@@ -20,6 +20,8 @@ public:
 	template <Color US, Rank BRANK, Rank WRANK>
 	static inline bool IsInFrontOf(const Rank target) { return (US == Black ? (target < BRANK) : (WRANK < target)); }
 
+	static inline bool IsBehind(Color US, Rank BRANK, Rank WRANK, const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
+
 	template <Color US, Rank BRANK, Rank WRANK>
 	static inline bool IsBehind(const Rank target) { return (US == Black ? (BRANK < target) : (target < WRANK)); }
 

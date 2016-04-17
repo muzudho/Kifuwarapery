@@ -11,11 +11,12 @@
 
 
 // 金, 成り金、馬、竜の指し手生成
-template <MoveType MT, PieceType PT, Color us, bool ALL>
+template <MoveType MT, PieceType PT, bool ALL>
 struct GeneratePieceMoves {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
+	) {
 		static_assert(PT == N16_GoldHorseDragon, "");
 		// 金、成金、馬、竜のbitboardをまとめて扱う。
 		Bitboard fromBB = (pos.GetGoldsBB() | pos.GetBbOf(N13_Horse, N14_Dragon)) & pos.GetBbOf(us);
@@ -32,18 +33,20 @@ struct GeneratePieceMoves {
 		return moveStackList;
 	}
 };
-// 歩の場合
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
-	FORCE_INLINE MoveStack* operator () (
-		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
-		// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
-		const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
-		const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
-		Bitboard toBB = Bitboard:: PawnAttack(pos.GetBbOf(N01_Pawn, US), US) & target;
+// 歩の場合
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N01_Pawn, ALL> {
+	FORCE_INLINE MoveStack* operator () (
+		Color us,
+		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
+	) {
+		// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
+		const Rank TRank6 = (us == Black ? Rank6 : Rank4);
+		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(us, TRank6);
+		const SquareDelta TDeltaS = (us == Black ? DeltaS : DeltaN);
+
+		Bitboard toBB = Bitboard:: PawnAttack(pos.GetBbOf(N01_Pawn, us), us) & target;
 
 		// 成り
 		if (MT != NonCaptureMinusPro) {
@@ -58,7 +61,7 @@ struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
 					const Square from = to + TDeltaS;
 				(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N01_Pawn, from, to, pos);
 				if (MT == NonEvasion || ALL) {
-					const Rank TRank9 = (US == Black ? Rank9 : Rank1);
+					const Rank TRank9 = (us == Black ? Rank9 : Rank1);
 					if (UtilSquare::ToRank(to) != TRank9) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
 					}
@@ -82,29 +85,30 @@ struct GeneratePieceMoves<MT, N01_Pawn, US, ALL> {
 	}//演算子のオーバーロードの定義？
 };//struct
 
-  // 香車の場合
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
+ // 香車の場合
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N02_Lance, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
-		Bitboard fromBB = pos.GetBbOf(N02_Lance, US);
+	) {
+		Bitboard fromBB = pos.GetBbOf(N02_Lance, us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			Bitboard toBB = PieceTypeArray::m_lance.GetAttacks2From(pos.GetOccupiedBB(), US, from) & target;
+			Bitboard toBB = PieceTypeArray::m_lance.GetAttacks2From(pos.GetOccupiedBB(), us, from) & target;
 			do {
 				if (toBB.Exists1Bit()) {
 					// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
 					const Square to = (MT == Capture || MT == CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
-					const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
+					const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N02_Lance, from, to, pos);
 						if (MT == NonEvasion || ALL) {
-							if (UtilSquare::IsBehind<US, Rank9, Rank1>(UtilSquare::ToRank(to))) // 1段目の不成は省く
+							if (UtilSquare::IsBehind(us, Rank9, Rank1, UtilSquare::ToRank(to))) // 1段目の不成は省く
 								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 						}
 						else if (MT != NonCapture && MT != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
-							if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 2段目の不成を省く
+							if (UtilSquare::IsBehind(us, Rank8, Rank2, UtilSquare::ToRank(to))) // 2段目の不成を省く
 								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 						}
 					}
@@ -117,22 +121,24 @@ struct GeneratePieceMoves<MT, N02_Lance, US, ALL> {
 		return moveStackList;
 	}
 };
+
 // 桂馬の場合
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N03_Knight, US, ALL> {
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N03_Knight, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
-		Bitboard fromBB = pos.GetBbOf(N03_Knight, US);
+	) {
+		Bitboard fromBB = pos.GetBbOf(N03_Knight, us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			Bitboard toBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, US, from) & target;
+			Bitboard toBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 				if (toCanPromote) {
 					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N03_Knight, from, to, pos);
-					if (UtilSquare::IsBehind<US, Rank8, Rank2>(UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
+					if (UtilSquare::IsBehind(us, Rank8, Rank2, UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N03_Knight, from, to, pos);
 				}
 				else
@@ -142,20 +148,22 @@ struct GeneratePieceMoves<MT, N03_Knight, US, ALL> {
 		return moveStackList;
 	}
 };
+
 // 銀の場合
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N04_Silver, US, ALL> {
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N04_Silver, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
-		Bitboard fromBB = pos.GetBbOf(N04_Silver, US);
+	) {
+		Bitboard fromBB = pos.GetBbOf(N04_Silver, us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(from));
-			Bitboard toBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, US, from) & target;
+			const bool fromCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(from));
+			Bitboard toBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(US, UtilSquare::ToRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote)
 					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N04_Silver, from, to, pos);
 				(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N04_Silver, from, to, pos);
@@ -164,33 +172,39 @@ struct GeneratePieceMoves<MT, N04_Silver, US, ALL> {
 		return moveStackList;
 	}
 };
+
 // 角の動き☆？
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N05_Bishop, US, ALL> {
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N05_Bishop, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
-		) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N05_Bishop, US, ALL>(moveStackList, pos, target, ksq);
+	) {
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N05_Bishop, ALL>(us, moveStackList, pos, target, ksq);
 	}
 };
+
 // 飛車の動き☆？
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N06_Rook, US, ALL> {
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N06_Rook, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
-		) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N06_Rook, US, ALL>(moveStackList, pos, target, ksq);
+	) {
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N06_Rook, ALL>(us, moveStackList, pos, target, ksq);
 	}
 };
+
 // 玉の場合
 // 必ず盤上に 1 枚だけあることを前提にすることで、while ループを 1 つ無くして高速化している。
-template <MoveType MT, Color US, bool ALL>
-struct GeneratePieceMoves<MT, N08_King, US, ALL> {
+template <MoveType MT, bool ALL>
+struct GeneratePieceMoves<MT, N08_King, ALL> {
 	FORCE_INLINE MoveStack* operator () (
+		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		) {
-		const Square from = pos.GetKingSquare(US);
-		Bitboard toBB = PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, US, from) & target;
+	) {
+		const Square from = pos.GetKingSquare(us);
+		Bitboard toBB = PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, us, from) & target;
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N08_King, from, to, pos);
