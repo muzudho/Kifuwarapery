@@ -34,55 +34,43 @@ public:
 		);
 	}
 
-
 	// 練習☆（＾ｑ＾）
 	static MoveStack* Func001(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target,
-		const Hand hand
+		const Hand& hand
+		)
+	{
+		return Func002(
+			us,
+			pMovestack,
+			pos,
+			target,
+			hand
+			);
+	}
+
+	// 練習☆（＾ｑ＾）
+	static MoveStack* Func002(
+		Color us,
+		MoveStack* pMovestack,
+		const Position& pos,
+		const Bitboard& target,
+		const Hand& hand
 	)
 	{
 		// まず、歩に対して指し手を生成
 		if (Hand::Exists_HPawn(hand)) {
 
-			Bitboard toBB = target;
-			// 一段目には打てない
-
-			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
-			toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
-
-			// 二歩の回避
-			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, us);
-			Square pawnsSquare;
-			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
-				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
-			});
-
-			// 打ち歩詰めの回避
-			const Rank tRank1 = (us == Black ? Rank1 : Rank9);
-			const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
-
-			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
-			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
-			if (UtilSquare::ToRank(ksq) != tRank1) {
-				const Square pawnDropCheckSquare = ksq + tDeltaS;
-				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
-					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
-						// ここで clearBit だけして MakeMove しないことも出来る。
-						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
-					}
-					g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
-				}
-			}
-
-			Square to;
-			FOREACH_BB(toBB, to, {
-				(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, to);
-			});
+			FuncA001(
+				us,
+				pMovestack,
+				pos,
+				target,
+				hand
+				);
 		}
 
 		// 歩 以外の駒を持っているか
@@ -514,4 +502,58 @@ public:
 
 		return pMovestack;
 	}
+
+
+
+
+
+	// 練習☆（＾ｑ＾）
+	static void FuncA001(
+		Color us,
+		MoveStack* pMovestack,
+		const Position& pos,
+		const Bitboard& target,
+		const Hand& hand
+		)
+	{
+		Bitboard toBB = target;
+		// 一段目には打てない
+
+		const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+		toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
+
+		// 二歩の回避
+		Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, us);
+		Square pawnsSquare;
+		foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
+			toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
+		});
+
+		// 打ち歩詰めの回避
+		const Rank tRank1 = (us == Black ? Rank1 : Rank9);
+		const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
+
+		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
+		// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
+		if (UtilSquare::ToRank(ksq) != tRank1) {
+			const Square pawnDropCheckSquare = ksq + tDeltaS;
+			assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
+			if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
+				if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
+					// ここで clearBit だけして MakeMove しないことも出来る。
+					// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
+					(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
+				}
+				g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
+			}
+		}
+
+		Square to;
+		FOREACH_BB(toBB, to, {
+			(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, to);
+		});
+	}
+
+
+
 };
