@@ -6,14 +6,6 @@
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n374_genMOve_/n374_800_moveGenerator200.hpp"
 
-/*
-// MoveType の全ての指し手を生成
-template <MoveType MT>
-MoveStack* MoveGenerator200::GenerateMoves_2(MoveStack* moveStackList, const Position& pos);
-template <MoveType MT>
-MoveStack* MoveGenerator200::GenerateMoves_3(MoveStack* moveStackList, const Position& pos, const Square to);
-*/
-
 
 template <MoveType MT>
 class MoveList {

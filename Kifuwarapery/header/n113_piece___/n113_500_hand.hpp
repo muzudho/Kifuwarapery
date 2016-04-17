@@ -37,17 +37,13 @@ public:
 
 	// 2つの Hand 型変数の、同じ種類の駒の数を比較する必要があるため、
 	// bool じゃなくて、u32 型でそのまま返す。
-	template <HandPiece HP>
-	u32 Exists() const
-	{
-		return (HP == HPawn ? (Value() & m_HPawnMask) :
-			HP == HLance ? (Value() & m_HLanceMask) :
-			HP == HKnight ? (Value() & m_HKnightMask) :
-			HP == HSilver ? (Value() & m_HSilverMask) :
-			HP == HGold ? (Value() & m_HGoldMask) :
-			HP == HBishop ? (Value() & m_HBishopMask) :
-			/*HP == HRook   ?*/ (Value() & m_HRookMask));
-	}
+	static u32 Exists_HPawn(const Hand& hand) { return hand.Value() & m_HPawnMask; }
+	static u32 Exists_HLance(const Hand& hand) { return hand.Value() & m_HLanceMask; }
+	static u32 Exists_HKnight(const Hand& hand) { return hand.Value() & m_HKnightMask; }
+	static u32 Exists_HSilver(const Hand& hand) { return hand.Value() & m_HSilverMask; }
+	static u32 Exists_HGold(const Hand& hand) { return hand.Value() & m_HGoldMask; }
+	static u32 Exists_HBishop(const Hand& hand) { return hand.Value() & m_HBishopMask; }
+	static u32 Exists_HRook(const Hand& hand) { return hand.Value() & m_HRookMask; }
 
 	u32 Exists(const HandPiece handPiece) const;
 

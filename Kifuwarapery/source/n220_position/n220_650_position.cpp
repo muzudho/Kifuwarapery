@@ -741,7 +741,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	const Bitboard dcBB_betweenIsThem = DiscoveredCheckBB<false>();
 
 	// 飛車打ち
-	if (ourHand.Exists<HRook>()) {
+	if (Hand::Exists_HRook(ourHand)) {
 		// 合駒されるとややこしいので、3手詰み関数の中で調べる。
 		// ここでは離れた位置から王手するのは考えない。
 		Bitboard toBB = dropTarget & g_rookAttackBb.RookStepAttacks(ksq);
@@ -761,7 +761,10 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	// 香車打ち
 	// 飛車で詰まなければ香車でも詰まないので、else if を使用。
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
-	else if (ourHand.Exists<HLance>() && UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))) {
+	else if (
+		Hand::Exists_HLance(ourHand) &&
+		UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))
+	) {
 		const Square to = ksq + TDeltaS;
 		if (GetPiece(to) == N00_Empty && IsAttackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
@@ -773,7 +776,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	}
 
 	// 角打ち
-	if (ourHand.Exists<HBishop>()) {
+	if (Hand::Exists_HBishop(ourHand)) {
 		Bitboard toBB = dropTarget & g_bishopAttackBb.BishopStepAttacks(ksq);
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
@@ -788,9 +791,9 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	}
 
 	// 金打ち
-	if (ourHand.Exists<HGold>()) {
+	if (Hand::Exists_HGold(ourHand)) {
 		Bitboard toBB;
-		if (ourHand.Exists<HRook>()) {
+		if (Hand::Exists_HRook(ourHand)) {
 			// 飛車打ちを先に調べたので、尻金だけは省く。
 			toBB = dropTarget & (g_goldAttackBb.GetControllBb(Them, ksq) ^ g_pawnAttackBb.GetControllBb(US, ksq));
 		}
@@ -809,12 +812,12 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 		}
 	}
 
-	if (ourHand.Exists<HSilver>()) {
+	if (Hand::Exists_HSilver(ourHand)) {
 		Bitboard toBB;
-		if (ourHand.Exists<HGold>()) {
+		if (Hand::Exists_HGold(ourHand)) {
 			// 金打ちを先に調べたので、斜め後ろから打つ場合だけを調べる。
 
-			if (ourHand.Exists<HBishop>()) {
+			if (Hand::Exists_HBishop(ourHand)) {
 				// 角打ちを先に調べたので、斜めからの王手も除外できる。銀打ちを調べる必要がない。
 				goto silver_drop_end;
 			}
@@ -822,7 +825,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 			toBB = dropTarget & (g_silverAttackBb.GetControllBb(Them, ksq) & g_inFrontMaskBb.GetInFrontMask(US, UtilSquare::ToRank(ksq)));
 		}
 		else {
-			if (ourHand.Exists<HBishop>()) {
+			if (Hand::Exists_HBishop(ourHand)) {
 				// 斜め後ろを除外。前方から打つ場合を調べる必要がある。
 				toBB = dropTarget & g_goldAndSilverAttackBb.GoldAndSilverAttacks(Them, ksq);
 			}
@@ -843,7 +846,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	}
 silver_drop_end:
 
-	if (ourHand.Exists<HKnight>()) {
+	if (Hand::Exists_HKnight(ourHand)) {
 		Bitboard toBB = dropTarget & g_knightAttackBb.GetControllBb(Them, ksq);
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();

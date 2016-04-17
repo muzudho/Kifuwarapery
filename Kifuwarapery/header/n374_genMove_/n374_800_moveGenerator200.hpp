@@ -15,6 +15,7 @@
 #include "../n376_genMoveP/n376_500_pieceArray.hpp"
 
 
+// MoveType の全ての指し手を生成
 class MoveGenerator200 {
 public:
 

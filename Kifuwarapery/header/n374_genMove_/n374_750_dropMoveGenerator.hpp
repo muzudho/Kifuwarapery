@@ -26,7 +26,7 @@ public:
 		const Hand hand = pos.GetHand(us);
 
 		// まず、歩に対して指し手を生成
-		if (hand.Exists<HPawn>()) {
+		if (Hand::Exists_HPawn(hand)) {
 
 			Bitboard toBB = target;
 			// 一段目には打てない
@@ -72,14 +72,14 @@ public:
 			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
 								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
-			if (hand.Exists<HKnight>()) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
+			if (Hand::Exists_HKnight(hand)) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
 			const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
-			if (hand.Exists<HLance >()) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
+			if (Hand::Exists_HLance(hand)) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
 			const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
-			if (hand.Exists<HSilver>()) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
-			if (hand.Exists<HGold  >()) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
-			if (hand.Exists<HBishop>()) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
-			if (hand.Exists<HRook  >()) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
+			if (Hand::Exists_HSilver(hand)) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
+			if (Hand::Exists_HGold(hand)) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
+			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
+			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
 
 			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
 			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
