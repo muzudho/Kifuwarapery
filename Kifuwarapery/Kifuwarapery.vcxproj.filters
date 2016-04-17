@@ -873,9 +873,6 @@
     <ClInclude Include="header\n374_genMove_\n374_650_bannedKingToMaker.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_550_bishopRookMovesGenerator.hpp">
-      <Filter>header\n374_genMove_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_050_generateMoves.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
@@ -883,6 +880,9 @@
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_780_MoveGenerator100.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
   </ItemGroup>

@@ -7,11 +7,12 @@
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
 #include "n374_050_generateMoves.hpp"
+#include "n374_250_bishopRookMovesGenerator.hpp"
 #include "../n376_genMoveP/n376_500_pieceArray.hpp"
 
 
 // 金, 成り金、馬、竜の指し手生成
-template <MoveType MT, PieceType PT, bool ALL>
+template <MoveType MT, PieceType PT, bool all>
 struct GeneratePieceMoves {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
@@ -35,8 +36,8 @@ struct GeneratePieceMoves {
 };
 
 // 歩の場合
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N01_Pawn, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N01_Pawn, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -60,7 +61,7 @@ struct GeneratePieceMoves<MT, N01_Pawn, ALL> {
 				FOREACH_BB(toOn789BB, to, {
 					const Square from = to + TDeltaS;
 				(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N01_Pawn, from, to, pos);
-				if (MT == NonEvasion || ALL) {
+				if (MT == NonEvasion || all) {
 					const Rank TRank9 = (us == Black ? Rank9 : Rank1);
 					if (UtilSquare::ToRank(to) != TRank9) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N01_Pawn, from, to, pos);
@@ -86,8 +87,8 @@ struct GeneratePieceMoves<MT, N01_Pawn, ALL> {
 };//struct
 
  // 香車の場合
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N02_Lance, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N02_Lance, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -103,7 +104,7 @@ struct GeneratePieceMoves<MT, N02_Lance, ALL> {
 					const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2<MT>(N02_Lance, from, to, pos);
-						if (MT == NonEvasion || ALL) {
+						if (MT == NonEvasion || all) {
 							if (UtilSquare::IsBehind(us, Rank9, Rank1, UtilSquare::ToRank(to))) // 1段目の不成は省く
 								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<MT>(N02_Lance, from, to, pos);
 						}
@@ -123,8 +124,8 @@ struct GeneratePieceMoves<MT, N02_Lance, ALL> {
 };
 
 // 桂馬の場合
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N03_Knight, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N03_Knight, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -150,8 +151,8 @@ struct GeneratePieceMoves<MT, N03_Knight, ALL> {
 };
 
 // 銀の場合
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N04_Silver, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N04_Silver, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
@@ -174,31 +175,31 @@ struct GeneratePieceMoves<MT, N04_Silver, ALL> {
 };
 
 // 角の動き☆？
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N05_Bishop, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N05_Bishop, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
 	) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N05_Bishop, ALL>(us, moveStackList, pos, target, ksq);
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves(MT, PieceType::N05_Bishop, us, all, moveStackList, pos, target, ksq);
 	}
 };
 
 // 飛車の動き☆？
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N06_Rook, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N06_Rook, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square ksq
 	) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<MT, N06_Rook, ALL>(us, moveStackList, pos, target, ksq);
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves(MT, PieceType::N06_Rook, us,  all, moveStackList, pos, target, ksq);
 	}
 };
 
 // 玉の場合
 // 必ず盤上に 1 枚だけあることを前提にすることで、while ループを 1 つ無くして高速化している。
-template <MoveType MT, bool ALL>
-struct GeneratePieceMoves<MT, N08_King, ALL> {
+template <MoveType MT, bool all>
+struct GeneratePieceMoves<MT, N08_King, all> {
 	FORCE_INLINE MoveStack* operator () (
 		Color us,
 		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
