@@ -34,6 +34,7 @@ const PtProSilver PieceTypeArray::m_proSilver = PtProSilver();
 const PtHorse PieceTypeArray::m_horse = PtHorse();
 const PtDragon PieceTypeArray::m_dragon = PtDragon();
 
+// ポインタの配列にするのが正解☆（＾ｑ＾）
 const PtAbstract* PieceTypeArray::m_ptArray[PieceType::N15_PieceTypeNum] = {
 	&PieceTypeArray::m_occupied,
 	&PieceTypeArray::m_pawn,

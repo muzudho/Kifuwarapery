@@ -870,6 +870,12 @@
     <ClInclude Include="header\n376_genMoveP\n376_500_pieceArray.hpp">
       <Filter>header\n376_genMoveP</Filter>
     </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_650_bannedKingToMaker.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
