@@ -9,7 +9,13 @@
 #include "../n160_board___/n160_600_bitboardAll.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "n374_749_dropMoveGeneratorA.hpp"
+#include "../n358_dropMake/n358_100_dropMakerHand0.hpp"
+#include "../n358_dropMake/n358_110_dropMakerHand1.hpp"
+#include "../n358_dropMake/n358_120_dropMakerHand2.hpp"
+#include "../n358_dropMake/n358_130_dropMakerHand3.hpp"
+#include "../n358_dropMake/n358_140_dropMakerHand4.hpp"
+#include "../n358_dropMake/n358_150_dropMakerHand5.hpp"
+#include "../n358_dropMake/n358_160_dropMakerHand6.hpp"
 
 
 class DropMoveGenerator {
@@ -193,7 +199,7 @@ public:
 		switch (haveHandNum - noKnightLanceIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_A_0(
+			pMovestack = DropMakerHand0::MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -210,7 +216,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_A_1(
+			pMovestack = DropMakerHand1::MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -227,7 +233,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_A_2(
+			pMovestack = DropMakerHand2::MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -244,7 +250,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_A_3(
+			pMovestack = DropMakerHand3::MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -261,7 +267,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_A_4(
+			pMovestack = DropMakerHand4::MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -305,7 +311,7 @@ public:
 		switch (haveHandNum - noKnightIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_0(
+			pMovestack = DropMakerHand0::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -322,7 +328,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_1(
+			pMovestack = DropMakerHand1::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -339,7 +345,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_2(
+			pMovestack = DropMakerHand2::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -356,7 +362,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_3(
+			pMovestack = DropMakerHand3::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -373,7 +379,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_4(
+			pMovestack = DropMakerHand4::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -390,7 +396,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_B_5(
+			pMovestack = DropMakerHand5::MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -433,7 +439,7 @@ public:
 		switch (haveHandNum) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_0(
+			pMovestack = DropMakerHand0::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -450,7 +456,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_1(
+			pMovestack = DropMakerHand1::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -467,7 +473,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_2(
+			pMovestack = DropMakerHand2::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -484,7 +490,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_3(
+			pMovestack = DropMakerHand3::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -501,7 +507,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_4(
+			pMovestack = DropMakerHand4::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -518,7 +524,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_5(
+			pMovestack = DropMakerHand5::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -535,7 +541,7 @@ public:
 		}
 		case 6:
 		{
-			pMovestack = DropMoveGeneratorA::Func001_C_6(
+			pMovestack = DropMakerHand6::MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
