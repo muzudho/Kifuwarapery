@@ -18,7 +18,7 @@
 class DropMakerHand1 : public DropMakerAbstract {
 public:
 
-	static MoveStack* MakeDropMovesToRank9ExceptNL(
+	MoveStack* MakeDropMovesToRank9ExceptNL(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -30,7 +30,7 @@ public:
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
 		PieceType haveHandArr[6]
-	) {
+	) const {
 		Bitboard toBB = target & TRank9BB;
 		do {
 			while (toBB.GetP(0)) {
@@ -49,7 +49,7 @@ public:
 		return pMovestack;
 	}
 
-	static MoveStack* MakeDropMovesToRank8ExceptN(
+	MoveStack* MakeDropMovesToRank8ExceptN(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -61,7 +61,7 @@ public:
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
 		PieceType haveHandArr[6]
-	) {
+	) const {
 		Bitboard toBB = target & TRank8BB;
 		do {
 			while (toBB.GetP(0)) {
@@ -80,7 +80,7 @@ public:
 		return pMovestack;
 	}
 
-	static MoveStack* MakeDropMovesToRank1234567(
+	MoveStack* MakeDropMovesToRank1234567(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -92,7 +92,7 @@ public:
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
 		PieceType haveHandArr[6]
-	) {
+	) const {
 		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
 		do {
 			while (toBB.GetP(0)) {
