@@ -100,129 +100,28 @@ public:
 
 		// 歩 以外の駒を持っているか
 		if (Hand::ExceptPawnExists(hand)) {
-			pMovestack = Func001(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand
-			);
-		}
+			PieceType haveHandArr[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
+			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
-		return pMovestack;
-	}
+								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
+			if (Hand::Exists_HKnight(hand)) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
+			const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
+			if (Hand::Exists_HLance(hand)) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
+			const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
+			if (Hand::Exists_HSilver(hand)) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
+			if (Hand::Exists_HGold(hand)) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
+			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
+			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
 
-	// 練習☆（＾ｑ＾）
-	MoveStack* Func001(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand
-	)
-	{
-		PieceType haveHandArr[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
-		int haveHandNum = 0; // 持ち駒の駒の種類の数
+			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
+			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
+			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
-							 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
-		if (Hand::Exists_HKnight(hand)) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
-		const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
-		if (Hand::Exists_HLance(hand)) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
-		const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
-		if (Hand::Exists_HSilver(hand)) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
-		if (Hand::Exists_HGold(hand)) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
-		if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
-		if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
-
-		const Rank tRank8 = (us == Black ? Rank8 : Rank2);
-		const Rank tRank9 = (us == Black ? Rank9 : Rank1);
-		const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
-		const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
-
-
-		/* FIXME: 駒の打ち込みが見えないぜ☆！（＾ｑ＾）
-		//
-		// 桂馬、香車 以外の持ち駒があれば、
-		// 一段目に対して、桂馬、香車以外の指し手を生成。
-		// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
-		pMovestack = DropMakerArray::m_dropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(target, TRank9BB, pMovestack, haveHandArr, noKnightLanceIdx);
-
-		// 桂馬以外の持ち駒があれば、
-		// 二段目に対して、桂馬以外の指し手を生成。
-		pMovestack = DropMakerArray::m_dropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(target, TRank8BB, pMovestack, haveHandArr, noKnightIdx);
-
-		// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		pMovestack = DropMakerArray::m_dropMakerArray[haveHandNum]->MakeDropMovesToRank1234567( toBB, pMovestack, haveHandArr);
-		//*/
-
-		pMovestack = Func001_A(
-			us,
-			pMovestack,
-			pos,
-			target,
-			hand,
-			haveHandNum,
-			noKnightIdx,
-			noKnightLanceIdx,
-			TRank8BB,
-			TRank9BB,
-			haveHandArr
-		);
-
-		pMovestack = Func001_B(
-			us,
-			pMovestack,
-			pos,
-			target,
-			hand,
-			haveHandNum,
-			noKnightIdx,
-			noKnightLanceIdx,
-			TRank8BB,
-			TRank9BB,
-			haveHandArr
-			);
-
-		pMovestack = Func001_C(
-			us,
-			pMovestack,
-			pos,
-			target,
-			hand,
-			haveHandNum,
-			noKnightIdx,
-			noKnightLanceIdx,
-			TRank8BB,
-			TRank9BB,
-			haveHandArr
-			);
-
-		return pMovestack;
-	}
-
-	MoveStack* Func001_A(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		PieceType haveHandArr[6]
-	)
-	{
-		//* OK
-		//Square iTo;// ループカウンタを兼ねる。
-		// 桂馬、香車 以外の持ち駒があれば、
-		// 一段目に対して、桂馬、香車以外の指し手を生成。
-		switch (haveHandNum - noKnightLanceIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
-		case 0:
-		{
-			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank9ExceptNL(
+			// 桂馬、香車 以外の持ち駒があれば、
+			// 一段目に対して、桂馬、香車以外の指し手を生成。
+			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
+			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -235,11 +134,10 @@ public:
 				TRank9BB,
 				haveHandArr
 				);
-			break;
-		}
-		case 1:
-		{
-			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank9ExceptNL(
+
+			// 桂馬以外の持ち駒があれば、
+			// 二段目に対して、桂馬以外の指し手を生成。
+			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -252,11 +150,9 @@ public:
 				TRank9BB,
 				haveHandArr
 				);
-			break;
-		}
-		case 2:
-		{
-			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank9ExceptNL(
+
+			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
+			pMovestack = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -269,320 +165,6 @@ public:
 				TRank9BB,
 				haveHandArr
 				);
-			break;
-		}
-		case 3:
-		{
-			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank9ExceptNL(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-				);
-			break;
-		}
-		case 4:
-		{
-			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank9ExceptNL(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-				);
-			break;
-		}
-		default:
-		{
-			UNREACHABLE;
-		}
-		}
-		//*/
-
-		return pMovestack;
-	}
-
-	MoveStack* Func001_B(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		PieceType haveHandArr[6]
-		)
-	{
-		// 桂馬以外の持ち駒があれば、
-		// 二段目に対して、桂馬以外の指し手を生成。
-		switch (haveHandNum - noKnightIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
-		case 0:
-		{
-			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 1:
-		{
-			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 2:
-		{
-			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 3:
-		{
-			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 4:
-		{
-			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 5:
-		{
-			pMovestack = this->m_pDropMakerArray[5]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		default:
-		{
-			UNREACHABLE;
-		}
-		}
-
-		return pMovestack;
-	}
-
-	MoveStack* Func001_C(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		PieceType haveHandArr[6]
-		)
-	{
-		// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
-		//Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		switch (haveHandNum) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
-		case 0:
-		{
-			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 1:
-		{
-			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 2:
-		{
-			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 3:
-		{
-			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 4:
-		{
-			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 5:
-		{
-			pMovestack = this->m_pDropMakerArray[5]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		case 6:
-		{
-			pMovestack = this->m_pDropMakerArray[6]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
-				haveHandArr
-			);
-			break;
-		}
-		default:
-		{
-			UNREACHABLE;
-		}
 		}
 
 		return pMovestack;
