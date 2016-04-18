@@ -20,11 +20,34 @@
 
 class DropMoveGenerator {
 public:
+
+	// (^q^)追加
+	DropMakerHand0 m_dropMakerHand0;
+	DropMakerHand1 m_dropMakerHand1;
+	DropMakerHand2 m_dropMakerHand2;
+	DropMakerHand3 m_dropMakerHand3;
+	DropMakerHand4 m_dropMakerHand4;
+	DropMakerHand5 m_dropMakerHand5;
+	DropMakerHand6 m_dropMakerHand6;
+	DropMakerAbstract* m_pDropMakerArray[7];
+
+	// (^q^)追加
+	DropMoveGenerator() {
+		this->m_pDropMakerArray[0] = &this->m_dropMakerHand0;
+		this->m_pDropMakerArray[1] = &this->m_dropMakerHand1;
+		this->m_pDropMakerArray[2] = &this->m_dropMakerHand2;
+		this->m_pDropMakerArray[3] = &this->m_dropMakerHand3;
+		this->m_pDropMakerArray[4] = &this->m_dropMakerHand4;
+		this->m_pDropMakerArray[5] = &this->m_dropMakerHand5;
+		this->m_pDropMakerArray[6] = &this->m_dropMakerHand6;
+	}
+
+
 	// 駒打ちの場合
 	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって switch で展開している。
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
-	static MoveStack* GenerateDropMoves(
+	MoveStack* GenerateDropMoves(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -90,7 +113,7 @@ public:
 	}
 
 	// 練習☆（＾ｑ＾）
-	static MoveStack* Func001(
+	MoveStack* Func001(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -178,7 +201,7 @@ public:
 		return pMovestack;
 	}
 
-	static MoveStack* Func001_A(
+	MoveStack* Func001_A(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -192,14 +215,6 @@ public:
 		PieceType haveHandArr[6]
 	)
 	{
-		DropMakerAbstract* pDropMakerHand0 = &DropMakerHand0();
-		DropMakerAbstract* pDropMakerHand1 = &DropMakerHand1();
-		DropMakerAbstract* pDropMakerHand2 = &DropMakerHand2();
-		DropMakerAbstract* pDropMakerHand3 = &DropMakerHand3();
-		DropMakerAbstract* pDropMakerHand4 = &DropMakerHand4();
-		DropMakerAbstract* pDropMakerHand5 = &DropMakerHand5();
-		DropMakerAbstract* pDropMakerHand6 = &DropMakerHand6();
-
 		//* OK
 		//Square iTo;// ループカウンタを兼ねる。
 		// 桂馬、香車 以外の持ち駒があれば、
@@ -207,7 +222,7 @@ public:
 		switch (haveHandNum - noKnightLanceIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = pDropMakerHand0->MakeDropMovesToRank9ExceptNL(
+			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -224,7 +239,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = pDropMakerHand1->MakeDropMovesToRank9ExceptNL(
+			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -241,7 +256,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = pDropMakerHand2->MakeDropMovesToRank9ExceptNL(
+			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -258,7 +273,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = pDropMakerHand3->MakeDropMovesToRank9ExceptNL(
+			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -275,7 +290,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = pDropMakerHand4->MakeDropMovesToRank9ExceptNL(
+			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -300,7 +315,7 @@ public:
 		return pMovestack;
 	}
 
-	static MoveStack* Func001_B(
+	MoveStack* Func001_B(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -314,20 +329,12 @@ public:
 		PieceType haveHandArr[6]
 		)
 	{
-		DropMakerAbstract* pDropMakerHand0 = &DropMakerHand0();
-		DropMakerAbstract* pDropMakerHand1 = &DropMakerHand1();
-		DropMakerAbstract* pDropMakerHand2 = &DropMakerHand2();
-		DropMakerAbstract* pDropMakerHand3 = &DropMakerHand3();
-		DropMakerAbstract* pDropMakerHand4 = &DropMakerHand4();
-		DropMakerAbstract* pDropMakerHand5 = &DropMakerHand5();
-		DropMakerAbstract* pDropMakerHand6 = &DropMakerHand6();
-
 		// 桂馬以外の持ち駒があれば、
 		// 二段目に対して、桂馬以外の指し手を生成。
 		switch (haveHandNum - noKnightIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = pDropMakerHand0->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -344,7 +351,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = pDropMakerHand1->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -361,7 +368,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = pDropMakerHand2->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -378,7 +385,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = pDropMakerHand3->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -395,7 +402,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = pDropMakerHand4->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -412,7 +419,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = pDropMakerHand5->MakeDropMovesToRank8ExceptN(
+			pMovestack = this->m_pDropMakerArray[5]->MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -436,7 +443,7 @@ public:
 		return pMovestack;
 	}
 
-	static MoveStack* Func001_C(
+	MoveStack* Func001_C(
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -450,20 +457,12 @@ public:
 		PieceType haveHandArr[6]
 		)
 	{
-		DropMakerAbstract* pDropMakerHand0 = &DropMakerHand0();
-		DropMakerAbstract* pDropMakerHand1 = &DropMakerHand1();
-		DropMakerAbstract* pDropMakerHand2 = &DropMakerHand2();
-		DropMakerAbstract* pDropMakerHand3 = &DropMakerHand3();
-		DropMakerAbstract* pDropMakerHand4 = &DropMakerHand4();
-		DropMakerAbstract* pDropMakerHand5 = &DropMakerHand5();
-		DropMakerAbstract* pDropMakerHand6 = &DropMakerHand6();
-
 		// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 		//Bitboard toBB = target & ~(TRank8BB | TRank9BB);
 		switch (haveHandNum) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = pDropMakerHand0->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[0]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -480,7 +479,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = pDropMakerHand1->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[1]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -497,7 +496,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = pDropMakerHand2->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[2]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -514,7 +513,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = pDropMakerHand3->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[3]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -531,7 +530,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = pDropMakerHand4->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[4]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -548,7 +547,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = pDropMakerHand5->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[5]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -565,7 +564,7 @@ public:
 		}
 		case 6:
 		{
-			pMovestack = pDropMakerHand6->MakeDropMovesToRank1234567(
+			pMovestack = this->m_pDropMakerArray[6]->MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -590,3 +589,7 @@ public:
 	}
 
 };
+
+
+extern DropMoveGenerator g_dropMoveGenerator;
+

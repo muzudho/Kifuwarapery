@@ -1382,5 +1382,8 @@
     <ClCompile Include="source\n376_genMoveP\n376_500_pieceArray.cpp">
       <Filter>source\n376_genMoveP</Filter>
     </ClCompile>
+    <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp">
+      <Filter>source\n374_genMove_</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

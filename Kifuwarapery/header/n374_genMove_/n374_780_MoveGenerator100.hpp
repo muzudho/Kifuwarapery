@@ -1,6 +1,9 @@
 #pragma once
 
 
+#include "n374_750_dropMoveGenerator.hpp"
+
+
 class MoveGenerator100 {
 public:
 
@@ -56,7 +59,7 @@ public:
 		MoveStack* pMovestack, const Position& pos
 	) {
 		const Bitboard target = pos.GetEmptyBB();
-		pMovestack = DropMoveGenerator::GenerateDropMoves(us, pMovestack, pos, target);//<US>
+		pMovestack = g_dropMoveGenerator.GenerateDropMoves(us, pMovestack, pos, target);//<US>
 		return pMovestack;
 	}
 
@@ -144,7 +147,7 @@ public:
 		pMovestack = GeneratePieceMoves_pt()(N16_GoldHorseDragon, Evasion, us, ALL, pMovestack, pos, target2, ksq);
 
 		if (target1.Exists1Bit()) {
-			pMovestack = DropMoveGenerator::GenerateDropMoves(us, pMovestack, pos, target1);//<US>
+			pMovestack = g_dropMoveGenerator.GenerateDropMoves(us, pMovestack, pos, target1);//<US>
 		}
 
 		return pMovestack;
@@ -160,7 +163,7 @@ public:
 	) {
 		Bitboard target = pos.GetEmptyBB();
 
-		pMovestack = DropMoveGenerator::GenerateDropMoves(us, pMovestack, pos, target);//<US>
+		pMovestack = g_dropMoveGenerator.GenerateDropMoves(us, pMovestack, pos, target);//<US>
 		target |= pos.GetBbOf(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
