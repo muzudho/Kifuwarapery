@@ -47,7 +47,7 @@ public:
 
 	u32 Exists(const HandPiece handPiece) const;
 
-	u32 ExceptPawnExists() const;
+	static u32 ExceptPawnExists(const Hand& hand);
 
 	// num が int だけどまあ良いか。
 	void OrEqual(const int num, const HandPiece handPiece);

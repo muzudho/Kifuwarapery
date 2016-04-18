@@ -13,7 +13,7 @@ class DropMakerAbstract {
 public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	static void MakeDropMovesToRank9ExceptNL(
+	static MoveStack* MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard& TRank9BB,
 		MoveStack* pMovestack,
@@ -22,10 +22,11 @@ public:
 	) {
 		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
 		UNREACHABLE;
+		return pMovestack;
 	};
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	static void MakeDropMovesToRank8ExceptN(
+	static MoveStack* MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard& TRank8BB,
 		MoveStack* pMovestack,
@@ -34,16 +35,18 @@ public:
 	) {
 		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
 		UNREACHABLE;
+		return pMovestack;
 	};
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	static void MakeDropMovesToRank1234567(
+	static MoveStack* MakeDropMovesToRank1234567(
 		Bitboard& toBB,	// const
 		MoveStack* pMovestack,
 		const PieceType haveHand[6]
 	) {
 		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
 		UNREACHABLE;
+		return pMovestack;
 	};
 
 };

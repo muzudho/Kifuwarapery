@@ -13,7 +13,7 @@
 class DropMakerHand6 : public DropMakerAbstract {
 public:
 
-	static void MakeDropMovesToRank9ExceptNL(
+	static MoveStack* MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard& TRank9BB,
 		MoveStack* moveStackList,
@@ -21,9 +21,10 @@ public:
 		int noKnightLanceIdx
 	) {
 		UNREACHABLE;
+		return moveStackList;
 	}
 
-	static void MakeDropMovesToRank8ExceptN(
+	static MoveStack* MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard& TRank8BB,
 		MoveStack* moveStackList,
@@ -31,9 +32,10 @@ public:
 		int noKnightIdx
 	) {
 		UNREACHABLE;
+		return moveStackList;
 	}
 
-	static void MakeDropMovesToRank1234567(
+	static MoveStack* MakeDropMovesToRank1234567(
 		Bitboard& toBB,
 		MoveStack* moveStackList,
 		const PieceType haveHand[6]
@@ -49,6 +51,7 @@ public:
 		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[1], to);
 		//	(*pMovestack++).m_move = UtilMove::MakeDropMove(haveHand[0], to);
 		//});
+		return moveStackList;
 	}
 
 };

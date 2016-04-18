@@ -324,7 +324,7 @@ void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
 #endif
 	ss->m_staticEvalRaw = sum;
 
-	Evaluation09 evaluation;
+	//Evaluation09 evaluation;
 	assert(this->evaluateUnUseDiff(pos) == sum.GetSum(pos.GetTurn()));
 }
 

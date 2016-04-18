@@ -46,9 +46,9 @@ u32 Hand::Exists(const HandPiece handPiece) const
 	return Value() & m_HandPieceMask[handPiece];
 }
 
-u32 Hand::ExceptPawnExists() const
+u32 Hand::ExceptPawnExists(const Hand& hand)
 {
-	return Value() & m_HandPieceExceptPawnMask;
+	return hand.Value() & m_HandPieceExceptPawnMask;
 }
 
 void Hand::OrEqual(const int num, const HandPiece handPiece)

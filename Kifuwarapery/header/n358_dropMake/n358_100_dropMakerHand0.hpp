@@ -12,7 +12,7 @@
 
 class DropMakerHand0 : public DropMakerAbstract {
 public:
-	static void MakeDropMovesToRank9ExceptNL(
+	static MoveStack* MakeDropMovesToRank9ExceptNL(
 		const Bitboard& target,
 		const Bitboard& TRank9BB,
 		MoveStack* pMovestack,
@@ -20,9 +20,10 @@ public:
 		int noKnightLanceIdx
 	) {
 		// 桂馬、香車 以外の持ち駒がない。
+		return pMovestack;
 	}
 
-	static void MakeDropMovesToRank8ExceptN(
+	static MoveStack* MakeDropMovesToRank8ExceptN(
 		const Bitboard& target,
 		const Bitboard& TRank8BB,
 		MoveStack* pMovestack,
@@ -30,14 +31,16 @@ public:
 		int noKnightIdx
 	) {
 		// 桂馬 以外の持ち駒がない。
+		return pMovestack;
 	}
 
-	static void MakeDropMovesToRank1234567(
+	static MoveStack* MakeDropMovesToRank1234567(
 		Bitboard& toBB,
 		MoveStack* pMovestack,
 		const PieceType haveHand[6]
 		) {
 		assert(false); // 最適化の為のダミー
+		return pMovestack;
 	}
 
 };
