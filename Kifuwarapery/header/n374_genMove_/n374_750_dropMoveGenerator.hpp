@@ -199,7 +199,7 @@ public:
 		switch (haveHandNum - noKnightLanceIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMakerHand0::MakeDropMovesToRank9ExceptNL(
+			pMovestack = (DropMakerHand0()).MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -216,7 +216,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMakerHand1::MakeDropMovesToRank9ExceptNL(
+			pMovestack = (DropMakerHand1()).MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -233,7 +233,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMakerHand2::MakeDropMovesToRank9ExceptNL(
+			pMovestack = (DropMakerHand2()).MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -250,7 +250,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMakerHand3::MakeDropMovesToRank9ExceptNL(
+			pMovestack = (DropMakerHand3()).MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -267,7 +267,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMakerHand4::MakeDropMovesToRank9ExceptNL(
+			pMovestack = (DropMakerHand4()).MakeDropMovesToRank9ExceptNL(
 				us,
 				pMovestack,
 				pos,
@@ -311,7 +311,7 @@ public:
 		switch (haveHandNum - noKnightIdx) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMakerHand0::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand0()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -328,7 +328,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMakerHand1::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand1()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -345,7 +345,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMakerHand2::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand2()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -362,7 +362,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMakerHand3::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand3()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -379,7 +379,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMakerHand4::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand4()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -396,7 +396,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = DropMakerHand5::MakeDropMovesToRank8ExceptN(
+			pMovestack = (DropMakerHand5()).MakeDropMovesToRank8ExceptN(
 				us,
 				pMovestack,
 				pos,
@@ -439,7 +439,7 @@ public:
 		switch (haveHandNum) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
 		case 0:
 		{
-			pMovestack = DropMakerHand0::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand0()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -456,7 +456,7 @@ public:
 		}
 		case 1:
 		{
-			pMovestack = DropMakerHand1::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand1()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -473,7 +473,7 @@ public:
 		}
 		case 2:
 		{
-			pMovestack = DropMakerHand2::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand2()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -490,7 +490,7 @@ public:
 		}
 		case 3:
 		{
-			pMovestack = DropMakerHand3::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand3()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -507,7 +507,7 @@ public:
 		}
 		case 4:
 		{
-			pMovestack = DropMakerHand4::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand4()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -524,7 +524,7 @@ public:
 		}
 		case 5:
 		{
-			pMovestack = DropMakerHand5::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand5()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
@@ -541,7 +541,7 @@ public:
 		}
 		case 6:
 		{
-			pMovestack = DropMakerHand6::MakeDropMovesToRank1234567(
+			pMovestack = (DropMakerHand6()).MakeDropMovesToRank1234567(
 				us,
 				pMovestack,
 				pos,
