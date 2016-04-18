@@ -885,6 +885,9 @@
     <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_749_dropMoveGeneratorA.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
