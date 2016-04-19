@@ -300,7 +300,6 @@
     <ClInclude Include="header\n372_piece___\n372_400_pieceWDragon.hpp" />
     <ClInclude Include="header\n372_piece___\n372_410_pieceNone.hpp" />
     <ClInclude Include="header\n372_piece___\n372_500_pieceArray.hpp" />
-    <ClInclude Include="header\n374_genMove_\n374_050_generateMoves.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp" />
@@ -376,6 +375,14 @@
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp" />
     <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp" />
     <ClInclude Include="header\n885_searcher\n885_500_searcher.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_070_rtAbstract.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_100_rtNot.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_110_rtDraw.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_120_rtWin.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_130_rtLose.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_140_rtSuperior.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_150_rtInferior.hpp" />
+    <ClInclude Include="header\n886_repeType\n886_500_rtArray.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_100_nodeTypeRoot.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_110_nodeTypePv.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_120_nodeTypeNonPv.hpp" />
@@ -420,6 +427,14 @@
     <ClCompile Include="source\n162_bonaDir_\n162_070_bonaDirAbstract.cpp" />
     <ClCompile Include="source\n163_sqDistan\n163_600_utilSquareDistance.cpp" />
     <ClCompile Include="source\n165_movStack\n165_700_makePromoteMove.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_070_rtAbstract.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_100_rtNot.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_110_rtDraw.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_120_rtWin.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_130_rtLose.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_140_rtSuperior.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_150_rtInferior.cpp" />
+    <ClCompile Include="source\n205_repeType\n886_500_rtArray.cpp" />
     <ClCompile Include="source\n220_position\n220_150_checkInfo.cpp" />
     <ClCompile Include="source\n220_position\n220_650_position.cpp" />
     <ClCompile Include="source\n220_position\n220_640_utilAttack.cpp" />
@@ -496,7 +511,6 @@
     <ClCompile Include="source\n372_piece___\n372_400_pieceWDragon.cpp" />
     <ClCompile Include="source\n372_piece___\n372_410_pieceNone.cpp" />
     <ClCompile Include="source\n372_piece___\n372_500_pieceArray.cpp" />
-    <ClCompile Include="source\n374_genMove_\n374_500_generateMoves.cpp" />
     <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp" />
     <ClCompile Include="source\n405_moveType\n405_070_mtAbstract.cpp" />
     <ClCompile Include="source\n405_moveType\n405_100_mtCapture.cpp" />

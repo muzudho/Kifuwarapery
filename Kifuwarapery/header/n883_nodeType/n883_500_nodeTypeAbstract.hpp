@@ -3,7 +3,7 @@
 
 #include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
-#include "../n640_searcher/n640_440_splitPoint.hpp"
+#include "../n640_searcher/n640_440_splitPoint.hpp" // Searcherと持ち合い
 class Searcher;
 
 

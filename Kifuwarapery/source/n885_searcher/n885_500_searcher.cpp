@@ -3,6 +3,13 @@
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n886_repeType/n886_100_rtNot.hpp"
+#include "../../header/n886_repeType/n886_110_rtDraw.hpp"
+#include "../../header/n886_repeType/n886_120_rtWin.hpp"
+#include "../../header/n886_repeType/n886_130_rtLose.hpp"
+#include "../../header/n886_repeType/n886_140_rtSuperior.hpp"
+#include "../../header/n886_repeType/n886_150_rtInferior.hpp"
+#include "../../header/n886_repeType/n886_500_rtArray.hpp"
 #include "../../header/n220_position/n220_100_repetitionType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
@@ -777,7 +784,9 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 }
 
 template <NodeType NT>
-Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode) {
+Score Searcher::Search(
+	Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
+) {
 	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitPointPV || NT == SplitPointRoot);
 	const bool SPNode = (NT == SplitPointPV || NT == SplitPointNonPV || NT == SplitPointRoot);
 	const bool RootNode = (NT == N00_Root || NT == SplitPointRoot);
@@ -850,14 +859,22 @@ Score Searcher::Search(Position& pos, SearchStack* ss, Score alpha, Score beta, 
 	if (!RootNode) {
 		// step2
 		// stop と最大探索深さのチェック
+
+		bool isReturn = false;
+		Score resultScore = Score::ScoreNone;
 		switch (pos.IsDraw(16)) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
-		case NotRepetition      : if (!m_signals.m_stop && ss->m_ply <= g_maxPly) { break; }
-		case RepetitionDraw     : return ScoreDraw;
-		case RepetitionWin      : return UtilScore::MateIn(ss->m_ply);
-		case RepetitionLose     : return UtilScore::MatedIn(ss->m_ply);
-		case RepetitionSuperior : if (ss->m_ply != 2) { return ScoreMateInMaxPly; } break;
-		case RepetitionInferior : if (ss->m_ply != 2) { return ScoreMatedInMaxPly; } break;
-		default                 : UNREACHABLE;
+		case N00_NotRepetition      :	RepetitionTypeNot().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
+		case N01_RepetitionDraw		:	RepetitionTypeDraw().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
+		case N02_RepetitionWin		:	RepetitionTypeWin().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
+		case N03_RepetitionLose		:	RepetitionTypeLose().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
+		case N04_RepetitionSuperior	:	RepetitionTypeSuperior().CheckStopAndMaxPly(isReturn, resultScore, this, ss);	break;
+		case N05_RepetitionInferior	:	RepetitionTypeInferior().CheckStopAndMaxPly(isReturn, resultScore, this, ss);	break;
+		default						:	UNREACHABLE;
+		}
+
+		if (isReturn)
+		{
+			return resultScore;
 		}
 
 		// step3

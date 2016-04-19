@@ -226,6 +226,12 @@
     <Filter Include="source\n405_moveType">
       <UniqueIdentifier>{6b73a060-0dc8-4622-95af-f377693e23bd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="header\n886_repeType">
+      <UniqueIdentifier>{c0af112f-b935-48a8-9f32-0169f82cbc7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n886_repeType">
+      <UniqueIdentifier>{2d17a063-9b8f-4a44-969d-7bcb62b87d15}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -771,9 +777,6 @@
     <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_050_generateMoves.hpp">
-      <Filter>header\n374_genMove_</Filter>
-    </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp">
       <Filter>header\n374_genMove_</Filter>
     </ClInclude>
@@ -923,6 +926,30 @@
     </ClInclude>
     <ClInclude Include="header\n405_moveType\n405_500_mtArray.hpp">
       <Filter>header\n405_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_070_rtAbstract.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_100_rtNot.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_110_rtDraw.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_120_rtWin.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_130_rtLose.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_140_rtSuperior.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_150_rtInferior.hpp">
+      <Filter>header\n886_repeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n886_repeType\n886_500_rtArray.hpp">
+      <Filter>header\n886_repeType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1316,9 +1343,6 @@
     <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp">
       <Filter>source\n887_nodeType</Filter>
     </ClCompile>
-    <ClCompile Include="source\n374_genMove_\n374_500_generateMoves.cpp">
-      <Filter>source\n374_genMove_</Filter>
-    </ClCompile>
     <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp">
       <Filter>source\n374_genMove_</Filter>
     </ClCompile>
@@ -1465,6 +1489,30 @@
     </ClCompile>
     <ClCompile Include="source\n405_moveType\n405_500_mtArray.cpp">
       <Filter>source\n405_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_070_rtAbstract.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_100_rtNot.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_110_rtDraw.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_120_rtWin.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_130_rtLose.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_140_rtSuperior.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_150_rtInferior.cpp">
+      <Filter>source\n886_repeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n205_repeType\n886_500_rtArray.cpp">
+      <Filter>source\n886_repeType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

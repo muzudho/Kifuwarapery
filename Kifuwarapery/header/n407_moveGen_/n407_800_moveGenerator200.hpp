@@ -8,7 +8,6 @@
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_piece___/n372_070_pieceAbstract.hpp"
 #include "../n372_piece___/n372_500_pieceArray.hpp"
-#include "../n374_genMove_/n374_050_generateMoves.hpp"
 #include "../n374_genMove_/n374_250_bishopRookMovesGenerator.hpp"
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "../n374_genMove_/n374_750_dropMoveGenerator.hpp"

@@ -1788,27 +1788,27 @@ RepetitionType Position::IsDraw(const int checkMaxPly) const {
 			stp = stp->m_previous->m_previous;
 			if (stp->GetKey() == m_st_->GetKey()) {
 				if (i <= m_st_->m_continuousCheck[GetTurn()]) {
-					return RepetitionLose;
+					return N03_RepetitionLose;
 				}
 				else if (i <= m_st_->m_continuousCheck[UtilColor::OppositeColor(GetTurn())]) {
-					return RepetitionWin;
+					return N02_RepetitionWin;
 				}
 #if defined BAN_BLACK_REPETITION
-				return (GetTurn() == Black ? RepetitionLose : RepetitionWin);
+				return (GetTurn() == Black ? N03_RepetitionLose : N02_RepetitionWin);
 #elif defined BAN_WHITE_REPETITION
-				return (GetTurn() == White ? RepetitionLose : RepetitionWin);
+				return (GetTurn() == White ? N03_RepetitionLose : N02_RepetitionWin);
 #else
-				return RepetitionDraw;
+				return N01_RepetitionDraw;
 #endif
 			}
 			else if (stp->m_boardKey == m_st_->m_boardKey) {
-				if (m_st_->m_hand.IsEqualOrSuperior(stp->m_hand)) { return RepetitionSuperior; }
-				if (stp->m_hand.IsEqualOrSuperior(m_st_->m_hand)) { return RepetitionInferior; }
+				if (m_st_->m_hand.IsEqualOrSuperior(stp->m_hand)) { return N04_RepetitionSuperior; }
+				if (stp->m_hand.IsEqualOrSuperior(m_st_->m_hand)) { return N05_RepetitionInferior; }
 			}
 			i += 2;
 		} while (i <= e);
 	}
-	return NotRepetition;
+	return N00_NotRepetition;
 }
 
 Thread * Position::GetThisThread() const

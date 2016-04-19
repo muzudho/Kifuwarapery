@@ -29,14 +29,14 @@ public:
 		const Bitboard targetOther = pos.GetBbOf(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
-		moveStackList = GeneratePieceMoves_N01_Pawn()(MT, us, all, moveStackList, pos, targetPawn, ksq);
-		moveStackList = GeneratePieceMoves_N02_Lance()(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_N03_Knight()(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_N04_Silver()(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_N05_Bishop()(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_N06_Rook()(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_pt()(N16_GoldHorseDragon, MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = GeneratePieceMoves_N08_King()(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N01_Pawn(MT, us, all, moveStackList, pos, targetPawn, ksq);
+		moveStackList = GeneratePieceMoves_N02_Lance(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N03_Knight(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N04_Silver(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N05_Bishop(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N06_Rook(MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, MT, us, all, moveStackList, pos, targetOther, ksq);
+		moveStackList = GeneratePieceMoves_N08_King(MT, us, all, moveStackList, pos, targetOther, ksq);
 
 		return moveStackList;
 	}
