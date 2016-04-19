@@ -14,8 +14,8 @@
 #include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
-#include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
-#include "../n372_genMoveP/n372_500_pieceArray.hpp"
+#include "../n372_piece___/n372_070_pieceAbstract.hpp"
+#include "../n372_piece___/n372_500_pieceArray.hpp"
 #include "n374_050_generateMoves.hpp"
 #include "n374_250_bishopRookMovesGenerator.hpp"
 
