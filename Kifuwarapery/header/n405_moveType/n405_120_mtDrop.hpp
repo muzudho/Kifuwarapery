@@ -6,6 +6,7 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "../n374_genMove_/n374_750_dropMoveGenerator.hpp"
+#include "n405_040_mtEvent.hpp"
 #include "n405_070_mtAbstract.hpp"
 
 
@@ -13,12 +14,15 @@ class MoveTypeDrop : public MoveTypeAbstract {
 public:
 	// 部分特殊化
 	// 駒打ち生成
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
-		Color us = pos.GetTurn();
+	MoveStack* GenerateMoves1(
+		MoveTypeEvent& mtEvent,
+		bool all = false
+	) const {
+		const Bitboard target = mtEvent.m_pos.GetEmptyBB();
 
-		const Bitboard target = pos.GetEmptyBB();
-		moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target);//<US>
-		return moveStackList;
+		mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(
+			mtEvent.m_us, mtEvent.m_moveStackList, mtEvent.m_pos, target);//<US>
+		return mtEvent.m_moveStackList;
 	}
 
 };

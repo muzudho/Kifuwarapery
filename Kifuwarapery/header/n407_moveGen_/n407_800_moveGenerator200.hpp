@@ -12,6 +12,7 @@
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "../n374_genMove_/n374_750_dropMoveGenerator.hpp"
 #include "../n374_genMove_/n374_780_MoveGenerator100.hpp""
+#include "../n405_moveType/n405_040_mtEvent.hpp"
 #include "../n405_moveType/n405_100_mtCapture.hpp"
 #include "../n405_moveType/n405_110_mtNonCapture.hpp"
 #include "../n405_moveType/n405_120_mtDrop.hpp"
@@ -31,9 +32,16 @@ class MoveGenerator200 {
 public:
 
 	inline MoveStack* GenerateMoves_2(
-		MoveType mt, MoveStack* moveStackList, const Position& pos
+		MoveType mt,
+		MoveStack* moveStackList,
+		const Position& pos
 	) const {
-		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMove(moveStackList, pos);
+		MoveTypeEvent mtEvent(
+			moveStackList,
+			pos,
+			pos.GetTurn()//(^q^)追加
+		);
+		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMoves1(mtEvent);
 	}
 
 

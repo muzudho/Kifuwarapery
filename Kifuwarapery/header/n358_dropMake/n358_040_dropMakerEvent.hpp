@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 
 #include "../n105_color___/n105_100_color.hpp"
@@ -13,7 +13,7 @@ class DropMakerEvent {
 public:
 
 	const Color m_us;
-	MoveStack* m_pMovestack;// •Ï‰»‚·‚é‚º™
+	MoveStack* m_pMovestack;// å¤‰åŒ–ã™ã‚‹ãœâ˜†
 	const Position& m_pos;
 	const Bitboard& m_target;
 	const Hand& m_hand;
@@ -22,7 +22,7 @@ public:
 	const int m_noKnightLanceIdx;
 	const Bitboard& m_tRank8BB;
 	const Bitboard& m_tRank9BB;
-	//PieceType m_haveHandArr[6];//(^q^)”z—ñ‚ÍƒRƒ“ƒXƒgƒ‰ƒNƒ^‚É“n‚¹‚È‚¢‚º™I
+	//PieceType m_haveHandArr[6];//(^q^)é…åˆ—ã¯ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿ã«æ¸¡ã›ãªã„ãœâ˜†ï¼
 
 public:
 
