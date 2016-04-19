@@ -16,6 +16,7 @@
 #include "../n358_dropMake/n358_140_dropMakerHand4.hpp"
 #include "../n358_dropMake/n358_150_dropMakerHand5.hpp"
 #include "../n358_dropMake/n358_160_dropMakerHand6.hpp"
+#include "n374_040_mtEvent.hpp"
 
 
 class DropMoveGenerator {
@@ -48,12 +49,10 @@ public:
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
 	MoveStack* GenerateDropMoves(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
+		MoveTypeEvent& mtEvent,//Color us,		MoveStack* pMovestack,		const Position& pos,
 		const Bitboard& target
 	) {
-		const Hand hand = pos.GetHand(us);
+		const Hand hand = mtEvent.m_pos.GetHand(mtEvent.m_us);
 
 
 		// まず、歩に対して指し手を生成
@@ -62,30 +61,30 @@ public:
 			Bitboard toBB = target;
 			// 一段目には打てない
 
-			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Rank tRank9 = (mtEvent.m_us == Black ? Rank9 : Rank1);
 			toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
 
 			// 二歩の回避
-			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, us);
+			Bitboard pawnsBB = mtEvent.m_pos.GetBbOf(N01_Pawn, mtEvent.m_us);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
 				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
 			});
 
 			// 打ち歩詰めの回避
-			const Rank tRank1 = (us == Black ? Rank1 : Rank9);
-			const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
+			const Rank tRank1 = (mtEvent.m_us == Black ? Rank1 : Rank9);
+			const SquareDelta tDeltaS = (mtEvent.m_us == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
+			const Square ksq = mtEvent.m_pos.GetKingSquare(UtilColor::OppositeColor(mtEvent.m_us));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (UtilSquare::ToRank(ksq) != tRank1) {
 				const Square pawnDropCheckSquare = ksq + tDeltaS;
 				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
-				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
-					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
+				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && mtEvent.m_pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
+					if (!mtEvent.m_pos.IsPawnDropCheckMate(mtEvent.m_us, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
+						(*mtEvent.m_moveStackList++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
 					}
 					g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
 				}
@@ -93,7 +92,7 @@ public:
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-				(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, to);
+				(*mtEvent.m_moveStackList++).m_move = UtilMove::MakeDropMove(N01_Pawn, to);
 			});
 		}
 
@@ -113,15 +112,15 @@ public:
 			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
 			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
 
-			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
-			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Rank tRank8 = (mtEvent.m_us == Black ? Rank8 : Rank2);
+			const Rank tRank9 = (mtEvent.m_us == Black ? Rank9 : Rank1);
 			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
 			DropMakerEvent dmEvent(
-				us,
-				pMovestack,
-				pos,
+				mtEvent.m_us,
+				mtEvent.m_moveStackList,
+				mtEvent.m_pos,
 				target,
 				hand,
 				haveHandNum,
@@ -133,26 +132,26 @@ public:
 			// 桂馬、香車 以外の持ち駒があれば、
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
 			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
-			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
+			mtEvent.m_moveStackList = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
 				dmEvent,
 				haveHandArr
 				);
 
 			// 桂馬以外の持ち駒があれば、
 			// 二段目に対して、桂馬以外の指し手を生成。
-			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
+			mtEvent.m_moveStackList = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
 				dmEvent,
 				haveHandArr
 				);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
-			pMovestack = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
+			mtEvent.m_moveStackList = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
 				dmEvent,
 				haveHandArr
 				);
 		}
 
-		return pMovestack;
+		return mtEvent.m_moveStackList;
 	}
 
 };

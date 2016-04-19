@@ -20,29 +20,29 @@ public:
 	static FORCE_INLINE MoveStack* GenerateBishopOrRookMoves(
 		MoveType mt,
 		PieceType pt,
-		Color us,
+		MoveTypeEvent& mtEvent,//Color us,MoveStack* moveStackList, const Position& pos,
 		bool all,
-		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
-		)
+		const Bitboard& target, const Square /*ksq*/
+	)
 	{
-		Bitboard fromBB = pos.GetBbOf(pt, us);
+		Bitboard fromBB = mtEvent.m_pos.GetBbOf(pt, mtEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(from));
-			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(pos.GetOccupiedBB(), us, from) & target;
+			const bool fromCanPromote = UtilSquare::CanPromote(mtEvent.m_us, UtilSquare::ToRank(from));
+			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(mtEvent.m_pos.GetOccupiedBB(), mtEvent.m_us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(mtEvent.m_us, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
-					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, pt, from, to, pos);
+					(*mtEvent.m_moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, pt, from, to, mtEvent.m_pos);
 					if (mt == N07_NonEvasion || all)
-						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, pos);
+						(*mtEvent.m_moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, mtEvent.m_pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
-					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, pos);
+					(*mtEvent.m_moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, mtEvent.m_pos);
 			}
 		}
-		return moveStackList;
+		return mtEvent.m_moveStackList;
 	}
 
 };

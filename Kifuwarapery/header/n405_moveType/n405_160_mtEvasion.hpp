@@ -4,9 +4,9 @@
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n374_genMove_/n374_040_mtEvent.hpp"
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "../n374_genMove_/n374_750_dropMoveGenerator.hpp"
-#include "n405_040_mtEvent.hpp"
 #include "n405_070_mtAbstract.hpp"
 
 
@@ -29,7 +29,7 @@ public:
 		const Square ksq = mtEvent.m_pos.GetKingSquare(mtEvent.m_us);
 
 		// 相手の色☆
-		const Color Them = UtilColor::OppositeColor(mtEvent.m_us);
+		const Color Them = mtEvent.m_oppositeColor;
 
 		const Bitboard checkers = mtEvent.m_pos.GetCheckersBB();
 		Bitboard bb = checkers;
@@ -79,16 +79,16 @@ public:
 		// pin されているかどうかは movePicker か search で調べる。
 		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 		const Bitboard target2 = target1 | checkers;
-		mtEvent.m_moveStackList = GeneratePieceMoves_N01_Pawn(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N02_Lance(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N03_Knight(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N04_Silver(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N05_Bishop(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N06_Rook(N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, N06_Evasion, mtEvent.m_us, all, mtEvent.m_moveStackList, mtEvent.m_pos, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N01_Pawn(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N02_Lance(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N03_Knight(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N04_Silver(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N05_Bishop(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_N06_Rook(N06_Evasion, mtEvent, all, target2, ksq);
+		mtEvent.m_moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, N06_Evasion, mtEvent, all, target2, ksq);
 
 		if (target1.Exists1Bit()) {
-			mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(mtEvent.m_us, mtEvent.m_moveStackList, mtEvent.m_pos, target1);//<US>
+			mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(mtEvent, target1);//<US>
 		}
 
 		return mtEvent.m_moveStackList;
