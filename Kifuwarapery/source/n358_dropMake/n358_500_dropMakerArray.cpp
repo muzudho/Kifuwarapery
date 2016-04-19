@@ -17,7 +17,7 @@ const DropMakerHand4 DropMakerArray::m_dropMakerHand4;
 const DropMakerHand5 DropMakerArray::m_dropMakerHand5;
 const DropMakerHand6 DropMakerArray::m_dropMakerHand6;
 
-// TODO: ポインタの配列にするのは正解のはず☆（＾ｑ＾）他にはテンプレートはずしも考えないと☆
+// 抽象クラスのインスタンスを配列にするためには、ポインタで持てばいいんだぜ☆（＾ｑ＾）
 const DropMakerAbstract* DropMakerArray::m_dropMakerArray[] = {
 	&DropMakerArray::m_dropMakerHand0,
 	&DropMakerArray::m_dropMakerHand1,

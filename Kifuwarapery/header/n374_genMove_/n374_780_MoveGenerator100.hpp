@@ -1,7 +1,24 @@
 #pragma once
 
 
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n110_square__/n110_400_squareRelation.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_110_silverAttackBb.hpp"
+#include "../n160_board___/n160_120_bishopAttackBb.hpp"
+#include "../n160_board___/n160_130_lanceAttackBb.hpp"
+#include "../n160_board___/n160_140_goldAttackBb.hpp"
+#include "../n160_board___/n160_150_rookAttackBb.hpp"
+#include "../n160_board___/n160_200_horseAttackBb.hpp"
+#include "../n160_board___/n160_210_dragonAttackBb.hpp"
+#include "../n220_position/n220_650_position.hpp"
+#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n372_genMoveP/n372_500_pieceArray.hpp"
+#include "n374_350_PieceMovesGenerator.hpp"
 #include "n374_750_dropMoveGenerator.hpp"
+
 
 
 class MoveGenerator100 {
@@ -10,11 +27,11 @@ public:
 	// 指し手生成 functor
 	// テンプレート引数が複数あり、部分特殊化したかったので、関数ではなく、struct にした。
 	// ALL == true のとき、歩、飛、角の不成、香の2段目の不成、香の3段目の駒を取らない不成も生成する。
-	static MoveStack* GenerateMoves_mt1 (
+	MoveStack* GenerateMoves_mt1 (
 		MoveType MT,
 		Color us,
 		MoveStack* moveStackList, const Position& pos
-	) {
+	) const {
 		bool ALL = false;
 
 		assert(MT == Capture || MT == NonCapture || MT == CapturePlusPro || MT == NonCaptureMinusPro, "");
@@ -54,10 +71,10 @@ public:
 
 	// 部分特殊化
 	// 駒打ち生成
-	static MoveStack* GenerateMoves_Drop (
+	MoveStack* GenerateMoves_Drop (
 		Color us,
 		MoveStack* pMovestack, const Position& pos
-	) {
+	) const {
 		const Bitboard target = pos.GetEmptyBB();
 		pMovestack = g_dropMoveGenerator.GenerateDropMoves(us, pMovestack, pos, target);//<US>
 		return pMovestack;
@@ -69,12 +86,12 @@ public:
 	// 王手をしている駒による王手は避けるが、
 	// 玉の移動先に敵の利きがある場合と、pinされている味方の駒を動かした場合、非合法手を生成する。
 	// そのため、pseudo legal である。
-	static MoveStack* GenerateMoves_Evasion (
+	MoveStack* GenerateMoves_Evasion (
 		Color us,
 		bool ALL,
 		MoveStack* pMovestack,
 		const Position& pos
-	) {
+	) const {
 		assert(pos.IsOK());
 		assert(pos.InCheck());
 
@@ -107,14 +124,129 @@ public:
 			// 両王手のときには二度連続で呼ばれるため、= ではなく |= を使用している。
 			// 最初に呼ばれたときは、bannedKingToBB == allZeroBB() である。
 			// todo: FOECE_INLINE と template 省いてNPS比較
-			//PieceArray::m_pieceAbstractArray[pos.GetPiece(checkSq)].MakeBanned2KingTo(bannedKingToBB, pos, checkSq, ksq);
+			//g_pieceArray.m_pieceAbstractArray[pos.GetPiece(checkSq)]->MakeBanned2KingTo(bannedKingToBB, pos, checkSq, ksq);
+			//
+			// (^q^)黒も白も、分けずに一緒にやるぜ☆
+			//
 			//*
-			// 白か黒かによって分けている☆
-			(Them == Black ?
-				BannedKingToMaker::DoMakeBannedKingTo_black(bannedKingToBB, pos, checkSq, ksq) :
-				BannedKingToMaker::DoMakeBannedKingTo_white(bannedKingToBB, pos, checkSq, ksq)
-				);
+			switch (pos.GetPiece(checkSq))//templateの中なので改造しにくいぜ☆（＾ｑ＾）
+			{
+				//────────────────────────────────────────────────────────────────────────────────
+				// (^q^)まず、黒ピースからだぜ☆
+				//────────────────────────────────────────────────────────────────────────────────
+
+				// (^q^)ビットが 0 のとき☆？
+				//		case Empty: assert(false); break; // 最適化の為のダミー
+
+			case Piece::N01_BPawn:
+			case Piece::N03_BKnight:
+				// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
+				// よって、ここでは何もしない。
+				assert(pos.GetPiece(checkSq) == N01_BPawn || pos.GetPiece(checkSq) == N03_BKnight);
+				break;
+
+			case Piece::N02_BLance:
+				bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::Black, checkSq);
+				break;
+
+			case Piece::N04_BSilver:
+				bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::Black, checkSq);
+				break;
+
+			case Piece::N07_BGold:
+			case Piece::N09_BProPawn:
+			case Piece::N10_BProLance:
+			case Piece::N11_BProKnight:
+			case Piece::N12_BProSilver:
+				bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::Black, checkSq);
+				break;
+
+			case Piece::N05_BBishop:
+				bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N13_BHorse:
+				bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N06_BRook:
+				bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N14_BDragon:
+				if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
+					// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
+					// dragonAttackToEdge(checkSq) は使えない。
+					bannedKingToBB |= PieceTypeArray::m_dragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+				}
+				else {
+					bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
+				}
+				break;
+
+				//────────────────────────────────────────────────────────────────────────────────
+				// (^q^)次は、白ピースだぜ☆
+				//────────────────────────────────────────────────────────────────────────────────
+
+				// (^q^)ビットが 0 のとき☆？
+				//		case Empty: assert(false); break; // 最適化の為のダミー
+
+				// (^q^)色が黒なら BPawn、そうでなければ WPawn のケースだぜ☆
+			case Piece::N17_WPawn:
+				// (^q^)色が黒なら BKnight、そうでなければ WKnight のケースだぜ☆
+			case Piece::N19_WKnight:
+				// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
+				// よって、ここでは何もしない。
+				assert(
+					pos.GetPiece(checkSq) == N17_WPawn ||
+					pos.GetPiece(checkSq) == N19_WKnight
+					);
+				break;
+
+			case Piece::N18_WLance:
+				bannedKingToBB |= g_lanceAttackBb.GetControllBbToEdge(Color::White, checkSq);
+				break;
+
+			case Piece::N20_WSilver:
+				bannedKingToBB |= g_silverAttackBb.GetControllBb(Color::White, checkSq);
+				break;
+
+			case Piece::N23_WGold:
+			case Piece::N25_WProPawn:
+			case Piece::N26_WProLance:
+			case Piece::N27_WProKnight:
+			case Piece::N28_WProSilver:
+				bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::White, checkSq);
+				break;
+
+			case Piece::N21_WBishop:
+				bannedKingToBB |= g_bishopAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N29_WHorse:
+				bannedKingToBB |= g_horseAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N22_WRook:
+				bannedKingToBB |= g_rookAttackBb.GetControllBbToEdge(checkSq);
+				break;
+
+			case Piece::N30_WDragon:
+				if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
+					// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
+					// dragonAttackToEdge(checkSq) は使えない。
+					bannedKingToBB |= PieceTypeArray::m_dragon.GetAttacks2From(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+				}
+				else {
+					bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
+				}
+				break;
+			default:
+				UNREACHABLE;
+			}
 			//*/
+
+
 
 		} while (bb.Exists1Bit());
 
@@ -157,10 +289,10 @@ public:
 	// 王手が掛かっていないときの指し手生成
 	// これには、玉が相手駒の利きのある地点に移動する自殺手と、pin されている駒を動かす自殺手を含む。
 	// ここで生成した手は pseudo legal
-	static MoveStack* GenerateMoves_NonEvasion(
+	MoveStack* GenerateMoves_NonEvasion(
 		Color us,
 		MoveStack* pMovestack, const Position& pos
-	) {
+	) const {
 		Bitboard target = pos.GetEmptyBB();
 
 		pMovestack = g_dropMoveGenerator.GenerateDropMoves(us, pMovestack, pos, target);//<US>
@@ -182,10 +314,10 @@ public:
 	// 部分特殊化
 	// 連続王手の千日手以外の反則手を排除した合法手生成
 	// そんなに速度が要求されるところでは呼ばない。
-	static MoveStack* GenerateMoves_Legal (
+	MoveStack* GenerateMoves_Legal (
 		Color us,
 		MoveStack* moveStackList, const Position& pos
-	) {
+	) const {
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();
 
@@ -208,10 +340,10 @@ public:
 
 	// 部分特殊化
 	// Evasion のときに歩、飛、角と、香の2段目の不成も生成する。
-	static MoveStack* GenerateMoves_LegalAll(
+	MoveStack* GenerateMoves_LegalAll(
 		Color us,
 		MoveStack* moveStackList, const Position& pos
-	) {
+	) const {
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();
 
@@ -235,3 +367,5 @@ public:
 
 };
 
+
+extern MoveGenerator100 g_moveGenerator100;

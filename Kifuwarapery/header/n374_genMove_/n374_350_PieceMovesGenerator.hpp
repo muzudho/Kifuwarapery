@@ -2,13 +2,22 @@
 
 
 #include "../n080_common__/n080_100_common.hpp"
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n110_square__/n110_200_rank.hpp"
+#include "../n110_square__/n110_250_squareDelta.hpp"
+#include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_150_piece.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
+#include "../n220_position/n220_640_utilAttack.hpp"
+#include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
+#include "../n372_genMoveP/n372_500_pieceArray.hpp"
 #include "n374_050_generateMoves.hpp"
 #include "n374_250_bishopRookMovesGenerator.hpp"
-#include "../n376_genMoveP/n376_500_pieceArray.hpp"
 
 
 // 金, 成り金、馬、竜の指し手生成

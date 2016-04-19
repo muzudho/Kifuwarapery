@@ -33,12 +33,12 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(MoveGenerator200::GenerateMoves_2(NonCaptureMinusPro,movePicker.GetCurrMove(), movePicker.GetPos()));
+		movePicker.SetLastMove(g_moveGenerator200.GenerateMoves_2(NonCaptureMinusPro,movePicker.GetCurrMove(), movePicker.GetPos()));
 
 		movePicker.ScoreNonCapturesMinusPro<false>();
 		movePicker.SetCurrMove(movePicker.GetLastMove());
 
-		movePicker.SetLastMoveAndLastNonCaputre(MoveGenerator200::GenerateMoves_2(Drop,movePicker.GetCurrMove(), movePicker.GetPos()));
+		movePicker.SetLastMoveAndLastNonCaputre(g_moveGenerator200.GenerateMoves_2(Drop,movePicker.GetCurrMove(), movePicker.GetPos()));
 		movePicker.ScoreNonCapturesMinusPro<true>();
 
 		movePicker.SetCurrMove(movePicker.GetFirstMove());

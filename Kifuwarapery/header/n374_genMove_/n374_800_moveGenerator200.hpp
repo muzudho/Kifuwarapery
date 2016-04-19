@@ -6,66 +6,65 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_genMoveP/n372_070_pieceAbstract.hpp"
+#include "../n372_genMoveP/n372_500_pieceArray.hpp"
 #include "n374_050_generateMoves.hpp"
 #include "n374_250_bishopRookMovesGenerator.hpp"
 #include "n374_350_PieceMovesGenerator.hpp"
-#include "n374_650_bannedKingToMaker.hpp"
 #include "n374_750_dropMoveGenerator.hpp"
 #include "n374_780_MoveGenerator100.hpp""
-#include "../n376_genMoveP/n376_500_pieceArray.hpp"
 
 
 // MoveType の全ての指し手を生成
 class MoveGenerator200 {
 public:
 
-	static MoveStack* GenerateMoves_2(
+	MoveStack* GenerateMoves_2(
 		MoveType mt,
 		MoveStack* moveStackList, const Position& pos
-	) {
+	) const {
 		switch(mt){
 		case Capture:
 		case NonCapture:
 		case CapturePlusPro:
 		case NonCaptureMinusPro:
 		{
-			return MoveGenerator100::GenerateMoves_mt1(mt, pos.GetTurn(), moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_mt1(mt, pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		case Drop:
 		{
-			return MoveGenerator100::GenerateMoves_Drop(pos.GetTurn(), moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_Drop(pos.GetTurn(), moveStackList, pos);
 		}
 		case Evasion:
 		{
-			return MoveGenerator100::GenerateMoves_Evasion(pos.GetTurn(), false/*FIXME:*/, moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_Evasion(pos.GetTurn(), false/*FIXME:*/, moveStackList, pos);
 		}
 		case NonEvasion:
 		{
-			return MoveGenerator100::GenerateMoves_NonEvasion(pos.GetTurn(), moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_NonEvasion(pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		case Legal:
 		{
-			return MoveGenerator100::GenerateMoves_Legal(pos.GetTurn(), moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_Legal(pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		case LegalAll:
 		{
-			return MoveGenerator100::GenerateMoves_LegalAll(pos.GetTurn(), moveStackList, pos);
+			return g_moveGenerator100.GenerateMoves_LegalAll(pos.GetTurn(), moveStackList, pos);
 		}
 		break;
 		default:
 			UNREACHABLE;
-			//return MoveGenerator100::GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
+			//return g_moveGenerator100.GenerateMoves<MT>()(pos.GetTurn(), moveStackList, pos);
 		}
 	}
 
 
 	// pin は省かない。
-	static MoveStack* GenerateMoves_3(
+	MoveStack* GenerateMoves_3(
 		MoveStack* moveStackList, const Position& pos, const Square to
-	) {
+	) const {
 		const Color us = pos.GetTurn();
 
 		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
@@ -80,3 +79,6 @@ public:
 	}
 
 };
+
+
+extern MoveGenerator200 g_moveGenerator200;

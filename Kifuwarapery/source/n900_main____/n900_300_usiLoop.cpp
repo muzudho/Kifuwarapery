@@ -35,15 +35,15 @@ void measureGenerateMoves(const Position& pos) {
 	if (pos.InCheck()) {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = MoveGenerator200::GenerateMoves_2(Evasion,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(Evasion,pms, pos);
 		}
 	}
 	else {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = MoveGenerator200::GenerateMoves_2(CapturePlusPro,pms, pos);
-			pms = MoveGenerator200::GenerateMoves_2(NonCaptureMinusPro,pms, pos);
-			pms = MoveGenerator200::GenerateMoves_2(Drop,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(CapturePlusPro,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(NonCaptureMinusPro,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(Drop,pms, pos);
 			//			pms = generateMoves<PseudoLegal>(pms, pos);
 			//			pms = generateMoves<Legal>(pms, pos);
 		}
