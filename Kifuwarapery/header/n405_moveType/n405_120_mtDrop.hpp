@@ -20,8 +20,7 @@ public:
 	) const {
 		const Bitboard target = mtEvent.m_pos.GetEmptyBB();
 
-		mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(
-			mtEvent, target);//<US>
+		mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(mtEvent, target);//<US>
 		return mtEvent.m_moveStackList;
 	}
 

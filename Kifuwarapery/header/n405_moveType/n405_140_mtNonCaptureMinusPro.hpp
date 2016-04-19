@@ -18,25 +18,27 @@ public:
 		MoveTypeEvent& mtEvent,
 		bool all = false
 	) const {
-		MoveType MT = N04_NonCaptureMinusPro;
-
-		// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
-		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(mtEvent.m_us,			(mtEvent.m_us == Black ? Rank6 : Rank4));
-		const Bitboard TRank1_6BB = g_inFrontMaskBb.GetInFrontMask(mtEvent.m_oppositeColor, (mtEvent.m_us == Black ? Rank7 : Rank3));
-		const Bitboard TRank1_7BB = g_inFrontMaskBb.GetInFrontMask(mtEvent.m_oppositeColor, (mtEvent.m_us == Black ? Rank8 : Rank2));
-
-		const Bitboard targetPawn = mtEvent.m_pos.GetOccupiedBB().NotThisAnd(TRank1_6BB);
+		const Bitboard targetPawn = mtEvent.m_pos.GetOccupiedBB().NotThisAnd(mtEvent.m_tRank1_6BB);
 		const Bitboard targetOther = mtEvent.m_pos.GetEmptyBB();
-		const Square ksq = mtEvent.m_pos.GetKingSquare(mtEvent.m_oppositeColor);
+		// 相手玉の位置
+		const Square oppositeKsq = mtEvent.m_pos.GetKingSquare(mtEvent.m_oppositeColor);
 
-		mtEvent.m_moveStackList = GeneratePieceMoves_N01_Pawn(MT, mtEvent, all, targetPawn, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N02_Lance(MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N03_Knight(MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N04_Silver(MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N05_Bishop(MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N06_Rook(MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, MT, mtEvent, all, targetOther, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N08_King(MT, mtEvent, all, targetOther, ksq);
+		PieceMovesEvent pmEvent(
+			MoveType::N04_NonCaptureMinusPro,
+			mtEvent,
+			all,
+			targetOther,
+			oppositeKsq
+		);
+		// 金、成金、馬、竜の指し手を作る順位を上げてみるぜ☆（＾ｑ＾）
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(pmEvent);
 
 		return mtEvent.m_moveStackList;
 	}

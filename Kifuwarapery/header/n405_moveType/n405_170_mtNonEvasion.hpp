@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
@@ -24,16 +26,25 @@ public:
 
 		mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(mtEvent, target);//<US>
 		target |= mtEvent.m_pos.GetBbOf(mtEvent.m_oppositeColor);
-		const Square ksq = mtEvent.m_pos.GetKingSquare(mtEvent.m_oppositeColor);
+		// 相手玉の位置
+		const Square oppositeKsq = mtEvent.m_pos.GetKingSquare(mtEvent.m_oppositeColor);
 
-		mtEvent.m_moveStackList = GeneratePieceMoves_N01_Pawn(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N02_Lance(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N03_Knight(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N04_Silver(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N05_Bishop(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N06_Rook(N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, N07_NonEvasion, mtEvent, false, target, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N08_King(N07_NonEvasion, mtEvent, false, target, ksq);
+		PieceMovesEvent pmEvent(
+			N07_NonEvasion,
+			mtEvent,
+			false,
+			target,
+			oppositeKsq
+		);
+		// 金、成金、馬、竜の指し手を作る順位を上げてみるぜ☆（＾ｑ＾）
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(pmEvent);
 
 		return mtEvent.m_moveStackList;
 	}

@@ -79,13 +79,23 @@ public:
 		// pin されているかどうかは movePicker か search で調べる。
 		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 		const Bitboard target2 = target1 | checkers;
-		mtEvent.m_moveStackList = GeneratePieceMoves_N01_Pawn(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N02_Lance(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N03_Knight(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N04_Silver(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N05_Bishop(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_N06_Rook(N06_Evasion, mtEvent, all, target2, ksq);
-		mtEvent.m_moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, N06_Evasion, mtEvent, all, target2, ksq);
+
+		PieceMovesEvent pmEvent(
+			N06_Evasion,
+			mtEvent,
+			all,
+			target2,
+			ksq
+		);
+		// 金、成金、馬、竜の指し手を作る順位を上げてみるぜ☆（＾ｑ＾）
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(pmEvent);
+		mtEvent.m_moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(pmEvent);
+
 
 		if (target1.Exists1Bit()) {
 			mtEvent.m_moveStackList = g_dropMoveGenerator.GenerateDropMoves(mtEvent, target1);//<US>
