@@ -10,11 +10,7 @@
 
 class PieceWProSilver : public PieceAbstract {
 public:
-	static void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
 		bannedKingToBB |= g_goldAttackBb.GetControllBb(Color::White, checkSq);
 	}
-
 };
-
-
-//extern PieceWProSilver g_pieceWProSilver;

@@ -12,7 +12,7 @@
 
 class PieceWDragon : public PieceAbstract {
 public:
-	static void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
 		if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 			// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 			// dragonAttackToEdge(checkSq) は使えない。
@@ -22,8 +22,4 @@ public:
 			bannedKingToBB |= g_dragonAttackBb.GetControllBbToEdge(checkSq);
 		}
 	}
-
 };
-
-
-//extern PieceWDragon g_pieceWDragon;

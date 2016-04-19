@@ -9,11 +9,7 @@
 
 class PieceWKing : public PieceAbstract {
 public:
-	static void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
 		UNREACHABLE;
 	}
-
 };
-
-
-//extern PieceWKing g_pieceWKing;

@@ -9,7 +9,7 @@
 
 class PieceBPawn : public PieceAbstract {
 public:
-	static void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
 		// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 		// よって、ここでは何もしない。
 		assert(pos.GetPiece(checkSq) == N01_BPawn || pos.GetPiece(checkSq) == N03_BKnight);
@@ -17,5 +17,3 @@ public:
 
 };
 
-
-//extern PieceBPawn g_pieceBPawn;

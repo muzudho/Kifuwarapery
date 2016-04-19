@@ -9,7 +9,7 @@
 
 class PieceWPawn : public PieceAbstract {
 public:
-	static void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
 		// 歩、桂馬で王手したときは、どこへ逃げても、その駒で取られることはない。
 		// よって、ここでは何もしない。
 		assert(
@@ -17,8 +17,4 @@ public:
 			pos.GetPiece(checkSq) == N19_WKnight
 			);
 	}
-
 };
-
-
-//extern PieceWPawn g_pieceWPawn;
