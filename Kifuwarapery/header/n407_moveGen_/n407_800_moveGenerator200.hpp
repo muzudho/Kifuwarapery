@@ -8,7 +8,6 @@
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../n372_piece___/n372_070_pieceAbstract.hpp"
 #include "../n372_piece___/n372_500_pieceArray.hpp"
-#include "../n374_genMove_/n374_040_mtEvent.hpp"
 #include "../n374_genMove_/n374_250_bishopRookMovesGenerator.hpp"
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "../n374_genMove_/n374_750_dropMoveGenerator.hpp"
@@ -32,16 +31,9 @@ class MoveGenerator200 {
 public:
 
 	inline MoveStack* GenerateMoves_2(
-		MoveType mt,
-		MoveStack* moveStackList,
-		const Position& pos
+		MoveType mt, MoveStack* moveStackList, const Position& pos
 	) const {
-		MoveTypeEvent mtEvent(
-			moveStackList,
-			pos,
-			pos.GetTurn()//(^q^)追加
-		);
-		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMoves1(mtEvent);
+		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMove(moveStackList, pos);
 	}
 
 
