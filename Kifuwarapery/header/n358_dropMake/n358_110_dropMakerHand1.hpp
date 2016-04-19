@@ -19,96 +19,57 @@ class DropMakerHand1 : public DropMakerAbstract {
 public:
 
 	MoveStack* MakeDropMovesToRank9ExceptNL(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
-		Bitboard toBB = target & TRank9BB;
-		do {
-			while (toBB.GetP(0)) {
-				Square iTo = toBB.PopFirstOneRightFromI9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-				};
-			}
-			while (toBB.GetP(1)) {
-				Square iTo = toBB.PopFirstOneLeftFromB9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightLanceIdx + 0], iTo); pMovestack++;
-				};
-			}
-		} while (false);
-		return pMovestack;
+		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank9BB;
+		while (toBB.GetP(0)) {
+			Square iTo = toBB.PopFirstOneRightFromI9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		while (toBB.GetP(1)) {
+			Square iTo = toBB.PopFirstOneLeftFromB9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		return dmEvent.m_pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
-		Bitboard toBB = target & TRank8BB;
-		do {
-			while (toBB.GetP(0)) {
-				Square iTo = toBB.PopFirstOneRightFromI9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-				};
-			}
-			while (toBB.GetP(1)) {
-				Square iTo = toBB.PopFirstOneLeftFromB9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[noKnightIdx + 0], iTo); pMovestack++;
-				};
-			}
-		} while (false);
-		return pMovestack;
+		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank8BB;
+		while (toBB.GetP(0)) {
+			Square iTo = toBB.PopFirstOneRightFromI9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		while (toBB.GetP(1)) {
+			Square iTo = toBB.PopFirstOneLeftFromB9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		return dmEvent.m_pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank1234567(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
-		Bitboard toBB = target & ~(TRank8BB | TRank9BB);
-		do {
-			while (toBB.GetP(0)) {
-				Square iTo = toBB.PopFirstOneRightFromI9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-				};
-			}
-			while (toBB.GetP(1)) {
-				Square iTo = toBB.PopFirstOneLeftFromB9();
-				{
-					pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo); pMovestack++;
-				};
-			}
-		} while (false);
-		return pMovestack;
+		Bitboard toBB = dmEvent.m_target & ~(dmEvent.m_tRank8BB | dmEvent.m_tRank9BB);
+		while (toBB.GetP(0)) {
+			Square iTo = toBB.PopFirstOneRightFromI9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		while (toBB.GetP(1)) {
+			Square iTo = toBB.PopFirstOneLeftFromB9();
+			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			dmEvent.m_pMovestack++;
+		}
+		return dmEvent.m_pMovestack;
 	}
 
 };

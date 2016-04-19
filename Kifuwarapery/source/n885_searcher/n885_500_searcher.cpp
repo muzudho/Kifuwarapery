@@ -38,6 +38,7 @@ using namespace std;
 
 extern const InFrontMaskBb g_inFrontMaskBb;
 extern NodeTypeAbstract* g_nodeTypeArray[];
+extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 // 一箇所でしか呼ばないので、FORCE_INLINE
@@ -862,15 +863,8 @@ Score Searcher::Search(
 
 		bool isReturn = false;
 		Score resultScore = Score::ScoreNone;
-		switch (pos.IsDraw(16)) {//templateの中なので改造しにくいぜ☆（＾ｑ＾）
-		case N00_NotRepetition      :	RepetitionTypeNot().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
-		case N01_RepetitionDraw		:	RepetitionTypeDraw().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
-		case N02_RepetitionWin		:	RepetitionTypeWin().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
-		case N03_RepetitionLose		:	RepetitionTypeLose().CheckStopAndMaxPly(isReturn, resultScore, this, ss);		break;
-		case N04_RepetitionSuperior	:	RepetitionTypeSuperior().CheckStopAndMaxPly(isReturn, resultScore, this, ss);	break;
-		case N05_RepetitionInferior	:	RepetitionTypeInferior().CheckStopAndMaxPly(isReturn, resultScore, this, ss);	break;
-		default						:	UNREACHABLE;
-		}
+
+		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(isReturn, resultScore, this, ss);
 
 		if (isReturn)
 		{

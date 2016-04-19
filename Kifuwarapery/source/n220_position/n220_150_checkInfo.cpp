@@ -32,7 +32,7 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_checkBB[N07_Gold] = PieceTypeArray::m_gold.GetAttacks2From( g_nullBitboard, them, ksq);
 	m_checkBB[N08_King] = Bitboard::CreateAllZeroBB();
 	// todo: ここで AVX2 使えそう。
-	//       checkBB のreadアクセスは switch (pt) で場合分けして、余計なコピー減らした方が良いかも。
+	//       checkBB のreadアクセスは ｓｗｉｔｃｈ (pt) で場合分けして、余計なコピー減らした方が良いかも。
 	m_checkBB[N09_ProPawn] = m_checkBB[N07_Gold];
 	m_checkBB[N10_ProLance] = m_checkBB[N07_Gold];
 	m_checkBB[N11_ProKnight] = m_checkBB[N07_Gold];

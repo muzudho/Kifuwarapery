@@ -951,6 +951,9 @@
     <ClInclude Include="header\n886_repeType\n886_500_rtArray.hpp">
       <Filter>header\n886_repeType</Filter>
     </ClInclude>
+    <ClInclude Include="header\n358_dropMake\n358_040_dropMakerEvent.hpp">
+      <Filter>header\n358_dropMake</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

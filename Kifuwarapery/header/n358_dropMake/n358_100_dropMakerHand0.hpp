@@ -18,54 +18,27 @@
 class DropMakerHand0 : public DropMakerAbstract {
 public:
 	MoveStack* MakeDropMovesToRank9ExceptNL(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const  {
 		// 桂馬、香車 以外の持ち駒がない。
-		return pMovestack;
+		return dmEvent.m_pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		// 桂馬 以外の持ち駒がない。
-		return pMovestack;
+		return dmEvent.m_pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank1234567(
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
+		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		assert(false);// 最適化の為のダミー
-		return pMovestack;
+		return dmEvent.m_pMovestack;
 	}
 
 };

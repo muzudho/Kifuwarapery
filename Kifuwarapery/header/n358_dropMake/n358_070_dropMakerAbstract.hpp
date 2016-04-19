@@ -12,16 +12,16 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_utilMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "n358_040_dropMakerEvent.hpp"
 
 
 class DropMakerAbstract {
-private:
-	int m_noUse_;
-
 public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank9ExceptNL(
+		DropMakerEvent& dmEvent,
+		/*
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -32,16 +32,14 @@ public:
 		const int noKnightLanceIdx,
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
+		*/
 		PieceType haveHandArr[6]
 	) const = 0;
-	/* {
-		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
-		UNREACHABLE;
-		return pMovestack;
-	};*/
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank8ExceptN(
+		DropMakerEvent& dmEvent,
+		/*
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -52,16 +50,14 @@ public:
 		const int noKnightLanceIdx,
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
+		*/
 		PieceType haveHandArr[6]
 	) const = 0;
-	/*{
-		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
-		UNREACHABLE;
-		return pMovestack;
-	};*/
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank1234567(
+		DropMakerEvent& dmEvent,
+		/*
 		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
@@ -72,12 +68,9 @@ public:
 		const int noKnightLanceIdx,
 		const Bitboard& TRank8BB,
 		const Bitboard& TRank9BB,
+		*/
 		PieceType haveHandArr[6]
-	) const = 0;/* {
-		// このクラスのメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
-		UNREACHABLE;
-		return pMovestack;
-	};*/
+	) const = 0;
 
 };
 

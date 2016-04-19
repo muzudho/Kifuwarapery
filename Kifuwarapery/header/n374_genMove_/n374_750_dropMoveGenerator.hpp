@@ -44,7 +44,7 @@ public:
 
 
 	// 駒打ちの場合
-	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって switch で展開している。
+	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって ｓｗｉｔｃｈ で展開している。
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
 	MoveStack* GenerateDropMoves(
@@ -118,10 +118,7 @@ public:
 			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
-			// 桂馬、香車 以外の持ち駒があれば、
-			// 一段目に対して、桂馬、香車以外の指し手を生成。
-			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
-			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
+			DropMakerEvent dmEvent(
 				us,
 				pMovestack,
 				pos,
@@ -131,38 +128,26 @@ public:
 				noKnightIdx,
 				noKnightLanceIdx,
 				TRank8BB,
-				TRank9BB,
+				TRank9BB
+			);
+			// 桂馬、香車 以外の持ち駒があれば、
+			// 一段目に対して、桂馬、香車以外の指し手を生成。
+			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
+			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
+				dmEvent,
 				haveHandArr
 				);
 
 			// 桂馬以外の持ち駒があれば、
 			// 二段目に対して、桂馬以外の指し手を生成。
 			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
+				dmEvent,
 				haveHandArr
 				);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 			pMovestack = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
-				us,
-				pMovestack,
-				pos,
-				target,
-				hand,
-				haveHandNum,
-				noKnightIdx,
-				noKnightLanceIdx,
-				TRank8BB,
-				TRank9BB,
+				dmEvent,
 				haveHandArr
 				);
 		}
