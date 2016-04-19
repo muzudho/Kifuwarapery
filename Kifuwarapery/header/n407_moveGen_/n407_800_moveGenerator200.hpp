@@ -31,31 +31,14 @@
 class MoveGenerator200 {
 public:
 
-	MoveStack* GenerateMoves_2(
-		MoveType mt,
-		MoveStack* moveStackList, const Position& pos
+	inline MoveStack* GenerateMoves_2(
+		MoveType mt, MoveStack* moveStackList, const Position& pos
 	) const {
-
 		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMove(moveStackList, pos);
-		/*
-		switch(mt){
-		case N00_Capture:			return MoveTypeCapture().GenerateMove( moveStackList, pos);
-		case N01_NonCapture:		return MoveTypeNonCapture().GenerateMove( moveStackList, pos);
-		case N03_CapturePlusPro:	return MoveTypeCapturePlusPro().GenerateMove( moveStackList, pos);
-		case N04_NonCaptureMinusPro:return MoveTypeNonCapture().GenerateMove( moveStackList, pos);
-		case N02_Drop:				return MoveTypeDrop().GenerateMove( moveStackList, pos);
-		case N06_Evasion:			return MoveTypeEvasion().GenerateMove( moveStackList, pos);
-		case N07_NonEvasion:		return MoveTypeNonEvasion().GenerateMove( moveStackList, pos);
-		case N08_Legal:				return MoveTypeLegal().GenerateMove( moveStackList, pos);
-		case N09_LegalAll:			return MoveTypeLegalAll().GenerateMove( moveStackList, pos);
-		default:
-			UNREACHABLE;
-		}
-		*/
 	}
 
 
-	// pin は省かない。
+	// pin は省かない。リキャプチャー専用か。
 	MoveStack* GenerateMoves_3(
 		MoveStack* moveStackList, const Position& pos, const Square to
 	) const {

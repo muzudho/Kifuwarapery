@@ -17,6 +17,7 @@
 
 class MoveTypeArray {
 public:
+	//(^q^)const型の配列を作るには、static でやるんだぜ☆
 	static const MoveTypeCapture m_moveTypeCapture;
 	static const MoveTypeNonCapture m_moveTypeNonCapture;
 	static const MoveTypeDrop m_moveTypeDrop;

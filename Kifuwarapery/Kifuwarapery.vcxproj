@@ -302,7 +302,6 @@
     <ClInclude Include="header\n372_piece___\n372_500_pieceArray.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_050_generateMoves.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp" />
-    <ClInclude Include="header\n374_genMove_\n374_780_MoveGenerator100.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp" />
     <ClInclude Include="header\n405_moveType\n405_070_mtAbstract.hpp" />
@@ -499,7 +498,6 @@
     <ClCompile Include="source\n372_piece___\n372_500_pieceArray.cpp" />
     <ClCompile Include="source\n374_genMove_\n374_500_generateMoves.cpp" />
     <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp" />
-    <ClCompile Include="source\n374_genMove_\n374_780_MoveGenerator100.cpp" />
     <ClCompile Include="source\n405_moveType\n405_070_mtAbstract.cpp" />
     <ClCompile Include="source\n405_moveType\n405_100_mtCapture.cpp" />
     <ClCompile Include="source\n405_moveType\n405_110_mtNonCapture.cpp" />

@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-
+/*
 #include "../n105_color___/n105_500_utilColor.hpp"
 #include "../n110_square__/n110_250_squareDelta.hpp"
 #include "../n110_square__/n110_400_squareRelation.hpp"
@@ -47,24 +47,4 @@
 
 extern const InFrontMaskBb g_inFrontMaskBb;
 extern SquareRelation g_squareRelation;
-
-
-/*
-// 明示的なインスタンス化
-// これが無いと、他のファイルから呼んだ時に、
-// 実体が無いためにリンクエラーになる。
-// ちなみに、特殊化されたテンプレート関数は、明示的なインスタンス化の必要はない。
-// 実装を cpp に置くことで、コンパイル時間の短縮が出来る。
-//template MoveStack* generateMoves<Capture           >(MoveStack* moveStackList, const Position& pos);
-//template MoveStack* generateMoves<NonCapture        >(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<Drop              >(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<CapturePlusPro    >(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<NonCaptureMinusPro>(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<Evasion           >(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<NonEvasion        >(MoveStack* moveStackList, const Position& pos);
-template MoveStack* generateMoves<Legal             >(MoveStack* moveStackList, const Position& pos);
-#if !defined NDEBUG || defined LEARN
-template MoveStack* generateMoves<LegalAll          >(MoveStack* pMovestack, const Position& GetPos);
-#endif
-template MoveStack* generateMoves<Recapture         >(MoveStack* moveStackList, const Position& pos, const Square to);
 */
