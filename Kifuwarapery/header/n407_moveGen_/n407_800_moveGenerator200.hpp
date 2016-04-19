@@ -35,6 +35,9 @@ public:
 		MoveType mt,
 		MoveStack* moveStackList, const Position& pos
 	) const {
+
+		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMove(moveStackList, pos);
+		/*
 		switch(mt){
 		case N00_Capture:			return MoveTypeCapture().GenerateMove( moveStackList, pos);
 		case N01_NonCapture:		return MoveTypeNonCapture().GenerateMove( moveStackList, pos);
@@ -48,6 +51,7 @@ public:
 		default:
 			UNREACHABLE;
 		}
+		*/
 	}
 
 
