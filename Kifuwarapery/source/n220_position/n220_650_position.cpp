@@ -26,7 +26,7 @@
 #include "../../header/n350_pieceTyp/n350_230_ptHorse.hpp"
 #include "../../header/n350_pieceTyp/n350_240_ptDragon.hpp"
 #include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
-#include "../../header/n374_genMove_/n374_900_moveList.hpp"
+#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
@@ -200,7 +200,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 // 過去(又は現在)に生成した指し手が現在の局面でも有効か判定。
 // あまり速度が要求される場面で使ってはいけない。
 bool Position::MoveIsLegal(const Move GetMove) const {
-	return MoveList<LegalAll>(*this).Contains(GetMove);
+	return MoveList<N09_LegalAll>(*this).Contains(GetMove);
 }
 #endif
 

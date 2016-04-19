@@ -4,7 +4,7 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
-#include "../n374_genMOve_/n374_800_moveGenerator200.hpp"
+#include "n407_800_moveGenerator200.hpp"
 
 
 template <MoveType MT>

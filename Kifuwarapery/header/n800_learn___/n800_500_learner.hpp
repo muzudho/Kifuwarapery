@@ -357,7 +357,7 @@ private:
 						auto& recordPv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
 						bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(recordPv), std::IsEnd(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
-						for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
+						for (MoveList<N09_LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 							if (ml.GetMove() != bmd.GetMove) {
 								GetPos.GetSearcher()->m_alpha = recordScore - FVWindow;
 								GetPos.GetSearcher()->m_beta  = recordScore + FVWindow;

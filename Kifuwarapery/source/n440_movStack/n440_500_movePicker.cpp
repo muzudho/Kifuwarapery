@@ -6,7 +6,7 @@
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
-#include "../../header/n374_genMove_/n374_900_moveList.hpp"
+#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 
 #include "../../header/n450_movPhase/n450_100_mainSearch.hpp"

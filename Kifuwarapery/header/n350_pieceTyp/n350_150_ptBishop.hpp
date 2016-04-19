@@ -36,8 +36,8 @@ public:
 		(*moveStackList++).m_move = (
 			(UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))
 				) ?
-			g_makePromoteMove.MakePromoteMove2<Capture>(this->GetNumber(), from, to, pos) :
-			g_makePromoteMove.MakeNonPromoteMove<Capture>(this->GetNumber(), from, to, pos)
+			g_makePromoteMove.MakePromoteMove2<N00_Capture>(this->GetNumber(), from, to, pos) :
+			g_makePromoteMove.MakeNonPromoteMove<N00_Capture>(this->GetNumber(), from, to, pos)
 			);
 	}
 

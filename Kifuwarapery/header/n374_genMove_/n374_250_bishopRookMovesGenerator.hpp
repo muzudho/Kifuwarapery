@@ -35,7 +35,7 @@ public:
 				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
 					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, pt, from, to, pos);
-					if (mt == NonEvasion || all)
+					if (mt == N07_NonEvasion || all)
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。

@@ -6,7 +6,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n374_genMove_/n374_050_generateMoves.hpp"
-#include "../n374_genMove_/n374_800_moveGenerator200.hpp"
+#include "../n407_moveGen_/n407_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_500_movePicker.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
@@ -28,7 +28,7 @@ public:
 	};
 
 	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(g_moveGenerator200.GenerateMoves_2(Evasion,movePicker.GetCurrMove(), movePicker.GetPos()) );
+		movePicker.SetLastMove(g_moveGenerator200.GenerateMoves_2(N06_Evasion,movePicker.GetCurrMove(), movePicker.GetPos()) );
 		if (movePicker.GetCurrMove() + 1 < movePicker.GetLastMove()) {
 			movePicker.ScoreEvasions();
 		}

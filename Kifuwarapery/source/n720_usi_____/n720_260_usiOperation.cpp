@@ -4,7 +4,7 @@
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n374_genMove_/n374_900_moveList.hpp"
+#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n885_searcher/n885_500_searcher.hpp"
 
@@ -87,7 +87,7 @@ void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move Get
 #if !defined NDEBUG
 // for debug
 Move UsiOperation::usiToMoveDebug(const Position& GetPos, const std::string& moveStr) {
-	for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
+	for (MoveList<N09_LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 		if (moveStr == ml.GetMove().ToUSI()) {
 			return ml.GetMove();
 		}
@@ -97,7 +97,7 @@ Move UsiOperation::usiToMoveDebug(const Position& GetPos, const std::string& mov
 
 
 Move UsiOperation::csaToMoveDebug(const Position& GetPos, const std::string& moveStr) {
-	for (MoveList<LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
+	for (MoveList<N09_LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 		if (moveStr == ml.GetMove().ToCSA()) {
 			return ml.GetMove();
 		}
@@ -182,13 +182,13 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = g_makePromoteMove.MakeNonPromoteMove<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.MakeNonPromoteMove<N00_Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return Move::GetMoveNone();
 			}
-			move = g_makePromoteMove.MakePromoteMove2<Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.MakePromoteMove2<N00_Capture>(UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();
@@ -233,11 +233,11 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = g_makePromoteMove.MakeNonPromoteMove<Capture>(ptFrom, from, to, pos);
+			move = g_makePromoteMove.MakeNonPromoteMove<N00_Capture>(ptFrom, from, to, pos);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = g_makePromoteMove.MakePromoteMove2<Capture>(ptFrom, from, to, pos);
+			move = g_makePromoteMove.MakePromoteMove2<N00_Capture>(ptFrom, from, to, pos);
 		}
 		else {
 			return Move::GetMoveNone();

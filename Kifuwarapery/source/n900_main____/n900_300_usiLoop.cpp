@@ -3,8 +3,8 @@
 #include "../../header/n165_movStack/n165_600_utilMove.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n374_genMove_/n374_800_moveGenerator200.hpp"
-#include "../../header/n374_genMove_/n374_900_moveList.hpp"
+#include "../../header/n407_moveGen_/n407_800_moveGenerator200.hpp"
+#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_movePicker.hpp"
 #include "../../header/n480_tt______/n480_300_tt.hpp"
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
@@ -35,15 +35,15 @@ void measureGenerateMoves(const Position& pos) {
 	if (pos.InCheck()) {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = g_moveGenerator200.GenerateMoves_2(Evasion,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(N06_Evasion,pms, pos);
 		}
 	}
 	else {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
-			pms = g_moveGenerator200.GenerateMoves_2(CapturePlusPro,pms, pos);
-			pms = g_moveGenerator200.GenerateMoves_2(NonCaptureMinusPro,pms, pos);
-			pms = g_moveGenerator200.GenerateMoves_2(Drop,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(N04_NonCaptureMinusPro,pms, pos);
+			pms = g_moveGenerator200.GenerateMoves_2(N02_Drop,pms, pos);
 			//			pms = generateMoves<PseudoLegal>(pms, pos);
 			//			pms = generateMoves<Legal>(pms, pos);
 		}

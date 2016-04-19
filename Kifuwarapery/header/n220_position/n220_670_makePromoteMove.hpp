@@ -20,8 +20,8 @@ public:
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
 	static inline Move GetSelectedMakeMove(MoveType mt, PromoteMode pm, const PieceType pt, const Square from, const Square to, const Position& pos) {
 		assert(pm == Promote || pm == NonPromote, "");
-		assert(!((pt == N07_Gold || pt == N08_King || mt == Drop) && pm == Promote));
-		Move move = ((mt == NonCapture || mt == NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
+		assert(!((pt == N07_Gold || pt == N08_King || mt == N02_Drop) && pm == Promote));
+		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
 		if (pm == Promote) {
 			move |= UtilMove::GetPromoteFlag();
 		}
@@ -34,8 +34,8 @@ public:
 	template <MoveType MT, PromoteMode PM>
 	inline Move GetSelectedMakeMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
 		static_assert(PM == Promote || PM == NonPromote, "");
-		assert(!((pt == N07_Gold || pt == N08_King || MT == Drop) && PM == Promote));
-		Move move = ((MT == NonCapture || MT == NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
+		assert(!((pt == N07_Gold || pt == N08_King || MT == N02_Drop) && PM == Promote));
+		Move move = ((MT == N01_NonCapture || MT == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
 		if (PM == Promote) {
 			move |= UtilMove::GetPromoteFlag();
 		}

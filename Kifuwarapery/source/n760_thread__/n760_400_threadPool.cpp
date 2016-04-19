@@ -1,7 +1,7 @@
 ﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_050_limitsType.hpp"
-#include "../../header/n374_genMove_/n374_900_moveList.hpp"
+#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n760_thread__/n760_400_threadPool.hpp"
@@ -105,7 +105,7 @@ void ThreadPool::StartThinking(
 	// searchMoves を直接使う。
 	GetPos.GetSearcher()->m_rootMoves.push_back(RootMove(m_searchMoves[0]));
 #else
-	const MoveType MT = Legal;
+	const MoveType MT = N08_Legal;
 	for (MoveList<MT> ml(position); !ml.IsEnd(); ++ml) {
 		if (searchMoves.empty()
 			|| std::find(searchMoves.begin(), searchMoves.end(), ml.GetMove()) != searchMoves.end())

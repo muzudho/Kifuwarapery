@@ -62,7 +62,7 @@ struct GeneratePieceMoves_N01_Pawn {
 		Bitboard toBB = Bitboard:: PawnAttack(pos.GetBbOf(N01_Pawn, us), us) & target;
 
 		// 成り
-		if (mt != NonCaptureMinusPro) {
+		if (mt != N04_NonCaptureMinusPro) {
 			Bitboard toOn789BB = toBB & TRank789BB;
 			if (toOn789BB.Exists1Bit()) {
 
@@ -73,7 +73,7 @@ struct GeneratePieceMoves_N01_Pawn {
 				FOREACH_BB(toOn789BB, to, {
 					const Square from = to + TDeltaS;
 				(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, N01_Pawn, from, to, pos);
-				if (mt == NonEvasion || all) {
+				if (mt == N07_NonEvasion || all) {
 					const Rank TRank9 = (us == Black ? Rank9 : Rank1);
 					if (UtilSquare::ToRank(to) != TRank9) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, N01_Pawn, from, to, pos);
@@ -113,15 +113,15 @@ struct GeneratePieceMoves_N02_Lance {
 			do {
 				if (toBB.Exists1Bit()) {
 					// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
-					const Square to = (mt == Capture || mt == CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
+					const Square to = (mt == N00_Capture || mt == N03_CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
 					const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
 					if (toCanPromote) {
 						(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, N02_Lance, from, to, pos);
-						if (mt == NonEvasion || all) {
+						if (mt == N07_NonEvasion || all) {
 							if (UtilSquare::IsBehind(us, Rank9, Rank1, UtilSquare::ToRank(to))) // 1段目の不成は省く
 								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, N02_Lance, from, to, pos);
 						}
-						else if (mt != NonCapture && mt != NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
+						else if (mt != N01_NonCapture && mt != N04_NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
 							if (UtilSquare::IsBehind(us, Rank8, Rank2, UtilSquare::ToRank(to))) // 2段目の不成を省く
 								(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, N02_Lance, from, to, pos);
 						}
@@ -130,7 +130,7 @@ struct GeneratePieceMoves_N02_Lance {
 						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, N02_Lance, from, to, pos);
 				}
 				// 駒取り対象は必ず一つ以下なので、loop は不要。最適化で do while が無くなると良い。
-			} while (!(mt == Capture || mt == CapturePlusPro) && toBB.Exists1Bit());
+			} while (!(mt == N00_Capture || mt == N03_CapturePlusPro) && toBB.Exists1Bit());
 		}
 		return moveStackList;
 	}
