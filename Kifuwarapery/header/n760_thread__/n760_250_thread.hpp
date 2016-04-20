@@ -11,7 +11,7 @@
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp" // 持ち合い
 
-class Searcher;
+class Rucksack;
 
 
 const int g_MaxSplitedNodesPerThread = 8;
@@ -21,7 +21,7 @@ const int g_MaxSplitedNodesPerThread = 8;
 
 struct Thread {
 
-	explicit Thread(Searcher* s);
+	explicit Thread(Rucksack* s);
 
 	virtual ~Thread() {};
 
@@ -36,9 +36,9 @@ struct Thread {
 	void WaitFor(volatile const bool& b);
 
 	// 元の名前： Ｓｐｌｉｔ
-	// 探索を分けるのだろうか☆？
+	// 探索を分けるのだろうか☆？兵士をどんどん増やそうぜ☆（＾ｑ＾）
 	template <bool Fake>
-	void Split(
+	void ForkNewFighter(
 		Position& pos,
 		Flashlight* pFlashlightBox,
 		const Score alpha,
@@ -75,6 +75,6 @@ struct Thread {
 
 	volatile bool m_exit;
 
-	Searcher* m_pSearcher;
+	Rucksack* m_pSearcher;
 };
 

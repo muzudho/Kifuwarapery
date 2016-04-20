@@ -8,7 +8,7 @@
 #include "../n640_searcher/n640_450_rootMove.hpp"
 #include "../n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
-#include "../n760_thread__/n760_400_threadPool.hpp"
+#include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_learn___/n800_100_stopwatch.hpp"
 
 using namespace std;
@@ -18,9 +18,10 @@ using Gains   = Stats<true>;
 
 
 
-
+// 元の名前：　Ｓｅａｒｃｈｅｒ
 // 検索のための構造体？
-class Searcher {
+//rucksack
+class Rucksack {
 public:
 
 	// シグナル？
@@ -29,8 +30,9 @@ public:
 	// 思考用の時間などの上限☆？
 	LimitsOfThinking		m_limits;
 
-	// ムーブ？
-	std::vector<Move>		m_searchMoves;
+	// 元の名前：ｓｅａｒｃｈＭｏｖｅｓ
+	// 送られてきた棋譜。（現局面までの指し手のスタック）
+	std::vector<Move>		m_ourMoves;
 
 	// 検索用タイマー？
 	Stopwatch				m_stopwatchForSearch;
@@ -78,7 +80,7 @@ public:
 	Position				m_rootPosition;
 
 	// スレッズ？
-	ThreadPool				m_threads;
+	HerosPub				m_threads;
 
 	// USIオプション？
 	EngineOptionsMap		m_engineOptions;

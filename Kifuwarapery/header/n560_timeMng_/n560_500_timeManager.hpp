@@ -3,14 +3,14 @@
 #include "../n520_evaluate/n520_700_evaluation09.hpp"
 #include "../n560_timeMng_/n560_100_limitsOfThinking.hpp"
 
-class Searcher;
+class Rucksack;
 
 
 class TimeManager {
 public:
 
 	// 初期化？
-	void Init(LimitsOfThinking& limits, const Ply currentPly, const Color us, Searcher* s);
+	void Init(LimitsOfThinking& limits, const Ply currentPly, const Color us, Rucksack* s);
 
 	// 本譜の情勢不安定さ☆？
 	void SetPvInstability(const int currChanges, const int prevChanges);

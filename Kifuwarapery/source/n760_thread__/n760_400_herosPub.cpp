@@ -4,13 +4,13 @@
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
-#include "../../header/n760_thread__/n760_400_threadPool.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n760_thread__/n760_400_herosPub.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
 
 //namespace {
-template <typename T> T* newThread(Searcher* s) {
+template <typename T> T* newThread(Rucksack* s) {
 	T* th = new T(s);
 	th->m_handle = std::thread(&Thread::IdleLoop, th); // move constructor
 	return th;
@@ -23,21 +23,21 @@ void deleteThread(Thread* th) {
 }
 //}
 
-void ThreadPool::Init(Searcher* s) {
+void HerosPub::Init(Rucksack* s) {
 	m_isSleepWhileIdle_ = true;
 #if defined LEARN
 #else
-	m_timer_ = newThread<TimerThread>(s);
+	m_pWarrior_ = newThread<Warrior>(s);
 #endif
 	push_back(newThread<MainThread>(s));
 	ReadUSIOptions(s);
 }
 
-void ThreadPool::Exit() {
+void HerosPub::Exit() {
 #if defined LEARN
 #else
 	// checkTime() がデータにアクセスしないよう、先に timer_ を delete
-	deleteThread(m_timer_);
+	deleteThread(m_pWarrior_);
 #endif
 
 	for (auto elem : *this) {
@@ -45,7 +45,7 @@ void ThreadPool::Exit() {
 	}
 }
 
-void ThreadPool::ReadUSIOptions(Searcher* searcher) {
+void HerosPub::ReadUSIOptions(Rucksack* searcher) {
 
 	this->m_maxThreadsPerSplitedNode_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
 
@@ -72,7 +72,7 @@ void ThreadPool::ReadUSIOptions(Searcher* searcher) {
 	}
 }
 
-Thread* ThreadPool::GetAvailableSlave(Thread* master) const {
+Thread* HerosPub::GetAvailableSlave(Thread* master) const {
 	for (auto elem : *this) {
 		if (elem->IsAvailableTo(master)) {
 			return elem;
@@ -81,18 +81,18 @@ Thread* ThreadPool::GetAvailableSlave(Thread* master) const {
 	return nullptr;
 }
 
-void ThreadPool::SetTimer(const int msec) {
-	m_timer_->m_maxPly = msec;
-	m_timer_->NotifyOne(); // Wake up and restart the timer
+void HerosPub::SetCurrWorrior(const int msec) {
+	m_pWarrior_->m_maxPly = msec;
+	m_pWarrior_->NotifyOne(); // Wake up and restart the timer
 }
 
-void ThreadPool::WaitForThinkFinished() {
+void HerosPub::WaitForThinkFinished() {
 	MainThread* t = GetMainThread();
 	std::unique_lock<Mutex> lock(t->m_sleepLock);
 	m_sleepCond_.wait(lock, [&] { return !(t->m_isThinking); });
 }
 
-void ThreadPool::StartThinking(
+void HerosPub::StartThinking(
 	const Position& position,
 	const LimitsOfThinking& limits,
 	const std::vector<Move>& searchMoves
@@ -113,7 +113,7 @@ void ThreadPool::StartThinking(
 
 #if defined LEARN
 	// searchMoves を直接使う。
-	GetPos.GetSearcher()->m_rootMoves.push_back(RootMove(m_searchMoves[0]));
+	GetPos.GetSearcher()->m_rootMoves.push_back(RootMove(position.GetSearcher()->m_ourMoves[0]));
 #else
 	const MoveType MT = N08_Legal;
 	for (MoveList<MT> ml(position); !ml.IsEnd(); ++ml) {

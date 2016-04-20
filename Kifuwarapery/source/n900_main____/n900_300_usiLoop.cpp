@@ -14,7 +14,7 @@
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
 #include "../../header/n800_learn___/n800_500_learner.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 #include "..\..\header\n900_main____\n900_300_usiLoop.hpp"
 
 
@@ -73,7 +73,7 @@ UsiLoop::UsiLoop()
 {
 }
 
-void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
+void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 {
 	Position pos(g_DefaultStartPositionSFEN, searcher.m_threads.GetMainThread(), &searcher);
 

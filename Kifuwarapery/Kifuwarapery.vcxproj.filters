@@ -477,12 +477,6 @@
     <ClInclude Include="header\n760_thread__\n760_300_mainThread.hpp">
       <Filter>header\n760_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n760_thread__\n760_350_timerThread.hpp">
-      <Filter>header\n760_thread__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n760_thread__\n760_400_threadPool.hpp">
-      <Filter>header\n760_thread__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp">
       <Filter>header\n720_usi_____</Filter>
     </ClInclude>
@@ -744,9 +738,6 @@
     <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
       <Filter>header\n351_bonaDir_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n885_searcher\n885_500_searcher.hpp">
-      <Filter>header\n885_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp">
       <Filter>header\n883_nodeType</Filter>
     </ClInclude>
@@ -960,6 +951,15 @@
     <ClInclude Include="header\n223_move____\n223_500_flashlight.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_350_warrior.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp">
+      <Filter>header\n760_thread__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1089,12 +1089,6 @@
       <Filter>source\n760_thread__</Filter>
     </ClCompile>
     <ClCompile Include="source\n760_thread__\n760_300_mainThread.cpp">
-      <Filter>source\n760_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n760_thread__\n760_350_timerThread.cpp">
-      <Filter>source\n760_thread__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n760_thread__\n760_400_threadPool.cpp">
       <Filter>source\n760_thread__</Filter>
     </ClCompile>
     <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp">
@@ -1328,9 +1322,6 @@
     <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
       <Filter>source\n351_bonaDir_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n885_searcher\n885_500_searcher.cpp">
-      <Filter>source\n885_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n883_nodeType\n883_500_nodeTypeAbstract.cpp">
       <Filter>source\n883_search__</Filter>
     </ClCompile>
@@ -1522,6 +1513,15 @@
     </ClCompile>
     <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp">
       <Filter>source\n800_learn___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_350_warrior.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp">
+      <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp">
+      <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

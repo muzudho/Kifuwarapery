@@ -30,9 +30,9 @@
 #include "../../header/n640_searcher/n640_520_futilityMoveCounts.hpp"
 #include "../../header/n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
-#include "../../header/n760_thread__/n760_400_threadPool.hpp"
+#include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n883_nodeType/n883_500_nodeTypeAbstract.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 using namespace std;
 
@@ -43,19 +43,19 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 // 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::WakeUp(Searcher* s) {
+FORCE_INLINE void HerosPub::WakeUp(Rucksack* s) {
 	for (size_t i = 0; i < size(); ++i) {
 		(*this)[i]->m_maxPly = 0;
 	}
 	m_isSleepWhileIdle_ = s->m_engineOptions["Use_Sleeping_Threads"];
 }
 // 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void ThreadPool::Sleep() {
+FORCE_INLINE void HerosPub::Sleep() {
 	m_isSleepWhileIdle_ = true;
 }
 
 
-void Searcher::Init() {
+void Rucksack::Init() {
 	EngineOptionSetup engineOptionSetup;
 	engineOptionSetup.Initialize( &m_engineOptions, this);
 
@@ -80,7 +80,7 @@ namespace {
 			  max_random_score_diff(static_cast<Score>(mr)),
 			  best(Move::GetMoveNone()) {}
 		~Skill() {}
-		void swapIfEnabled(Searcher* s) {
+		void swapIfEnabled(Rucksack* s) {
 			if (enabled()) {
 				auto it = std::find(s->m_rootMoves.begin(),
 									s->m_rootMoves.end(),
@@ -92,7 +92,7 @@ namespace {
 		}
 		bool enabled() const { return level < 20 || max_random_score_diff != ScoreZero; }
 		bool timeToPick(const int depth) const { return depth == 1 + level; }
-		Move pickMove(Searcher* s) {
+		Move pickMove(Rucksack* s) {
 			// level については未対応。max_random_score_diff についてのみ対応する。
 			if (max_random_score_diff != ScoreZero) {
 				size_t i = 1;
@@ -253,7 +253,7 @@ namespace {
 	}
 }
 
-std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
+std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
 
 	// 思考時間（ミリ秒。読み筋表示用）
 	const int time = m_stopwatchForSearch.GetElapsed();
@@ -297,7 +297,7 @@ std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score al
 }
 
 template <NodeType NT, bool INCHECK>
-Score Searcher::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth) {
+Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth) {
 	const bool PVNode = (NT == N01_PV);
 
 	assert(NT == N01_PV || NT == N02_NonPV);
@@ -394,7 +394,7 @@ Score Searcher::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 	Evaluation09 evaluation;
 	evaluation.evaluate(pos, ss);
 
-	NextmoveEvent mp(pos, ttMove, depth, m_history, (ss-1)->m_currentMove.To());
+	NextmoveEvent mp(pos, ttMove, depth, this->m_history, (ss-1)->m_currentMove.To());
 	const CheckInfo ci(pos);
 
 	while (!(move = mp.GetNextMove<false>()).IsNone())
@@ -489,7 +489,7 @@ Score Searcher::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 }
 
 // iterative deepening loop
-void Searcher::IdLoop(Position& pos) {
+void Rucksack::IdLoop(Position& pos) {
 	Flashlight ss[g_maxPlyPlus2];
 	Ply depth;
 	Ply prevBestMoveChanges;
@@ -510,9 +510,9 @@ void Searcher::IdLoop(Position& pos) {
 #endif
 
 	ss[0].m_currentMove = Move::GetMoveNull(); // skip update gains
-	m_tt.NewSearch();
-	m_history.Clear();
-	m_gains.Clear();
+	this->m_tt.NewSearch();
+	this->m_history.Clear();
+	this->m_gains.Clear();
 
 	m_pvSize = m_engineOptions["MultiPV"];
 	Skill skill(m_engineOptions["Skill_Level"], m_engineOptions["Max_Random_Score_Diff"]);
@@ -738,7 +738,7 @@ void Searcher::IdLoop(Position& pos) {
 
 #if defined INANIWA_SHIFT
 // 稲庭判定
-void Searcher::detectInaniwa(const Position& GetPos) {
+void Rucksack::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
@@ -750,7 +750,7 @@ void Searcher::detectInaniwa(const Position& GetPos) {
 }
 #endif
 #if defined BISHOP_IN_DANGER
-void Searcher::detectBishopInDanger(const Position& GetPos) {
+void Rucksack::detectBishopInDanger(const Position& GetPos) {
 	if (bishopInDangerFlag == NotBishopInDanger && GetPos.GetGamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(GetPos.GetTurn());
 		if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
@@ -811,7 +811,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 }
 
 template <NodeType NT>
-Score Searcher::Search(
+Score Rucksack::Search(
 	Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
 ) {
 	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitedNodePV || NT == SplitedNodeRoot);
@@ -1088,7 +1088,7 @@ Score Searcher::Search(
 
 		assert(move == (ss-1)->m_currentMove);
 		// move.cap() は前回(一手前)の指し手で取った駒の種類
-		NextmoveEvent mp(pos, ttMove, m_history, move.GetCap());
+		NextmoveEvent mp(pos, ttMove, this->m_history, move.GetCap());
 		const CheckInfo ci(pos);
 		while (!(move = mp.GetNextMove<false>()).IsNone()) {
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
@@ -1125,7 +1125,7 @@ iid_start:
 	}
 
 split_point_start:
-	NextmoveEvent mp(pos, ttMove, depth, m_history, ss, PVNode ? -ScoreInfinite : beta);
+	NextmoveEvent mp(pos, ttMove, depth, this->m_history, ss, PVNode ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
 	score = bestScore;
 	singularExtensionNode =
@@ -1389,7 +1389,7 @@ split_point_start:
 			&& thisThread->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
-			thisThread->Split<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
+			thisThread->ForkNewFighter<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
 										 depth, threatMove, moveCount, mp, NT, cutNode);
 			if (beta <= bestScore) {
 				break;
@@ -1424,12 +1424,12 @@ split_point_start:
 
 			const Score bonus = static_cast<Score>(depth * depth);
 			const Piece pc1 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), bestMove.GetPieceTypeFromOrDropped());
-			m_history.Update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
+			this->m_history.Update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
 
 			for (int i = 0; i < playedMoveCount - 1; ++i) {
 				const Move m = movesSearched[i];
 				const Piece pc2 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), m.GetPieceTypeFromOrDropped());
-				m_history.Update(m.IsDrop(), pc2, m.To(), -bonus);
+				this->m_history.Update(m.IsDrop(), pc2, m.To(), -bonus);
 			}
 		}
 	}
@@ -1566,7 +1566,7 @@ bool nyugyoku(const Position& pos) {
 	return true;
 }
 
-void Searcher::Think() {
+void Rucksack::Think() {
 	static Book book;
 	Position& pos = m_rootPosition;
 	m_timeManager.Init(m_limits, pos.GetGamePly(), pos.GetTurn(), this);
@@ -1613,9 +1613,9 @@ void Searcher::Think() {
 		}
 	}
 
-	Searcher::m_threads.WakeUp(this);
+	Rucksack::m_threads.WakeUp(this);
 
-	Searcher::m_threads.GetTimerThread()->m_msec =
+	Rucksack::m_threads.GetCurrWarrior()->m_msec =
 		(m_limits.IsUseTimeManagement() ?
 			std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
 			m_limits.m_nodes ?
@@ -1623,7 +1623,7 @@ void Searcher::Think() {
 				100
 		);
 
-	Searcher::m_threads.GetTimerThread()->NotifyOne();
+	Rucksack::m_threads.GetCurrWarrior()->NotifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(GetPos);
@@ -1636,7 +1636,7 @@ void Searcher::Think() {
 
 #if defined LEARN
 #else
-	m_threads.GetTimerThread()->m_msec = 0; // timer を止める。
+	m_threads.GetCurrWarrior()->m_msec = 0; // timer を止める。
 	m_threads.Sleep();
 
 finalize:
@@ -1663,7 +1663,7 @@ finalize:
 #endif
 }
 
-void Searcher::CheckTime() {
+void Rucksack::CheckTime() {
 	if (m_limits.m_ponder)
 		return;
 
@@ -1785,7 +1785,7 @@ void Thread::IdleLoop() {
 
 
 
-void Searcher::SetOption(std::istringstream& ssCmd) {
+void Rucksack::SetOption(std::istringstream& ssCmd) {
 	std::string token;
 	std::string name;
 	std::string value;

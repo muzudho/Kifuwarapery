@@ -6,7 +6,7 @@
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
 class StringToPieceTypeCSA : public std::map<std::string, PieceType> {
@@ -65,7 +65,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 			}
 		}
 	}
-	pos.GetSearcher()->m_searchMoves = moves;
+	pos.GetSearcher()->m_ourMoves = moves;
 
 	// 思考を開始☆
 	pos.GetSearcher()->m_threads.StartThinking(pos, limits, moves);

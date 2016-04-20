@@ -5,7 +5,7 @@
 #include "../n220_position/n220_700_charToPieceUSI.hpp"
 #include "../n520_evaluate/n520_700_evaluation09.hpp"
 #include "../n720_thread__/n720_400_threadPool.hpp"
-class Searcher;
+class Rucksack;
 
 
 #if 0
@@ -217,7 +217,7 @@ public:
 		readBook(GetPos, recordFileName, blackRecordFileName, whiteRecordFileName, gameNum);
 		// 既に 1 つのSearcher, Positionが立ち上がっているので、指定した数 - 1 の Searcher, Position を立ち上げる。
 		threadNum = std::max<size_t>(0, threadNum - 1);
-		std::vector<Searcher> searchers(threadNum);
+		std::vector<Rucksack> searchers(threadNum);
 		for (auto& s : searchers) {
 			s.initOptions();
 			setLearnOptions(s);
@@ -317,7 +317,7 @@ private:
 		readBookBody(dict, GetPos, whiteRecordFileName, {false, true }, gameNum);
 		gameNumForIteration_ = std::min(gameNumForIteration_, bookMovesDatum_.m_size());
 	}
-	void setLearnOptions(Searcher& s) {
+	void setLearnOptions(Rucksack& s) {
 		std::string m_engineOptions[] = {"name Threads value 1",
 								 "name MultiPV value 1",
 								 "name OwnBook value false",

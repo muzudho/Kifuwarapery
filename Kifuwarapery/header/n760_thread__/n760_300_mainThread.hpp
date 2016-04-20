@@ -2,12 +2,12 @@
 
 #include "n760_250_thread.hpp"
 
-class Searcher;
+class Rucksack;
 
 
 struct MainThread : public Thread {
 
-	explicit MainThread(Searcher* s) : Thread(s), m_isThinking(true) {}
+	explicit MainThread(Rucksack* s) : Thread(s), m_isThinking(true) {}
 
 	virtual void IdleLoop();
 

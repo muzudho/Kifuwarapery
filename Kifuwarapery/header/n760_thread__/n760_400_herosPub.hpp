@@ -10,18 +10,19 @@
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "n760_250_thread.hpp"
 #include "n760_300_mainThread.hpp"
-#include "n760_350_timerThread.hpp"
+#include "n760_350_warrior.hpp"
 
 const int g_MaxThreads = 64;
 
-class Searcher;
+class Rucksack;
 
 
+// 元の名前：　ＴｈｒｅａｄＰｏｏｌ
 // ベクター型。
-class ThreadPool : public std::vector<Thread*> {
+class HerosPub : public std::vector<Thread*> {
 public:
 	// 初期化？
-	void Init(Searcher* s);
+	void Init(Rucksack* s);
 
 	// 終了？
 	void Exit();
@@ -33,22 +34,22 @@ public:
 	Depth GetMinSplitDepth() const { return m_minimumSplitDepth_; }
 
 	// タイマースレッド？
-	TimerThread* GetTimerThread() { return m_timer_; }
+	Warrior* GetCurrWarrior() { return this->m_pWarrior_; }
 
 	// 起きろ？
-	void WakeUp(Searcher* s);
+	void WakeUp(Rucksack* s);
 
 	// 寝ろ？
 	void Sleep();
 
 	// USIオプションを読め？
-	void ReadUSIOptions(Searcher* s);
+	void ReadUSIOptions(Rucksack* s);
 
 	// スレーブ？
 	Thread* GetAvailableSlave(Thread* master) const;
 
-	// タイマーをセット？
-	void SetTimer(const int msec);
+	// タイマー・スレッドをセット？
+	void SetCurrWorrior(const int maxPly);//ｍａｘＰｌｙ＝ｍｓｅｃ
 
 	// 考えが終わるまで待て？
 	void WaitForThinkFinished();
@@ -72,7 +73,8 @@ public:
 
 private:
 
-	TimerThread* m_timer_;
+	// タイマースレッド☆
+	Warrior* m_pWarrior_;
 
 	Depth m_minimumSplitDepth_;
 };

@@ -8,10 +8,10 @@
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n640_searcher/n640_440_splitedNode.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
-Thread::Thread(Searcher* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
+Thread::Thread(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
 	m_pSearcher = searcher;
 	m_exit = false;
 	m_searching = false;
@@ -54,7 +54,7 @@ void Thread::WaitFor(volatile const bool& b) {
 
 
 template <bool Fake>
-void Thread::Split(
+void Thread::ForkNewFighter(
 	Position& pos,
 	Flashlight* pFlashlightBox,
 	const Score alpha,
@@ -139,13 +139,13 @@ void Thread::Split(
 	sp.m_mutex.unlock();
 }
 
-template void Thread::Split<true >(
+template void Thread::ForkNewFighter<true >(
 	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
 );
 
-template void Thread::Split<false>(
+template void Thread::ForkNewFighter<false>(
 	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode

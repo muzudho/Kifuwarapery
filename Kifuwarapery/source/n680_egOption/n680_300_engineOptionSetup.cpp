@@ -2,17 +2,17 @@
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "..\..\header\n680_egOption/n680_245_engineOption.hpp"
 #include "..\..\header\n680_egOption\n680_300_engineOptionSetup.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
 // 初期化の値を取ってくるのに使います。
 namespace {
-	void onHashSize(Searcher* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
-	void onClearHash(Searcher* s, const EngineOptionable&) { s->m_tt.Clear(); }
-	void onEvalDir(Searcher*, const EngineOptionable& opt) {
+	void onHashSize(Rucksack* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
+	void onClearHash(Rucksack* s, const EngineOptionable&) { s->m_tt.Clear(); }
+	void onEvalDir(Rucksack*, const EngineOptionable& opt) {
 		std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(opt, true);
 	}
-	void onThreads(Searcher* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
+	void onThreads(Rucksack* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
 	// 論理的なコア数の取得
 	inline int cpuCoreCount() {
 		// todo: boost::thread::physical_concurrency() を使うこと。
@@ -22,7 +22,7 @@ namespace {
 }
 
 
-void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Searcher * s)
+void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Rucksack * s)
 {
 	pMap->Put("USI_Hash", EngineOption(256, 1, 65536, onHashSize, s));
 	pMap->Put("Clear_Hash", EngineOption(onClearHash, s));

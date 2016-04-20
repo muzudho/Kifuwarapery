@@ -1,9 +1,9 @@
 ﻿#include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n760_thread__/n760_350_timerThread.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n760_thread__/n760_350_warrior.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
-void TimerThread::IdleLoop() {
+void Warrior::IdleLoop() {
 	while (!m_exit) {
 		{
 			std::unique_lock<Mutex> lock(m_sleepLock);

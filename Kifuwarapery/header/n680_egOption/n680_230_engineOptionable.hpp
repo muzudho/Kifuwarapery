@@ -2,17 +2,17 @@
 
 
 #include "../n080_common__/n080_100_common.hpp"
-class Searcher;
+class Rucksack;
 
 
 class EngineOptionable {
 protected:
-	using Fn = void(Searcher*, const EngineOptionable&);
+	using Fn = void(Rucksack*, const EngineOptionable&);
 public:
-	EngineOptionable(												Fn* = nullptr, Searcher* s = nullptr);
-	EngineOptionable(const char* v,								Fn* = nullptr, Searcher* s = nullptr);
-	EngineOptionable(const bool  v,								Fn* = nullptr, Searcher* s = nullptr);
-	EngineOptionable(const int   v, const int min, const int max,	Fn* = nullptr, Searcher* s = nullptr);
+	EngineOptionable(												Fn* = nullptr, Rucksack* s = nullptr);
+	EngineOptionable(const char* v,								Fn* = nullptr, Rucksack* s = nullptr);
+	EngineOptionable(const bool  v,								Fn* = nullptr, Rucksack* s = nullptr);
+	EngineOptionable(const int   v, const int min, const int max,	Fn* = nullptr, Rucksack* s = nullptr);
 
 	EngineOptionable& operator = (const std::string& v);
 
@@ -39,5 +39,5 @@ protected:
 	int m_min_;
 	int m_max_;
 	Fn* m_onChange_;
-	Searcher* m_searcher_;
+	Rucksack* m_searcher_;
 };

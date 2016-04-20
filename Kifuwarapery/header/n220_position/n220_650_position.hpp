@@ -27,7 +27,7 @@ using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
 
 struct Thread;
-class Searcher;
+class Rucksack;
 
 
 class Position {
@@ -35,13 +35,13 @@ public:
 
 	Position();
 
-	explicit Position(Searcher* s);
+	explicit Position(Rucksack* s);
 
 	Position(const Position& pos);
 
 	Position(const Position& pos, Thread* th);
 
-	Position(const std::string& sfen, Thread* th, Searcher* s);
+	Position(const std::string& sfen, Thread* th, Rucksack* s);
 
 	Position& operator = (const Position& pos);
 
@@ -240,11 +240,11 @@ public:
 
 	const ChangedLists& GetCl() const;
 
-	const Searcher* GetCsearcher() const;
+	const Rucksack* GetCsearcher() const;
 
-	Searcher* GetSearcher() const;
+	Rucksack* GetSearcher() const;
 
-	void SetSearcher(Searcher* s);
+	void SetSearcher(Rucksack* s);
 
 #if !defined NDEBUG
 	// for debug
@@ -385,7 +385,7 @@ private:
 
 	u64 m_nodes_;
 
-	Searcher* m_searcher_;
+	Rucksack* m_searcher_;
 
 	static Key m_zobrist_[N15_PieceTypeNum][SquareNum][ColorNum];
 

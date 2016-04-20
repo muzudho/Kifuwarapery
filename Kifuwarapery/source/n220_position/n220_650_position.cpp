@@ -30,7 +30,7 @@
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
 
@@ -1866,17 +1866,17 @@ const ChangedLists & Position::GetCl() const
 	return m_st_->m_cl;
 }
 
-const Searcher * Position::GetCsearcher() const
+const Rucksack * Position::GetCsearcher() const
 {
 	return m_searcher_;
 }
 
-Searcher * Position::GetSearcher() const
+Rucksack * Position::GetSearcher() const
 {
 	return m_searcher_;
 }
 
-void Position::SetSearcher(Searcher * s)
+void Position::SetSearcher(Rucksack * s)
 {
 	m_searcher_ = s;
 }
@@ -1923,7 +1923,7 @@ Position::Position()
 	// デフォルト・コンストラクタは空っぽ☆（＾ｑ＾）
 }
 
-Position::Position(Searcher * s) : m_searcher_(s)
+Position::Position(Rucksack * s) : m_searcher_(s)
 {
 }
 
@@ -1938,7 +1938,7 @@ Position::Position(const Position & pos, Thread * th)
 	m_thisThread_ = th;
 }
 
-Position::Position(const std::string & sfen, Thread * th, Searcher * s)
+Position::Position(const std::string & sfen, Thread * th, Rucksack * s)
 {
 	Set(sfen, th);
 	SetSearcher(s);
@@ -1961,7 +1961,7 @@ void Position::Set(const std::string& sfen, Thread* th) {
 	char token;
 	Square sq = A9;
 
-	Searcher* s = std::move(m_searcher_);
+	Rucksack* s = std::move(m_searcher_);
 	Clear();
 	SetSearcher(s);
 

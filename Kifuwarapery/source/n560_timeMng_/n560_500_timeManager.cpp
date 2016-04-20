@@ -2,7 +2,7 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
-#include "../../header/n885_searcher/n885_500_searcher.hpp"
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
 namespace {
@@ -141,7 +141,7 @@ void TimeManager::SetPvInstability(const int currChanges, const int prevChanges)
 		prevChanges * (m_optimumSearchTime_ / 3);
 }
 
-void TimeManager::Init(LimitsOfThinking& limits, const Ply currentPly, const Color us, Searcher* searcher) {
+void TimeManager::Init(LimitsOfThinking& limits, const Ply currentPly, const Color us, Rucksack* searcher) {
 	const int emergencyMoveHorizon = searcher->m_engineOptions["Emergency_Move_Horizon"];
 	const int emergencyBaseTime    = searcher->m_engineOptions["Emergency_Base_Time"];
 	const int emergencyMoveTime    = searcher->m_engineOptions["Emergency_Move_Time"];
