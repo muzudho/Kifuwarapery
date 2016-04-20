@@ -123,7 +123,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 			}
 
 			if (token == "ponderhit" && searcher.m_limits.m_moveTime != 0) {
-				searcher.m_limits.m_moveTime += searcher.m_searchTimer.GetElapsed();
+				searcher.m_limits.m_moveTime += searcher.m_stopwatchForSearch.GetElapsed();
 			}
 		}
 		else if (token == "usinewgame") {

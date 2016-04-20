@@ -3,7 +3,7 @@
 #include "../../header/n119_score___/n119_090_score.hpp"
 #include "../../header/n220_position/n220_400_evalList.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n223_move____/n223_500_searchStack.hpp"
+#include "../../header/n223_move____/n223_500_flashlight.hpp"
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 
@@ -121,7 +121,7 @@ inline Score Evaluation09::inaniwaScore(const Position& GetPos) {
 
 
 
-bool Evaluation09::calcDifference(Position& pos, SearchStack* ss) {
+bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 #if defined INANIWA_SHIFT
 	if (GetPos.GetCsearcher()->inaniwaFlag != NotInaniwa) return false;
 #endif
@@ -260,7 +260,7 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 
 
 
-void Evaluation09::evaluateBody(Position& pos, SearchStack* ss) {
+void Evaluation09::evaluateBody(Position& pos, Flashlight* ss) {
 	if (this->calcDifference(pos, ss)) {
 		assert([&] {
 			const auto score = ss->m_staticEvalRaw.GetSum(pos.GetTurn());
@@ -400,7 +400,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 }
 
 
-Score Evaluation09::evaluate(Position& pos, SearchStack* ss) {
+Score Evaluation09::evaluate(Position& pos, Flashlight* ss) {
 	if (ss->m_staticEvalRaw.m_p[0][0] != ScoreNotEvaluated) {
 		const Score score = static_cast<Score>(ss->m_staticEvalRaw.GetSum(pos.GetTurn()));
 		assert(score == evaluateUnUseDiff(pos));

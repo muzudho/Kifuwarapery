@@ -46,17 +46,27 @@ void ThreadPool::Exit() {
 }
 
 void ThreadPool::ReadUSIOptions(Searcher* searcher) {
-	m_maxThreadsPerSplitedNode_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
-	const size_t requested   = searcher->m_engineOptions["Threads"];
-	m_minimumSplitDepth_ = (requested < 6 ? 4 : (requested < 8 ? 5 : 7)) * OnePly;
 
-	assert(0 < requested);
+	this->m_maxThreadsPerSplitedNode_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
 
-	while (size() < requested) {
+	// スレッドの個数（１以上）
+	const size_t numberOfThreads   = searcher->m_engineOptions["Threads"];
+
+	this->m_minimumSplitDepth_ = (
+		numberOfThreads < 6 ?
+			4 :
+			(numberOfThreads < 8 ?
+				5 :
+				7
+			)
+	) * OnePly;
+	assert(0 < numberOfThreads);
+
+	while (size() < numberOfThreads) {
 		push_back(newThread<Thread>(searcher));
 	}
 
-	while (requested < size()) {
+	while (numberOfThreads < size()) {
 		deleteThread(back());
 		pop_back();
 	}
@@ -92,7 +102,7 @@ void ThreadPool::StartThinking(
 #else
 	WaitForThinkFinished();
 #endif
-	position.GetSearcher()->m_searchTimer.Restart();
+	position.GetSearcher()->m_stopwatchForSearch.Restart();
 
 	position.GetSearcher()->m_signals.m_stopOnPonderHit = position.GetSearcher()->m_signals.m_firstRootMove = false;
 	position.GetSearcher()->m_signals.m_stop = position.GetSearcher()->m_signals.m_failedLowAtRoot = false;

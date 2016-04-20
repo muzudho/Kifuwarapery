@@ -2,7 +2,7 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
-#include "../n223_move____/n223_500_searchStack.hpp"
+#include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../n480_tt______/n480_300_tt.hpp"
 #include "../n520_evaluate/n520_700_evaluation09.hpp"
@@ -17,6 +17,7 @@ const int g_MaxThreads = 64;
 class Searcher;
 
 
+// ベクター型。
 class ThreadPool : public std::vector<Thread*> {
 public:
 	// 初期化？

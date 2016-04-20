@@ -23,10 +23,10 @@ public:
 
 private:
 
-	// 最適な検索時間？
+	// 理想的な思考時間？
 	int m_optimumSearchTime_;
 
-	// 最大検索時間？
+	// 長考を打ち切る時間？
 	int m_maximumSearchTime_;
 
 	// 不安定な本譜のその他の時間？

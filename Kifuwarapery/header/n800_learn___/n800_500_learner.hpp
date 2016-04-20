@@ -247,16 +247,16 @@ private:
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
 		BookMoveData bmdBase[ColorNum];
 		bmdBase[Black].GetMove = bmdBase[White].GetMove = Move::GetMoveNone();
-		std::stringstream m_searchStack(s0);
+		std::stringstream textA(s0);
 		std::string elem;
-		m_searchStack >> elem; // 対局番号
-		m_searchStack >> elem; // 対局日
+		textA >> elem; // 対局番号
+		textA >> elem; // 対局日
 		bmdBase[Black].date = bmdBase[White].date = elem;
-		m_searchStack >> elem; // 先手名
+		textA >> elem; // 先手名
 		bmdBase[Black].player = elem;
-		m_searchStack >> elem; // 後手名
+		textA >> elem; // 後手名
 		bmdBase[White].player = elem;
-		m_searchStack >> elem; // 引き分け勝ち負け
+		textA >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
 		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
@@ -463,7 +463,7 @@ private:
 	}
 	void learnParse2Body(Position& GetPos, Parse2Data& parse2Data) {
 		parse2Data.Clear();
-		SearchStack m_searchStack[2];
+		Flashlight m_pFlashlightBox[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
@@ -480,8 +480,8 @@ private:
 						GetPos.DoMove(bmd.pvBuffer[recordPVIndex], m_setUpStates->top());
 					}
 					// evaluate() の差分計算を無効化する。
-					m_searchStack[0].m_staticEvalRaw.GetP[0][0] = m_searchStack[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_searchStack+1) : -evaluate(GetPos, m_searchStack+1));
+					m_pFlashlightBox[0].m_staticEvalRaw.GetP[0][0] = m_pFlashlightBox[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
+					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
 						GetPos.UndoMove(bmd.pvBuffer[jj]);
@@ -495,8 +495,8 @@ private:
 							m_setUpStates->push(StateInfo());
 							GetPos.DoMove(bmd.pvBuffer[otherPVIndex], m_setUpStates->top());
 						}
-						m_searchStack[0].m_staticEvalRaw.GetP[0][0] = m_searchStack[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_searchStack+1) : -evaluate(GetPos, m_searchStack+1));
+						m_pFlashlightBox[0].m_staticEvalRaw.GetP[0][0] = m_pFlashlightBox[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
+						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
 						const auto diff = GetScore - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};

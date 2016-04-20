@@ -7,7 +7,7 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
-#include "../n223_move____/n223_500_searchStack.hpp"
+#include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 
 
@@ -17,10 +17,12 @@ struct Thread;
 // 元の名前は ＳｐｌｉｔＰｏｉｎｔ☆
 // ツリーノードの、分岐しているところだろうか☆（＾ｑ＾）？
 struct SplitedNode {
+
 	// 局面か☆
 	const Position*		m_position;
 
-	const SearchStack*	m_searchStack;
+	// サーチ・スタック☆
+	const Flashlight*	m_pFlashlightBox;
 
 	Thread*				m_masterThread;
 

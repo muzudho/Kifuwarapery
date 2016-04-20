@@ -14,6 +14,8 @@ namespace {
 	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
 	const int MoveHorizon = 47;
 	const float MaxRatio = 80.0f; // 試しに１６倍にするとどうなるんだぜ☆？（＾ｑ＾）？
+	// 1手に 7秒ぐらいしか使わない早指しになっている気がするぜ☆（＾ｑ＾）？
+	// 定跡抜けてからの初手で18秒ぐらい☆（＾＿＾）
 #elif 7
 	//────────────────────────────────────────────────────────────────────────────────
 	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
@@ -164,34 +166,41 @@ void TimeManager::Init(LimitsOfThinking& limits, const Ply currentPly, const Col
 
 		hypMyTime = std::max(hypMyTime, 0);
 
-		const int t1 = minThinkingTime + remaining<OptimumTime>(hypMyTime, hypMTG, currentPly, slowMover);
-		const int t2 = minThinkingTime + remaining<MaxTime>(hypMyTime, hypMTG, currentPly, slowMover);
+		// 少ない方に更新します。
+		this->m_optimumSearchTime_ = std::min(
+			this->m_optimumSearchTime_,
+			minThinkingTime + remaining<OptimumTime>(hypMyTime, hypMTG, currentPly, slowMover)
+		);
 
-		m_optimumSearchTime_ = std::min(m_optimumSearchTime_, t1);
-		m_maximumSearchTime_ = std::min(m_maximumSearchTime_, t2);
+		// 少ない方に更新します。
+		this->m_maximumSearchTime_ = std::min(
+			this->m_maximumSearchTime_,
+			minThinkingTime + remaining<MaxTime>(hypMyTime, hypMTG, currentPly, slowMover)
+		);
 	}
 
 	if (searcher->m_engineOptions["USI_Ponder"]) {
-		m_optimumSearchTime_ += m_optimumSearchTime_ / 4;
+		// 4分の1を追加します。
+		this->m_optimumSearchTime_ += this->m_optimumSearchTime_ / 4;
 	}
 
-	// こちらも minThinkingTime 以上にする。
-	m_optimumSearchTime_ = std::max(m_optimumSearchTime_, minThinkingTime);
-	m_optimumSearchTime_ = std::min(m_optimumSearchTime_, m_maximumSearchTime_);
+	// こちらも min 以上 max 以下☆にする。
+	this->m_optimumSearchTime_ = std::max(this->m_optimumSearchTime_, minThinkingTime);
+	this->m_optimumSearchTime_ = std::min(this->m_optimumSearchTime_, m_maximumSearchTime_);
 
 	if (limits.m_moveTime != 0) {
-		if (m_optimumSearchTime_ < limits.m_moveTime) {
-			m_optimumSearchTime_ = std::min(limits.m_time[us], limits.m_moveTime);
+		if (this->m_optimumSearchTime_ < limits.m_moveTime) {
+			this->m_optimumSearchTime_ = std::min(limits.m_time[us], limits.m_moveTime);
 		}
 		if (m_maximumSearchTime_ < limits.m_moveTime) {
 			m_maximumSearchTime_ = std::min(limits.m_time[us], limits.m_moveTime);
 		}
-		m_optimumSearchTime_ += limits.m_moveTime;
-		m_maximumSearchTime_ += limits.m_moveTime;
+		this->m_optimumSearchTime_ += limits.m_moveTime;
+		this->m_maximumSearchTime_ += limits.m_moveTime;
 		if (limits.m_time[us] != 0) {
 			limits.m_moveTime = 0;
 		}
 	}
-	SYNCCOUT << "info string optimum_search_time = " << m_optimumSearchTime_ << SYNCENDL;
-	SYNCCOUT << "info string maximum_search_time = " << m_maximumSearchTime_ << SYNCENDL;
+	SYNCCOUT << "info string optimum_search_time = " << this->m_optimumSearchTime_ << SYNCENDL;
+	SYNCCOUT << "info string maximum_search_time = " << this->m_maximumSearchTime_ << SYNCENDL;
 }

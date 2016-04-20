@@ -1,8 +1,8 @@
 ﻿#include <iostream>
-#include "../../header/n080_common__/n080_105_stopwatch.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
+#include "../../header/n800_learn___/n800_100_stopwatch.hpp"
 #include "../../header/n886_repeType/n886_100_rtNot.hpp"
 #include "../../header/n886_repeType/n886_110_rtDraw.hpp"
 #include "../../header/n886_repeType/n886_120_rtWin.hpp"
@@ -254,7 +254,10 @@ namespace {
 }
 
 std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
-	const int t = m_searchTimer.GetElapsed();
+
+	// 思考時間（ミリ秒。読み筋表示用）
+	const int time = m_stopwatchForSearch.GetElapsed();
+
 	const size_t usiPVSize = m_pvSize;
 	Ply selDepth = 0; // 選択的に読んでいる部分の探索深さ。
 	std::stringstream ss;
@@ -279,8 +282,8 @@ std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score al
 		   << " seldepth " << selDepth
 		   << " score " << (i == m_pvIdx ? scoreToUSI(s, alpha, beta) : scoreToUSI(s))
 		   << " nodes " << pos.GetNodesSearched()
-		   << " nps " << (0 < t ? pos.GetNodesSearched() * 1000 / t : 0)
-		   << " time " << t
+		   << " nps " << (0 < time ? pos.GetNodesSearched() * 1000 / time : 0)
+		   << " time " << time
 		   << " multipv " << i + 1
 		   << " pv ";
 
@@ -294,7 +297,7 @@ std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score al
 }
 
 template <NodeType NT, bool INCHECK>
-Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth) {
+Score Searcher::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth) {
 	const bool PVNode = (NT == N01_PV);
 
 	assert(NT == N01_PV || NT == N02_NonPV);
@@ -360,7 +363,9 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 		}
 
 		if (tte != nullptr) {
-			if ((ss->m_staticEval = bestScore = tte->GetEvalScore()) == ScoreNone) {
+			if (
+				(ss->m_staticEval = bestScore = tte->GetEvalScore()) == ScoreNone
+			) {
 				Evaluation09 evaluation;
 				ss->m_staticEval = bestScore = evaluation.evaluate(pos, ss);
 			}
@@ -485,7 +490,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 
 // iterative deepening loop
 void Searcher::IdLoop(Position& pos) {
-	SearchStack ss[g_maxPlyPlus2];
+	Flashlight ss[g_maxPlyPlus2];
 	Ply depth;
 	Ply prevBestMoveChanges;
 	Score bestScore = -ScoreInfinite;
@@ -495,7 +500,7 @@ void Searcher::IdLoop(Position& pos) {
 	bool bestMoveNeverChanged = true;
 	int lastInfoTime = -1; // 将棋所のコンソールが詰まる問題への対処用
 
-	memset(ss, 0, 4 * sizeof(SearchStack));
+	memset(ss, 0, 4 * sizeof(Flashlight));
 	m_bestMoveChanges = 0;
 #if defined LEARN
 	// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
@@ -615,11 +620,14 @@ void Searcher::IdLoop(Position& pos) {
 					break;
 				}
 
-				if (3000 < m_searchTimer.GetElapsed()
+				
+				if (
+					// 思考時間が3秒経過し、
+					3000 < m_stopwatchForSearch.GetElapsed()
 					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.GetElapsed()))
+					&& (depth < 10 || lastInfoTime + 200 < m_stopwatchForSearch.GetElapsed()))
 				{
-					lastInfoTime = m_searchTimer.GetElapsed();
+					lastInfoTime = m_stopwatchForSearch.GetElapsed();
 					SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 				}
 
@@ -645,11 +653,17 @@ void Searcher::IdLoop(Position& pos) {
 			}
 
 			UtilMoveStack::InsertionSort(m_rootMoves.begin(), m_rootMoves.begin() + m_pvIdx + 1);
-			if ((m_pvIdx + 1 == m_pvSize || 3000 < m_searchTimer.GetElapsed())
+
+			if (
+				(
+					m_pvIdx + 1 == m_pvSize ||
+					// 思考時間が3秒を経過し
+					3000 < m_stopwatchForSearch.GetElapsed()
+				)
 				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.GetElapsed()))
+				&& (depth < 10 || lastInfoTime + 200 < m_stopwatchForSearch.GetElapsed()))
 			{
-				lastInfoTime = m_searchTimer.GetElapsed();
+				lastInfoTime = m_stopwatchForSearch.GetElapsed();
 				SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 			}
 		}
@@ -667,7 +681,10 @@ void Searcher::IdLoop(Position& pos) {
 			}
 
 			// 次のイテレーションを回す時間が無いなら、ストップ
-			if ((m_timeManager.GetAvailableTime() * 62) / 100 < m_searchTimer.GetElapsed()) {
+			if (
+				// 有効時間の62%が、思考経過時間（ミリ秒）に満たない場合。
+				(m_timeManager.GetAvailableTime() * 62) / 100 < m_stopwatchForSearch.GetElapsed()
+			) {
 				stop = true;
 			}
 
@@ -676,15 +693,22 @@ void Searcher::IdLoop(Position& pos) {
 
 			// 最善手が、ある程度の深さまで同じであれば、
 			// その手が突出して良い手なのだろう。
-			if (12 <= depth
+			if (
+				12 <= depth
 				&& !stop
 				&& bestMoveNeverChanged
 				&& m_pvSize == 1
 				// ここは確実にバグらせないようにする。
 				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
-				&& (m_rootMoves.size() == 1
-					|| m_timeManager.GetAvailableTime() * 40 / 100 < m_searchTimer.GetElapsed()))
-			{
+				&& (
+					m_rootMoves.size() == 1
+					||
+					// または、利用可能時間の40%が、思考経過時間未満の場合。
+					m_timeManager.GetAvailableTime() * 40 / 100
+					<
+					m_stopwatchForSearch.GetElapsed()
+				)
+			){
 				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
 				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 				(ss+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
@@ -788,7 +812,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 
 template <NodeType NT>
 Score Searcher::Search(
-	Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
+	Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
 ) {
 	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitedNodePV || NT == SplitedNodeRoot);
 	const bool SPNode = (NT == SplitedNodePV || NT == SplitedNodeNonPV || NT == SplitedNodeRoot);
@@ -1143,7 +1167,7 @@ split_point_start:
 		if (RootNode) {
 			m_signals.m_firstRootMove = (moveCount == 1);
 #if 0
-			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_searchTimer.GetElapsed()) {
+			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_stopwatchForSearch.GetElapsed()) {
 				SYNCCOUT << "info depth " << GetDepth / OnePly
 						 << " currmove " << GetMove.ToUSI()
 						 << " currmovenumber " << m_moveCount + m_pvIdx << SYNCENDL;
@@ -1592,9 +1616,13 @@ void Searcher::Think() {
 	Searcher::m_threads.WakeUp(this);
 
 	Searcher::m_threads.GetTimerThread()->m_msec =
-		(m_limits.IsUseTimeManagement() ? std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
-		 m_limits.m_nodes               ? 2 * TimerResolution :
-		 100);
+		(m_limits.IsUseTimeManagement() ?
+			std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
+			m_limits.m_nodes ?
+				2 * TimerResolution :
+				100
+		);
+
 	Searcher::m_threads.GetTimerThread()->NotifyOne();
 
 #if defined INANIWA_SHIFT
@@ -1614,7 +1642,7 @@ void Searcher::Think() {
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
-			 << " time " << m_searchTimer.GetElapsed() << SYNCENDL;
+			 << " time " << m_stopwatchForSearch.GetElapsed() << SYNCENDL;
 
 	if (!m_signals.m_stop && (m_limits.m_ponder || m_limits.m_infinite)) {
 		m_signals.m_stopOnPonderHit = true;
@@ -1662,7 +1690,8 @@ void Searcher::CheckTime() {
 		}
 	}
 
-	const int e = m_searchTimer.GetElapsed();
+	const int e = m_stopwatchForSearch.GetElapsed();
+
 	const bool stillAtFirstMove =
 		m_signals.m_firstRootMove
 		&& !m_signals.m_failedLowAtRoot
@@ -1710,10 +1739,10 @@ void Thread::IdleLoop() {
 			SplitedNode* sp = m_activeSplitedNode;
 			m_pSearcher->m_threads.m_mutex_.unlock();
 
-			SearchStack ss[g_maxPlyPlus2];
+			Flashlight ss[g_maxPlyPlus2];
 			Position pos(*sp->m_position, this);
 
-			memcpy(ss, sp->m_searchStack - 1, 4 * sizeof(SearchStack));
+			memcpy(ss, sp->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
 			(ss+1)->m_splitedNode = sp;
 
 			sp->m_mutex.lock();

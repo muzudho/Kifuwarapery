@@ -152,7 +152,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="header\n080_common__\n080_105_stopwatch.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
     <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp" />
@@ -224,7 +223,7 @@
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
     <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp" />
-    <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp" />
+    <ClInclude Include="header\n223_move____\n223_500_flashlight.hpp" />
     <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
@@ -374,6 +373,7 @@
     <ClInclude Include="header\n760_thread__\n760_300_mainThread.hpp" />
     <ClInclude Include="header\n760_thread__\n760_350_timerThread.hpp" />
     <ClInclude Include="header\n760_thread__\n760_400_threadPool.hpp" />
+    <ClInclude Include="header\n800_learn___\n800_100_stopwatch.hpp" />
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp" />
     <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp" />
     <ClInclude Include="header\n885_searcher\n885_500_searcher.hpp" />
@@ -396,7 +396,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
-    <ClCompile Include="source\n080_common__\n080_105_stopwatch.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n110_square\n110_150_file.cpp" />
     <ClCompile Include="source\n110_square\n110_200_rank.cpp" />
@@ -572,6 +571,7 @@
     <ClCompile Include="source\n760_thread__\n760_300_mainThread.cpp" />
     <ClCompile Include="source\n760_thread__\n760_350_timerThread.cpp" />
     <ClCompile Include="source\n760_thread__\n760_400_threadPool.cpp" />
+    <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp" />
     <ClCompile Include="source\n883_nodeType\n883_500_nodeTypeAbstract.cpp" />
     <ClCompile Include="source\n885_searcher\n885_500_searcher.cpp" />
     <ClCompile Include="source\n887_nodeType\n887_100_nodeTypeRoot.cpp" />

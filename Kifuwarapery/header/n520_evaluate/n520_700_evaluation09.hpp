@@ -8,7 +8,7 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 
-#include "../n223_move____/n223_500_searchStack.hpp"
+#include "../n223_move____/n223_500_flashlight.hpp"
 
 
 
@@ -24,7 +24,7 @@ extern EvaluateHashTable g_evalTable;
 class Evaluation09 {
 public:
 	Score evaluateUnUseDiff(const Position& pos);
-	Score evaluate(Position& pos, SearchStack* ss);
+	Score evaluate(Position& pos, Flashlight* ss);
 private:
 
 	EvalSum doapc(const Position& pos, const int index[2]);
@@ -36,8 +36,8 @@ private:
 	inline Score inaniwaScore(const Position& GetPos);
 #endif
 
-	bool calcDifference(Position& pos, SearchStack* ss);
+	bool calcDifference(Position& pos, Flashlight* ss);
 	int make_list_unUseDiff(const Position& pos, int list0[EvalList::m_ListSize], int list1[EvalList::m_ListSize], int nlist);
-	void evaluateBody(Position& pos, SearchStack* ss);
+	void evaluateBody(Position& pos, Flashlight* ss);
 };
 

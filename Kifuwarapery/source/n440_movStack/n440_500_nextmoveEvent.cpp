@@ -5,7 +5,7 @@
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
-#include "../../header/n223_move____/n223_500_searchStack.hpp"
+#include "../../header/n223_move____/n223_500_flashlight.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 
@@ -43,38 +43,42 @@ NextmoveEvent::NextmoveEvent(
 	const Move ttm,
 	const Depth depth,
 	const History& history,
-	SearchStack* searchStack,
+	Flashlight* pFlashlightBox,
 	const Score beta
 )
 	: m_pos_(pos), m_history_(history), m_depth_(depth)
 {
 	assert(Depth0 < depth);
 
-	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
-	m_currMove_ = m_lastMove_ = GetFirstMove();
-	m_captureThreshold_ = 0;
-	m_endBadCaptures_ = m_legalMoves_ + g_MaxLegalMoves - 1;
-	m_ss_ = searchStack;
+	this->m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
+	this->m_currMove_ = this->m_lastMove_ = GetFirstMove();
+	this->m_captureThreshold_ = 0;
+	this->m_endBadCaptures_ = this->m_legalMoves_ + g_MaxLegalMoves - 1;
+	this->m_pFlashlightBox_ = pFlashlightBox;
 
 	if (pos.InCheck()) {
-		m_phase_ = N06_EvasionSearch;
+		this->m_phase_ = N06_EvasionSearch;
 	}
 	else {
-		m_phase_ = N00_MainSearch;
+		this->m_phase_ = N00_MainSearch;
 
-		m_killerMoves_[0].m_move = searchStack->m_killers[0];
-		m_killerMoves_[1].m_move = searchStack->m_killers[1];
+		this->m_killerMoves_[0].m_move = pFlashlightBox->m_killers[0];
+		this->m_killerMoves_[1].m_move = pFlashlightBox->m_killers[1];
 
-		if (m_ss_ != nullptr && m_ss_->m_staticEval < beta - g_CapturePawnScore && depth < 3 * OnePly) {
-			m_captureThreshold_ = -g_CapturePawnScore;
+		if (
+			this->m_pFlashlightBox_ != nullptr &&
+			this->m_pFlashlightBox_->m_staticEval < beta - g_CapturePawnScore &&
+			depth < 3 * OnePly
+		) {
+			this->m_captureThreshold_ = -g_CapturePawnScore;
 		}
-		else if (m_ss_ != nullptr && beta < m_ss_->m_staticEval) {
-			m_captureThreshold_ = beta - m_ss_->m_staticEval;
+		else if (m_pFlashlightBox_ != nullptr && beta < this->m_pFlashlightBox_->m_staticEval) {
+			this->m_captureThreshold_ = beta - this->m_pFlashlightBox_->m_staticEval;
 		}
 	}
 
-	m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
-	m_lastMove_ += (!m_ttMove_.IsNone());
+	this->m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
+	this->m_lastMove_ += (!this->m_ttMove_.IsNone());
 }
 
 // 静止探索で呼ばれる。
@@ -136,7 +140,7 @@ template <> Move NextmoveEvent::GetNextMove<false>() {
 
 template <>
 Move NextmoveEvent::GetNextMove<true>() {
-	return this->m_ss_->m_splitedNode->m_pNextmoveEvent->GetNextMove<false>();
+	return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove<false>();
 }
 
 const Score LVATable[N15_PieceTypeNum] = {

@@ -8,7 +8,7 @@
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n225_movPhase/n225_050_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
-#include "../n223_move____/n223_500_searchStack.hpp"
+#include "../n223_move____/n223_500_flashlight.hpp"
 
 
 using History = Stats<false>;
@@ -22,7 +22,7 @@ public:
 		const Move ttm,
 		const Depth depth,
 		const History& history,
-		SearchStack* searchStack,
+		Flashlight* pFlashlightBox,
 		const Score beta
 	);
 
@@ -114,7 +114,8 @@ private:
 
 	const History&		m_history_;
 
-	SearchStack*		m_ss_;
+	// サーチ・スタック☆
+	Flashlight*			m_pFlashlightBox_;
 
 	Depth				m_depth_;
 

@@ -2,7 +2,6 @@
 
 #include <string>
 #include <sstream>
-#include "../n080_common__/n080_105_stopwatch.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n560_timeMng_/n560_500_timeManager.hpp"
 #include "../n640_searcher/n640_128_signalsType.hpp"
@@ -10,6 +9,7 @@
 #include "../n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n760_thread__/n760_400_threadPool.hpp"
+#include "../n800_learn___/n800_100_stopwatch.hpp"
 
 using namespace std;
 
@@ -26,14 +26,14 @@ public:
 	// シグナル？
 	volatile SignalsType	m_signals;
 
-	// リミッツ？
-	LimitsOfThinking				m_limits;
+	// 思考用の時間などの上限☆？
+	LimitsOfThinking		m_limits;
 
 	// ムーブ？
 	std::vector<Move>		m_searchMoves;
 
-	// タイマー？
-	Stopwatch					m_searchTimer;
+	// 検索用タイマー？
+	Stopwatch				m_stopwatchForSearch;
 
 	// ステータス？
 	StateStackPtr			m_setUpStates;
@@ -94,7 +94,7 @@ public:
 
 	// Ｑサーチ？
 	template <NodeType NT, bool INCHECK>
-	Score					Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth);
+	Score					Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth);
 
 #if defined INANIWA_SHIFT
 	void					detectInaniwa(const Position& GetPos);
@@ -105,7 +105,7 @@ public:
 
 	// サーチ？
 	template <NodeType NT>
-	Score					Search(Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
+	Score					Search(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
 
 	// 考える？
 	void					Think();

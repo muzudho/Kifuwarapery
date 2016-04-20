@@ -56,7 +56,7 @@ void Thread::WaitFor(volatile const bool& b) {
 template <bool Fake>
 void Thread::Split(
 	Position& pos,
-	SearchStack* ss,
+	Flashlight* pFlashlightBox,
 	const Score alpha,
 	const Score beta,
 	Score& bestScore,
@@ -95,7 +95,7 @@ void Thread::Split(
 	sp.m_position = &pos;
 	sp.m_nodes = 0;
 	sp.m_cutoff = false;
-	sp.m_searchStack = ss;
+	sp.m_pFlashlightBox = pFlashlightBox;
 
 	m_pSearcher->m_threads.m_mutex_.lock();
 	sp.m_mutex.lock();
@@ -139,9 +139,14 @@ void Thread::Split(
 	sp.m_mutex.unlock();
 }
 
-template void Thread::Split<true >(Position& pos, SearchStack* ss, const Score alpha, const Score beta, Score& bestScore,
+template void Thread::Split<true >(
+	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode);
-template void Thread::Split<false>(Position& pos, SearchStack* ss, const Score alpha, const Score beta, Score& bestScore,
+	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
+);
+
+template void Thread::Split<false>(
+	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode);
+	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
+);

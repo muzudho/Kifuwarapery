@@ -232,6 +232,9 @@
     <Filter Include="source\n886_repeType">
       <UniqueIdentifier>{2d17a063-9b8f-4a44-969d-7bcb62b87d15}</UniqueIdentifier>
     </Filter>
+    <Filter Include="source\n800_learn___">
+      <UniqueIdentifier>{b4e903c8-38e7-4086-94b5-1c996286b26b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -416,9 +419,6 @@
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_500_searchStack.hpp">
-      <Filter>header\n223_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
       <Filter>header\n223_move____</Filter>
@@ -951,11 +951,14 @@
     <ClInclude Include="header\n640_searcher\n640_440_splitedNode.hpp">
       <Filter>header\n640_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n080_common__\n080_105_stopwatch.hpp">
-      <Filter>header\n080_common__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n560_timeMng_\n560_100_limitsOfThinking.hpp">
       <Filter>header\n560_timeMng_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n800_learn___\n800_100_stopwatch.hpp">
+      <Filter>header\n800_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_500_flashlight.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1517,8 +1520,8 @@
     <ClCompile Include="source\n440_movStack\n440_500_nextmoveEvent.cpp">
       <Filter>source\n440_movStack</Filter>
     </ClCompile>
-    <ClCompile Include="source\n080_common__\n080_105_stopwatch.cpp">
-      <Filter>source\n080_common</Filter>
+    <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp">
+      <Filter>source\n800_learn___</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
