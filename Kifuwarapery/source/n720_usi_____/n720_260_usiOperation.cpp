@@ -39,7 +39,7 @@ const StringToPieceTypeCSA g_stringToPieceTypeCSA;
 
 // 考え始めるのはここ。
 void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
-	LimitsType limits;
+	LimitsOfThinking limits;
 	std::vector<Move> moves;
 	std::string token;
 
@@ -74,7 +74,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 #if defined LEARN
 // 学習用。通常の go 呼び出しは文字列を扱って高コストなので、大量に探索の開始、終了を行う学習では別の呼び出し方にする。
 void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
-	LimitsType m_limits;
+	LimitsOfThinking m_limits;
 	std::vector<Move> moves;
 	m_limits.GetDepth = GetDepth;
 	moves.push_back(GetMove);

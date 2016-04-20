@@ -1,12 +1,13 @@
-﻿#include "..\..\header\n080_common__\n080_105_time.hpp"
+﻿#include "..\..\header\n080_common__\n080_105_stopwatch.hpp"
 
 
-void Time::Restart()
+void Stopwatch::Restart()
 {
 	this->m_start_ = std::chrono::system_clock::now();
 }
 
-int Time::Elapsed() const
+// 経過ミリ秒☆？
+int Stopwatch::GetElapsed() const
 {
 	using std::chrono::duration_cast;
 	using std::chrono::milliseconds;
@@ -17,9 +18,9 @@ int Time::Elapsed() const
 	);
 }
 
-Time Time::CurrentTime()
+Stopwatch Stopwatch::CreateStopwatchByCurrentTime()
 {
-	Time t;
+	Stopwatch t;
 	t.Restart();
 	return t;
 }

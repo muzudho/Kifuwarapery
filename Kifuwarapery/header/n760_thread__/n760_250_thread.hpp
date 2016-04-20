@@ -9,12 +9,12 @@
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
-#include "../n640_searcher/n640_440_splitPoint.hpp" // 持ち合い
+#include "../n640_searcher/n640_440_splitedNode.hpp" // 持ち合い
 
 class Searcher;
 
 
-const int g_MaxSplitPointsPerThread = 8;
+const int g_MaxSplitedNodesPerThread = 8;
 
 
 
@@ -45,15 +45,15 @@ struct Thread {
 		const bool cutNode
 	);
 
-	SplitPoint m_SplitPoints[g_MaxSplitPointsPerThread];
+	SplitedNode m_SplitedNodes[g_MaxSplitedNodesPerThread];
 	Position* m_activePosition;
 	int m_idx;
 	int m_maxPly;
 	Mutex m_sleepLock;
 	ConditionVariable m_sleepCond;
 	std::thread m_handle;
-	SplitPoint* volatile m_activeSplitPoint;
-	volatile int m_splitPointsSize;
+	SplitedNode* volatile m_activeSplitedNode;
+	volatile int m_splitedNodesSize;
 	volatile bool m_searching;
 	volatile bool m_exit;
 	Searcher* m_pSearcher;

@@ -255,9 +255,6 @@
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n080_common__\n080_105_time.hpp">
-      <Filter>header\n080_common__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
@@ -417,9 +414,6 @@
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
     </ClInclude>
@@ -568,9 +562,6 @@
       <Filter>header\n480_tt______</Filter>
     </ClInclude>
     <ClInclude Include="header\n640_searcher\n640_450_rootMove.hpp">
-      <Filter>header\n640_searcher</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n640_searcher\n640_440_splitPoint.hpp">
       <Filter>header\n640_searcher</Filter>
     </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_070_movePhaseAbstract.hpp">
@@ -957,6 +948,15 @@
     <ClInclude Include="header\n440_movStack\n440_500_nextmoveEvent.hpp">
       <Filter>header\n440_movStack</Filter>
     </ClInclude>
+    <ClInclude Include="header\n640_searcher\n640_440_splitedNode.hpp">
+      <Filter>header\n640_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_105_stopwatch.hpp">
+      <Filter>header\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n560_timeMng_\n560_100_limitsOfThinking.hpp">
+      <Filter>header\n560_timeMng_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -976,9 +976,6 @@
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_400_main.cpp">
       <Filter>source\n900_main____</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n080_common__\n080_105_time.cpp">
-      <Filter>source\n080_common</Filter>
     </ClCompile>
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp">
       <Filter>source\n900_main____</Filter>
@@ -1519,6 +1516,9 @@
     </ClCompile>
     <ClCompile Include="source\n440_movStack\n440_500_nextmoveEvent.cpp">
       <Filter>source\n440_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common__\n080_105_stopwatch.cpp">
+      <Filter>source\n080_common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

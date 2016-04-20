@@ -14,7 +14,9 @@
 struct Thread;
 
 
-struct SplitPoint {
+// 元の名前は ＳｐｌｉｔＰｏｉｎｔ☆
+// ツリーノードの、分岐しているところだろうか☆（＾ｑ＾）？
+struct SplitedNode {
 	// 局面か☆
 	const Position*		m_position;
 
@@ -34,7 +36,7 @@ struct SplitPoint {
 
 	NextmoveEvent*		m_pNextmoveEvent;
 
-	SplitPoint*			m_pParentSplitPoint;
+	SplitedNode*		m_pParentSplitedNode;
 
 	Mutex				m_mutex;
 

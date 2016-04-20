@@ -382,10 +382,10 @@ private:
 		}
 	}
 	void learnParse1(Position& GetPos) {
-		Time t = Time::CurrentTime();
+		Stopwatch t = Stopwatch::CreateStopwatchByCurrentTime();
 		// 棋譜をシャッフルすることで、先頭 gameNum_ 個の学習に使うデータをランダムに選ぶ。
 		std::shuffle(std::begin(bookMovesDatum_), std::IsEnd(bookMovesDatum_), mt_);
-		std::cout << "shuffle elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
+		std::cout << "shuffle elapsed: " << t.GetElapsed() / 1000 << "[sec]" << std::endl;
 		index_ = 0;
 		moveCount_.Store(0);
 		for (auto& pred : predictions_)
@@ -403,7 +403,7 @@ private:
 		for (auto& pred : predictions_)
 			std::cout << static_cast<double>(pred.load()*100) / moveCount_.load() << ", ";
 		std::cout << std::endl;
-		std::cout << "parse1 elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
+		std::cout << "parse1 elapsed: " << t.GetElapsed() / 1000 << "[sec]" << std::endl;
 	}
 	static constexpr double FVPenalty() { return (0.2/static_cast<double>(g_FVScale)); }
 	template <bool UsePenalty, typename T>
@@ -526,7 +526,7 @@ private:
 		}
 	}
 	void learnParse2(Position& GetPos) {
-		Time t;
+		Stopwatch t;
 		for (int step = 1; step <= stepNum_; ++step) {
 			t.Restart();
 			std::cout << "step " << step << "/" << stepNum_ << " " << std::flush;
@@ -548,7 +548,7 @@ private:
 			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
 			else             updateEval<false>(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
 			std::cout << "done" << std::endl;
-			std::cout << "parse2 1 step elapsed: " << t.Elapsed() / 1000 << "[sec]" << std::endl;
+			std::cout << "parse2 1 step elapsed: " << t.GetElapsed() / 1000 << "[sec]" << std::endl;
 			Print();
 		}
 	}

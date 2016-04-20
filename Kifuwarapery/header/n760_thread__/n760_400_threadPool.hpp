@@ -2,12 +2,12 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
-#include "../n223_move____/n223_050_limitsType.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../n480_tt______/n480_300_tt.hpp"
 #include "../n520_evaluate/n520_700_evaluation09.hpp"
-#include "../n640_searcher/n640_440_splitPoint.hpp"
+#include "../n560_timeMng_/n560_100_limitsOfThinking.hpp"
+#include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "n760_250_thread.hpp"
 #include "n760_300_mainThread.hpp"
 #include "n760_350_timerThread.hpp"
@@ -53,7 +53,7 @@ public:
 	void WaitForThinkFinished();
 
 	// 考えを始めろ？
-	void StartThinking(const Position& pos, const LimitsType& limits,
+	void StartThinking(const Position& pos, const LimitsOfThinking& limits,
 					   const std::vector<Move>& searchMoves);
 
 public:
@@ -61,7 +61,7 @@ public:
 	bool m_isSleepWhileIdle_;
 
 	// マックス・スレッド？
-	size_t m_maxThreadsPerSplitPoint_;
+	size_t m_maxThreadsPerSplitedNode_;
 
 	// ミューテックス？
 	Mutex m_mutex_;

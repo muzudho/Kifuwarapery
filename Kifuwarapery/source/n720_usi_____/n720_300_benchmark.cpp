@@ -4,7 +4,7 @@
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n223_move____/n223_050_limitsType.hpp"
+#include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
 #include "../../header/n885_searcher/n885_500_searcher.hpp"
@@ -13,7 +13,7 @@
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。
 void Benchmark(Position& pos) {
 	std::string token;
-	LimitsType limits;
+	LimitsOfThinking limits;
 
 	std::string options[] = {"name Threads value 1",
 							 "name MultiPV value 1",

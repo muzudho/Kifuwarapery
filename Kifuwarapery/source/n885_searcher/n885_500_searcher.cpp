@@ -1,5 +1,5 @@
 ﻿#include <iostream>
-#include "../../header/n080_common__/n080_105_time.hpp"
+#include "../../header/n080_common__/n080_105_stopwatch.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
@@ -24,6 +24,7 @@
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n600_book____/n600_500_book.hpp"
+#include "../../header/n640_searcher/n640_440_splitedNode.hpp"
 #include "../../header/n640_searcher/n640_500_reductions.hpp"
 #include "../../header/n640_searcher/n640_510_futilityMargins.hpp"
 #include "../../header/n640_searcher/n640_520_futilityMoveCounts.hpp"
@@ -253,7 +254,7 @@ namespace {
 }
 
 std::string Searcher::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
-	const int t = m_searchTimer.Elapsed();
+	const int t = m_searchTimer.GetElapsed();
 	const size_t usiPVSize = m_pvSize;
 	Ply selDepth = 0; // 選択的に読んでいる部分の探索深さ。
 	std::stringstream ss;
@@ -614,11 +615,11 @@ void Searcher::IdLoop(Position& pos) {
 					break;
 				}
 
-				if (3000 < m_searchTimer.Elapsed()
+				if (3000 < m_searchTimer.GetElapsed()
 					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.Elapsed()))
+					&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.GetElapsed()))
 				{
-					lastInfoTime = m_searchTimer.Elapsed();
+					lastInfoTime = m_searchTimer.GetElapsed();
 					SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 				}
 
@@ -644,11 +645,11 @@ void Searcher::IdLoop(Position& pos) {
 			}
 
 			UtilMoveStack::InsertionSort(m_rootMoves.begin(), m_rootMoves.begin() + m_pvIdx + 1);
-			if ((m_pvIdx + 1 == m_pvSize || 3000 < m_searchTimer.Elapsed())
+			if ((m_pvIdx + 1 == m_pvSize || 3000 < m_searchTimer.GetElapsed())
 				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.Elapsed()))
+				&& (depth < 10 || lastInfoTime + 200 < m_searchTimer.GetElapsed()))
 			{
-				lastInfoTime = m_searchTimer.Elapsed();
+				lastInfoTime = m_searchTimer.GetElapsed();
 				SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 			}
 		}
@@ -660,12 +661,13 @@ void Searcher::IdLoop(Position& pos) {
 		if (m_limits.IsUseTimeManagement() && !m_signals.m_stopOnPonderHit) {
 			bool stop = false;
 
+			// 深さが 5 ～ 49 で、PVサイズが 1 のとき。
 			if (4 < depth && depth < 50 && m_pvSize == 1) {
-				m_timeManager.PvInstability(m_bestMoveChanges, prevBestMoveChanges);
+				m_timeManager.SetPvInstability(m_bestMoveChanges, prevBestMoveChanges);
 			}
 
 			// 次のイテレーションを回す時間が無いなら、ストップ
-			if ((m_timeManager.AvailableTime() * 62) / 100 < m_searchTimer.Elapsed()) {
+			if ((m_timeManager.GetAvailableTime() * 62) / 100 < m_searchTimer.GetElapsed()) {
 				stop = true;
 			}
 
@@ -681,7 +683,7 @@ void Searcher::IdLoop(Position& pos) {
 				// ここは確実にバグらせないようにする。
 				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
 				&& (m_rootMoves.size() == 1
-					|| m_timeManager.AvailableTime() * 40 / 100 < m_searchTimer.Elapsed()))
+					|| m_timeManager.GetAvailableTime() * 40 / 100 < m_searchTimer.GetElapsed()))
 			{
 				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
 				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
@@ -788,9 +790,9 @@ template <NodeType NT>
 Score Searcher::Search(
 	Position& pos, SearchStack* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
 ) {
-	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitPointPV || NT == SplitPointRoot);
-	const bool SPNode = (NT == SplitPointPV || NT == SplitPointNonPV || NT == SplitPointRoot);
-	const bool RootNode = (NT == N00_Root || NT == SplitPointRoot);
+	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitedNodePV || NT == SplitedNodeRoot);
+	const bool SPNode = (NT == SplitedNodePV || NT == SplitedNodeNonPV || NT == SplitedNodeRoot);
+	const bool RootNode = (NT == N00_Root || NT == SplitedNodeRoot);
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(PVNode || (alpha == beta - 1));
@@ -800,7 +802,7 @@ Score Searcher::Search(
 	Move movesSearched[64];
 	StateInfo st;
 	const TTEntry* tte;
-	SplitPoint* splitPoint;
+	SplitedNode* splitedNode;
 	Key posKey;
 	Move ttMove;
 	Move move;
@@ -830,10 +832,10 @@ Score Searcher::Search(
 	inCheck = pos.InCheck();
 
 	if (SPNode) {
-		splitPoint = ss->m_splitPoint;
-		bestMove = splitPoint->m_bestMove;
-		threatMove = splitPoint->m_threatMove;
-		bestScore = splitPoint->m_bestScore;
+		splitedNode = ss->m_splitedNode;
+		bestMove = splitedNode->m_bestMove;
+		threatMove = splitedNode->m_threatMove;
+		bestScore = splitedNode->m_bestScore;
 		tte = nullptr;
 		ttMove = excludedMove = Move::GetMoveNone();
 		ttScore = ScoreNone;
@@ -841,7 +843,7 @@ Score Searcher::Search(
 		Evaluation09 evaluation;
 		evaluation.evaluate(pos, ss);
 
-		assert(-ScoreInfinite < splitPoint->m_bestScore && 0 < splitPoint->m_moveCount);
+		assert(-ScoreInfinite < splitedNode->m_bestScore && 0 < splitedNode->m_moveCount);
 
 		goto split_point_start;
 	}
@@ -1130,8 +1132,8 @@ split_point_start:
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				continue;
 			}
-			moveCount = ++splitPoint->m_moveCount;
-			splitPoint->m_mutex.unlock();
+			moveCount = ++splitedNode->m_moveCount;
+			splitedNode->m_mutex.unlock();
 		}
 		else {
 			++moveCount;
@@ -1141,7 +1143,7 @@ split_point_start:
 		if (RootNode) {
 			m_signals.m_firstRootMove = (moveCount == 1);
 #if 0
-			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_searchTimer.Elapsed()) {
+			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_searchTimer.GetElapsed()) {
 				SYNCCOUT << "info depth " << GetDepth / OnePly
 						 << " currmove " << GetMove.ToUSI()
 						 << " currmovenumber " << m_moveCount + m_pvIdx << SYNCENDL;
@@ -1200,7 +1202,7 @@ split_point_start:
 				&& (threatMove.IsNone() || !refutes(pos, move, threatMove)))
 			{
 				if (SPNode) {
-					splitPoint->m_mutex.lock();
+					splitedNode->m_mutex.lock();
 				}
 				continue;
 			}
@@ -1214,9 +1216,9 @@ split_point_start:
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
 				if (SPNode) {
-					splitPoint->m_mutex.lock();
-					if (splitPoint->m_bestScore < bestScore) {
-						splitPoint->m_bestScore = bestScore;
+					splitedNode->m_mutex.lock();
+					if (splitedNode->m_bestScore < bestScore) {
+						splitedNode->m_bestScore = bestScore;
 					}
 				}
 				continue;
@@ -1226,7 +1228,7 @@ split_point_start:
 				&& pos.GetSeeSign(move) < ScoreZero)
 			{
 				if (SPNode) {
-					splitPoint->m_mutex.lock();
+					splitedNode->m_mutex.lock();
 				}
 				continue;
 			}
@@ -1263,7 +1265,7 @@ split_point_start:
 			}
 			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
 			if (SPNode) {
-				alpha = splitPoint->m_alpha;
+				alpha = splitedNode->m_alpha;
 			}
 			// PVS
 			score = -Search<N02_NonPV>(pos, ss+1, -(alpha + 1), -alpha, d, true);
@@ -1280,7 +1282,7 @@ split_point_start:
 		// PVS
 		if (doFullDepthSearch) {
 			if (SPNode) {
-				alpha = splitPoint->m_alpha;
+				alpha = splitedNode->m_alpha;
 			}
 			score = (newDepth < OnePly ?
 					 (givesCheck ? -Qsearch<N02_NonPV, true>(pos, ss+1, -(alpha + 1), -alpha, Depth0)
@@ -1303,9 +1305,9 @@ split_point_start:
 
 		// step18
 		if (SPNode) {
-			splitPoint->m_mutex.lock();
-			bestScore = splitPoint->m_bestScore;
-			alpha = splitPoint->m_alpha;
+			splitedNode->m_mutex.lock();
+			bestScore = splitedNode->m_bestScore;
+			alpha = splitedNode->m_alpha;
 		}
 
 		if (m_signals.m_stop || thisThread->CutoffOccurred()) {
@@ -1338,18 +1340,18 @@ split_point_start:
 		}
 
 		if (bestScore < score) {
-			bestScore = (SPNode ? splitPoint->m_bestScore = score : score);
+			bestScore = (SPNode ? splitedNode->m_bestScore = score : score);
 
 			if (alpha < score) {
-				bestMove = (SPNode ? splitPoint->m_bestMove = move : move);
+				bestMove = (SPNode ? splitedNode->m_bestMove = move : move);
 
 				if (PVNode && score < beta) {
-					alpha = (SPNode ? splitPoint->m_alpha = score : score);
+					alpha = (SPNode ? splitedNode->m_alpha = score : score);
 				}
 				else {
 					// fail high
 					if (SPNode) {
-						splitPoint->m_cutoff = true;
+						splitedNode->m_cutoff = true;
 					}
 					break;
 				}
@@ -1360,7 +1362,7 @@ split_point_start:
 		if (!SPNode
 			&& m_threads.GetMinSplitDepth() <= depth
 			&& m_threads.GetAvailableSlave(thisThread)
-			&& thisThread->m_splitPointsSize < g_MaxSplitPointsPerThread)
+			&& thisThread->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
 			thisThread->Split<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
@@ -1590,7 +1592,7 @@ void Searcher::Think() {
 	Searcher::m_threads.WakeUp(this);
 
 	Searcher::m_threads.GetTimerThread()->m_msec =
-		(m_limits.IsUseTimeManagement() ? std::min(100, std::max(m_timeManager.AvailableTime() / 16, TimerResolution)) :
+		(m_limits.IsUseTimeManagement() ? std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
 		 m_limits.m_nodes               ? 2 * TimerResolution :
 		 100);
 	Searcher::m_threads.GetTimerThread()->NotifyOne();
@@ -1612,7 +1614,7 @@ void Searcher::Think() {
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
-			 << " time " << m_searchTimer.Elapsed() << SYNCENDL;
+			 << " time " << m_searchTimer.GetElapsed() << SYNCENDL;
 
 	if (!m_signals.m_stop && (m_limits.m_ponder || m_limits.m_infinite)) {
 		m_signals.m_stopOnPonderHit = true;
@@ -1643,14 +1645,14 @@ void Searcher::CheckTime() {
 
 		nodes = m_rootPosition.GetNodesSearched();
 		for (size_t i = 0; i < m_threads.size(); ++i) {
-			for (int j = 0; j < m_threads[i]->m_splitPointsSize; ++j) {
-				SplitPoint& splitPoint = m_threads[i]->m_SplitPoints[j];
-				std::unique_lock<Mutex> spLock(splitPoint.m_mutex);
-				nodes += splitPoint.m_nodes;
-				u64 sm = splitPoint.m_slavesMask;
-				while (sm) {
-					const int index = firstOneFromLSB(sm);
-					sm &= sm - 1;
+			for (int j = 0; j < m_threads[i]->m_splitedNodesSize; ++j) {
+				SplitedNode& splitedNode = m_threads[i]->m_SplitedNodes[j];
+				std::unique_lock<Mutex> spLock(splitedNode.m_mutex);
+				nodes += splitedNode.m_nodes;
+				u64 slvMask = splitedNode.m_slavesMask;
+				while (slvMask) {
+					const int index = firstOneFromLSB(slvMask);
+					slvMask &= slvMask - 1;
 					Position* pos = m_threads[index]->m_activePosition;
 					if (pos != nullptr) {
 						nodes += pos->GetNodesSearched();
@@ -1660,14 +1662,14 @@ void Searcher::CheckTime() {
 		}
 	}
 
-	const int e = m_searchTimer.Elapsed();
+	const int e = m_searchTimer.GetElapsed();
 	const bool stillAtFirstMove =
 		m_signals.m_firstRootMove
 		&& !m_signals.m_failedLowAtRoot
-		&& m_timeManager.AvailableTime() < e;
+		&& m_timeManager.GetAvailableTime() < e;
 
 	const bool noMoreTime =
-		m_timeManager.MaximumTime() - 2 * TimerResolution < e
+		m_timeManager.GetMaximumTime() - 2 * TimerResolution < e
 		|| stillAtFirstMove;
 
 	if ((m_limits.IsUseTimeManagement() && noMoreTime)
@@ -1679,7 +1681,7 @@ void Searcher::CheckTime() {
 }
 
 void Thread::IdleLoop() {
-	SplitPoint* thisSp = m_splitPointsSize ? m_activeSplitPoint : nullptr;
+	SplitedNode* thisSp = m_splitedNodesSize ? m_activeSplitedNode : nullptr;
 	assert(!thisSp || (thisSp->m_masterThread == this && m_searching));
 
 	while (true) {
@@ -1705,14 +1707,14 @@ void Thread::IdleLoop() {
 
 			m_pSearcher->m_threads.m_mutex_.lock();
 			assert(m_searching);
-			SplitPoint* sp = m_activeSplitPoint;
+			SplitedNode* sp = m_activeSplitedNode;
 			m_pSearcher->m_threads.m_mutex_.unlock();
 
 			SearchStack ss[g_maxPlyPlus2];
 			Position pos(*sp->m_position, this);
 
 			memcpy(ss, sp->m_searchStack - 1, 4 * sizeof(SearchStack));
-			(ss+1)->m_splitPoint = sp;
+			(ss+1)->m_splitedNode = sp;
 
 			sp->m_mutex.lock();
 

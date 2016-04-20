@@ -29,7 +29,7 @@
 #include "../../header/n450_movPhase/n450_500_movePhaseArray.hpp"
 
 
-#include "../../header/n640_searcher/n640_440_splitPoint.hpp"	// 持ち合いになっているが .cpp だからいいかだぜ☆（＾ｑ＾）
+#include "../../header/n640_searcher/n640_440_splitedNode.hpp"	// 持ち合いになっているが .cpp だからいいかだぜ☆（＾ｑ＾）
 
 
 
@@ -136,7 +136,7 @@ template <> Move NextmoveEvent::GetNextMove<false>() {
 
 template <>
 Move NextmoveEvent::GetNextMove<true>() {
-	return this->m_ss_->m_splitPoint->m_pNextmoveEvent->GetNextMove<false>();
+	return this->m_ss_->m_splitedNode->m_pNextmoveEvent->GetNextMove<false>();
 }
 
 const Score LVATable[N15_PieceTypeNum] = {

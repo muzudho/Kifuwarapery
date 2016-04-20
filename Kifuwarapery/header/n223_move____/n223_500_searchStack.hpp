@@ -5,13 +5,13 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 
-struct SplitPoint;// SearchStack,NextmoveEvent(ＭｏｖｅＰｉｃｋｅｒ),SplitPoint が三つ巴になっている☆（＾ｑ＾）
+struct SplitedNode;// SearchStack,NextmoveEvent(ＭｏｖｅＰｉｃｋｅｒ),ＳｐｌｉｔＰｏｉｎｔ が三つ巴になっている☆（＾ｑ＾）
 
 
 class SearchStack {
 public:
 
-	SplitPoint*		m_splitPoint;
+	SplitedNode*	m_splitedNode;
 
 	Ply				m_ply;
 

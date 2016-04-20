@@ -5,9 +5,7 @@
 #include "../n223_move____/n223_300_moveScore.hpp"
 
 
-#include "n640_440_splitPoint.hpp"
-//struct SplitPoint;
-
+#include "n640_440_splitedNode.hpp"
 
 
 class RootMove {

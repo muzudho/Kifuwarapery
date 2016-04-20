@@ -31,7 +31,7 @@ void measureGenerateMoves(const Position& pos) {
 	}
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;
-	Time t = Time::CurrentTime();
+	Stopwatch t = Stopwatch::CreateStopwatchByCurrentTime();
 	if (pos.InCheck()) {
 		for (u64 i = 0; i < num; ++i) {
 			pms = &legalMoves[0];
@@ -48,7 +48,7 @@ void measureGenerateMoves(const Position& pos) {
 			//			pms = generateMoves<Legal>(pms, pos);
 		}
 	}
-	const int elapsed = t.Elapsed();
+	const int elapsed = t.GetElapsed();
 	std::cout << "elapsed = " << elapsed << " [msec]" << std::endl;
 	if (elapsed != 0) {
 		std::cout << "times/s = " << num * 1000 / elapsed << " [times/sec]" << std::endl;
@@ -123,7 +123,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Searcher& searcher)
 			}
 
 			if (token == "ponderhit" && searcher.m_limits.m_moveTime != 0) {
-				searcher.m_limits.m_moveTime += searcher.m_searchTimer.Elapsed();
+				searcher.m_limits.m_moveTime += searcher.m_searchTimer.GetElapsed();
 			}
 		}
 		else if (token == "usinewgame") {

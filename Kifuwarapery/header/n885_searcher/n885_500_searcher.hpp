@@ -2,13 +2,13 @@
 
 #include <string>
 #include <sstream>
-#include "../n080_common__/n080_105_time.hpp"
+#include "../n080_common__/n080_105_stopwatch.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n560_timeMng_/n560_500_timeManager.hpp"
 #include "../n640_searcher/n640_128_signalsType.hpp"
 #include "../n640_searcher/n640_450_rootMove.hpp"
 #include "../n680_egOption/n680_240_engineOptionsMap.hpp"
-#include "../n640_searcher/n640_440_splitPoint.hpp"
+#include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n760_thread__/n760_400_threadPool.hpp"
 
 using namespace std;
@@ -27,13 +27,13 @@ public:
 	volatile SignalsType	m_signals;
 
 	// リミッツ？
-	LimitsType				m_limits;
+	LimitsOfThinking				m_limits;
 
 	// ムーブ？
 	std::vector<Move>		m_searchMoves;
 
 	// タイマー？
-	Time					m_searchTimer;
+	Stopwatch					m_searchTimer;
 
 	// ステータス？
 	StateStackPtr			m_setUpStates;

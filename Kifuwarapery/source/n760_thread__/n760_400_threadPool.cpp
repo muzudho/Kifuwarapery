@@ -1,7 +1,7 @@
 ﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n223_move____/n223_050_limitsType.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
+#include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n760_thread__/n760_400_threadPool.hpp"
@@ -46,7 +46,7 @@ void ThreadPool::Exit() {
 }
 
 void ThreadPool::ReadUSIOptions(Searcher* searcher) {
-	m_maxThreadsPerSplitPoint_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
+	m_maxThreadsPerSplitedNode_ = searcher->m_engineOptions["Max_Threads_per_Split_Point"];
 	const size_t requested   = searcher->m_engineOptions["Threads"];
 	m_minimumSplitDepth_ = (requested < 6 ? 4 : (requested < 8 ? 5 : 7)) * OnePly;
 
@@ -84,7 +84,7 @@ void ThreadPool::WaitForThinkFinished() {
 
 void ThreadPool::StartThinking(
 	const Position& position,
-	const LimitsType& limits,
+	const LimitsOfThinking& limits,
 	const std::vector<Move>& searchMoves
 )
 {

@@ -355,9 +355,9 @@ private:
 	static Key GetZobHand(const HandPiece hp, const Color c);
 
 	// byTypeBB は敵、味方の駒を区別しない。
-	// byColorBB は駒の種類を区別しない。
 	Bitboard m_byTypeBB_[N15_PieceTypeNum];
 
+	// byColorBB は駒の種類を区別しない。
 	Bitboard m_byColorBB_[ColorNum];
 
 	Bitboard m_goldsBB_;

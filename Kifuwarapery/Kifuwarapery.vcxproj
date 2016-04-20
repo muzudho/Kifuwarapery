@@ -152,7 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="header\n080_common__\n080_105_time.hpp" />
+    <ClInclude Include="header\n080_common__\n080_105_stopwatch.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
     <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp" />
@@ -221,7 +221,6 @@
     <ClInclude Include="header\n220_position\n220_750_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp" />
-    <ClInclude Include="header\n223_move____\n223_050_limitsType.hpp" />
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
     <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp" />
@@ -352,6 +351,7 @@
     <ClInclude Include="header\n520_evaluate\n520_490_KppCacheIo.hpp" />
     <ClInclude Include="header\n520_evaluate\n520_500_kkKkpKppStorage1.hpp" />
     <ClInclude Include="header\n520_evaluate\n520_700_evaluation09.hpp" />
+    <ClInclude Include="header\n560_timeMng_\n560_100_limitsOfThinking.hpp" />
     <ClInclude Include="header\n560_timeMng_\n560_500_timeManager.hpp" />
     <ClInclude Include="header\n600_book____\n600_100_mt64bit.hpp" />
     <ClInclude Include="header\n600_book____\n600_400_bookEntry.hpp" />
@@ -359,7 +359,7 @@
     <ClInclude Include="header\n640_searcher\n640_128_signalsType.hpp" />
     <ClInclude Include="header\n640_searcher\n640_131_inaniwaFlag.hpp" />
     <ClInclude Include="header\n640_searcher\n640_134_bishopInDangerFlag.hpp" />
-    <ClInclude Include="header\n640_searcher\n640_440_splitPoint.hpp" />
+    <ClInclude Include="header\n640_searcher\n640_440_splitedNode.hpp" />
     <ClInclude Include="header\n640_searcher\n640_450_rootMove.hpp" />
     <ClInclude Include="header\n640_searcher\n640_500_reductions.hpp" />
     <ClInclude Include="header\n640_searcher\n640_510_futilityMargins.hpp" />
@@ -396,7 +396,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
-    <ClCompile Include="source\n080_common__\n080_105_time.cpp" />
+    <ClCompile Include="source\n080_common__\n080_105_stopwatch.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n110_square\n110_150_file.cpp" />
     <ClCompile Include="source\n110_square\n110_200_rank.cpp" />

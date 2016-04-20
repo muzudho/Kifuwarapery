@@ -1,6 +1,6 @@
 ﻿#include <algorithm> // std::min
 #include "../../header/n119_score___/n119_090_score.hpp"
-#include "../../header/n223_move____/n223_050_limitsType.hpp"
+#include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n885_searcher/n885_500_searcher.hpp"
 
@@ -132,14 +132,14 @@ namespace {
 	}
 }
 
-void TimeManager::PvInstability(const int currChanges, const int prevChanges) {
+void TimeManager::SetPvInstability(const int currChanges, const int prevChanges) {
 	m_unstablePVExtraTime_ =
 		currChanges * (m_optimumSearchTime_ / 2)
 		+
 		prevChanges * (m_optimumSearchTime_ / 3);
 }
 
-void TimeManager::Init(LimitsType& limits, const Ply currentPly, const Color us, Searcher* searcher) {
+void TimeManager::Init(LimitsOfThinking& limits, const Ply currentPly, const Color us, Searcher* searcher) {
 	const int emergencyMoveHorizon = searcher->m_engineOptions["Emergency_Move_Horizon"];
 	const int emergencyBaseTime    = searcher->m_engineOptions["Emergency_Base_Time"];
 	const int emergencyMoveTime    = searcher->m_engineOptions["Emergency_Move_Time"];

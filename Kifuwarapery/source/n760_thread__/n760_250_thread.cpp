@@ -6,18 +6,18 @@
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
-#include "../../header/n640_searcher/n640_440_splitPoint.hpp"
+#include "../../header/n640_searcher/n640_440_splitedNode.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n885_searcher/n885_500_searcher.hpp"
 
 
-Thread::Thread(Searcher* searcher) /*: splitPoints()*/ {
+Thread::Thread(Searcher* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
 	m_pSearcher = searcher;
 	m_exit = false;
 	m_searching = false;
-	m_splitPointsSize = 0;
+	m_splitedNodesSize = 0;
 	m_maxPly = 0;
-	m_activeSplitPoint = nullptr;
+	m_activeSplitedNode = nullptr;
 	m_activePosition = nullptr;
 	m_idx = searcher->m_threads.size();
 }
@@ -28,7 +28,7 @@ void Thread::NotifyOne() {
 }
 
 bool Thread::CutoffOccurred() const {
-	for (SplitPoint* sp = m_activeSplitPoint; sp != nullptr; sp = sp->m_pParentSplitPoint) {
+	for (SplitedNode* sp = m_activeSplitedNode; sp != nullptr; sp = sp->m_pParentSplitedNode) {
 		if (sp->m_cutoff) {
 			return true;
 		}
@@ -43,8 +43,8 @@ bool Thread::IsAvailableTo(Thread* master) const {
 	}
 
 	// ローカルコピーし、途中で値が変わらないようにする。
-	const int spCount = m_splitPointsSize;
-	return !spCount || (m_SplitPoints[spCount - 1].m_slavesMask & (UINT64_C(1) << master->m_idx));
+	const int spCount = m_splitedNodesSize;
+	return !spCount || (m_SplitedNodes[spCount - 1].m_slavesMask & (UINT64_C(1) << master->m_idx));
 }
 
 void Thread::WaitFor(volatile const bool& b) {
@@ -75,12 +75,12 @@ void Thread::Split(
 	assert(m_pSearcher->m_threads.GetMinSplitDepth() <= depth);
 
 	assert(m_searching);
-	assert(m_splitPointsSize < g_MaxSplitPointsPerThread);
+	assert(m_splitedNodesSize < g_MaxSplitedNodesPerThread);
 
-	SplitPoint& sp = m_SplitPoints[m_splitPointsSize];
+	SplitedNode& sp = m_SplitedNodes[m_splitedNodesSize];
 
 	sp.m_masterThread = this;
-	sp.m_pParentSplitPoint = m_activeSplitPoint;
+	sp.m_pParentSplitedNode = m_activeSplitedNode;
 	sp.m_slavesMask = UINT64_C(1) << m_idx;
 	sp.m_depth = depth;
 	sp.m_bestMove = bestMove;
@@ -100,8 +100,8 @@ void Thread::Split(
 	m_pSearcher->m_threads.m_mutex_.lock();
 	sp.m_mutex.lock();
 
-	++m_splitPointsSize;
-	m_activeSplitPoint = &sp;
+	++m_splitedNodesSize;
+	m_activeSplitedNode = &sp;
 	m_activePosition = nullptr;
 
 	// thisThread が常に含まれるので 1
@@ -109,10 +109,10 @@ void Thread::Split(
 	Thread* slave;
 
 	while ((slave = m_pSearcher->m_threads.GetAvailableSlave(this)) != nullptr
-		&& ++slavesCount <= m_pSearcher->m_threads.m_maxThreadsPerSplitPoint_ && !Fake)
+		&& ++slavesCount <= m_pSearcher->m_threads.m_maxThreadsPerSplitedNode_ && !Fake)
 	{
 		sp.m_slavesMask |= UINT64_C(1) << slave->m_idx;
-		slave->m_activeSplitPoint = &sp;
+		slave->m_activeSplitedNode = &sp;
 		slave->m_searching = true;
 		slave->NotifyOne();
 	}
@@ -128,8 +128,8 @@ void Thread::Split(
 	}
 
 	m_searching = true;
-	--m_splitPointsSize;
-	m_activeSplitPoint = sp.m_pParentSplitPoint;
+	--m_splitedNodesSize;
+	m_activeSplitedNode = sp.m_pParentSplitedNode;
 	m_activePosition = &pos;
 	pos.SetNodesSearched(pos.GetNodesSearched() + sp.m_nodes);
 	bestMove = sp.m_bestMove;
