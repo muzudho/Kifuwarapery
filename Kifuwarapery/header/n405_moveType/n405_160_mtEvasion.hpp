@@ -76,13 +76,15 @@ public:
 		// pin されているかどうかは movePicker か search で調べる。
 		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 		const Bitboard target2 = target1 | checkers;
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(N06_Evasion, us, all, moveStackList, pos, target2, ksq);
+
+		const PieceMoveEvent pmEvent(MoveType::N06_Evasion, us, all, pos, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn( moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(moveStackList, pmEvent, target2);
 
 		if (target1.Exists1Bit()) {
 			moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target1);//<US>

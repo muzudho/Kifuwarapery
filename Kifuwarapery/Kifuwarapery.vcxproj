@@ -301,6 +301,7 @@
     <ClInclude Include="header\n372_piece___\n372_400_pieceWDragon.hpp" />
     <ClInclude Include="header\n372_piece___\n372_410_pieceNone.hpp" />
     <ClInclude Include="header\n372_piece___\n372_500_pieceArray.hpp" />
+    <ClInclude Include="header\n374_genMove_\n374_040_pieceMoveEvent.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp" />
     <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp" />

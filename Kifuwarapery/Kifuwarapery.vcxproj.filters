@@ -954,6 +954,9 @@
     <ClInclude Include="header\n358_dropMake\n358_040_dropMakerEvent.hpp">
       <Filter>header\n358_dropMake</Filter>
     </ClInclude>
+    <ClInclude Include="header\n374_genMove_\n374_040_pieceMoveEvent.hpp">
+      <Filter>header\n374_genMove_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

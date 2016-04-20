@@ -4,6 +4,7 @@
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n374_genMove_/n374_040_pieceMoveEvent.hpp"
 #include "../n374_genMove_/n374_350_PieceMovesGenerator.hpp"
 #include "n405_070_mtAbstract.hpp"
 
@@ -15,7 +16,7 @@ public:
 	// テンプレート引数が複数あり、部分特殊化したかったので、関数ではなく、struct にした。
 	// ALL == true のとき、歩、飛、角の不成、香の2段目の不成、香の3段目の駒を取らない不成も生成する。
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
-		MoveType MT = N00_Capture;
+		const MoveType MT = N00_Capture;
 		Color us = pos.GetTurn();
 
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
@@ -30,14 +31,16 @@ public:
 		const Bitboard targetOther = pos.GetBbOf(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(MT, us, all, moveStackList, pos, targetPawn, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(MT, us, all, moveStackList, pos, targetOther, ksq);
+
+		const PieceMoveEvent pmEvent( MT, us, all, pos, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(moveStackList, pmEvent, targetPawn);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(moveStackList, pmEvent, targetOther);
 
 		return moveStackList;
 	}

@@ -29,14 +29,15 @@ public:
 		const Bitboard targetOther = pos.GetEmptyBB();
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(MT, us, all, moveStackList, pos, targetPawn, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(MT, us, all, moveStackList, pos, targetOther, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(MT, us, all, moveStackList, pos, targetOther, ksq);
+		const PieceMoveEvent pmEvent(MT, us, all, pos, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn( moveStackList, pmEvent, targetPawn);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(moveStackList, pmEvent, targetOther);
 
 		return moveStackList;
 	}

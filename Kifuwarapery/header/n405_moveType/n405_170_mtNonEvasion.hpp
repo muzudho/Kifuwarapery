@@ -23,14 +23,15 @@ public:
 		target |= pos.GetBbOf(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, us, false, pos, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn( moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(moveStackList, pmEvent, target);
 
 		return moveStackList;
 	}

@@ -11,6 +11,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "n374_040_pieceMoveEvent.hpp"
 
 
 class BishopRookMovesGenerator {
@@ -18,28 +19,27 @@ public:
 
 	// 角, 飛車の共通処理☆
 	static FORCE_INLINE MoveStack* GenerateBishopOrRookMoves(
-		MoveType mt,
-		PieceType pt,
-		Color us,
-		bool all,
-		MoveStack* moveStackList, const Position& pos, const Bitboard& target, const Square /*ksq*/
+		MoveStack* moveStackList,
+		const PieceType pt,
+		const PieceMoveEvent ptEvent,
+		const Bitboard& target
 		)
 	{
-		Bitboard fromBB = pos.GetBbOf(pt, us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf(pt, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(from));
-			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(pos.GetOccupiedBB(), us, from) & target;
+			const bool fromCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(from));
+			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(us, UtilSquare::ToRank(to));
+				const bool toCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(to));
 				if (fromCanPromote | toCanPromote) {
-					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(mt, pt, from, to, pos);
-					if (mt == N07_NonEvasion || all)
-						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakePromoteMove2(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
+					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all)
+						(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
-					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(mt, pt, from, to, pos);
+					(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
 			}
 		}
 		return moveStackList;
