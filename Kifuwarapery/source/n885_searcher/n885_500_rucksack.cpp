@@ -67,140 +67,6 @@ void Rucksack::Init() {
 	this->m_tt.SetSize(this->m_engineOptions["USI_Hash"]);
 }
 
-namespace {
-	// true にすると、シングルスレッドで動作する。デバッグ用。
-	const bool FakeSplit = false;
-
-	inline Score razorMargin(const Depth d) {
-		return static_cast<Score>(512 + 16 * static_cast<int>(d));
-	}
-
-	// checkTime() を呼び出す最大間隔(msec)
-	const int TimerResolution = 5;
-
-
-	inline bool checkIsDangerous() {
-		// not implement
-		// 使用しないで良いかも知れない。
-		return false;
-	}
-
-	// 1 ply前の first move によって second move が合法手にするか。
-	bool allows(const Position& pos, const Move first, const Move second) {
-		const Square m1to   = first.To();
-		const Square m1from = first.From();
-		const Square m2from = second.From();
-		const Square m2to   = second.To();
-		if (m1to == m2from || m2to == m1from) {
-			return true;
-		}
-
-		if (second.IsDrop() && first.IsDrop()) {
-			return false;
-		}
-
-		if (!second.IsDrop() && !first.IsDrop()) {
-			if (g_setMaskBb.IsSet(&g_betweenBb.GetBetweenBB(m2from, m2to), m1from)) {
-				return true;
-			}
-		}
-
-		const PieceType m1pt = first.GetPieceTypeFromOrDropped();
-		const Color us = pos.GetTurn();
-		const Bitboard occ = (second.IsDrop() ? pos.GetOccupiedBB() : pos.GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(m2from));
-		const Bitboard m1att = UtilAttack::GetAttacksFrom(m1pt, us, m1to, occ);
-		if (g_setMaskBb.IsSet(&m1att, m2to)) {
-			return true;
-		}
-
-		if (g_setMaskBb.IsSet(&m1att, pos.GetKingSquare(us))) {
-			return true;
-		}
-
-		return false;
-	}
-
-	Score scoreToTT(const Score s, const Ply ply) {
-		assert(s != ScoreNone);
-
-		return (ScoreMateInMaxPly <= s ? s + static_cast<Score>(ply)
-				: s <= ScoreMatedInMaxPly ? s - static_cast<Score>(ply)
-				: s);
-	}
-
-	Score scoreFromTT(const Score s, const Ply ply) {
-		return (s == ScoreNone ? ScoreNone
-				: ScoreMateInMaxPly <= s ? s - static_cast<Score>(ply)
-				: s <= ScoreMatedInMaxPly ? s + static_cast<Score>(ply)
-				: s);
-	}
-
-	// fitst move によって、first move の相手側の second move を違法手にするか。
-	bool refutes(const Position& pos, const Move first, const Move second) {
-		assert(pos.IsOK());
-
-		const Square m2to = second.To();
-		const Square m1from = first.From(); // 駒打でも今回はこれで良い。
-
-		if (m1from == m2to) {
-			return true;
-		}
-
-		const PieceType m2ptFrom = second.GetPieceTypeFrom();
-		if (
-			second.IsCaptureOrPromotion()
-			&& (
-				//(pos.GetPieceScore(second.GetCap()) <= pos.GetPieceScore(m2ptFrom))
-				(PieceScore::GetPieceScore(second.GetCap()) <= PieceScore::GetPieceScore(m2ptFrom))
-				||
-				m2ptFrom == N08_King
-			)
-		){
-			// first により、新たに m2to に当たりになる駒があるなら true
-			assert(!second.IsDrop());
-
-			const Color us = pos.GetTurn();
-			const Square m1to = first.To();
-			const Square m2from = second.From();
-			Bitboard occ = pos.GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(m2from) ^ g_setMaskBb.GetSetMaskBb(m1to);
-			PieceType m1ptTo;
-
-			if (first.IsDrop()) {
-				m1ptTo = first.GetPieceTypeDropped();
-			}
-			else {
-				m1ptTo = first.GetPieceTypeTo();
-				occ ^= g_setMaskBb.GetSetMaskBb(m1from);
-			}
-
-			if (g_setMaskBb.IsSet(&UtilAttack::GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
-				return true;
-			}
-
-			const Color them = UtilColor::OppositeColor(us);
-			// first で動いた後、sq へ当たりになっている遠隔駒
-			const Bitboard xray =
-				(PieceTypeArray::m_lance.GetAttacks2From(occ, them, m2to) & pos.GetBbOf(N02_Lance, us))
-				| (PieceTypeArray::m_rook.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
-				| (PieceTypeArray::m_bishop.GetAttacks2From(occ, Color::ColorNum, m2to) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
-
-			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
-			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(&pos.GetOccupiedBB(),m2to))).Exists1Bit()) {
-				return true;
-			}
-		}
-
-		if (!second.IsDrop()
-			&& UtilPieceType::IsSlider(m2ptFrom)
-			&& g_setMaskBb.IsSet(&g_betweenBb.GetBetweenBB(second.From(), m2to), first.To())
-			&& ScoreZero <= pos.GetSeeSign(first))
-		{
-			return true;
-		}
-
-		return false;
-	}
-}
 
 std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
 
@@ -1090,7 +956,7 @@ split_point_start:
 			&& thisThread->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
-			thisThread->ForkNewFighter<FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
+			thisThread->ForkNewFighter<Rucksack::FakeSplit>(pos, ss, alpha, beta, bestScore, bestMove,
 										 depth, threatMove, moveCount, mp, NT, cutNode);
 			if (beta <= bestScore) {
 				break;
