@@ -21,57 +21,21 @@ public:
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank9ExceptNL(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
-		/*
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		*/
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const = 0;
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank8ExceptN(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
-		/*
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		*/
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const = 0;
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank1234567(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
-		/*
-		Color us,
-		MoveStack* pMovestack,
-		const Position& pos,
-		const Bitboard& target,
-		const Hand& hand,
-		const int haveHandNum,
-		const int noKnightIdx,
-		const int noKnightLanceIdx,
-		const Bitboard& TRank8BB,
-		const Bitboard& TRank9BB,
-		*/
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const = 0;
 

@@ -118,7 +118,7 @@ public:
 			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
-			DropMakerEvent dmEvent(
+			const DropMakerEvent dmEvent(
 				us,
 				pos,
 				target,

@@ -23,14 +23,14 @@ public:
 		target |= pos.GetBbOf(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
-		moveStackList = GeneratePieceMoves_N01_Pawn(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N02_Lance(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N03_Knight(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N04_Silver(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N05_Bishop(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N06_Rook(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_pt(N16_GoldHorseDragon, N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
-		moveStackList = GeneratePieceMoves_N08_King(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(N07_NonEvasion, us, false, moveStackList, pos, target, ksq);
 
 		return moveStackList;
 	}

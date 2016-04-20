@@ -20,7 +20,7 @@ public:
 
 	MoveStack* MakeDropMovesToRank9ExceptNL(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		// このメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
@@ -30,7 +30,7 @@ public:
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		// このメソッドを実行しているようではエラーだぜ☆（＾ｑ＾）
@@ -40,7 +40,7 @@ public:
 
 	MoveStack* MakeDropMovesToRank1234567(
 		MoveStack* pMovestack,
-		DropMakerEvent& dmEvent,
+		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		Bitboard toBB = dmEvent.m_target & ~(dmEvent.m_tRank8BB | dmEvent.m_tRank9BB);
