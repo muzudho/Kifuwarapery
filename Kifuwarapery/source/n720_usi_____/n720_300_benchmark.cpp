@@ -35,6 +35,6 @@ void Benchmark(Position& pos) {
 
 		std::istringstream ss_go("byoyomi 10000");
 		usiOperation.Go(pos, ss_go);
-		pos.GetSearcher()->m_threads.WaitForThinkFinished();
+		pos.GetSearcher()->m_ownerHerosPub.WaitForThinkFinished();
 	}
 }

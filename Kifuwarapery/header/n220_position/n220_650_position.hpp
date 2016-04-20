@@ -26,7 +26,7 @@
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
 
-struct Thread;
+struct Military;
 class Rucksack;
 
 
@@ -39,13 +39,13 @@ public:
 
 	Position(const Position& pos);
 
-	Position(const Position& pos, Thread* th);
+	Position(const Position& pos, Military* th);
 
-	Position(const std::string& sfen, Thread* th, Rucksack* s);
+	Position(const std::string& sfen, Military* th, Rucksack* s);
 
 	Position& operator = (const Position& pos);
 
-	void Set(const std::string& sfen, Thread* th);
+	void Set(const std::string& sfen, Military* th);
 
 	Bitboard GetBbOf(const PieceType pt) const;
 
@@ -214,7 +214,7 @@ public:
 
 	RepetitionType IsDraw(const int checkMaxPly = std::numeric_limits<int>::max()) const;
 
-	Thread* GetThisThread() const;
+	Military* GetThisThread() const;
 
 	void SetStartPosPly(const Ply ply);
 
@@ -381,7 +381,7 @@ private:
 	// 時間管理に使用する。
 	Ply m_gamePly_;
 
-	Thread* m_thisThread_;
+	Military* m_thisThread_;
 
 	u64 m_nodes_;
 

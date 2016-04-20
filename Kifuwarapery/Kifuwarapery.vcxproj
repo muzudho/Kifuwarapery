@@ -222,7 +222,7 @@
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp" />
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp" />
     <ClInclude Include="header\n223_move____\n223_200_depth.hpp" />
-    <ClInclude Include="header\n223_move____\n223_300_moveScore.hpp" />
+    <ClInclude Include="header\n223_move____\n223_300_moveAndScore.hpp" />
     <ClInclude Include="header\n223_move____\n223_500_flashlight.hpp" />
     <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp" />
     <ClInclude Include="header\n080_common__\n080_050_ifdef.hpp" />
@@ -369,8 +369,8 @@
     <ClInclude Include="header\n680_egOption\n680_300_engineOptionSetup.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_300_benchmark.hpp" />
-    <ClInclude Include="header\n760_thread__\n760_250_thread.hpp" />
-    <ClInclude Include="header\n760_thread__\n760_300_mainThread.hpp" />
+    <ClInclude Include="header\n760_thread__\n760_250_military.hpp" />
+    <ClInclude Include="header\n760_thread__\n760_300_captain.hpp" />
     <ClInclude Include="header\n760_thread__\n760_350_warrior.hpp" />
     <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp" />
     <ClInclude Include="header\n800_learn___\n800_100_stopwatch.hpp" />
@@ -442,7 +442,7 @@
     <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_100_move.cpp" />
-    <ClCompile Include="source\n223_move____\n223_300_MoveScore.cpp" />
+    <ClCompile Include="source\n223_move____\n223_300_moveAndScore.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_070_ptAbstract.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_080_ptPromote.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_100_ptOccupied.cpp" />
@@ -567,8 +567,8 @@
     <ClCompile Include="source\n680_egOption\n680_300_engineOptionSetup.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_300_benchmark.cpp" />
-    <ClCompile Include="source\n760_thread__\n760_250_thread.cpp" />
-    <ClCompile Include="source\n760_thread__\n760_300_mainThread.cpp" />
+    <ClCompile Include="source\n760_thread__\n760_250_military.cpp" />
+    <ClCompile Include="source\n760_thread__\n760_300_captain.cpp" />
     <ClCompile Include="source\n760_thread__\n760_350_warrior.cpp" />
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp" />
     <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp" />

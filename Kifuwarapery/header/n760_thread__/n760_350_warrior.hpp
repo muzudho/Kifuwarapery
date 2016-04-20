@@ -1,15 +1,15 @@
 ﻿#pragma once
 
 
-#include "n760_250_thread.hpp"
+#include "n760_250_military.hpp"
 
 class Rucksack;
 
 
 // 元の名前：　ＴｉｍｅｒＴｈｒｅａｄ
-struct Warrior : public Thread {
+struct Warrior : public Military {
 
-	explicit Warrior(Rucksack* s) : Thread(s), m_msec(0) {}
+	explicit Warrior(Rucksack* s) : Military(s), m_msec(0) {}
 
 	virtual void IdleLoop();
 

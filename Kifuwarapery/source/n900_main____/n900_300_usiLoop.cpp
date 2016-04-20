@@ -75,7 +75,7 @@ UsiLoop::UsiLoop()
 
 void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 {
-	Position pos(g_DefaultStartPositionSFEN, searcher.m_threads.GetMainThread(), &searcher);
+	Position pos(g_DefaultStartPositionSFEN, searcher.m_ownerHerosPub.GetFirstCaptain(), &searcher);
 
 	std::string cmd;
 	std::string token;
@@ -116,14 +116,14 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 				searcher.m_signals.m_stopOnPonderHit
 			) {
 				searcher.m_signals.m_stop = true;
-				searcher.m_threads.GetMainThread()->NotifyOne();
+				searcher.m_ownerHerosPub.GetFirstCaptain()->NotifyOne();
 			}
 			else {
 				searcher.m_limits.m_ponder = false;
 			}
 
 			if (token == "ponderhit" && searcher.m_limits.m_moveTime != 0) {
-				searcher.m_limits.m_moveTime += searcher.m_stopwatchForSearch.GetElapsed();
+				searcher.m_limits.m_moveTime += searcher.m_stopwatch.GetElapsed();
 			}
 		}
 		else if (token == "usinewgame") {
@@ -189,5 +189,5 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 
 	//────────────────────────────────────────────────────────────────────────────────
 
-	searcher.m_threads.WaitForThinkFinished();
+	searcher.m_ownerHerosPub.WaitForThinkFinished();
 }

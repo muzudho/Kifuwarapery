@@ -7,11 +7,11 @@
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n640_searcher/n640_440_splitedNode.hpp"
-#include "../../header/n760_thread__/n760_250_thread.hpp"
+#include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
 
-Thread::Thread(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
+Military::Military(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
 	m_pSearcher = searcher;
 	m_exit = false;
 	m_searching = false;
@@ -19,15 +19,15 @@ Thread::Thread(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
 	m_maxPly = 0;
 	m_activeSplitedNode = nullptr;
 	m_activePosition = nullptr;
-	m_idx = searcher->m_threads.size();
+	m_idx = searcher->m_ownerHerosPub.size();
 }
 
-void Thread::NotifyOne() {
+void Military::NotifyOne() {
 	std::unique_lock<Mutex> lock(m_sleepLock);
 	m_sleepCond.notify_one();
 }
 
-bool Thread::CutoffOccurred() const {
+bool Military::CutoffOccurred() const {
 	for (SplitedNode* sp = m_activeSplitedNode; sp != nullptr; sp = sp->m_pParentSplitedNode) {
 		if (sp->m_cutoff) {
 			return true;
@@ -37,7 +37,7 @@ bool Thread::CutoffOccurred() const {
 }
 
 // master と同じ thread であるかを判定
-bool Thread::IsAvailableTo(Thread* master) const {
+bool Military::IsAvailableTo(Military* master) const {
 	if (m_searching) {
 		return false;
 	}
@@ -47,14 +47,14 @@ bool Thread::IsAvailableTo(Thread* master) const {
 	return !spCount || (m_SplitedNodes[spCount - 1].m_slavesMask & (UINT64_C(1) << master->m_idx));
 }
 
-void Thread::WaitFor(volatile const bool& b) {
+void Military::WaitFor(volatile const bool& b) {
 	std::unique_lock<Mutex> lock(m_sleepLock);
 	m_sleepCond.wait(lock, [&] { return b; });
 }
 
 
 template <bool Fake>
-void Thread::ForkNewFighter(
+void Military::ForkNewFighter(
 	Position& pos,
 	Flashlight* pFlashlightBox,
 	const Score alpha,
@@ -72,7 +72,7 @@ void Thread::ForkNewFighter(
 	assert(pos.IsOK());
 	assert(bestScore <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(-ScoreInfinite < bestScore);
-	assert(m_pSearcher->m_threads.GetMinSplitDepth() <= depth);
+	assert(m_pSearcher->m_ownerHerosPub.GetMinSplitDepth() <= depth);
 
 	assert(m_searching);
 	assert(m_splitedNodesSize < g_MaxSplitedNodesPerThread);
@@ -97,7 +97,7 @@ void Thread::ForkNewFighter(
 	sp.m_cutoff = false;
 	sp.m_pFlashlightBox = pFlashlightBox;
 
-	m_pSearcher->m_threads.m_mutex_.lock();
+	m_pSearcher->m_ownerHerosPub.m_mutex_.lock();
 	sp.m_mutex.lock();
 
 	++m_splitedNodesSize;
@@ -106,10 +106,10 @@ void Thread::ForkNewFighter(
 
 	// thisThread が常に含まれるので 1
 	size_t slavesCount = 1;
-	Thread* slave;
+	Military* slave;
 
-	while ((slave = m_pSearcher->m_threads.GetAvailableSlave(this)) != nullptr
-		&& ++slavesCount <= m_pSearcher->m_threads.m_maxThreadsPerSplitedNode_ && !Fake)
+	while ((slave = m_pSearcher->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
+		&& ++slavesCount <= m_pSearcher->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
 	{
 		sp.m_slavesMask |= UINT64_C(1) << slave->m_idx;
 		slave->m_activeSplitedNode = &sp;
@@ -119,11 +119,11 @@ void Thread::ForkNewFighter(
 
 	if (1 < slavesCount || Fake) {
 		sp.m_mutex.unlock();
-		m_pSearcher->m_threads.m_mutex_.unlock();
-		Thread::IdleLoop();
+		m_pSearcher->m_ownerHerosPub.m_mutex_.unlock();
+		Military::IdleLoop();
 		assert(!m_searching);
 		assert(!m_activePosition);
-		m_pSearcher->m_threads.m_mutex_.lock();
+		m_pSearcher->m_ownerHerosPub.m_mutex_.lock();
 		sp.m_mutex.lock();
 	}
 
@@ -135,17 +135,17 @@ void Thread::ForkNewFighter(
 	bestMove = sp.m_bestMove;
 	bestScore = sp.m_bestScore;
 
-	m_pSearcher->m_threads.m_mutex_.unlock();
+	m_pSearcher->m_ownerHerosPub.m_mutex_.unlock();
 	sp.m_mutex.unlock();
 }
 
-template void Thread::ForkNewFighter<true >(
+template void Military::ForkNewFighter<true >(
 	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
 );
 
-template void Thread::ForkNewFighter<false>(
+template void Military::ForkNewFighter<false>(
 	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode

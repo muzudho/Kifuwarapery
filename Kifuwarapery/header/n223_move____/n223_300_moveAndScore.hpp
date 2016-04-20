@@ -5,18 +5,18 @@
 
 
 // 指し手と、評価値。
-class MoveScore {
+class MoveAndScore {
 public:
 
 	// 指し手
-	Move m_move;
+	const Move m_move;
 
 	// 評価値
-	enum Score m_score;
+	const enum Score m_score;
 
 public:
 
-	MoveScore(Move move, enum Score score);
+	MoveAndScore(Move move, enum Score score);
 	
 	// 指し手
 	Move GetMove(void);

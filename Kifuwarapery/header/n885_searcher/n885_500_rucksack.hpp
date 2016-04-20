@@ -35,7 +35,7 @@ public:
 	std::vector<Move>		m_ourMoves;
 
 	// 検索用タイマー？
-	Stopwatch				m_stopwatchForSearch;
+	Stopwatch				m_stopwatch;
 
 	// ステータス？
 	StateStackPtr			m_setUpStates;
@@ -80,7 +80,7 @@ public:
 	Position				m_rootPosition;
 
 	// スレッズ？
-	HerosPub				m_threads;
+	HerosPub				m_ownerHerosPub;
 
 	// USIオプション？
 	EngineOptionsMap		m_engineOptions;

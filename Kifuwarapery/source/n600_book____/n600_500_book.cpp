@@ -1,4 +1,5 @@
-﻿#include <algorithm>	//std::max
+﻿#include <iostream>		//cout
+#include <algorithm>	//std::max
 #include <sstream>
 #include "../../header/n220_position/n220_660_utilMovePos.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
@@ -99,7 +100,7 @@ Key Book::GetBookKey(const Position& pos) {
 	return key;
 }
 
-MoveScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
+MoveAndScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
@@ -109,7 +110,7 @@ MoveScore Book::GetProbe(const Position& position, const std::string& fName, con
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
-		return MoveScore(Move::GetMoveNone(), ScoreNone);
+		return MoveAndScore(Move::GetMoveNone(), ScoreNone);
 	}
 
 	Binary_search(key);
@@ -146,7 +147,7 @@ MoveScore Book::GetProbe(const Position& position, const std::string& fName, con
 		}
 	}
 
-	return MoveScore(move, score);
+	return MoveAndScore(move, score);
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {
@@ -196,7 +197,7 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->m_threads.GetMainThread());
+		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {
@@ -235,7 +236,7 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 					std::istringstream ssCmd("byoyomi 1000");
 					UsiOperation usiOperation;
 					usiOperation.Go(pos, ssCmd);
-					pos.GetSearcher()->m_threads.WaitForThinkFinished();
+					pos.GetSearcher()->m_ownerHerosPub.WaitForThinkFinished();
 
 					pos.UndoMove(move);
 					SetUpStates->pop();

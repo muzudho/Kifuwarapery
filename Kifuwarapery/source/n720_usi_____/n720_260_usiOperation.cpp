@@ -68,7 +68,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 	pos.GetSearcher()->m_ourMoves = moves;
 
 	// 思考を開始☆
-	pos.GetSearcher()->m_threads.StartThinking(pos, limits, moves);
+	pos.GetSearcher()->m_ownerHerosPub.StartThinking(pos, limits, moves);
 }
 
 #if defined LEARN
@@ -78,7 +78,7 @@ void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move Get
 	std::vector<Move> moves;
 	m_limits.GetDepth = GetDepth;
 	moves.push_back(GetMove);
-	GetPos.GetSearcher()->m_threads.StartThinking(GetPos, m_limits, moves);
+	GetPos.GetSearcher()->m_ownerHerosPub.StartThinking(GetPos, m_limits, moves);
 }
 #endif
 
@@ -138,7 +138,7 @@ void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 		return;
 	}
 
-	pos.Set(sfen, pos.GetSearcher()->m_threads.GetMainThread());
+	pos.Set(sfen, pos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
 	pos.GetSearcher()->m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 
 	Ply currentPly = pos.GetGamePly();

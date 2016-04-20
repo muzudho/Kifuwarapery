@@ -579,7 +579,7 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 
 		if (ptCaptured == N08_King) {
 			if (opponentAttackers.Exists1Bit()) {
-				swapList[slIndex++] = g_CaptureKingScore;
+				swapList[slIndex++] = PieceScore::m_CaptureKingScore;
 			}
 			break;
 		}
@@ -588,7 +588,7 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 	if (asymmThreshold) {
 		for (int i = 0; i < slIndex; i += 2) {
 			if (swapList[i] < asymmThreshold) {
-				swapList[i] = -g_CaptureKingScore;
+				swapList[i] = -PieceScore::m_CaptureKingScore;
 			}
 		}
 	}
@@ -1811,7 +1811,7 @@ RepetitionType Position::IsDraw(const int checkMaxPly) const {
 	return N00_NotRepetition;
 }
 
-Thread * Position::GetThisThread() const
+Military * Position::GetThisThread() const
 {
 	return m_thisThread_;
 }
@@ -1932,13 +1932,13 @@ Position::Position(const Position & pos)
 	*this = pos;
 }
 
-Position::Position(const Position & pos, Thread * th)
+Position::Position(const Position & pos, Military * th)
 {
 	*this = pos;
 	m_thisThread_ = th;
 }
 
-Position::Position(const std::string & sfen, Thread * th, Rucksack * s)
+Position::Position(const std::string & sfen, Military * th, Rucksack * s)
 {
 	Set(sfen, th);
 	SetSearcher(s);
@@ -1955,7 +1955,7 @@ Position& Position::operator = (const Position& pos) {
 	return *this;
 }
 
-void Position::Set(const std::string& sfen, Thread* th) {
+void Position::Set(const std::string& sfen, Military* th) {
 	Piece promoteFlag = UnPromoted;
 	std::istringstream ss(sfen);
 	char token;

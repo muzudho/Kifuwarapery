@@ -11,7 +11,7 @@
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 
 
-struct Thread;
+struct Military;
 
 
 // 元の名前は ＳｐｌｉｔＰｏｉｎｔ☆
@@ -24,7 +24,7 @@ struct SplitedNode {
 	// サーチ・スタック☆
 	const Flashlight*	m_pFlashlightBox;
 
-	Thread*				m_masterThread;
+	Military*				m_masterThread;
 
 	Depth				m_depth;
 

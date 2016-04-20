@@ -12,7 +12,7 @@ namespace {
 	void onEvalDir(Rucksack*, const EngineOptionable& opt) {
 		std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(opt, true);
 	}
-	void onThreads(Rucksack* s, const EngineOptionable&) { s->m_threads.ReadUSIOptions(s); }
+	void onThreads(Rucksack* s, const EngineOptionable&) { s->m_ownerHerosPub.ReadUSIOptions(s); }
 	// 論理的なコア数の取得
 	inline int cpuCoreCount() {
 		// todo: boost::thread::physical_concurrency() を使うこと。

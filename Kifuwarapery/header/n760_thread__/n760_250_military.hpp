@@ -18,12 +18,13 @@ const int g_MaxSplitedNodesPerThread = 8;
 
 
 
+// 元の名前：Ｔｈｒｅａｄ
+// ゲームツリーを戦線拡大していくぜ☆！（＾ｑ＾）
+struct Military {
 
-struct Thread {
+	explicit Military(Rucksack* s);
 
-	explicit Thread(Rucksack* s);
-
-	virtual ~Thread() {};
+	virtual ~Military() {};
 
 	virtual void IdleLoop();
 
@@ -31,7 +32,7 @@ struct Thread {
 
 	bool CutoffOccurred() const;
 
-	bool IsAvailableTo(Thread* master) const;
+	bool IsAvailableTo(Military* master) const;
 
 	void WaitFor(volatile const bool& b);
 

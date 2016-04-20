@@ -17,8 +17,7 @@
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
-#include "../../header/n223_move____/n223_300_moveScore.hpp"
-#include "../../header/n223_move____/n223_300_moveScore.hpp"
+#include "../../header/n223_move____/n223_300_moveAndScore.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
@@ -59,7 +58,7 @@ void Rucksack::Init() {
 	EngineOptionSetup engineOptionSetup;
 	engineOptionSetup.Initialize( &m_engineOptions, this);
 
-	this->m_threads.Init(this);
+	this->m_ownerHerosPub.Init(this);
 	this->m_tt.SetSize(this->m_engineOptions["USI_Hash"]);
 }
 
@@ -74,44 +73,56 @@ namespace {
 	// checkTime() を呼び出す最大間隔(msec)
 	const int TimerResolution = 5;
 
+	// 何がスキルなのか☆？（＾ｑ＾）
 	struct Skill {
+
 		Skill(const int l, const int mr)
-			: level(l),
-			  max_random_score_diff(static_cast<Score>(mr)),
-			  best(Move::GetMoveNone()) {}
+			: m_level(l),
+			  m_maxRandomScoreDiff(static_cast<Score>(mr)),
+			  m_best(Move::GetMoveNone()) {}
+
 		~Skill() {}
+
 		void swapIfEnabled(Rucksack* s) {
 			if (enabled()) {
 				auto it = std::find(s->m_rootMoves.begin(),
 									s->m_rootMoves.end(),
-									(!best.IsNone() ? best : pickMove(s)));
+									(!m_best.IsNone() ? m_best : pickMove(s)));
 				if (s->m_rootMoves.begin() != it)
 					SYNCCOUT << "info string swap multipv 1, " << it - s->m_rootMoves.begin() + 1 << SYNCENDL;
 				std::swap(s->m_rootMoves[0], *it);
 			}
 		}
-		bool enabled() const { return level < 20 || max_random_score_diff != ScoreZero; }
-		bool timeToPick(const int depth) const { return depth == 1 + level; }
+
+		bool enabled() const { return m_level < 20 || m_maxRandomScoreDiff != ScoreZero; }
+
+		bool timeToPick(const int depth) const { return depth == 1 + m_level; }
+
 		Move pickMove(Rucksack* s) {
 			// level については未対応。max_random_score_diff についてのみ対応する。
-			if (max_random_score_diff != ScoreZero) {
+			if (m_maxRandomScoreDiff != ScoreZero) {
 				size_t i = 1;
 				for (; i < s->m_pvSize; ++i) {
-					if (max_random_score_diff < s->m_rootMoves[0].m_score_ - s->m_rootMoves[i].m_score_)
+					if (m_maxRandomScoreDiff < s->m_rootMoves[0].m_score_ - s->m_rootMoves[i].m_score_)
 						break;
 				}
 				// 0 から i-1 までの間でランダムに選ぶ。
 				std::uniform_int_distribution<size_t> dist(0, i-1);
-				best = s->m_rootMoves[dist(g_randomTimeSeed)].m_pv_[0];
-				return best;
+				m_best = s->m_rootMoves[dist(g_randomTimeSeed)].m_pv_[0];
+				return m_best;
 			}
-			best = s->m_rootMoves[0].m_pv_[0];
-			return best;
+			m_best = s->m_rootMoves[0].m_pv_[0];
+			return m_best;
 		}
 
-		int level;
-		Score max_random_score_diff;
-		Move best;
+		// レベル☆？
+		int m_level;
+
+		// ランダムな評価値の差分の最大値か☆？？
+		Score m_maxRandomScoreDiff;
+
+		// ベストムーブか☆？
+		Move m_best;
 	};
 
 	inline bool checkIsDangerous() {
@@ -236,7 +247,7 @@ namespace {
 
 		if (abs(score) < ScoreMateInMaxPly) {
 			// cp は centi pawn の略
-			ss << "cp " << score * 100 / g_PawnScore;
+			ss << "cp " << score * 100 / PieceScore::m_PawnScore;
 		}
 		else {
 			// mate の後には、何手で詰むかを表示する。
@@ -256,15 +267,15 @@ namespace {
 std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
 
 	// 思考時間（ミリ秒。読み筋表示用）
-	const int time = m_stopwatchForSearch.GetElapsed();
+	const int time = m_stopwatch.GetElapsed();
 
 	const size_t usiPVSize = m_pvSize;
 	Ply selDepth = 0; // 選択的に読んでいる部分の探索深さ。
 	std::stringstream ss;
 
-	for (size_t i = 0; i < m_threads.size(); ++i) {
-		if (selDepth < m_threads[i]->m_maxPly) {
-			selDepth = m_threads[i]->m_maxPly;
+	for (size_t i = 0; i < m_ownerHerosPub.size(); ++i) {
+		if (selDepth < m_ownerHerosPub[i]->m_maxPly) {
+			selDepth = m_ownerHerosPub[i]->m_maxPly;
 		}
 	}
 
@@ -488,9 +499,10 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 	return bestScore;
 }
 
-// iterative deepening loop
+// 深い反復ループ☆？（iterative deepening loop）
+// 反復深化探索のことなのかだぜ☆（＾ｑ＾）？
 void Rucksack::IdLoop(Position& pos) {
-	Flashlight ss[g_maxPlyPlus2];
+	Flashlight flashlight[g_maxPlyPlus2];
 	Ply depth;
 	Ply prevBestMoveChanges;
 	Score bestScore = -ScoreInfinite;
@@ -500,7 +512,7 @@ void Rucksack::IdLoop(Position& pos) {
 	bool bestMoveNeverChanged = true;
 	int lastInfoTime = -1; // 将棋所のコンソールが詰まる問題への対処用
 
-	memset(ss, 0, 4 * sizeof(Flashlight));
+	memset(flashlight, 0, 4 * sizeof(Flashlight));
 	m_bestMoveChanges = 0;
 #if defined LEARN
 	// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
@@ -509,16 +521,17 @@ void Rucksack::IdLoop(Position& pos) {
 	depth = 0;
 #endif
 
-	ss[0].m_currentMove = Move::GetMoveNull(); // skip update gains
+	flashlight[0].m_currentMove = Move::GetMoveNull(); // skip update gains
 	this->m_tt.NewSearch();
 	this->m_history.Clear();
 	this->m_gains.Clear();
 
+	// マルチＰＶの数☆？
 	m_pvSize = m_engineOptions["MultiPV"];
 	Skill skill(m_engineOptions["Skill_Level"], m_engineOptions["Max_Random_Score_Diff"]);
 
 	if (m_engineOptions["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
-		skill.max_random_score_diff = ScoreZero;
+		skill.m_maxRandomScoreDiff = ScoreZero;
 		m_pvSize = 1;
 		assert(!skill.enabled()); // level による設定が出来るようになるまでは、これで良い。
 	}
@@ -564,18 +577,22 @@ void Rucksack::IdLoop(Position& pos) {
 			m_rootMoves[i].m_prevScore_ = m_rootMoves[i].m_score_;
 		}
 
-		prevBestMoveChanges = m_bestMoveChanges;
-		m_bestMoveChanges = 0;
+		prevBestMoveChanges = this->m_bestMoveChanges;
+		this->m_bestMoveChanges = 0;
 
 		// Multi PV loop
-		for (m_pvIdx = 0; m_pvIdx < m_pvSize && !m_signals.m_stop; ++m_pvIdx) {
+		for (this->m_pvIdx = 0; this->m_pvIdx < this->m_pvSize && !this->m_signals.m_stop; ++this->m_pvIdx) {
 #if defined LEARN
 			m_alpha = this->m_alpha;
 			m_beta  = this->m_beta;
 #else
 			// aspiration search
 			// alpha, beta をある程度絞ることで、探索効率を上げる。
-			if (5 <= depth && abs(m_rootMoves[m_pvIdx].m_prevScore_) < g_ScoreKnownWin) {
+			if (
+				// 深さ５以上で
+				5 <= depth &&
+				abs(m_rootMoves[m_pvIdx].m_prevScore_) < PieceScore::m_ScoreKnownWin
+			) {
 				delta = static_cast<Score>(16);
 				alpha = m_rootMoves[m_pvIdx].m_prevScore_ - delta;
 				beta  = m_rootMoves[m_pvIdx].m_prevScore_ + delta;
@@ -590,13 +607,13 @@ void Rucksack::IdLoop(Position& pos) {
 			// fail high/low になったなら、今度は window 幅を広げて、再探索を行う。
 			while (true) {
 				// 探索を行う。
-				ss->m_staticEvalRaw.m_p[0][0] = (ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				bestScore = Search<N00_Root>(pos, ss + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
+				flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+				bestScore = Search<N00_Root>(pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 				// 先頭が最善手になるようにソート
 				UtilMoveStack::InsertionSort(m_rootMoves.begin() + m_pvIdx, m_rootMoves.end());
 
 				for (size_t i = 0; i <= m_pvIdx; ++i) {
-					ss->m_staticEvalRaw.m_p[0][0] = (ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+					flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 					m_rootMoves[i].InsertPvInTT(pos);
 				}
 
@@ -623,16 +640,16 @@ void Rucksack::IdLoop(Position& pos) {
 				
 				if (
 					// 思考時間が3秒経過し、
-					3000 < m_stopwatchForSearch.GetElapsed()
+					3000 < m_stopwatch.GetElapsed()
 					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < m_stopwatchForSearch.GetElapsed()))
+					&& (depth < 10 || lastInfoTime + 200 < m_stopwatch.GetElapsed()))
 				{
-					lastInfoTime = m_stopwatchForSearch.GetElapsed();
+					lastInfoTime = m_stopwatch.GetElapsed();
 					SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 				}
 
 				// fail high/low のとき、aspiration window を広げる。
-				if (g_ScoreKnownWin <= abs(bestScore)) {
+				if (PieceScore::m_ScoreKnownWin <= abs(bestScore)) {
 					// 勝ち(負け)だと判定したら、最大の幅で探索を試してみる。
 					alpha = -ScoreInfinite;
 					beta = ScoreInfinite;
@@ -658,12 +675,12 @@ void Rucksack::IdLoop(Position& pos) {
 				(
 					m_pvIdx + 1 == m_pvSize ||
 					// 思考時間が3秒を経過し
-					3000 < m_stopwatchForSearch.GetElapsed()
+					3000 < m_stopwatch.GetElapsed()
 				)
 				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < m_stopwatchForSearch.GetElapsed()))
+				&& (depth < 10 || lastInfoTime + 200 < m_stopwatch.GetElapsed()))
 			{
-				lastInfoTime = m_stopwatchForSearch.GetElapsed();
+				lastInfoTime = m_stopwatch.GetElapsed();
 				SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
 			}
 		}
@@ -683,7 +700,7 @@ void Rucksack::IdLoop(Position& pos) {
 			// 次のイテレーションを回す時間が無いなら、ストップ
 			if (
 				// 有効時間の62%が、思考経過時間（ミリ秒）に満たない場合。
-				(m_timeManager.GetAvailableTime() * 62) / 100 < m_stopwatchForSearch.GetElapsed()
+				(m_timeManager.GetAvailableTime() * 62) / 100 < m_stopwatch.GetElapsed()
 			) {
 				stop = true;
 			}
@@ -699,23 +716,23 @@ void Rucksack::IdLoop(Position& pos) {
 				&& bestMoveNeverChanged
 				&& m_pvSize == 1
 				// ここは確実にバグらせないようにする。
-				&& -ScoreInfinite + 2 * g_CapturePawnScore <= bestScore
+				&& -ScoreInfinite + 2 * PieceScore::m_CapturePawnScore <= bestScore
 				&& (
 					m_rootMoves.size() == 1
 					||
 					// または、利用可能時間の40%が、思考経過時間未満の場合。
 					m_timeManager.GetAvailableTime() * 40 / 100
 					<
-					m_stopwatchForSearch.GetElapsed()
+					m_stopwatch.GetElapsed()
 				)
 			){
-				const Score rBeta = bestScore - 2 * g_CapturePawnScore;
-				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				(ss+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
-				(ss+1)->m_skipNullMove = true;
-				const Score s = Search<N02_NonPV>(pos, ss+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
-				(ss+1)->m_skipNullMove = false;
-				(ss+1)->m_excludedMove = Move::GetMoveNone();
+				const Score rBeta = bestScore - 2 * PieceScore::m_CapturePawnScore;
+				(flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+				(flashlight+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
+				(flashlight+1)->m_skipNullMove = true;
+				const Score s = Search<N02_NonPV>(pos, flashlight+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
+				(flashlight+1)->m_skipNullMove = false;
+				(flashlight+1)->m_excludedMove = Move::GetMoveNone();
 
 				if (s < rBeta) {
 					stop = true;
@@ -851,7 +868,7 @@ Score Rucksack::Search(
 
 	// step1
 	// initialize node
-	Thread* thisThread = pos.GetThisThread();
+	Military* thisThread = pos.GetThisThread();
 	moveCount = playedMoveCount = 0;
 	inCheck = pos.InCheck();
 
@@ -1027,7 +1044,7 @@ Score Rucksack::Search(
 		ss->m_currentMove = Move::GetMoveNull();
 		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
-		if (beta < eval - g_PawnScore) {
+		if (beta < eval - PieceScore::m_PawnScore) {
 			reduction += OnePly;
 		}
 
@@ -1167,7 +1184,7 @@ split_point_start:
 		if (RootNode) {
 			m_signals.m_firstRootMove = (moveCount == 1);
 #if 0
-			if (GetThisThread == m_threads.GetMainThread() && 3000 < m_stopwatchForSearch.GetElapsed()) {
+			if (GetThisThread == m_ownerHerosPub.GetFirstCaptain() && 3000 < m_stopwatch.GetElapsed()) {
 				SYNCCOUT << "info depth " << GetDepth / OnePly
 						 << " currmove " << GetMove.ToUSI()
 						 << " currmovenumber " << m_moveCount + m_pvIdx << SYNCENDL;
@@ -1191,7 +1208,7 @@ split_point_start:
 			&& extension == Depth0
 			&& move == ttMove
 			&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
-			&& abs(ttScore) < g_ScoreKnownWin)
+			&& abs(ttScore) < PieceScore::m_ScoreKnownWin)
 		{
 			assert(ttScore != ScoreNone);
 
@@ -1384,8 +1401,8 @@ split_point_start:
 
 		// step19
 		if (!SPNode
-			&& m_threads.GetMinSplitDepth() <= depth
-			&& m_threads.GetAvailableSlave(thisThread)
+			&& m_ownerHerosPub.GetMinSplitDepth() <= depth
+			&& m_ownerHerosPub.GetAvailableSlave(thisThread)
 			&& thisThread->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
@@ -1584,13 +1601,13 @@ void Rucksack::Think() {
 	pos.SetNodesSearched(0);
 
 #if defined LEARN
-	m_threads[0]->m_searching = true;
+	m_ownerHerosPub[0]->m_searching = true;
 #else
 	m_tt.SetSize(m_engineOptions["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
+		const MoveAndScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&
@@ -1613,9 +1630,9 @@ void Rucksack::Think() {
 		}
 	}
 
-	Rucksack::m_threads.WakeUp(this);
+	Rucksack::m_ownerHerosPub.WakeUp(this);
 
-	Rucksack::m_threads.GetCurrWarrior()->m_msec =
+	Rucksack::m_ownerHerosPub.GetCurrWarrior()->m_msec =
 		(m_limits.IsUseTimeManagement() ?
 			std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
 			m_limits.m_nodes ?
@@ -1623,7 +1640,7 @@ void Rucksack::Think() {
 				100
 		);
 
-	Rucksack::m_threads.GetCurrWarrior()->NotifyOne();
+	Rucksack::m_ownerHerosPub.GetCurrWarrior()->NotifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(GetPos);
@@ -1636,13 +1653,13 @@ void Rucksack::Think() {
 
 #if defined LEARN
 #else
-	m_threads.GetCurrWarrior()->m_msec = 0; // timer を止める。
-	m_threads.Sleep();
+	m_ownerHerosPub.GetCurrWarrior()->m_msec = 0; // timer を止める。
+	m_ownerHerosPub.Sleep();
 
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
-			 << " time " << m_stopwatchForSearch.GetElapsed() << SYNCENDL;
+			 << " time " << m_stopwatch.GetElapsed() << SYNCENDL;
 
 	if (!m_signals.m_stop && (m_limits.m_ponder || m_limits.m_infinite)) {
 		m_signals.m_stopOnPonderHit = true;
@@ -1669,19 +1686,19 @@ void Rucksack::CheckTime() {
 
 	s64 nodes = 0;
 	if (m_limits.m_nodes) {
-		std::unique_lock<Mutex> lock(m_threads.m_mutex_);
+		std::unique_lock<Mutex> lock(m_ownerHerosPub.m_mutex_);
 
 		nodes = m_rootPosition.GetNodesSearched();
-		for (size_t i = 0; i < m_threads.size(); ++i) {
-			for (int j = 0; j < m_threads[i]->m_splitedNodesSize; ++j) {
-				SplitedNode& splitedNode = m_threads[i]->m_SplitedNodes[j];
+		for (size_t i = 0; i < m_ownerHerosPub.size(); ++i) {
+			for (int j = 0; j < m_ownerHerosPub[i]->m_splitedNodesSize; ++j) {
+				SplitedNode& splitedNode = m_ownerHerosPub[i]->m_SplitedNodes[j];
 				std::unique_lock<Mutex> spLock(splitedNode.m_mutex);
 				nodes += splitedNode.m_nodes;
 				u64 slvMask = splitedNode.m_slavesMask;
 				while (slvMask) {
 					const int index = firstOneFromLSB(slvMask);
 					slvMask &= slvMask - 1;
-					Position* pos = m_threads[index]->m_activePosition;
+					Position* pos = m_ownerHerosPub[index]->m_activePosition;
 					if (pos != nullptr) {
 						nodes += pos->GetNodesSearched();
 					}
@@ -1690,7 +1707,7 @@ void Rucksack::CheckTime() {
 		}
 	}
 
-	const int e = m_stopwatchForSearch.GetElapsed();
+	const int e = m_stopwatch.GetElapsed();
 
 	const bool stillAtFirstMove =
 		m_signals.m_firstRootMove
@@ -1709,12 +1726,12 @@ void Rucksack::CheckTime() {
 	}
 }
 
-void Thread::IdleLoop() {
+void Military::IdleLoop() {
 	SplitedNode* thisSp = m_splitedNodesSize ? m_activeSplitedNode : nullptr;
 	assert(!thisSp || (thisSp->m_masterThread == this && m_searching));
 
 	while (true) {
-		while ((!m_searching && m_pSearcher->m_threads.m_isSleepWhileIdle_) || m_exit)
+		while ((!m_searching && m_pSearcher->m_ownerHerosPub.m_isSleepWhileIdle_) || m_exit)
 		{
 			if (m_exit) {
 				assert(thisSp == nullptr);
@@ -1734,10 +1751,10 @@ void Thread::IdleLoop() {
 		if (m_searching) {
 			assert(!m_exit);
 
-			m_pSearcher->m_threads.m_mutex_.lock();
+			m_pSearcher->m_ownerHerosPub.m_mutex_.lock();
 			assert(m_searching);
 			SplitedNode* sp = m_activeSplitedNode;
-			m_pSearcher->m_threads.m_mutex_.unlock();
+			m_pSearcher->m_ownerHerosPub.m_mutex_.unlock();
 
 			Flashlight ss[g_maxPlyPlus2];
 			Position pos(*sp->m_position, this);
@@ -1762,7 +1779,7 @@ void Thread::IdleLoop() {
 			sp->m_slavesMask ^= (UINT64_C(1) << m_idx);
 			sp->m_nodes += pos.GetNodesSearched();
 
-			if (m_pSearcher->m_threads.m_isSleepWhileIdle_
+			if (m_pSearcher->m_ownerHerosPub.m_isSleepWhileIdle_
 				&& this != sp->m_masterThread
 				&& !sp->m_slavesMask)
 			{

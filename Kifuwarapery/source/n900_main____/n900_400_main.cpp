@@ -118,5 +118,5 @@ void Main01::Body(int argc, char* argv[])
 void Main01::Finalize()
 {
 	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
-	this->searcher->m_threads.Exit();
+	this->searcher->m_ownerHerosPub.Exit();
 }

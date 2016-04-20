@@ -8,8 +8,8 @@
 #include "../n520_evaluate/n520_700_evaluation09.hpp"
 #include "../n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
-#include "n760_250_thread.hpp"
-#include "n760_300_mainThread.hpp"
+#include "n760_250_military.hpp"
+#include "n760_300_captain.hpp"
 #include "n760_350_warrior.hpp"
 
 const int g_MaxThreads = 64;
@@ -19,7 +19,7 @@ class Rucksack;
 
 // 元の名前：　ＴｈｒｅａｄＰｏｏｌ
 // ベクター型。
-class HerosPub : public std::vector<Thread*> {
+class HerosPub : public std::vector<Military*> {
 public:
 	// 初期化？
 	void Init(Rucksack* s);
@@ -28,7 +28,7 @@ public:
 	void Exit();
 
 	// メインスレッド？
-	MainThread* GetMainThread() { return static_cast<MainThread*>((*this)[0]); }
+	Captain* GetFirstCaptain() { return static_cast<Captain*>((*this)[0]); }
 
 	// 最小の深さ？
 	Depth GetMinSplitDepth() const { return m_minimumSplitDepth_; }
@@ -46,7 +46,7 @@ public:
 	void ReadUSIOptions(Rucksack* s);
 
 	// スレーブ？
-	Thread* GetAvailableSlave(Thread* master) const;
+	Military* GetAvailableSlave(Military* master) const;
 
 	// タイマー・スレッドをセット？
 	void SetCurrWorrior(const int maxPly);//ｍａｘＰｌｙ＝ｍｓｅｃ

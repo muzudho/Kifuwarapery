@@ -221,7 +221,7 @@ public:
 		for (auto& s : searchers) {
 			s.initOptions();
 			setLearnOptions(s);
-			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.m_threads.GetMainThread(), s.thisptr));
+			positions_.push_back(Position(g_DefaultStartPositionSFEN, s.m_ownerHerosPub.GetFirstCaptain(), s.thisptr));
 			mts_.push_back(std::mt19937(std::chrono::system_clock::now().time_since_epoch().m_count()));
 			// ここでデフォルトコンストラクタでpush_backすると、
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
@@ -259,7 +259,7 @@ private:
 		textA >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
+		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
 		StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
@@ -341,7 +341,7 @@ private:
 		GetPos.GetSearcher()->m_tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
@@ -390,11 +390,11 @@ private:
 		moveCount_.Store(0);
 		for (auto& pred : predictions_)
 			pred.Store(0);
-		std::vector<std::thread> m_threads(positions_.m_size());
+		std::vector<std::thread> m_ownerHerosPub(positions_.m_size());
 		for (size_t i = 0; i < positions_.m_size(); ++i)
-			m_threads[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
+			m_ownerHerosPub[i] = std::thread([this, i] { learnParse1Body(positions_[i], mts_[i]); });
 		learnParse1Body(GetPos, mt_);
-		for (auto& thread : m_threads)
+		for (auto& thread : m_ownerHerosPub)
 			thread.join();
 
 		std::cout << "\nGames = " << bookMovesDatum_.m_size()
@@ -466,7 +466,7 @@ private:
 		Flashlight m_pFlashlightBox[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_threads.GetMainThread());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				PRINT_PV(GetPos.Print());
@@ -531,11 +531,11 @@ private:
 			t.Restart();
 			std::cout << "step " << step << "/" << stepNum_ << " " << std::flush;
 			index_ = 0;
-			std::vector<std::thread> m_threads(positions_.m_size());
+			std::vector<std::thread> m_ownerHerosPub(positions_.m_size());
 			for (size_t i = 0; i < positions_.m_size(); ++i)
-				m_threads[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
+				m_ownerHerosPub[i] = std::thread([this, i] { learnParse2Body(positions_[i], parse2Datum_[i]); });
 			learnParse2Body(GetPos, parse2Data_);
-			for (auto& thread : m_threads)
+			for (auto& thread : m_ownerHerosPub)
 				thread.join();
 
 			for (auto& parse2 : parse2Datum_) {

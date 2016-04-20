@@ -4,15 +4,15 @@
 
 
 void Warrior::IdleLoop() {
-	while (!m_exit) {
+	while (!this->m_exit) {
 		{
-			std::unique_lock<Mutex> lock(m_sleepLock);
-			if (!m_exit) {
-				m_sleepCond.wait_for(lock, std::chrono::milliseconds(m_msec ? m_msec : INT_MAX));
+			std::unique_lock<Mutex> lock(this->m_sleepLock);
+			if (!this->m_exit) {
+				m_sleepCond.wait_for(lock, std::chrono::milliseconds(this->m_msec ? this->m_msec : INT_MAX));
 			}
 		}
-		if (m_msec) {
-			m_pSearcher->CheckTime();
+		if (this->m_msec) {
+			this->m_pSearcher->CheckTime();
 		}
 	}
 }

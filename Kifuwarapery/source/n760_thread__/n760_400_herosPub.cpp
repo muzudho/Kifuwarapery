@@ -3,7 +3,7 @@
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
-#include "../../header/n760_thread__/n760_250_thread.hpp"
+#include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
@@ -12,10 +12,10 @@
 //namespace {
 template <typename T> T* newThread(Rucksack* s) {
 	T* th = new T(s);
-	th->m_handle = std::thread(&Thread::IdleLoop, th); // move constructor
+	th->m_handle = std::thread(&Military::IdleLoop, th); // move constructor
 	return th;
 }
-void deleteThread(Thread* th) {
+void deleteThread(Military* th) {
 	th->m_exit = true;
 	th->NotifyOne();
 	th->m_handle.join(); // Wait for thread termination
@@ -29,7 +29,7 @@ void HerosPub::Init(Rucksack* s) {
 #else
 	m_pWarrior_ = newThread<Warrior>(s);
 #endif
-	push_back(newThread<MainThread>(s));
+	push_back(newThread<Captain>(s));
 	ReadUSIOptions(s);
 }
 
@@ -63,7 +63,7 @@ void HerosPub::ReadUSIOptions(Rucksack* searcher) {
 	assert(0 < numberOfThreads);
 
 	while (size() < numberOfThreads) {
-		push_back(newThread<Thread>(searcher));
+		push_back(newThread<Military>(searcher));
 	}
 
 	while (numberOfThreads < size()) {
@@ -72,7 +72,7 @@ void HerosPub::ReadUSIOptions(Rucksack* searcher) {
 	}
 }
 
-Thread* HerosPub::GetAvailableSlave(Thread* master) const {
+Military* HerosPub::GetAvailableSlave(Military* master) const {
 	for (auto elem : *this) {
 		if (elem->IsAvailableTo(master)) {
 			return elem;
@@ -81,13 +81,14 @@ Thread* HerosPub::GetAvailableSlave(Thread* master) const {
 	return nullptr;
 }
 
-void HerosPub::SetCurrWorrior(const int msec) {
-	m_pWarrior_->m_maxPly = msec;
+// 元の引数名はｍｓｅｃ☆
+void HerosPub::SetCurrWorrior(const int maxPly) {
+	m_pWarrior_->m_maxPly = maxPly;
 	m_pWarrior_->NotifyOne(); // Wake up and restart the timer
 }
 
 void HerosPub::WaitForThinkFinished() {
-	MainThread* t = GetMainThread();
+	Captain* t = GetFirstCaptain();
 	std::unique_lock<Mutex> lock(t->m_sleepLock);
 	m_sleepCond_.wait(lock, [&] { return !(t->m_isThinking); });
 }
@@ -102,7 +103,7 @@ void HerosPub::StartThinking(
 #else
 	WaitForThinkFinished();
 #endif
-	position.GetSearcher()->m_stopwatchForSearch.Restart();
+	position.GetSearcher()->m_stopwatch.Restart();
 
 	position.GetSearcher()->m_signals.m_stopOnPonderHit = position.GetSearcher()->m_signals.m_firstRootMove = false;
 	position.GetSearcher()->m_signals.m_stop = position.GetSearcher()->m_signals.m_failedLowAtRoot = false;
@@ -129,7 +130,7 @@ void HerosPub::StartThinking(
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
 	GetPos.GetSearcher()->Think();
 #else
-	this->GetMainThread()->m_isThinking = true;
-	this->GetMainThread()->NotifyOne();
+	this->GetFirstCaptain()->m_isThinking = true;
+	this->GetFirstCaptain()->NotifyOne();
 #endif
 }
