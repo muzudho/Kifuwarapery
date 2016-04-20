@@ -14,11 +14,12 @@ public:
 	// 部分特殊化
 	// 駒打ち生成
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
-		Color us = pos.GetTurn();
-
-		const Bitboard target = pos.GetEmptyBB();
-		moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target);//<US>
-		return moveStackList;
+		return g_dropMoveGenerator.GenerateDropMoves(
+			pos.GetTurn(),//us,
+			moveStackList,
+			pos,
+			pos.GetEmptyBB()//target
+		);
 	}
 
 };

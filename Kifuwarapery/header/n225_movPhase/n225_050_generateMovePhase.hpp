@@ -3,7 +3,7 @@
 #include "../n080_common__/n080_150_overloadEnumOperators.hpp"
 
 
-// 指し手生成フェーズ☆？（＾ｑ＾）320_540_movePickerとかで使う☆
+// 指し手生成フェーズ☆？（＾ｑ＾）320_540_ＭｏｖｅＰｉｃｋｅｒとかで使う☆
 enum GenerateMovePhase {
 	N00_MainSearch,
 	N01_PH_TacticalMoves0,

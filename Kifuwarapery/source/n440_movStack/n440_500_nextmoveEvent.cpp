@@ -7,7 +7,7 @@
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_searchStack.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
-#include "../../header/n440_movStack/n440_500_movePicker.hpp"
+#include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 
 #include "../../header/n450_movPhase/n450_100_mainSearch.hpp"
 #include "../../header/n450_movPhase/n450_110_phTacticalMoves0.hpp"
@@ -36,7 +36,9 @@
 using History = Stats<false>;
 
 
-MovePicker::MovePicker(
+// （＾ｑ＾）元の名前は ＭｏｖｅＰｉｃｋｅｒ☆
+// 指し手を選ぶ関数の引数として使われるぜ☆（＾ｑ＾）
+NextmoveEvent::NextmoveEvent(
 	const Position& pos,
 	const Move ttm,
 	const Depth depth,
@@ -76,7 +78,7 @@ MovePicker::MovePicker(
 }
 
 // 静止探索で呼ばれる。
-MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq)
+NextmoveEvent::NextmoveEvent(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq)
 	: m_pos_(pos), m_history_(history), m_currMove_(GetFirstMove()), m_lastMove_(GetFirstMove())
 {
 	assert(depth <= Depth0);
@@ -97,7 +99,7 @@ MovePicker::MovePicker(const Position& pos, Move ttm, const Depth depth, const H
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
-MovePicker::MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt)
+NextmoveEvent::NextmoveEvent(const Position& pos, const Move ttm, const History& history, const PieceType pt)
 	: m_pos_(pos), m_history_(history), m_currMove_(GetFirstMove()), m_lastMove_(GetFirstMove())
 {
 	assert(!pos.InCheck());
@@ -115,7 +117,7 @@ MovePicker::MovePicker(const Position& pos, const Move ttm, const History& histo
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
-template <> Move MovePicker::GetNextMove<false>() {
+template <> Move NextmoveEvent::GetNextMove<false>() {
 	do {
 		// lastMove() に達したら次の phase に移る。
 		while (GetCurrMove() == GetLastMove()) {
@@ -133,8 +135,8 @@ template <> Move MovePicker::GetNextMove<false>() {
 }
 
 template <>
-Move MovePicker::GetNextMove<true>() {
-	return this->m_ss_->m_splitPoint->m_pMovePicker->GetNextMove<false>();
+Move NextmoveEvent::GetNextMove<true>() {
+	return this->m_ss_->m_splitPoint->m_pNextmoveEvent->GetNextMove<false>();
 }
 
 const Score LVATable[N15_PieceTypeNum] = {
@@ -143,14 +145,14 @@ const Score LVATable[N15_PieceTypeNum] = {
 };
 inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 
-void MovePicker::ScoreCaptures() {
+void NextmoveEvent::ScoreCaptures() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->m_move;
 		curr->m_score = Position::GetPieceScore(GetPos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
 	}
 }
 
-void MovePicker::ScoreEvasions() {
+void NextmoveEvent::ScoreEvasions() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->m_move;
 		const Score seeScore = GetPos().GetSeeSign(move);
@@ -170,7 +172,7 @@ void MovePicker::ScoreEvasions() {
 	}
 }
 
-void MovePicker::GoNextPhase() {
+void NextmoveEvent::GoNextPhase() {
 	m_currMove_ = GetFirstMove(); // legalMoves_[0] は番兵
 	++m_phase_;
 

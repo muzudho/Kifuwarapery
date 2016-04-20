@@ -62,7 +62,7 @@ public:
 		while (bb.Exists1Bit()) {
 			const Square to = bb.PopFirstOneFromI9();
 			// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
-			// attackersTo() が重いので、movePicker か search で合法手か調べる。
+			// attackersTo() が重いので、ＭｏｖｅＰｉｃｋｅｒ か search で合法手か調べる。
 			(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<N00_Capture>(N08_King, ksq, to, pos);
 		}
 
@@ -73,7 +73,7 @@ public:
 		}
 
 		// 王手している駒を玉以外で取る手の生成。
-		// pin されているかどうかは movePicker か search で調べる。
+		// pin されているかどうかは ＭｏｖｅＰｉｃｋｅｒ か search で調べる。
 		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 		const Bitboard target2 = target1 | checkers;
 

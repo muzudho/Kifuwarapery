@@ -20,6 +20,7 @@ public:
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();
 
+		// 要素の追加☆
 		moveStackList = pos.InCheck() ?
 			MoveTypeEvasion().GenerateMove( moveStackList, pos) :
 			MoveTypeNonEvasion().GenerateMove( moveStackList, pos);

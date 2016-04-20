@@ -8,7 +8,7 @@
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
-#include "../n440_movStack/n440_500_movePicker.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../n640_searcher/n640_440_splitPoint.hpp" // 持ち合い
 
 class Searcher;
@@ -40,7 +40,7 @@ struct Thread {
 		const Depth depth,
 		const Move threatMove,
 		const int moveCount,
-		MovePicker& mp,
+		NextmoveEvent& mp,
 		const NodeType nodeType,
 		const bool cutNode
 	);

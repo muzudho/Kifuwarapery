@@ -3,23 +3,23 @@
 
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n440_movStack/n440_500_movePicker.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
 
-class MovePicker;
+class NextmoveEvent;
 
 
 class PhKillers : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, MovePicker& movePicker) const {
-		Move move = movePicker.GetCurrMove()->m_move;
-		movePicker.IncrementCurMove();
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+		Move move = nmEvent.GetCurrMove()->m_move;
+		nmEvent.IncrementCurMove();
 		if (!move.IsNone()
-			&& move != movePicker.GetTranspositionTableMove()
-			&& movePicker.GetPos().MoveIsPseudoLegal(move, true)
-			&& movePicker.GetPos().GetPiece(move.To()) == N00_Empty)
+			&& move != nmEvent.GetTranspositionTableMove()
+			&& nmEvent.GetPos().MoveIsPseudoLegal(move, true)
+			&& nmEvent.GetPos().GetPiece(move.To()) == N00_Empty)
 		{
 			resultMove = move;
 			return true;
@@ -27,9 +27,9 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetCurrMove(movePicker.GetKillerMoves());//m_currMove_ = m_killerMoves_;
-		movePicker.SetLastMove(movePicker.GetCurrMove() + 2);
+	void GoNext2Phase(NextmoveEvent& nmEvent) {
+		nmEvent.SetCurrMove(nmEvent.GetKillerMoves());//m_currMove_ = m_killerMoves_;
+		nmEvent.SetLastMove(nmEvent.GetCurrMove() + 2);
 	}
 
 };

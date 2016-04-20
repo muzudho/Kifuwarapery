@@ -8,7 +8,7 @@
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_500_searchStack.hpp"
-#include "../n440_movStack/n440_500_movePicker.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 
 
 struct Thread;
@@ -32,7 +32,7 @@ struct SplitPoint {
 
 	bool				m_cutNode;
 
-	MovePicker*			m_pMovePicker;
+	NextmoveEvent*		m_pNextmoveEvent;
 
 	SplitPoint*			m_pParentSplitPoint;
 

@@ -20,7 +20,7 @@
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n223_move____/n223_300_moveScore.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
-#include "../../header/n440_movStack/n440_500_movePicker.hpp"
+#include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n600_book____/n600_500_book.hpp"
@@ -388,7 +388,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 	Evaluation09 evaluation;
 	evaluation.evaluate(pos, ss);
 
-	MovePicker mp(pos, ttMove, depth, m_history, (ss-1)->m_currentMove.To());
+	NextmoveEvent mp(pos, ttMove, depth, m_history, (ss-1)->m_currentMove.To());
 	const CheckInfo ci(pos);
 
 	while (!(move = mp.GetNextMove<false>()).IsNone())
@@ -414,7 +414,7 @@ Score Searcher::Qsearch(Position& pos, SearchStack* ss, Score alpha, Score beta,
 				continue;
 			}
 
-			// todo: MovePicker のオーダリングで SEE してるので、ここで SEE するの勿体無い。
+			// todo: ＭｏｖｅＰｉｃｋｅｒ のオーダリングで SEE してるので、ここで SEE するの勿体無い。
 			if (futilityBase < beta
 				&& depth < Depth0
 				&& pos.GetSee(move, beta - futilityBase) <= ScoreZero)
@@ -1062,7 +1062,7 @@ Score Searcher::Search(
 
 		assert(move == (ss-1)->m_currentMove);
 		// move.cap() は前回(一手前)の指し手で取った駒の種類
-		MovePicker mp(pos, ttMove, m_history, move.GetCap());
+		NextmoveEvent mp(pos, ttMove, m_history, move.GetCap());
 		const CheckInfo ci(pos);
 		while (!(move = mp.GetNextMove<false>()).IsNone()) {
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
@@ -1099,7 +1099,7 @@ iid_start:
 	}
 
 split_point_start:
-	MovePicker mp(pos, ttMove, depth, m_history, ss, PVNode ? -ScoreInfinite : beta);
+	NextmoveEvent mp(pos, ttMove, depth, m_history, ss, PVNode ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
 	score = bestScore;
 	singularExtensionNode =

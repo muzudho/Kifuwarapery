@@ -56,7 +56,7 @@ Color Position::GetTurn() const
 // そのような手を指し手生成してはいけない。
 template <bool MUSTNOTDROP, bool FROMMUSTNOTKING>
 bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const {
-	// 駒打ちは、打ち歩詰めや二歩は指し手生成時や、killerをMovePicker::nextMove() 内で排除しているので、常に合法手
+	// 駒打ちは、打ち歩詰めや二歩は指し手生成時や、killerを ＭｏｖｅＰｉｃｋｅｒ::nextMove() 内で排除しているので、常に合法手
 	// (連続王手の千日手は省いていないけれど。)
 	if (!MUSTNOTDROP && move.IsDrop()) {
 		return true;

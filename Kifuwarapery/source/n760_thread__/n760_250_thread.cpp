@@ -5,7 +5,7 @@
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"
-#include "../../header/n440_movStack/n440_500_movePicker.hpp"
+#include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n640_searcher/n640_440_splitPoint.hpp"
 #include "../../header/n760_thread__/n760_250_thread.hpp"
 #include "../../header/n885_searcher/n885_500_searcher.hpp"
@@ -64,7 +64,7 @@ void Thread::Split(
 	const Depth depth,
 	const Move threatMove,
 	const int moveCount,
-	MovePicker& mp,
+	NextmoveEvent& mp,
 	const NodeType nodeType,
 	const bool cutNode
 	)
@@ -90,7 +90,7 @@ void Thread::Split(
 	sp.m_nodeType = nodeType;
 	sp.m_cutNode = cutNode;
 	sp.m_bestScore = bestScore;
-	sp.m_pMovePicker = &mp;
+	sp.m_pNextmoveEvent = &mp;
 	sp.m_moveCount = moveCount;
 	sp.m_position = &pos;
 	sp.m_nodes = 0;
@@ -141,7 +141,7 @@ void Thread::Split(
 
 template void Thread::Split<true >(Position& pos, SearchStack* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	MovePicker& mp, const NodeType nodeType, const bool cutNode);
+	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode);
 template void Thread::Split<false>(Position& pos, SearchStack* ss, const Score alpha, const Score beta, Score& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	MovePicker& mp, const NodeType nodeType, const bool cutNode);
+	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode);

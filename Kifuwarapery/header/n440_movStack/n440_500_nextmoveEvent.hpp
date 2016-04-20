@@ -14,10 +14,10 @@
 using History = Stats<false>;
 
 
-class MovePicker {
+class NextmoveEvent {
 public:
 
-	MovePicker(
+	NextmoveEvent(
 		const Position& pos,
 		const Move ttm,
 		const Depth depth,
@@ -26,9 +26,9 @@ public:
 		const Score beta
 	);
 
-	MovePicker(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq);
+	NextmoveEvent(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq);
 
-	MovePicker(const Position& pos, const Move ttm, const History& history, const PieceType pt);
+	NextmoveEvent(const Position& pos, const Move ttm, const History& history, const PieceType pt);
 
 	template <bool SPNODE>
 	Move GetNextMove();
@@ -78,7 +78,7 @@ public:// もともと本当はプライベート・メソッド☆
 
 	//template <bool IsDrop> void ScoreNonCapturesMinusPro();
 	template <bool IsDrop>
-	void MovePicker::ScoreNonCapturesMinusPro() {
+	void NextmoveEvent::ScoreNonCapturesMinusPro() {
 		for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 			const Move move = curr->m_move;
 			curr->m_score =

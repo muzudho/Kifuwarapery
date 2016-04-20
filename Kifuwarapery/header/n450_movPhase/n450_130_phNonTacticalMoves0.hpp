@@ -7,22 +7,22 @@
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n407_moveGen_/n407_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_400_hasPositiveScore.hpp"
-#include "../n440_movStack/n440_500_movePicker.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
 
-class MovePicker;
+class NextmoveEvent;
 
 
 class PhNonTacticalMoves0 : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, MovePicker& movePicker) const {
-		Move move = movePicker.GetCurrMove()->m_move;
-		movePicker.IncrementCurMove();
-		if (move != movePicker.GetTranspositionTableMove()
-			&& move != movePicker.GetKillerMove(0).m_move
-			&& move != movePicker.GetKillerMove(1).m_move
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+		Move move = nmEvent.GetCurrMove()->m_move;
+		nmEvent.IncrementCurMove();
+		if (move != nmEvent.GetTranspositionTableMove()
+			&& move != nmEvent.GetKillerMove(0).m_move
+			&& move != nmEvent.GetKillerMove(1).m_move
 			)
 		{
 			resultMove = move;
@@ -31,20 +31,20 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetLastMove(g_moveGenerator200.GenerateMoves_2(N04_NonCaptureMinusPro,movePicker.GetCurrMove(), movePicker.GetPos()));
+	void GoNext2Phase(NextmoveEvent& nmEvent) {
+		nmEvent.SetLastMove(g_moveGenerator200.GenerateMoves_2(N04_NonCaptureMinusPro,nmEvent.GetCurrMove(), nmEvent.GetPos()));
 
-		movePicker.ScoreNonCapturesMinusPro<false>();
-		movePicker.SetCurrMove(movePicker.GetLastMove());
+		nmEvent.ScoreNonCapturesMinusPro<false>();
+		nmEvent.SetCurrMove(nmEvent.GetLastMove());
 
-		movePicker.SetLastMoveAndLastNonCaputre(g_moveGenerator200.GenerateMoves_2(N02_Drop,movePicker.GetCurrMove(), movePicker.GetPos()));
-		movePicker.ScoreNonCapturesMinusPro<true>();
+		nmEvent.SetLastMoveAndLastNonCaputre(g_moveGenerator200.GenerateMoves_2(N02_Drop,nmEvent.GetCurrMove(), nmEvent.GetPos()));
+		nmEvent.ScoreNonCapturesMinusPro<true>();
 
-		movePicker.SetCurrMove(movePicker.GetFirstMove());
-		movePicker.SetLastMove(std::partition(movePicker.GetCurrMove(), movePicker.GetLastNonCapture(), HasPositiveScore()));
+		nmEvent.SetCurrMove(nmEvent.GetFirstMove());
+		nmEvent.SetLastMove(std::partition(nmEvent.GetCurrMove(), nmEvent.GetLastNonCapture(), HasPositiveScore()));
 
 		// 要素数は10個くらいまでであることが多い。要素数が少ないので、insertionSort() を使用する。
-		UtilMoveStack::InsertionSort<MoveStack*, true>(movePicker.GetCurrMove(), movePicker.GetLastMove());
+		UtilMoveStack::InsertionSort<MoveStack*, true>(nmEvent.GetCurrMove(), nmEvent.GetLastMove());
 	}
 
 };

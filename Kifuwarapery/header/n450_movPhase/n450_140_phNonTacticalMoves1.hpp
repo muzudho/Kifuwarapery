@@ -3,22 +3,22 @@
 
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n440_movStack/n440_500_movePicker.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
 
-class MovePicker;
+class NextmoveEvent;
 
 
 class PhNonTacticalMoves1 : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, MovePicker& movePicker) const {
-		Move move = movePicker.GetCurrMove()->m_move;
-		movePicker.IncrementCurMove();
-		if (move != movePicker.GetTranspositionTableMove()
-			&& move != movePicker.GetKillerMove(0).m_move
-			&& move != movePicker.GetKillerMove(1).m_move
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+		Move move = nmEvent.GetCurrMove()->m_move;
+		nmEvent.IncrementCurMove();
+		if (move != nmEvent.GetTranspositionTableMove()
+			&& move != nmEvent.GetKillerMove(0).m_move
+			&& move != nmEvent.GetKillerMove(1).m_move
 			)
 		{
 			resultMove = move;
@@ -27,12 +27,12 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(MovePicker& movePicker) {
-		movePicker.SetCurrMove(movePicker.GetLastMove());
-		movePicker.SetLastMove(movePicker.GetLastNonCapture());
+	void GoNext2Phase(NextmoveEvent& nmEvent) {
+		nmEvent.SetCurrMove(nmEvent.GetLastMove());
+		nmEvent.SetLastMove(nmEvent.GetLastNonCapture());
 
-		if (static_cast<Depth>(3 * OnePly) <= movePicker.GetDepth() ) {
-			std::sort(movePicker.GetCurrMove(), movePicker.GetLastMove(), std::greater<MoveStack>());
+		if (static_cast<Depth>(3 * OnePly) <= nmEvent.GetDepth() ) {
+			std::sort(nmEvent.GetCurrMove(), nmEvent.GetLastMove(), std::greater<MoveStack>());
 		}
 	}
 
