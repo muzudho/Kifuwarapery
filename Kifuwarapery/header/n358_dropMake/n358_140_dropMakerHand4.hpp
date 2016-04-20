@@ -19,6 +19,7 @@ class DropMakerHand4 : public DropMakerAbstract {
 public:
 
 	MoveStack* MakeDropMovesToRank9ExceptNL(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
@@ -26,33 +27,34 @@ public:
 		//do {
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 3], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 2], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 3], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 2], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
 			{
-				dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 3], iTo);
-				dmEvent.m_pMovestack++;
-				dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 2], iTo);
-				dmEvent.m_pMovestack++;
-				dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
-				dmEvent.m_pMovestack++;
-				dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
-				dmEvent.m_pMovestack++;
+				pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 3], iTo);
+				pMovestack++;
+				pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 2], iTo);
+				pMovestack++;
+				pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
+				pMovestack++;
+				pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+				pMovestack++;
 			};
 		}
 		//} while (false);
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
@@ -60,31 +62,32 @@ public:
 		//do {
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 3], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 2], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 3], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 2], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 3], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 2], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 3], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 2], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			pMovestack++;
 		}
 		//} while (false);
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank1234567(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
@@ -92,28 +95,28 @@ public:
 		//do {
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
-			dmEvent.m_pMovestack++;
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[3], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[2], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[1], iTo);
+			pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			pMovestack++;
 		}
 		//} while (false);
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 };

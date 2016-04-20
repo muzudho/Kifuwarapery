@@ -18,27 +18,30 @@
 class DropMakerHand0 : public DropMakerAbstract {
 public:
 	MoveStack* MakeDropMovesToRank9ExceptNL(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const  {
 		// 桂馬、香車 以外の持ち駒がない。
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		// 桂馬 以外の持ち駒がない。
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank1234567(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		assert(false);// 最適化の為のダミー
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 };

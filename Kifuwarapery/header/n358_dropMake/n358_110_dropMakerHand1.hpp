@@ -19,57 +19,60 @@ class DropMakerHand1 : public DropMakerAbstract {
 public:
 
 	MoveStack* MakeDropMovesToRank9ExceptNL(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank9BB;
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+			pMovestack++;
 		}
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank8ExceptN(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank8BB;
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+			pMovestack++;
 		}
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 	MoveStack* MakeDropMovesToRank1234567(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
 	) const {
 		Bitboard toBB = dmEvent.m_target & ~(dmEvent.m_tRank8BB | dmEvent.m_tRank9BB);
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			dmEvent.m_pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
-			dmEvent.m_pMovestack++;
+			pMovestack->m_move = UtilMove::MakeDropMove(haveHandArr[0], iTo);
+			pMovestack++;
 		}
-		return dmEvent.m_pMovestack;
+		return pMovestack;
 	}
 
 };

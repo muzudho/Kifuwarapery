@@ -120,7 +120,6 @@ public:
 
 			DropMakerEvent dmEvent(
 				us,
-				pMovestack,
 				pos,
 				target,
 				hand,
@@ -134,6 +133,7 @@ public:
 			// 一段目に対して、桂馬、香車以外の指し手を生成。
 			// FIXME: 配列の範囲チェックしてないぜ☆（＾ｑ＾）
 			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
+				pMovestack,
 				dmEvent,
 				haveHandArr
 				);
@@ -141,12 +141,14 @@ public:
 			// 桂馬以外の持ち駒があれば、
 			// 二段目に対して、桂馬以外の指し手を生成。
 			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
+				pMovestack,
 				dmEvent,
 				haveHandArr
 				);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 			pMovestack = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
+				pMovestack,
 				dmEvent,
 				haveHandArr
 				);

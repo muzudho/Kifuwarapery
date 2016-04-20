@@ -20,6 +20,7 @@ public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank9ExceptNL(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		/*
 		Color us,
@@ -38,6 +39,7 @@ public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank8ExceptN(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		/*
 		Color us,
@@ -56,6 +58,7 @@ public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank1234567(
+		MoveStack* pMovestack,
 		DropMakerEvent& dmEvent,
 		/*
 		Color us,
