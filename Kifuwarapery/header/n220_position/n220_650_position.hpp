@@ -253,20 +253,6 @@ public:
 
 	static void InitZobrist();
 
-	static Score GetPieceScore(const Piece pc);
-
-	// Piece を index としても、 PieceType を index としても、
-	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score GetPieceScore(const PieceType pt);
-
-	static Score GetCapturePieceScore(const Piece pc);
-
-	// Piece を index としても、 PieceType を index としても、
-	// 同じ値が取得出来るようにしているので、PieceType => Piece への変換は必要ない。
-	static Score GetCapturePieceScore(const PieceType pt);
-
-	static Score GetPromotePieceScore(const PieceType pt);
-
 	// メンバーを変更するのに使われる。
 	inline StateInfo* GetStateInfo() { return m_st_; }
 

@@ -111,7 +111,8 @@ NextmoveEvent::NextmoveEvent(const Position& pos, const Move ttm, const History&
 	m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 	m_phase_ = N12_ProbCut;
 
-	m_captureThreshold_ = pos.GetCapturePieceScore(pt);
+	//m_captureThreshold_ = pos.GetCapturePieceScore(pt);
+	m_captureThreshold_ = PieceScore::GetCapturePieceScore(pt);
 	m_ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::GetMoveNone());
 
 	if (!m_ttMove_.IsNone() && (!m_ttMove_.IsCapture() || pos.GetSee(m_ttMove_) <= m_captureThreshold_)) {
@@ -152,7 +153,7 @@ inline Score LVA(const PieceType pt) { return LVATable[pt]; }
 void NextmoveEvent::ScoreCaptures() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->m_move;
-		curr->m_score = Position::GetPieceScore(GetPos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
+		curr->m_score = PieceScore::GetPieceScore(GetPos().GetPiece(move.To())) - LVA(move.GetPieceTypeFrom());
 	}
 }
 
@@ -164,10 +165,12 @@ void NextmoveEvent::ScoreEvasions() {
 			curr->m_score = seeScore - History::m_MaxScore;
 		}
 		else if (move.IsCaptureOrPromotion()) {
-			curr->m_score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
+			//curr->m_score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
+			curr->m_score = PieceScore::GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			if (move.IsPromotion()) {
 				const PieceType pt = UtilPiece::ToPieceType(GetPos().GetPiece(move.From()));
-				curr->m_score += GetPos().GetPromotePieceScore(pt);
+				//curr->m_score += GetPos().GetPromotePieceScore(pt);
+				curr->m_score += PieceScore::GetPromotePieceScore(pt);
 			}
 		}
 		else {

@@ -7,6 +7,8 @@
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n113_piece___/n113_150_piece.hpp"
 #include "../../header/n113_piece___/n113_155_utilPiece.hpp"
+#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n119_score___/n119_200_pieceScore.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n160_board___/n160_170_goldAndSilverAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
@@ -309,7 +311,10 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_cl.m_clistpair[1].m_newlist[0] = m_evalList_.m_list0[toListIndex];
 			m_st_->m_cl.m_clistpair[1].m_newlist[1] = m_evalList_.m_list1[toListIndex];
 
-			m_st_->m_material += (us == Black ? GetCapturePieceScore(ptCaptured) : -GetCapturePieceScore(ptCaptured));
+			m_st_->m_material += (us == Black ?
+				PieceScore::GetCapturePieceScore(ptCaptured) :
+				-PieceScore::GetCapturePieceScore(ptCaptured)
+			);
 		}
 		prefetch(GetCsearcher()->m_tt.FirstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
@@ -338,8 +343,8 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		if (move.IsPromotion()) {
 			m_st_->m_material += (us == Black ?
-				(GetPieceScore(ptTo) - GetPieceScore(ptFrom))
-				: -(GetPieceScore(ptTo) - GetPieceScore(ptFrom)));
+				(PieceScore::GetPieceScore(ptTo) - PieceScore::GetPieceScore(ptFrom))
+				: -(PieceScore::GetPieceScore(ptTo) - PieceScore::GetPieceScore(ptFrom)));
 		}
 
 		if (moveIsCheck) {
@@ -552,23 +557,23 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 		if (!opponentAttackers.Exists1Bit()) {
 			if (move.IsPromotion()) {
 				const PieceType ptFrom = move.GetPieceTypeFrom();
-				return GetCapturePieceScore(move.GetCap()) + GetPromotePieceScore(ptFrom);
+				return PieceScore::GetCapturePieceScore(move.GetCap()) + PieceScore::GetPromotePieceScore(ptFrom);
 			}
-			return GetCapturePieceScore(move.GetCap());
+			return PieceScore::GetCapturePieceScore(move.GetCap());
 		}
 		attackers = opponentAttackers | this->GetAttackersTo(UtilColor::OppositeColor(turn), to, occ);
-		swapList[0] = GetCapturePieceScore(move.GetCap());
+		swapList[0] = PieceScore::GetCapturePieceScore(move.GetCap());
 		ptCaptured = move.GetPieceTypeFrom();
 		if (move.IsPromotion()) {
 			const PieceType ptFrom = move.GetPieceTypeFrom();
-			swapList[0] += GetPromotePieceScore(ptFrom);
+			swapList[0] += PieceScore::GetPromotePieceScore(ptFrom);
 			ptCaptured += PTPromote;
 		}
 	}
 
 	int slIndex = 1;
 	do {
-		swapList[slIndex] = -swapList[slIndex - 1] + GetCapturePieceScore(ptCaptured);
+		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 
 		ptCaptured = nextAttacker<N01_Pawn>(*this, to, opponentAttackers, occ, attackers, turn);
 
@@ -604,7 +609,7 @@ Score Position::GetSeeSign(const Move move) const {
 	if (move.IsCapture()) {
 		const PieceType ptFrom = move.GetPieceTypeFrom();
 		const Square to = move.To();
-		if (GetCapturePieceScore(ptFrom) <= GetCapturePieceScore(GetPiece(to))) {
+		if (PieceScore::GetCapturePieceScore(ptFrom) <= PieceScore::GetCapturePieceScore(GetPiece(to))) {
 			return static_cast<Score>(1);
 		}
 	}
@@ -1517,40 +1522,6 @@ void Position::InitZobrist() {
 	m_zobExclusion_ = g_mt64bit.GetRandom() & ~UINT64_C(1);
 }
 
-Score Position::GetPieceScore(const Piece pc)
-{
-	return g_PieceScore[pc];
-}
-
-Score Position::GetPieceScore(const PieceType pt)
-{
-	return g_PieceScore[pt];
-}
-
-Score Position::GetCapturePieceScore(const Piece pc)
-{
-	return g_CapturePieceScore[pc];
-}
-
-Score Position::GetCapturePieceScore(const PieceType pt)
-{
-	return g_CapturePieceScore[pt];
-}
-
-Score Position::GetPromotePieceScore(const PieceType pt)
-{
-	assert(pt < N07_Gold);
-	return g_PromotePieceScore[pt];
-}
-
-
-
-
-
-
-
-
-
 // Print() で使う。
 namespace {
 	const char* PieceToCharCSATable[N31_PieceNone] = {
@@ -2290,11 +2261,11 @@ Score Position::ComputeMaterial() const {
 	Score s = ScoreZero;
 	for (PieceType pt = N01_Pawn; pt < N15_PieceTypeNum; ++pt) {
 		const int num = this->GetBbOf(pt, Black).PopCount() - this->GetBbOf(pt, White).PopCount();
-		s += num * GetPieceScore(pt);
+		s += num * PieceScore::GetPieceScore(pt);
 	}
 	for (PieceType pt = N01_Pawn; pt < N08_King; ++pt) {
 		const int num = GetHand(Black).NumOf(UtilHandPiece::FromPieceType(pt)) - GetHand(White).NumOf(UtilHandPiece::FromPieceType(pt));
-		s += num * GetPieceScore(pt);
+		s += num * PieceScore::GetPieceScore(pt);
 	}
 	return s;
 }

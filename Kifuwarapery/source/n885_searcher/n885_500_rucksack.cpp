@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include "../../header/n119_score___/n119_200_pieceScore.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
@@ -193,10 +194,15 @@ namespace {
 		}
 
 		const PieceType m2ptFrom = second.GetPieceTypeFrom();
-		if (second.IsCaptureOrPromotion()
-			&& ((pos.GetPieceScore(second.GetCap()) <= pos.GetPieceScore(m2ptFrom))
-				|| m2ptFrom == N08_King))
-		{
+		if (
+			second.IsCaptureOrPromotion()
+			&& (
+				//(pos.GetPieceScore(second.GetCap()) <= pos.GetPieceScore(m2ptFrom))
+				(PieceScore::GetPieceScore(second.GetCap()) <= PieceScore::GetPieceScore(m2ptFrom))
+				||
+				m2ptFrom == N08_King
+			)
+		){
 			// first により、新たに m2to に当たりになる駒があるなら true
 			assert(!second.IsDrop());
 
@@ -421,9 +427,9 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 			&& move != ttMove)
 		{
 			futilityScore =
-				futilityBase + Position::GetCapturePieceScore(pos.GetPiece(move.To()));
+				futilityBase + PieceScore::GetCapturePieceScore(pos.GetPiece(move.To()));
 			if (move.IsPromotion()) {
-				futilityScore += Position::GetPromotePieceScore(move.GetPieceTypeFrom());
+				futilityScore += PieceScore::GetPromotePieceScore(move.GetPieceTypeFrom());
 			}
 
 			if (futilityScore < beta) {
