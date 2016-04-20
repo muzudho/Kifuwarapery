@@ -34,6 +34,10 @@
 #include "../../header/n883_nodeType/n883_500_nodeTypeAbstract.hpp"
 #include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
+#include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
+//class IterativeDeepeningLoop;
+//static inline void IterativeDeepeningLoop::Execute(Rucksack& rucksack, Position& pos);
+
 using namespace std;
 
 
@@ -74,57 +78,6 @@ namespace {
 	// checkTime() を呼び出す最大間隔(msec)
 	const int TimerResolution = 5;
 
-	// 何がスキルなのか☆？（＾ｑ＾）
-	struct Skill {
-
-		Skill(const int l, const int mr)
-			: m_level(l),
-			  m_maxRandomScoreDiff(static_cast<Score>(mr)),
-			  m_best(Move::GetMoveNone()) {}
-
-		~Skill() {}
-
-		void swapIfEnabled(Rucksack* s) {
-			if (enabled()) {
-				auto it = std::find(s->m_rootMoves.begin(),
-									s->m_rootMoves.end(),
-									(!m_best.IsNone() ? m_best : pickMove(s)));
-				if (s->m_rootMoves.begin() != it)
-					SYNCCOUT << "info string swap multipv 1, " << it - s->m_rootMoves.begin() + 1 << SYNCENDL;
-				std::swap(s->m_rootMoves[0], *it);
-			}
-		}
-
-		bool enabled() const { return m_level < 20 || m_maxRandomScoreDiff != ScoreZero; }
-
-		bool timeToPick(const int depth) const { return depth == 1 + m_level; }
-
-		Move pickMove(Rucksack* s) {
-			// level については未対応。max_random_score_diff についてのみ対応する。
-			if (m_maxRandomScoreDiff != ScoreZero) {
-				size_t i = 1;
-				for (; i < s->m_pvSize; ++i) {
-					if (m_maxRandomScoreDiff < s->m_rootMoves[0].m_score_ - s->m_rootMoves[i].m_score_)
-						break;
-				}
-				// 0 から i-1 までの間でランダムに選ぶ。
-				std::uniform_int_distribution<size_t> dist(0, i-1);
-				m_best = s->m_rootMoves[dist(g_randomTimeSeed)].m_pv_[0];
-				return m_best;
-			}
-			m_best = s->m_rootMoves[0].m_pv_[0];
-			return m_best;
-		}
-
-		// レベル☆？
-		int m_level;
-
-		// ランダムな評価値の差分の最大値か☆？？
-		Score m_maxRandomScoreDiff;
-
-		// ベストムーブか☆？
-		Move m_best;
-	};
 
 	inline bool checkIsDangerous() {
 		// not implement
@@ -246,27 +199,6 @@ namespace {
 		}
 
 		return false;
-	}
-
-	std::string scoreToUSI(const Score score, const Score alpha, const Score beta) {
-		std::stringstream ss;
-
-		if (abs(score) < ScoreMateInMaxPly) {
-			// cp は centi pawn の略
-			ss << "cp " << score * 100 / PieceScore::m_PawnScore;
-		}
-		else {
-			// mate の後には、何手で詰むかを表示する。
-			ss << "mate " << (0 < score ? ScoreMate0Ply - score : -ScoreMate0Ply - score);
-		}
-
-		ss << (beta <= score ? " lowerbound" : score <= alpha ? " upperbound" : "");
-
-		return ss.str();
-	}
-
-	inline std::string scoreToUSI(const Score score) {
-		return scoreToUSI(score, -ScoreInfinite, ScoreInfinite);
 	}
 }
 
@@ -503,260 +435,6 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
 
 	return bestScore;
-}
-
-// 深い反復ループ☆？（iterative deepening loop）
-// 反復深化探索のことなのかだぜ☆（＾ｑ＾）？
-void Rucksack::IdLoop(Position& pos) {
-	Flashlight flashlight[g_maxPlyPlus2];
-	Ply depth;
-	Ply prevBestMoveChanges;
-	Score bestScore = -ScoreInfinite;
-	Score delta = -ScoreInfinite;
-	Score alpha = -ScoreInfinite;
-	Score beta = ScoreInfinite;
-	bool bestMoveNeverChanged = true;
-	int lastInfoTime = -1; // 将棋所のコンソールが詰まる問題への対処用
-
-	memset(flashlight, 0, 4 * sizeof(Flashlight));
-	m_bestMoveChanges = 0;
-#if defined LEARN
-	// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
-	GetDepth = std::max<Ply>(0, m_limits.GetDepth - 1);
-#else
-	depth = 0;
-#endif
-
-	flashlight[0].m_currentMove = Move::GetMoveNull(); // skip update gains
-	this->m_tt.NewSearch();
-	this->m_history.Clear();
-	this->m_gains.Clear();
-
-	// マルチＰＶの数☆？
-	m_pvSize = m_engineOptions["MultiPV"];
-	Skill skill(m_engineOptions["Skill_Level"], m_engineOptions["Max_Random_Score_Diff"]);
-
-	if (m_engineOptions["Max_Random_Score_Diff_Ply"] < pos.GetGamePly()) {
-		skill.m_maxRandomScoreDiff = ScoreZero;
-		m_pvSize = 1;
-		assert(!skill.enabled()); // level による設定が出来るようになるまでは、これで良い。
-	}
-
-	if (skill.enabled() && m_pvSize < 3) {
-		m_pvSize = 3;
-	}
-	m_pvSize = std::min(m_pvSize, m_rootMoves.size());
-
-	// 指し手が無ければ負け
-	if (m_rootMoves.empty()) {
-		m_rootMoves.push_back(RootMove(Move::GetMoveNone()));
-		SYNCCOUT << "info depth 0 score "
-				 << scoreToUSI(-ScoreMate0Ply)
-				 << SYNCENDL;
-
-		return;
-	}
-
-#if defined BISHOP_IN_DANGER
-	if ((bishopInDangerFlag == BlackBishopInDangerIn28
-		 && std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
-						 [](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0082KA"; }) != std::IsEnd(m_rootMoves))
-		|| (bishopInDangerFlag == WhiteBishopInDangerIn28
-			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
-							[](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0028KA"; }) != std::IsEnd(m_rootMoves))
-		|| (bishopInDangerFlag == BlackBishopInDangerIn78
-			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
-						 [](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0032KA"; }) != std::IsEnd(m_rootMoves))
-		|| (bishopInDangerFlag == WhiteBishopInDangerIn78
-			&& std::find_if(std::begin(m_rootMoves), std::IsEnd(m_rootMoves),
-							[](const RootMove& rm) { return rm.m_pv_[0].ToCSA() == "0078KA"; }) != std::IsEnd(m_rootMoves)))
-	{
-		if (m_rootMoves.m_size() != 1)
-			m_pvSize = std::max<size_t>(m_pvSize, 2);
-	}
-#endif
-
-	// 反復深化で探索を行う。
-	while (++depth <= g_maxPly && !m_signals.m_stop && (!m_limits.m_depth || depth <= m_limits.m_depth)) {
-		// 前回の iteration の結果を全てコピー
-		for (size_t i = 0; i < m_rootMoves.size(); ++i) {
-			m_rootMoves[i].m_prevScore_ = m_rootMoves[i].m_score_;
-		}
-
-		prevBestMoveChanges = this->m_bestMoveChanges;
-		this->m_bestMoveChanges = 0;
-
-		// Multi PV loop
-		for (this->m_pvIdx = 0; this->m_pvIdx < this->m_pvSize && !this->m_signals.m_stop; ++this->m_pvIdx) {
-#if defined LEARN
-			m_alpha = this->m_alpha;
-			m_beta  = this->m_beta;
-#else
-			// aspiration search
-			// alpha, beta をある程度絞ることで、探索効率を上げる。
-			if (
-				// 深さ５以上で
-				5 <= depth &&
-				abs(m_rootMoves[m_pvIdx].m_prevScore_) < PieceScore::m_ScoreKnownWin
-			) {
-				delta = static_cast<Score>(16);
-				alpha = m_rootMoves[m_pvIdx].m_prevScore_ - delta;
-				beta  = m_rootMoves[m_pvIdx].m_prevScore_ + delta;
-			}
-			else {
-				alpha = -ScoreInfinite;
-				beta  =  ScoreInfinite;
-			}
-#endif
-
-			// aspiration search の window 幅を、初めは小さい値にして探索し、
-			// fail high/low になったなら、今度は window 幅を広げて、再探索を行う。
-			while (true) {
-				// 探索を行う。
-				flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				bestScore = Search<N00_Root>(pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
-				// 先頭が最善手になるようにソート
-				UtilMoveStack::InsertionSort(m_rootMoves.begin() + m_pvIdx, m_rootMoves.end());
-
-				for (size_t i = 0; i <= m_pvIdx; ++i) {
-					flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-					m_rootMoves[i].InsertPvInTT(pos);
-				}
-
-#if 0
-				// 詰みを発見したら即指す。
-				if (ScoreMateInMaxPly <= abs(m_bestScore) && abs(m_bestScore) < ScoreInfinite) {
-					SYNCCOUT << PvInfoToUSI(GetPos, m_ply, m_alpha, m_beta) << SYNCENDL;
-					m_signals.m_stop = true;
-				}
-#endif
-
-#if defined LEARN
-				break;
-#endif
-
-				if (m_signals.m_stop) {
-					break;
-				}
-
-				if (alpha < bestScore && bestScore < beta) {
-					break;
-				}
-
-				
-				if (
-					// 思考時間が3秒経過し、
-					3000 < m_stopwatch.GetElapsed()
-					// 将棋所のコンソールが詰まるのを防ぐ。
-					&& (depth < 10 || lastInfoTime + 200 < m_stopwatch.GetElapsed()))
-				{
-					lastInfoTime = m_stopwatch.GetElapsed();
-					SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
-				}
-
-				// fail high/low のとき、aspiration window を広げる。
-				if (PieceScore::m_ScoreKnownWin <= abs(bestScore)) {
-					// 勝ち(負け)だと判定したら、最大の幅で探索を試してみる。
-					alpha = -ScoreInfinite;
-					beta = ScoreInfinite;
-				}
-				else if (beta <= bestScore) {
-					beta += delta;
-					delta += delta / 2;
-				}
-				else {
-					m_signals.m_failedLowAtRoot = true;
-					m_signals.m_stopOnPonderHit = false;
-
-					alpha -= delta;
-					delta += delta / 2;
-				}
-
-				assert(-ScoreInfinite <= alpha && beta <= ScoreInfinite);
-			}
-
-			UtilMoveStack::InsertionSort(m_rootMoves.begin(), m_rootMoves.begin() + m_pvIdx + 1);
-
-			if (
-				(
-					m_pvIdx + 1 == m_pvSize ||
-					// 思考時間が3秒を経過し
-					3000 < m_stopwatch.GetElapsed()
-				)
-				// 将棋所のコンソールが詰まるのを防ぐ。
-				&& (depth < 10 || lastInfoTime + 200 < m_stopwatch.GetElapsed()))
-			{
-				lastInfoTime = m_stopwatch.GetElapsed();
-				SYNCCOUT << PvInfoToUSI(pos, depth, alpha, beta) << SYNCENDL;
-			}
-		}
-
-		//if (skill.enabled() && skill.timeToPick(depth)) {
-		//	skill.pickMove();
-		//}
-
-		if (m_limits.IsUseTimeManagement() && !m_signals.m_stopOnPonderHit) {
-			bool stop = false;
-
-			// 深さが 5 ～ 49 で、PVサイズが 1 のとき。
-			if (4 < depth && depth < 50 && m_pvSize == 1) {
-				m_timeManager.SetPvInstability(m_bestMoveChanges, prevBestMoveChanges);
-			}
-
-			// 次のイテレーションを回す時間が無いなら、ストップ
-			if (
-				// 有効時間の62%が、思考経過時間（ミリ秒）に満たない場合。
-				(m_timeManager.GetAvailableTime() * 62) / 100 < m_stopwatch.GetElapsed()
-			) {
-				stop = true;
-			}
-
-			if (2 < depth && m_bestMoveChanges)
-				bestMoveNeverChanged = false;
-
-			// 最善手が、ある程度の深さまで同じであれば、
-			// その手が突出して良い手なのだろう。
-			if (
-				12 <= depth
-				&& !stop
-				&& bestMoveNeverChanged
-				&& m_pvSize == 1
-				// ここは確実にバグらせないようにする。
-				&& -ScoreInfinite + 2 * PieceScore::m_CapturePawnScore <= bestScore
-				&& (
-					m_rootMoves.size() == 1
-					||
-					// または、利用可能時間の40%が、思考経過時間未満の場合。
-					m_timeManager.GetAvailableTime() * 40 / 100
-					<
-					m_stopwatch.GetElapsed()
-				)
-			){
-				const Score rBeta = bestScore - 2 * PieceScore::m_CapturePawnScore;
-				(flashlight+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				(flashlight+1)->m_excludedMove = m_rootMoves[0].m_pv_[0];
-				(flashlight+1)->m_skipNullMove = true;
-				const Score s = Search<N02_NonPV>(pos, flashlight+1, rBeta-1, rBeta, (depth - 3) * OnePly, true);
-				(flashlight+1)->m_skipNullMove = false;
-				(flashlight+1)->m_excludedMove = Move::GetMoveNone();
-
-				if (s < rBeta) {
-					stop = true;
-				}
-			}
-
-			if (stop) {
-				if (m_limits.m_ponder) {
-					m_signals.m_stopOnPonderHit = true;
-				}
-				else {
-					m_signals.m_stop = true;
-				}
-			}
-		}
-	}
-	skill.swapIfEnabled(this);
-	SYNCCOUT << PvInfoToUSI(pos, depth-1, alpha, beta) << SYNCENDL;
 }
 
 #if defined INANIWA_SHIFT
@@ -1050,7 +728,7 @@ Score Rucksack::Search(
 		ss->m_currentMove = Move::GetMoveNull();
 		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
-		if (beta < eval - PieceScore::m_PawnScore) {
+		if (beta < eval - PieceScore::m_pawn) {
 			reduction += OnePly;
 		}
 
@@ -1655,7 +1333,8 @@ void Rucksack::Think() {
 	detectBishopInDanger(GetPos);
 #endif
 #endif
-	IdLoop(pos);
+	// 反復深化探索なのかだぜ☆？（＾ｑ＾）？
+	IterativeDeepeningLoop::Execute885_500(*this, pos);//ExecuteIterativeDeepeningLoop(pos);
 
 #if defined LEARN
 #else

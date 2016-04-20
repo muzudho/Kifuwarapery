@@ -8,32 +8,32 @@
 class PieceScore {
 public:
 
-	static const Score m_PawnScore;
-	static const Score m_LanceScore;
-	static const Score m_KnightScore;
-	static const Score m_SilverScore;
-	static const Score m_GoldScore;
-	static const Score m_BishopScore;
-	static const Score m_RookScore;
-	static const Score m_ProPawnScore;
-	static const Score m_ProLanceScore;
-	static const Score m_ProKnightScore;
-	static const Score m_ProSilverScore;
-	static const Score m_HorseScore;
-	static const Score m_DragonScore;
+	static const Score m_pawn;
+	static const Score m_lance;
+	static const Score m_knight;
+	static const Score m_silver;
+	static const Score m_gold;
+	static const Score m_bishop;
+	static const Score m_rook;
+	static const Score m_proPawn;
+	static const Score m_proLance;
+	static const Score m_proKnight;
+	static const Score m_proSilver;
+	static const Score m_horse;
+	static const Score m_dragon;
 
-	static const Score m_KingScore;
+	static const Score m_king;
 
-	static const Score m_CapturePawnScore;
-	static const Score m_CaptureLanceScore;
-	static const Score m_CaptureKnightScore;
-	static const Score m_CaptureSilverScore;
-	static const Score m_CaptureGoldScore;
-	static const Score m_CaptureBishopScore;
-	static const Score m_CaptureRookScore;
-	static const Score m_CaptureProPawnScore;
-	static const Score m_CaptureProLanceScore;
-	static const Score m_CaptureProKnightScore;
+	static const Score m_capturePawn;
+	static const Score m_captureLance;
+	static const Score m_captureKnight;
+	static const Score m_captureSilver;
+	static const Score m_captureGold;
+	static const Score m_captureBishop;
+	static const Score m_captureRook;
+	static const Score m_captureProPawn;
+	static const Score m_captureProLance;
+	static const Score m_captureProKnight;
 	static const Score m_CaptureProSilverScore;
 	static const Score m_CaptureHorseScore;
 	static const Score m_CaptureDragonScore;

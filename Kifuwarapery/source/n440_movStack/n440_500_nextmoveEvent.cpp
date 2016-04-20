@@ -67,10 +67,10 @@ NextmoveEvent::NextmoveEvent(
 
 		if (
 			this->m_pFlashlightBox_ != nullptr &&
-			this->m_pFlashlightBox_->m_staticEval < beta - PieceScore::m_CapturePawnScore &&
+			this->m_pFlashlightBox_->m_staticEval < beta - PieceScore::m_capturePawn &&
 			depth < 3 * OnePly
 		) {
-			this->m_captureThreshold_ = -PieceScore::m_CapturePawnScore;
+			this->m_captureThreshold_ = -PieceScore::m_capturePawn;
 		}
 		else if (m_pFlashlightBox_ != nullptr && beta < this->m_pFlashlightBox_->m_staticEval) {
 			this->m_captureThreshold_ = beta - this->m_pFlashlightBox_->m_staticEval;

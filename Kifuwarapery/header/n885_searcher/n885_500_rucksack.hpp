@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include "../n119_score___/n119_090_score.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n560_timeMng_/n560_500_timeManager.hpp"
 #include "../n640_searcher/n640_128_signalsType.hpp"
@@ -40,7 +41,7 @@ public:
 	// ステータス？
 	StateStackPtr			m_setUpStates;
 
-	// ルート？
+	// ルート？ 前回の反復深化探索☆？（イテレーション）の結果が入っているみたいだぜ☆
 	std::vector<RootMove>	m_rootMoves;
 
 #if defined LEARN
@@ -88,9 +89,6 @@ public:
 	// 初期化？
 	void					Init();
 
-	// IDループ？
-	void					IdLoop(Position& pos);
-
 	// 本譜の情報？
 	std::string				PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
 
@@ -117,6 +115,31 @@ public:
 
 	// エンジン・オプション設定？
 	void					SetOption(std::istringstream& ssCmd);
+
+
+
+	//private:
+	std::string scoreToUSI(const Score score, const Score alpha, const Score beta) {
+		std::stringstream ss;
+
+		if (abs(score) < ScoreMateInMaxPly) {
+			// cp は centi pawn の略
+			ss << "cp " << score * 100 / PieceScore::m_pawn;
+		}
+		else {
+			// mate の後には、何手で詰むかを表示する。
+			ss << "mate " << (0 < score ? ScoreMate0Ply - score : -ScoreMate0Ply - score);
+		}
+
+		ss << (beta <= score ? " lowerbound" : score <= alpha ? " upperbound" : "");
+
+		return ss.str();
+	}
+
+	//private:
+	inline std::string scoreToUSI(const Score score) {
+		return scoreToUSI(score, -Score::ScoreInfinite, Score::ScoreInfinite);
+	}
 };
 
 // メイン関数で１回だけ呼ばれる。

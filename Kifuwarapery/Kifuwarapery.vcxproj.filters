@@ -960,6 +960,12 @@
     <ClInclude Include="header\n760_thread__\n760_250_military.hpp">
       <Filter>header\n760_thread__</Filter>
     </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_600_iterativeDeepeningLoop.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_580_skill.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1522,6 +1528,12 @@
     </ClCompile>
     <ClCompile Include="source\n760_thread__\n760_250_military.cpp">
       <Filter>source\n760_thread__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_600_iterativeDeepeningLoop.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_580_skill.cpp">
+      <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
