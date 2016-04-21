@@ -112,7 +112,8 @@ public:
 	// 正解のPV, MoveNone, その他0のPV, MoveNone, その他1のPV, MoveNone, MovePVsEnd という感じに並ぶ。
 	static Move GetMovePVsEnd();
 
-	static const u32 m_PromoteFlag = 1 << 14;
+	static const u32 m_PROMOTE_FLAG = 1 << 14;
+
 	static const u32 m_MoveNone = 0;
 	static const u32 m_MoveNull = 129;
 	static const u32 m_MovePVsEnd = 1 << 15; // for learn
@@ -120,3 +121,11 @@ public:
 private:
 	u32 value_;
 };
+
+
+//────────────────────────────────────────────────────────────────────────────────
+// 非クラスメンバ 静的グローバル・オブジェクト
+//────────────────────────────────────────────────────────────────────────────────
+
+// 成りフラグ
+static const Move g_PROMOTE_FLAG = Move(Move::m_PROMOTE_FLAG);

@@ -429,6 +429,7 @@
     <ClCompile Include="source\n161_sqDistan\n161_500_squareDistance.cpp" />
     <ClCompile Include="source\n162_bonaDir_\n162_070_bonaDirAbstract.cpp" />
     <ClCompile Include="source\n163_sqDistan\n163_600_utilSquareDistance.cpp" />
+    <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp" />
     <ClCompile Include="source\n165_movStack\n165_700_makePromoteMove.cpp" />
     <ClCompile Include="source\n205_repeType\n886_070_rtAbstract.cpp" />
     <ClCompile Include="source\n205_repeType\n886_100_rtNot.cpp" />

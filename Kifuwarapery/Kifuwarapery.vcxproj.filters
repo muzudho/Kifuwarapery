@@ -1535,5 +1535,8 @@
     <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
+    <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp">
+      <Filter>source\n165_movStack</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

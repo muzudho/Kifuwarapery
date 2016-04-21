@@ -23,21 +23,7 @@ public:
 		assert(!((pt == N07_Gold || pt == N08_King || mt == N02_Drop) && pm == Promote));
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
 		if (pm == Promote) {
-			move |= UtilMove::GetPromoteFlag();
-		}
-		return move;
-	}
-
-	//(^q^)旧型
-	// MoveType によって指し手生成関数を使い分ける。
-	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	template <MoveType MT, PromoteMode PM>
-	inline Move GetSelectedMakeMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		static_assert(PM == Promote || PM == NonPromote, "");
-		assert(!((pt == N07_Gold || pt == N08_King || MT == N02_Drop) && PM == Promote));
-		Move move = ((MT == N01_NonCapture || MT == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
-		if (PM == Promote) {
-			move |= UtilMove::GetPromoteFlag();
+			move |= g_PROMOTE_FLAG;// UtilMove::GetPromoteFlag()
 		}
 		return move;
 	}
@@ -47,21 +33,9 @@ public:
 		return GetSelectedMakeMove(mt, Promote, pt, from, to, pos);
 	}
 
-	// (^q^)旧型
-	template <MoveType MT>
-	inline Move MakePromoteMove2(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return GetSelectedMakeMove<MT, Promote>(pt, from, to, pos);
-	}
-
 	// (^q^)新型
 	static inline Move MakeNonPromoteMove(const MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
 		return GetSelectedMakeMove(mt, NonPromote, pt, from, to, pos);
-	}
-
-	// (^q^)旧型
-	template <MoveType MT>
-	inline Move MakeNonPromoteMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return GetSelectedMakeMove<MT, NonPromote>(pt, from, to, pos);
 	}
 
 };

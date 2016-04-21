@@ -48,7 +48,7 @@ PieceType Move::GetCap() const
 
 u32 Move::IsPromotion() const
 {
-	return GetValue() & m_PromoteFlag;
+	return GetValue() & m_PROMOTE_FLAG;
 }
 
 PieceType Move::GetPieceTypeFrom() const
@@ -65,7 +65,7 @@ PieceType Move::GetPieceTypeTo(const PieceType ptFrom) const
 {
 	// これらは同じ意味。
 #if 1
-	return (ptFrom + static_cast<PieceType>((GetValue() & m_PromoteFlag) >> 11));
+	return (ptFrom + static_cast<PieceType>((GetValue() & m_PROMOTE_FLAG) >> 11));
 #else
 	return (IsPromotion()) ? ptFrom + PTPromote : ptFrom;
 #endif

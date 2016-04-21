@@ -11,7 +11,7 @@ class UtilMove {
 public:
 
 	// 成り flag
-	static inline Move GetPromoteFlag() { return static_cast<Move>(Move::m_PromoteFlag); }
+	//static inline Move GetPromoteFlag() { return static_cast<Move>(Move::m_PROMOTE_FLAG); }
 
 	static inline Move GetMoveNone() { return static_cast<Move>(Move::m_MoveNone); }
 
@@ -47,9 +47,5 @@ public:
 	static inline Move MakeDropMove(const PieceType pt, const Square to) {
 		return UtilMove::From2Move(UtilMove::GetDrop2From(pt)) | UtilMove::To2Move(to);
 	}
-
-
-
-
 
 };

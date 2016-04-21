@@ -33,7 +33,7 @@ public:
 		const Square to,
 		const Color us
 		) const {
-		(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove<N00_Capture>(this->GetNumber(), from, to, pos);
+		(*moveStackList++).m_move = g_makePromoteMove.MakeNonPromoteMove(N00_Capture, this->GetNumber(), from, to, pos);
 	}
 
 };

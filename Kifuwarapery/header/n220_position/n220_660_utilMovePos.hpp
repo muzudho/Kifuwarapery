@@ -29,7 +29,7 @@ public:
 
 	// makeCaptureMove() かつ 成り
 	static inline Move MakeCapturePromoteMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return UtilMovePos::MakeCaptureMove(pt, from, to, pos) | UtilMove::GetPromoteFlag();
+		return UtilMovePos::MakeCaptureMove(pt, from, to, pos) | g_PROMOTE_FLAG;//UtilMove::GetPromoteFlag()
 	}
 
 };
