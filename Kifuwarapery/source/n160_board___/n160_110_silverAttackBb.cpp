@@ -32,7 +32,7 @@ void SilverAttackBb::InitCheckTableSilver() {
 				const Square checkSq = checkBB.PopFirstOneFromI9();
 				this->m_silverCheckTable_[c][sq] |= this->GetControllBb(opp, checkSq);
 			}
-			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
+			const Bitboard TRank789BB = (c == Black ? g_inFrontMaskBb.GetInFrontMask(Black, Rank6) : g_inFrontMaskBb.GetInFrontMask(White, Rank4));
 			checkBB = g_goldAttackBb.GetControllBb(opp, sq);
 			while (checkBB.Exists1Bit()) {
 				const Square checkSq = checkBB.PopFirstOneFromI9();

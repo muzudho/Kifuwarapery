@@ -8,12 +8,6 @@
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
 #include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
-//#include "../../header/n220_position/n220_750_charToPieceUSI.hpp"	//TODO:
-
-
-// position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
-// の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。
-const int g_MaxLegalMoves = 593 + 1;
 
 
 // xxxxxxxx xxxxxxxx xxxxxxxx x1111111  移動先
@@ -29,18 +23,18 @@ public:
 
 	Move();
 
-	explicit Move(const u32 u) : value_(u) {}
+	explicit Move(const u32 u) : m_value_(u) {}
 
-	Move& operator = (const Move& m) { value_ = m.value_; return *this; }
+	Move& operator = (const Move& m) { m_value_ = m.m_value_; return *this; }
 
-	Move& operator = (const volatile Move& m) { value_ = m.value_; return *this; }
+	Move& operator = (const volatile Move& m) { m_value_ = m.m_value_; return *this; }
 
 	// volatile Move& 型の *this を返すとなぜか警告が出るので、const Move& 型の m を返すことにする。
-	const Move& operator = (const Move& m) volatile { value_ = m.value_; return m; }
+	const Move& operator = (const Move& m) volatile { m_value_ = m.m_value_; return m; }
 
-	Move(const Move& m) { value_ = m.value_; }
+	Move(const Move& m) { m_value_ = m.m_value_; }
 
-	Move(const volatile Move& m) { value_ = m.value_; }
+	Move(const volatile Move& m) { m_value_ = m.m_value_; }
 
 	// 移動先
 	Square To() const;
@@ -104,6 +98,12 @@ public:
 	std::string ToUSI() const;
 	std::string ToCSA() const;
 
+
+public:
+	// position sfen R8/2K1S1SSk/4B4/9/9/9/9/9/1L1L1L3 b PLNSGBR17p3n3g 1
+	// の局面が最大合法手局面で 593 手。番兵の分、+ 1 しておく。
+	static const int m_MAX_LEGAL_MOVES = 593 + 1;
+
 	static const u32 m_PROMOTE_FLAG = 1 << 14;
 	static const u32 m_NONE = 0;
 	static const u32 m_NULL = 129;
@@ -114,7 +114,7 @@ public:
 	static const u32 m_PVS_END = 1 << 15; // for learn
 
 private:
-	u32 value_;
+	u32 m_value_;
 };
 
 

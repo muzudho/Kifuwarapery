@@ -21,7 +21,7 @@ public:
 	};
 
 	void GoNext2Phase(NextmoveEvent& nmEvent) {
-		nmEvent.SetCurrMove(nmEvent.GetLegalMoves() + g_MaxLegalMoves - 1 );
+		nmEvent.SetCurrMove(nmEvent.GetLegalMoves() + Move::m_MAX_LEGAL_MOVES - 1 );
 		nmEvent.SetLastMove(nmEvent.GetEndBadCaptures());
 	}
 

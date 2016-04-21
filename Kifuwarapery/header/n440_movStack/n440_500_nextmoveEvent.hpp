@@ -138,7 +138,7 @@ private:
 	MoveStack*			m_endBadCaptures_;
 
 	// std::array にした方が良さそう。
-	MoveStack			m_legalMoves_[g_MaxLegalMoves];
+	MoveStack			m_legalMoves_[Move::m_MAX_LEGAL_MOVES];
 
 };
 

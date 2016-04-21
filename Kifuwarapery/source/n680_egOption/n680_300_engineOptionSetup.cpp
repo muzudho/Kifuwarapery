@@ -36,7 +36,7 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Rucksack * s)
 	pMap->Put("Write_Synthesized_Eval", EngineOption(false));
 	pMap->Put("USI_Ponder", EngineOption(true));
 	pMap->Put("Byoyomi_Margin", EngineOption(500, 0, INT_MAX));
-	pMap->Put("MultiPV", EngineOption(1, 1, g_MaxLegalMoves));
+	pMap->Put("MultiPV", EngineOption(1, 1, Move::m_MAX_LEGAL_MOVES));
 	pMap->Put("Skill_Level", EngineOption(20, 0, 20));
 	pMap->Put("Max_Random_Score_Diff", EngineOption(0, 0, ScoreMate0Ply));
 	pMap->Put("Max_Random_Score_Diff_Ply", EngineOption(40, 0, SHRT_MAX));

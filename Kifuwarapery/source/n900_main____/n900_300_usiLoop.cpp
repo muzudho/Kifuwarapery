@@ -24,8 +24,8 @@
 void measureGenerateMoves(const Position& pos) {
 	pos.Print();
 
-	MoveStack legalMoves[g_MaxLegalMoves];
-	for (int i = 0; i < g_MaxLegalMoves; ++i)
+	MoveStack legalMoves[Move::m_MAX_LEGAL_MOVES];
+	for (int i = 0; i < Move::m_MAX_LEGAL_MOVES; ++i)
 	{
 		legalMoves[i].m_move = g_MOVE_NONE;
 	}

@@ -21,21 +21,14 @@ public:
 	static inline Move GetSelectedMakeMove(MoveType mt, PromoteMode pm, const PieceType pt, const Square from, const Square to, const Position& pos) {
 		assert(pm == Promote || pm == NonPromote, "");
 		assert(!((pt == N07_Gold || pt == N08_King || mt == N02_Drop) && pm == Promote));
-		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
+		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
+			UtilMove::MakeMove(pt, from, to) :
+			UtilMovePos::MakeCaptureMove(pt, from, to, pos)
+		);
 		if (pm == Promote) {
 			move |= g_MOVE_PROMOTE_FLAG;// UtilMove::GetPromoteFlag()
 		}
 		return move;
-	}
-
-	// (^q^)新型
-	static inline Move MakePromoteMove2(const MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return GetSelectedMakeMove(mt, Promote, pt, from, to, pos);
-	}
-
-	// (^q^)新型
-	static inline Move MakeNonPromoteMove(const MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return GetSelectedMakeMove(mt, NonPromote, pt, from, to, pos);
 	}
 
 };

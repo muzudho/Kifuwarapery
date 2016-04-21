@@ -30,7 +30,7 @@ public:
 	}
 
 private:
-	MoveStack m_moveStackList_[g_MaxLegalMoves];
+	MoveStack m_moveStackList_[Move::m_MAX_LEGAL_MOVES];
 	MoveStack* m_curr_;
 	MoveStack* m_last_;
 };

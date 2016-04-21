@@ -36,20 +36,6 @@ public:
 		return this->m_fileMask[f];
 	}
 
-	template <File F>
-	inline Bitboard GetFileMask() const {
-		static_assert(FileI <= F && F <= FileA, "");
-		return (F == FileI ? this->m_I
-			: F == FileH ? this->m_H
-			: F == FileG ? this->m_G
-			: F == FileF ? this->m_F
-			: F == FileE ? this->m_E
-			: F == FileD ? this->m_D
-			: F == FileC ? this->m_C
-			: F == FileB ? this->m_B
-			: /*F == FileA ?*/ this->m_A);
-	}
-
 	// 直接テーブル引きすべきだと思う。
 	inline Bitboard GetSquareFileMask(const Square sq) const {
 		const File f = UtilSquare::ToFile(sq);

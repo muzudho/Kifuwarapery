@@ -53,7 +53,7 @@ NextmoveEvent::NextmoveEvent(
 	this->m_legalMoves_[0].m_score = INT_MAX; // 番兵のセット
 	this->m_currMove_ = this->m_lastMove_ = GetFirstMove();
 	this->m_captureThreshold_ = 0;
-	this->m_endBadCaptures_ = this->m_legalMoves_ + g_MaxLegalMoves - 1;
+	this->m_endBadCaptures_ = this->m_legalMoves_ + Move::m_MAX_LEGAL_MOVES - 1;
 	this->m_pFlashlightBox_ = pFlashlightBox;
 
 	if (pos.InCheck()) {

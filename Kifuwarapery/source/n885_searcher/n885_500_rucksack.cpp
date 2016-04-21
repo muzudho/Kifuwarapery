@@ -297,7 +297,7 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 void Rucksack::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
-		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask<FileA>() & ~g_fileMaskBb.GetFileMask<FileI>();
+		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask(FileA) & ~g_fileMaskBb.GetFileMask(FileI);
 		if ((GetPos.GetBbOf(N01_Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			m_tt.Clear();
@@ -1080,7 +1080,7 @@ bool nyugyoku(const Position& pos) {
 
 	const Color us = pos.GetTurn();
 	// 敵陣のマスク
-	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask<Black, Rank6>() : g_inFrontMaskBb.GetInFrontMask<White, Rank4>());
+	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask(Black, Rank6) : g_inFrontMaskBb.GetInFrontMask(White, Rank4));
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.GetBbOf(N08_King, us).AndIsNot0(opponentsField))

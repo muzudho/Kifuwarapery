@@ -909,7 +909,7 @@ silver_drop_end:
 
 	// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 	const Rank TRank6 = (US == Black ? Rank6 : Rank4);
-	const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US, TRank6>();
+	const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(US, TRank6);
 	{
 		// 飛車による移動
 		Bitboard fromBB = GetBbOf(N06_Rook, US);
@@ -1146,7 +1146,7 @@ silver_drop_end:
 		Bitboard fromBB = GetBbOf(N04_Silver, US) & g_silverAttackBb.SilverCheckTable(US, ksq);
 		if (fromBB.Exists1Bit()) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
-			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask<Them, TRank6>();
+			const Bitboard TRank1_5BB = g_inFrontMaskBb.GetInFrontMask(Them, TRank6);
 			const Bitboard chkBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, Them, ksq);
 			const Bitboard chkBB_promo = PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq);
 
@@ -1346,7 +1346,8 @@ silver_drop_end:
 			const Bitboard chkBB_promo = PieceTypeArray::m_gold.GetAttacks2From( g_nullBitboard, Them, ksq) & TRank789BB;
 			// 玉の前方1マスのみ。
 			// 玉が 1 段目にいるときは、成のみで良いので省く。
-			const Bitboard chkBB = PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Them, ksq) & g_inFrontMaskBb.GetInFrontMask<Them, TRank8>();
+			const Bitboard chkBB = PieceTypeArray::m_pawn.GetAttacks2From(g_nullBitboard, Them, ksq) &
+				g_inFrontMaskBb.GetInFrontMask(Them, TRank8);
 
 			do {
 				const Square from = fromBB.PopFirstOneFromI9();
