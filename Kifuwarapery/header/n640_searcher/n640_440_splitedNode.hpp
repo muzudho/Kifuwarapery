@@ -11,7 +11,7 @@
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 
 
-struct Military;
+class Military;
 
 
 // 元の名前は ＳｐｌｉｔＰｏｉｎｔ☆

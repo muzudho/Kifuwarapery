@@ -32,8 +32,8 @@
 #include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n883_nodeType/n883_500_nodeTypeAbstract.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
+#include "../../header/n885_searcher/n885_500_rucksack.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
 //class IterativeDeepeningLoop;
 //static inline void IterativeDeepeningLoop::Execute(Rucksack& rucksack, Position& pos);
@@ -46,17 +46,6 @@ extern NodeTypeAbstract* g_nodeTypeArray[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void HerosPub::WakeUp(Rucksack* s) {
-	for (size_t i = 0; i < size(); ++i) {
-		(*this)[i]->m_maxPly = 0;
-	}
-	m_isSleepWhileIdle_ = s->m_engineOptions["Use_Sleeping_Threads"];
-}
-// 一箇所でしか呼ばないので、FORCE_INLINE
-FORCE_INLINE void HerosPub::Sleep() {
-	m_isSleepWhileIdle_ = true;
-}
 
 
 void Rucksack::Init() {
@@ -1180,9 +1169,9 @@ void Rucksack::Think() {
 		}
 	}
 
-	Rucksack::m_ownerHerosPub.WakeUp(this);
+	this->m_ownerHerosPub.WakeUp(this);
 
-	Rucksack::m_ownerHerosPub.GetCurrWarrior()->m_msec =
+	this->m_ownerHerosPub.GetCurrWarrior()->m_msec =
 		(m_limits.IsUseTimeManagement() ?
 			std::min(100, std::max(m_timeManager.GetAvailableTime() / 16, TimerResolution)) :
 			m_limits.m_nodes ?
@@ -1190,7 +1179,7 @@ void Rucksack::Think() {
 				100
 		);
 
-	Rucksack::m_ownerHerosPub.GetCurrWarrior()->NotifyOne();
+	this->m_ownerHerosPub.GetCurrWarrior()->NotifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(GetPos);
@@ -1204,8 +1193,8 @@ void Rucksack::Think() {
 
 #if defined LEARN
 #else
-	m_ownerHerosPub.GetCurrWarrior()->m_msec = 0; // timer を止める。
-	m_ownerHerosPub.Sleep();
+	this->m_ownerHerosPub.GetCurrWarrior()->m_msec = 0; // timer を止める。
+	this->m_ownerHerosPub.Sleep();
 
 finalize:
 

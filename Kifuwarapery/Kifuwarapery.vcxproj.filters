@@ -948,9 +948,6 @@
     <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp">
       <Filter>header\n760_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp">
-      <Filter>header\n885_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_300_moveAndScore.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
@@ -964,6 +961,9 @@
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1517,9 +1517,6 @@
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp">
       <Filter>source\n760_thread__</Filter>
     </ClCompile>
-    <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp">
-      <Filter>source\n885_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n223_move____\n223_300_moveAndScore.cpp">
       <Filter>source\n223_move____</Filter>
     </ClCompile>
@@ -1533,6 +1530,9 @@
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>

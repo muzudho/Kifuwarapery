@@ -7,7 +7,8 @@ class Rucksack;
 
 
 // 元の名前：　ＴｉｍｅｒＴｈｒｅａｄ
-struct Warrior : public Military {
+class Warrior : public Military {
+public:
 
 	explicit Warrior(Rucksack* s) : Military(s), m_msec(0) {}
 

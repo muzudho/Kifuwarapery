@@ -37,10 +37,10 @@ public:
 	Warrior* GetCurrWarrior() { return this->m_pWarrior_; }
 
 	// 起きろ？
-	void WakeUp(Rucksack* s);
-
+	void WakeUp(Rucksack* rucksack);
 	// 寝ろ？
 	void Sleep();
+
 
 	// USIオプションを読め？
 	void ReadUSIOptions(Rucksack* s);

@@ -20,8 +20,8 @@ const int g_MaxSplitedNodesPerThread = 8;
 
 // 元の名前：Ｔｈｒｅａｄ
 // ゲームツリーを戦線拡大していくぜ☆！（＾ｑ＾）
-struct Military {
-
+class Military {
+public:
 	explicit Military(Rucksack* s);
 
 	virtual ~Military() {};

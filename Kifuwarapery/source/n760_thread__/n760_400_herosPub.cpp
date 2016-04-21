@@ -1,4 +1,5 @@
-﻿#include "../../header/n165_movStack/n165_300_moveType.hpp"
+﻿#include "../../header/n080_common__/n080_100_common.hpp"
+#include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"

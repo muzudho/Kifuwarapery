@@ -17,6 +17,7 @@
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_learn___/n800_100_stopwatch.hpp"
+//#include "../n885_searcher/n885_600_iterativeDeepeningLoop.hpp"
 
 using namespace std;
 
@@ -287,3 +288,22 @@ public://private:
 // メイン関数で１回だけ呼ばれる。
 void InitSearchTable();
 
+
+//────────────────────────────────────────────────────────────────────────────────
+// 依存順の関係でここに☆（＾ｑ＾）
+//────────────────────────────────────────────────────────────────────────────────
+
+// 起きろ？
+// 一箇所でしか呼ばないので、FORCE_INLINE
+FORCE_INLINE void HerosPub::WakeUp(Rucksack* rucksack) {
+	for (size_t i = 0; i < size(); ++i) {
+		(*this)[i]->m_maxPly = 0;
+	}
+	this->m_isSleepWhileIdle_ = rucksack->m_engineOptions["Use_Sleeping_Threads"];
+}
+
+// 寝ろ？
+// 一箇所でしか呼ばないので、FORCE_INLINE
+FORCE_INLINE void HerosPub::Sleep() {
+	this->m_isSleepWhileIdle_ = true;
+}

@@ -7,7 +7,8 @@ class Rucksack;
 
 // 元の名前：ＭａｉｎＴｈｒｅａｄ
 //
-struct Captain : public Military {
+class Captain : public Military {
+public:
 
 	explicit Captain(Rucksack* s) : Military(s), m_isThinking(true) {}
 

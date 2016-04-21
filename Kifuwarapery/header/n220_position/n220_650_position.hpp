@@ -26,7 +26,7 @@
 using StateStackPtr = std::unique_ptr<std::stack<StateInfo> >;
 
 
-struct Military;
+class Military;
 class Rucksack;
 
 
