@@ -36,20 +36,20 @@ public:
 				if (fromCanPromote | toCanPromote) {
 
 					// 成りVer☆
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
-					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move, ptEvent.m_mt, pt);
+					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
+					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, pt
 					moveStackList++;
 
 					// 次の指し手は不成Ver☆
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all)
 					{
-						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
+						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
 						moveStackList++;
 					}
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
 				{
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
+					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
 					moveStackList++;
 				}
 			}
