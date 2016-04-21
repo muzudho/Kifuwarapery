@@ -48,7 +48,7 @@ public:
 
 	static inline Move Move16toMove(const Move move, const Position& pos) {
 		if (move.IsNone()) {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		if (move.IsDrop()) {
 			return move;

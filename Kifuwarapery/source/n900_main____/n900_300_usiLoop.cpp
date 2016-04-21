@@ -27,7 +27,7 @@ void measureGenerateMoves(const Position& pos) {
 	MoveStack legalMoves[g_MaxLegalMoves];
 	for (int i = 0; i < g_MaxLegalMoves; ++i)
 	{
-		legalMoves[i].m_move = UtilMove::GetMoveNone();
+		legalMoves[i].m_move = g_MOVE_NONE;
 	}
 	MoveStack* pms = &legalMoves[0];
 	const u64 num = 5000000;

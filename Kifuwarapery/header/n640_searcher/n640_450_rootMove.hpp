@@ -15,12 +15,12 @@ public:
 
 	explicit RootMove(const Move m) : m_score_(-ScoreInfinite), m_prevScore_(-ScoreInfinite) {
 		m_pv_.push_back(m);
-		m_pv_.push_back(Move::GetMoveNone());
+		m_pv_.push_back(g_MOVE_NONE);
 	}
 
 	explicit RootMove(const MoveAndScore m) : m_score_(m.m_score), m_prevScore_(-ScoreInfinite) {
 		m_pv_.push_back(m.m_move);
-		m_pv_.push_back(Move::GetMoveNone());
+		m_pv_.push_back(g_MOVE_NONE);
 	}
 
 	bool operator < (const RootMove& m) const {

@@ -12,7 +12,7 @@ struct Skill {
 	Skill(const int l, const int mr)
 		: m_level(l),
 		m_maxRandomScoreDiff(static_cast<Score>(mr)),
-		m_best(Move::GetMoveNone()) {}
+		m_best(g_MOVE_NONE) {}
 
 	~Skill() {}
 

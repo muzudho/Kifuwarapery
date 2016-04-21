@@ -1466,7 +1466,7 @@ silver_drop_end:
 		}
 	}
 
-	return Move::GetMoveNone();
+	return g_MOVE_NONE;
 }
 
 Move Position::GetMateMoveIn1Ply() {

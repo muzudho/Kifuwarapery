@@ -104,13 +104,13 @@ MoveAndScore Book::GetProbe(const Position& position, const std::string& fName, 
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
-	Move move = Move::GetMoveNone();
+	Move move = g_MOVE_NONE;//該当なしのときに使う値☆
 	const Key key = this->GetBookKey(position);
 	const Score min_book_score = static_cast<Score>(static_cast<int>(position.GetSearcher()->m_engineOptions["Min_Book_Score"]));
 	Score score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
-		return MoveAndScore(Move::GetMoveNone(), ScoreNone);
+		return MoveAndScore(g_MOVE_NONE, ScoreNone);
 	}
 
 	Binary_search(key);

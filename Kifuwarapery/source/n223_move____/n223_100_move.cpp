@@ -109,7 +109,7 @@ HandPiece Move::GetHandPieceDropped() const
 
 bool Move::IsNone() const
 {
-	return (GetValue() == m_MoveNone);
+	return GetValue() == Move::m_NONE;
 }
 
 u32 Move::GetValue() const
@@ -167,19 +167,4 @@ std::string Move::ToCSA() const {
 	std::string s = (this->IsDrop() ? std::string("00") : UtilSquare::ToStringCSA(this->From()));
 	s += UtilSquare::ToStringCSA(this->To()) + pieceTypeToString(this->GetPieceTypeTo());
 	return s;
-}
-
-Move Move::GetMoveNone()
-{
-	return Move(m_MoveNone);
-}
-
-Move Move::GetMoveNull()
-{
-	return Move(m_MoveNull);
-}
-
-Move Move::GetMovePVsEnd()
-{
-	return Move(m_MovePVsEnd);
 }

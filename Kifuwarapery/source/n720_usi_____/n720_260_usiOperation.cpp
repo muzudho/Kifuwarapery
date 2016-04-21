@@ -158,12 +158,12 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		// drop
 		const PieceType ptTo = UtilPiece::ToPieceType(g_charToPieceUSI.GetValue(moveStr[0]));
 		if (moveStr[1] != '*') {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		const File toFile = UtilFile::FromCharUSI(moveStr[2]);
 		const Rank toRank = UtilRank::FromCharUSI(moveStr[3]);
 		if (!UtilSquare::ContainsOf(toFile, toRank)) {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		move = UtilMove::MakeDropMove(ptTo, to);
@@ -172,13 +172,13 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		const File fromFile = UtilFile::FromCharUSI(moveStr[0]);
 		const Rank fromRank = UtilRank::FromCharUSI(moveStr[1]);
 		if (!UtilSquare::ContainsOf(fromFile, fromRank)) {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		const Square from = UtilSquare::FromFileRank(fromFile, fromRank);
 		const File toFile = UtilFile::FromCharUSI(moveStr[2]);
 		const Rank toRank = UtilRank::FromCharUSI(moveStr[3]);
 		if (!UtilSquare::ContainsOf(toFile, toRank)) {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		const Square to = UtilSquare::FromFileRank(toFile, toRank);
 		if (moveStr[4] == '\0') {
@@ -186,12 +186,12 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
-				return Move::GetMoveNone();
+				return g_MOVE_NONE;
 			}
 			move = g_makePromoteMove.MakePromoteMove2(N00_Capture, UtilPiece::ToPieceType(pos.GetPiece(from)), from, to, pos);
 		}
 		else {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 	}
 
@@ -200,22 +200,22 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 	{
 		return move;
 	}
-	return Move::GetMoveNone();
+	return g_MOVE_NONE;
 }
 
 Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr) {
 	if (moveStr.size() != 6) {
-		return Move::GetMoveNone();
+		return g_MOVE_NONE;
 	}
 	const File toFile = UtilFile::FromCharCSA(moveStr[2]);
 	const Rank toRank = UtilRank::FromCharCSA(moveStr[3]);
 	if (!UtilSquare::ContainsOf(toFile, toRank)) {
-		return Move::GetMoveNone();
+		return g_MOVE_NONE;
 	}
 	const Square to = UtilSquare::FromFileRank(toFile, toRank);
 	const std::string ptToString(moveStr.begin() + 4, moveStr.end());
 	if (!g_stringToPieceTypeCSA.isLegalString(ptToString)) {
-		return Move::GetMoveNone();
+		return g_MOVE_NONE;
 	}
 	const PieceType ptTo = g_stringToPieceTypeCSA.value(ptToString);
 	Move move;
@@ -227,7 +227,7 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		const File fromFile = UtilFile::FromCharCSA(moveStr[0]);
 		const Rank fromRank = UtilRank::FromCharCSA(moveStr[1]);
 		if (!UtilSquare::ContainsOf(fromFile, fromRank)) {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 		const Square from = UtilSquare::FromFileRank(fromFile, fromRank);
 		PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
@@ -240,7 +240,7 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 			move = g_makePromoteMove.MakePromoteMove2(N00_Capture, ptFrom, from, to, pos);
 		}
 		else {
-			return Move::GetMoveNone();
+			return g_MOVE_NONE;
 		}
 	}
 
@@ -249,6 +249,6 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 	{
 		return move;
 	}
-	return Move::GetMoveNone();
+	return g_MOVE_NONE;
 }
 

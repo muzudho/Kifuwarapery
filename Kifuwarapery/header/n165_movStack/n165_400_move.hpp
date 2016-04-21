@@ -104,19 +104,14 @@ public:
 	std::string ToUSI() const;
 	std::string ToCSA() const;
 
-	static Move GetMoveNone();
-	static Move GetMoveNull();
+	static const u32 m_PROMOTE_FLAG = 1 << 14;
+	static const u32 m_NONE = 0;
+	static const u32 m_NULL = 129;
 
 	// 学習時に、正解の手のPV、その他の手のPVを MoveNone で区切りながら 1 次元配列に格納していく。
 	// 格納するその他のPVの最後に MovePVsEnd を格納する。それをフラグに次の指し手に遷移する。
 	// 正解のPV, MoveNone, その他0のPV, MoveNone, その他1のPV, MoveNone, MovePVsEnd という感じに並ぶ。
-	static Move GetMovePVsEnd();
-
-	static const u32 m_PROMOTE_FLAG = 1 << 14;
-
-	static const u32 m_MoveNone = 0;
-	static const u32 m_MoveNull = 129;
-	static const u32 m_MovePVsEnd = 1 << 15; // for learn
+	static const u32 m_PVS_END = 1 << 15; // for learn
 
 private:
 	u32 value_;
@@ -128,4 +123,11 @@ private:
 //────────────────────────────────────────────────────────────────────────────────
 
 // 成りフラグ
-static const Move g_PROMOTE_FLAG = Move(Move::m_PROMOTE_FLAG);
+static const Move g_MOVE_PROMOTE_FLAG = Move(Move::m_PROMOTE_FLAG);
+
+static const Move g_MOVE_NONE = Move(Move::m_NONE);
+
+static const Move g_MOVE_NULL = Move(Move::m_NULL);
+
+// PVs end
+static const Move g_MOVE_PVS_END = Move(Move::m_PVS_END);

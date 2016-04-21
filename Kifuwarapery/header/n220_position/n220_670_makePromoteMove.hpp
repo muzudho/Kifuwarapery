@@ -23,7 +23,7 @@ public:
 		assert(!((pt == N07_Gold || pt == N08_King || mt == N02_Drop) && pm == Promote));
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ? UtilMove::MakeMove(pt, from, to) : UtilMovePos::MakeCaptureMove(pt, from, to, pos));
 		if (pm == Promote) {
-			move |= g_PROMOTE_FLAG;// UtilMove::GetPromoteFlag()
+			move |= g_MOVE_PROMOTE_FLAG;// UtilMove::GetPromoteFlag()
 		}
 		return move;
 	}

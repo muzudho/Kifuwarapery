@@ -10,11 +10,6 @@
 class UtilMove {
 public:
 
-	// 成り flag
-	//static inline Move GetPromoteFlag() { return static_cast<Move>(Move::m_PROMOTE_FLAG); }
-
-	static inline Move GetMoveNone() { return static_cast<Move>(Move::m_MoveNone); }
-
 	// 移動先から指し手に変換
 	static inline Move To2Move(const Square to) { return static_cast<Move>(to << 0); }
 

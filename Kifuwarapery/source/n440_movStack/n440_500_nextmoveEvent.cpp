@@ -77,7 +77,7 @@ NextmoveEvent::NextmoveEvent(
 		}
 	}
 
-	this->m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
+	this->m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : g_MOVE_NONE);
 	this->m_lastMove_ += (!this->m_ttMove_.IsNone());
 }
 
@@ -96,10 +96,10 @@ NextmoveEvent::NextmoveEvent(const Position& pos, Move ttm, const Depth depth, c
 	else {
 		m_phase_ = N14_QRecapture;
 		m_recaptureSquare_ = sq;
-		ttm = Move::GetMoveNone();
+		ttm = g_MOVE_NONE;
 	}
 
-	m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : Move::GetMoveNone());
+	m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : g_MOVE_NONE);
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
@@ -113,10 +113,10 @@ NextmoveEvent::NextmoveEvent(const Position& pos, const Move ttm, const History&
 
 	//m_captureThreshold_ = pos.GetCapturePieceScore(pt);
 	m_captureThreshold_ = PieceScore::GetCapturePieceScore(pt);
-	m_ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : Move::GetMoveNone());
+	m_ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : g_MOVE_NONE);
 
 	if (!m_ttMove_.IsNone() && (!m_ttMove_.IsCapture() || pos.GetSee(m_ttMove_) <= m_captureThreshold_)) {
-		m_ttMove_ = Move::GetMoveNone();
+		m_ttMove_ = g_MOVE_NONE;
 	}
 
 	m_lastMove_ += !m_ttMove_.IsNone();
@@ -165,11 +165,9 @@ void NextmoveEvent::ScoreEvasions() {
 			curr->m_score = seeScore - History::m_MaxScore;
 		}
 		else if (move.IsCaptureOrPromotion()) {
-			//curr->m_score = GetPos().GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			curr->m_score = PieceScore::GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			if (move.IsPromotion()) {
 				const PieceType pt = UtilPiece::ToPieceType(GetPos().GetPiece(move.From()));
-				//curr->m_score += GetPos().GetPromotePieceScore(pt);
 				curr->m_score += PieceScore::GetPromotePieceScore(pt);
 			}
 		}

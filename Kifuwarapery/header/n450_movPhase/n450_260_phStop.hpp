@@ -14,7 +14,7 @@ class PhStop : public MovePhaseAbstract {
 public:
 
 	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
-		resultMove = Move::GetMoveNone();
+		resultMove = g_MOVE_NONE;
 		return true;
 	};
 

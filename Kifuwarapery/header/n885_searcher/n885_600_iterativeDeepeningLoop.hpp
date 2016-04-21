@@ -36,7 +36,7 @@ public:
 		depth = 0;
 #endif
 
-		flashlight[0].m_currentMove = Move::GetMoveNull(); // skip update gains
+		flashlight[0].m_currentMove = g_MOVE_NULL; // skip update gains
 		rucksack.m_tt.NewSearch();
 		rucksack.m_history.Clear();
 		rucksack.m_gains.Clear();
@@ -58,7 +58,7 @@ public:
 
 		// 指し手が無ければ負け
 		if (rucksack.m_rootMoves.empty()) {
-			rucksack.m_rootMoves.push_back(RootMove(Move::GetMoveNone()));
+			rucksack.m_rootMoves.push_back(RootMove(g_MOVE_NONE));
 			SYNCCOUT << "info depth 0 score "
 				<< rucksack.scoreToUSI(-ScoreMate0Ply)
 				<< SYNCENDL;
@@ -248,7 +248,7 @@ public:
 					(flashlight + 1)->m_skipNullMove = true;
 					const Score s = rucksack.Search<N02_NonPV>(pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
 					(flashlight + 1)->m_skipNullMove = false;
-					(flashlight + 1)->m_excludedMove = Move::GetMoveNone();
+					(flashlight + 1)->m_excludedMove = g_MOVE_NONE;
 
 					if (s < rBeta) {
 						stop = true;

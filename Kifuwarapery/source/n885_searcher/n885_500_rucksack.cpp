@@ -130,7 +130,7 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 		oldAlpha = alpha;
 	}
 
-	ss->m_currentMove = bestMove = Move::GetMoveNone();
+	ss->m_currentMove = bestMove = g_MOVE_NONE;
 	ss->m_ply = (ss-1)->m_ply + 1;
 
 	if (g_maxPly < ss->m_ply) {
@@ -141,7 +141,7 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 
 	posKey = pos.GetKey();
 	tte = m_tt.Probe(posKey);
-	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : Move::GetMoveNone());
+	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : g_MOVE_NONE);
 	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
 
 	if (tte != nullptr
@@ -182,7 +182,7 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 		if (beta <= bestScore) {
 			if (tte == nullptr) {
 				m_tt.Store(pos.GetKey(), scoreToTT(bestScore, ss->m_ply), BoundLower,
-						 DepthNone, Move::GetMoveNone(), ss->m_staticEval);
+						 DepthNone, g_MOVE_NONE, ss->m_staticEval);
 			}
 
 			return bestScore;
@@ -417,7 +417,7 @@ Score Rucksack::Search(
 		threatMove = splitedNode->m_threatMove;
 		bestScore = splitedNode->m_bestScore;
 		tte = nullptr;
-		ttMove = excludedMove = Move::GetMoveNone();
+		ttMove = excludedMove = g_MOVE_NONE;
 		ttScore = ScoreNone;
 
 		Evaluation09 evaluation;
@@ -429,11 +429,11 @@ Score Rucksack::Search(
 	}
 
 	bestScore = -ScoreInfinite;
-	ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = Move::GetMoveNone();
+	ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;
 	ss->m_ply = (ss-1)->m_ply + 1;
 	(ss+1)->m_skipNullMove = false;
 	(ss+1)->m_reduction = Depth0;
-	(ss+2)->m_killers[0] = (ss+2)->m_killers[1] = Move::GetMoveNone();
+	(ss+2)->m_killers[0] = (ss+2)->m_killers[1] = g_MOVE_NONE;
 
 	if (PVNode && thisThread->m_maxPly < ss->m_ply) {
 		thisThread->m_maxPly = ss->m_ply;
@@ -475,7 +475,7 @@ Score Rucksack::Search(
 		RootNode ? m_rootMoves[m_pvIdx].m_pv_[0] :
 		tte != nullptr ?
 		UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
-		Move::GetMoveNone();
+		g_MOVE_NONE;
 	ttScore = (tte != nullptr ? scoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
 
 	if (!RootNode
@@ -531,12 +531,12 @@ Score Rucksack::Search(
 	}
 	else {
 		m_tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
-				 Move::GetMoveNone(), ss->m_staticEval);
+				 g_MOVE_NONE, ss->m_staticEval);
 	}
 
 	// 一手前の指し手について、history を更新する。
 	// todo: ここの条件はもう少し考えた方が良い。
-	if ((move = (ss-1)->m_currentMove) != Move::GetMoveNull()
+	if ((move = (ss-1)->m_currentMove) != g_MOVE_NULL
 		&& (ss-1)->m_staticEval != ScoreNone
 		&& ss->m_staticEval != ScoreNone
 		&& !move.IsCaptureOrPawnPromotion() // 前回(一手前)の指し手が駒取りでなかった。
@@ -580,7 +580,7 @@ Score Rucksack::Search(
 		&& beta <= eval
 		&& abs(beta) < ScoreMateInMaxPly)
 	{
-		ss->m_currentMove = Move::GetMoveNull();
+		ss->m_currentMove = g_MOVE_NULL;
 		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
 		if (beta < eval - PieceScore::m_pawn) {
@@ -677,7 +677,7 @@ iid_start:
 		tte = m_tt.Probe(posKey);
 		ttMove = (tte != nullptr ?
 			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
-				  Move::GetMoveNone());
+				  g_MOVE_NONE);
 	}
 
 split_point_start:
@@ -756,7 +756,7 @@ split_point_start:
 			ss->m_skipNullMove = true;
 			score = Search<N02_NonPV>(pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
 			ss->m_skipNullMove = false;
-			ss->m_excludedMove = Move::GetMoveNone();
+			ss->m_excludedMove = g_MOVE_NONE;
 
 			if (score < rBeta) {
 				//extension = OnePly;
@@ -1026,7 +1026,7 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 		   && ply < g_maxPly
 		   && (!pos.IsDraw(20) || ply < 6));
 
-	m_pv_.push_back(Move::GetMoveNone());
+	m_pv_.push_back(g_MOVE_NONE);
 	while (ply) {
 		pos.UndoMove(m_pv_[--ply]);
 	}
