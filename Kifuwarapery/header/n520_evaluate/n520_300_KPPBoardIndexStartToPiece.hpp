@@ -2,7 +2,7 @@
 
 
 #include <unordered_map>
-#include "../n113_piece___/n113_205_utilHandPiece.hpp"
+#include "../n113_piece___/n113_205_convHandPiece.hpp"
 #include "../n160_board___/n160_600_bitboardAll.hpp"
 #include "../n520_evaluate/n520_150_kppIndexArray.hpp"
 

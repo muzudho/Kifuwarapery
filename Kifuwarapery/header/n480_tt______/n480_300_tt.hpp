@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n480_tt______/n480_285_tTCluster.hpp"
 
 
@@ -18,8 +18,8 @@ public:
 
 	void Clear();
 
-	void Store(const Key posKey, const Score score, const Bound bound, Depth depth,
-			   Move move, const Score evalScore);
+	void Store(const Key posKey, const ScoreIndex score, const Bound bound, Depth depth,
+			   Move move, const ScoreIndex evalScore);
 
 	TTEntry* Probe(const Key posKey) const;
 

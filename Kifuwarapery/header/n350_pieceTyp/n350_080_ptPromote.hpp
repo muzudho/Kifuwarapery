@@ -7,7 +7,7 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "n350_070_ptAbstract.hpp"
 

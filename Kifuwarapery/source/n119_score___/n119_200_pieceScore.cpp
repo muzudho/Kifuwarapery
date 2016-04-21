@@ -2,48 +2,48 @@
 #include "../../header/n119_score___/n119_200_pieceScore.hpp"
 
 
-const Score PieceScore::m_pawn = static_cast<Score>(100 * 9 / 10);
-const Score PieceScore::m_lance = static_cast<Score>(350 * 9 / 10);
-const Score PieceScore::m_knight = static_cast<Score>(450 * 9 / 10);
-const Score PieceScore::m_silver = static_cast<Score>(550 * 9 / 10);
-const Score PieceScore::m_gold = static_cast<Score>(600 * 9 / 10);
-const Score PieceScore::m_bishop = static_cast<Score>(950 * 9 / 10);
-const Score PieceScore::m_rook = static_cast<Score>(1100 * 9 / 10);
-const Score PieceScore::m_proPawn = static_cast<Score>(600 * 9 / 10);
-const Score PieceScore::m_proLance = static_cast<Score>(600 * 9 / 10);
-const Score PieceScore::m_proKnight = static_cast<Score>(600 * 9 / 10);
-const Score PieceScore::m_proSilver = static_cast<Score>(600 * 9 / 10);
-const Score PieceScore::m_horse = static_cast<Score>(1050 * 9 / 10);
-const Score PieceScore::m_dragon = static_cast<Score>(1550 * 9 / 10);
+const ScoreIndex PieceScore::m_pawn = static_cast<ScoreIndex>(100 * 9 / 10);
+const ScoreIndex PieceScore::m_lance = static_cast<ScoreIndex>(350 * 9 / 10);
+const ScoreIndex PieceScore::m_knight = static_cast<ScoreIndex>(450 * 9 / 10);
+const ScoreIndex PieceScore::m_silver = static_cast<ScoreIndex>(550 * 9 / 10);
+const ScoreIndex PieceScore::m_gold = static_cast<ScoreIndex>(600 * 9 / 10);
+const ScoreIndex PieceScore::m_bishop = static_cast<ScoreIndex>(950 * 9 / 10);
+const ScoreIndex PieceScore::m_rook = static_cast<ScoreIndex>(1100 * 9 / 10);
+const ScoreIndex PieceScore::m_proPawn = static_cast<ScoreIndex>(600 * 9 / 10);
+const ScoreIndex PieceScore::m_proLance = static_cast<ScoreIndex>(600 * 9 / 10);
+const ScoreIndex PieceScore::m_proKnight = static_cast<ScoreIndex>(600 * 9 / 10);
+const ScoreIndex PieceScore::m_proSilver = static_cast<ScoreIndex>(600 * 9 / 10);
+const ScoreIndex PieceScore::m_horse = static_cast<ScoreIndex>(1050 * 9 / 10);
+const ScoreIndex PieceScore::m_dragon = static_cast<ScoreIndex>(1550 * 9 / 10);
 
-const Score PieceScore::m_king = static_cast<Score>(15000);
+const ScoreIndex PieceScore::m_king = static_cast<ScoreIndex>(15000);
 
-const Score PieceScore::m_capturePawn = PieceScore::m_pawn * 2;
-const Score PieceScore::m_captureLance = PieceScore::m_lance * 2;
-const Score PieceScore::m_captureKnight = PieceScore::m_knight * 2;
-const Score PieceScore::m_captureSilver = PieceScore::m_silver * 2;
-const Score PieceScore::m_captureGold = PieceScore::m_gold * 2;
-const Score PieceScore::m_captureBishop = PieceScore::m_bishop * 2;
-const Score PieceScore::m_captureRook = PieceScore::m_rook * 2;
-const Score PieceScore::m_captureProPawn = PieceScore::m_proPawn + PieceScore::m_pawn;
-const Score PieceScore::m_captureProLance = PieceScore::m_proLance + PieceScore::m_lance;
-const Score PieceScore::m_captureProKnight = PieceScore::m_proKnight + PieceScore::m_knight;
-const Score PieceScore::m_CaptureProSilverScore = PieceScore::m_proSilver + PieceScore::m_silver;
-const Score PieceScore::m_CaptureHorseScore = PieceScore::m_horse + PieceScore::m_bishop;
-const Score PieceScore::m_CaptureDragonScore = PieceScore::m_dragon + PieceScore::m_rook;
-const Score PieceScore::m_CaptureKingScore = PieceScore::m_king * 2;
+const ScoreIndex PieceScore::m_capturePawn = PieceScore::m_pawn * 2;
+const ScoreIndex PieceScore::m_captureLance = PieceScore::m_lance * 2;
+const ScoreIndex PieceScore::m_captureKnight = PieceScore::m_knight * 2;
+const ScoreIndex PieceScore::m_captureSilver = PieceScore::m_silver * 2;
+const ScoreIndex PieceScore::m_captureGold = PieceScore::m_gold * 2;
+const ScoreIndex PieceScore::m_captureBishop = PieceScore::m_bishop * 2;
+const ScoreIndex PieceScore::m_captureRook = PieceScore::m_rook * 2;
+const ScoreIndex PieceScore::m_captureProPawn = PieceScore::m_proPawn + PieceScore::m_pawn;
+const ScoreIndex PieceScore::m_captureProLance = PieceScore::m_proLance + PieceScore::m_lance;
+const ScoreIndex PieceScore::m_captureProKnight = PieceScore::m_proKnight + PieceScore::m_knight;
+const ScoreIndex PieceScore::m_CaptureProSilverScore = PieceScore::m_proSilver + PieceScore::m_silver;
+const ScoreIndex PieceScore::m_CaptureHorseScore = PieceScore::m_horse + PieceScore::m_bishop;
+const ScoreIndex PieceScore::m_CaptureDragonScore = PieceScore::m_dragon + PieceScore::m_rook;
+const ScoreIndex PieceScore::m_CaptureKingScore = PieceScore::m_king * 2;
 
-const Score PieceScore::m_PromotePawnScore = PieceScore::m_proPawn - PieceScore::m_pawn;
-const Score PieceScore::m_PromoteLanceScore = PieceScore::m_proLance - PieceScore::m_lance;
-const Score PieceScore::m_PromoteKnightScore = PieceScore::m_proKnight - PieceScore::m_knight;
-const Score PieceScore::m_PromoteSilverScore = PieceScore::m_proSilver - PieceScore::m_silver;
-const Score PieceScore::m_PromoteBishopScore = PieceScore::m_horse - PieceScore::m_bishop;
-const Score PieceScore::m_PromoteRookScore = PieceScore::m_dragon - PieceScore::m_rook;
+const ScoreIndex PieceScore::m_PromotePawnScore = PieceScore::m_proPawn - PieceScore::m_pawn;
+const ScoreIndex PieceScore::m_PromoteLanceScore = PieceScore::m_proLance - PieceScore::m_lance;
+const ScoreIndex PieceScore::m_PromoteKnightScore = PieceScore::m_proKnight - PieceScore::m_knight;
+const ScoreIndex PieceScore::m_PromoteSilverScore = PieceScore::m_proSilver - PieceScore::m_silver;
+const ScoreIndex PieceScore::m_PromoteBishopScore = PieceScore::m_horse - PieceScore::m_bishop;
+const ScoreIndex PieceScore::m_PromoteRookScore = PieceScore::m_dragon - PieceScore::m_rook;
 
-const Score PieceScore::m_ScoreKnownWin = PieceScore::m_king;
+const ScoreIndex PieceScore::m_ScoreKnownWin = PieceScore::m_king;
 
 
-const Score PieceScore::m_PieceScore[Piece::N31_PieceNone] = {
+const ScoreIndex PieceScore::m_PieceScore[Piece::N31_PieceNone] = {
 	ScoreZero,
 	PieceScore::m_pawn,
 	PieceScore::m_lance,
@@ -76,7 +76,7 @@ const Score PieceScore::m_PieceScore[Piece::N31_PieceNone] = {
 	PieceScore::m_horse,
 	PieceScore::m_dragon,
 };
-const Score PieceScore::m_CapturePieceScore[Piece::N31_PieceNone] = {
+const ScoreIndex PieceScore::m_CapturePieceScore[Piece::N31_PieceNone] = {
 	ScoreZero,
 	PieceScore::m_capturePawn,
 	PieceScore::m_captureLance,
@@ -109,7 +109,7 @@ const Score PieceScore::m_CapturePieceScore[Piece::N31_PieceNone] = {
 	PieceScore::m_CaptureHorseScore,
 	PieceScore::m_CaptureDragonScore,
 };
-const Score PieceScore::m_PromotePieceScore[7] = {
+const ScoreIndex PieceScore::m_PromotePieceScore[7] = {
 	ScoreZero,
 	PieceScore::m_PromotePawnScore,
 	PieceScore::m_PromoteLanceScore,

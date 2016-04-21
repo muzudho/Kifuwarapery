@@ -46,7 +46,7 @@ public:
 		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const PieceType pieceType = UtilPiece::ToPieceType(pos.GetPiece(from));
+			const PieceType pieceType = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
 			PieceTypeArray::m_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);

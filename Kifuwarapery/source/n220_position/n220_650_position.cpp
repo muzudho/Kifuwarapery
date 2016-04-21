@@ -6,8 +6,8 @@
 #include "../../header/n110_square__/n110_400_squareRelation.hpp"
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n113_piece___/n113_150_piece.hpp"
-#include "../../header/n113_piece___/n113_155_utilPiece.hpp"
-#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n113_piece___/n113_155_convPiece.hpp"
+#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n119_score___/n119_200_pieceScore.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n160_board___/n160_170_goldAndSilverAttackBb.hpp"
@@ -68,7 +68,7 @@ bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned)
 	const Color us = GetTurn();
 	const Square from = move.From();
 
-	if (!FROMMUSTNOTKING && UtilPiece::ToPieceType(GetPiece(from)) == N08_King) {
+	if (!FROMMUSTNOTKING && ConvPiece::TO_PIECE_TYPE10(GetPiece(from)) == N08_King) {
 		const Color them = UtilColor::OppositeColor(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
 		return !IsAttackersToIsNot0(them, move.To());
@@ -123,7 +123,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	if (move.IsDrop()) {
 		const PieceType ptFrom = move.GetPieceTypeDropped();
-		if (!GetHand(us).Exists(UtilHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != N00_Empty) {
+		if (!GetHand(us).Exists(ConvHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != N00_Empty) {
 			return false;
 		}
 
@@ -145,7 +145,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 
 		if (ptFrom == N01_Pawn && checkPawnDrop) {
-			if ((this->GetBbOf(N01_Pawn, us) & g_fileMaskBb.GetFileMask(UtilSquare::ToFile(to))).Exists1Bit()) {
+			if ((this->GetBbOf(N01_Pawn, us) & g_fileMaskBb.GetFileMask(ConvSquare::TO_FILE10(to))).Exists1Bit()) {
 				// 二歩
 				return false;
 			}
@@ -159,7 +159,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 	else {
 		const Square from = move.From();
 		const PieceType ptFrom = move.GetPieceTypeFrom();
-		if (GetPiece(from) != UtilPiece::FromColorAndPieceType(us, ptFrom) || g_setMaskBb.IsSet(&this->GetBbOf(us), to)) {
+		if (GetPiece(from) != ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptFrom) || g_setMaskBb.IsSet(&this->GetBbOf(us), to)) {
 			return false;
 		}
 
@@ -234,7 +234,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 	PieceType ptTo;
 	if (move.IsDrop()) {
 		ptTo = move.GetPieceTypeDropped();
-		const HandPiece hpTo = UtilHandPiece::FromPieceType(ptTo);
+		const HandPiece hpTo = ConvHandPiece::FromPieceType(ptTo);
 
 		handKey -= GetZobHand(hpTo, us);
 		boardKey += GetZobrist(ptTo, to, us);
@@ -243,13 +243,13 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		const int handnum = GetHand(us).NumOf(hpTo);
 		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpTo] + handnum];
-		const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
+		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
 		m_st_->m_cl.m_listindex[0] = listIndex;
 		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.m_list0[listIndex];
 		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[listIndex];
 
 		m_evalList_.m_list0[listIndex] = kppArray[pcTo] + to;
-		m_evalList_.m_list1[listIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+		m_evalList_.m_list1[listIndex] = kppArray[ConvPiece::INVERSE10(pcTo)] + ConvSquare::INVERSE10(to);
 		m_evalList_.m_listToSquareHand[listIndex] = to;
 		m_evalList_.m_squareHandToList[to] = listIndex;
 
@@ -258,7 +258,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		m_hand_[us].MinusOne(hpTo);
 		XorBBs(ptTo, to, us);
-		m_piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
 
 		if (moveIsCheck) {
 			// Direct checks
@@ -279,13 +279,13 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptTo], to);
 		g_setMaskBb.XorBit(&m_byColorBB_[us], from, to);
 		m_piece_[from] = N00_Empty;
-		m_piece_[to] = UtilPiece::FromColorAndPieceType(us, ptTo);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
 		boardKey -= GetZobrist(ptFrom, from, us);
 		boardKey += GetZobrist(ptTo, to, us);
 
 		if (ptCaptured) {
 			// 駒を取ったとき
-			const HandPiece hpCaptured = UtilHandPiece::FromPieceType(ptCaptured);
+			const HandPiece hpCaptured = ConvHandPiece::FromPieceType(ptCaptured);
 			const Color them = UtilColor::OppositeColor(us);
 
 			boardKey -= GetZobrist(ptCaptured, to, them);
@@ -325,7 +325,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_kingSquare_[us] = to;
 		}
 		else {
-			const Piece pcTo = UtilPiece::FromColorAndPieceType(us, ptTo);
+			const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
 			const int fromListIndex = m_evalList_.m_squareHandToList[from];
 
 			m_st_->m_cl.m_listindex[0] = fromListIndex;
@@ -333,7 +333,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[fromListIndex];
 
 			m_evalList_.m_list0[fromListIndex] = kppArray[pcTo] + to;
-			m_evalList_.m_list1[fromListIndex] = kppArray[UtilPiece::Inverse(pcTo)] + UtilSquare::Inverse(to);
+			m_evalList_.m_list1[fromListIndex] = kppArray[ConvPiece::INVERSE10(pcTo)] + ConvSquare::INVERSE10(to);
 			m_evalList_.m_listToSquareHand[fromListIndex] = to;
 			m_evalList_.m_squareHandToList[to] = fromListIndex;
 
@@ -390,7 +390,7 @@ void Position::UndoMove(const Move move) {
 		g_setMaskBb.XorBit(&m_byColorBB_[us], to);
 		m_piece_[to] = N00_Empty;
 
-		const HandPiece hp = UtilHandPiece::FromPieceType(ptTo);
+		const HandPiece hp = ConvHandPiece::FromPieceType(ptTo);
 		m_hand_[us].PlusOne(hp);
 
 		const int toListIndex = m_evalList_.m_squareHandToList[to];
@@ -411,10 +411,10 @@ void Position::UndoMove(const Move move) {
 			m_kingSquare_[us] = from;
 		}
 		else {
-			const Piece pcFrom = UtilPiece::FromColorAndPieceType(us, ptFrom);
+			const Piece pcFrom = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptFrom);
 			const int toListIndex = m_evalList_.m_squareHandToList[to];
 			m_evalList_.m_list0[toListIndex] = kppArray[pcFrom] + from;
-			m_evalList_.m_list1[toListIndex] = kppArray[UtilPiece::Inverse(pcFrom)] + UtilSquare::Inverse(from);
+			m_evalList_.m_list1[toListIndex] = kppArray[ConvPiece::INVERSE10(pcFrom)] + ConvSquare::INVERSE10(from);
 			m_evalList_.m_listToSquareHand[toListIndex] = from;
 			m_evalList_.m_squareHandToList[from] = toListIndex;
 		}
@@ -423,14 +423,14 @@ void Position::UndoMove(const Move move) {
 			// 駒を取ったとき
 			g_setMaskBb.XorBit(&m_byTypeBB_[ptCaptured], to);
 			g_setMaskBb.XorBit(&m_byColorBB_[them], to);
-			const HandPiece hpCaptured = UtilHandPiece::FromPieceType(ptCaptured);
-			const Piece pcCaptured = UtilPiece::FromColorAndPieceType(them, ptCaptured);
+			const HandPiece hpCaptured = ConvHandPiece::FromPieceType(ptCaptured);
+			const Piece pcCaptured = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(them, ptCaptured);
 			m_piece_[to] = pcCaptured;
 
 			const int handnum = GetHand(us).NumOf(hpCaptured);
 			const int toListIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpCaptured] + handnum];
 			m_evalList_.m_list0[toListIndex] = kppArray[pcCaptured] + to;
-			m_evalList_.m_list1[toListIndex] = kppArray[UtilPiece::Inverse(pcCaptured)] + UtilSquare::Inverse(to);
+			m_evalList_.m_list1[toListIndex] = kppArray[ConvPiece::INVERSE10(pcCaptured)] + ConvSquare::INVERSE10(to);
 			m_evalList_.m_listToSquareHand[toListIndex] = to;
 			m_evalList_.m_squareHandToList[to] = toListIndex;
 
@@ -444,7 +444,7 @@ void Position::UndoMove(const Move move) {
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptFrom], from);
 		g_setMaskBb.XorBit(&m_byTypeBB_[ptTo], to);
 		g_setMaskBb.XorBit(&m_byColorBB_[us], from, to);
-		m_piece_[from] = UtilPiece::FromColorAndPieceType(us, ptFrom);
+		m_piece_[from] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptFrom);
 	}
 	// Occupied は to, from の位置のビットを操作するよりも、
 	// Black と White の or を取る方が速いはず。
@@ -512,12 +512,12 @@ namespace {
 			}
 
 			if (PT == N01_Pawn || PT == N02_Lance || PT == N03_Knight) {
-				if (UtilSquare::CanPromote(turn, UtilSquare::ToRank(to))) {
+				if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to))) {
 					return PT + PTPromote;
 				}
 			}
 			if (PT == N04_Silver || PT == N05_Bishop || PT == N06_Rook) {
-				if (UtilSquare::CanPromote(turn, UtilSquare::ToRank(to)) || UtilSquare::CanPromote(turn, UtilSquare::ToRank(from))) {
+				if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to)) || ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(from))) {
 					return PT + PTPromote;
 				}
 			}
@@ -532,7 +532,7 @@ namespace {
 	}
 }
 
-Score Position::GetSee(const Move move, const int asymmThreshold) const {
+ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	const Square to = move.To();
 	Square from;
 	PieceType ptCaptured;
@@ -540,7 +540,7 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 	Bitboard attackers;
 	Bitboard opponentAttackers;
 	Color turn = UtilColor::OppositeColor(this->GetTurn());
-	Score swapList[32];
+	ScoreIndex swapList[32];
 	if (move.IsDrop()) {
 		opponentAttackers = this->GetAttackersTo(turn, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
@@ -605,12 +605,12 @@ Score Position::GetSee(const Move move, const int asymmThreshold) const {
 	return swapList[0];
 }
 
-Score Position::GetSeeSign(const Move move) const {
+ScoreIndex Position::GetSeeSign(const Move move) const {
 	if (move.IsCapture()) {
 		const PieceType ptFrom = move.GetPieceTypeFrom();
 		const Square to = move.To();
 		if (PieceScore::GetCapturePieceScore(ptFrom) <= PieceScore::GetCapturePieceScore(GetPiece(to))) {
-			return static_cast<Score>(1);
+			return static_cast<ScoreIndex>(1);
 		}
 	}
 	return GetSee(move);
@@ -758,7 +758,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, g_rookAttackBb.GetControllBbToEdge(to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return UtilMove::MakeDropMove(N06_Rook, to);
+					return ConvMove::Convert30_MakeDropMove(N06_Rook, to);
 				}
 			}
 		}
@@ -768,14 +768,14 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 	// 玉が 9(1) 段目にいれば香車で王手出来無いので、それも省く。
 	else if (
 		Hand::Exists_HLance(ourHand) &&
-		UtilSquare::IsInFrontOf<US, Rank1, Rank9>(UtilSquare::ToRank(ksq))
+		ConvSquare::IS_IN_FRONT_OF10(US, Rank1, Rank9, ConvSquare::TO_RANK10(ksq))
 	) {
 		const Square to = ksq + TDeltaS;
 		if (GetPiece(to) == N00_Empty && IsAttackersToIsNot0(US, to)) {
 			if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
-				return UtilMove::MakeDropMove(N02_Lance, to);
+				return ConvMove::Convert30_MakeDropMove(N02_Lance, to);
 			}
 		}
 	}
@@ -789,7 +789,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, g_bishopAttackBb.GetControllBbToEdge(to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return UtilMove::MakeDropMove(N05_Bishop, to);
+					return ConvMove::Convert30_MakeDropMove(N05_Bishop, to);
 				}
 			}
 		}
@@ -811,7 +811,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, g_goldAttackBb.GetControllBb(US, to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return UtilMove::MakeDropMove(N07_Gold, to);
+					return ConvMove::Convert30_MakeDropMove(N07_Gold, to);
 				}
 			}
 		}
@@ -827,7 +827,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				goto silver_drop_end;
 			}
 			// 斜め後ろから打つ場合を調べる必要がある。
-			toBB = dropTarget & (g_silverAttackBb.GetControllBb(Them, ksq) & g_inFrontMaskBb.GetInFrontMask(US, UtilSquare::ToRank(ksq)));
+			toBB = dropTarget & (g_silverAttackBb.GetControllBb(Them, ksq) & g_inFrontMaskBb.GetInFrontMask(US, ConvSquare::TO_RANK10(ksq)));
 		}
 		else {
 			if (Hand::Exists_HBishop(ourHand)) {
@@ -844,7 +844,7 @@ template <Color US> Move Position::GetMateMoveIn1Ply() {
 				if (!canKingEscape(*this, US, to, g_silverAttackBb.GetControllBb(US, to))
 					&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 				{
-					return UtilMove::MakeDropMove(N04_Silver, to);
+					return ConvMove::Convert30_MakeDropMove(N04_Silver, to);
 				}
 			}
 		}
@@ -860,7 +860,7 @@ silver_drop_end:
 			if (!canKingEscape(*this, US, to, Bitboard::CreateAllZeroBB())
 				&& !canPieceCapture(*this, Them, to, dcBB_betweenIsThem))
 			{
-				return UtilMove::MakeDropMove(N03_Knight, to);
+				return ConvMove::Convert30_MakeDropMove(N03_Knight, to);
 			}
 		}
 	}
@@ -1111,7 +1111,7 @@ silver_drop_end:
 			const Square from = fromBB.PopFirstOneFromI9();
 			Bitboard toBB = moveTarget & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, US, from) & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq);
 			if (toBB.Exists1Bit()) {
-				const PieceType pt = UtilPiece::ToPieceType(GetPiece(from));
+				const PieceType pt = ConvPiece::TO_PIECE_TYPE10(GetPiece(from));
 				XorBBs(pt, from, US);
 				g_setMaskBb.XorBit(&m_goldsBB_, from);
 				// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
@@ -1182,7 +1182,7 @@ silver_drop_end:
 
 						// 玉の前方に移動する場合、成で詰まなかったら不成でも詰まないので、ここで省く。
 						// sakurapyon の作者が言ってたので実装。
-						toBB.AndEqualNot(g_inFrontMaskBb.GetInFrontMask(Them, UtilSquare::ToRank(ksq)));
+						toBB.AndEqualNot(g_inFrontMaskBb.GetInFrontMask(Them, ConvSquare::TO_RANK10(ksq)));
 						while (toBB.Exists1Bit()) {
 							const Square to = toBB.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
@@ -1403,16 +1403,16 @@ silver_drop_end:
 		// 歩による移動
 		// 成れる場合は必ずなる。
 		// todo: PawnCheckBB 作って簡略化する。
-		const Rank krank = UtilSquare::ToRank(ksq);
+		const Rank krank = ConvSquare::TO_RANK10(ksq);
 		// 歩が移動して王手になるのは、相手玉が1~7段目の時のみ。
-		if (UtilSquare::IsInFrontOf<US, Rank2, Rank8>(krank)) {
+		if (ConvSquare::IS_IN_FRONT_OF10(US, Rank2, Rank8, krank)) {
 			// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 			const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 			const SquareDelta TDeltaN = (US == Black ? DeltaN : DeltaS);
 
 			Bitboard fromBB = GetBbOf(N01_Pawn, US);
 			// 玉が敵陣にいないと成で王手になることはない。
-			if (UtilSquare::IsInFrontOf<US, Rank6, Rank4>(krank)) {
+			if (ConvSquare::IS_IN_FRONT_OF10(US, Rank6, Rank4, krank)) {
 				// 成った時に王手になる位置
 				const Bitboard toBB_promo = moveTarget & PieceTypeArray::m_gold.GetAttacks2From(g_nullBitboard, Them, ksq) & TRank789BB;
 				Bitboard fromBB_promo = fromBB & Bitboard::PawnAttack(toBB_promo, Them);
@@ -1445,7 +1445,7 @@ silver_drop_end:
 			const Square from = to + TDeltaS;
 			if (g_setMaskBb.IsSet(&fromBB, from) && !g_setMaskBb.IsSet(&GetBbOf(US), to)) {
 				// 玉が 1, 2 段目にいるなら、成りで王手出来るので不成は調べない。
-				if (UtilSquare::IsBehind<US, Rank8, Rank2>(krank)) {
+				if (ConvSquare::IS_BEHIND10(US, Rank8, Rank2, krank)) {
 					XorBBs(N01_Pawn, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<false>();
@@ -1540,7 +1540,7 @@ void Position::Print() const {
 		++i;
 		std::cout << "P" << i;
 		for (File f = FileA; FileI <= f; --f) {
-			std::cout << pieceToCharCSA(GetPiece(UtilSquare::FromFileRank(f, r)));
+			std::cout << pieceToCharCSA(GetPiece(ConvSquare::FROM_FILE_RANK10(f, r)));
 		}
 		std::cout << std::endl;
 	}
@@ -1665,7 +1665,7 @@ bool Position::IsOK() const {
 				}
 			}
 			else {
-				if (!g_setMaskBb.IsSet( &GetBbOf(UtilPiece::ToPieceType(pc), UtilPiece::ToColor(pc)), sq) ) {
+				if (!g_setMaskBb.IsSet( &GetBbOf(ConvPiece::TO_PIECE_TYPE10(pc), ConvPiece::TO_COLOR10(pc)), sq) ) {
 					goto incorrect_position;
 				}
 			}
@@ -1715,7 +1715,7 @@ Key Position::GetComputeBoardKey() const {
 	Key result = 0;
 	for (Square sq = I9; sq < SquareNum; ++sq) {
 		if (GetPiece(sq) != N00_Empty) {
-			result += GetZobrist(UtilPiece::ToPieceType(GetPiece(sq)), sq, UtilPiece::ToColor(GetPiece(sq)));
+			result += GetZobrist(ConvPiece::TO_PIECE_TYPE10(GetPiece(sq)), sq, ConvPiece::TO_COLOR10(GetPiece(sq)));
 		}
 	}
 	if (GetTurn() == White) {
@@ -1949,7 +1949,7 @@ void Position::Set(const std::string& sfen, Military* th) {
 			promoteFlag = Promoted;
 		}
 		else if (g_charToPieceUSI.IsLegalChar(token)) {
-			if (UtilSquare::ContainsOf(sq)) {
+			if (ConvSquare::CONTAINS_OF10(sq)) {
 				SetPiece(g_charToPieceUSI.GetValue(token) + promoteFlag, sq);
 				promoteFlag = UnPromoted;
 				sq += DeltaE;
@@ -2113,12 +2113,12 @@ bool Position::InCheck() const
 	return GetCheckersBB().Exists1Bit();
 }
 
-Score Position::GetMaterial() const
+ScoreIndex Position::GetMaterial() const
 {
 	return m_st_->m_material;
 }
 
-Score Position::GetMaterialDiff() const
+ScoreIndex Position::GetMaterialDiff() const
 {
 	return m_st_->m_material - m_st_->m_previous->m_material;
 }
@@ -2144,7 +2144,7 @@ bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 		const Square from = move.From();
 		const PieceType ptFrom = move.GetPieceTypeFrom();
 		const PieceType ptTo = move.GetPieceTypeTo(ptFrom);
-		assert(ptFrom == UtilPiece::ToPieceType(GetPiece(from)));
+		assert(ptFrom == ConvPiece::TO_PIECE_TYPE10(GetPiece(from)));
 		// Direct Check ?
 		if (g_setMaskBb.IsSet(&ci.m_checkBB[ptTo], to)) {
 			return true;
@@ -2166,8 +2166,8 @@ void Position::Clear() {
 
 void Position::SetPiece(const Piece piece, const Square sq)
 {
-	const Color c = UtilPiece::ToColor(piece);
-	const PieceType pt = UtilPiece::ToPieceType(piece);
+	const Color c = ConvPiece::TO_COLOR10(piece);
+	const PieceType pt = ConvPiece::TO_PIECE_TYPE10(piece);
 
 	m_piece_[sq] = piece;
 
@@ -2183,9 +2183,9 @@ void Position::SetHand(const HandPiece hp, const Color c, const int num)
 
 void Position::SetHand(const Piece piece, const int num)
 {
-	const Color c = UtilPiece::ToColor(piece);
-	const PieceType pt = UtilPiece::ToPieceType(piece);
-	const HandPiece hp = UtilHandPiece::FromPieceType(pt);
+	const Color c = ConvPiece::TO_COLOR10(piece);
+	const PieceType pt = ConvPiece::TO_PIECE_TYPE10(piece);
+	const HandPiece hp = ConvHandPiece::FromPieceType(pt);
 	SetHand(hp, c, num);
 }
 
@@ -2258,14 +2258,14 @@ void Position::FindCheckers()
 	m_st_->m_checkersBB = GetAttackersToExceptKing(UtilColor::OppositeColor(GetTurn()), GetKingSquare(GetTurn()));
 }
 
-Score Position::ComputeMaterial() const {
-	Score s = ScoreZero;
+ScoreIndex Position::ComputeMaterial() const {
+	ScoreIndex s = ScoreZero;
 	for (PieceType pt = N01_Pawn; pt < N15_PieceTypeNum; ++pt) {
 		const int num = this->GetBbOf(pt, Black).PopCount() - this->GetBbOf(pt, White).PopCount();
 		s += num * PieceScore::GetPieceScore(pt);
 	}
 	for (PieceType pt = N01_Pawn; pt < N08_King; ++pt) {
-		const int num = GetHand(Black).NumOf(UtilHandPiece::FromPieceType(pt)) - GetHand(White).NumOf(UtilHandPiece::FromPieceType(pt));
+		const int num = GetHand(Black).NumOf(ConvHandPiece::FromPieceType(pt)) - GetHand(White).NumOf(ConvHandPiece::FromPieceType(pt));
 		s += num * PieceScore::GetPieceScore(pt);
 	}
 	return s;

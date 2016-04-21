@@ -1,6 +1,6 @@
 ﻿#include <mutex>
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
@@ -57,9 +57,9 @@ template <bool Fake>
 void Military::ForkNewFighter(
 	Position& pos,
 	Flashlight* pFlashlightBox,
-	const Score alpha,
-	const Score beta,
-	Score& bestScore,
+	const ScoreIndex alpha,
+	const ScoreIndex beta,
+	ScoreIndex& bestScore,
 	Move& bestMove,
 	const Depth depth,
 	const Move threatMove,
@@ -140,13 +140,13 @@ void Military::ForkNewFighter(
 }
 
 template void Military::ForkNewFighter<true >(
-	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
+	Position& pos, Flashlight* ss, const ScoreIndex alpha, const ScoreIndex beta, ScoreIndex& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
 );
 
 template void Military::ForkNewFighter<false>(
-	Position& pos, Flashlight* ss, const Score alpha, const Score beta, Score& bestScore,
+	Position& pos, Flashlight* ss, const ScoreIndex alpha, const ScoreIndex beta, ScoreIndex& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
 	NextmoveEvent& mp, const NodeType nodeType, const bool cutNode
 );

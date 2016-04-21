@@ -1,7 +1,7 @@
-﻿#include "../../header/n119_score___/n119_090_score.hpp"
+﻿#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_500_moveStack.hpp"
-#include "../../header/n165_movStack/n165_600_utilMove.hpp"
+#include "../../header/n165_movStack/n165_600_convMove.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
@@ -44,7 +44,7 @@ NextmoveEvent::NextmoveEvent(
 	const Depth depth,
 	const History& history,
 	Flashlight* pFlashlightBox,
-	const Score beta
+	const ScoreIndex beta
 )
 	: m_pos_(pos), m_history_(history), m_depth_(depth)
 {
@@ -82,7 +82,9 @@ NextmoveEvent::NextmoveEvent(
 }
 
 // 静止探索で呼ばれる。
-NextmoveEvent::NextmoveEvent(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq)
+NextmoveEvent::NextmoveEvent(
+	const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq
+)
 	: m_pos_(pos), m_history_(history), m_currMove_(GetFirstMove()), m_lastMove_(GetFirstMove())
 {
 	assert(depth <= Depth0);
@@ -103,7 +105,9 @@ NextmoveEvent::NextmoveEvent(const Position& pos, Move ttm, const Depth depth, c
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
-NextmoveEvent::NextmoveEvent(const Position& pos, const Move ttm, const History& history, const PieceType pt)
+NextmoveEvent::NextmoveEvent(
+	const Position& pos, const Move ttm, const History& history, const PieceType pt
+)
 	: m_pos_(pos), m_history_(history), m_currMove_(GetFirstMove()), m_lastMove_(GetFirstMove())
 {
 	assert(!pos.InCheck());
@@ -144,11 +148,24 @@ Move NextmoveEvent::GetNextMove<true>() {
 	return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove<false>();
 }
 
-const Score LVATable[N15_PieceTypeNum] = {
-	Score(0), Score(1), Score(2), Score(3), Score(4), Score(7), Score(8), Score(6), Score(10000),
-	Score(5), Score(5), Score(5), Score(5), Score(9), Score(10)
+const ScoreIndex LVATable[N15_PieceTypeNum] = {
+	ScoreIndex(0),
+	ScoreIndex(1),
+	ScoreIndex(2),
+	ScoreIndex(3),
+	ScoreIndex(4),
+	ScoreIndex(7),
+	ScoreIndex(8),
+	ScoreIndex(6),
+	ScoreIndex(10000),
+	ScoreIndex(5),
+	ScoreIndex(5),
+	ScoreIndex(5),
+	ScoreIndex(5),
+	ScoreIndex(9),
+	ScoreIndex(10)
 };
-inline Score LVA(const PieceType pt) { return LVATable[pt]; }
+inline ScoreIndex LVA(const PieceType pt) { return LVATable[pt]; }
 
 void NextmoveEvent::ScoreCaptures() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
@@ -160,19 +177,19 @@ void NextmoveEvent::ScoreCaptures() {
 void NextmoveEvent::ScoreEvasions() {
 	for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
 		const Move move = curr->m_move;
-		const Score seeScore = GetPos().GetSeeSign(move);
+		const ScoreIndex seeScore = GetPos().GetSeeSign(move);
 		if (seeScore < 0) {
 			curr->m_score = seeScore - History::m_MaxScore;
 		}
 		else if (move.IsCaptureOrPromotion()) {
 			curr->m_score = PieceScore::GetCapturePieceScore(GetPos().GetPiece(move.To())) + History::m_MaxScore;
 			if (move.IsPromotion()) {
-				const PieceType pt = UtilPiece::ToPieceType(GetPos().GetPiece(move.From()));
+				const PieceType pt = ConvPiece::TO_PIECE_TYPE10(GetPos().GetPiece(move.From()));
 				curr->m_score += PieceScore::GetPromotePieceScore(pt);
 			}
 		}
 		else {
-			curr->m_score = GetHistory().GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
+			curr->m_score = GetHistory().GetValue(move.IsDrop(), ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(GetPos().GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 		}
 	}
 }

@@ -4,10 +4,11 @@
 #include <string>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_100_square.hpp"
-#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n110_square__/n110_500_convSquare.hpp"
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
-#include "../../header/n113_piece___/n113_205_utilHandPiece.hpp"
+#include "../../header/n113_piece___/n113_205_convHandPiece.hpp"
+
 
 
 // xxxxxxxx xxxxxxxx xxxxxxxx x1111111  移動先

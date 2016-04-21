@@ -3,7 +3,7 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_100_color.hpp"
-#include "../n110_square__/n110_205_utilRank.hpp"
+#include "../n110_square__/n110_205_convRank.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_230_setMaskBB.hpp"
 #include "../n160_board___/n160_600_bitboardAll.hpp"
@@ -78,14 +78,14 @@ public:
 
 			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
-			if (UtilSquare::ToRank(ksq) != tRank1) {
+			if (ConvSquare::TO_RANK10(ksq) != tRank1) {
 				const Square pawnDropCheckSquare = ksq + tDeltaS;
-				assert(UtilSquare::ContainsOf(pawnDropCheckSquare));
+				assert(ConvSquare::ContainsOf(pawnDropCheckSquare));
 				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
 					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, pawnDropCheckSquare);
+						(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove(N01_Pawn, pawnDropCheckSquare);
 					}
 					g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
 				}
@@ -93,7 +93,7 @@ public:
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-				(*pMovestack++).m_move = UtilMove::MakeDropMove(N01_Pawn, to);
+				(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove(N01_Pawn, to);
 			});
 		}
 

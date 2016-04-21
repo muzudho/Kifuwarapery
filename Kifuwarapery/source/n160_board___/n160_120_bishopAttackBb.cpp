@@ -53,12 +53,12 @@ u64 BishopAttackBb::findMagicBishop(const Square square) {
 
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard BishopAttackBb::BishopBlockMaskCalc(const Square square) const {
-	const Rank rank = UtilSquare::ToRank(square);
-	const File file = UtilSquare::ToFile(square);
+	const Rank rank = ConvSquare::TO_RANK10(square);
+	const File file = ConvSquare::TO_FILE10(square);
 	Bitboard result = Bitboard::CreateAllZeroBB();
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		const Rank r = UtilSquare::ToRank(sq);
-		const File f = UtilSquare::ToFile(sq);
+		const Rank r = ConvSquare::TO_RANK10(sq);
+		const File f = ConvSquare::TO_FILE10(sq);
 		if (abs(rank - r) == abs(file - f))
 			g_setMaskBb.SetBit(&result, sq);
 	}
@@ -80,7 +80,7 @@ Bitboard BishopAttackBb::BishopAttackCalc(const Square square, const Bitboard& o
 	Bitboard result = Bitboard::CreateAllZeroBB();
 	for (SquareDelta delta : deltaArray[true/*isBishop*/]) {
 		for (Square sq = square + delta;
-		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
+		ConvSquare::CONTAINS_OF10(sq) && abs(ConvSquare::TO_RANK10(sq - delta) - ConvSquare::TO_RANK10(sq)) <= 1;
 			sq += delta)
 		{
 			g_setMaskBb.SetBit(&result, sq);

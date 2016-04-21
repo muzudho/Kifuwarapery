@@ -1,4 +1,4 @@
-﻿#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+﻿#include "../../header/n110_square__/n110_500_convSquare.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_110_silverAttackBb.hpp"
 #include "../../header/n160_board___/n160_120_bishopAttackBb.hpp"	// TODO:これを消すのが難しい
@@ -16,7 +16,7 @@ void SilverAttackBb::Initialize()
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_silverAttackBb.m_controllBb_[c][sq] = (
 				g_kingAttackBb.GetControllBb(sq) &
-				g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(sq))
+				g_inFrontMaskBb.GetInFrontMask(c, ConvSquare::TO_RANK10(sq))
 			) |
 			g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllOneBB(), sq);
 }

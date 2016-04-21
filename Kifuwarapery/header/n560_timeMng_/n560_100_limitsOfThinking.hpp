@@ -2,7 +2,7 @@
 
 #include "../n080_common__/n080_100_common.hpp"	//u32
 #include "../n105_color___/n105_100_color.hpp"	//ColorNum
-#include "../n119_score___/n119_090_score.hpp"	//Ply
+#include "../n119_score___/n119_090_scoreIndex.hpp"	//Ply
 
 // 元の名前：ＬｉｍｉｔｓＴｙｐｅ
 // 時間や探索深さの制限を格納する為の構造体

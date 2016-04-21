@@ -1,6 +1,6 @@
 ﻿#include <array>
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n220_position/n220_400_evalList.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
@@ -19,7 +19,7 @@ EvalSum Evaluation09::doapc(const Position& pos, const int index[2]) {
 	sum.m_p[2][0] = KkKkpKppStorage1::KKP[sq_bk][sq_wk][index[0]][0];
 	sum.m_p[2][1] = KkKkpKppStorage1::KKP[sq_bk][sq_wk][index[0]][1];
 	const auto* pkppb = KkKkpKppStorage1::KPP[sq_bk][index[0]];
-	const auto* pkppw = KkKkpKppStorage1::KPP[UtilSquare::Inverse(sq_wk)][index[1]];
+	const auto* pkppw = KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(sq_wk)][index[1]];
 #if defined USE_AVX2_EVAL || defined USE_SSE_EVAL
 	GetSum.m[0] = _mm_set_epi32(0, 0, *reinterpret_cast<const s32*>(&pkppw[GetList1[0]][0]), *reinterpret_cast<const s32*>(&pkppb[GetList0[0]][0]));
 	GetSum.m[0] = _mm_cvtepi16_epi32(GetSum.m[0]);
@@ -65,7 +65,7 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 	const Square sq_wk = pos.GetKingSquare(White);
 	const int* list1 = pos.GetCplist1();
 
-	const auto* pkppw = KkKkpKppStorage1::KPP[UtilSquare::Inverse(sq_wk)][index[1]];
+	const auto* pkppw = KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(sq_wk)][index[1]];
 	std::array<s32, 2> sum = { { pkppw[list1[0]][0], pkppw[list1[0]][1] } };
 	for (int i = 1; i < pos.GetNlist(); ++i) {
 		sum[0] += pkppw[list1[i]][0];
@@ -77,8 +77,8 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 
 
 #if defined INANIWA_SHIFT
-Score Evaluation09::inaniwaScoreBody(const Position& GetPos) {
-	Score GetScore = ScoreZero;
+ScoreIndex Evaluation09::inaniwaScoreBody(const Position& GetPos) {
+	ScoreIndex GetScore = ScoreZero;
 	if (GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsBlack) {
 		if (GetPos.GetPiece(B9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
 		if (GetPos.GetPiece(H9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
@@ -112,7 +112,7 @@ Score Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 	}
 	return GetScore;
 }
-inline Score Evaluation09::inaniwaScore(const Position& GetPos) {
+inline ScoreIndex Evaluation09::inaniwaScore(const Position& GetPos) {
 	if (GetPos.GetCsearcher()->inaniwaFlag == NotInaniwa) return ScoreZero;
 	return inaniwaScoreBody(GetPos);
 }
@@ -138,7 +138,7 @@ bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 		diff.m_p[2] = KkKkpKppStorage1::KK[sq_bk][sq_wk];
 		diff.m_p[2][0] += pos.GetMaterial() * g_FVScale;
 		if (pos.GetTurn() == Black) {
-			const auto* ppkppw = KkKkpKppStorage1::KPP[UtilSquare::Inverse(sq_wk)];
+			const auto* ppkppw = KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(sq_wk)];
 			const int* list1 = pos.GetPlist1();
 			diff.m_p[1][0] = 0;
 			diff.m_p[1][1] = 0;
@@ -149,8 +149,8 @@ bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 					const int l1 = list1[j];
 					diff.m_p[1] += pkppw[l1];
 				}
-				diff.m_p[2][0] -= KkKkpKppStorage1::KKP[UtilSquare::Inverse(sq_wk)][UtilSquare::Inverse(sq_bk)][k1][0];
-				diff.m_p[2][1] += KkKkpKppStorage1::KKP[UtilSquare::Inverse(sq_wk)][UtilSquare::Inverse(sq_bk)][k1][1];
+				diff.m_p[2][0] -= KkKkpKppStorage1::KKP[ConvSquare::INVERSE10(sq_wk)][ConvSquare::INVERSE10(sq_bk)][k1][0];
+				diff.m_p[2][1] += KkKkpKppStorage1::KKP[ConvSquare::INVERSE10(sq_wk)][ConvSquare::INVERSE10(sq_bk)][k1][1];
 			}
 
 			if (pos.GetCl().m_size == 2) {
@@ -198,7 +198,7 @@ bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 			assert(pos.GetCl().m_size == 2);
 			diff += this->doapc(pos, pos.GetCl().m_clistpair[1].m_newlist);
 			diff.m_p[0] -= KkKkpKppStorage1::KPP[pos.GetKingSquare(Black)][pos.GetCl().m_clistpair[0].m_newlist[0]][pos.GetCl().m_clistpair[1].m_newlist[0]];
-			diff.m_p[1] -= KkKkpKppStorage1::KPP[UtilSquare::Inverse(pos.GetKingSquare(White))][pos.GetCl().m_clistpair[0].m_newlist[1]][pos.GetCl().m_clistpair[1].m_newlist[1]];
+			diff.m_p[1] -= KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(pos.GetKingSquare(White))][pos.GetCl().m_clistpair[0].m_newlist[1]][pos.GetCl().m_clistpair[1].m_newlist[1]];
 			const int listIndex_cap = pos.GetCl().m_listindex[1];
 			pos.GetPlist0()[listIndex_cap] = pos.GetCl().m_clistpair[1].m_oldlist[0];
 			pos.GetPlist1()[listIndex_cap] = pos.GetCl().m_clistpair[1].m_oldlist[1];
@@ -209,7 +209,7 @@ bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 
 			diff -= this->doapc(pos, pos.GetCl().m_clistpair[1].m_oldlist);
 			diff.m_p[0] += KkKkpKppStorage1::KPP[pos.GetKingSquare(Black)][pos.GetCl().m_clistpair[0].m_oldlist[0]][pos.GetCl().m_clistpair[1].m_oldlist[0]];
-			diff.m_p[1] += KkKkpKppStorage1::KPP[UtilSquare::Inverse(pos.GetKingSquare(White))][pos.GetCl().m_clistpair[0].m_oldlist[1]][pos.GetCl().m_clistpair[1].m_oldlist[1]];
+			diff.m_p[1] += KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(pos.GetKingSquare(White))][pos.GetCl().m_clistpair[0].m_oldlist[1]][pos.GetCl().m_clistpair[1].m_oldlist[1]];
 			pos.GetPlist0()[listIndex_cap] = pos.GetCl().m_clistpair[1].m_newlist[0];
 			pos.GetPlist1()[listIndex_cap] = pos.GetCl().m_clistpair[1].m_newlist[1];
 		}
@@ -234,13 +234,13 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 		bb = (posBB)& pos.GetBbOf(Black);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (f_pt)+sq;
-		list1[nlist] = (e_pt)+UtilSquare::Inverse(sq);
+		list1[nlist] = (e_pt)+ConvSquare::INVERSE10(sq);
 		nlist += 1;
 		});
 		bb = (posBB)& pos.GetBbOf(White);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (e_pt)+sq;
-		list1[nlist] = (f_pt)+UtilSquare::Inverse(sq);
+		list1[nlist] = (f_pt)+ConvSquare::INVERSE10(sq);
 		nlist += 1;
 		});
 	};
@@ -275,7 +275,7 @@ void Evaluation09::evaluateBody(Position& pos, Flashlight* ss) {
 	const int* list1 = pos.GetPlist1();
 
 	const auto* ppkppb = KkKkpKppStorage1::KPP[sq_bk];
-	const auto* ppkppw = KkKkpKppStorage1::KPP[UtilSquare::Inverse(sq_wk)];
+	const auto* ppkppw = KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(sq_wk)];
 
 	EvalSum sum;
 	sum.m_p[2] = KkKkpKppStorage1::KK[sq_bk][sq_wk];
@@ -331,7 +331,7 @@ void Evaluation09::evaluateBody(Position& pos, Flashlight* ss) {
 
 
 // todo: 無名名前空間に入れる。
-Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
+ScoreIndex Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	int list0[EvalList::m_ListSize];
 	int list1[EvalList::m_ListSize];
 
@@ -367,7 +367,7 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	nlist = this->make_list_unUseDiff(pos, list0, list1, nlist);
 
 	const auto* ppkppb = KkKkpKppStorage1::KPP[sq_bk];
-	const auto* ppkppw = KkKkpKppStorage1::KPP[UtilSquare::Inverse(sq_wk)];
+	const auto* ppkppw = KkKkpKppStorage1::KPP[ConvSquare::INVERSE10(sq_wk)];
 
 	EvalSum score;
 	score.m_p[2] = KkKkpKppStorage1::KK[sq_bk][sq_wk];
@@ -396,13 +396,13 @@ Score Evaluation09::evaluateUnUseDiff(const Position& pos) {
 	GetScore.GetP[2][0] += inaniwaScore(GetPos);
 #endif
 
-	return static_cast<Score>(score.GetSum(pos.GetTurn()));
+	return static_cast<ScoreIndex>(score.GetSum(pos.GetTurn()));
 }
 
 
-Score Evaluation09::evaluate(Position& pos, Flashlight* ss) {
+ScoreIndex Evaluation09::evaluate(Position& pos, Flashlight* ss) {
 	if (ss->m_staticEvalRaw.m_p[0][0] != ScoreNotEvaluated) {
-		const Score score = static_cast<Score>(ss->m_staticEvalRaw.GetSum(pos.GetTurn()));
+		const ScoreIndex score = static_cast<ScoreIndex>(ss->m_staticEvalRaw.GetSum(pos.GetTurn()));
 		assert(score == evaluateUnUseDiff(pos));
 		return score / g_FVScale;
 	}
@@ -412,8 +412,8 @@ Score Evaluation09::evaluate(Position& pos, Flashlight* ss) {
 	entry.Decode();
 	if (entry.m_key == keyExcludeTurn) {
 		ss->m_staticEvalRaw = entry;
-		assert(static_cast<Score>(ss->m_staticEvalRaw.GetSum(pos.GetTurn())) == evaluateUnUseDiff(pos));
-		return static_cast<Score>(entry.GetSum(pos.GetTurn())) / g_FVScale;
+		assert(static_cast<ScoreIndex>(ss->m_staticEvalRaw.GetSum(pos.GetTurn())) == evaluateUnUseDiff(pos));
+		return static_cast<ScoreIndex>(entry.GetSum(pos.GetTurn())) / g_FVScale;
 	}
 
 	this->evaluateBody(pos, ss);
@@ -421,5 +421,5 @@ Score Evaluation09::evaluate(Position& pos, Flashlight* ss) {
 	ss->m_staticEvalRaw.m_key = keyExcludeTurn;
 	ss->m_staticEvalRaw.Encode();
 	*g_evalTable[keyExcludeTurn] = ss->m_staticEvalRaw;
-	return static_cast<Score>(ss->m_staticEvalRaw.GetSum(pos.GetTurn())) / g_FVScale;
+	return static_cast<ScoreIndex>(ss->m_staticEvalRaw.GetSum(pos.GetTurn())) / g_FVScale;
 }

@@ -2,7 +2,7 @@
 
 
 #include "../n080_common__/n080_100_common.hpp"	//Mutexなど
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
@@ -28,7 +28,7 @@ struct SplitedNode {
 
 	Depth				m_depth;
 
-	Score				m_beta;
+	ScoreIndex				m_beta;
 
 	NodeType			m_nodeType;
 
@@ -46,9 +46,9 @@ struct SplitedNode {
 
 	volatile s64		m_nodes;
 
-	volatile Score		m_alpha;
+	volatile ScoreIndex		m_alpha;
 
-	volatile Score		m_bestScore;
+	volatile ScoreIndex		m_bestScore;
 
 	volatile Move		m_bestMove;
 

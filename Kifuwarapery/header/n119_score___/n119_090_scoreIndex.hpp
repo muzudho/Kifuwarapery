@@ -10,7 +10,7 @@ const Ply g_maxPly = 128;
 const Ply g_maxPlyPlus2 = g_maxPly + 2;
 
 // 評価値
-enum Score {
+enum ScoreIndex {
 	ScoreZero = 0,
 	ScoreDraw = 0,
 	ScoreMaxEvaluate = 30000,
@@ -23,4 +23,4 @@ enum Score {
 	ScoreNotEvaluated = INT_MAX,
 	ScoreNone = 32602
 };
-OverloadEnumOperators(Score);
+OverloadEnumOperators(ScoreIndex);

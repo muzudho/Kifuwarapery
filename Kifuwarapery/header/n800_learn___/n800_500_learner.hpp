@@ -34,8 +34,8 @@ struct RawEvaluater {
 				const int l0 = GetList0[j];
 				const int l1 = GetList1[j];
 				kpp_raw[sq_bk         ][k0][l0] += f;
-				kpp_raw[Inverse(sq_wk)][k1][l1][0] -= f[0];
-				kpp_raw[Inverse(sq_wk)][k1][l1][1] += f[1];
+				kpp_raw[INVERSE10(sq_wk)][k1][l1][0] -= f[0];
+				kpp_raw[INVERSE10(sq_wk)][k1][l1][1] += f[1];
 			}
 			kkp_raw[sq_bk][sq_wk][k0] += f;
 		}
@@ -348,7 +348,7 @@ private:
 					GetPos.GetSearcher()->m_alpha = -ScoreMaxEvaluate;
 					GetPos.GetSearcher()->m_beta  =  ScoreMaxEvaluate;
 					Go(GetPos, dist(mt), bmd.GetMove);
-					const Score recordScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
+					const ScoreIndex recordScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
 					bmd.pvBuffer.Clear();
@@ -362,7 +362,7 @@ private:
 								GetPos.GetSearcher()->m_alpha = recordScore - FVWindow;
 								GetPos.GetSearcher()->m_beta  = recordScore + FVWindow;
 								Go(GetPos, dist(mt), ml.GetMove());
-								const Score GetScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
+								const ScoreIndex GetScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
 								if (GetPos.GetSearcher()->m_alpha < GetScore && GetScore < GetPos.GetSearcher()->m_beta) {
 									auto& pv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
 									bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(pv), std::IsEnd(pv));
@@ -481,7 +481,7 @@ private:
 					}
 					// evaluate() の差分計算を無効化する。
 					m_pFlashlightBox[0].m_staticEvalRaw.GetP[0][0] = m_pFlashlightBox[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-					const Score recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
+					const ScoreIndex recordScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
 					PRINT_PV(std::cout << ", score: " << recordScore << std::endl);
 					for (int jj = recordPVIndex - 1; 0 <= jj; --jj) {
 						GetPos.UndoMove(bmd.pvBuffer[jj]);
@@ -496,7 +496,7 @@ private:
 							GetPos.DoMove(bmd.pvBuffer[otherPVIndex], m_setUpStates->top());
 						}
 						m_pFlashlightBox[0].m_staticEvalRaw.GetP[0][0] = m_pFlashlightBox[1].m_staticEvalRaw.GetP[0][0] = ScoreNotEvaluated;
-						const Score GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
+						const ScoreIndex GetScore = (rootColor == GetPos.GetTurn() ? evaluate(GetPos, m_pFlashlightBox+1) : -evaluate(GetPos, m_pFlashlightBox+1));
 						const auto diff = GetScore - recordScore;
 						const double dsig = dsigmoid(diff);
 						std::array<double, 2> dT = {{(rootColor == Black ? dsig : -dsig), dsig}};
@@ -555,7 +555,7 @@ private:
 	void Print() {
 		for (Rank r = Rank9; r < RankNum; ++r) {
 			for (File f = FileA; FileI <= f; --f) {
-				const Square sq = FromFileRank(f, r);
+				const Square sq = FROM_FILE_RANK10(f, r);
 				printf("%5d", KkKkpKppStorage1::KPP[B2][f_gold + C2][f_gold + sq][0]);
 			}
 			printf("\n");
@@ -565,7 +565,7 @@ private:
 	}
 
 	static const int PredSize = 8;
-	static const Score FVWindow = static_cast<Score>(256);
+	static const ScoreIndex FVWindow = static_cast<ScoreIndex>(256);
 
 	Mutex m_mutex_;
 	size_t index_;

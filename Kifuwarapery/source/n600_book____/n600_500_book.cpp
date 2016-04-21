@@ -100,17 +100,17 @@ Key Book::GetBookKey(const Position& pos) {
 	return key;
 }
 
-MoveAndScore Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
+MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fName, const bool pickBest) {
 	BookEntry entry;
 	u16 best = 0;
 	u32 sum = 0;
 	Move move = g_MOVE_NONE;//該当なしのときに使う値☆
 	const Key key = this->GetBookKey(position);
-	const Score min_book_score = static_cast<Score>(static_cast<int>(position.GetSearcher()->m_engineOptions["Min_Book_Score"]));
-	Score score = ScoreZero;
+	const ScoreIndex min_book_score = static_cast<ScoreIndex>(static_cast<int>(position.GetSearcher()->m_engineOptions["Min_Book_Score"]));
+	ScoreIndex score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
-		return MoveAndScore(g_MOVE_NONE, ScoreNone);
+		return MoveAndScoreIndex(g_MOVE_NONE, ScoreNone);
 	}
 
 	Binary_search(key);
@@ -130,11 +130,11 @@ MoveAndScore Book::GetProbe(const Position& position, const std::string& fName, 
 			const Square to = tmp.To();
 			if (tmp.IsDrop()) {
 				const PieceType ptDropped = tmp.GetPieceTypeDropped();
-				move = UtilMove::MakeDropMove(ptDropped, to);
+				move = ConvMove::Convert30_MakeDropMove(ptDropped, to);
 			}
 			else {
 				const Square from = tmp.From();
-				const PieceType ptFrom = UtilPiece::ToPieceType(position.GetPiece(from));
+				const PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(position.GetPiece(from));
 				const bool promo = tmp.IsPromotion();
 				if (promo) {
 					move = UtilMovePos::MakeCapturePromoteMove(ptFrom, from, to, position);
@@ -147,7 +147,7 @@ MoveAndScore Book::GetProbe(const Position& position, const std::string& fName, 
 		}
 	}
 
-	return MoveAndScore(move, score);
+	return MoveAndScoreIndex(move, score);
 }
 
 inline bool countCompare(const BookEntry& b1, const BookEntry& b2) {
@@ -242,9 +242,9 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 					SetUpStates->pop();
 
 					// doMove してから search してるので点数が反転しているので直す。
-					const Score score = -pos.GetCsearcher()->m_rootMoves[0].m_score_;
+					const ScoreIndex score = -pos.GetCsearcher()->m_rootMoves[0].m_score_;
 #else
-					const Score GetScore = ScoreZero;
+					const ScoreIndex GetScore = ScoreZero;
 #endif
 					// 未登録の手
 					BookEntry be;

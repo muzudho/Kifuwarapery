@@ -4,7 +4,7 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n105_color___/n105_100_color.hpp"
 #include "../n110_square__/n110_100_square.hpp"
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
@@ -28,11 +28,11 @@ public:
 		Bitboard fromBB = ptEvent.m_pos.GetBbOf(pt, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(from));
+			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
 			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(to));
+				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 				if (fromCanPromote | toCanPromote) {
 
 					// 成りVer☆

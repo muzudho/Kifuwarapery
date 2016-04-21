@@ -8,7 +8,7 @@
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_150_piece.hpp"
 #include "../n113_piece___/n113_500_hand.hpp"
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n119_score___/n119_200_pieceScore.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_102_FileMaskBb.hpp"
@@ -61,8 +61,7 @@ public:
 
 	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3, const PieceType pt4) const;
 
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3,
-		const PieceType pt4, const PieceType pt5) const;
+	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3,	const PieceType pt4, const PieceType pt5) const;
 
 	Bitboard GetOccupiedBB() const;
 
@@ -123,9 +122,9 @@ public:
 	// 王手が掛かっているか。
 	bool InCheck() const;
 
-	Score GetMaterial() const;
+	ScoreIndex GetMaterial() const;
 
-	Score GetMaterialDiff() const;
+	ScoreIndex GetMaterialDiff() const;
 
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
 		assert(m_kingSquare_[c] == this->GetBbOf(N08_King, c).GetFirstOneFromI9());
@@ -185,9 +184,9 @@ public:
 	template <bool DO>
 	void DoNullMove(StateInfo& backUpSt);
 
-	Score GetSee(const Move move, const int asymmThreshold = 0) const;
+	ScoreIndex GetSee(const Move move, const int asymmThreshold = 0) const;
 
-	Score GetSeeSign(const Move move) const;
+	ScoreIndex GetSeeSign(const Move move) const;
 
 	template <Color US>
 	Move GetMateMoveIn1Ply();
@@ -270,7 +269,7 @@ private:
 	// 最後の手が何か覚えておけば、attackersTo() を使用しなくても良いはずで、処理が軽くなる。
 	void FindCheckers();
 
-	Score ComputeMaterial() const;
+	ScoreIndex ComputeMaterial() const;
 
 	void XorBBs(const PieceType pt, const Square sq, const Color c);
 

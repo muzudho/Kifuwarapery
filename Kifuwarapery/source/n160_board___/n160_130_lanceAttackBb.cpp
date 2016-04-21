@@ -70,5 +70,5 @@ Bitboard LanceAttackBb::LanceBlockMask(const Square square) {
 // 香車の利きは常にこれを使っても良いけど、もう少し速くする為に、テーブル化する為だけに使う。
 // occupied  障害物があるマスが 1 の bitboard
 Bitboard LanceAttackBb::LanceAttackCalc(const Color c, const Square square, const Bitboard& occupied) {
-	return g_rookAttackBb.GetControllBb(&occupied, square) & g_inFrontMaskBb.GetInFrontMask(c, UtilSquare::ToRank(square));
+	return g_rookAttackBb.GetControllBb(&occupied, square) & g_inFrontMaskBb.GetInFrontMask(c, ConvSquare::TO_RANK10(square));
 }

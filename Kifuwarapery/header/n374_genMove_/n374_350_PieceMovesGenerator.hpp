@@ -24,28 +24,6 @@
 class PieceMovesGenerator {
 public:
 
-	// 金, 成り金、馬、竜の指し手生成
-	static FORCE_INLINE MoveStack* GeneratePieceMoves_N16_GoldHorseDragon(
-		MoveStack* moveStackList,
-		const PieceMoveEvent ptEvent,
-		const Bitboard& target
-	) {
-		// 金、成金、馬、竜のbitboardをまとめて扱う。
-		Bitboard fromBB = (ptEvent.m_pos.GetGoldsBB() | ptEvent.m_pos.GetBbOf(N13_Horse, N14_Dragon)) & ptEvent.m_pos.GetBbOf(ptEvent.m_us);
-		while (fromBB.Exists1Bit()) {
-			const Square from = fromBB.PopFirstOneFromI9();
-			// from にある駒の種類を判別
-			const PieceType pt = UtilPiece::ToPieceType(ptEvent.m_pos.GetPiece(from));
-			Bitboard toBB = UtilAttack::GetAttacksFrom(pt, ptEvent.m_us, from, ptEvent.m_pos.GetOccupiedBB()) & target;
-			while (toBB.Exists1Bit()) {
-				const Square to = toBB.PopFirstOneFromI9();
-				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
-				moveStackList++;
-			}
-		}
-		return moveStackList;
-	}
-
 
 	// 歩の場合
 	static FORCE_INLINE MoveStack* GeneratePieceMoves_N01_Pawn(
@@ -78,7 +56,7 @@ public:
 
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
 						const Rank TRank9 = (ptEvent.m_us == Black ? Rank9 : Rank1);
-						if (UtilSquare::ToRank(to) != TRank9) {
+						if (ConvSquare::TO_RANK10(to) != TRank9) {
 							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N01_Pawn, from, to, ptEvent.m_pos);
 							moveStackList++;
 						}
@@ -117,7 +95,7 @@ public:
 				if (toBB.Exists1Bit()) {
 					// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
 					const Square to = (ptEvent.m_mt == N00_Capture || ptEvent.m_mt == N03_CapturePlusPro ? toBB.GetFirstOneFromI9() : toBB.PopFirstOneFromI9());
-					const bool toCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(to));
+					const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 					if (toCanPromote) {
 
 						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N02_Lance, from, to, ptEvent.m_pos);
@@ -125,14 +103,14 @@ public:
 						moveStackList++;
 
 						if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
-							if (UtilSquare::IsBehind(ptEvent.m_us, Rank9, Rank1, UtilSquare::ToRank(to))) // 1段目の不成は省く
+							if (ConvSquare::IS_BEHIND10(ptEvent.m_us, Rank9, Rank1, ConvSquare::TO_RANK10(to))) // 1段目の不成は省く
 							{
 								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N02_Lance, from, to, ptEvent.m_pos);
 								moveStackList++;
 							}
 						}
 						else if (ptEvent.m_mt != N01_NonCapture && ptEvent.m_mt != N04_NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
-							if (UtilSquare::IsBehind(ptEvent.m_us, Rank8, Rank2, UtilSquare::ToRank(to))) // 2段目の不成を省く
+							if (ConvSquare::IS_BEHIND10(ptEvent.m_us, Rank8, Rank2, ConvSquare::TO_RANK10(to))) // 2段目の不成を省く
 							{
 								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N02_Lance, from, to, ptEvent.m_pos);
 								moveStackList++;
@@ -164,14 +142,14 @@ public:
 			Bitboard toBB = PieceTypeArray::m_knight.GetAttacks2From(g_nullBitboard, ptEvent.m_us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(to));
+				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 				if (toCanPromote) {
 
 					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N03_Knight, from, to, ptEvent.m_pos);
 					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N03_Knight
 					moveStackList++;
 
-					if (UtilSquare::IsBehind(ptEvent.m_us, Rank8, Rank2, UtilSquare::ToRank(to))) // 1, 2段目の不成は省く
+					if (ConvSquare::IS_BEHIND10(ptEvent.m_us, Rank8, Rank2, ConvSquare::TO_RANK10(to))) // 1, 2段目の不成は省く
 					{
 						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N03_Knight, from, to, ptEvent.m_pos);
 						moveStackList++;
@@ -197,11 +175,11 @@ public:
 		Bitboard fromBB = ptEvent.m_pos.GetBbOf(N04_Silver, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(from));
+			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
 			Bitboard toBB = PieceTypeArray::m_silver.GetAttacks2From(g_nullBitboard, ptEvent.m_us, from) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = UtilSquare::CanPromote(ptEvent.m_us, UtilSquare::ToRank(to));
+				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 				if (fromCanPromote | toCanPromote) {
 					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N04_Silver, from, to, ptEvent.m_pos);
 					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N04_Silver
@@ -233,6 +211,29 @@ public:
 		const Bitboard& target
 	) {
 		return BishopRookMovesGenerator::GenerateBishopOrRookMoves(moveStackList, PieceType::N06_Rook, ptEvent, target);
+	}
+
+
+	// 金, 成り金、馬、竜の指し手生成
+	static FORCE_INLINE MoveStack* GeneratePieceMoves_N16_GoldHorseDragon(
+		MoveStack* moveStackList,
+		const PieceMoveEvent ptEvent,
+		const Bitboard& target
+	) {
+		// 金、成金、馬、竜のbitboardをまとめて扱う。
+		Bitboard fromBB = (ptEvent.m_pos.GetGoldsBB() | ptEvent.m_pos.GetBbOf(N13_Horse, N14_Dragon)) & ptEvent.m_pos.GetBbOf(ptEvent.m_us);
+		while (fromBB.Exists1Bit()) {
+			const Square from = fromBB.PopFirstOneFromI9();
+			// from にある駒の種類を判別
+			const PieceType pt = ConvPiece::TO_PIECE_TYPE10(ptEvent.m_pos.GetPiece(from));
+			Bitboard toBB = UtilAttack::GetAttacksFrom(pt, ptEvent.m_us, from, ptEvent.m_pos.GetOccupiedBB()) & target;
+			while (toBB.Exists1Bit()) {
+				const Square to = toBB.PopFirstOneFromI9();
+				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, pt, from, to, ptEvent.m_pos);
+				moveStackList++;
+			}
+		}
+		return moveStackList;
 	}
 
 

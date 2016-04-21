@@ -23,8 +23,8 @@ extern EvaluateHashTable g_evalTable;
 
 class Evaluation09 {
 public:
-	Score evaluateUnUseDiff(const Position& pos);
-	Score evaluate(Position& pos, Flashlight* ss);
+	ScoreIndex evaluateUnUseDiff(const Position& pos);
+	ScoreIndex evaluate(Position& pos, Flashlight* ss);
 private:
 
 	EvalSum doapc(const Position& pos, const int index[2]);
@@ -32,8 +32,8 @@ private:
 	std::array<s32, 2> doawhite(const Position& pos, const int index[2]);
 
 #if defined INANIWA_SHIFT
-	Score inaniwaScoreBody(const Position& GetPos);
-	inline Score inaniwaScore(const Position& GetPos);
+	ScoreIndex inaniwaScoreBody(const Position& GetPos);
+	inline ScoreIndex inaniwaScore(const Position& GetPos);
 #endif
 
 	bool calcDifference(Position& pos, Flashlight* ss);

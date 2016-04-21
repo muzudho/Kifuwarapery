@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n110_square__/n110_500_convSquare.hpp"
 
 
 class SlideBits {

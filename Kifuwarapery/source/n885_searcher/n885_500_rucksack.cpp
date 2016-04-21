@@ -18,7 +18,7 @@
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
-#include "../../header/n223_move____/n223_300_moveAndScore.hpp"
+#include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
@@ -57,7 +57,7 @@ void Rucksack::Init() {
 }
 
 
-std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta) {
+std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const ScoreIndex alpha, const ScoreIndex beta) {
 
 	// 思考時間（ミリ秒。読み筋表示用）
 	const int time = m_stopwatch.GetElapsed();
@@ -80,7 +80,7 @@ std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score al
 		}
 
 		const Ply d = (update ? depth : depth - 1);
-		const Score s = (update ? m_rootMoves[i].m_score_ : m_rootMoves[i].m_prevScore_);
+		const ScoreIndex s = (update ? m_rootMoves[i].m_score_ : m_rootMoves[i].m_prevScore_);
 
 		ss << "info depth " << d
 		   << " seldepth " << selDepth
@@ -101,7 +101,7 @@ std::string Rucksack::PvInfoToUSI(Position& pos, const Ply depth, const Score al
 }
 
 template <NodeType NT, bool INCHECK>
-Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth) {
+ScoreIndex Rucksack::Qsearch(Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth) {
 	const bool PVNode = (NT == N01_PV);
 
 	assert(NT == N01_PV || NT == N02_NonPV);
@@ -116,12 +116,12 @@ Score Rucksack::Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, 
 	Move ttMove;
 	Move move;
 	Move bestMove;
-	Score bestScore;
-	Score score;
-	Score ttScore;
-	Score futilityScore;
-	Score futilityBase;
-	Score oldAlpha;
+	ScoreIndex bestScore;
+	ScoreIndex score;
+	ScoreIndex ttScore;
+	ScoreIndex futilityScore;
+	ScoreIndex futilityBase;
+	ScoreIndex oldAlpha;
 	bool givesCheck;
 	bool evasionPrunable;
 	Depth ttDepth;
@@ -310,32 +310,32 @@ void Rucksack::detectBishopInDanger(const Position& GetPos) {
 	if (bishopInDangerFlag == NotBishopInDanger && GetPos.GetGamePly() <= 50) {
 		const Color them = UtilColor::OppositeColor(GetPos.GetTurn());
 		if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
-			&& GetPos.GetBbOf(N04_Silver, them).IsSet(InverseIfWhite(them, H3))
-			&& (GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, F2))
-				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, F3))
-				|| GetPos.GetBbOf(N08_King  , them).IsSet(InverseIfWhite(them, E1)))
-			&& GetPos.GetBbOf(N01_Pawn  , them).IsSet(InverseIfWhite(them, G3))
-			&& GetPos.GetPiece(InverseIfWhite(them, H2)) == N00_Empty
-			&& GetPos.GetPiece(InverseIfWhite(them, G2)) == N00_Empty
-			&& GetPos.GetPiece(InverseIfWhite(them, G1)) == N00_Empty)
+			&& GetPos.GetBbOf(N04_Silver, them).IsSet(INVERSE_IF_WHITE20(them, H3))
+			&& (GetPos.GetBbOf(N08_King  , them).IsSet(INVERSE_IF_WHITE20(them, F2))
+				|| GetPos.GetBbOf(N08_King  , them).IsSet(INVERSE_IF_WHITE20(them, F3))
+				|| GetPos.GetBbOf(N08_King  , them).IsSet(INVERSE_IF_WHITE20(them, E1)))
+			&& GetPos.GetBbOf(N01_Pawn  , them).IsSet(INVERSE_IF_WHITE20(them, G3))
+			&& GetPos.GetPiece(INVERSE_IF_WHITE20(them, H2)) == N00_Empty
+			&& GetPos.GetPiece(INVERSE_IF_WHITE20(them, G2)) == N00_Empty
+			&& GetPos.GetPiece(INVERSE_IF_WHITE20(them, G1)) == N00_Empty)
 		{
 			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn28 : WhiteBishopInDangerIn28);
 			//tt.clear();
 		}
 		else if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
 				 && GetPos.m_hand(them).Exists<HBishop>()
-				 && GetPos.GetPiece(InverseIfWhite(them, C2)) == N00_Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, C1)) == N00_Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, D2)) == N00_Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, D1)) == N00_Empty
-				 && GetPos.GetPiece(InverseIfWhite(them, A2)) == N00_Empty
-				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N04_Silver
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B2))) == N04_Silver)
-				 && (UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, C3))) == N03_Knight
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, B1))) == N03_Knight)
-				 && ((UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E2))) == N07_Gold
-					  && UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == N08_King)
-					 || UtilPiece::ToPieceType(GetPos.GetPiece(InverseIfWhite(them, E1))) == N07_Gold))
+				 && GetPos.GetPiece(INVERSE_IF_WHITE20(them, C2)) == N00_Empty
+				 && GetPos.GetPiece(INVERSE_IF_WHITE20(them, C1)) == N00_Empty
+				 && GetPos.GetPiece(INVERSE_IF_WHITE20(them, D2)) == N00_Empty
+				 && GetPos.GetPiece(INVERSE_IF_WHITE20(them, D1)) == N00_Empty
+				 && GetPos.GetPiece(INVERSE_IF_WHITE20(them, A2)) == N00_Empty
+				 && (ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, C3))) == N04_Silver
+					 || ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, B2))) == N04_Silver)
+				 && (ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, C3))) == N03_Knight
+					 || ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, B1))) == N03_Knight)
+				 && ((ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, E2))) == N07_Gold
+					  && ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, E1))) == N08_King)
+					 || ConvPiece::TO_PIECE_TYPE10(GetPos.GetPiece(INVERSE_IF_WHITE20(them, E1))) == N07_Gold))
 		{
 			bishopInDangerFlag = (GetPos.GetTurn() == Black ? BlackBishopInDangerIn78 : WhiteBishopInDangerIn78);
 			//tt.clear();
@@ -367,8 +367,8 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 }
 
 template <NodeType NT>
-Score Rucksack::Search(
-	Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth, const bool cutNode
+ScoreIndex Rucksack::Search(
+	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode
 ) {
 	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitedNodePV || NT == SplitedNodeRoot);
 	const bool SPNode = (NT == SplitedNodePV || NT == SplitedNodeNonPV || NT == SplitedNodeRoot);
@@ -391,10 +391,10 @@ Score Rucksack::Search(
 	Move threatMove;
 	Depth newDepth;
 	Depth extension;
-	Score bestScore;
-	Score score;
-	Score ttScore;
-	Score eval;
+	ScoreIndex bestScore;
+	ScoreIndex score;
+	ScoreIndex ttScore;
+	ScoreIndex eval;
 	bool inCheck;
 	bool givesCheck;
 	bool isPVMove;
@@ -444,7 +444,7 @@ Score Rucksack::Search(
 		// stop と最大探索深さのチェック
 
 		bool isReturn = false;
-		Score resultScore = Score::ScoreNone;
+		ScoreIndex resultScore = ScoreIndex::ScoreNone;
 
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(isReturn, resultScore, this, ss);
 
@@ -554,8 +554,8 @@ Score Rucksack::Search(
 		&& ttMove.IsNone()
 		&& abs(beta) < ScoreMateInMaxPly)
 	{
-		const Score rbeta = beta - razorMargin(depth);
-		const Score s = Qsearch<N02_NonPV, false>(pos, ss, rbeta-1, rbeta, Depth0);
+		const ScoreIndex rbeta = beta - razorMargin(depth);
+		const ScoreIndex s = Qsearch<N02_NonPV, false>(pos, ss, rbeta-1, rbeta, Depth0);
 		if (s < rbeta) {
 			return s;
 		}
@@ -590,7 +590,7 @@ Score Rucksack::Search(
 		pos.DoNullMove<true>(st);
 		(ss+1)->m_staticEvalRaw = (ss)->m_staticEvalRaw; // 評価値の差分評価の為。
 		(ss+1)->m_skipNullMove = true;
-		Score nullScore = (depth - reduction < OnePly ?
+		ScoreIndex nullScore = (depth - reduction < OnePly ?
 						   -Qsearch<N02_NonPV, false>(pos, ss + 1, -beta, -alpha, Depth0)
 						   : -Search<N02_NonPV>(pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
 		(ss+1)->m_skipNullMove = false;
@@ -607,7 +607,7 @@ Score Rucksack::Search(
 
 			ss->m_skipNullMove = true;
 			assert(Depth0 < depth - reduction);
-			const Score s = Search<N02_NonPV>(pos, ss, alpha, beta, depth - reduction, false);
+			const ScoreIndex s = Search<N02_NonPV>(pos, ss, alpha, beta, depth - reduction, false);
 			ss->m_skipNullMove = false;
 
 			if (beta <= s) {
@@ -635,7 +635,7 @@ Score Rucksack::Search(
 		// 確実にバグらせないようにする。
 		&& abs(beta) < ScoreInfinite - 200)
 	{
-		const Score rbeta = beta + 200;
+		const ScoreIndex rbeta = beta + 200;
 		const Depth rdepth = depth - OnePly - 3 * OnePly;
 
 		assert(OnePly <= rdepth);
@@ -665,7 +665,7 @@ iid_start:
 	// internal iterative deepening
 	if ((PVNode ? 5 * OnePly : 8 * OnePly) <= depth
 		&& ttMove.IsNone()
-		&& (PVNode || (!inCheck && beta <= ss->m_staticEval + static_cast<Score>(256))))
+		&& (PVNode || (!inCheck && beta <= ss->m_staticEval + static_cast<ScoreIndex>(256))))
 	{
 		//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
 		const Depth d = (PVNode ? depth - 2 * OnePly : depth / 2);
@@ -751,7 +751,7 @@ split_point_start:
 		{
 			assert(ttScore != ScoreNone);
 
-			const Score rBeta = ttScore - static_cast<Score>(depth);
+			const ScoreIndex rBeta = ttScore - static_cast<ScoreIndex>(depth);
 			ss->m_excludedMove = move;
 			ss->m_skipNullMove = true;
 			score = Search<N02_NonPV>(pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
@@ -790,8 +790,8 @@ split_point_start:
 			// score based pruning
 			const Depth predictedDepth = newDepth - g_reductions.reduction<PVNode>(depth, moveCount);
 			// gain を 2倍にする。
-			const Score futilityScore = ss->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
-				+ 2 * m_gains.GetValue(move.IsDrop(), UtilPiece::FromColorAndPieceType(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
+			const ScoreIndex futilityScore = ss->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
+				+ 2 * m_gains.GetValue(move.IsDrop(), ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
@@ -978,13 +978,13 @@ split_point_start:
 				ss->m_killers[0] = bestMove;
 			}
 
-			const Score bonus = static_cast<Score>(depth * depth);
-			const Piece pc1 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), bestMove.GetPieceTypeFromOrDropped());
+			const ScoreIndex bonus = static_cast<ScoreIndex>(depth * depth);
+			const Piece pc1 = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), bestMove.GetPieceTypeFromOrDropped());
 			this->m_history.Update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
 
 			for (int i = 0; i < playedMoveCount - 1; ++i) {
 				const Move m = movesSearched[i];
-				const Piece pc2 = UtilPiece::FromColorAndPieceType(pos.GetTurn(), m.GetPieceTypeFromOrDropped());
+				const Piece pc2 = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), m.GetPieceTypeFromOrDropped());
 				this->m_history.Update(m.IsDrop(), pc2, m.To(), -bonus);
 			}
 		}
@@ -1146,7 +1146,7 @@ void Rucksack::Think() {
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveAndScore bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
+		const MoveAndScoreIndex bookMoveScore = book.GetProbe(pos, m_engineOptions["Book_File"], m_engineOptions["Best_Book_Move"]);
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&
@@ -1161,7 +1161,7 @@ void Rucksack::Think() {
 											   m_rootMoves.end(),
 											   bookMoveScore.m_move));
 			SYNCCOUT << "info"
-					 << " score " << scoreToUSI(bookMoveScore.m_score)
+					 << " score " << scoreToUSI(bookMoveScore.m_scoreIndex)
 					 << " pv " << bookMoveScore.m_move.ToUSI()
 					 << SYNCENDL;
 

@@ -303,28 +303,10 @@
     <ClInclude Include="header\n110_square__\n110_300_direction.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n110_square__\n110_500_utilSquare.hpp">
-      <Filter>header\n110_square__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n110_square__\n110_155_utilFile.hpp">
-      <Filter>header\n110_square__</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n110_square__\n110_205_utilRank.hpp">
-      <Filter>header\n110_square__</Filter>
-    </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_150_piece.hpp">
       <Filter>header\n113_piece___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n113_piece___\n113_155_utilPiece.hpp">
-      <Filter>header\n113_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n113_piece___\n113_105_utilPieceType.hpp">
-      <Filter>header\n113_piece___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_200_handPiece.hpp">
-      <Filter>header\n113_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n113_piece___\n113_205_utilHandPiece.hpp">
       <Filter>header\n113_piece___</Filter>
     </ClInclude>
     <ClInclude Include="header\n111_colorSq_\n111_500_ColorFileRank.h">
@@ -337,9 +319,6 @@
       <Filter>header\n119_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_055_utilBound.hpp">
-      <Filter>header\n119_score___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n119_score___\n119_090_score.hpp">
       <Filter>header\n119_score___</Filter>
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_100_utilScore.hpp">
@@ -448,9 +427,6 @@
       <Filter>header\n165_movStack</Filter>
     </ClInclude>
     <ClInclude Include="header\n165_movStack\n165_310_promoteMode.hpp">
-      <Filter>header\n165_movStack</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n165_movStack\n165_600_utilMove.hpp">
       <Filter>header\n165_movStack</Filter>
     </ClInclude>
     <ClInclude Include="header\n220_position\n220_660_utilMovePos.hpp">
@@ -948,9 +924,6 @@
     <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp">
       <Filter>header\n760_thread__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_300_moveAndScore.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n760_thread__\n760_300_captain.hpp">
       <Filter>header\n760_thread__</Filter>
     </ClInclude>
@@ -965,6 +938,33 @@
     </ClInclude>
     <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp">
       <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n165_movStack\n165_600_convMove.hpp">
+      <Filter>header\n165_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_105_convPieceType.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_155_convFile.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_205_convRank.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n110_square__\n110_500_convSquare.hpp">
+      <Filter>header\n110_square__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_205_convHandPiece.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n113_piece___\n113_155_convPiece.hpp">
+      <Filter>header\n113_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n119_score___\n119_090_scoreIndex.hpp">
+      <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_300_moveAndScoreIndex.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -991,9 +991,6 @@
     </ClCompile>
     <ClCompile Include="source\n111_colorSq_\n111_500_ColorFileRank.cpp">
       <Filter>source\n111_colorSq_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n223_move____\n223_100_move.cpp">
-      <Filter>source\n223_move____</Filter>
     </ClCompile>
     <ClCompile Include="source\n119_score___\n119_200_pieceScore.cpp">
       <Filter>source\n119_score___</Filter>
@@ -1517,9 +1514,6 @@
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp">
       <Filter>source\n760_thread__</Filter>
     </ClCompile>
-    <ClCompile Include="source\n223_move____\n223_300_moveAndScore.cpp">
-      <Filter>source\n223_move____</Filter>
-    </ClCompile>
     <ClCompile Include="source\n760_thread__\n760_300_captain.cpp">
       <Filter>source\n760_thread__</Filter>
     </ClCompile>
@@ -1537,6 +1531,12 @@
     </ClCompile>
     <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp">
       <Filter>source\n165_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n165_movStack\n165_400_move.cpp">
+      <Filter>source\n165_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n223_move____\n223_300_moveAndScoreIndex.cpp">
+      <Filter>source\n223_move____</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n119_score___/n119_100_utilScore.hpp"
 #include "n886_070_rtAbstract.hpp"
 
@@ -13,7 +13,7 @@ class RepetitionTypeWin : public RepetitionTypeAbstract {
 public:
 
 	void CheckStopAndMaxPly(
-		bool& isReturn, Score& resultScore, const Rucksack* pSearcher, Flashlight* pFlashlightBox
+		bool& isReturn, ScoreIndex& resultScore, const Rucksack* pSearcher, Flashlight* pFlashlightBox
 	) const {
 		isReturn = true;
 		resultScore = UtilScore::MateIn(pFlashlightBox->m_ply);

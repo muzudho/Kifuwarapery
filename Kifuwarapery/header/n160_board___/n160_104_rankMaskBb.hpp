@@ -2,7 +2,7 @@
 
 
 #include "../n110_square__/n110_200_rank.hpp"
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 
 
@@ -51,7 +51,7 @@ public:
 
 	// 直接テーブル引きすべきだと思う。
 	inline Bitboard GetSquareRankMask(const Square sq) const {
-		const Rank r = UtilSquare::ToRank(sq);
+		const Rank r = ConvSquare::TO_RANK10(sq);
 		return this->GetRankMask(r);
 	}
 

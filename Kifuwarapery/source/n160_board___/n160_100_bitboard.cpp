@@ -1,6 +1,6 @@
 ﻿#include <iostream>	// std::cout
 #include "../../header/n080_common__/n080_100_common.hpp"
-#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n110_square__/n110_500_convSquare.hpp"
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 
 using namespace std;
@@ -179,7 +179,7 @@ void Bitboard::PrintTable(const int part) const
 {
 	for (Rank r = Rank9; r < RankNum; ++r) {
 		for (File f = FileC; FileI <= f; --f) {
-			std::cout << (UINT64_C(1) & (this->GetP(part) >> UtilSquare::FromFileRank(f, r)));
+			std::cout << (UINT64_C(1) & (this->GetP(part) >> ConvSquare::FROM_FILE_RANK10(f, r)));
 		}
 		std::cout << std::endl;
 	}

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n223_move____/n223_300_moveAndScore.hpp"
+#include "../n223_move____/n223_300_moveAndScoreIndex.hpp"
 
 
 #include "n640_440_splitedNode.hpp"
@@ -18,7 +18,7 @@ public:
 		m_pv_.push_back(g_MOVE_NONE);
 	}
 
-	explicit RootMove(const MoveAndScore m) : m_score_(m.m_score), m_prevScore_(-ScoreInfinite) {
+	explicit RootMove(const MoveAndScoreIndex m) : m_score_(m.m_scoreIndex), m_prevScore_(-ScoreInfinite) {
 		m_pv_.push_back(m.m_move);
 		m_pv_.push_back(g_MOVE_NONE);
 	}
@@ -37,10 +37,10 @@ public:
 public:
 
 	// 評価値
-	Score m_score_;
+	ScoreIndex m_score_;
 
 	// 前の評価値
-	Score m_prevScore_;
+	ScoreIndex m_prevScore_;
 
 	// 指し手のスタック
 	std::vector<Move> m_pv_;

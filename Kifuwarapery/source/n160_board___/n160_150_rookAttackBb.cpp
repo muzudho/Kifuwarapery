@@ -57,10 +57,10 @@ u64 RookAttackBb::findMagicRook(const Square square) {
 // square のマスにおける、障害物を調べる必要がある場所を調べて Bitboard で返す。
 Bitboard RookAttackBb::RookBlockMaskCalc(const Square square) const {
 	Bitboard result = g_fileMaskBb.GetSquareFileMask(square) ^ g_rankMaskBb.GetSquareRankMask(square);
-	if (UtilSquare::ToFile(square) != FileA) { result &= ~g_fileMaskBb.GetFileMask(FileA); }
-	if (UtilSquare::ToFile(square) != FileI) { result &= ~g_fileMaskBb.GetFileMask(FileI); }
-	if (UtilSquare::ToRank(square) != Rank1) { result &= ~g_rankMaskBb.GetRankMask(Rank1); }
-	if (UtilSquare::ToRank(square) != Rank9) { result &= ~g_rankMaskBb.GetRankMask(Rank9); }
+	if (ConvSquare::TO_FILE10(square) != FileA) { result &= ~g_fileMaskBb.GetFileMask(FileA); }
+	if (ConvSquare::TO_FILE10(square) != FileI) { result &= ~g_fileMaskBb.GetFileMask(FileI); }
+	if (ConvSquare::TO_RANK10(square) != Rank1) { result &= ~g_rankMaskBb.GetRankMask(Rank1); }
+	if (ConvSquare::TO_RANK10(square) != Rank9) { result &= ~g_rankMaskBb.GetRankMask(Rank9); }
 	return result;
 }
 
@@ -72,7 +72,7 @@ Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occup
 	Bitboard result = Bitboard::CreateAllZeroBB();
 	for (SquareDelta delta : deltaArray[false/*isBishop*/]) {
 		for (Square sq = square + delta;
-		UtilSquare::ContainsOf(sq) && abs(UtilSquare::ToRank(sq - delta) - UtilSquare::ToRank(sq)) <= 1;
+		ConvSquare::CONTAINS_OF10(sq) && abs(ConvSquare::TO_RANK10(sq - delta) - ConvSquare::TO_RANK10(sq)) <= 1;
 			sq += delta)
 		{
 			g_setMaskBb.SetBit(&result, sq);

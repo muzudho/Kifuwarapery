@@ -2,7 +2,7 @@
 
 
 #include "../n110_square__/n110_150_file.hpp"
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 
 
@@ -38,7 +38,7 @@ public:
 
 	// 直接テーブル引きすべきだと思う。
 	inline Bitboard GetSquareFileMask(const Square sq) const {
-		const File f = UtilSquare::ToFile(sq);
+		const File f = ConvSquare::TO_FILE10(sq);
 		return this->GetFileMask(f);
 	}
 

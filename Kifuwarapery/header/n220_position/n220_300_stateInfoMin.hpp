@@ -6,7 +6,7 @@
 
 // minimul stateinfo
 struct StateInfoMin {
-	Score m_material; // stocfish の npMaterial は 先手、後手の点数を配列で持っているけど、
+	ScoreIndex m_material; // stocfish の npMaterial は 先手、後手の点数を配列で持っているけど、
 					// 特に分ける必要は無い気がする。
 	int m_pliesFromNull;
 	int m_continuousCheck[ColorNum]; // Stockfish には無い。

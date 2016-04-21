@@ -1,4 +1,4 @@
-﻿#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+﻿#include "../../header/n110_square__/n110_500_convSquare.hpp"
 #include "../../header/n160_board___/n160_400_printBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 
@@ -26,7 +26,7 @@ void SetMaskBb::XorBit(Bitboard* thisBitboard, const Square sq1, const Square sq
 
 bool SetMaskBb::IsSet(const Bitboard* thisBitboard, const Square sq) const
 {
-	assert(UtilSquare::ContainsOf(sq));
+	assert(ConvSquare::ContainsOf(sq));
 	return thisBitboard->AndIsNot0(g_setMaskBb.m_setMaskBB_[sq]);
 }
 

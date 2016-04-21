@@ -2,7 +2,7 @@
 
 #include <thread>	//std::thread
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
@@ -42,9 +42,9 @@ public:
 	void ForkNewFighter(
 		Position& pos,
 		Flashlight* pFlashlightBox,
-		const Score alpha,
-		const Score beta,
-		Score& bestScore,
+		const ScoreIndex alpha,
+		const ScoreIndex beta,
+		ScoreIndex& bestScore,
 		Move& bestMove,
 		const Depth depth,
 		const Move threatMove,

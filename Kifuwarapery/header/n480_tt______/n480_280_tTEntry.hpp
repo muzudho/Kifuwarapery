@@ -2,9 +2,9 @@
 
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n119_score___/n119_050_bound.hpp"
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 
 
@@ -15,7 +15,7 @@ public:
 
 	Depth GetDepth() const;
 
-	Score GetScore() const;
+	ScoreIndex GetScore() const;
 
 	Move  GetMove() const;
 
@@ -23,13 +23,13 @@ public:
 
 	u8    GetGeneration() const;
 
-	Score GetEvalScore() const;
+	ScoreIndex GetEvalScore() const;
 
 	void SetGeneration(const u8 g);
 
-	void SetSave(const Depth depth, const Score score, const Move move,
+	void SetSave(const Depth depth, const ScoreIndex score, const Move move,
 		const u32 posKeyHigh32, const Bound bound, const u8 generation,
-		const Score evalScore);
+		const ScoreIndex evalScore);
 
 private:
 

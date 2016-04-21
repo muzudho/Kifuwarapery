@@ -4,7 +4,7 @@
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n111_colorSq_/n111_500_ColorFileRank.h"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
-#include "../n113_piece___/n113_155_utilPiece.hpp"
+#include "../n113_piece___/n113_155_convPiece.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n161_sqDistan/n161_500_squareDistance.hpp"
@@ -148,21 +148,21 @@ struct KkKkpKppStorageBase {
 		if (j < i) std::swap(i, j);
 
 		if (E1 < ksq) {
-			ksq = UtilSquare::InverseFile(ksq);
+			ksq = ConvSquare::INVERSE_FILE40(ksq);
 			i = UtilKppIndex::InverseFileIndexIfOnBoard(i);
 			j = UtilKppIndex::InverseFileIndexIfOnBoard(j);
 			if (j < i) std::swap(i, j);
 		}
-		else if (UtilSquare::ToFile(ksq) == FileE) {
+		else if (ConvSquare::TO_FILE10(ksq) == FileE) {
 			assert(i < j);
 			if (f_pawn <= i) {
 				const int ibegin = UtilKppIndex::GetBegin(i);
 				const Square isq = static_cast<Square>(i - ibegin);
 				if (E1 < isq) {
-					i = ibegin + UtilSquare::InverseFile(isq);
+					i = ibegin + ConvSquare::INVERSE_FILE40(isq);
 					j = UtilKppIndex::InverseFileIndexOnBoard(j);
 				}
-				else if (UtilSquare::ToFile(isq) == FileE) {
+				else if (ConvSquare::TO_FILE10(isq) == FileE) {
 					j = UtilKppIndex::InverseFileIndexIfLefterThanMiddle(j);
 				}
 			}
@@ -171,7 +171,7 @@ struct KkKkpKppStorageBase {
 
 #if defined EVAL_PHASE4
 		ret[retIdx++] = std::make_pair(&kpps.kpp[ksq][i][j] - GetKppOneArrayFirst(0), MaxWeight());
-		ret[retIdx++] = std::make_pair(&kpps.xpp[UtilSquare::ToFile(ksq)][i][j] - GetKppOneArrayFirst(0), MaxWeight());
+		ret[retIdx++] = std::make_pair(&kpps.xpp[ConvSquare::TO_FILE10(ksq)][i][j] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
 
 		assert(i < j);
@@ -182,7 +182,7 @@ struct KkKkpKppStorageBase {
 			ret[retIdx++] = std::make_pair(&kpps.pp[i][j] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
 #if defined EVAL_PHASE4
-			ret[retIdx++] = std::make_pair(&kpps.ypp[UtilSquare::ToRank(ksq)][i][j] - GetKppOneArrayFirst(0), MaxWeight());
+			ret[retIdx++] = std::make_pair(&kpps.ypp[ConvSquare::TO_RANK10(ksq)][i][j] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
 		}
 		else if (i < fe_hand_end) {
@@ -190,10 +190,10 @@ struct KkKkpKppStorageBase {
 			const int jbegin = UtilKppIndex::GetBegin(j);
 			const Piece jpiece = g_kppBoardIndexStartToPiece.value(jbegin);
 			const Square jsq = static_cast<Square>(j - jbegin);
-			const Rank krank = UtilSquare::ToRank(ksq);
-			const File kfile = UtilSquare::ToFile(ksq);
-			const Rank jrank = UtilSquare::ToRank(jsq);
-			const File jfile = UtilSquare::ToFile(jsq);
+			const Rank krank = ConvSquare::TO_RANK10(ksq);
+			const File kfile = ConvSquare::TO_FILE10(ksq);
+			const Rank jrank = ConvSquare::TO_RANK10(jsq);
+			const File jfile = ConvSquare::TO_FILE10(jsq);
 #if defined EVAL_PHASE3
 			ret[retIdx++] = std::make_pair(&kpps.r_kpp_hb[i][jpiece][m_R_Mid + -abs(kfile - jfile)][m_R_Mid + krank - jrank] - GetKppOneArrayFirst(0), MaxWeight());
 #endif
@@ -208,29 +208,29 @@ struct KkKkpKppStorageBase {
 #endif
 
 #if defined EVAL_PHASE1 || defined EVAL_PHASE3
-			const Color jcolor = UtilPiece::ToColor(jpiece);
-			const PieceType jpt = UtilPiece::ToPieceType(jpiece);
+			const Color jcolor = ConvPiece::TO_COLOR10(jpiece);
+			const PieceType jpt = ConvPiece::TO_PIECE_TYPE10(jpiece);
 			Bitboard jtoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
 				UtilAttack::GetAttacksFrom(jpt, jcolor, jsq, g_setMaskBb.GetSetMaskBb(ksq)));
 			while (jtoBB.Exists1Bit()) {
 				Square jto = jtoBB.PopFirstOneFromI9();
 				if (kfile == FileE && E1 < jto)
-					jto = UtilSquare::InverseFile(jto);
+					jto = ConvSquare::INVERSE_FILE40(jto);
 				const int distance = g_squareDistance.GetSquareDistance(jsq, jto);
 				// distance == 1 で 1/8 で 3bit シフトにする程度の寄与にする。
 #if defined EVAL_PHASE3
 				ret[retIdx++] = std::make_pair(&kpps.kpe[ksq][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 				ret[retIdx++] = std::make_pair(&kpps.xpe[kfile][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 #endif
-				const Rank jtorank = UtilSquare::ToRank(jto);
-				const File jtofile = UtilSquare::ToFile(jto);
+				const Rank jtorank = ConvSquare::TO_RANK10(jto);
+				const File jtofile = ConvSquare::TO_FILE10(jto);
 #if defined EVAL_PHASE1
 				ret[retIdx++] = std::make_pair(&kpps.r_kpe_h[i][jcolor][m_R_Mid + -abs(kfile - jtofile)][m_R_Mid + krank - jtorank] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 				ret[retIdx++] = std::make_pair(&kpps.r_pe_h[i][jcolor] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 				ret[retIdx++] = std::make_pair(&kpps.pe[i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 #endif
 				if (E1 < jto)
-					jto = UtilSquare::InverseFile(jto);
+					jto = ConvSquare::INVERSE_FILE40(jto);
 #if defined EVAL_PHASE3
 				ret[retIdx++] = std::make_pair(&kpps.ype[krank][i][jcolor][jto] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 #endif
@@ -245,12 +245,12 @@ struct KkKkpKppStorageBase {
 			const Piece jpiece = g_kppBoardIndexStartToPiece.value(jbegin);
 			const Square isq = static_cast<Square>(i - ibegin);
 			const Square jsq = static_cast<Square>(j - jbegin);
-			const Rank krank = UtilSquare::ToRank(ksq);
-			const File kfile = UtilSquare::ToFile(ksq);
-			const Rank irank = UtilSquare::ToRank(isq);
-			const File ifile = UtilSquare::ToFile(isq);
-			const Rank jrank = UtilSquare::ToRank(jsq);
-			const File jfile = UtilSquare::ToFile(jsq);
+			const Rank krank = ConvSquare::TO_RANK10(ksq);
+			const File kfile = ConvSquare::TO_FILE10(ksq);
+			const Rank irank = ConvSquare::TO_RANK10(isq);
+			const File ifile = ConvSquare::TO_FILE10(isq);
+			const Rank jrank = ConvSquare::TO_RANK10(jsq);
+			const File jfile = ConvSquare::TO_FILE10(jsq);
 			File diff_file_ki = kfile - ifile;
 			bool kfile_ifile_is_inversed = false;
 			if (0 < diff_file_ki) {
@@ -282,8 +282,8 @@ struct KkKkpKppStorageBase {
 			}
 
 			auto func = [this, &retIdx, &ret](Square ksq, int ij, int ji) {
-				const Rank krank = UtilSquare::ToRank(ksq);
-				const File kfile = UtilSquare::ToFile(ksq);
+				const Rank krank = ConvSquare::TO_RANK10(ksq);
+				const File kfile = ConvSquare::TO_FILE10(ksq);
 				const int ijbegin = UtilKppIndex::GetBegin(ij);
 				const int jibegin = UtilKppIndex::GetBegin(ji);
 				const Piece ijpiece = g_kppBoardIndexStartToPiece.value(ijbegin);
@@ -291,45 +291,45 @@ struct KkKkpKppStorageBase {
 				const Square ijsq = static_cast<Square>(ij - ijbegin);
 				const Square jisq = static_cast<Square>(ji - jibegin);
 
-				const Color jicolor = UtilPiece::ToColor(jipiece);
-				const PieceType jipt = UtilPiece::ToPieceType(jipiece);
+				const Color jicolor = ConvPiece::TO_COLOR10(jipiece);
+				const PieceType jipt = ConvPiece::TO_PIECE_TYPE10(jipiece);
 				const Bitboard mask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(ijsq);
 				Bitboard jitoBB = mask.NotThisAnd(UtilAttack::GetAttacksFrom(jipt, jicolor, jisq, mask));
 				while (jitoBB.Exists1Bit()) {
 					Square jito = jitoBB.PopFirstOneFromI9();
 					Square ijsq_tmp = ijsq;
 					assert(ksq <= E1);
-					if (UtilSquare::ToFile(ksq) == FileE) {
+					if (ConvSquare::TO_FILE10(ksq) == FileE) {
 						if (E1 < ijsq_tmp) {
 							ij = UtilKppIndex::InverseFileIndexOnBoard(ij);
-							ijsq_tmp = UtilSquare::InverseFile(ijsq_tmp);
-							jito = UtilSquare::InverseFile(jito);
+							ijsq_tmp = ConvSquare::INVERSE_FILE40(ijsq_tmp);
+							jito = ConvSquare::INVERSE_FILE40(jito);
 						}
-						else if (UtilSquare::ToFile(ijsq_tmp) == FileE)
-							jito = UtilSquare::InverseFile(jito);
+						else if (ConvSquare::TO_FILE10(ijsq_tmp) == FileE)
+							jito = ConvSquare::INVERSE_FILE40(jito);
 					}
-					const Rank ijrank = UtilSquare::ToRank(ijsq_tmp);
-					const File ijfile = UtilSquare::ToFile(ijsq_tmp);
+					const Rank ijrank = ConvSquare::TO_RANK10(ijsq_tmp);
+					const File ijfile = ConvSquare::TO_FILE10(ijsq_tmp);
 					const int distance = g_squareDistance.GetSquareDistance(jisq, jito);
 #if defined EVAL_PHASE3
 					ret[retIdx++] = std::make_pair(&kpps.kpe[ksq][ij][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
-					ret[retIdx++] = std::make_pair(&kpps.xpe[UtilSquare::ToFile(ksq)][ij][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
+					ret[retIdx++] = std::make_pair(&kpps.xpe[ConvSquare::TO_FILE10(ksq)][ij][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
 #endif
-					const Rank jitorank = UtilSquare::ToRank(jito);
-					const File jitofile = UtilSquare::ToFile(jito);
+					const Rank jitorank = ConvSquare::TO_RANK10(jito);
+					const File jitofile = ConvSquare::TO_FILE10(jito);
 					{
 						int ij_tmp = ij;
 						int jito_tmp = jito;
 						if (FileE < ijfile) {
 							ij_tmp = UtilKppIndex::InverseFileIndexOnBoard(ij_tmp);
-							jito_tmp = UtilSquare::InverseFile(jito);
+							jito_tmp = ConvSquare::INVERSE_FILE40(jito);
 						}
 						else if (FileE == ijfile && FileE < jitofile)
-							jito_tmp = UtilSquare::InverseFile(jito);
+							jito_tmp = ConvSquare::INVERSE_FILE40(jito);
 
 #if defined EVAL_PHASE3
 						ret[retIdx++] = std::make_pair(
-							&kpps.ype[UtilSquare::ToRank(ksq)][ij_tmp][jicolor][jito_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4)
+							&kpps.ype[ConvSquare::TO_RANK10(ksq)][ij_tmp][jicolor][jito_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4)
 						);
 #endif
 					}
@@ -351,10 +351,10 @@ struct KkKkpKppStorageBase {
 					int ij_tmp = ij;
 					if (FileE < ijfile) {
 						ij_tmp = UtilKppIndex::InverseFileIndexOnBoard(ij_tmp);
-						jito = UtilSquare::InverseFile(jito);
+						jito = ConvSquare::INVERSE_FILE40(jito);
 					}
 					else if (FileE == ijfile && E1 < jito) {
-						jito = UtilSquare::InverseFile(jito);
+						jito = ConvSquare::INVERSE_FILE40(jito);
 					}
 #if defined EVAL_PHASE1
 					ret[retIdx++] = std::make_pair(&kpps.pe[ij_tmp][jicolor][jito] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 4));
@@ -367,12 +367,12 @@ struct KkKkpKppStorageBase {
 #endif
 			auto ee_func = [this, &retIdx, &ret](Square ksq, int i, int j) {
 				assert(ksq <= E1);
-				const Rank krank = UtilSquare::ToRank(ksq);
-				const File kfile = UtilSquare::ToFile(ksq);
+				const Rank krank = ConvSquare::TO_RANK10(ksq);
+				const File kfile = ConvSquare::TO_FILE10(ksq);
 				auto color = [](int ij) {
 					const int ijbegin = UtilKppIndex::GetBegin(ij);
 					const Piece ijpiece = g_kppBoardIndexStartToPiece.value(ijbegin);
-					const Color ijcolor = UtilPiece::ToColor(ijpiece);
+					const Color ijcolor = ConvPiece::TO_COLOR10(ijpiece);
 					return ijcolor;
 				};
 				if (color(j) < color(i))
@@ -384,10 +384,10 @@ struct KkKkpKppStorageBase {
 				const Square isq = static_cast<Square>(i - ibegin);
 				const Square jsq = static_cast<Square>(j - jbegin);
 
-				const Color icolor = UtilPiece::ToColor(ipiece);
-				const Color jcolor = UtilPiece::ToColor(jpiece);
-				const PieceType ipt = UtilPiece::ToPieceType(ipiece);
-				const PieceType jpt = UtilPiece::ToPieceType(jpiece);
+				const Color icolor = ConvPiece::TO_COLOR10(ipiece);
+				const Color jcolor = ConvPiece::TO_COLOR10(jpiece);
+				const PieceType ipt = ConvPiece::TO_PIECE_TYPE10(ipiece);
+				const PieceType jpt = ConvPiece::TO_PIECE_TYPE10(jpiece);
 				const Bitboard imask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(jsq);
 				const Bitboard jmask = g_setMaskBb.GetSetMaskBb(ksq) | g_setMaskBb.GetSetMaskBb(isq);
 				Bitboard itoBB = imask.NotThisAnd(UtilAttack::GetAttacksFrom(jpt, icolor, isq, imask));
@@ -405,20 +405,20 @@ struct KkKkpKppStorageBase {
 							Square jto_tmp = jto;
 							if (kfile == FileE) {
 								if (icolor == jcolor) {
-									if (std::min(UtilSquare::InverseFile(ito_tmp), UtilSquare::InverseFile(jto_tmp)) < std::min(ito_tmp, jto_tmp)) {
-										ito_tmp = UtilSquare::InverseFile(ito_tmp);
-										jto_tmp = UtilSquare::InverseFile(jto_tmp);
+									if (std::min(ConvSquare::INVERSE_FILE40(ito_tmp), ConvSquare::INVERSE_FILE40(jto_tmp)) < std::min(ito_tmp, jto_tmp)) {
+										ito_tmp = ConvSquare::INVERSE_FILE40(ito_tmp);
+										jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 									}
 									if (jto_tmp < ito_tmp)
 										std::swap(ito_tmp, jto_tmp);
 								}
 								else {
 									if (E1 < ito_tmp) {
-										ito_tmp = UtilSquare::InverseFile(ito_tmp);
-										jto_tmp = UtilSquare::InverseFile(jto_tmp);
+										ito_tmp = ConvSquare::INVERSE_FILE40(ito_tmp);
+										jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 									}
-									else if (UtilSquare::ToFile(ito_tmp) == FileE && E1 < jto_tmp)
-										jto_tmp = UtilSquare::InverseFile(jto_tmp);
+									else if (ConvSquare::TO_FILE10(ito_tmp) == FileE && E1 < jto_tmp)
+										jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 								}
 							}
 							else if (icolor == jcolor && jto_tmp < ito_tmp)
@@ -428,17 +428,17 @@ struct KkKkpKppStorageBase {
 							ret[retIdx++] = std::make_pair(&kpps.kee[ksq][icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 							ret[retIdx++] = std::make_pair(&kpps.xee[kfile][icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 #endif
-							File diff_file_kito = kfile - UtilSquare::ToFile(ito_tmp);
+							File diff_file_kito = kfile - ConvSquare::TO_FILE10(ito_tmp);
 							bool kfile_itofile_is_inversed = false;
 							if (0 < diff_file_kito) {
 								diff_file_kito = -diff_file_kito;
 								kfile_itofile_is_inversed = true;
 							}
 							File diff_file_kjto =
-								static_cast<File>(diff_file_kito == static_cast<File>(0) ? -abs(kfile - UtilSquare::ToFile(jto_tmp)) :
-									kfile_itofile_is_inversed ? UtilSquare::ToFile(jto_tmp) - kfile : kfile - UtilSquare::ToFile(jto_tmp));
-							Rank diff_rank_kito = krank - UtilSquare::ToRank(ito_tmp);
-							Rank diff_rank_kjto = krank - UtilSquare::ToRank(jto_tmp);
+								static_cast<File>(diff_file_kito == static_cast<File>(0) ? -abs(kfile - ConvSquare::TO_FILE10(jto_tmp)) :
+									kfile_itofile_is_inversed ? ConvSquare::TO_FILE10(jto_tmp) - kfile : kfile - ConvSquare::TO_FILE10(jto_tmp));
+							Rank diff_rank_kito = krank - ConvSquare::TO_RANK10(ito_tmp);
+							Rank diff_rank_kjto = krank - ConvSquare::TO_RANK10(jto_tmp);
 							ColorFileRank iColorFileRank = ColorFileRank(icolor, diff_file_kito, diff_rank_kito);
 							ColorFileRank jColorFileRank = ColorFileRank(jcolor, diff_file_kjto, diff_rank_kjto);
 							if (jColorFileRank.GetOrder() < iColorFileRank.GetOrder())
@@ -450,29 +450,29 @@ struct KkKkpKppStorageBase {
 						Square ito_tmp = ito;
 						Square jto_tmp = jto;
 						if (icolor == jcolor) {
-							if (std::min(UtilSquare::InverseFile(ito_tmp), UtilSquare::InverseFile(jto_tmp)) < std::min(ito_tmp, jto_tmp)) {
-								ito_tmp = UtilSquare::InverseFile(ito_tmp);
-								jto_tmp = UtilSquare::InverseFile(jto_tmp);
+							if (std::min(ConvSquare::INVERSE_FILE40(ito_tmp), ConvSquare::INVERSE_FILE40(jto_tmp)) < std::min(ito_tmp, jto_tmp)) {
+								ito_tmp = ConvSquare::INVERSE_FILE40(ito_tmp);
+								jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 							}
 							if (jto_tmp < ito_tmp)
 								std::swap(ito_tmp, jto_tmp);
 						}
 						else {
 							if (E1 < ito_tmp) {
-								ito_tmp = UtilSquare::InverseFile(ito_tmp);
-								jto_tmp = UtilSquare::InverseFile(jto_tmp);
+								ito_tmp = ConvSquare::INVERSE_FILE40(ito_tmp);
+								jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 							}
-							else if (UtilSquare::ToFile(ito_tmp) == FileE && E1 < jto_tmp)
-								jto_tmp = UtilSquare::InverseFile(jto_tmp);
+							else if (ConvSquare::TO_FILE10(ito_tmp) == FileE && E1 < jto_tmp)
+								jto_tmp = ConvSquare::INVERSE_FILE40(jto_tmp);
 						}
 #if defined EVAL_PHASE1
 						ret[retIdx++] = std::make_pair(&kpps.ee[icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 						ret[retIdx++] = std::make_pair(&kpps.yee[krank][icolor][ito_tmp][jcolor][jto_tmp] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 #endif
-						const File itofile = UtilSquare::ToFile(ito_tmp);
-						const Rank itorank = UtilSquare::ToRank(ito_tmp);
-						const File jtofile = UtilSquare::ToFile(jto_tmp);
-						const Rank jtorank = UtilSquare::ToRank(jto_tmp);
+						const File itofile = ConvSquare::TO_FILE10(ito_tmp);
+						const Rank itorank = ConvSquare::TO_RANK10(ito_tmp);
+						const File jtofile = ConvSquare::TO_FILE10(jto_tmp);
+						const Rank jtorank = ConvSquare::TO_RANK10(jto_tmp);
 #if defined EVAL_PHASE1
 						ret[retIdx++] = std::make_pair(&kpps.r_ee[icolor][jcolor][m_R_Mid + abs(-itofile - jtofile)][m_R_Mid + itorank - jtorank] - GetKppOneArrayFirst(0), MaxWeight() >> (distance + 6));
 #endif
@@ -489,7 +489,7 @@ struct KkKkpKppStorageBase {
 				if (j < i) std::swap(i, j);
 			}
 			else if ((E1 < isq)
-				|| (ibegin == jbegin && UtilSquare::InverseFile(jsq) < isq))
+				|| (ibegin == jbegin && ConvSquare::INVERSE_FILE40(jsq) < isq))
 			{
 				// ppに関してiを左右反転するのでjも左右反転する。
 				i = UtilKppIndex::InverseFileIndexOnBoard(i);
@@ -518,10 +518,10 @@ struct KkKkpKppStorageBase {
 		}
 		auto kp_func = [this, &retIdx, &ret](Square ksq, int i, int sign) {
 			if (E1 < ksq) {
-				ksq = UtilSquare::InverseFile(ksq);
+				ksq = ConvSquare::INVERSE_FILE40(ksq);
 				i = UtilKppIndex::InverseFileIndexIfOnBoard(i);
 			}
-			else if (UtilSquare::ToFile(ksq) == FileE)
+			else if (ConvSquare::TO_FILE10(ksq) == FileE)
 				i = UtilKppIndex::InverseFileIndexIfLefterThanMiddle(i);
 #if defined EVAL_PHASE3
 			ret[retIdx++] = std::make_pair(sign*(&kkps.kp[ksq][i] - GetKkpOneArrayFirst(0)), MaxWeight());
@@ -537,18 +537,18 @@ struct KkKkpKppStorageBase {
 					const Square isq = static_cast<Square>(i - ibegin);
 					const Piece ipiece = g_kppBoardIndexStartToPiece.value(ibegin);
 #if defined EVAL_PHASE2
-					ret[retIdx++] = std::make_pair(sign*(&kkps.r_kp_b[ipiece][m_R_Mid + -abs(UtilSquare::ToFile(ksq) - UtilSquare::ToFile(isq))][m_R_Mid + UtilSquare::ToRank(ksq) - UtilSquare::ToRank(isq)] - GetKkpOneArrayFirst(0)), MaxWeight());
+					ret[retIdx++] = std::make_pair(sign*(&kkps.r_kp_b[ipiece][m_R_Mid + -abs(ConvSquare::TO_FILE10(ksq) - ConvSquare::TO_FILE10(isq))][m_R_Mid + ConvSquare::TO_RANK10(ksq) - ConvSquare::TO_RANK10(isq)] - GetKkpOneArrayFirst(0)), MaxWeight());
 #endif
 
 #if defined EVAL_PHASE1
-					const PieceType ipt = UtilPiece::ToPieceType(ipiece);
-					const Color icolor = UtilPiece::ToColor(ipiece);
+					const PieceType ipt = ConvPiece::TO_PIECE_TYPE10(ipiece);
+					const Color icolor = ConvPiece::TO_COLOR10(ipiece);
 					Bitboard itoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
 						UtilAttack::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 					while (itoBB.Exists1Bit()) {
 						Square ito = itoBB.PopFirstOneFromI9();
 						const int distance = g_squareDistance.GetSquareDistance(isq, ito);
-						ret[retIdx++] = std::make_pair(sign*(&kkps.r_ke[icolor][m_R_Mid + -abs(UtilSquare::ToFile(ksq) - UtilSquare::ToFile(ito))][m_R_Mid + UtilSquare::ToRank(ksq) - UtilSquare::ToRank(ito)] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
+						ret[retIdx++] = std::make_pair(sign*(&kkps.r_ke[icolor][m_R_Mid + -abs(ConvSquare::TO_FILE10(ksq) - ConvSquare::TO_FILE10(ito))][m_R_Mid + ConvSquare::TO_RANK10(ksq) - ConvSquare::TO_RANK10(ito)] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
 					}
 #endif
 				}
@@ -559,16 +559,16 @@ struct KkKkpKppStorageBase {
 				const int ibegin = UtilKppIndex::GetBegin(i);
 				const Square isq = static_cast<Square>(i - ibegin);
 				const Piece ipiece = g_kppBoardIndexStartToPiece.value(ibegin);
-				const PieceType ipt = UtilPiece::ToPieceType(ipiece);
-				const Color icolor = UtilPiece::ToColor(ipiece);
+				const PieceType ipt = ConvPiece::TO_PIECE_TYPE10(ipiece);
+				const Color icolor = ConvPiece::TO_COLOR10(ipiece);
 
 				Bitboard itoBB = g_setMaskBb.GetSetMaskBb(ksq).NotThisAnd(
 					UtilAttack::GetAttacksFrom(ipt, icolor, isq, g_setMaskBb.GetSetMaskBb(ksq)));
 				while (itoBB.Exists1Bit()) {
 					Square ito = itoBB.PopFirstOneFromI9();
 					const int distance = g_squareDistance.GetSquareDistance(isq, ito);
-					if (UtilSquare::ToFile(ksq) == FileE && E1 < ito)
-						ito = UtilSquare::InverseFile(ito);
+					if (ConvSquare::TO_FILE10(ksq) == FileE && E1 < ito)
+						ito = ConvSquare::INVERSE_FILE40(ito);
 					ret[retIdx++] = std::make_pair(sign*(&kkps.ke[ksq][icolor][ito] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
 				}
 			}
@@ -579,30 +579,30 @@ struct KkKkpKppStorageBase {
 		{
 			const int begin = UtilKppIndex::GetBegin(i);
 			const int opp_begin = UtilKppIndex::ToOpponentBegin(i);
-			const int tmp_i = (begin < fe_hand_end ? opp_begin + (i - begin) : opp_begin + UtilSquare::Inverse(static_cast<Square>(i - begin)));
-			kp_func(UtilSquare::Inverse(ksq1), tmp_i, -1);
+			const int tmp_i = (begin < fe_hand_end ? opp_begin + (i - begin) : opp_begin + ConvSquare::INVERSE10(static_cast<Square>(i - begin)));
+			kp_func(ConvSquare::INVERSE10(ksq1), tmp_i, -1);
 		}
 
 		int sign = 1;
 		if (!UtilKppIndex::IsBlack(i)) {
 			const Square tmp = ksq0;
-			ksq0 = UtilSquare::Inverse(ksq1);
-			ksq1 = UtilSquare::Inverse(tmp);
+			ksq0 = ConvSquare::INVERSE10(ksq1);
+			ksq1 = ConvSquare::INVERSE10(tmp);
 			const int ibegin = UtilKppIndex::GetBegin(i);
 			const int opp_ibegin = UtilKppIndex::KppWhiteIndexToBlackBegin(i);
-			i = opp_ibegin + (i < fe_hand_end ? i - ibegin : UtilSquare::Inverse(static_cast<Square>(i - ibegin)));
+			i = opp_ibegin + (i < fe_hand_end ? i - ibegin : ConvSquare::INVERSE10(static_cast<Square>(i - ibegin)));
 			sign = -1;
 		}
 		if (E1 < ksq0) {
-			ksq0 = UtilSquare::InverseFile(ksq0);
-			ksq1 = UtilSquare::InverseFile(ksq1);
+			ksq0 = ConvSquare::INVERSE_FILE40(ksq0);
+			ksq1 = ConvSquare::INVERSE_FILE40(ksq1);
 			i = UtilKppIndex::InverseFileIndexIfOnBoard(i);
 		}
-		else if (UtilSquare::ToFile(ksq0) == FileE && E1 < ksq1) {
-			ksq1 = UtilSquare::InverseFile(ksq1);
+		else if (ConvSquare::TO_FILE10(ksq0) == FileE && E1 < ksq1) {
+			ksq1 = ConvSquare::INVERSE_FILE40(ksq1);
 			i = UtilKppIndex::InverseFileIndexIfOnBoard(i);
 		}
-		else if (UtilSquare::ToFile(ksq0) == FileE && UtilSquare::ToFile(ksq1) == FileE) {
+		else if (ConvSquare::TO_FILE10(ksq0) == FileE && ConvSquare::TO_FILE10(ksq1) == FileE) {
 			i = UtilKppIndex::InverseFileIndexIfLefterThanMiddle(i);
 		}
 #if defined EVAL_PHASE4
@@ -610,8 +610,8 @@ struct KkKkpKppStorageBase {
 #endif
 
 #if defined EVAL_PHASE1 || defined EVAL_PHASE3
-		const Rank diff_rank_k0k1 = UtilSquare::ToRank(ksq0) - UtilSquare::ToRank(ksq1);
-		File diff_file_k0k1 = UtilSquare::ToFile(ksq0) - UtilSquare::ToFile(ksq1);
+		const Rank diff_rank_k0k1 = ConvSquare::TO_RANK10(ksq0) - ConvSquare::TO_RANK10(ksq1);
+		File diff_file_k0k1 = ConvSquare::TO_FILE10(ksq0) - ConvSquare::TO_FILE10(ksq1);
 		if (i < fe_hand_end) {
 			if (0 < diff_file_k0k1)
 				diff_file_k0k1 = -diff_file_k0k1;
@@ -623,25 +623,25 @@ struct KkKkpKppStorageBase {
 			const int ibegin = UtilKppIndex::GetBegin(i);
 			const Piece ipiece = g_kppBoardIndexStartToPiece.value(ibegin);
 			Square isq = static_cast<Square>(i - ibegin);
-			const Rank diff_rank_k0i = UtilSquare::ToRank(ksq0) - UtilSquare::ToRank(isq);
-			File diff_file_k0i = UtilSquare::ToFile(ksq0) - UtilSquare::ToFile(isq);
+			const Rank diff_rank_k0i = ConvSquare::TO_RANK10(ksq0) - ConvSquare::TO_RANK10(isq);
+			File diff_file_k0i = ConvSquare::TO_FILE10(ksq0) - ConvSquare::TO_FILE10(isq);
 
-			const Color icolor = UtilPiece::ToColor(ipiece);
-			const PieceType ipt = UtilPiece::ToPieceType(ipiece);
+			const Color icolor = ConvPiece::TO_COLOR10(ipiece);
+			const PieceType ipt = ConvPiece::TO_PIECE_TYPE10(ipiece);
 			const Bitboard mask = g_setMaskBb.GetSetMaskBb(ksq0) | g_setMaskBb.GetSetMaskBb(ksq1);
 			Bitboard itoBB = mask.NotThisAnd(UtilAttack::GetAttacksFrom(ipt, icolor, isq, mask));
 			while (itoBB.Exists1Bit()) {
 				Square ito = itoBB.PopFirstOneFromI9();
 				const int distance = g_squareDistance.GetSquareDistance(isq, ito);
-				if (UtilSquare::ToFile(ksq0) == FileE && UtilSquare::ToFile(ksq1) == FileE && E1 < ito)
-					ito = UtilSquare::InverseFile(ito);
+				if (ConvSquare::TO_FILE10(ksq0) == FileE && ConvSquare::TO_FILE10(ksq1) == FileE && E1 < ito)
+					ito = ConvSquare::INVERSE_FILE40(ito);
 #if defined EVAL_PHASE3
 				ret[retIdx++] = std::make_pair(sign*(&kkps.kke[ksq0][ksq1][icolor][ito] - GetKkpOneArrayFirst(0)), MaxWeight() >> (distance + 4));
 #endif
 #if defined EVAL_PHASE1
 				File diff_file_k0k1_tmp = diff_file_k0k1;
-				File diff_file_k0ito = UtilSquare::ToFile(ksq0) - UtilSquare::ToFile(ito);
-				Rank diff_rank_k0ito = UtilSquare::ToRank(ksq0) - UtilSquare::ToRank(ito);
+				File diff_file_k0ito = ConvSquare::TO_FILE10(ksq0) - ConvSquare::TO_FILE10(ito);
+				Rank diff_rank_k0ito = ConvSquare::TO_RANK10(ksq0) - ConvSquare::TO_RANK10(ito);
 				if (0 < diff_file_k0k1_tmp) {
 					diff_file_k0k1_tmp = -diff_file_k0k1_tmp;
 					diff_file_k0ito = -diff_file_k0ito;
@@ -672,8 +672,8 @@ struct KkKkpKppStorageBase {
 	void CreateKkIndices(std::pair<ptrdiff_t, int> ret[g_KKIndicesMax], Square ksq0, Square ksq1) {
 		int retIdx = 0;
 #if defined EVAL_PHASE1
-		ret[retIdx++] = std::make_pair(&kks.k[std::min(ksq0, UtilSquare::InverseFile(ksq0))] - GetKkOneArrayFirst(0), MaxWeight());
-		ret[retIdx++] = std::make_pair(-(&kks.k[std::min(UtilSquare::Inverse(ksq1), UtilSquare::InverseFile(UtilSquare::Inverse(ksq1)))] - GetKkOneArrayFirst(0)), MaxWeight());
+		ret[retIdx++] = std::make_pair(&kks.k[std::min(ksq0, ConvSquare::INVERSE_FILE40(ksq0))] - GetKkOneArrayFirst(0), MaxWeight());
+		ret[retIdx++] = std::make_pair(-(&kks.k[std::min(ConvSquare::INVERSE10(ksq1), ConvSquare::INVERSE_FILE40(ConvSquare::INVERSE10(ksq1)))] - GetKkOneArrayFirst(0)), MaxWeight());
 #endif
 
 		auto kk_func = [this, &retIdx, &ret](Square ksq0, Square ksq1, int sign) {
@@ -681,28 +681,28 @@ struct KkKkpKppStorageBase {
 				// 常に ksq0 < ksq1 となるテーブルにアクセスする為の変換
 				const Square ksq0Arr[] = {
 					ksq0,
-					UtilSquare::InverseFile(ksq0),
+					ConvSquare::INVERSE_FILE40(ksq0),
 				};
 				const Square ksq1Arr[] = {
-					UtilSquare::Inverse(ksq1),
-					UtilSquare::Inverse(UtilSquare::InverseFile(ksq1)),
+					ConvSquare::INVERSE10(ksq1),
+					ConvSquare::INVERSE10(ConvSquare::INVERSE_FILE40(ksq1)),
 				};
 				auto ksq0ArrIdx = std::min_element(std::begin(ksq0Arr), std::end(ksq0Arr)) - std::begin(ksq0Arr);
 				auto ksq1ArrIdx = std::min_element(std::begin(ksq1Arr), std::end(ksq1Arr)) - std::begin(ksq1Arr);
 				if (ksq0Arr[ksq0ArrIdx] <= ksq1Arr[ksq1ArrIdx]) {
 					ksq0 = ksq0Arr[ksq0ArrIdx];
-					ksq1 = UtilSquare::Inverse(ksq1Arr[ksq0ArrIdx]);
+					ksq1 = ConvSquare::INVERSE10(ksq1Arr[ksq0ArrIdx]);
 				}
 				else {
 					sign = -sign; // ksq0 と ksq1 を入れ替えるので符号反転
 					ksq0 = ksq1Arr[ksq1ArrIdx];
-					ksq1 = UtilSquare::Inverse(ksq0Arr[ksq1ArrIdx]);
+					ksq1 = ConvSquare::INVERSE10(ksq0Arr[ksq1ArrIdx]);
 				}
 			}
-			const File kfile0 = UtilSquare::ToFile(ksq0);
-			const Rank krank0 = UtilSquare::ToRank(ksq0);
-			const File kfile1 = UtilSquare::ToFile(ksq1);
-			const Rank krank1 = UtilSquare::ToRank(ksq1);
+			const File kfile0 = ConvSquare::TO_FILE10(ksq0);
+			const Rank krank0 = ConvSquare::TO_RANK10(ksq0);
+			const File kfile1 = ConvSquare::TO_FILE10(ksq1);
+			const Rank krank1 = ConvSquare::TO_RANK10(ksq1);
 #if defined EVAL_PHASE3
 			ret[retIdx++] = std::make_pair(sign*(&kks.kk[ksq0][ksq1] - GetKkOneArrayFirst(0)), MaxWeight());
 #endif
@@ -713,7 +713,7 @@ struct KkKkpKppStorageBase {
 			assert(kfile0 - kfile1 <= 0);
 		};
 		kk_func(ksq0, ksq1, 1);
-		kk_func(UtilSquare::Inverse(ksq1), UtilSquare::Inverse(ksq0), -1);
+		kk_func(ConvSquare::INVERSE10(ksq1), ConvSquare::INVERSE10(ksq0), -1);
 		ret[retIdx++] = std::make_pair(std::numeric_limits<ptrdiff_t>::max(), MaxWeight());
 		assert(retIdx <= g_KKIndicesMax);
 	}

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <algorithm> //std::upper_bound
-#include "../n110_square__/n110_500_utilSquare.hpp"
+#include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n520_evaluate/n520_100_evaluateEnum.hpp"
 
 
@@ -61,7 +61,7 @@ public:
 		const int begin = UtilKppIndex::GetBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
 		if (sq <= Square::E1) return index;
-		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
+		return static_cast<int>(begin + ConvSquare::INVERSE_FILE40(sq));
 	};
 
 
@@ -69,14 +69,14 @@ public:
 		if (index < fe_hand_end) return index;
 		const int begin = UtilKppIndex::GetBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
-		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
+		return static_cast<int>(begin + ConvSquare::INVERSE_FILE40(sq));
 	};
 
 	inline static int InverseFileIndexOnBoard(const int index) {
 		assert(f_pawn <= index);
 		const int begin = UtilKppIndex::GetBegin(index);
 		const Square sq = static_cast<Square>(index - begin);
-		return static_cast<int>(begin + UtilSquare::InverseFile(sq));
+		return static_cast<int>(begin + ConvSquare::INVERSE_FILE40(sq));
 	};
 
 };

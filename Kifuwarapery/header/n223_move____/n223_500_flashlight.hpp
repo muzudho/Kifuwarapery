@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "../n119_score___/n119_090_score.hpp"	//Ply,Score
+#include "../n119_score___/n119_090_scoreIndex.hpp"	//Ply,ScoreIndex
 #include "../n119_score___/n119_500_EvalSum.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
@@ -35,7 +35,7 @@ public:
 	Depth			m_reduction;
 
 	// 静的な評価値とは☆？
-	Score			m_staticEval;
+	ScoreIndex			m_staticEval;
 
 	// 一時的にヌル・ムーブをせずに検索させたいときのために設定するもの☆
 	bool			m_skipNullMove;

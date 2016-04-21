@@ -1,10 +1,12 @@
 ﻿#pragma once
 
 
+#include "../n113_piece___/n113_155_convPiece.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n225_movPhase/n225_050_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
@@ -23,7 +25,7 @@ public:
 		const Depth depth,
 		const History& history,
 		Flashlight* pFlashlightBox,
-		const Score beta
+		const ScoreIndex beta
 	);
 
 	NextmoveEvent(const Position& pos, Move ttm, const Depth depth, const History& history, const Square sq);
@@ -83,7 +85,7 @@ public:// もともと本当はプライベート・メソッド☆
 			const Move move = curr->m_move;
 			curr->m_score =
 				GetHistory().GetValue(IsDrop,
-					UtilPiece::FromColorAndPieceType(GetPos().GetTurn(),
+					ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(GetPos().GetTurn(),
 						(IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
 					move.To());
 		}

@@ -2,7 +2,7 @@
 
 #include <string>
 #include <sstream>
-#include "../n119_score___/n119_090_score.hpp"
+#include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_130_lanceAttackBb.hpp"
 #include "../n160_board___/n160_150_rookAttackBb.hpp"
@@ -52,8 +52,8 @@ public:
 	std::vector<RootMove>	m_rootMoves;
 
 #if defined LEARN
-	Score					m_alpha;
-	Score					m_beta;
+	ScoreIndex					m_alpha;
+	ScoreIndex					m_beta;
 #endif
 
 	// 本譜のサイズ？
@@ -97,11 +97,11 @@ public:
 	void					Init();
 
 	// 本譜の情報？
-	std::string				PvInfoToUSI(Position& pos, const Ply depth, const Score alpha, const Score beta);
+	std::string				PvInfoToUSI(Position& pos, const Ply depth, const ScoreIndex alpha, const ScoreIndex beta);
 
 	// Ｑサーチ？
 	template <NodeType NT, bool INCHECK>
-	Score					Qsearch(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth);
+	ScoreIndex					Qsearch(Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth);
 
 #if defined INANIWA_SHIFT
 	void					detectInaniwa(const Position& GetPos);
@@ -112,7 +112,7 @@ public:
 
 	// サーチ？
 	template <NodeType NT>
-	Score					Search(Position& pos, Flashlight* ss, Score alpha, Score beta, const Depth depth, const bool cutNode);
+	ScoreIndex					Search(Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode);
 
 	// 考える？
 	void					Think();
@@ -126,7 +126,7 @@ public:
 
 
 	//private:
-	std::string scoreToUSI(const Score score, const Score alpha, const Score beta) {
+	std::string scoreToUSI(const ScoreIndex score, const ScoreIndex alpha, const ScoreIndex beta) {
 		std::stringstream ss;
 
 		if (abs(score) < ScoreMateInMaxPly) {
@@ -144,16 +144,16 @@ public:
 	}
 
 	//private:
-	inline std::string scoreToUSI(const Score score) {
-		return scoreToUSI(score, -Score::ScoreInfinite, Score::ScoreInfinite);
+	inline std::string scoreToUSI(const ScoreIndex score) {
+		return scoreToUSI(score, -ScoreIndex::ScoreInfinite, ScoreIndex::ScoreInfinite);
 	}
 
 public://private:
 	   // true にすると、シングルスレッドで動作する。デバッグ用。
 	static const bool FakeSplit = false;
 
-	inline Score razorMargin(const Depth d) {
-		return static_cast<Score>(512 + 16 * static_cast<int>(d));
+	inline ScoreIndex razorMargin(const Depth d) {
+		return static_cast<ScoreIndex>(512 + 16 * static_cast<int>(d));
 	}
 
 	// checkTime() を呼び出す最大間隔(msec)
@@ -201,18 +201,18 @@ public://private:
 		return false;
 	}
 
-	Score scoreToTT(const Score s, const Ply ply) {
+	ScoreIndex scoreToTT(const ScoreIndex s, const Ply ply) {
 		assert(s != ScoreNone);
 
-		return (ScoreMateInMaxPly <= s ? s + static_cast<Score>(ply)
-			: s <= ScoreMatedInMaxPly ? s - static_cast<Score>(ply)
+		return (ScoreMateInMaxPly <= s ? s + static_cast<ScoreIndex>(ply)
+			: s <= ScoreMatedInMaxPly ? s - static_cast<ScoreIndex>(ply)
 			: s);
 	}
 
-	Score scoreFromTT(const Score s, const Ply ply) {
+	ScoreIndex scoreFromTT(const ScoreIndex s, const Ply ply) {
 		return (s == ScoreNone ? ScoreNone
-			: ScoreMateInMaxPly <= s ? s - static_cast<Score>(ply)
-			: s <= ScoreMatedInMaxPly ? s + static_cast<Score>(ply)
+			: ScoreMateInMaxPly <= s ? s - static_cast<ScoreIndex>(ply)
+			: s <= ScoreMatedInMaxPly ? s + static_cast<ScoreIndex>(ply)
 			: s);
 	}
 
@@ -272,7 +272,7 @@ public://private:
 		}
 
 		if (!second.IsDrop()
-			&& UtilPieceType::IsSlider(m2ptFrom)
+			&& ConvPieceType::IS_SLIDER10(m2ptFrom)
 			&& g_setMaskBb.IsSet(&g_betweenBb.GetBetweenBB(second.From(), m2to), first.To())
 			&& ScoreZero <= pos.GetSeeSign(first))
 		{

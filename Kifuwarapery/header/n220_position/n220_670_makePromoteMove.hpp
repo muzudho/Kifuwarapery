@@ -1,15 +1,16 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n113_piece___/n113_205_utilHandPiece.hpp"
+#include "../n113_piece___/n113_205_convHandPiece.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_310_promoteMode.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_660_utilMovePos.hpp"
+#include "../n220_position/n220_650_position.hpp"
 
 
-class Position;
+//class Position;
 
 
 class MakePromoteMove {
@@ -21,7 +22,7 @@ public:
 	static inline Move GetSelectedMakeMove_ExceptPromote_mt(MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
 		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
-			UtilMove::MakeMove(pt, from, to) :
+			ConvMove::FROM_PT_SRC_DST30(pt, from, to) :
 			UtilMovePos::MakeCaptureMove(pt, from, to, pos)
 		);
 		return move;

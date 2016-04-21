@@ -1,20 +1,11 @@
 ﻿#include <string>
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n110_square__/n110_100_square.hpp"
-#include "../../header/n110_square__/n110_500_utilSquare.hpp"
+#include "../../header/n110_square__/n110_500_convSquare.hpp"
 #include "../../header/n112_pieceTyp/n112_050_pieceType.hpp"
+#include "../../header/n113_piece___/n113_105_convPieceType.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
-
-namespace {
-	const std::string HandPieceToStringTable[HandPieceNum] = {"P*", "L*", "N*", "S*", "G*", "B*", "R*"};
-	inline std::string handPieceToString(const HandPiece hp) { return HandPieceToStringTable[hp]; }
-
-	const std::string PieceTypeToStringTable[N15_PieceTypeNum] = {
-		"", "FU", "KY", "KE", "GI", "KA", "HI", "KI", "OU", "TO", "NY", "NK", "NG", "UM", "RY"
-	};
-	inline std::string pieceTypeToString(const PieceType pt) { return PieceTypeToStringTable[pt]; }
-}
 
 Move::Move()
 {
@@ -104,7 +95,7 @@ PieceType Move::GetPieceTypeFromOrDropped() const
 HandPiece Move::GetHandPieceDropped() const
 {
 	assert(this->IsDrop());
-	return UtilHandPiece::FromPieceType(GetPieceTypeDropped());
+	return ConvHandPiece::FromPieceType(GetPieceTypeDropped());
 }
 
 bool Move::IsNone() const
@@ -154,9 +145,9 @@ std::string Move::ToUSI() const {
 	const Square from = this->From();
 	const Square to = this->To();
 	if (this->IsDrop()) {
-		return handPieceToString(this->GetHandPieceDropped()) + UtilSquare::ToStringUSI(to);
+		return ConvHandPiece::GET_STRING(this->GetHandPieceDropped()) + ConvSquare::TO_STRING_USI40(to);
 	}
-	std::string usi = UtilSquare::ToStringUSI(from) + UtilSquare::ToStringUSI(to);
+	std::string usi = ConvSquare::TO_STRING_USI40(from) + ConvSquare::TO_STRING_USI40(to);
 	if (this->IsPromotion()) { usi += "+"; }
 	return usi;
 }
@@ -164,7 +155,7 @@ std::string Move::ToUSI() const {
 std::string Move::ToCSA() const {
 	if (this->IsNone()) { return "None"; }
 
-	std::string s = (this->IsDrop() ? std::string("00") : UtilSquare::ToStringCSA(this->From()));
-	s += UtilSquare::ToStringCSA(this->To()) + pieceTypeToString(this->GetPieceTypeTo());
+	std::string s = (this->IsDrop() ? std::string("00") : ConvSquare::TO_STRING_CSA40(this->From()));
+	s += ConvSquare::TO_STRING_CSA40(this->To()) + ConvPieceType::GET_STRING(this->GetPieceTypeTo());
 	return s;
 }

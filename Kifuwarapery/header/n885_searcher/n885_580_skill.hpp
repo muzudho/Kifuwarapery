@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 
-#include "../../header/n119_score___/n119_090_score.hpp"
+#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n885_searcher/n885_500_rucksack.hpp"
 
@@ -11,7 +11,7 @@ struct Skill {
 
 	Skill(const int l, const int mr)
 		: m_level(l),
-		m_maxRandomScoreDiff(static_cast<Score>(mr)),
+		m_maxRandomScoreDiff(static_cast<ScoreIndex>(mr)),
 		m_best(g_MOVE_NONE) {}
 
 	~Skill() {}
@@ -52,7 +52,7 @@ struct Skill {
 	int m_level;
 
 	// ランダムな評価値の差分の最大値か☆？？
-	Score m_maxRandomScoreDiff;
+	ScoreIndex m_maxRandomScoreDiff;
 
 	// ベストムーブか☆？
 	Move m_best;

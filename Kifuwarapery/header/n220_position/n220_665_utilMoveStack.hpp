@@ -3,10 +3,10 @@
 #include <algorithm> //std::swap std::max_element
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
-#include "../n113_piece___/n113_105_utilPieceType.hpp"
+#include "../n113_piece___/n113_105_convPieceType.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_utilMove.hpp"
+#include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_660_utilMovePos.hpp"
 
@@ -54,8 +54,8 @@ public:
 			return move;
 		}
 		const Square from = move.From();
-		const PieceType ptFrom = UtilPiece::ToPieceType(pos.GetPiece(from));
-		return move | UtilMove::GetPieceType2Move(ptFrom) | UtilMovePos::GetCapturedPieceType2Move2(move.To(), pos);
+		const PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
+		return move | ConvMove::FROM_PIECE_TYPE10(ptFrom) | UtilMovePos::GetCapturedPieceType2Move2(move.To(), pos);
 	}
 
 
