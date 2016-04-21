@@ -18,17 +18,23 @@ public:
 	//(^q^)新型
 	// MoveType によって指し手生成関数を使い分ける。
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	static inline Move GetSelectedMakeMove(MoveType mt, PromoteMode pm, const PieceType pt, const Square from, const Square to, const Position& pos) {
-		assert(pm == Promote || pm == NonPromote, "");
-		assert(!((pt == N07_Gold || pt == N08_King || mt == N02_Drop) && pm == Promote));
+	static inline Move GetSelectedMakeMove_ExceptPromote(MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
 			UtilMove::MakeMove(pt, from, to) :
 			UtilMovePos::MakeCaptureMove(pt, from, to, pos)
 		);
-		if (pm == Promote) {
-			move |= g_MOVE_PROMOTE_FLAG;// UtilMove::GetPromoteFlag()
-		}
 		return move;
+	}
+
+	static inline void APPEND_PROMOTE_FLAG(Move& move, MoveType mt_forAssert, const PieceType pt_forAssert)
+	{
+		assert(!(
+			// 持ち駒の打ち込みに成りは無い☆
+			mt_forAssert == N02_Drop ||
+			// 金と玉に成りは無い☆
+			pt_forAssert == N07_Gold || pt_forAssert == N08_King
+		));
+		move |= g_MOVE_PROMOTE_FLAG;
 	}
 
 };

@@ -33,12 +33,17 @@ public:
 		const Square to,
 		const Color us
 		) const {
-		(*moveStackList++).m_move = (
-			(UtilSquare::CanPromote(us, UtilSquare::ToRank(to)) | UtilSquare::CanPromote(us, UtilSquare::ToRank(from))
-				) ?
-			g_makePromoteMove.GetSelectedMakeMove(N00_Capture, PromoteMode::Promote, this->GetNumber(), from, to, pos) :
-			g_makePromoteMove.GetSelectedMakeMove(N00_Capture, PromoteMode::NonPromote, this->GetNumber(), from, to, pos)
-			);
+		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote(N00_Capture, this->GetNumber(), from, to, pos);
+
+		if (
+			UtilSquare::CanPromote(us, UtilSquare::ToRank(to))
+			|
+			UtilSquare::CanPromote(us, UtilSquare::ToRank(from))
+		) {
+			MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move, N00_Capture, this->GetNumber());
+		}
+
+		moveStackList++;
 	}
 
 };
