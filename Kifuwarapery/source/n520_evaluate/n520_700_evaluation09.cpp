@@ -79,7 +79,7 @@ std::array<s32, 2> Evaluation09::doawhite(const Position& pos, const int index[2
 #if defined INANIWA_SHIFT
 ScoreIndex Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 	ScoreIndex GetScore = ScoreZero;
-	if (GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsBlack) {
+	if (GetPos.GetConstRucksack()->inaniwaFlag == InaniwaIsBlack) {
 		if (GetPos.GetPiece(B9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
 		if (GetPos.GetPiece(H9) == N19_WKnight) { GetScore += 700 * g_FVScale; }
 		if (GetPos.GetPiece(A7) == N19_WKnight) { GetScore += 700 * g_FVScale; }
@@ -95,7 +95,7 @@ ScoreIndex Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 		if (GetPos.GetPiece(E5) == N01_BPawn) { GetScore += 200 * g_FVScale; }
 }
 	else {
-		assert(GetPos.GetCsearcher()->inaniwaFlag == InaniwaIsWhite);
+		assert(GetPos.GetConstRucksack()->inaniwaFlag == InaniwaIsWhite);
 		if (GetPos.GetPiece(B1) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
 		if (GetPos.GetPiece(H1) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
 		if (GetPos.GetPiece(A3) == N03_BKnight) { GetScore -= 700 * g_FVScale; }
@@ -113,7 +113,7 @@ ScoreIndex Evaluation09::inaniwaScoreBody(const Position& GetPos) {
 	return GetScore;
 }
 inline ScoreIndex Evaluation09::inaniwaScore(const Position& GetPos) {
-	if (GetPos.GetCsearcher()->inaniwaFlag == NotInaniwa) return ScoreZero;
+	if (GetPos.GetConstRucksack()->inaniwaFlag == NotInaniwa) return ScoreZero;
 	return inaniwaScoreBody(GetPos);
 }
 #endif
@@ -123,13 +123,13 @@ inline ScoreIndex Evaluation09::inaniwaScore(const Position& GetPos) {
 
 bool Evaluation09::calcDifference(Position& pos, Flashlight* ss) {
 #if defined INANIWA_SHIFT
-	if (GetPos.GetCsearcher()->inaniwaFlag != NotInaniwa) return false;
+	if (GetPos.GetConstRucksack()->inaniwaFlag != NotInaniwa) return false;
 #endif
 	if ((ss - 1)->m_staticEvalRaw.m_p[0][0] == ScoreNotEvaluated)
 		return false;
 
 	const Move lastMove = (ss - 1)->m_currentMove;
-	assert(lastMove != Move::GetMoveNull());
+	assert(lastMove != Move::m_NULL);
 
 	if (lastMove.GetPieceTypeFrom() == N08_King) {
 		EvalSum diff = (ss - 1)->m_staticEvalRaw; // 本当は diff ではないので名前が良くない。

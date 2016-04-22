@@ -104,32 +104,32 @@ void HerosPub::StartThinking(
 #else
 	WaitForThinkFinished();
 #endif
-	position.GetSearcher()->m_stopwatch.Restart();
+	position.GetRucksack()->m_stopwatch.Restart();
 
-	position.GetSearcher()->m_signals.m_stopOnPonderHit = position.GetSearcher()->m_signals.m_firstRootMove = false;
-	position.GetSearcher()->m_signals.m_stop = position.GetSearcher()->m_signals.m_failedLowAtRoot = false;
+	position.GetRucksack()->m_signals.m_stopOnPonderHit = position.GetRucksack()->m_signals.m_firstRootMove = false;
+	position.GetRucksack()->m_signals.m_stop = position.GetRucksack()->m_signals.m_failedLowAtRoot = false;
 
-	position.GetSearcher()->m_rootPosition = position;
-	position.GetSearcher()->m_limits = limits;
-	position.GetSearcher()->m_rootMoves.clear();
+	position.GetRucksack()->m_rootPosition = position;
+	position.GetRucksack()->m_limits = limits;
+	position.GetRucksack()->m_rootMoves.clear();
 
 #if defined LEARN
 	// searchMoves を直接使う。
-	GetPos.GetSearcher()->m_rootMoves.push_back(RootMove(position.GetSearcher()->m_ourMoves[0]));
+	GetPos.GetRucksack()->m_rootMoves.push_back(RootMove(position.GetRucksack()->m_ourMoves[0]));
 #else
 	const MoveType MT = N08_Legal;
 	for (MoveList<MT> ml(position); !ml.IsEnd(); ++ml) {
 		if (searchMoves.empty()
 			|| std::find(searchMoves.begin(), searchMoves.end(), ml.GetMove()) != searchMoves.end())
 		{
-			position.GetSearcher()->m_rootMoves.push_back(RootMove(ml.GetMove()));
+			position.GetRucksack()->m_rootMoves.push_back(RootMove(ml.GetMove()));
 		}
 	}
 #endif
 
 #if defined LEARN
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
-	GetPos.GetSearcher()->Think();
+	GetPos.GetRucksack()->Think(GetPos.GetRucksack());
 #else
 	this->GetFirstCaptain()->m_isThinking = true;
 	this->GetFirstCaptain()->NotifyOne();

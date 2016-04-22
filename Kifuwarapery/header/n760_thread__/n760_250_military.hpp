@@ -76,6 +76,6 @@ public:
 
 	volatile bool m_exit;
 
-	Rucksack* m_pSearcher;
+	Rucksack* m_pRucksack;
 };
 

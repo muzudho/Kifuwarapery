@@ -12,7 +12,7 @@
 
 
 Military::Military(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
-	m_pSearcher = searcher;
+	m_pRucksack = searcher;
 	m_exit = false;
 	m_searching = false;
 	m_splitedNodesSize = 0;
@@ -72,7 +72,7 @@ void Military::ForkNewFighter(
 	assert(pos.IsOK());
 	assert(bestScore <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(-ScoreInfinite < bestScore);
-	assert(m_pSearcher->m_ownerHerosPub.GetMinSplitDepth() <= depth);
+	assert(m_pRucksack->m_ownerHerosPub.GetMinSplitDepth() <= depth);
 
 	assert(m_searching);
 	assert(m_splitedNodesSize < g_MaxSplitedNodesPerThread);
@@ -97,7 +97,7 @@ void Military::ForkNewFighter(
 	sp.m_cutoff = false;
 	sp.m_pFlashlightBox = pFlashlightBox;
 
-	m_pSearcher->m_ownerHerosPub.m_mutex_.lock();
+	m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 	sp.m_mutex.lock();
 
 	++m_splitedNodesSize;
@@ -108,8 +108,8 @@ void Military::ForkNewFighter(
 	size_t slavesCount = 1;
 	Military* slave;
 
-	while ((slave = m_pSearcher->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
-		&& ++slavesCount <= m_pSearcher->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
+	while ((slave = m_pRucksack->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
+		&& ++slavesCount <= m_pRucksack->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
 	{
 		sp.m_slavesMask |= UINT64_C(1) << slave->m_idx;
 		slave->m_activeSplitedNode = &sp;
@@ -119,11 +119,11 @@ void Military::ForkNewFighter(
 
 	if (1 < slavesCount || Fake) {
 		sp.m_mutex.unlock();
-		m_pSearcher->m_ownerHerosPub.m_mutex_.unlock();
+		m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 		Military::IdleLoop();
 		assert(!m_searching);
 		assert(!m_activePosition);
-		m_pSearcher->m_ownerHerosPub.m_mutex_.lock();
+		m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 		sp.m_mutex.lock();
 	}
 
@@ -135,7 +135,7 @@ void Military::ForkNewFighter(
 	bestMove = sp.m_bestMove;
 	bestScore = sp.m_bestScore;
 
-	m_pSearcher->m_ownerHerosPub.m_mutex_.unlock();
+	m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 	sp.m_mutex.unlock();
 }
 

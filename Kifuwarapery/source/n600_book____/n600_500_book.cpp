@@ -106,7 +106,7 @@ MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fN
 	u32 sum = 0;
 	Move move = g_MOVE_NONE;//該当なしのときに使う値☆
 	const Key key = this->GetBookKey(position);
-	const ScoreIndex min_book_score = static_cast<ScoreIndex>(static_cast<int>(position.GetSearcher()->m_engineOptions["Min_Book_Score"]));
+	const ScoreIndex min_book_score = static_cast<ScoreIndex>(static_cast<int>(position.GetRucksack()->m_engineOptions["Min_Book_Score"]));
 	ScoreIndex score = ScoreZero;
 
 	if (m_fileName_ != fName && !Open(fName.c_str())) {
@@ -197,7 +197,7 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 			std::cout << "!!! header only !!!" << std::endl;
 			return;
 		}
-		pos.Set(g_DefaultStartPositionSFEN, pos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
+		pos.Set(g_DefaultStartPositionSFEN, pos.GetRucksack()->m_ownerHerosPub.GetFirstCaptain());
 		StateStackPtr SetUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (!line.empty()) {
@@ -236,13 +236,13 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 					std::istringstream ssCmd("byoyomi 1000");
 					UsiOperation usiOperation;
 					usiOperation.Go(pos, ssCmd);
-					pos.GetSearcher()->m_ownerHerosPub.WaitForThinkFinished();
+					pos.GetRucksack()->m_ownerHerosPub.WaitForThinkFinished();
 
 					pos.UndoMove(move);
 					SetUpStates->pop();
 
 					// doMove してから search してるので点数が反転しているので直す。
-					const ScoreIndex score = -pos.GetCsearcher()->m_rootMoves[0].m_score_;
+					const ScoreIndex score = -pos.GetConstRucksack()->m_rootMoves[0].m_score_;
 #else
 					const ScoreIndex GetScore = ScoreZero;
 #endif

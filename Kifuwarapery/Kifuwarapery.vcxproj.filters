@@ -981,6 +981,9 @@
     <ClInclude Include="header\n883_nodeType\n883_070_nodetypeAbstract.hpp">
       <Filter>header\n883_nodeType</Filter>
     </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_510_hitchhiker.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1561,6 +1564,9 @@
     </ClCompile>
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
       <Filter>source\n883_search__</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_510_hitchhiker.cpp">
+      <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

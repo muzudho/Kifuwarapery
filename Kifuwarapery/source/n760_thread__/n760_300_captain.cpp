@@ -11,7 +11,7 @@ void Captain::IdleLoop() {
 			this->m_isThinking = false;
 			while (!this->m_isThinking && !m_exit) {
 				// UI 関連だから要らないのかも。
-				this->m_pSearcher->m_ownerHerosPub.m_sleepCond_.notify_one();
+				this->m_pRucksack->m_ownerHerosPub.m_sleepCond_.notify_one();
 				this->m_sleepCond.wait(lock);
 			}
 		}
@@ -21,7 +21,7 @@ void Captain::IdleLoop() {
 		}
 
 		this->m_searching = true;
-		this->m_pSearcher->Think();
+		Hitchhiker::Think(*this->m_pRucksack);
 		assert(this->m_searching);
 		this->m_searching = false;
 	}

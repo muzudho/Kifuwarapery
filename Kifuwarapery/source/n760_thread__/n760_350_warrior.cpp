@@ -12,7 +12,7 @@ void Warrior::IdleLoop() {
 			}
 		}
 		if (this->m_msec) {
-			this->m_pSearcher->CheckTime();
+			this->m_pRucksack->CheckTime();
 		}
 	}
 }

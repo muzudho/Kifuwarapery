@@ -53,7 +53,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 				 token == "movetime"   ) {
 			// btime wtime の後に byoyomi が来る前提になっているので良くない。
 			ssCmd >> limits.m_moveTime;
-			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetSearcher()->m_engineOptions["Byoyomi_Margin"]; }
+			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetRucksack()->m_engineOptions["Byoyomi_Margin"]; }
 		}
 		else if (token == "depth"      ) { ssCmd >> limits.m_depth; }
 		else if (token == "nodes"      ) { ssCmd >> limits.m_nodes; }
@@ -65,10 +65,10 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 			}
 		}
 	}
-	pos.GetSearcher()->m_ourMoves = moves;
+	pos.GetRucksack()->m_ourMoves = moves;
 
 	// 思考を開始☆
-	pos.GetSearcher()->m_ownerHerosPub.StartThinking(pos, limits, moves);
+	pos.GetRucksack()->m_ownerHerosPub.StartThinking(pos, limits, moves);
 }
 
 #if defined LEARN
@@ -78,7 +78,7 @@ void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move Get
 	std::vector<Move> moves;
 	m_limits.GetDepth = GetDepth;
 	moves.push_back(GetMove);
-	GetPos.GetSearcher()->m_ownerHerosPub.StartThinking(GetPos, m_limits, moves);
+	GetPos.GetRucksack()->m_ownerHerosPub.StartThinking(GetPos, m_limits, moves);
 }
 #endif
 
@@ -138,15 +138,15 @@ void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 		return;
 	}
 
-	pos.Set(sfen, pos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
-	pos.GetSearcher()->m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
+	pos.Set(sfen, pos.GetRucksack()->m_ownerHerosPub.GetFirstCaptain());
+	pos.GetRucksack()->m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 
 	Ply currentPly = pos.GetGamePly();
 	while (ssCmd >> token) {
 		const Move move = this->UsiToMove(pos, token);
 		if (move.IsNone()) break;
-		pos.GetSearcher()->m_setUpStates->push(StateInfo());
-		pos.DoMove(move, pos.GetSearcher()->m_setUpStates->top());
+		pos.GetRucksack()->m_setUpStates->push(StateInfo());
+		pos.DoMove(move, pos.GetRucksack()->m_setUpStates->top());
 		++currentPly;
 	}
 	pos.SetStartPosPly(currentPly);

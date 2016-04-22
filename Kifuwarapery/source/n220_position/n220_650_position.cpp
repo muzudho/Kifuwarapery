@@ -241,7 +241,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		handKey -= GetZobHand(hpTo, us);
 		boardKey += GetZobrist(ptTo, to, us);
 
-		prefetch(GetCsearcher()->m_tt.FirstEntry(boardKey + handKey));
+		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 
 		const int handnum = GetHand(us).NumOf(hpTo);
 		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpTo] + handnum];
@@ -318,7 +318,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 				-PieceScore::GetCapturePieceScore(ptCaptured)
 			);
 		}
-		prefetch(GetCsearcher()->m_tt.FirstEntry(boardKey + handKey));
+		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
 		// Black と White の or を取る方が速いはず。
 		m_byTypeBB_[N00_Occupied] = this->GetBbOf10(Black) | this->GetBbOf10(White);
@@ -1817,19 +1817,19 @@ const ChangedLists & Position::GetCl() const
 	return this->m_st_->m_cl;
 }
 
-const Rucksack * Position::GetCsearcher() const
+const Rucksack * Position::GetConstRucksack() const
 {
-	return this->m_searcher_;
+	return this->m_pRucksack_;
 }
 
-Rucksack * Position::GetSearcher() const
+Rucksack * Position::GetRucksack() const
 {
-	return this->m_searcher_;
+	return this->m_pRucksack_;
 }
 
-void Position::SetSearcher(Rucksack * s)
+void Position::SetRucksack(Rucksack * s)
 {
-	this->m_searcher_ = s;
+	this->m_pRucksack_ = s;
 }
 
 namespace {
@@ -1874,7 +1874,7 @@ Position::Position()
 	// デフォルト・コンストラクタは空っぽ☆（＾ｑ＾）
 }
 
-Position::Position(Rucksack * s) : m_searcher_(s)
+Position::Position(Rucksack * s) : m_pRucksack_(s)
 {
 }
 
@@ -1892,7 +1892,7 @@ Position::Position(const Position & pos, Military * th)
 Position::Position(const std::string & sfen, Military * th, Rucksack * s)
 {
 	this->Set(sfen, th);
-	this->SetSearcher(s);
+	this->SetRucksack(s);
 }
 
 Position& Position::operator = (const Position& pos) {
@@ -1912,9 +1912,9 @@ void Position::Set(const std::string& sfen, Military* th) {
 	char token;
 	Square sq = A9;
 
-	Rucksack* s = std::move(m_searcher_);
+	Rucksack* s = std::move(m_pRucksack_);
 	this->Clear();
-	this->SetSearcher(s);
+	this->SetRucksack(s);
 
 	// 盤上の駒
 	while (ss.get(token) && token != ' ') {

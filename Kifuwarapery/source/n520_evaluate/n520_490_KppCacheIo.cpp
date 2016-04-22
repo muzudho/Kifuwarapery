@@ -99,7 +99,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
-	SYNCCOUT << "(WriteKppCache3Files 1/9) File Search: path3=[" << file3.c_str() << "]" << SYNCENDL;
+	SYNCCOUT << "(WriteKppCache3Files 1/9) File: path3=[" << file3.c_str() << "]" << SYNCENDL;
 
 	// obj ディレクトリがなければ作ります。
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
@@ -295,16 +295,16 @@ std::string KppCacheIo::GetLv2FilePath(const std::string & dirName, int k1)
 
 std::string KppCacheIo::GetLv3FilePath(const std::string & dirName, int k1, int p1)
 {
-	//SYNCCOUT << "(Write) File Search: dirName=[" << dirName << "]" << SYNCENDL;
+	//SYNCCOUT << "(Write) File: dirName=[" << dirName << "]" << SYNCENDL;
 
 	std::string dir1 = KkKkpKppStorage1::AppendSlashIfNone(dirName) + "obj";
-	//SYNCCOUT << "(Write) File Search: dir1=[" << dir1 << "]" << SYNCENDL;
+	//SYNCCOUT << "(Write) File: dir1=[" << dir1 << "]" << SYNCENDL;
 
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";
-	//SYNCCOUT << "(Write) File Search: dir2=[" << dir2 << "]" << SYNCENDL;
+	//SYNCCOUT << "(Write) File: dir2=[" << dir2 << "]" << SYNCENDL;
 
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
-	//SYNCCOUT << "(Write) File Search: path3=[" << file3 << "]" << SYNCENDL;
+	//SYNCCOUT << "(Write) File: path3=[" << file3 << "]" << SYNCENDL;
 
 	return file3;
 }

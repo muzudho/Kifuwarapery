@@ -14,10 +14,9 @@
 class NodetypeRoot : public NodetypeAbstract {
 public:
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	static void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) {
-		searcher.Search(
-			NodeType::SplitedNodeRoot, pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
+	void GoSearch(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const {
+		Hitchhiker::Travel(	rucksack, NodeType::SplitedNodeRoot,
+			pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
 	}
 
 	const bool IsPvNode() const { return true; };

@@ -19,6 +19,7 @@
 #include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_learn___/n800_100_stopwatch.hpp"
 //#include "../n885_searcher/n885_600_iterativeDeepeningLoop.hpp"
+#include "n885_510_hitchhiker.hpp"	// FIXME:
 
 using namespace std;
 
@@ -100,10 +101,6 @@ public:
 	// 本譜の情報？
 	std::string				PvInfoToUSI(Position& pos, const Ply depth, const ScoreIndex alpha, const ScoreIndex beta);
 
-	// Ｑサーチ？
-	template <NodeType NT, bool INCHECK>
-	ScoreIndex					Qsearch(Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth);
-
 #if defined INANIWA_SHIFT
 	void					detectInaniwa(const Position& GetPos);
 #endif
@@ -111,13 +108,6 @@ public:
 	void						detectBishopInDanger(const Position& GetPos);
 #endif
 
-	// サーチ？
-	ScoreIndex Search(
-		NodeType NT,
-		Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode);
-
-	// 考える？
-	void					Think();
 
 	// 時間チェック？
 	void					CheckTime();
@@ -203,15 +193,26 @@ public://private:
 		return false;
 	}
 
-	ScoreIndex scoreToTT(const ScoreIndex s, const Ply ply) {
-		assert(s != ScoreNone);
+	// トランスポジション・テーブル用にスコアを変更する？
+	ScoreIndex ConvertScoreToTT(const ScoreIndex score, const Ply ply) {
+		assert(score != ScoreNone);
 
-		return (ScoreMateInMaxPly <= s ? s + static_cast<ScoreIndex>(ply)
-			: s <= ScoreMatedInMaxPly ? s - static_cast<ScoreIndex>(ply)
-			: s);
+		return (
+			// mate表示をするとき☆
+			ScoreMateInMaxPly <= score ?
+			// スコアの土台に、手数（mate）を乗せるぜ☆！
+			score + static_cast<ScoreIndex>(ply)
+			:
+			score <= ScoreMatedInMaxPly ?
+			// 先後逆のときも、手数を乗せる（マイナスをもっと引く）のは同じ☆
+			score - static_cast<ScoreIndex>(ply)
+			// それ以外のときは、そのままスコア表示。
+			: score
+		);
 	}
 
-	ScoreIndex scoreFromTT(const ScoreIndex s, const Ply ply) {
+	// トランスポジション・テーブル用のスコアから、スコアを復元する？
+	ScoreIndex ConvertScoreFromTT(const ScoreIndex s, const Ply ply) {
 		return (s == ScoreNone ? ScoreNone
 			: ScoreMateInMaxPly <= s ? s - static_cast<ScoreIndex>(ply)
 			: s <= ScoreMatedInMaxPly ? s + static_cast<ScoreIndex>(ply)

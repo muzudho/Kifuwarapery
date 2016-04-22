@@ -14,7 +14,7 @@
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
 
-	static void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) {
+	void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
 		UNREACHABLE;
 	}
 

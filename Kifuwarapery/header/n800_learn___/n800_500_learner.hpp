@@ -170,7 +170,7 @@ struct BookMoveData {
 class Learner {
 public:
 	void learn(Position& GetPos, std::istringstream& ssCmd) {
-		eval_.initOptions(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"], false);
+		eval_.initOptions(GetPos.GetRucksack()->m_engineOptions["Eval_Dir"], false);
 		s64 gameNum;
 		std::string recordFileName;
 		std::string blackRecordFileName;
@@ -227,7 +227,7 @@ public:
 			// 一時オブジェクトのParse2Dataがスタックに出来ることでプログラムが落ちるので、コピーコンストラクタにする。
 			parse2Datum_.push_back(parse2Data_);
 		}
-		setLearnOptions(*GetPos.GetSearcher());
+		setLearnOptions(*GetPos.GetRucksack());
 		mt_ = std::mt19937(std::chrono::system_clock::now().time_since_epoch().m_count());
 		mt64_ = std::mt19937_64(std::chrono::system_clock::now().time_since_epoch().m_count());
 		for (int i = 0; ; ++i) {
@@ -259,7 +259,7 @@ private:
 		textA >> elem; // 引き分け勝ち負け
 		bmdBase[Black].winner = (elem == "1");
 		bmdBase[White].winner = (elem == "2");
-		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
+		GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetRucksack()->m_ownerHerosPub.GetFirstCaptain());
 		StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
 		UsiOperation usiOperation;
 		while (true) {
@@ -338,33 +338,33 @@ private:
 	}
 	void learnParse1Body(Position& GetPos, std::mt19937& mt) {
 		std::uniform_int_distribution<Ply> dist(minDepth_, maxDepth_);
-		GetPos.GetSearcher()->m_tt.Clear();
+		GetPos.GetRucksack()->m_tt.Clear();
 		for (size_t i = lockingIndexIncrement<true>(); i < gameNumForIteration_; i = lockingIndexIncrement<true>()) {
 			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetRucksack()->m_ownerHerosPub.GetFirstCaptain());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				if (bmd.useLearning) {
-					GetPos.GetSearcher()->m_alpha = -ScoreMaxEvaluate;
-					GetPos.GetSearcher()->m_beta  =  ScoreMaxEvaluate;
+					GetPos.GetRucksack()->m_alpha = -ScoreMaxEvaluate;
+					GetPos.GetRucksack()->m_beta  =  ScoreMaxEvaluate;
 					Go(GetPos, dist(mt), bmd.GetMove);
-					const ScoreIndex recordScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
+					const ScoreIndex recordScore = GetPos.GetRucksack()->m_rootMoves[0].m_score_;
 					++moveCount_;
 					bmd.otherPVExist = false;
 					bmd.pvBuffer.Clear();
 					if (abs(recordScore) < ScoreMaxEvaluate) {
 						int recordIsNth = 0; // 正解の手が何番目に良い手か。0から数える。
-						auto& recordPv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
+						auto& recordPv = GetPos.GetRucksack()->m_rootMoves[0].m_pv_;
 						bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(recordPv), std::IsEnd(recordPv));
 						const auto recordPVSize = bmd.pvBuffer.m_size();
 						for (MoveList<N09_LegalAll> ml(GetPos); !ml.IsEnd(); ++ml) {
 							if (ml.GetMove() != bmd.GetMove) {
-								GetPos.GetSearcher()->m_alpha = recordScore - FVWindow;
-								GetPos.GetSearcher()->m_beta  = recordScore + FVWindow;
+								GetPos.GetRucksack()->m_alpha = recordScore - FVWindow;
+								GetPos.GetRucksack()->m_beta  = recordScore + FVWindow;
 								Go(GetPos, dist(mt), ml.GetMove());
-								const ScoreIndex GetScore = GetPos.GetSearcher()->m_rootMoves[0].m_score_;
-								if (GetPos.GetSearcher()->m_alpha < GetScore && GetScore < GetPos.GetSearcher()->m_beta) {
-									auto& pv = GetPos.GetSearcher()->m_rootMoves[0].m_pv_;
+								const ScoreIndex GetScore = GetPos.GetRucksack()->m_rootMoves[0].m_score_;
+								if (GetPos.GetRucksack()->m_alpha < GetScore && GetScore < GetPos.GetRucksack()->m_beta) {
+									auto& pv = GetPos.GetRucksack()->m_rootMoves[0].m_pv_;
 									bmd.pvBuffer.insert(std::IsEnd(bmd.pvBuffer), std::begin(pv), std::IsEnd(pv));
 								}
 								if (recordScore < GetScore)
@@ -466,7 +466,7 @@ private:
 		Flashlight m_pFlashlightBox[2];
 		for (size_t i = lockingIndexIncrement<false>(); i < gameNumForIteration_; i = lockingIndexIncrement<false>()) {
 			StateStackPtr m_setUpStates = StateStackPtr(new std::stack<StateInfo>());
-			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetSearcher()->m_ownerHerosPub.GetFirstCaptain());
+			GetPos.SetP(g_DefaultStartPositionSFEN, GetPos.GetRucksack()->m_ownerHerosPub.GetFirstCaptain());
 			auto& gameMoves = bookMovesDatum_[i];
 			for (auto& bmd : gameMoves) {
 				PRINT_PV(GetPos.Print());
@@ -545,8 +545,8 @@ private:
 			lowerDimension(parse2EvalBase_, parse2Data_.params);
 			setUpdateMask(step);
 			std::cout << "update eval ... " << std::flush;
-			if (usePenalty_) updateEval<true >(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
-			else             updateEval<false>(GetPos.GetSearcher()->m_engineOptions["Eval_Dir"]);
+			if (usePenalty_) updateEval<true >(GetPos.GetRucksack()->m_engineOptions["Eval_Dir"]);
+			else             updateEval<false>(GetPos.GetRucksack()->m_engineOptions["Eval_Dir"]);
 			std::cout << "done" << std::endl;
 			std::cout << "parse2 1 step elapsed: " << t.GetElapsed() / 1000 << "[sec]" << std::endl;
 			Print();

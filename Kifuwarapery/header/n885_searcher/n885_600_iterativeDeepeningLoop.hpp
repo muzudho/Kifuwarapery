@@ -123,8 +123,7 @@ public:
 				while (true) {
 					// 探索を行う。
 					flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-					bestScore = rucksack.Search(
-						NodeType::N00_Root,
+					bestScore = Hitchhiker::Travel(	rucksack, NodeType::N00_Root,
 						pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 					// 先頭が最善手になるようにソート
 					UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
@@ -248,8 +247,8 @@ public:
 					(flashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 					(flashlight + 1)->m_excludedMove = rucksack.m_rootMoves[0].m_pv_[0];
 					(flashlight + 1)->m_skipNullMove = true;
-					const ScoreIndex s = rucksack.Search(
-						NodeType::N02_NonPV, pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
+					const ScoreIndex s = Hitchhiker::Travel( rucksack, NodeType::N02_NonPV,
+						pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
 					(flashlight + 1)->m_skipNullMove = false;
 					(flashlight + 1)->m_excludedMove = g_MOVE_NONE;
 

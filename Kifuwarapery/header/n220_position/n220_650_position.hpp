@@ -181,8 +181,7 @@ public:
 
 	void UndoMove(const Move move);
 
-	template <bool DO>
-	void DoNullMove(StateInfo& backUpSt);
+	void DoNullMove(bool DO, StateInfo& backUpSt);
 
 	ScoreIndex GetSee(const Move move, const int asymmThreshold = 0) const;
 
@@ -239,11 +238,11 @@ public:
 
 	const ChangedLists& GetCl() const;
 
-	const Rucksack* GetCsearcher() const;
+	const Rucksack* GetConstRucksack() const;
 
-	Rucksack* GetSearcher() const;
+	Rucksack* GetRucksack() const;
 
-	void SetSearcher(Rucksack* s);
+	void SetRucksack(Rucksack* s);
 
 #if !defined NDEBUG
 	// for debug
@@ -370,7 +369,7 @@ private:
 
 	u64 m_nodes_;
 
-	Rucksack* m_searcher_;
+	Rucksack* m_pRucksack_;
 
 	static Key m_ZOBRIST_[N15_PieceTypeNum][SquareNum][ColorNum];
 

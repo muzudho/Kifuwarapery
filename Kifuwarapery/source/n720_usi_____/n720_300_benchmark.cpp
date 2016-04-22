@@ -21,7 +21,7 @@ void Benchmark(Position& pos) {
 							 "name Max_Random_Score_Diff value 0"};
 	for (auto& str : options) {
 		std::istringstream is(str);
-		pos.GetSearcher()->SetOption(is);
+		pos.GetRucksack()->SetOption(is);
 	}
 
 	std::ifstream ifs("benchmark.sfen");
@@ -35,6 +35,6 @@ void Benchmark(Position& pos) {
 
 		std::istringstream ss_go("byoyomi 10000");
 		usiOperation.Go(pos, ss_go);
-		pos.GetSearcher()->m_ownerHerosPub.WaitForThinkFinished();
+		pos.GetRucksack()->m_ownerHerosPub.WaitForThinkFinished();
 	}
 }
