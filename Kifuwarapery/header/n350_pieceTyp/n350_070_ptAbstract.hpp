@@ -36,4 +36,11 @@ public:
 		const Color turn
 	) const = 0;
 
+	virtual PieceType TryPromoteNextAttacker(
+		const PieceType PT,
+		const Square to,
+		const Color turn,
+		const Square from
+	) const = 0;
+
 };

@@ -505,17 +505,10 @@ namespace {
 			);
 			// attackersは参照なのでこれで呼び出し元に反映されるはず☆？
 
-			if (PT == N01_Pawn || PT == N02_Lance || PT == N03_Knight) {
-				if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to))) {
-					return PT + PTPromote;
-				}
-			}
-			if (PT == N04_Silver || PT == N05_Bishop || PT == N06_Rook) {
-				if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to)) || ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(from))) {
-					return PT + PTPromote;
-				}
-			}
-			return PT;
+			// 歩、香、桂は　陣地に飛び込んだとき、成れる時には成る☆
+			// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
+			// それ以外の駒種類は、そのまま返す☆
+			return PieceTypeArray::m_ptArray[PT]->TryPromoteNextAttacker(PT, to, turn, from);
 		}
 		return nextAttacker<SEENextPieceType<PT>::value>(pos, to, opponentAttackers, occupied, attackers, turn);
 	}

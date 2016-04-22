@@ -45,6 +45,16 @@ public:
 		return attackers;
 	}
 
+	PieceType TryPromoteNextAttacker(
+		const PieceType PT,
+		const Square to,
+		const Color turn,
+		const Square from
+	) const {
+		// ‚»‚êˆÈŠO‚Ì‹îí—Ş‚ÍA‚»‚Ì‚Ü‚Ü•Ô‚·™
+		return PT;
+	}
+
 };
 
 

@@ -58,4 +58,18 @@ public:
 		return attackers;
 	}
 
+	PieceType TryPromoteNextAttacker(
+		const PieceType PT,
+		const Square to,
+		const Color turn,
+		const Square from
+	) const {
+		// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
+		if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to)) || ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(from))) {
+			return PT + PTPromote;
+		}
+		// それ以外の駒種類は、そのまま返す☆
+		return PT;
+	}
+
 };

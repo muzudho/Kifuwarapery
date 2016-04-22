@@ -62,4 +62,18 @@ public:
 		return attackers;
 	}
 
+	PieceType TryPromoteNextAttacker(
+		const PieceType PT,
+		const Square to,
+		const Color turn,
+		const Square from
+	) const {
+		// 歩、香、桂は　陣地に飛び込んだとき、成れる時には成る☆
+		if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to))) {
+			return PT + PTPromote;
+		}
+		// それ以外の駒種類は、そのまま返す☆
+		return PT;
+	}
+
 };
