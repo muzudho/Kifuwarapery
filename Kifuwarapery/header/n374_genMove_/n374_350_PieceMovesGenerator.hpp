@@ -15,7 +15,7 @@
 #include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_040_ptEvent.hpp"
-#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "../n372_piece___/n372_070_pieceAbstract.hpp"
 #include "../n372_piece___/n372_500_pieceArray.hpp"
 #include "n374_040_pieceMoveEvent.hpp"
@@ -92,7 +92,7 @@ public:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from);
-			Bitboard toBB = PieceTypeArray::m_lance.GetAttacks2From(ptEvent1) & target;
+			Bitboard toBB = PiecetypePrograms::m_LANCE.GetAttacks2From(ptEvent1) & target;
 			do {
 				if (toBB.Exists1Bit()) {
 					// 駒取り対象は必ず一つ以下なので、toBB のビットを 0 にする必要がない。
@@ -142,7 +142,7 @@ public:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceTypeEvent ptEvent1(g_nullBitboard, ptEvent.m_us, from);
-			Bitboard toBB = PieceTypeArray::m_knight.GetAttacks2From(ptEvent1) & target;
+			Bitboard toBB = PiecetypePrograms::m_KNIGHT.GetAttacks2From(ptEvent1) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
@@ -180,7 +180,7 @@ public:
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
 			const PieceTypeEvent ptEvent1(g_nullBitboard, ptEvent.m_us, from);
-			Bitboard toBB = PieceTypeArray::m_silver.GetAttacks2From(ptEvent1) & target;
+			Bitboard toBB = PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent1) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
@@ -251,7 +251,7 @@ public:
 	) {
 		const Square from = ptEvent.m_pos.GetKingSquare(ptEvent.m_us);
 		const PieceTypeEvent ptEvent1(g_nullBitboard, ptEvent.m_us, from);
-		Bitboard toBB = PieceTypeArray::m_king.GetAttacks2From(ptEvent1) & target;
+		Bitboard toBB = PiecetypePrograms::m_KING.GetAttacks2From(ptEvent1) & target;
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N08_King, from, to, ptEvent.m_pos);

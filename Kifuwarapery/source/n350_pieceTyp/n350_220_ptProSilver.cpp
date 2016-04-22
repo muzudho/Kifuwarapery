@@ -16,7 +16,7 @@
 #include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_220_ptProSilver.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
 PieceType PtProSilver::AppendToNextAttackerAndTryPromote(
@@ -34,10 +34,10 @@ PieceType PtProSilver::AppendToNextAttackerAndTryPromote(
 		const Square from = bb.GetFirstOneFromI9();
 		g_setMaskBb.XorBit(&occupied, from);
 
-		attackers |= (g_lanceAttackBb.GetControllBb(occupied, UtilColor::OppositeColor(ptsEvent.m_turn), ptsEvent.m_to) &
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn), ptsEvent.m_to) &
 			ptsEvent.m_pos.GetBbOf20(N02_Lance, ptsEvent.m_turn))
 			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) &
-				ptsEvent.m_pos.GetBbOf20(N02_Lance, UtilColor::OppositeColor(ptsEvent.m_turn)))
+				ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn)))
 			| (g_rookAttackBb.GetControllBb(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N06_Rook, N14_Dragon))
 			| (g_bishopAttackBb.BishopAttack(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N05_Bishop, N13_Horse));
 
@@ -45,7 +45,7 @@ PieceType PtProSilver::AppendToNextAttackerAndTryPromote(
 		return PT;
 	}
 
-	return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
+	return PiecetypePrograms::m_PIECETYPE_PROGRAMS[nextPT]->AppendToNextAttackerAndTryPromote(
 		occupied,
 		attackers,
 		PieceType::N07_Gold,

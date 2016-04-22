@@ -23,7 +23,7 @@ void GoldAttackBb::Initialize()
 
 void GoldAttackBb::InitCheckTableGold() {
 	for (Color c = Black; c < ColorNum; ++c) {
-		const Color opp = UtilColor::OppositeColor(c);
+		const Color opp = ConvColor::OPPOSITE_COLOR10(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_goldAttackBb.m_goldCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();
 			Bitboard checkBB = g_goldAttackBb.GetControllBb(opp, sq);

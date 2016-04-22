@@ -1,4 +1,4 @@
-﻿#include "../../header/n887_nodeType/n887_100_nodeTypeRoot.hpp"
+﻿#include "../../header/n887_nodeType/n887_100_nodetypeRoot.hpp"
 
 
-NodeTypeRoot g_nodeTypeRoot;
+NodetypeRoot g_nodetypeRoot;

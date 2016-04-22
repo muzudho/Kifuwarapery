@@ -16,7 +16,7 @@
 #include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_150_ptBishop.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
 PieceType PtBishop::AppendToNextAttackerAndTryPromote(
@@ -45,7 +45,7 @@ PieceType PtBishop::AppendToNextAttackerAndTryPromote(
 		return PT;
 	}
 
-	return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
+	return PiecetypePrograms::m_PIECETYPE_PROGRAMS[nextPT]->AppendToNextAttackerAndTryPromote(
 		occupied,
 		attackers,
 		PieceType::N13_Horse,

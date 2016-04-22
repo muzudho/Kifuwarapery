@@ -19,7 +19,7 @@
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
@@ -31,10 +31,11 @@
 #include "../../header/n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
-#include "../../header/n883_nodeType/n883_500_nodeTypeAbstract.hpp"
+#include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
 #include "../../header/n885_searcher/n885_500_rucksack.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
+#include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
 //class IterativeDeepeningLoop;
 //static inline void IterativeDeepeningLoop::Execute(Rucksack& rucksack, Position& pos);
 
@@ -42,7 +43,7 @@ using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
-extern NodeTypeAbstract* g_nodeTypeArray[];
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
@@ -201,7 +202,7 @@ ScoreIndex Rucksack::Qsearch(Position& pos, Flashlight* ss, ScoreIndex alpha, Sc
 	NextmoveEvent mp(pos, ttMove, depth, this->m_history, (ss-1)->m_currentMove.To());
 	const CheckInfo ci(pos);
 
-	while (!(move = mp.GetNextMove<false>()).IsNone())
+	while (!(move = mp.GetNextMove(false)).IsNone())
 	{
 		assert(pos.IsOK());
 
@@ -298,7 +299,7 @@ void Rucksack::detectInaniwa(const Position& GetPos) {
 	if (inaniwaFlag == NotInaniwa && 20 <= GetPos.GetGamePly()) {
 		const Rank TRank7 = (GetPos.GetTurn() == Black ? Rank7 : Rank3); // not constant
 		const Bitboard mask = g_rankMaskBb.GetRankMask(TRank7) & ~g_fileMaskBb.GetFileMask(FileA) & ~g_fileMaskBb.GetFileMask(FileI);
-		if ((GetPos.GetBbOf(N01_Pawn, UtilColor::OppositeColor(GetPos.GetTurn())) & mask) == mask) {
+		if ((GetPos.GetBbOf(N01_Pawn, ConvColor::OPPOSITE_COLOR10(GetPos.GetTurn())) & mask) == mask) {
 			inaniwaFlag = (GetPos.GetTurn() == Black ? InaniwaIsWhite : InaniwaIsBlack);
 			m_tt.Clear();
 		}
@@ -308,7 +309,7 @@ void Rucksack::detectInaniwa(const Position& GetPos) {
 #if defined BISHOP_IN_DANGER
 void Rucksack::detectBishopInDanger(const Position& GetPos) {
 	if (bishopInDangerFlag == NotBishopInDanger && GetPos.GetGamePly() <= 50) {
-		const Color them = UtilColor::OppositeColor(GetPos.GetTurn());
+		const Color them = ConvColor::OPPOSITE_COLOR10(GetPos.GetTurn());
 		if (GetPos.m_hand(GetPos.GetTurn()).Exists<HBishop>()
 			&& GetPos.GetBbOf(N04_Silver, them).IsSet(INVERSE_IF_WHITE20(them, H3))
 			&& (GetPos.GetBbOf(N08_King  , them).IsSet(INVERSE_IF_WHITE20(them, F2))
@@ -353,7 +354,7 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 	dst->m_handKey       = src->m_handKey;
 	dst->m_pliesFromNull = src->m_pliesFromNull;
 	dst->m_hand = GetHand(GetTurn());
-	m_turn_ = UtilColor::OppositeColor(GetTurn());
+	m_turn_ = ConvColor::OPPOSITE_COLOR10(GetTurn());
 
 	if (DO) {
 		m_st_->m_boardKey ^= GetZobTurn();
@@ -366,13 +367,15 @@ template <bool DO> void Position::DoNullMove(StateInfo& backUpSt) {
 	assert(IsOK());
 }
 
-template <NodeType NT>
 ScoreIndex Rucksack::Search(
+	NodeType NT,
 	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode
 ) {
-	const bool PVNode = (NT == N01_PV || NT == N00_Root || NT == SplitedNodePV || NT == SplitedNodeRoot);
-	const bool SPNode = (NT == SplitedNodePV || NT == SplitedNodeNonPV || NT == SplitedNodeRoot);
-	const bool RootNode = (NT == N00_Root || NT == SplitedNodeRoot);
+	NodetypeAbstract* nodetypeProgram = g_NODETYPE_PROGRAMS[NT];
+	const bool PVNode = nodetypeProgram->IsPvNode();
+	const bool SPNode = nodetypeProgram->IsSplitedNode();
+	const bool RootNode = nodetypeProgram->IsRootNode();
+
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(PVNode || (alpha == beta - 1));
@@ -382,7 +385,7 @@ ScoreIndex Rucksack::Search(
 	Move movesSearched[64];
 	StateInfo st;
 	const TTEntry* tte;
-	SplitedNode* splitedNode;
+	SplitedNode* splitedNode = nullptr;//(^q^)
 	Key posKey;
 	Move ttMove;
 	Move move;
@@ -592,7 +595,7 @@ ScoreIndex Rucksack::Search(
 		(ss+1)->m_skipNullMove = true;
 		ScoreIndex nullScore = (depth - reduction < OnePly ?
 						   -Qsearch<N02_NonPV, false>(pos, ss + 1, -beta, -alpha, Depth0)
-						   : -Search<N02_NonPV>(pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
+						   : -Search(NodeType::N02_NonPV, pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
 		(ss+1)->m_skipNullMove = false;
 		pos.DoNullMove<false>(st);
 
@@ -607,7 +610,7 @@ ScoreIndex Rucksack::Search(
 
 			ss->m_skipNullMove = true;
 			assert(Depth0 < depth - reduction);
-			const ScoreIndex s = Search<N02_NonPV>(pos, ss, alpha, beta, depth - reduction, false);
+			const ScoreIndex s = Search(NodeType::N02_NonPV, pos, ss, alpha, beta, depth - reduction, false);
 			ss->m_skipNullMove = false;
 
 			if (beta <= s) {
@@ -646,12 +649,12 @@ ScoreIndex Rucksack::Search(
 		// move.cap() は前回(一手前)の指し手で取った駒の種類
 		NextmoveEvent mp(pos, ttMove, this->m_history, move.GetCap());
 		const CheckInfo ci(pos);
-		while (!(move = mp.GetNextMove<false>()).IsNone()) {
+		while (!(move = mp.GetNextMove(false)).IsNone()) {
 			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				ss->m_currentMove = move;
 				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
 				(ss+1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				score = -Search<N02_NonPV>(pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
+				score = -Search(NodeType::N02_NonPV, pos, ss+1, -rbeta, -rbeta+1, rdepth, !cutNode);
 				pos.UndoMove(move);
 				if (rbeta <= score) {
 					return score;
@@ -671,7 +674,14 @@ iid_start:
 		const Depth d = (PVNode ? depth - 2 * OnePly : depth / 2);
 
 		ss->m_skipNullMove = true;
-		Search<PVNode ? NodeType::N01_PV : NodeType::N02_NonPV>(pos, ss, alpha, beta, d, true);
+		if (PVNode)
+		{
+			Search(NodeType::N01_PV, pos, ss, alpha, beta, d, true);
+		}
+		else
+		{
+			Search(NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
+		}
 		ss->m_skipNullMove = false;
 
 		tte = m_tt.Probe(posKey);
@@ -695,7 +705,7 @@ split_point_start:
 
 	// step11
 	// Loop through moves
-	while (!(move = mp.GetNextMove<SPNode>()).IsNone()) {
+	while (!(move = mp.GetNextMove(SPNode)).IsNone()) {
 		if (move == excludedMove) {
 			continue;
 		}
@@ -754,7 +764,7 @@ split_point_start:
 			const ScoreIndex rBeta = ttScore - static_cast<ScoreIndex>(depth);
 			ss->m_excludedMove = move;
 			ss->m_skipNullMove = true;
-			score = Search<N02_NonPV>(pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
+			score = Search(N02_NonPV, pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
 			ss->m_skipNullMove = false;
 			ss->m_excludedMove = g_MOVE_NONE;
 
@@ -788,7 +798,7 @@ split_point_start:
 			}
 
 			// score based pruning
-			const Depth predictedDepth = newDepth - g_reductions.reduction<PVNode>(depth, moveCount);
+			const Depth predictedDepth = newDepth - g_reductions.reduction(PVNode, depth, moveCount);
 			// gain を 2倍にする。
 			const ScoreIndex futilityScore = ss->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
 				+ 2 * m_gains.GetValue(move.IsDrop(), ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
@@ -839,7 +849,7 @@ split_point_start:
 			&& ss->m_killers[0] != move
 			&& ss->m_killers[1] != move)
 		{
-			ss->m_reduction = g_reductions.reduction<PVNode>(depth, moveCount);
+			ss->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
 			if (!PVNode && cutNode) {
 				ss->m_reduction += OnePly;
 			}
@@ -848,7 +858,8 @@ split_point_start:
 				alpha = splitedNode->m_alpha;
 			}
 			// PVS
-			score = -Search<N02_NonPV>(pos, ss+1, -(alpha + 1), -alpha, d, true);
+			score = -Search(
+				N02_NonPV, pos, ss+1, -(alpha + 1), -alpha, d, true);
 
 			doFullDepthSearch = (alpha < score && ss->m_reduction != Depth0);
 			ss->m_reduction = Depth0;
@@ -867,7 +878,8 @@ split_point_start:
 			score = (newDepth < OnePly ?
 					 (givesCheck ? -Qsearch<N02_NonPV, true>(pos, ss+1, -(alpha + 1), -alpha, Depth0)
 					  : -Qsearch<N02_NonPV, false>(pos, ss+1, -(alpha + 1), -alpha, Depth0))
-					 : -Search<N02_NonPV>(pos, ss+1, -(alpha + 1), -alpha, newDepth, !cutNode));
+					 : -Search(
+						 N02_NonPV, pos, ss+1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 
 		// 通常の探索
@@ -875,7 +887,8 @@ split_point_start:
 			score = (newDepth < OnePly ?
 					 (givesCheck ? -Qsearch<N01_PV, true>(pos, ss+1, -beta, -alpha, Depth0)
 					  : -Qsearch<N01_PV, false>(pos, ss+1, -beta, -alpha, Depth0))
-					 : -Search<N01_PV>(pos, ss+1, -beta, -alpha, newDepth, false));
+					 : -Search(
+						 N01_PV, pos, ss+1, -beta, -alpha, newDepth, false));
 		}
 
 		// step17
@@ -939,6 +952,28 @@ split_point_start:
 		}
 
 		// step19
+		bool isBreak = false;
+		nodetypeProgram->DoStep19(
+			isBreak,
+			(*this),
+			depth,
+			thisThread,
+			bestScore,
+			beta,
+			pos,
+			*ss,
+			alpha,
+			bestMove,
+			threatMove,
+			moveCount,
+			mp,
+			NT,
+			cutNode
+			);
+		if (isBreak) {
+			break;
+		}
+		/*
 		if (!SPNode
 			&& m_ownerHerosPub.GetMinSplitDepth() <= depth
 			&& m_ownerHerosPub.GetAvailableSlave(thisThread)
@@ -951,6 +986,7 @@ split_point_start:
 				break;
 			}
 		}
+		//*/
 	}
 
 	if (SPNode) {
@@ -961,40 +997,20 @@ split_point_start:
 	if (moveCount == 0) {
 		return !excludedMove.IsNone() ? alpha : UtilScore::MatedIn(ss->m_ply);
 	}
-
-	if (bestScore == -ScoreInfinite) {
-		assert(playedMoveCount == 0);
-		bestScore = alpha;
-	}
-
-	if (beta <= bestScore) {
-		// failed high
-		m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply), BoundLower, depth,
-				 bestMove, ss->m_staticEval);
-
-		if (!bestMove.IsCaptureOrPawnPromotion() && !inCheck) {
-			if (bestMove != ss->m_killers[0]) {
-				ss->m_killers[1] = ss->m_killers[0];
-				ss->m_killers[0] = bestMove;
-			}
-
-			const ScoreIndex bonus = static_cast<ScoreIndex>(depth * depth);
-			const Piece pc1 = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), bestMove.GetPieceTypeFromOrDropped());
-			this->m_history.Update(bestMove.IsDrop(), pc1, bestMove.To(), bonus);
-
-			for (int i = 0; i < playedMoveCount - 1; ++i) {
-				const Move m = movesSearched[i];
-				const Piece pc2 = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), m.GetPieceTypeFromOrDropped());
-				this->m_history.Update(m.IsDrop(), pc2, m.To(), -bonus);
-			}
-		}
-	}
-	else {
-		// failed low or PV search
-		m_tt.Store(posKey, scoreToTT(bestScore, ss->m_ply),
-				 ((PVNode && !bestMove.IsNone()) ? BoundExact : BoundUpper),
-				 depth, bestMove, ss->m_staticEval);
-	}
+	nodetypeProgram->DoStep20(
+		*this,
+		alpha,
+		*ss,
+		bestScore,
+		playedMoveCount,
+		beta,
+		posKey,
+		depth,
+		bestMove,
+		inCheck,
+		pos,
+		movesSearched
+		);
 
 	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
 
@@ -1310,7 +1326,7 @@ void Military::IdleLoop() {
 			m_activePosition = &pos;
 
 
-			g_nodeTypeArray[sp->m_nodeType]->GoSearch(*m_pSearcher, pos, ss, *sp);
+			g_NODETYPE_PROGRAMS[sp->m_nodeType]->GoSearch(*m_pSearcher, pos, ss, *sp);
 
 
 			assert(m_searching);

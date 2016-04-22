@@ -5,7 +5,7 @@
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
 // 定義☆（＾ｑ＾）
@@ -15,5 +15,5 @@
 Bitboard UtilAttack::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {//const
 	// FIXME: 配列の範囲チェックをしてないぜ☆（＾ｑ＾）
 	const PieceTypeEvent ptEvent1(occupied, c, sq);
-	return PieceTypeArray::m_ptArray[pType]->GetAttacks2From(ptEvent1);
+	return PiecetypePrograms::m_PIECETYPE_PROGRAMS[pType]->GetAttacks2From(ptEvent1);
 }

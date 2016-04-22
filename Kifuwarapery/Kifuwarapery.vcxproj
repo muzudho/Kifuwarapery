@@ -154,7 +154,7 @@
   <ItemGroup>
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
-    <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp" />
+    <ClInclude Include="header\n105_color___\n105_500_convColor.hpp" />
     <ClInclude Include="header\n110_square__\n110_155_convFile.hpp" />
     <ClInclude Include="header\n110_square__\n110_205_convRank.hpp" />
     <ClInclude Include="header\n110_square__\n110_250_squareDelta.hpp" />
@@ -250,7 +250,7 @@
     <ClInclude Include="header\n350_pieceTyp\n350_240_ptDragon.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_250_ptPieceTypeNum.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_260_ptGoldHorseDragon.hpp" />
-    <ClInclude Include="header\n350_pieceTyp\n350_500_ptArray.hpp" />
+    <ClInclude Include="header\n350_pieceTyp\n350_500_ptPrograms.hpp" />
     <ClInclude Include="header\n351_bonaDir_\n351_090_nullBonaDir.hpp" />
     <ClInclude Include="header\n351_bonaDir_\n351_100_direcMisc.hpp" />
     <ClInclude Include="header\n351_bonaDir_\n351_120_direcFile.hpp" />
@@ -377,7 +377,7 @@
     <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp" />
     <ClInclude Include="header\n800_learn___\n800_100_stopwatch.hpp" />
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp" />
-    <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp" />
+    <ClInclude Include="header\n883_nodeType\n883_070_nodetypeAbstract.hpp" />
     <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp" />
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp" />
     <ClInclude Include="header\n885_searcher\n885_600_iterativeDeepeningLoop.hpp" />
@@ -389,10 +389,13 @@
     <ClInclude Include="header\n886_repeType\n886_140_rtSuperior.hpp" />
     <ClInclude Include="header\n886_repeType\n886_150_rtInferior.hpp" />
     <ClInclude Include="header\n886_repeType\n886_500_rtArray.hpp" />
-    <ClInclude Include="header\n887_nodeType\n887_100_nodeTypeRoot.hpp" />
-    <ClInclude Include="header\n887_nodeType\n887_110_nodeTypePv.hpp" />
-    <ClInclude Include="header\n887_nodeType\n887_120_nodeTypeNonPv.hpp" />
-    <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_100_nodetypeRoot.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_110_nodetypePv.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_120_nodetypeNonPv.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_130_nodetypeSplitedNodeRoot.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_140_nodetypeSplitedNodePv.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.hpp" />
+    <ClInclude Include="header\n887_nodeType\n887_500_nodetypePrograms.hpp" />
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
@@ -467,7 +470,7 @@
     <ClCompile Include="source\n350_pieceTyp\n350_240_ptDragon.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_250_ptPieceTypeNum.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_260_ptGoldHorseDragon.cpp" />
-    <ClCompile Include="source\n350_pieceTyp\n350_500_ptArray.cpp" />
+    <ClCompile Include="source\n350_pieceTyp\n350_500_ptPrograms.cpp" />
     <ClCompile Include="source\n351_bonaDir_\n351_090_nullBonaDir.cpp" />
     <ClCompile Include="source\n351_bonaDir_\n351_100_direcMisc.cpp" />
     <ClCompile Include="source\n351_bonaDir_\n351_120_direcFile.cpp" />
@@ -577,14 +580,17 @@
     <ClCompile Include="source\n760_thread__\n760_350_warrior.cpp" />
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp" />
     <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp" />
-    <ClCompile Include="source\n883_nodeType\n883_500_nodeTypeAbstract.cpp" />
+    <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp" />
     <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp" />
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp" />
     <ClCompile Include="source\n885_searcher\n885_600_iterativeDeepeningLoop.cpp" />
-    <ClCompile Include="source\n887_nodeType\n887_100_nodeTypeRoot.cpp" />
-    <ClCompile Include="source\n887_nodeType\n887_110_nodeTypePv.cpp" />
-    <ClCompile Include="source\n887_nodeType\n887_120_nodeTypeNonPv.cpp" />
-    <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_100_nodetypeRoot.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_110_nodetypePv.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_120_nodetypeNonPv.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_130_nodetypeSplitedNodeRoot.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_140_nodetypeSplitedNodePv.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.cpp" />
+    <ClCompile Include="source\n887_nodeType\n887_500_nodetypePrograms.cpp" />
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp" />
     <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
     <ClCompile Include="source\n900_main____\n900_500_main.cpp" />

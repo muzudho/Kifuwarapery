@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n105_color___/n105_500_convColor.hpp"
 #include "../n110_square__/n110_200_rank.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_104_RankMaskBb.hpp"

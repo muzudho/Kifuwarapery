@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"
-#include "../n105_color___/n105_500_utilColor.hpp"
+#include "../n105_color___/n105_500_convColor.hpp"
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n110_square__/n110_150_file.hpp"
 #include "../n110_square__/n110_155_convFile.hpp"

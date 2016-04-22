@@ -19,7 +19,6 @@ public:
 	const Color m_us;
 	const bool m_all;
 	const Position& m_pos;
-	//const Bitboard& m_target;
 	const Square m_ksq;
 
 public:
@@ -28,14 +27,12 @@ public:
 		const Color us,
 		const bool all,
 		const Position& pos,
-		//const Bitboard& target,
 		const Square ksq
 	):
 		m_mt(mt),
 		m_us(us),
 		m_all(all),
 		m_pos(pos),
-		//m_target(target),
 		m_ksq(ksq)
 	{
 	}

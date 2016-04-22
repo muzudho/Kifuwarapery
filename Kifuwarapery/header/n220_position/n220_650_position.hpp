@@ -281,7 +281,7 @@ private:
 	Bitboard GetHiddenCheckers() const {
 		Bitboard result = Bitboard::CreateAllZeroBB();
 		const Color us = GetTurn();
-		const Color them = UtilColor::OppositeColor(us);
+		const Color them = ConvColor::OPPOSITE_COLOR10(us);
 		// pin する遠隔駒
 		// まずは自駒か敵駒かで大雑把に判別
 		Bitboard pinners = this->GetBbOf10(FindPinned ? them : us);
@@ -372,12 +372,12 @@ private:
 
 	Rucksack* m_searcher_;
 
-	static Key m_zobrist_[N15_PieceTypeNum][SquareNum][ColorNum];
+	static Key m_ZOBRIST_[N15_PieceTypeNum][SquareNum][ColorNum];
 
 	static const Key m_zobTurn_ = 1;
 
-	static Key m_zobHand_[HandPieceNum][ColorNum];
+	static Key m_ZOB_HAND_[HandPieceNum][ColorNum];
 
-	static Key m_zobExclusion_; // todo: これが必要か、要検討
+	static Key m_ZOB_EXCLUSION_; // todo: これが必要か、要検討
 
 };

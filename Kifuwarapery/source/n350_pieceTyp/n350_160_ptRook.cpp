@@ -16,7 +16,7 @@
 #include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_160_ptRook.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
 PieceType PtRook::AppendToNextAttackerAndTryPromote(
@@ -34,9 +34,9 @@ PieceType PtRook::AppendToNextAttackerAndTryPromote(
 		const Square from = bb.GetFirstOneFromI9();
 		g_setMaskBb.XorBit(&occupied, from);
 
-		attackers |= (g_lanceAttackBb.GetControllBb(occupied, UtilColor::OppositeColor(ptsEvent.m_turn), ptsEvent.m_to) &
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn), ptsEvent.m_to) &
 			ptsEvent.m_pos.GetBbOf20(N02_Lance, ptsEvent.m_turn))
-			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N02_Lance, UtilColor::OppositeColor(ptsEvent.m_turn)))
+			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn)))
 			| (g_rookAttackBb.GetControllBb(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N06_Rook, N14_Dragon));
 
 		// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
@@ -47,7 +47,7 @@ PieceType PtRook::AppendToNextAttackerAndTryPromote(
 		return PT;
 	}
 
-	return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
+	return PiecetypePrograms::m_PIECETYPE_PROGRAMS[nextPT]->AppendToNextAttackerAndTryPromote(
 		occupied,
 		attackers,
 		PieceType::N14_Dragon,

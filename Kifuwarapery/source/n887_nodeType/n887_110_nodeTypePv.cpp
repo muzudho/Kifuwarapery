@@ -1,4 +1,4 @@
-﻿#include "../../header/n887_nodeType/n887_110_nodeTypePv.hpp"
+﻿#include "../../header/n887_nodeType/n887_110_nodetypePv.hpp"
 
 
-NodeTypePv g_nodeTypePv;
+NodetypePv g_nodetypePv;

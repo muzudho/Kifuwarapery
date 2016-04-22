@@ -285,9 +285,6 @@
     <ClInclude Include="header\n105_color___\n105_100_color.hpp">
       <Filter>header\n105_color___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n105_color___\n105_500_utilColor.hpp">
-      <Filter>header\n105_color___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n110_square__\n110_100_square.hpp">
       <Filter>header\n110_square__</Filter>
     </ClInclude>
@@ -642,9 +639,6 @@
     <ClInclude Include="header\n350_pieceTyp\n350_260_ptGoldHorseDragon.hpp">
       <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_500_ptArray.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
       <Filter>header\n440_movStack</Filter>
     </ClInclude>
@@ -704,21 +698,6 @@
     </ClInclude>
     <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
       <Filter>header\n351_bonaDir_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n883_nodeType\n883_500_nodeTypeAbstract.hpp">
-      <Filter>header\n883_nodeType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n887_nodeType\n887_100_nodeTypeRoot.hpp">
-      <Filter>header\n887_nodeType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n887_nodeType\n887_110_nodeTypePv.hpp">
-      <Filter>header\n887_nodeType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n887_nodeType\n887_120_nodeTypeNonPv.hpp">
-      <Filter>header\n887_nodeType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n887_nodeType\n887_500_nodeTypeArray.hpp">
-      <Filter>header\n887_nodeType</Filter>
     </ClInclude>
     <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp">
       <Filter>header\n374_genMove_</Filter>
@@ -971,6 +950,36 @@
     </ClInclude>
     <ClInclude Include="header\n350_pieceTyp\n350_045_pieceTypeSeeEvent.hpp">
       <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n105_color___\n105_500_convColor.hpp">
+      <Filter>header\n105_color___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_500_ptPrograms.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_500_nodetypePrograms.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_100_nodetypeRoot.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_110_nodetypePv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_120_nodetypeNonPv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_130_nodetypeSplitedNodeRoot.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_140_nodetypeSplitedNodePv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.hpp">
+      <Filter>header\n887_nodeType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n883_nodeType\n883_070_nodetypeAbstract.hpp">
+      <Filter>header\n883_nodeType</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1262,9 +1271,6 @@
     <ClCompile Include="source\n350_pieceTyp\n350_260_ptGoldHorseDragon.cpp">
       <Filter>source\n350_pieceTyp</Filter>
     </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_500_ptArray.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
     <ClCompile Include="source\n358_dropMake\n358_070_dropMakerAbstract.cpp">
       <Filter>source\n358_dropMake</Filter>
     </ClCompile>
@@ -1321,21 +1327,6 @@
     </ClCompile>
     <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
       <Filter>source\n351_bonaDir_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n883_nodeType\n883_500_nodeTypeAbstract.cpp">
-      <Filter>source\n883_search__</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n887_nodeType\n887_100_nodeTypeRoot.cpp">
-      <Filter>source\n887_nodeType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n887_nodeType\n887_110_nodeTypePv.cpp">
-      <Filter>source\n887_nodeType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n887_nodeType\n887_120_nodeTypeNonPv.cpp">
-      <Filter>source\n887_nodeType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n887_nodeType\n887_500_nodeTypeArray.cpp">
-      <Filter>source\n887_nodeType</Filter>
     </ClCompile>
     <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp">
       <Filter>source\n374_genMove_</Filter>
@@ -1543,6 +1534,33 @@
     </ClCompile>
     <ClCompile Include="source\n223_move____\n223_300_moveAndScoreIndex.cpp">
       <Filter>source\n223_move____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n350_pieceTyp\n350_500_ptPrograms.cpp">
+      <Filter>source\n350_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_500_nodetypePrograms.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_100_nodetypeRoot.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_110_nodetypePv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_120_nodetypeNonPv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_130_nodetypeSplitedNodeRoot.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_140_nodetypeSplitedNodePv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.cpp">
+      <Filter>source\n887_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
+      <Filter>source\n883_search__</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

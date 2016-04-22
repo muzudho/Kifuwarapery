@@ -14,7 +14,10 @@ public:
 	void Initialize();
 
 
-	template <bool PVNode> inline Depth reduction(const Depth depth, const int moveCount) {
+	inline Depth reduction(
+		bool PVNode,
+		const Depth depth, const int moveCount
+	) {
 		return static_cast<Depth>(this->m_reductions[PVNode][std::min(Depth(depth / OnePly), Depth(63))][std::min(moveCount, 63)]);
 	}
 

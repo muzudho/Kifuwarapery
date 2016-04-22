@@ -76,7 +76,7 @@ public:
 			const Rank tRank1 = (us == Black ? Rank1 : Rank9);
 			const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
+			const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (ConvSquare::TO_RANK10(ksq) != tRank1) {
 				const Square pawnDropCheckSquare = ksq + tDeltaS;

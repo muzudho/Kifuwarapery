@@ -20,8 +20,8 @@ public:
 		Color us = pos.GetTurn();
 
 		moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target);//<US>
-		target |= pos.GetBbOf10(UtilColor::OppositeColor(us));
-		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
+		target |= pos.GetBbOf10(ConvColor::OPPOSITE_COLOR10(us));
+		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
 
 		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, us, false, pos, ksq);
 		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn( moveStackList, pmEvent, target);

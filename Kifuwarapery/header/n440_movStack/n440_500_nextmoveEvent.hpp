@@ -32,8 +32,7 @@ public:
 
 	NextmoveEvent(const Position& pos, const Move ttm, const History& history, const PieceType pt);
 
-	template <bool SPNODE>
-	Move GetNextMove();
+	Move GetNextMove(bool isSplitedNode);
 
 	inline void IncrementCurMove() {
 		++this->m_currMove_;

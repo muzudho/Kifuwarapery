@@ -11,7 +11,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_040_ptEvent.hpp"
-#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "n374_040_pieceMoveEvent.hpp"
 
 
@@ -31,7 +31,7 @@ public:
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
 			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from);
-			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(ptEvent1) & target;
+			Bitboard toBB = PiecetypePrograms::m_PIECETYPE_PROGRAMS[pt]->GetAttacks2From(ptEvent1) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));

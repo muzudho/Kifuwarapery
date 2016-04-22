@@ -14,18 +14,7 @@
 #include "../n160_board___/n160_200_horseAttackBb.hpp"
 #include "../n160_board___/n160_210_dragonAttackBb.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "../n372_piece___/n372_500_pieceArray.hpp"
 #include "n374_350_PieceMovesGenerator.hpp"
 #include "n374_750_dropMoveGenerator.hpp"
-
-
-/*
-class MoveGenerator100 {
-public:
-
-};
-
-
-extern MoveGenerator100 g_moveGenerator100;
-*/

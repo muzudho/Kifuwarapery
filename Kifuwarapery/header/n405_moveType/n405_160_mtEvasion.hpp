@@ -26,7 +26,7 @@ public:
 		const Square ksq = pos.GetKingSquare(us);
 
 		// 相手の色☆
-		const Color Them = UtilColor::OppositeColor(us);
+		const Color Them = ConvColor::OPPOSITE_COLOR10(us);
 
 		const Bitboard checkers = pos.GetCheckersBB();
 		Bitboard bb = checkers;

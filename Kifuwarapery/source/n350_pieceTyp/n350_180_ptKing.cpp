@@ -16,7 +16,7 @@
 #include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
 PieceType PtKing::AppendToNextAttackerAndTryPromote(

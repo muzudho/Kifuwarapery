@@ -5,7 +5,7 @@
 #include "../n113_piece___/n113_150_piece.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_500_ptArray.hpp"
+#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "../n372_piece___/n372_070_pieceAbstract.hpp"
 #include "../n372_piece___/n372_500_pieceArray.hpp"
 #include "../n374_genMove_/n374_250_bishopRookMovesGenerator.hpp"
@@ -49,7 +49,7 @@ public:
 			const PieceType pieceType = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
-			PieceTypeArray::m_ptArray[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+			PiecetypePrograms::m_PIECETYPE_PROGRAMS[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
 		}
 		return moveStackList;
 	}
