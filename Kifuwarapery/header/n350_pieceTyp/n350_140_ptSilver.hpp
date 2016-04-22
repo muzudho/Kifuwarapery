@@ -15,6 +15,7 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "n350_040_ptEvent.hpp"
+#include "n350_045_pieceTypeSeeEvent.hpp"
 #include "n350_070_ptAbstract.hpp"
 
 
@@ -51,13 +52,10 @@ public:
 	}
 
 	PieceType AppendToNextAttackerAndTryPromote(
-		const Position& pos,
-		const Square to,
-		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
 		Bitboard& attackers,
-		const Color turn,
-		PieceType nextPT
+		PieceType nextPT,
+		const PieceTypeSeeEvent ptsEvent
 		) const;
 
 };

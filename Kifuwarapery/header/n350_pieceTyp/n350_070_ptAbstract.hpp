@@ -11,18 +11,7 @@
 #include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "n350_040_ptEvent.hpp"
-
-
-FORCE_INLINE PieceType G_NextAttacker_Recursive(
-	PieceType PT,
-	const Position& pos,
-	const Square to,
-	const Bitboard& opponentAttackers,
-	Bitboard& occupied,
-	Bitboard& attackers,
-	const Color turn,
-	PieceType nextPT
-	);
+#include "n350_045_pieceTypeSeeEvent.hpp"
 
 
 class PtAbstract {
@@ -42,13 +31,10 @@ public:
 	) const = 0;
 
 	virtual PieceType AppendToNextAttackerAndTryPromote(
-		const Position& pos,
-		const Square to,
-		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
 		Bitboard& attackers,
-		const Color turn,
-		PieceType nextPT
+		PieceType nextPT,
+		const PieceTypeSeeEvent ptsEvent
 		) const = 0;
 
 };

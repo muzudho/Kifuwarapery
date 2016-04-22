@@ -11,40 +11,44 @@
 #include "../../header/n165_movStack/n165_600_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
-#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 
+#include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
+#include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
+#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_150_ptBishop.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
 PieceType PtBishop::AppendToNextAttackerAndTryPromote(
-	const Position& pos,
-	const Square to,
-	const Bitboard& opponentAttackers,
 	Bitboard& occupied,
 	Bitboard& attackers,
-	const Color turn,
-	PieceType nextPT
+	PieceType nextPT,
+	const PieceTypeSeeEvent ptsEvent
 	) const {
 	PieceType PT = PieceType::N05_Bishop;
 
-	if (opponentAttackers.AndIsNot0(pos.GetBbOf10(PT))) {
+	if (ptsEvent.m_opponentAttackers.AndIsNot0(ptsEvent.m_pos.GetBbOf10(PT))) {
 		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
 		//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
-		const Bitboard bb = opponentAttackers & pos.GetBbOf10(PT);
+		const Bitboard bb = ptsEvent.m_opponentAttackers & ptsEvent.m_pos.GetBbOf10(PT);
 		const Square from = bb.GetFirstOneFromI9();
 		g_setMaskBb.XorBit(&occupied, from);
 
-		attackers |= (g_bishopAttackBb.BishopAttack(occupied, to) & pos.GetBbOf20(N05_Bishop, N13_Horse));
+		attackers |= (g_bishopAttackBb.BishopAttack(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N05_Bishop, N13_Horse));
 
 		// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
-		if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to)) || ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(from))) {
+		if (ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(ptsEvent.m_to)) ||
+			ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(from))) {
 			return PT + PTPromote;
 		}
 		// それ以外の駒種類は、そのまま返す☆
 		return PT;
 	}
-	return G_NextAttacker_Recursive(
-		PieceType::N05_Bishop, pos, to, opponentAttackers, occupied, attackers, turn, PieceType::N13_Horse);
+
+	return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
+		occupied,
+		attackers,
+		PieceType::N13_Horse,
+		ptsEvent
+		);
 }

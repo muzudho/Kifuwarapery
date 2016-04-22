@@ -11,31 +11,30 @@
 #include "../../header/n165_movStack/n165_600_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
-#include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
-#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 
+#include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
+#include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
+#include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"
 #include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptArray.hpp"
 
 
 PieceType PtKing::AppendToNextAttackerAndTryPromote(
-	const Position& pos,
-	const Square to,
-	const Bitboard& opponentAttackers,
 	Bitboard& occupied,
 	Bitboard& attackers,
-	const Color turn,
-	PieceType nextPT
+	PieceType nextPT,
+	const PieceTypeSeeEvent ptsEvent
 	) const {
 	PieceType PT = PieceType::N08_King;
 
 
-	if (opponentAttackers.AndIsNot0(pos.GetBbOf10(PT))) {
+	if (ptsEvent.m_opponentAttackers.AndIsNot0(ptsEvent.m_pos.GetBbOf10(PT))) {
 		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
 		//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
 		// それ以外の駒種類は、そのまま返す☆
 		return PT;
 	}
+
 	// 王は、これだけ☆
 	return N08_King;
 }

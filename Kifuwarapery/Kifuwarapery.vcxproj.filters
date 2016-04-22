@@ -969,6 +969,9 @@
     <ClInclude Include="header\n350_pieceTyp\n350_040_ptEvent.hpp">
       <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_045_pieceTypeSeeEvent.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

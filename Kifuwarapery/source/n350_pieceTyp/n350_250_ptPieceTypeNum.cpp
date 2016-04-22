@@ -1,14 +1,12 @@
-﻿#include "../../header/n350_pieceTyp/n350_250_ptPieceTypeNum.hpp"
+﻿#include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
+#include "../../header/n350_pieceTyp/n350_250_ptPieceTypeNum.hpp"
 
 
 PieceType PtPieceTypeNum::AppendToNextAttackerAndTryPromote(
-	const Position& pos,
-	const Square to,
-	const Bitboard& opponentAttackers,
 	Bitboard& occupied,
 	Bitboard& attackers,
-	const Color turn,
-	PieceType nextPT
+	PieceType nextPT,
+	const PieceTypeSeeEvent ptsEvent
 	) const {
 	PieceType PT = PieceType::N15_PieceTypeNum;
 

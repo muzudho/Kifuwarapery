@@ -463,35 +463,6 @@ void Position::UndoMove(const Move move) {
 
 
 
-// GetSee()用
-//namespace {
-
-
-	// 再帰関数になっている☆
-	FORCE_INLINE PieceType G_NextAttacker_Recursive(
-		PieceType PT,
-		const Position& pos,
-		const Square to,
-		const Bitboard& opponentAttackers,
-		Bitboard& occupied,
-		Bitboard& attackers,
-		const Color turn,
-		PieceType nextPT
-	){
-		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
-		//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
-		return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
-			pos,
-			to,
-			opponentAttackers,
-			occupied,
-			attackers,
-			turn,
-			nextPT
-		);
-	}
-//}
-
 ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	const Square to = move.To();
 	Square from;
@@ -536,7 +507,20 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 
 		// 再帰関数のスタート地点だぜ☆！（＾ｑ＾）
-		ptCaptured = G_NextAttacker_Recursive(PieceType::N01_Pawn, *this, to, opponentAttackers, occ, attackers, turn, PieceType::N02_Lance);
+		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
+		//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
+		const PieceTypeSeeEvent ptsEvent(
+			*this,
+			to,
+			opponentAttackers,
+			turn
+		);
+		ptCaptured = PieceTypeArray::m_ptArray[PieceType::N01_Pawn]->AppendToNextAttackerAndTryPromote(
+			occ,
+			attackers,
+			PieceType::N02_Lance,
+			ptsEvent
+		);
 
 		attackers &= occ;
 		++slIndex;
