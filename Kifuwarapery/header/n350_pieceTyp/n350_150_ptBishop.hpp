@@ -47,4 +47,15 @@ public:
 		moveStackList++;
 	}
 
+	Bitboard AppendToNextAttacker(
+		Bitboard& attackers,
+		const Position& pos,
+		const Square to,
+		Bitboard& occupied,
+		const Color turn
+	) const {
+		attackers |= (g_bishopAttackBb.BishopAttack(occupied, to) & pos.GetBbOf20(N05_Bishop, N13_Horse));
+		return attackers;
+	}
+
 };

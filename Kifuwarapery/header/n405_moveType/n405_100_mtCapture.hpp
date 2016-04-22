@@ -27,8 +27,8 @@ public:
 		const Bitboard TRank1_6BB = g_inFrontMaskBb.GetInFrontMask(UtilColor::OppositeColor(us), TRank7);
 		const Bitboard TRank1_7BB = g_inFrontMaskBb.GetInFrontMask(UtilColor::OppositeColor(us), TRank8);
 
-		const Bitboard targetPawn = pos.GetBbOf(UtilColor::OppositeColor(us));
-		const Bitboard targetOther = pos.GetBbOf(UtilColor::OppositeColor(us));
+		const Bitboard targetPawn = pos.GetBbOf10(UtilColor::OppositeColor(us));
+		const Bitboard targetOther = pos.GetBbOf10(UtilColor::OppositeColor(us));
 		const Square ksq = pos.GetKingSquare(UtilColor::OppositeColor(us));
 
 

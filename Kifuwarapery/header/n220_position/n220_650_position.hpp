@@ -47,13 +47,13 @@ public:
 
 	void Set(const std::string& sfen, Military* th);
 
-	Bitboard GetBbOf(const PieceType pt) const;
+	Bitboard GetBbOf10(const PieceType pt) const;
 
-	Bitboard GetBbOf(const Color c) const;
+	Bitboard GetBbOf10(const Color c) const;
 
-	Bitboard GetBbOf(const PieceType pt, const Color c) const;
+	Bitboard GetBbOf20(const PieceType pt, const Color c) const;
 
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2) const;
+	Bitboard GetBbOf20(const PieceType pt1, const PieceType pt2) const;
 
 	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const Color c) const;
 
@@ -284,21 +284,21 @@ private:
 		const Color them = UtilColor::OppositeColor(us);
 		// pin する遠隔駒
 		// まずは自駒か敵駒かで大雑把に判別
-		Bitboard pinners = this->GetBbOf(FindPinned ? them : us);
+		Bitboard pinners = this->GetBbOf10(FindPinned ? them : us);
 
 		const Square ksq = GetKingSquare(FindPinned ? us : them);
 
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
 		pinners &=	(
-						this->GetBbOf(N02_Lance) &
+						this->GetBbOf10(N02_Lance) &
 						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? us : them), ksq)
 					) |
 					(
-						this->GetBbOf(N06_Rook, N14_Dragon) &
+						this->GetBbOf20(N06_Rook, N14_Dragon) &
 						g_rookAttackBb.GetControllBbToEdge(ksq)
 					) |
 					(
-						this->GetBbOf(N05_Bishop, N13_Horse) &
+						this->GetBbOf20(N05_Bishop, N13_Horse) &
 						g_bishopAttackBb.GetControllBbToEdge(ksq)
 					);
 
@@ -310,7 +310,7 @@ private:
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
 			if (between.Exists1Bit()
 				&& between.IsOneBit<false>()
-				&& between.AndIsNot0( this->GetBbOf(BetweenIsUs ? us : them)))
+				&& between.AndIsNot0( this->GetBbOf10(BetweenIsUs ? us : them)))
 			{
 				result |= between;
 			}

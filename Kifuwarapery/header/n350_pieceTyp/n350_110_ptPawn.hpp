@@ -5,6 +5,7 @@
 #include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_130_lanceAttackBb.hpp"
 #include "../n160_board___/n160_190_pawnAttackBb.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
@@ -46,6 +47,19 @@ public:
 		}
 
 		moveStackList++;
+	}
+
+	Bitboard AppendToNextAttacker(
+		Bitboard& attackers,
+		const Position& pos,
+		const Square to,
+		Bitboard& occupied,
+		const Color turn
+	) const {
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, UtilColor::OppositeColor(turn), to) &
+			(pos.GetBbOf20(N06_Rook, N14_Dragon) |
+				pos.GetBbOf20(N02_Lance, turn)));
+		return attackers;
 	}
 
 };

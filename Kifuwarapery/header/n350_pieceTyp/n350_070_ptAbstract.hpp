@@ -28,4 +28,12 @@ public:
 		const Color us
 		) const = 0;
 
+	virtual Bitboard AppendToNextAttacker(
+		Bitboard& attackers,
+		const Position& pos,
+		const Square to,
+		Bitboard& occupied,
+		const Color turn
+	) const = 0;
+
 };

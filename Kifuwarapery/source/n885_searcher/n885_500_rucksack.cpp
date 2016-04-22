@@ -1083,15 +1083,16 @@ bool nyugyoku(const Position& pos) {
 	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask(Black, Rank6) : g_inFrontMaskBb.GetInFrontMask(White, Rank4));
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
-	if (!pos.GetBbOf(N08_King, us).AndIsNot0(opponentsField))
+	if (!pos.GetBbOf20(N08_King, us).AndIsNot0(opponentsField))
 		return false;
 
 	// 三 宣言側が、大駒5点小駒1点で計算して
 	//     先手の場合28点以上の持点がある。
 	//     後手の場合27点以上の持点がある。
 	//     点数の対象となるのは、宣言側の持駒と敵陣三段目以内に存在する玉を除く宣言側の駒のみである。
-	const Bitboard bigBB = pos.GetBbOf(N06_Rook, N14_Dragon, N05_Bishop, N13_Horse) & opponentsField & pos.GetBbOf(us);
-	const Bitboard smallBB = (pos.GetBbOf(N01_Pawn, N02_Lance, N03_Knight, N04_Silver) | pos.GetGoldsBB()) & opponentsField & pos.GetBbOf(us);
+	const Bitboard bigBB = pos.GetBbOf(N06_Rook, N14_Dragon, N05_Bishop, N13_Horse) & opponentsField & pos.GetBbOf10(us);
+	const Bitboard smallBB = (pos.GetBbOf(N01_Pawn, N02_Lance, N03_Knight, N04_Silver) |
+		pos.GetGoldsBB()) & opponentsField & pos.GetBbOf10(us);
 	const Hand hand = pos.GetHand(us);
 	const int val = (bigBB.PopCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
 		+ smallBB.PopCount()
@@ -1108,7 +1109,7 @@ bool nyugyoku(const Position& pos) {
 	// 四 宣言側の敵陣三段目以内の駒は、玉を除いて10枚以上存在する。
 
 	// 玉は敵陣にいるので、自駒が敵陣に11枚以上あればよい。
-	if ((pos.GetBbOf(us) & opponentsField).PopCount() < 11)
+	if ((pos.GetBbOf10(us) & opponentsField).PopCount() < 11)
 		return false;
 
 	// 五 宣言側の玉に王手がかかっていない。

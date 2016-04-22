@@ -231,29 +231,29 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 	auto func = [&](const Bitboard& posBB, const int f_pt, const int e_pt) {
 		Square sq;
 		Bitboard bb;
-		bb = (posBB)& pos.GetBbOf(Black);
+		bb = (posBB)& pos.GetBbOf10(Black);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (f_pt)+sq;
 		list1[nlist] = (e_pt)+ConvSquare::INVERSE10(sq);
 		nlist += 1;
 		});
-		bb = (posBB)& pos.GetBbOf(White);
+		bb = (posBB)& pos.GetBbOf10(White);
 		FOREACH_BB(bb, sq, {
 			list0[nlist] = (e_pt)+sq;
 		list1[nlist] = (f_pt)+ConvSquare::INVERSE10(sq);
 		nlist += 1;
 		});
 	};
-	func(pos.GetBbOf(N01_Pawn), f_pawn, e_pawn);
-	func(pos.GetBbOf(N02_Lance), f_lance, e_lance);
-	func(pos.GetBbOf(N03_Knight), f_knight, e_knight);
-	func(pos.GetBbOf(N04_Silver), f_silver, e_silver);
+	func(pos.GetBbOf10(N01_Pawn), f_pawn, e_pawn);
+	func(pos.GetBbOf10(N02_Lance), f_lance, e_lance);
+	func(pos.GetBbOf10(N03_Knight), f_knight, e_knight);
+	func(pos.GetBbOf10(N04_Silver), f_silver, e_silver);
 	const Bitboard goldsBB = pos.GetGoldsBB();
 	func(goldsBB, f_gold, e_gold);
-	func(pos.GetBbOf(N05_Bishop), f_bishop, e_bishop);
-	func(pos.GetBbOf(N13_Horse), f_horse, e_horse);
-	func(pos.GetBbOf(N06_Rook), f_rook, e_rook);
-	func(pos.GetBbOf(N14_Dragon), f_dragon, e_dragon);
+	func(pos.GetBbOf10(N05_Bishop), f_bishop, e_bishop);
+	func(pos.GetBbOf10(N13_Horse), f_horse, e_horse);
+	func(pos.GetBbOf10(N06_Rook), f_rook, e_rook);
+	func(pos.GetBbOf10(N14_Dragon), f_dragon, e_dragon);
 
 	return nlist;
 }

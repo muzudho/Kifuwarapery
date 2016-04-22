@@ -26,7 +26,7 @@ public:
 		const Bitboard& target
 		)
 	{
-		Bitboard fromBB = ptEvent.m_pos.GetBbOf(pt, ptEvent.m_us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf20(pt, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));

@@ -37,7 +37,7 @@ public:
 		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(ptEvent.m_us, TRank6);
 		const SquareDelta TDeltaS = (ptEvent.m_us == Black ? DeltaS : DeltaN);
 
-		Bitboard toBB = Bitboard::PawnAttack(ptEvent.m_pos.GetBbOf(N01_Pawn, ptEvent.m_us), ptEvent.m_us) & target;
+		Bitboard toBB = Bitboard::PawnAttack(ptEvent.m_pos.GetBbOf20(N01_Pawn, ptEvent.m_us), ptEvent.m_us) & target;
 
 		// 成り
 		if (ptEvent.m_mt != N04_NonCaptureMinusPro) {
@@ -88,7 +88,7 @@ public:
 		const PieceMoveEvent ptEvent,
 		const Bitboard& target
 	) {
-		Bitboard fromBB = ptEvent.m_pos.GetBbOf(N02_Lance, ptEvent.m_us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf20(N02_Lance, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from);
@@ -138,7 +138,7 @@ public:
 		const PieceMoveEvent ptEvent,
 		const Bitboard& target
 	) {
-		Bitboard fromBB = ptEvent.m_pos.GetBbOf(N03_Knight, ptEvent.m_us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf20(N03_Knight, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceTypeEvent ptEvent1(g_nullBitboard, ptEvent.m_us, from);
@@ -175,7 +175,7 @@ public:
 		const PieceMoveEvent ptEvent,
 		const Bitboard& target
 	) {
-		Bitboard fromBB = ptEvent.m_pos.GetBbOf(N04_Silver, ptEvent.m_us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf20(N04_Silver, ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
@@ -225,7 +225,8 @@ public:
 		const Bitboard& target
 	) {
 		// 金、成金、馬、竜のbitboardをまとめて扱う。
-		Bitboard fromBB = (ptEvent.m_pos.GetGoldsBB() | ptEvent.m_pos.GetBbOf(N13_Horse, N14_Dragon)) & ptEvent.m_pos.GetBbOf(ptEvent.m_us);
+		Bitboard fromBB = (ptEvent.m_pos.GetGoldsBB() | ptEvent.m_pos.GetBbOf20(N13_Horse, N14_Dragon)) &
+			ptEvent.m_pos.GetBbOf10(ptEvent.m_us);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// from にある駒の種類を判別

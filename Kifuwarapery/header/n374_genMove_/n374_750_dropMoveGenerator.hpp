@@ -66,7 +66,7 @@ public:
 			toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
 
 			// 二歩の回避
-			Bitboard pawnsBB = pos.GetBbOf(N01_Pawn, us);
+			Bitboard pawnsBB = pos.GetBbOf20(N01_Pawn, us);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
 				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));

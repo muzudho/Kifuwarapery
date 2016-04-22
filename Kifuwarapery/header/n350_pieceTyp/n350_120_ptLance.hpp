@@ -47,4 +47,17 @@ public:
 		moveStackList++;
 	}
 
+	Bitboard AppendToNextAttacker(
+		Bitboard& attackers,
+		const Position& pos,
+		const Square to,
+		Bitboard& occupied,
+		const Color turn
+	) const {
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, UtilColor::OppositeColor(turn), to) &
+			(pos.GetBbOf20(N06_Rook, N14_Dragon) |
+				pos.GetBbOf20(N02_Lance, turn)));
+		return attackers;
+	}
+
 };

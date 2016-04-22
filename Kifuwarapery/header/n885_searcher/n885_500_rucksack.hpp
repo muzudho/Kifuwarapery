@@ -264,7 +264,7 @@ public://private:
 			const PieceTypeEvent ptEventL(occ, them, m2to);
 			const PieceTypeEvent ptEventRB(occ, Color::ColorNum, m2to);
 			const Bitboard xray =
-				(PieceTypeArray::m_lance.GetAttacks2From(ptEventL) & pos.GetBbOf(N02_Lance, us))
+				(PieceTypeArray::m_lance.GetAttacks2From(ptEventL) & pos.GetBbOf20(N02_Lance, us))
 				| (PieceTypeArray::m_rook.GetAttacks2From(ptEventRB) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
 				| (PieceTypeArray::m_bishop.GetAttacks2From(ptEventRB) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
 

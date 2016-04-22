@@ -48,4 +48,14 @@ public:
 		moveStackList++;
 	}
 
+	Bitboard AppendToNextAttacker(
+		Bitboard& attackers,
+		const Position& pos,
+		const Square to,
+		Bitboard& occupied,
+		const Color turn
+	) const {
+		return attackers;
+	}
+
 };

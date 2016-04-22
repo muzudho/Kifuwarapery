@@ -58,7 +58,7 @@ public:
 
 
 		// 玉が移動出来る移動先を格納。
-		bb = bannedKingToBB.NotThisAnd(pos.GetBbOf(us).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
+		bb = bannedKingToBB.NotThisAnd(pos.GetBbOf10(us).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
 		while (bb.Exists1Bit()) {
 			const Square to = bb.PopFirstOneFromI9();
 			// 移動先に相手駒の利きがあるか調べずに指し手を生成する。

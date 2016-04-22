@@ -38,7 +38,7 @@ void EvalList::Set(const Position& pos) {
 	func(handB, HRook  , f_hand_rook  , e_hand_rook  , Black);
 	func(handW, HRook  , e_hand_rook  , f_hand_rook  , White);
 
-	Bitboard bb = pos.GetBbOf(N08_King).NotThisAnd(pos.GetOccupiedBB());
+	Bitboard bb = pos.GetBbOf10(N08_King).NotThisAnd(pos.GetOccupiedBB());
 	while (bb.Exists1Bit()) {
 		const Square sq = bb.PopFirstOneFromI9();
 		const Piece pc = pos.GetPiece(sq);
