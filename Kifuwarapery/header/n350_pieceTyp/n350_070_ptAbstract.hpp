@@ -18,17 +18,6 @@ public:
 	virtual PieceType GetNumber() const = 0;
 
 	virtual Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const = 0;
-	/*
-	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
-		return this->GetAttacks2From(ptEvent.m_occupied, ptEvent.m_c, ptEvent.m_sq);
-	}
-	*/
-
-	//virtual Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const = 0;
-	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		const PieceTypeEvent ptEvent(occupied, c, sq);
-		return this->GetAttacks2From(ptEvent);
-	}
 
 	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE 
 	virtual void Generate2RecaptureMoves(

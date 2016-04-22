@@ -24,12 +24,6 @@ public:
 		return Bitboard::CreateAllZeroBB();
 	}
 
-	/*
-	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		return Bitboard::CreateAllZeroBB();
-	}
-	*/
-
 	void Generate2RecaptureMoves(//FORCE_INLINE
 		MoveStack* moveStackList,
 		const Position& pos,

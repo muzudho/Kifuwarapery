@@ -24,12 +24,6 @@ public:
 		return g_nullBitboard;
 	}
 
-	/*
-	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		return g_nullBitboard;
-	}
-	*/
-
 	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE
 	void Generate2RecaptureMoves(
 		MoveStack* moveStackList,

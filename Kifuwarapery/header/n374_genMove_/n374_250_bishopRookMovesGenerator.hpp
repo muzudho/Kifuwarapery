@@ -10,6 +10,7 @@
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n350_pieceTyp/n350_040_ptEvent.hpp"
 #include "../n350_pieceTyp/n350_500_ptArray.hpp"
 #include "n374_040_pieceMoveEvent.hpp"
 
@@ -29,7 +30,8 @@ public:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
-			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from) & target;
+			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from);
+			Bitboard toBB = PieceTypeArray::m_ptArray[pt]->GetAttacks2From(ptEvent1) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));

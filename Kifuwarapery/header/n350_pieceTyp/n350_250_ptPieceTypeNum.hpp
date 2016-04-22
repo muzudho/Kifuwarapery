@@ -27,12 +27,6 @@ public:
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
 		return g_nullBitboard;
 	}
-	/*
-	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		const PieceTypeEvent ptEvent(occupied, c, sq);
-		return this->GetAttacks2From(ptEvent);
-	}
-	*/
 
 	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE
 	void Generate2RecaptureMoves(
