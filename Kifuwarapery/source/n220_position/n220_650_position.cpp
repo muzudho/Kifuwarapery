@@ -464,60 +464,33 @@ void Position::UndoMove(const Move move) {
 
 
 // GetSee()用
-namespace {
-	// SEE の順番
-	template <PieceType PT> struct SEENextPieceType {}; // これはインスタンス化しない。
-	template <> struct SEENextPieceType<N01_Pawn     > { static const PieceType value = N02_Lance; };
-	template <> struct SEENextPieceType<N02_Lance    > { static const PieceType value = N03_Knight; };
-	template <> struct SEENextPieceType<N03_Knight   > { static const PieceType value = N09_ProPawn; };
-	template <> struct SEENextPieceType<N09_ProPawn  > { static const PieceType value = N10_ProLance; };
-	template <> struct SEENextPieceType<N10_ProLance > { static const PieceType value = N11_ProKnight; };
-	template <> struct SEENextPieceType<N11_ProKnight> { static const PieceType value = N04_Silver; };
-	template <> struct SEENextPieceType<N04_Silver   > { static const PieceType value = N12_ProSilver; };
-	template <> struct SEENextPieceType<N12_ProSilver> { static const PieceType value = N07_Gold; };
-	template <> struct SEENextPieceType<N07_Gold     > { static const PieceType value = N05_Bishop; };
-	template <> struct SEENextPieceType<N05_Bishop   > { static const PieceType value = N13_Horse; };
-	template <> struct SEENextPieceType<N13_Horse    > { static const PieceType value = N06_Rook; };
-	template <> struct SEENextPieceType<N06_Rook     > { static const PieceType value = N14_Dragon; };
-	template <> struct SEENextPieceType<N14_Dragon   > { static const PieceType value = N08_King; };
+//namespace {
 
-	template <PieceType PT> FORCE_INLINE PieceType nextAttacker(
+
+	// 再帰関数になっている☆
+	FORCE_INLINE PieceType G_NextAttacker_Recursive(
+		PieceType PT,
 		const Position& pos,
 		const Square to,
 		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
 		Bitboard& attackers,
-		const Color turn
+		const Color turn,
+		PieceType nextPT
 	){
-		if (opponentAttackers.AndIsNot0(pos.GetBbOf10(PT))) {
-			const Bitboard bb = opponentAttackers & pos.GetBbOf10(PT);
-			const Square from = bb.GetFirstOneFromI9();
-			g_setMaskBb.XorBit(&occupied, from);
-
-			// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
-			//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
-			attackers = PieceTypeArray::m_ptArray[PT]->AppendToNextAttacker(
-				attackers,
-				pos,
-				to,
-				occupied,
-				turn
-			);
-			// attackersは参照なのでこれで呼び出し元に反映されるはず☆？
-
-			// 歩、香、桂は　陣地に飛び込んだとき、成れる時には成る☆
-			// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
-			// それ以外の駒種類は、そのまま返す☆
-			return PieceTypeArray::m_ptArray[PT]->TryPromoteNextAttacker(PT, to, turn, from);
-		}
-		return nextAttacker<SEENextPieceType<PT>::value>(pos, to, opponentAttackers, occupied, attackers, turn);
+		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
+		//       その場合、キャッシュに乗りやすくなるので逆に速くなるかも。
+		return PieceTypeArray::m_ptArray[nextPT]->AppendToNextAttackerAndTryPromote(
+			pos,
+			to,
+			opponentAttackers,
+			occupied,
+			attackers,
+			turn,
+			nextPT
+		);
 	}
-	template <> FORCE_INLINE PieceType nextAttacker<N08_King>(const Position&, const Square, const Bitboard&,
-		Bitboard&, Bitboard&, const Color)
-	{
-		return N08_King;
-	}
-}
+//}
 
 ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	const Square to = move.To();
@@ -562,7 +535,8 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	do {
 		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 
-		ptCaptured = nextAttacker<N01_Pawn>(*this, to, opponentAttackers, occ, attackers, turn);
+		// 再帰関数のスタート地点だぜ☆！（＾ｑ＾）
+		ptCaptured = G_NextAttacker_Recursive(PieceType::N01_Pawn, *this, to, opponentAttackers, occ, attackers, turn, PieceType::N02_Lance);
 
 		attackers &= occ;
 		++slIndex;

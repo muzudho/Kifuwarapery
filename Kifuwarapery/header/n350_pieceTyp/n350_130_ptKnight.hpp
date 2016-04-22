@@ -7,6 +7,7 @@
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_180_knightAttackBb.hpp"
+#include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
@@ -48,28 +49,14 @@ public:
 		moveStackList++;
 	}
 
-	Bitboard AppendToNextAttacker(
-		Bitboard& attackers,
+	PieceType AppendToNextAttackerAndTryPromote(
 		const Position& pos,
 		const Square to,
+		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
-		const Color turn
-	) const {
-		return attackers;
-	}
-
-	PieceType TryPromoteNextAttacker(
-		const PieceType PT,
-		const Square to,
+		Bitboard& attackers,
 		const Color turn,
-		const Square from
-	) const {
-		// 歩、香、桂は　陣地に飛び込んだとき、成れる時には成る☆
-		if (ConvSquare::CAN_PROMOTE10(turn, ConvSquare::TO_RANK10(to))) {
-			return PT + PTPromote;
-		}
-		// それ以外の駒種類は、そのまま返す☆
-		return PT;
-	}
+		PieceType nextPT
+		) const;
 
 };

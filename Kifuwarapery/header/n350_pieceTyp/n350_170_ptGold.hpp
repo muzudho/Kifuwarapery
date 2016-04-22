@@ -9,6 +9,7 @@
 #include "../n160_board___/n160_130_lanceAttackBb.hpp"
 #include "../n160_board___/n160_140_goldAttackBb.hpp"
 #include "../n160_board___/n160_150_rookAttackBb.hpp"
+#include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
@@ -40,30 +41,14 @@ public:
 		moveStackList++;
 	}
 
-	Bitboard AppendToNextAttacker(
-		Bitboard& attackers,
+	PieceType AppendToNextAttackerAndTryPromote(
 		const Position& pos,
 		const Square to,
+		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
-		const Color turn
-	) const {
-		attackers |= (g_lanceAttackBb.GetControllBb(occupied, UtilColor::OppositeColor(turn), to) &
-			pos.GetBbOf20(N02_Lance, turn))
-			| (g_lanceAttackBb.GetControllBb(occupied, turn, to) &
-				pos.GetBbOf20(N02_Lance, UtilColor::OppositeColor(turn)))
-			| (g_rookAttackBb.GetControllBb(occupied, to) & pos.GetBbOf20(N06_Rook, N14_Dragon))
-			| (g_bishopAttackBb.BishopAttack(occupied, to) & pos.GetBbOf20(N05_Bishop, N13_Horse));
-		return attackers;
-	}
-
-	PieceType TryPromoteNextAttacker(
-		const PieceType PT,
-		const Square to,
+		Bitboard& attackers,
 		const Color turn,
-		const Square from
-	) const {
-		// ÇªÇÍà»äOÇÃãÓéÌóﬁÇÕÅAÇªÇÃÇ‹Ç‹ï‘Ç∑Åô
-		return PT;
-	}
+		PieceType nextPT
+		) const;
 
 };

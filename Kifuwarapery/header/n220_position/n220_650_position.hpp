@@ -381,3 +381,23 @@ private:
 	static Key m_zobExclusion_; // todo: これが必要か、要検討
 
 };
+
+
+
+/*
+// SEE の順番
+template <PieceType PT> struct SEENextPieceType {}; // これはインスタンス化しない。
+template <> struct SEENextPieceType<N01_Pawn     > { static const PieceType value = N02_Lance; };
+template <> struct SEENextPieceType<N02_Lance    > { static const PieceType value = N03_Knight; };
+template <> struct SEENextPieceType<N03_Knight   > { static const PieceType value = N09_ProPawn; };
+template <> struct SEENextPieceType<N09_ProPawn  > { static const PieceType value = N10_ProLance; };
+template <> struct SEENextPieceType<N10_ProLance > { static const PieceType value = N11_ProKnight; };
+template <> struct SEENextPieceType<N11_ProKnight> { static const PieceType value = N04_Silver; };
+template <> struct SEENextPieceType<N04_Silver   > { static const PieceType value = N12_ProSilver; };
+template <> struct SEENextPieceType<N12_ProSilver> { static const PieceType value = N07_Gold; };
+template <> struct SEENextPieceType<N07_Gold     > { static const PieceType value = N05_Bishop; };
+template <> struct SEENextPieceType<N05_Bishop   > { static const PieceType value = N13_Horse; };
+template <> struct SEENextPieceType<N13_Horse    > { static const PieceType value = N06_Rook; };
+template <> struct SEENextPieceType<N06_Rook     > { static const PieceType value = N14_Dragon; };
+template <> struct SEENextPieceType<N14_Dragon   > { static const PieceType value = N08_King; };
+*/

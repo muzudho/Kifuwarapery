@@ -4,6 +4,7 @@
 #include "../n110_square__/n110_100_square.hpp"
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
+#include "../n160_board___/n160_230_setMaskBb.hpp"
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
@@ -35,22 +36,19 @@ public:
 		assert(false);
 	}
 
-	Bitboard AppendToNextAttacker(
-		Bitboard& attackers,
+	PieceType AppendToNextAttackerAndTryPromote(
 		const Position& pos,
 		const Square to,
+		const Bitboard& opponentAttackers,
 		Bitboard& occupied,
-		const Color turn
-	) const {
-		return attackers;
-	}
-
-	PieceType TryPromoteNextAttacker(
-		const PieceType PT,
-		const Square to,
+		Bitboard& attackers,
 		const Color turn,
-		const Square from
-	) const {
+		PieceType nextPT
+		) const {
+		PieceType PT = PieceType::N00_Occupied;
+
+		UNREACHABLE;
+
 		// ÇªÇÍà»äOÇÃãÓéÌóﬁÇÕÅAÇªÇÃÇ‹Ç‹ï‘Ç∑Åô
 		return PT;
 	}
