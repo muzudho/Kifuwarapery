@@ -229,6 +229,7 @@
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
     <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp" />
+    <ClInclude Include="header\n350_pieceTyp\n350_040_ptEvent.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_070_ptAbstract.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_080_ptPromote.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_100_ptOccupied.hpp" />

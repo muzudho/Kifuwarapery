@@ -18,7 +18,7 @@ void GoldAttackBb::Initialize()
 				g_kingAttackBb.GetControllBb(sq) &
 				g_inFrontMaskBb.GetInFrontMask(c, ConvSquare::TO_RANK10(sq))
 			) |
-			g_rookAttackBb.GetControllBb(&Bitboard::CreateAllOneBB(), sq);
+			g_rookAttackBb.GetControllBb(Bitboard::CreateAllOneBB(), sq);
 }
 
 void GoldAttackBb::InitCheckTableGold() {

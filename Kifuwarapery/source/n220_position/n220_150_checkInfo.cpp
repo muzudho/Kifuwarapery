@@ -6,6 +6,7 @@
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
+#include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"
 #include "../../header/n350_pieceTyp/n350_120_ptLance.hpp"
 #include "../../header/n350_pieceTyp/n350_130_ptKnight.hpp"
@@ -23,13 +24,15 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_pinned = position.GetPinnedBB();
 	m_dcBB = position.DiscoveredCheckBB();
 
-	m_checkBB[N01_Pawn] = PieceTypeArray::m_pawn.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N02_Lance] = PieceTypeArray::m_lance.GetAttacks2From( position.GetOccupiedBB(), them, ksq);
-	m_checkBB[N03_Knight] = PieceTypeArray::m_knight.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N04_Silver] = PieceTypeArray::m_silver.GetAttacks2From( g_nullBitboard, them, ksq);
-	m_checkBB[N05_Bishop] = PieceTypeArray::m_bishop.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);//Colorは使ってない。
-	m_checkBB[N06_Rook] = PieceTypeArray::m_rook.GetAttacks2From(position.GetOccupiedBB(), Color::ColorNum, ksq);
-	m_checkBB[N07_Gold] = PieceTypeArray::m_gold.GetAttacks2From( g_nullBitboard, them, ksq);
+	const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), them, ksq);
+
+	m_checkBB[N01_Pawn] = PieceTypeArray::m_pawn.GetAttacks2From(ptEvent1);
+	m_checkBB[N02_Lance] = PieceTypeArray::m_lance.GetAttacks2From(ptEvent1);
+	m_checkBB[N03_Knight] = PieceTypeArray::m_knight.GetAttacks2From(ptEvent1);
+	m_checkBB[N04_Silver] = PieceTypeArray::m_silver.GetAttacks2From(ptEvent1);
+	m_checkBB[N05_Bishop] = PieceTypeArray::m_bishop.GetAttacks2From(ptEvent1);
+	m_checkBB[N06_Rook] = PieceTypeArray::m_rook.GetAttacks2From(ptEvent1);
+	m_checkBB[N07_Gold] = PieceTypeArray::m_gold.GetAttacks2From(ptEvent1);
 	m_checkBB[N08_King] = Bitboard::CreateAllZeroBB();
 	// todo: ここで AVX2 使えそう。
 	//       checkBB のreadアクセスは ｓｗｉｔｃｈ (pt) で場合分けして、余計なコピー減らした方が良いかも。
@@ -37,6 +40,6 @@ CheckInfo::CheckInfo(const Position& position) {
 	m_checkBB[N10_ProLance] = m_checkBB[N07_Gold];
 	m_checkBB[N11_ProKnight] = m_checkBB[N07_Gold];
 	m_checkBB[N12_ProSilver] = m_checkBB[N07_Gold];
-	m_checkBB[N13_Horse] = m_checkBB[N05_Bishop] | PieceTypeArray::m_king.GetAttacks2From( g_nullBitboard, Color::ColorNum, ksq);
-	m_checkBB[N14_Dragon] = m_checkBB[N06_Rook] | PieceTypeArray::m_king.GetAttacks2From(g_nullBitboard, Color::ColorNum, ksq);
+	m_checkBB[N13_Horse] = m_checkBB[N05_Bishop] | PieceTypeArray::m_king.GetAttacks2From(ptEvent1);
+	m_checkBB[N14_Dragon] = m_checkBB[N06_Rook] | PieceTypeArray::m_king.GetAttacks2From(ptEvent1);
 }

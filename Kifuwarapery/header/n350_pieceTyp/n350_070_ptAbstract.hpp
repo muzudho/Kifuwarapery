@@ -9,29 +9,34 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "n350_040_ptEvent.hpp"
 
 
 class PtAbstract {
 public:
 
-	virtual inline PieceType GetNumber() const {
-		UNREACHABLE;
-	};// = 0;
+	virtual PieceType GetNumber() const = 0;
 
-	virtual inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		UNREACHABLE;
-	};// = 0;
+	virtual Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const = 0;
+	/*
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
+		return this->GetAttacks2From(ptEvent.m_occupied, ptEvent.m_c, ptEvent.m_sq);
+	}
+	*/
 
-	// pin ÇÕè»Ç©Ç»Ç¢ÅB
-	virtual FORCE_INLINE void Generate2RecaptureMoves(
+	//virtual Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const = 0;
+	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
+		const PieceTypeEvent ptEvent(occupied, c, sq);
+		return this->GetAttacks2From(ptEvent);
+	}
+
+	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE 
+	virtual void Generate2RecaptureMoves(
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,
 		const Square to,
 		const Color us
-		) const {
-		UNREACHABLE;
-	};// = 0;
-
+		) const = 0;
 
 };

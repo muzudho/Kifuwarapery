@@ -122,6 +122,6 @@ void RookAttackBb::InitRookAttacks()
 void RookAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_rookAttackBb.m_controllBbToEdge_[sq] = g_rookAttackBb.GetControllBb(&Bitboard::CreateAllZeroBB(), sq);
+		g_rookAttackBb.m_controllBbToEdge_[sq] = g_rookAttackBb.GetControllBb(Bitboard::CreateAllZeroBB(), sq);
 	}
 }

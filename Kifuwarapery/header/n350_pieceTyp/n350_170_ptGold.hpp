@@ -9,22 +9,29 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
+#include "n350_040_ptEvent.hpp"
 #include "n350_070_ptAbstract.hpp"
 
 
 class PtGold : public PtAbstract {
 public:
 
-	inline PieceType GetNumber() const {
+	PieceType GetNumber() const {//inline
 		return PieceType::N07_Gold;
 	}
 
-	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
-		return g_goldAttackBb.GetControllBb(c, sq);
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
+		return g_goldAttackBb.GetControllBb(ptEvent.m_c, ptEvent.m_sq);
 	}
+	/*
+	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {//inline
+		const PieceTypeEvent ptEvent(occupied, c, sq);
+		return this->GetAttacks2From(ptEvent);
+	}
+	*/
 
-	// pin ÇÕè»Ç©Ç»Ç¢ÅB
-	FORCE_INLINE void Generate2RecaptureMoves(
+	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE
+	void Generate2RecaptureMoves(
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,

@@ -18,7 +18,7 @@ void SilverAttackBb::Initialize()
 				g_kingAttackBb.GetControllBb(sq) &
 				g_inFrontMaskBb.GetInFrontMask(c, ConvSquare::TO_RANK10(sq))
 			) |
-			g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllOneBB(), sq);
+			g_bishopAttackBb.BishopAttack(Bitboard::CreateAllOneBB(), sq);
 }
 
 void SilverAttackBb::InitCheckTableSilver() {

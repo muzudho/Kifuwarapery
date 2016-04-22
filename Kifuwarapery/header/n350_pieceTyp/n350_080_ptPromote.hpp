@@ -9,25 +9,29 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "n350_040_ptEvent.hpp"
 #include "n350_070_ptAbstract.hpp"
-
-
-//class Position;
 
 
 class PtPromote : public PtAbstract {
 public:
 
-	inline PieceType GetNumber() const {
+	PieceType GetNumber() const {
 		return PieceType::PTPromote;
 	}
 
-	inline Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
 		return g_nullBitboard;
 	}
 
-	// pin ÇÕè»Ç©Ç»Ç¢ÅB
-	FORCE_INLINE void Generate2RecaptureMoves(
+	/*
+	Bitboard GetAttacks2From(const Bitboard& occupied, const Color c, const Square sq) const {
+		return g_nullBitboard;
+	}
+	*/
+
+	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE
+	void Generate2RecaptureMoves(
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,

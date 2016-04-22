@@ -1,6 +1,8 @@
 ﻿#pragma once
 
 
+#include "../n105_color___/n105_100_color.hpp"
+#include "../n110_square__/n110_100_square.hpp"
 #include "n160_100_bitboard.hpp"
 #include "n160_108_slideBits.hpp"
 
@@ -28,17 +30,17 @@ public:
 	void InitializeToEdge();
 
 	// todo: 香車の筋がどこにあるか先に分かっていれば、Bitboard の片方の変数だけを調べれば良くなる。
-	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Color c, const Square sq) const {
+	Bitboard GetControllBb(const Bitboard& thisBitboard, const Color c, const Square sq) const {
 		const int part = Bitboard::Part(sq);
-		const int index = ((*thisBitboard).GetP(part) >> g_slideBits.m_slide[sq]) & 127;
+		const int index = (thisBitboard.GetP(part) >> g_slideBits.m_slide[sq]) & 127;
 		return this->m_controllBb[c][sq][index];
 	}
 
-	inline Bitboard GetControllBbToEdge(const Color c, const Square sq) const {
+	Bitboard GetControllBbToEdge(const Color c, const Square sq) const {
 		return this->m_controllBbToEdge_[c][sq];
 	}
 
-	inline Bitboard LanceCheckTable(const Color c, const Square sq) const {
+	Bitboard LanceCheckTable(const Color c, const Square sq) const {
 		return this->m_lanceCheckTable_[c][sq];
 	}
 

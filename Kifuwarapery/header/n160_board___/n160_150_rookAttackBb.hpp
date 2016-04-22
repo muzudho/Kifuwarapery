@@ -136,8 +136,8 @@ public:
 			return this->m_controllBb_[this->m_rookAttackIndex[sq] + OccupiedToIndex(block, this->m_rookBlockMask_[sq])];
 		}
 	#else
-		inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Square sq) const {
-			const Bitboard block((*thisBitboard) & this->m_rookBlockMask_[sq]);
+		inline Bitboard GetControllBb(const Bitboard& thisBitboard, const Square sq) const {
+			const Bitboard block(thisBitboard & this->m_rookBlockMask_[sq]);
 			return this->m_controllBb_[
 				this->m_rookAttackIndex[sq] +
 					block.OccupiedToIndex(this->m_rookMagic_[sq], this->m_rookShiftBits_[sq])

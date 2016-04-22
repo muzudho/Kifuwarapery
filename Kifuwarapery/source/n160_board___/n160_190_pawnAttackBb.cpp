@@ -14,5 +14,6 @@ void PawnAttackBb::Initialize()
 {
 	for (Color c = Black; c < ColorNum; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
-			g_pawnAttackBb.m_controllBb_[c][sq] = g_silverAttackBb.GetControllBb(c, sq) ^ g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllOneBB(), sq);
+			g_pawnAttackBb.m_controllBb_[c][sq] =
+				g_silverAttackBb.GetControllBb(c, sq) ^ g_bishopAttackBb.BishopAttack(Bitboard::CreateAllOneBB(), sq);
 }

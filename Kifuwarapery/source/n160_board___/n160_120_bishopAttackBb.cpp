@@ -131,6 +131,6 @@ void BishopAttackBb::InitBishopAttacks()
 void BishopAttackBb::InitializeToEdge()
 {
 	for (Square sq = I9; sq < SquareNum; ++sq) {
-		g_bishopAttackBb.m_controllBbToEdge_[sq] = g_bishopAttackBb.BishopAttack(&Bitboard::CreateAllZeroBB(), sq);
+		g_bishopAttackBb.m_controllBbToEdge_[sq] = g_bishopAttackBb.BishopAttack(Bitboard::CreateAllZeroBB(), sq);
 	}
 }

@@ -966,6 +966,9 @@
     <ClInclude Include="header\n223_move____\n223_300_moveAndScoreIndex.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_040_ptEvent.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

@@ -9,7 +9,7 @@
 class DragonAttackBb {
 public:
 
-	inline Bitboard GetControllBb(const Bitboard* thisBitboard, const Square sq) const
+	inline Bitboard GetControllBb(const Bitboard& thisBitboard, const Square sq) const
 	{
 		return g_rookAttackBb.GetControllBb(thisBitboard, sq) | g_kingAttackBb.GetControllBb(sq);
 	}

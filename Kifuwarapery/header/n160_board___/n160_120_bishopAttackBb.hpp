@@ -105,9 +105,9 @@ public:
 			return this->m_controllBb_[this->m_controllBbIndex_[sq] + OccupiedToIndex(block, this->m_bishopBlockMask_[sq])];
 		}
 	#else
-		inline Bitboard BishopAttack(const Bitboard* thisBitboard, const Square sq) const {
+		inline Bitboard BishopAttack(const Bitboard& thisBitboard, const Square sq) const {
 
-			const Bitboard block((*thisBitboard) & this->m_bishopBlockMask_[sq]);
+			const Bitboard block(thisBitboard & this->m_bishopBlockMask_[sq]);
 
 			return this->m_controllBb_[
 				this->m_controllBbIndex_[sq] +
