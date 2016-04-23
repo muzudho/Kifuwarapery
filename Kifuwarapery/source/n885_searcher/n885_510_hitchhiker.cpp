@@ -94,15 +94,15 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	int playedMoveCount;
 
 	// step1
-	Military* thisThread = nullptr;
+	// initialize node
+	Military* thisThread = pos.GetThisThread();
 	bool isGotoSplitPointStart = false;
 	nodetypeProgram->DoStep1(
 		isGotoSplitPointStart,
-		&thisThread,
-		pos,
 		moveCount,
 		playedMoveCount,
 		inCheck,
+		pos,
 		splitedNode,
 		ss,
 		bestMove,
@@ -110,14 +110,15 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		bestScore,
 		ttMove,
 		excludedMove,
-		ttScore
+		ttScore,
+		thisThread
 		);
-	/*
-	if (isGotoSplitPointStart) {
+	if (isGotoSplitPointStart)
+	{
 		goto split_point_start;
 	}
+
 	// initialize node
-	Military* thisThread = pos.GetThisThread();
 	moveCount = playedMoveCount = 0;
 	inCheck = pos.InCheck();
 
@@ -148,24 +149,24 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	if (PVNode && thisThread->m_maxPly < ss->m_ply) {
 		thisThread->m_maxPly = ss->m_ply;
 	}
-	*/
 
 	bool isReturnWithScore = false;
-	ScoreIndex returnScore;
+	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 	if (!RootNode) {
 		// step2
 		// stop ‚ÆÅ‘å’Tõ[‚³‚Ìƒ`ƒFƒbƒN
+
 		nodetypeProgram->DoStep2(
 			isReturnWithScore,
 			returnScore,
 			pos,
 			rucksack,
 			ss
-			);
+		);
 		/*
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
 			isReturnWithScore, returnScore, &rucksack, ss);
-			*/
+		*/
 
 		if (isReturnWithScore)
 		{
@@ -184,6 +185,16 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		{
 			return returnScore;
 		}
+		/*
+		// mate distance pruning
+		if (!RootNode) {
+			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
+			beta = std::min(UtilScore::MateIn(ss->m_ply + 1), beta);
+			if (beta <= alpha) {
+				return alpha;
+			}
+		}
+		*/
 	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);

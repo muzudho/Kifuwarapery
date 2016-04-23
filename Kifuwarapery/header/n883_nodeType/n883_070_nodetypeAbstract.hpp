@@ -17,9 +17,6 @@
 using namespace std;
 
 
-extern RepetitionTypeArray g_repetitionTypeArray;
-
-
 class NodetypeAbstract {
 public:
 
@@ -32,11 +29,10 @@ public:
 
 	void DoStep1(
 		bool& isGotoSplitPointStart,
-		Military** ppThisThread,
-		Position& pos,
 		int& moveCount,
 		int& playedMoveCount,
 		bool& inCheck,
+		Position& pos,
 		SplitedNode* splitedNode,
 		Flashlight* ss,
 		Move& bestMove,
@@ -44,11 +40,11 @@ public:
 		ScoreIndex& bestScore,
 		Move& ttMove,
 		Move& excludedMove,
-		ScoreIndex& ttScore
+		ScoreIndex& ttScore,
+		Military* thisThread
 		) {
 
 		// initialize node
-		*ppThisThread = pos.GetThisThread();
 		moveCount = playedMoveCount = 0;
 		inCheck = pos.InCheck();
 
@@ -78,8 +74,8 @@ public:
 		(ss + 1)->m_reduction = Depth0;
 		(ss + 2)->m_killers[0] = (ss + 2)->m_killers[1] = g_MOVE_NONE;
 
-		if (this->IsPvNode() && (*ppThisThread)->m_maxPly < ss->m_ply) {
-			(*ppThisThread)->m_maxPly = ss->m_ply;
+		if (this->IsPvNode() && thisThread->m_maxPly < ss->m_ply) {
+			thisThread->m_maxPly = ss->m_ply;
 		}
 	}
 
@@ -89,7 +85,8 @@ public:
 		Position& pos,
 		Rucksack& rucksack,
 		Flashlight* ss
-		){
+		)
+	{
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
 			isReturnWithScore, returnScore, &rucksack, ss);
 	}
