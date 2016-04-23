@@ -6,7 +6,7 @@
 #include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 class StringToPieceTypeCSA : public std::map<std::string, PieceType> {

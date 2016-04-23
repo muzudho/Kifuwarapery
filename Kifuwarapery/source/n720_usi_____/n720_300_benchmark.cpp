@@ -7,7 +7,7 @@
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 // 今はベンチマークというより、PGO ビルドの自動化の為にある。

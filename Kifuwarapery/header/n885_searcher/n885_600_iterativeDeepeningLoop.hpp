@@ -6,7 +6,7 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
-#include "n885_500_rucksack.hpp"
+#include "n885_040_rucksack.hpp"
 #include "n885_580_skill.hpp"
 
 
@@ -87,6 +87,7 @@ public:
 
 		// 反復深化で探索を行う。
 		while (++depth <= g_maxPly && !rucksack.m_signals.m_stop && (!rucksack.m_limits.m_depth || depth <= rucksack.m_limits.m_depth)) {
+
 			// 前回の iteration の結果を全てコピー
 			for (size_t i = 0; i < rucksack.m_rootMoves.size(); ++i) {
 				rucksack.m_rootMoves[i].m_prevScore_ = rucksack.m_rootMoves[i].m_score_;
@@ -123,8 +124,13 @@ public:
 				while (true) {
 					// 探索を行う。
 					flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-					bestScore = Hitchhiker::Travel(	rucksack, NodeType::N00_Root,
+
+					//────────────────────────────────────────────────────────────────────────────────
+					// 探索☆？（＾ｑ＾）　１回目のぐるんぐるんだぜ～☆　ルート～☆
+					//────────────────────────────────────────────────────────────────────────────────
+					bestScore = Hitchhiker::Travel_885_510(	rucksack, NodeType::N00_Root,
 						pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
+
 					// 先頭が最善手になるようにソート
 					UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
 
@@ -155,7 +161,7 @@ public:
 
 
 					if (
-						// 思考時間が3秒経過し、
+						// 思考時間が3秒経過するまで、読み筋を出力しないぜ☆！（＾ｑ＾）
 						3000 < rucksack.m_stopwatch.GetElapsed()
 						// 将棋所のコンソールが詰まるのを防ぐ。
 						&& (depth < 10 || lastInfoTime + 200 < rucksack.m_stopwatch.GetElapsed()))
@@ -190,9 +196,9 @@ public:
 				if (
 					(
 						rucksack.m_pvIdx + 1 == rucksack.m_pvSize ||
-						// 思考時間が3秒を経過し
+						// 思考時間が3秒経過するまで、読み筋を出力しないぜ☆！（＾ｑ＾）
 						3000 < rucksack.m_stopwatch.GetElapsed()
-						)
+					)
 					// 将棋所のコンソールが詰まるのを防ぐ。
 					&& (depth < 10 || lastInfoTime + 200 < rucksack.m_stopwatch.GetElapsed()))
 				{
@@ -241,14 +247,20 @@ public:
 						rucksack.m_timeManager.GetAvailableTime() * 40 / 100
 						<
 						rucksack.m_stopwatch.GetElapsed()
-						)
-					) {
+					)
+				) {
 					const ScoreIndex rBeta = bestScore - 2 * PieceScore::m_capturePawn;
 					(flashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 					(flashlight + 1)->m_excludedMove = rucksack.m_rootMoves[0].m_pv_[0];
 					(flashlight + 1)->m_skipNullMove = true;
-					const ScoreIndex s = Hitchhiker::Travel( rucksack, NodeType::N02_NonPV,
+
+					//────────────────────────────────────────────────────────────────────────────────
+					// さあ、探索に潜るぜ～☆！（＾ｑ＾）　２回目のぐるんぐるんだぜ～☆ ノンＰＶ～☆
+					//────────────────────────────────────────────────────────────────────────────────
+					const ScoreIndex s = Hitchhiker::Travel_885_510(
+						rucksack, NodeType::N02_NonPV,
 						pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
+
 					(flashlight + 1)->m_skipNullMove = false;
 					(flashlight + 1)->m_excludedMove = g_MOVE_NONE;
 

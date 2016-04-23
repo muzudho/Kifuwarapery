@@ -1,6 +1,6 @@
 ﻿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n760_thread__/n760_350_warrior.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 void Warrior::IdleLoop() {
@@ -8,10 +8,12 @@ void Warrior::IdleLoop() {
 		{
 			std::unique_lock<Mutex> lock(this->m_sleepLock);
 			if (!this->m_exit) {
-				m_sleepCond.wait_for(lock, std::chrono::milliseconds(this->m_msec ? this->m_msec : INT_MAX));
+				// ずっと寝る？？（＾ｑ＾）？
+				m_sleepCond.wait_for(lock, std::chrono::milliseconds(
+					this->m_lifetimeMilliseconds ? this->m_lifetimeMilliseconds : INT_MAX));
 			}
 		}
-		if (this->m_msec) {
+		if (this->m_lifetimeMilliseconds) {
 			this->m_pRucksack->CheckTime();
 		}
 	}

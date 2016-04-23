@@ -33,7 +33,7 @@
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
 //class IterativeDeepeningLoop;

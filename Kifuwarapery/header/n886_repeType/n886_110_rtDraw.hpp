@@ -5,7 +5,7 @@
 #include "n886_070_rtAbstract.hpp"
 
 #include "../n223_move____/n223_500_flashlight.hpp"// &参照は使えない。*参照は使える。
-#include "../n885_searcher/n885_500_rucksack.hpp"
+#include "../n885_searcher/n885_040_rucksack.hpp"
 
 
 class RepetitionTypeDraw : public RepetitionTypeAbstract {

@@ -20,7 +20,7 @@
 #include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_learn___/n800_100_stopwatch.hpp"
 //#include "../n885_searcher/n885_600_iterativeDeepeningLoop.hpp"
-#include "n885_500_rucksack.hpp"	// FIXME:
+#include "n885_040_rucksack.hpp"	// FIXME:
 
 using namespace std;
 
@@ -38,11 +38,11 @@ public:
 	static void	Think(Rucksack& rucksack);
 
 	// 入玉勝ち判定
-	static bool Hitchhiker::Nyugyoku(const Position& pos);
+	static bool Hitchhiker::IsNyugyokuWin(const Position& pos);
 
 	// サーチ☆
 	// 主に、反復深化探索の中で呼び出される☆
-	static ScoreIndex Travel(
+	static ScoreIndex Travel_885_510(
 		Rucksack& rucksack,
 		NodeType NT,
 		Position& pos,

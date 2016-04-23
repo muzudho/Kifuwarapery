@@ -378,7 +378,8 @@
     <ClInclude Include="header\n800_learn___\n800_100_stopwatch.hpp" />
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp" />
     <ClInclude Include="header\n883_nodeType\n883_070_nodetypeAbstract.hpp" />
-    <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_040_rucksack.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_480_hitchhikerNyugyoku.hpp" />
     <ClInclude Include="header\n885_searcher\n885_510_hitchhiker.hpp" />
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp" />
     <ClInclude Include="header\n885_searcher\n885_600_iterativeDeepeningLoop.hpp" />
@@ -582,7 +583,8 @@
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp" />
     <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp" />
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp" />
-    <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_040_rucksack.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_480_hitchhikerNyugyoku.cpp" />
     <ClCompile Include="source\n885_searcher\n885_510_hitchhiker.cpp" />
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp" />
     <ClCompile Include="source\n885_searcher\n885_600_iterativeDeepeningLoop.cpp" />

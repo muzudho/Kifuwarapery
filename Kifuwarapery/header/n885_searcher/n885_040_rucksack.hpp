@@ -301,9 +301,11 @@ void InitSearchTable();
 // 起きろ？
 // 一箇所でしか呼ばないので、FORCE_INLINE
 FORCE_INLINE void HerosPub::WakeUp(Rucksack* rucksack) {
+	// 全員初期化☆？
 	for (size_t i = 0; i < size(); ++i) {
 		(*this)[i]->m_maxPly = 0;
 	}
+	// フラグを立てる☆？
 	this->m_isSleepWhileIdle_ = rucksack->m_engineOptions["Use_Sleeping_Threads"];
 }
 

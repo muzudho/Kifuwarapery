@@ -915,9 +915,6 @@
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n885_searcher\n885_500_rucksack.hpp">
-      <Filter>header\n885_searcher</Filter>
-    </ClInclude>
     <ClInclude Include="header\n165_movStack\n165_600_convMove.hpp">
       <Filter>header\n165_movStack</Filter>
     </ClInclude>
@@ -982,6 +979,12 @@
       <Filter>header\n883_nodeType</Filter>
     </ClInclude>
     <ClInclude Include="header\n885_searcher\n885_510_hitchhiker.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_040_rucksack.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_480_hitchhikerNyugyoku.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1526,9 +1529,6 @@
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
-    <ClCompile Include="source\n885_searcher\n885_500_rucksack.cpp">
-      <Filter>source\n885_searcher</Filter>
-    </ClCompile>
     <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp">
       <Filter>source\n165_movStack</Filter>
     </ClCompile>
@@ -1566,6 +1566,12 @@
       <Filter>source\n883_search__</Filter>
     </ClCompile>
     <ClCompile Include="source\n885_searcher\n885_510_hitchhiker.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_040_rucksack.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_480_hitchhikerNyugyoku.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>

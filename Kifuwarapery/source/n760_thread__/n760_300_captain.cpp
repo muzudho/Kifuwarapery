@@ -1,7 +1,7 @@
 ﻿#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n760_thread__/n760_300_captain.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 void Captain::IdleLoop() {

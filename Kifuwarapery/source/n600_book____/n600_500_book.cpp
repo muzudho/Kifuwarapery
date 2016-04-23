@@ -6,7 +6,7 @@
 #include "../../header/n600_book____/n600_400_bookEntry.hpp"
 #include "../../header/n600_book____/n600_500_book.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 MT64bit Book::m_mt64bit_; // 定跡のhash生成用なので、seedは固定でデフォルト値を使う。

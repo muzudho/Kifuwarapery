@@ -8,7 +8,7 @@
 #include "../n640_searcher/n640_510_futilityMargins.hpp"
 #include "../n640_searcher/n640_520_futilityMoveCounts.hpp"
 
-#include "../n885_searcher/n885_500_rucksack.hpp"//FIXME:
+#include "../n885_searcher/n885_040_rucksack.hpp"//FIXME:
 //class Rucksack;
 
 using namespace std;
@@ -23,6 +23,117 @@ public:
 	virtual const bool IsPvNode() const = 0;
 	virtual const bool IsSplitedNode() const = 0;
 	virtual const bool IsRootNode() const = 0;
+
+	void DoStep11LoopHeader(
+		Rucksack& rucksack,
+		bool& isContinue,
+		Move& move,
+		Move& excludedMove,
+		Position& pos,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode* splitedNode,
+		Depth& extension,
+		bool& captureOrPawnPromotion,
+		bool& givesCheck,
+		bool& dangerous
+		)
+	{
+		if (move == excludedMove) {
+			isContinue = true;
+			return;
+		}
+
+		if (this->IsRootNode()
+			&& std::find(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx,
+				rucksack.m_rootMoves.end(),
+				move) == rucksack.m_rootMoves.end())
+		{
+			isContinue = true;
+			return;
+		}
+
+		if (this->IsSplitedNode()) {
+			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+				isContinue = true;
+				return;
+			}
+			moveCount = ++splitedNode->m_moveCount;
+			splitedNode->m_mutex.unlock();
+		}
+		else {
+			++moveCount;
+		}
+
+
+		if (this->IsRootNode()) {
+			rucksack.m_signals.m_firstRootMove = (moveCount == 1);
+#if 0
+			if (GetThisThread == rucksack.m_ownerHerosPub.GetFirstCaptain() && 3000 < rucksack.m_stopwatch.GetElapsed()) {
+				SYNCCOUT << "info depth " << GetDepth / OnePly
+					<< " currmove " << GetMove.ToUSI()
+					<< " currmovenumber " << rucksack.m_moveCount + rucksack.m_pvIdx << SYNCENDL;
+			}
+#endif
+		}
+
+		extension = Depth0;
+		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
+		givesCheck = pos.IsMoveGivesCheck(move, ci);
+		dangerous = givesCheck; // todo: not implement
+
+	}
+
+	void DoStep12(
+		Rucksack& rucksack,
+		bool& givesCheck,
+		Position& pos,
+		Move& move,
+		Depth& extension,
+		bool& singularExtensionNode,
+		Move& ttMove,
+		ScoreIndex& ttScore,
+		const CheckInfo& ci,
+		const Depth& depth,
+		Flashlight* ss,
+		ScoreIndex& score,
+		const bool& cutNode,
+		ScoreIndex& beta,
+		Depth& newDepth
+		) {
+
+		if (givesCheck && ScoreIndex::ScoreZero <= pos.GetSeeSign(move))
+		{
+			extension = Depth::OnePly;
+		}
+
+		// singuler extension
+		if (singularExtensionNode
+			&& extension == Depth0
+			&& move == ttMove
+			&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
+			&& abs(ttScore) < PieceScore::m_ScoreKnownWin)
+		{
+			assert(ttScore != ScoreNone);
+
+			const ScoreIndex rBeta = ttScore - static_cast<ScoreIndex>(depth);
+			ss->m_excludedMove = move;
+			ss->m_skipNullMove = true;
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			score = Hitchhiker::Travel_885_510(rucksack, N02_NonPV, pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
+			ss->m_skipNullMove = false;
+			ss->m_excludedMove = g_MOVE_NONE;
+
+			if (score < rBeta) {
+				//extension = OnePly;
+				extension = (beta <= rBeta ? OnePly + OnePly / 2 : OnePly);
+			}
+		}
+
+		newDepth = depth - OnePly + extension;
+	}
 
 	void DoStep13(
 		bool& isContinue,
@@ -110,6 +221,119 @@ public:
 			movesSearched[playedMoveCount++] = move;
 		}
 
+	}
+
+	void DoStep14(
+		Position& pos,
+		Move& move,
+		StateInfo& st,
+		const CheckInfo& ci,
+		bool& givesCheck,
+		Flashlight* ss
+		) {
+		pos.DoMove(move, st, ci, givesCheck);
+		(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreIndex::ScoreNotEvaluated;
+	}
+
+	void DoStep15(
+		Rucksack& rucksack,
+		const Depth& depth,
+		bool& isPVMove,
+		bool& captureOrPawnPromotion,
+		Move& move,
+		Move& ttMove,
+		Flashlight* ss,
+		const bool& PVNode,
+		int& moveCount,
+		const bool& cutNode,
+		Depth& newDepth,
+		ScoreIndex& alpha,
+		SplitedNode* splitedNode,
+		ScoreIndex& score,
+		Position& pos,
+		bool& doFullDepthSearch
+		) {
+		// LMR
+		if (3 * OnePly <= depth
+			&& !isPVMove
+			&& !captureOrPawnPromotion
+			&& move != ttMove
+			&& ss->m_killers[0] != move
+			&& ss->m_killers[1] != move)
+		{
+			ss->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
+			if (!PVNode && cutNode) {
+				ss->m_reduction += OnePly;
+			}
+			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
+			if (this->IsSplitedNode()) {
+				alpha = splitedNode->m_alpha;
+			}
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			// PVS
+			score = -Hitchhiker::Travel_885_510(
+				rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, d, true);
+
+			doFullDepthSearch = (alpha < score && ss->m_reduction != Depth0);
+			ss->m_reduction = Depth0;
+		}
+		else {
+			doFullDepthSearch = !isPVMove;
+		}
+	}
+
+	void DoStep16(
+		Rucksack& rucksack,
+		bool& doFullDepthSearch,
+		SplitedNode* splitedNode,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Depth& newDepth,
+		bool& givesCheck,
+		Position& pos,
+		Flashlight* ss,
+		const bool& cutNode,
+		bool& isPVMove,
+		ScoreIndex& beta
+		) {
+
+		// full depth search
+		// PVS
+		if (doFullDepthSearch) {
+			if (this->IsSplitedNode()) {
+				alpha = splitedNode->m_alpha;
+			}
+			score = (newDepth < OnePly ?
+				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N02_NonPV, true, pos, ss + 1, -(alpha + 1), -alpha, Depth0)
+					: -Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -(alpha + 1), -alpha, Depth0))
+				//────────────────────────────────────────────────────────────────────────────────
+				// 探索☆？（＾ｑ＾）
+				//────────────────────────────────────────────────────────────────────────────────
+				: -Hitchhiker::Travel_885_510(
+					rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
+		}
+
+		// 通常の探索
+		if (this->IsPvNode() && (isPVMove || (alpha < score && (this->IsRootNode() || score < beta)))) {
+			score = (newDepth < OnePly ?
+				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, ss + 1, -beta, -alpha, Depth0)
+					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, ss + 1, -beta, -alpha, Depth0))
+				//────────────────────────────────────────────────────────────────────────────────
+				// 探索☆？（＾ｑ＾）
+				//────────────────────────────────────────────────────────────────────────────────
+				: -Hitchhiker::Travel_885_510(
+					rucksack, N01_PV, pos, ss + 1, -beta, -alpha, newDepth, false));
+		}
+
+	}
+
+	void DoStep17(
+		Position& pos,
+		Move& move
+		) {
+		pos.UndoMove(move);
 	}
 
 	void DoStep18(

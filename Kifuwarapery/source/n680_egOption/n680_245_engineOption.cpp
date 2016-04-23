@@ -1,6 +1,6 @@
 ﻿#include <ostream>
 #include "../../header/n680_egOption/n680_245_engineOption.hpp"
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
 
 

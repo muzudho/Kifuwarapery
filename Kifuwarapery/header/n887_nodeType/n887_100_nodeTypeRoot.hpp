@@ -8,14 +8,17 @@
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
-#include "../n885_searcher/n885_500_rucksack.hpp"
+#include "../n885_searcher/n885_040_rucksack.hpp"
 
 
 class NodetypeRoot : public NodetypeAbstract {
 public:
 
 	void GoSearch(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const {
-		Hitchhiker::Travel(	rucksack, NodeType::SplitedNodeRoot,
+		//────────────────────────────────────────────────────────────────────────────────
+		// 探索☆？（＾ｑ＾）
+		//────────────────────────────────────────────────────────────────────────────────
+		Hitchhiker::Travel_885_510(	rucksack, NodeType::SplitedNodeRoot,
 			pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
 	}
 

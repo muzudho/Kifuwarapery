@@ -10,9 +10,10 @@ class Rucksack;
 class Warrior : public Military {
 public:
 
-	explicit Warrior(Rucksack* s) : Military(s), m_msec(0) {}
+	explicit Warrior(Rucksack* s) : Military(s), m_lifetimeMilliseconds(0) {}
 
 	virtual void IdleLoop();
 
-	int m_msec;
+	// ｍｓｅｃはミリ秒☆？ 0にするとタイマーが止まるらしい☆（＾ｑ＾）？
+	int m_lifetimeMilliseconds;
 };

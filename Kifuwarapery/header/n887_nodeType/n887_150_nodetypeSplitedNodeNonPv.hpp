@@ -6,7 +6,7 @@
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
-#include "../n885_searcher/n885_500_rucksack.hpp"
+#include "../n885_searcher/n885_040_rucksack.hpp"
 
 
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {

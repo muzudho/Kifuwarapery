@@ -33,7 +33,8 @@
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
-#include "../../header/n885_searcher/n885_500_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
+#include "../../header/n885_searcher/n885_480_hitchhikerNyugyoku.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
 //class IterativeDeepeningLoop;
@@ -50,7 +51,7 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 
-ScoreIndex Hitchhiker::Travel(
+ScoreIndex Hitchhiker::Travel_885_510(
 	Rucksack& rucksack,
 	NodeType NT,
 	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode
@@ -278,9 +279,17 @@ ScoreIndex Hitchhiker::Travel(
 		pos.DoNullMove(true, st);
 		(ss + 1)->m_staticEvalRaw = (ss)->m_staticEvalRaw; // 評価値の差分評価の為。
 		(ss + 1)->m_skipNullMove = true;
+
 		ScoreIndex nullScore = (depth - reduction < OnePly ?
+			//────────────────────────────────────────────────────────────────────────────────
+			// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
 			-Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -beta, -alpha, Depth0)
-			: -Hitchhiker::Travel(rucksack, NodeType::N02_NonPV, pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
+			//────────────────────────────────────────────────────────────────────────────────
+			// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			: -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
+
 		(ss + 1)->m_skipNullMove = false;
 		pos.DoNullMove(false, st);
 
@@ -295,7 +304,10 @@ ScoreIndex Hitchhiker::Travel(
 
 			ss->m_skipNullMove = true;
 			assert(Depth0 < depth - reduction);
-			const ScoreIndex s = Hitchhiker::Travel(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, depth - reduction, false);
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			const ScoreIndex s = Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, depth - reduction, false);
 			ss->m_skipNullMove = false;
 
 			if (beta <= s) {
@@ -339,7 +351,11 @@ ScoreIndex Hitchhiker::Travel(
 				ss->m_currentMove = move;
 				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
 				(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-				score = -Hitchhiker::Travel(rucksack, NodeType::N02_NonPV, pos, ss + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+
+				//────────────────────────────────────────────────────────────────────────────────
+				// 探索☆？（＾ｑ＾）
+				//────────────────────────────────────────────────────────────────────────────────
+				score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
 				pos.UndoMove(move);
 				if (rbeta <= score) {
 					return score;
@@ -361,11 +377,17 @@ iid_start:
 		ss->m_skipNullMove = true;
 		if (PVNode)
 		{
-			Hitchhiker::Travel(rucksack, NodeType::N01_PV, pos, ss, alpha, beta, d, true);
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, ss, alpha, beta, d, true);
 		}
 		else
 		{
-			Hitchhiker::Travel(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
 		}
 		ss->m_skipNullMove = false;
 
@@ -391,6 +413,27 @@ split_point_start:
 	// step11
 	// Loop through moves
 	while (!(move = mp.GetNextMove(SPNode)).IsNone()) {
+
+		bool isContinue = false;
+		nodetypeProgram->DoStep11LoopHeader(
+			rucksack,
+			isContinue,
+			move,
+			excludedMove,
+			pos,
+			ci,
+			moveCount,
+			splitedNode,
+			extension,
+			captureOrPawnPromotion,
+			givesCheck,
+			dangerous
+			);
+		if (isContinue)
+		{
+			continue;
+		}
+		/*
 		if (move == excludedMove) {
 			continue;
 		}
@@ -430,39 +473,28 @@ split_point_start:
 		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
 		givesCheck = pos.IsMoveGivesCheck(move, ci);
 		dangerous = givesCheck; // todo: not implement
+		//*/
 
-								// step12
-		if (givesCheck && ScoreZero <= pos.GetSeeSign(move))
-		{
-			extension = OnePly;
-		}
-
-		// singuler extension
-		if (singularExtensionNode
-			&& extension == Depth0
-			&& move == ttMove
-			&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
-			&& abs(ttScore) < PieceScore::m_ScoreKnownWin)
-		{
-			assert(ttScore != ScoreNone);
-
-			const ScoreIndex rBeta = ttScore - static_cast<ScoreIndex>(depth);
-			ss->m_excludedMove = move;
-			ss->m_skipNullMove = true;
-			score = Hitchhiker::Travel(rucksack, N02_NonPV, pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
-			ss->m_skipNullMove = false;
-			ss->m_excludedMove = g_MOVE_NONE;
-
-			if (score < rBeta) {
-				//extension = OnePly;
-				extension = (beta <= rBeta ? OnePly + OnePly / 2 : OnePly);
-			}
-		}
-
-		newDepth = depth - OnePly + extension;
+		// step12
+		nodetypeProgram->DoStep12(
+			rucksack,
+			givesCheck,
+			pos,
+			move,
+			extension,
+			singularExtensionNode,
+			ttMove,
+			ttScore,
+			ci,
+			depth,
+			ss,
+			score,
+			cutNode,
+			beta,
+			newDepth
+			);
 
 		// step13
-		bool isContinue = false;
 		nodetypeProgram->DoStep13(
 			isContinue,
 			rucksack,
@@ -491,62 +523,56 @@ split_point_start:
 		}
 
 		// step14
-		pos.DoMove(move, st, ci, givesCheck);
-		(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+		nodetypeProgram->DoStep14(
+			pos,
+			move,
+			st,
+			ci,
+			givesCheck,
+			ss
+			);
 
 		// step15
-		// LMR
-		if (3 * OnePly <= depth
-			&& !isPVMove
-			&& !captureOrPawnPromotion
-			&& move != ttMove
-			&& ss->m_killers[0] != move
-			&& ss->m_killers[1] != move)
-		{
-			ss->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
-			if (!PVNode && cutNode) {
-				ss->m_reduction += OnePly;
-			}
-			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
-			if (SPNode) {
-				alpha = splitedNode->m_alpha;
-			}
-			// PVS
-			score = -Hitchhiker::Travel(
-				rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, d, true);
-
-			doFullDepthSearch = (alpha < score && ss->m_reduction != Depth0);
-			ss->m_reduction = Depth0;
-		}
-		else {
-			doFullDepthSearch = !isPVMove;
-		}
+		nodetypeProgram->DoStep15(
+			rucksack,
+			depth,
+			isPVMove,
+			captureOrPawnPromotion,
+			move,
+			ttMove,
+			ss,
+			PVNode,
+			moveCount,
+			cutNode,
+			newDepth,
+			alpha,
+			splitedNode,
+			score,
+			pos,
+			doFullDepthSearch
+			);
 
 		// step16
-		// full depth search
-		// PVS
-		if (doFullDepthSearch) {
-			if (SPNode) {
-				alpha = splitedNode->m_alpha;
-			}
-			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N02_NonPV, true, pos, ss + 1, -(alpha + 1), -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -(alpha + 1), -alpha, Depth0))
-				: -Hitchhiker::Travel(
-					rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
-		}
-
-		// 通常の探索
-		if (PVNode && (isPVMove || (alpha < score && (RootNode || score < beta)))) {
-			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, ss + 1, -beta, -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, ss + 1, -beta, -alpha, Depth0))
-				: -Hitchhiker::Travel(
-					rucksack, N01_PV, pos, ss + 1, -beta, -alpha, newDepth, false));
-		}
+		nodetypeProgram->DoStep16(
+			rucksack,
+			doFullDepthSearch,
+			splitedNode,
+			alpha,
+			score,
+			newDepth,
+			givesCheck,
+			pos,
+			ss,
+			cutNode,
+			isPVMove,
+			beta
+			);
 
 		// step17
-		pos.UndoMove(move);
+		nodetypeProgram->DoStep17(
+			pos,
+			move
+			);
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
@@ -826,20 +852,32 @@ ScoreIndex Hitchhiker::Qsearch(Rucksack& rucksack, NodeType NT, bool INCHECK,
 
 
 void Hitchhiker::Think(Rucksack& rucksack) {
-	static Book book;
+
 	Position& pos = rucksack.m_rootPosition;
 	rucksack.m_timeManager.Init(rucksack.m_limits, pos.GetGamePly(), pos.GetTurn(), &rucksack);
-	std::uniform_int_distribution<int> dist(rucksack.m_engineOptions["Min_Book_Ply"], rucksack.m_engineOptions["Max_Book_Ply"]);
-	const Ply book_ply = dist(g_randomTimeSeed);
 
-	bool nyugyokuWin = false;
-#if defined LEARN
-#else
-	if (Hitchhiker::Nyugyoku(pos)) {
-		nyugyokuWin = true;
-		goto finalize;
+	//────────────────────────────────────────────────────────────────────────────────
+	// 入玉勝ちかを調べるぜ☆（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+#if !defined(LEARN)
+	if (Hitchhiker::IsNyugyokuWin(pos)) {
+		//────────────────────────────────────────────────────────────────────────────────
+		// 探索☆？（＾ｑ＾）
+		//────────────────────────────────────────────────────────────────────────────────
+		HitchhikerNyugyoku::Travel_885_480(rucksack,pos);
+		return;
 	}
 #endif
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 入玉勝ちじゃなかったぜ☆（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	static Book book;
+	std::uniform_int_distribution<int> dist(
+		rucksack.m_engineOptions["Min_Book_Ply"], rucksack.m_engineOptions["Max_Book_Ply"]);
+
+	const Ply book_ply = dist(g_randomTimeSeed);
+
 	pos.SetNodesSearched(0);
 
 #if defined LEARN
@@ -848,8 +886,14 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 	rucksack.m_tt.SetSize(rucksack.m_engineOptions["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
-	if (rucksack.m_engineOptions["OwnBook"] && pos.GetGamePly() <= book_ply) {
-		const MoveAndScoreIndex bookMoveScore = book.GetProbe(pos, rucksack.m_engineOptions["Book_File"], rucksack.m_engineOptions["Best_Book_Move"]);
+	if (
+		// 定跡が使える手数のとき☆（＾ｑ＾）？
+		rucksack.m_engineOptions["OwnBook"] &&
+		pos.GetGamePly() <= book_ply
+	) {
+		const MoveAndScoreIndex bookMoveScore = book.GetProbe(
+			pos, rucksack.m_engineOptions["Book_File"], rucksack.m_engineOptions["Best_Book_Move"]);
+
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&
@@ -857,9 +901,8 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 				rucksack.m_rootMoves.begin(),
 				rucksack.m_rootMoves.end(),
 				bookMoveScore.m_move
-				) != rucksack.m_rootMoves.end()
-			)
-		{
+			) != rucksack.m_rootMoves.end()
+		){
 			std::swap(rucksack.m_rootMoves[0], *std::find(rucksack.m_rootMoves.begin(),
 				rucksack.m_rootMoves.end(),
 				bookMoveScore.m_move));
@@ -872,9 +915,11 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 		}
 	}
 
+	// 全スレッドの初期化か何か☆？
 	rucksack.m_ownerHerosPub.WakeUp(&rucksack);
 
-	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_msec =
+	// 下級戦士の寿命（ミリ秒）を設定するぜ☆
+	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds =
 		(rucksack.m_limits.IsUseTimeManagement() ?
 			std::min(100, std::max(rucksack.m_timeManager.GetAvailableTime() / 16, rucksack.TimerResolution)) :
 			rucksack.m_limits.m_nodes ?
@@ -891,12 +936,14 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 	detectBishopInDanger(GetPos);
 #endif
 #endif
+	//────────────────────────────────────────────────────────────────────────────────
 	// 反復深化探索を始めるぜ☆（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
 	IterativeDeepeningLoop::Execute885_500(rucksack, pos);//ExecuteIterativeDeepeningLoop(pos);
 
 #if defined LEARN
 #else
-	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_msec = 0; // timer を止める。
+	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds = 0; // timer を止める。
 	rucksack.m_ownerHerosPub.Sleep();
 
 finalize:
@@ -909,10 +956,7 @@ finalize:
 		pos.GetThisThread()->WaitFor(rucksack.m_signals.m_stop);
 	}
 
-	if (nyugyokuWin) {
-		SYNCCOUT << "bestmove win" << SYNCENDL;
-	}
-	else if (rucksack.m_rootMoves[0].m_pv_[0].IsNone()) {
+	if (rucksack.m_rootMoves[0].m_pv_[0].IsNone()) {
 		SYNCCOUT << "bestmove resign" << SYNCENDL;
 	}
 	else {
@@ -926,7 +970,7 @@ finalize:
 
 
 // 入玉勝ちかどうかを判定
-bool Hitchhiker::Nyugyoku(const Position& pos) {
+bool Hitchhiker::IsNyugyokuWin(const Position& pos) {
 	// CSA ルールでは、一 から 六 の条件を全て満たすとき、入玉勝ち宣言が出来る。
 
 	// 一 宣言側の手番である。
@@ -934,46 +978,61 @@ bool Hitchhiker::Nyugyoku(const Position& pos) {
 	// この関数を呼び出すのは自分の手番のみとする。ponder では呼び出さない。
 
 	const Color us = pos.GetTurn();
+
 	// 敵陣のマスク
 	const Bitboard opponentsField = (us == Black ? g_inFrontMaskBb.GetInFrontMask(Black, Rank6) : g_inFrontMaskBb.GetInFrontMask(White, Rank4));
 
 	// 二 宣言側の玉が敵陣三段目以内に入っている。
 	if (!pos.GetBbOf20(N08_King, us).AndIsNot0(opponentsField))
+	{
 		return false;
+	}
 
 	// 三 宣言側が、大駒5点小駒1点で計算して
 	//     先手の場合28点以上の持点がある。
 	//     後手の場合27点以上の持点がある。
 	//     点数の対象となるのは、宣言側の持駒と敵陣三段目以内に存在する玉を除く宣言側の駒のみである。
 	const Bitboard bigBB = pos.GetBbOf(N06_Rook, N14_Dragon, N05_Bishop, N13_Horse) & opponentsField & pos.GetBbOf10(us);
+
 	const Bitboard smallBB = (pos.GetBbOf(N01_Pawn, N02_Lance, N03_Knight, N04_Silver) |
 		pos.GetGoldsBB()) & opponentsField & pos.GetBbOf10(us);
+
 	const Hand hand = pos.GetHand(us);
+
 	const int val = (bigBB.PopCount() + hand.NumOf<HRook>() + hand.NumOf<HBishop>()) * 5
 		+ smallBB.PopCount()
 		+ hand.NumOf<HPawn>() + hand.NumOf<HLance>() + hand.NumOf<HKnight>()
 		+ hand.NumOf<HSilver>() + hand.NumOf<HGold>();
+
 #if defined LAW_24
 	if (val < 31)
+	{
 		return false;
+	}
 #else
 	if (val < (us == Black ? 28 : 27))
+	{
 		return false;
+	}
 #endif
 
 	// 四 宣言側の敵陣三段目以内の駒は、玉を除いて10枚以上存在する。
 
 	// 玉は敵陣にいるので、自駒が敵陣に11枚以上あればよい。
 	if ((pos.GetBbOf10(us) & opponentsField).PopCount() < 11)
+	{
 		return false;
+	}
 
 	// 五 宣言側の玉に王手がかかっていない。
 	if (pos.InCheck())
+	{
 		return false;
+	}
 
 	// 六 宣言側の持ち時間が残っている。
 
-	// 持ち時間が無ければ既に負けなので、何もチェックしない。
+	// 持ち時間が無ければ既に負けていて　ここにはこないので、何もチェックしない（＾ｑ＾）
 
 	return true;
 }
