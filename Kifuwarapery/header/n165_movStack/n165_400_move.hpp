@@ -95,8 +95,11 @@ public:
 	bool operator == (const Move rhs) const;
 	bool operator != (const Move rhs) const;
 	bool operator < (const Move rhs) const;
+
 	std::string GetPromoteFlagToStringUSI() const;
+
 	std::string ToUSI() const;
+
 	std::string ToCSA() const;
 
 

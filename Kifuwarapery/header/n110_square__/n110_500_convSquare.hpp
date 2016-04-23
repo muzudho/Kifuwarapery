@@ -64,7 +64,8 @@ public:
 		return g_squareToFile[s];
 	}
 
-	static inline std::string TO_STRING_USI40(const Square sq) {
+	// 末尾の改行付きで☆
+	static inline std::string TO_2CHARS_N0_STRING_USI40(const Square sq) {
 		const Rank r = ConvSquare::TO_RANK10(sq);
 		const File f = ConvSquare::TO_FILE10(sq);
 		const char ch[] = { ConvFile::TO_CHAR_USI10(f), ConvRank::TO_CHAR_USI10(r), '\0' };

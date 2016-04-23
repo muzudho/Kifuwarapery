@@ -12,7 +12,9 @@ public:
 	static inline constexpr Rank INVERSE10(const Rank r) { return RankNum - 1 - r; }
 
 	// todo: アルファベットが辞書順に並んでいない処理系があるなら対応すること。
+	// rank は 0～8という想定☆
 	static inline char TO_CHAR_USI10(const Rank r) {
+		// 処理系をコンパイル時に確認だぜ☆（＾ｑ＾）
 		static_assert('a' + 1 == 'b', "");
 		static_assert('a' + 2 == 'c', "");
 		static_assert('a' + 3 == 'd', "");
