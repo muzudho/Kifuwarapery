@@ -57,15 +57,18 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode
 	) {
 	NodetypeAbstract* nodetypeProgram = g_NODETYPE_PROGRAMS[NT];
+	/*
 	const bool PVNode = nodetypeProgram->IsPvNode();
 	const bool SPNode = nodetypeProgram->IsSplitedNode();
 	const bool RootNode = nodetypeProgram->IsRootNode();
+	*/
 
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	assert(PVNode || (alpha == beta - 1));
+	assert(nodetypeProgram->IsPvNode() || (alpha == beta - 1));
 	assert(Depth0 < depth);
 
+	
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
 	Move movesSearched[64];
 	StateInfo st;
@@ -118,41 +121,9 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		goto split_point_start;
 	}
 
-	// initialize node
-	moveCount = playedMoveCount = 0;
-	inCheck = pos.InCheck();
-
-	if (SPNode) {
-		splitedNode = ss->m_splitedNode;
-		bestMove = splitedNode->m_bestMove;
-		threatMove = splitedNode->m_threatMove;
-		bestScore = splitedNode->m_bestScore;
-		//tte = nullptr;
-		ttMove = excludedMove = g_MOVE_NONE;
-		ttScore = ScoreNone;
-
-		Evaluation09 evaluation;
-		evaluation.evaluate(pos, ss);
-
-		assert(-ScoreInfinite < splitedNode->m_bestScore && 0 < splitedNode->m_moveCount);
-
-		goto split_point_start;
-	}
-
-	bestScore = -ScoreInfinite;
-	ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;
-	ss->m_ply = (ss - 1)->m_ply + 1;
-	(ss + 1)->m_skipNullMove = false;
-	(ss + 1)->m_reduction = Depth0;
-	(ss + 2)->m_killers[0] = (ss + 2)->m_killers[1] = g_MOVE_NONE;
-
-	if (PVNode && thisThread->m_maxPly < ss->m_ply) {
-		thisThread->m_maxPly = ss->m_ply;
-	}
-
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
-	if (!RootNode) {
+	if (!nodetypeProgram->IsRootNode()) {
 		// step2
 		// stop と最大探索深さのチェック
 
@@ -163,10 +134,6 @@ ScoreIndex Hitchhiker::Travel_885_510(
 			rucksack,
 			ss
 		);
-		/*
-		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
-			isReturnWithScore, returnScore, &rucksack, ss);
-		*/
 
 		if (isReturnWithScore)
 		{
@@ -185,16 +152,6 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		{
 			return returnScore;
 		}
-		/*
-		// mate distance pruning
-		if (!RootNode) {
-			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
-			beta = std::min(UtilScore::MateIn(ss->m_ply + 1), beta);
-			if (beta <= alpha) {
-				return alpha;
-			}
-		}
-		*/
 	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
@@ -322,7 +279,8 @@ iid_start:
 		);
 
 split_point_start:
-	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, PVNode ? -ScoreInfinite : beta);
+	NextmoveEvent mp(
+		pos, ttMove, depth, rucksack.m_history, ss, nodetypeProgram->IsPvNode() ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
 
 	nodetypeProgram->DoStep11A_BeforeLoop_SplitPointStart(
@@ -337,7 +295,7 @@ split_point_start:
 
 	// step11
 	// Loop through moves
-	while (!(move = mp.GetNextMove(SPNode)).IsNone()) {
+	while (!(move = mp.GetNextMove(nodetypeProgram->IsSplitedNode())).IsNone()) {
 
 		bool isContinue = false;
 		nodetypeProgram->DoStep11B_LoopHeader(
@@ -425,7 +383,6 @@ split_point_start:
 			move,
 			ttMove,
 			ss,
-			PVNode,
 			moveCount,
 			cutNode,
 			newDepth,
@@ -461,7 +418,7 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
-		if (SPNode) {
+		if (nodetypeProgram->IsSplitedNode()) {
 			splitedNode->m_mutex.lock();
 			bestScore = splitedNode->m_bestScore;
 			alpha = splitedNode->m_alpha;
@@ -512,7 +469,7 @@ split_point_start:
 		}
 	}
 
-	if (SPNode) {
+	if (nodetypeProgram->IsSplitedNode()) {
 		return bestScore;
 	}
 
