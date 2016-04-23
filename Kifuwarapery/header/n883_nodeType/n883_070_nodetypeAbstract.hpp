@@ -2,6 +2,7 @@
 
 
 #include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp" // Searcherと持ち合い
 #include "../n640_searcher/n640_500_reductions.hpp"
@@ -24,7 +25,128 @@ public:
 	virtual const bool IsSplitedNode() const = 0;
 	virtual const bool IsRootNode() const = 0;
 
-	void DoStep11LoopHeader(
+	void DoStep9(
+		bool& isReturnWithScore,
+		Rucksack& rucksack,
+		const Depth& depth,
+		Flashlight* ss,
+		ScoreIndex& beta,
+		Move& move,
+		Position& pos,
+		Move& ttMove,
+		StateInfo& st,
+		ScoreIndex& score,
+		const bool& cutNode
+		) {
+
+		// probcut
+		if (!this->IsPvNode()
+			&& 5 * OnePly <= depth
+			&& !ss->m_skipNullMove
+			// 確実にバグらせないようにする。
+			&& abs(beta) < ScoreInfinite - 200)
+		{
+			const ScoreIndex rbeta = beta + 200;
+			const Depth rdepth = depth - OnePly - 3 * OnePly;
+
+			assert(OnePly <= rdepth);
+			assert(!(ss - 1)->m_currentMove.IsNone());
+			assert((ss - 1)->m_currentMove != g_MOVE_NULL);
+
+			assert(move == (ss - 1)->m_currentMove);
+			// move.cap() は前回(一手前)の指し手で取った駒の種類
+			NextmoveEvent mp(pos, ttMove, rucksack.m_history, move.GetCap());
+			const CheckInfo ci(pos);
+			while (!(move = mp.GetNextMove(false)).IsNone()) {
+				if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+					ss->m_currentMove = move;
+					pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
+					(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+
+					//────────────────────────────────────────────────────────────────────────────────
+					// 探索☆？（＾ｑ＾）
+					//────────────────────────────────────────────────────────────────────────────────
+					score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+					pos.UndoMove(move);
+					if (rbeta <= score) {
+						isReturnWithScore = true;
+						return;
+						//return score;
+					}
+				}
+			}
+		}
+	}
+
+	void DoStep10(
+		const Depth& depth,
+		Move& ttMove,
+		bool& inCheck,
+		ScoreIndex& beta,
+		Flashlight* ss,
+		Rucksack& rucksack,
+		Position& pos,
+		ScoreIndex& alpha,
+		const TTEntry* tte,
+		Key& posKey
+		)
+	{
+		// internal iterative deepening
+		if ((this->IsPvNode() ? 5 * OnePly : 8 * OnePly) <= depth
+			&& ttMove.IsNone()
+			&& (this->IsPvNode() || (!inCheck && beta <= ss->m_staticEval + static_cast<ScoreIndex>(256))))
+		{
+			//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
+			const Depth d = (this->IsPvNode() ? depth - 2 * OnePly : depth / 2);
+
+			ss->m_skipNullMove = true;
+			if (this->IsPvNode())
+			{
+				//────────────────────────────────────────────────────────────────────────────────
+				// 探索☆？（＾ｑ＾）
+				//────────────────────────────────────────────────────────────────────────────────
+				Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, ss, alpha, beta, d, true);
+			}
+			else
+			{
+				//────────────────────────────────────────────────────────────────────────────────
+				// 探索☆？（＾ｑ＾）
+				//────────────────────────────────────────────────────────────────────────────────
+				Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
+			}
+			ss->m_skipNullMove = false;
+
+			tte = rucksack.m_tt.Probe(posKey);
+			ttMove = (tte != nullptr ?
+				UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
+				g_MOVE_NONE);
+		}
+	}
+
+	void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
+		const Depth& depth,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
+		const TTEntry* tte
+		)
+	{
+		//NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, this->IsPvNode() ? -ScoreInfinite : beta);
+		//const CheckInfo ci(pos);
+		score = bestScore;
+		singularExtensionNode =
+			!this->IsRootNode()
+			&& !this-IsSplitedNode()
+			&& 8 * Depth::OnePly <= depth
+			&& !ttMove.IsNone()
+			&& excludedMove.IsNone()
+			&& (tte->GetType() & BoundLower)
+			&& depth - 3 * Depth::OnePly <= tte->GetDepth();
+	}
+
+	void DoStep11B_LoopHeader(
 		Rucksack& rucksack,
 		bool& isContinue,
 		Move& move,

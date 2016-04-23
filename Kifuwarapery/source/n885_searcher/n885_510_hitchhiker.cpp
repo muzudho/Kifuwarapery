@@ -328,6 +328,24 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	}
 
 	// step9
+	bool isReturnWithScore = false;
+	nodetypeProgram->DoStep9(
+		isReturnWithScore,
+		rucksack,
+		depth,
+		ss,
+		beta,
+		move,
+		pos,
+		ttMove,
+		st,
+		score,
+		cutNode
+		);
+	if (isReturnWithScore) {
+		return score;
+	}
+	/*
 	// probcut
 	if (!PVNode
 		&& 5 * OnePly <= depth
@@ -363,59 +381,44 @@ ScoreIndex Hitchhiker::Travel_885_510(
 			}
 		}
 	}
+	//*/
 
+	// “à‘¤‚Ì”½•œ[‰»’Tõ™HiO‚‘Oj
 iid_start:
 	// step10
-	// internal iterative deepening
-	if ((PVNode ? 5 * OnePly : 8 * OnePly) <= depth
-		&& ttMove.IsNone()
-		&& (PVNode || (!inCheck && beta <= ss->m_staticEval + static_cast<ScoreIndex>(256))))
-	{
-		//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
-		const Depth d = (PVNode ? depth - 2 * OnePly : depth / 2);
-
-		ss->m_skipNullMove = true;
-		if (PVNode)
-		{
-			//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-			// ’Tõ™HiO‚‘Oj
-			//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-			Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, ss, alpha, beta, d, true);
-		}
-		else
-		{
-			//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-			// ’Tõ™HiO‚‘Oj
-			//„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ„Ÿ
-			Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
-		}
-		ss->m_skipNullMove = false;
-
-		tte = rucksack.m_tt.Probe(posKey);
-		ttMove = (tte != nullptr ?
-			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
-			g_MOVE_NONE);
-	}
+	nodetypeProgram->DoStep10(
+		depth,
+		ttMove,
+		inCheck,
+		beta,
+		ss,
+		rucksack,
+		pos,
+		alpha,
+		tte,
+		posKey
+		);
 
 split_point_start:
 	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, PVNode ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
-	score = bestScore;
-	singularExtensionNode =
-		!RootNode
-		&& !SPNode
-		&& 8 * OnePly <= depth
-		&& !ttMove.IsNone()
-		&& excludedMove.IsNone()
-		&& (tte->GetType() & BoundLower)
-		&& depth - 3 * OnePly <= tte->GetDepth();
+
+	nodetypeProgram->DoStep11A_BeforeLoop_SplitPointStart(
+		ttMove,
+		depth,
+		score,
+		bestScore,
+		singularExtensionNode,
+		excludedMove,
+		tte
+		);
 
 	// step11
 	// Loop through moves
 	while (!(move = mp.GetNextMove(SPNode)).IsNone()) {
 
 		bool isContinue = false;
-		nodetypeProgram->DoStep11LoopHeader(
+		nodetypeProgram->DoStep11B_LoopHeader(
 			rucksack,
 			isContinue,
 			move,
@@ -433,47 +436,6 @@ split_point_start:
 		{
 			continue;
 		}
-		/*
-		if (move == excludedMove) {
-			continue;
-		}
-
-		if (RootNode
-			&& std::find(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx,
-				rucksack.m_rootMoves.end(),
-				move) == rucksack.m_rootMoves.end())
-		{
-			continue;
-		}
-
-		if (SPNode) {
-			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-				continue;
-			}
-			moveCount = ++splitedNode->m_moveCount;
-			splitedNode->m_mutex.unlock();
-		}
-		else {
-			++moveCount;
-		}
-
-
-		if (RootNode) {
-			rucksack.m_signals.m_firstRootMove = (moveCount == 1);
-#if 0
-			if (GetThisThread == rucksack.m_ownerHerosPub.GetFirstCaptain() && 3000 < rucksack.m_stopwatch.GetElapsed()) {
-				SYNCCOUT << "info depth " << GetDepth / OnePly
-					<< " currmove " << GetMove.ToUSI()
-					<< " currmovenumber " << rucksack.m_moveCount + rucksack.m_pvIdx << SYNCENDL;
-			}
-#endif
-		}
-
-		extension = Depth0;
-		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
-		givesCheck = pos.IsMoveGivesCheck(move, ci);
-		dangerous = givesCheck; // todo: not implement
-		//*/
 
 		// step12
 		nodetypeProgram->DoStep12(
