@@ -69,7 +69,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
 	Move movesSearched[64];
 	StateInfo st;
-	const TTEntry* tte;
+	const TTEntry* tte = nullptr;//(^q^)
 	SplitedNode* splitedNode = nullptr;//(^q^)
 	Key posKey;
 	Move ttMove;
@@ -104,7 +104,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		bestMove = splitedNode->m_bestMove;
 		threatMove = splitedNode->m_threatMove;
 		bestScore = splitedNode->m_bestScore;
-		tte = nullptr;
+		//tte = nullptr;
 		ttMove = excludedMove = g_MOVE_NONE;
 		ttScore = ScoreNone;
 
@@ -156,6 +156,31 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	// step4
+	bool isReturnWithScore = false;
+	ScoreIndex returnScore;
+	nodetypeProgram->DoStep4(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		excludedMove,
+		ss,
+		posKey,
+		pos,
+		tte,
+		ttMove,
+		ttScore,
+		depth,
+		beta,
+		inCheck,
+		move,
+		bestScore,
+		bestMove
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
+	/*
 	// trans position table lookup
 	excludedMove = ss->m_excludedMove;
 	posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
@@ -202,6 +227,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		}
 	}
 #endif
+	//*/
 
 	// step5
 	bool isGotoIidStart = false;
@@ -220,42 +246,8 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	if (isGotoIidStart) {
 		goto iid_start;
 	}
-	/*
-	// evaluate the position statically
-	Evaluation09 evaluation;
-	eval = ss->m_staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
-	if (inCheck) {
-		eval = ss->m_staticEval = ScoreNone;
-		goto iid_start;
-	}
-	else if (tte != nullptr) {
-		if (ttScore != ScoreNone
-			&& (tte->GetType() & (eval < ttScore ? BoundLower : BoundUpper)))
-		{
-			eval = ttScore;
-		}
-	}
-	else {
-		rucksack.m_tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
-			g_MOVE_NONE, ss->m_staticEval);
-	}
-
-	// 一手前の指し手について、history を更新する。
-	// todo: ここの条件はもう少し考えた方が良い。
-	if ((move = (ss - 1)->m_currentMove) != g_MOVE_NULL
-		&& (ss - 1)->m_staticEval != ScoreNone
-		&& ss->m_staticEval != ScoreNone
-		&& !move.IsCaptureOrPawnPromotion() // 前回(一手前)の指し手が駒取りでなかった。
-		)
-	{
-		const Square to = move.To();
-		rucksack.m_gains.Update(move.IsDrop(), pos.GetPiece(to), to, -(ss - 1)->m_staticEval - ss->m_staticEval);
-	}
-	//*/
 
 	// step6
-	bool isReturnWithScore = false;
-	ScoreIndex returnScore;
 	nodetypeProgram->DoStep6(
 		isReturnWithScore,
 		returnScore,
@@ -267,6 +259,10 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		pos,
 		ss
 		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
 
 	// step7
 	nodetypeProgram->DoStep7(

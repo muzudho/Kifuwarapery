@@ -25,6 +25,80 @@ public:
 	virtual const bool IsSplitedNode() const = 0;
 	virtual const bool IsRootNode() const = 0;
 
+	void DoStep4(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		Move& excludedMove,
+		Flashlight* ss,
+		Key& posKey,
+		Position& pos,
+		const TTEntry* tte,
+		Move& ttMove,
+		ScoreIndex& ttScore,
+		const Depth& depth,
+		ScoreIndex& beta,
+		bool& inCheck,
+		Move& move,
+		ScoreIndex& bestScore,
+		Move& bestMove
+	) {
+		// trans position table lookup
+		excludedMove = ss->m_excludedMove;
+		posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
+		tte = rucksack.m_tt.Probe(posKey);
+		ttMove =
+			this->IsRootNode() ? rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0] :
+			tte != nullptr ?
+			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
+			g_MOVE_NONE;
+		ttScore = (tte != nullptr ? rucksack.ConvertScoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
+
+		if (!this->IsRootNode()
+			&& tte != nullptr
+			&& depth <= tte->GetDepth()
+			&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
+			&& (this->IsPvNode() ? tte->GetType() == BoundExact
+				: (beta <= ttScore ? (tte->GetType() & BoundLower)
+					: (tte->GetType() & BoundUpper))))
+		{
+			rucksack.m_tt.Refresh(tte);
+			ss->m_currentMove = ttMove; // Move::moveNone() もありえる。
+
+			if (beta <= ttScore
+				&& !ttMove.IsNone()
+				&& !ttMove.IsCaptureOrPawnPromotion()
+				&& ttMove != ss->m_killers[0])
+			{
+				ss->m_killers[1] = ss->m_killers[0];
+				ss->m_killers[0] = ttMove;
+			}
+
+			isReturnWithScore = true;
+			returnScore = ttScore;
+			return;
+			//return ttScore;
+		}
+
+#if 1
+		if (!this->IsRootNode()
+			&& !inCheck)
+		{
+			if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
+				ss->m_staticEval = bestScore = UtilScore::MateIn(ss->m_ply);
+				rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss->m_ply), BoundExact, depth,
+					move, ss->m_staticEval);
+				bestMove = move;
+
+				isReturnWithScore = true;
+				returnScore = bestScore;
+				return;
+				//return bestScore;
+			}
+		}
+#endif
+	}
+
 	void DoStep5(
 		bool& isGotoIidStart,
 		Rucksack& rucksack,
@@ -34,7 +108,7 @@ public:
 		bool& inCheck,
 		const TTEntry* tte,
 		ScoreIndex& ttScore,
-		Key posKey,
+		Key& posKey,
 		Move& move
 	) {
 		// evaluate the position statically
