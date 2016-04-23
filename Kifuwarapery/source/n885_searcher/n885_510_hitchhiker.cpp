@@ -204,6 +204,23 @@ ScoreIndex Hitchhiker::Travel_885_510(
 #endif
 
 	// step5
+	bool isGotoIidStart = false;
+	nodetypeProgram->DoStep5(
+		isGotoIidStart,
+		rucksack,
+		eval,
+		ss,
+		pos,
+		inCheck,
+		tte,
+		ttScore,
+		posKey,
+		move
+		);
+	if (isGotoIidStart) {
+		goto iid_start;
+	}
+	/*
 	// evaluate the position statically
 	Evaluation09 evaluation;
 	eval = ss->m_staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
@@ -234,101 +251,53 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		const Square to = move.To();
 		rucksack.m_gains.Update(move.IsDrop(), pos.GetPiece(to), to, -(ss - 1)->m_staticEval - ss->m_staticEval);
 	}
+	//*/
 
 	// step6
-	// razoring
-	if (!PVNode
-		&& depth < 4 * OnePly
-		&& eval + rucksack.razorMargin(depth) < beta
-		&& ttMove.IsNone()
-		&& abs(beta) < ScoreMateInMaxPly)
-	{
-		const ScoreIndex rbeta = beta - rucksack.razorMargin(depth);
-		const ScoreIndex s = Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss, rbeta - 1, rbeta, Depth0);
-		if (s < rbeta) {
-			return s;
-		}
-	}
+	bool isReturnWithScore = false;
+	ScoreIndex returnScore;
+	nodetypeProgram->DoStep6(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		depth,
+		eval,
+		beta,
+		ttMove,
+		pos,
+		ss
+		);
 
 	// step7
-	// static null move pruning
-	if (!PVNode
-		&& !ss->m_skipNullMove
-		&& depth < 4 * OnePly
-		&& beta <= eval - g_futilityMargins.m_FutilityMargins[depth][0]
-		&& abs(beta) < ScoreMateInMaxPly)
-	{
-		return eval - g_futilityMargins.m_FutilityMargins[depth][0];
-	}
+	nodetypeProgram->DoStep7(
+		isReturnWithScore,
+		returnScore,
+		ss,
+		depth,
+		beta,
+		eval
+		);
 
 	// step8
-	// null move
-	if (!PVNode
-		&& !ss->m_skipNullMove
-		&& 2 * OnePly <= depth
-		&& beta <= eval
-		&& abs(beta) < ScoreMateInMaxPly)
-	{
-		ss->m_currentMove = g_MOVE_NULL;
-		Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
-
-		if (beta < eval - PieceScore::m_pawn) {
-			reduction += OnePly;
-		}
-
-		pos.DoNullMove(true, st);
-		(ss + 1)->m_staticEvalRaw = (ss)->m_staticEvalRaw; // 評価値の差分評価の為。
-		(ss + 1)->m_skipNullMove = true;
-
-		ScoreIndex nullScore = (depth - reduction < OnePly ?
-			//────────────────────────────────────────────────────────────────────────────────
-			// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
-			//────────────────────────────────────────────────────────────────────────────────
-			-Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -beta, -alpha, Depth0)
-			//────────────────────────────────────────────────────────────────────────────────
-			// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
-			//────────────────────────────────────────────────────────────────────────────────
-			: -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
-
-		(ss + 1)->m_skipNullMove = false;
-		pos.DoNullMove(false, st);
-
-		if (beta <= nullScore) {
-			if (ScoreMateInMaxPly <= nullScore) {
-				nullScore = beta;
-			}
-
-			if (depth < 6 * OnePly) {
-				return nullScore;
-			}
-
-			ss->m_skipNullMove = true;
-			assert(Depth0 < depth - reduction);
-			//────────────────────────────────────────────────────────────────────────────────
-			// 探索☆？（＾ｑ＾）
-			//────────────────────────────────────────────────────────────────────────────────
-			const ScoreIndex s = Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, depth - reduction, false);
-			ss->m_skipNullMove = false;
-
-			if (beta <= s) {
-				return nullScore;
-			}
-		}
-		else {
-			// fail low
-			threatMove = (ss + 1)->m_currentMove;
-			if (depth < 5 * OnePly
-				&& (ss - 1)->m_reduction != Depth0
-				&& !threatMove.IsNone()
-				&& rucksack.allows(pos, (ss - 1)->m_currentMove, threatMove))
-			{
-				return beta - 1;
-			}
-		}
+	nodetypeProgram->DoStep8(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		ss,
+		depth,
+		beta,
+		eval,
+		pos,
+		st,
+		alpha,
+		cutNode,
+		threatMove
+	);
+	if (isReturnWithScore) {
+		return returnScore;
 	}
 
 	// step9
-	bool isReturnWithScore = false;
 	nodetypeProgram->DoStep9(
 		isReturnWithScore,
 		rucksack,
@@ -345,43 +314,6 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	if (isReturnWithScore) {
 		return score;
 	}
-	/*
-	// probcut
-	if (!PVNode
-		&& 5 * OnePly <= depth
-		&& !ss->m_skipNullMove
-		// 確実にバグらせないようにする。
-		&& abs(beta) < ScoreInfinite - 200)
-	{
-		const ScoreIndex rbeta = beta + 200;
-		const Depth rdepth = depth - OnePly - 3 * OnePly;
-
-		assert(OnePly <= rdepth);
-		assert(!(ss - 1)->m_currentMove.IsNone());
-		assert((ss - 1)->m_currentMove != g_MOVE_NULL);
-
-		assert(move == (ss - 1)->m_currentMove);
-		// move.cap() は前回(一手前)の指し手で取った駒の種類
-		NextmoveEvent mp(pos, ttMove, rucksack.m_history, move.GetCap());
-		const CheckInfo ci(pos);
-		while (!(move = mp.GetNextMove(false)).IsNone()) {
-			if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-				ss->m_currentMove = move;
-				pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
-				(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-
-				//────────────────────────────────────────────────────────────────────────────────
-				// 探索☆？（＾ｑ＾）
-				//────────────────────────────────────────────────────────────────────────────────
-				score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
-				pos.UndoMove(move);
-				if (rbeta <= score) {
-					return score;
-				}
-			}
-		}
-	}
-	//*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
