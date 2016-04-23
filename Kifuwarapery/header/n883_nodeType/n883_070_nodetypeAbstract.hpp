@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include <algorithm>
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
@@ -10,9 +11,13 @@
 #include "../n640_searcher/n640_520_futilityMoveCounts.hpp"
 
 #include "../n885_searcher/n885_040_rucksack.hpp"//FIXME:
+#include "../n886_repeType/n886_500_rtArray.hpp"//FIXME:
 //class Rucksack;
 
 using namespace std;
+
+
+extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 class NodetypeAbstract {
@@ -24,6 +29,89 @@ public:
 	virtual const bool IsPvNode() const = 0;
 	virtual const bool IsSplitedNode() const = 0;
 	virtual const bool IsRootNode() const = 0;
+
+	void DoStep1(
+		bool& isGotoSplitPointStart,
+		Military** ppThisThread,
+		Position& pos,
+		int& moveCount,
+		int& playedMoveCount,
+		bool& inCheck,
+		SplitedNode* splitedNode,
+		Flashlight* ss,
+		Move& bestMove,
+		Move& threatMove,
+		ScoreIndex& bestScore,
+		Move& ttMove,
+		Move& excludedMove,
+		ScoreIndex& ttScore
+		) {
+
+		// initialize node
+		*ppThisThread = pos.GetThisThread();
+		moveCount = playedMoveCount = 0;
+		inCheck = pos.InCheck();
+
+		if (this->IsSplitedNode()) {
+			splitedNode = ss->m_splitedNode;
+			bestMove = splitedNode->m_bestMove;
+			threatMove = splitedNode->m_threatMove;
+			bestScore = splitedNode->m_bestScore;
+			//tte = nullptr;
+			ttMove = excludedMove = g_MOVE_NONE;
+			ttScore = ScoreNone;
+
+			Evaluation09 evaluation;
+			evaluation.evaluate(pos, ss);
+
+			assert(-ScoreInfinite < splitedNode->m_bestScore && 0 < splitedNode->m_moveCount);
+
+			isGotoSplitPointStart = true;
+			return;
+			//goto split_point_start;
+		}
+
+		bestScore = -ScoreInfinite;
+		ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;
+		ss->m_ply = (ss - 1)->m_ply + 1;
+		(ss + 1)->m_skipNullMove = false;
+		(ss + 1)->m_reduction = Depth0;
+		(ss + 2)->m_killers[0] = (ss + 2)->m_killers[1] = g_MOVE_NONE;
+
+		if (this->IsPvNode() && (*ppThisThread)->m_maxPly < ss->m_ply) {
+			(*ppThisThread)->m_maxPly = ss->m_ply;
+		}
+	}
+
+	void DoStep2(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Position& pos,
+		Rucksack& rucksack,
+		Flashlight* ss
+		){
+		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
+			isReturnWithScore, returnScore, &rucksack, ss);
+	}
+
+	void DoStep3(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Flashlight* ss,
+		ScoreIndex& alpha,
+		ScoreIndex& beta
+	) {
+		if (!this->IsRootNode()) {
+			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
+			beta = std::min(UtilScore::MateIn(ss->m_ply + 1), beta);
+			if (beta <= alpha) {
+				isReturnWithScore = true;
+				returnScore = alpha;
+				return;
+				//return alpha;
+			}
+		}
+	}
 
 	void DoStep4(
 		bool& isReturnWithScore,

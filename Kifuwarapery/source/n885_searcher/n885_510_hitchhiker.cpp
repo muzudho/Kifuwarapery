@@ -94,6 +94,28 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	int playedMoveCount;
 
 	// step1
+	Military* thisThread = nullptr;
+	bool isGotoSplitPointStart = false;
+	nodetypeProgram->DoStep1(
+		isGotoSplitPointStart,
+		&thisThread,
+		pos,
+		moveCount,
+		playedMoveCount,
+		inCheck,
+		splitedNode,
+		ss,
+		bestMove,
+		threatMove,
+		bestScore,
+		ttMove,
+		excludedMove,
+		ttScore
+		);
+	/*
+	if (isGotoSplitPointStart) {
+		goto split_point_start;
+	}
 	// initialize node
 	Military* thisThread = pos.GetThisThread();
 	moveCount = playedMoveCount = 0;
@@ -126,38 +148,47 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	if (PVNode && thisThread->m_maxPly < ss->m_ply) {
 		thisThread->m_maxPly = ss->m_ply;
 	}
+	*/
 
+	bool isReturnWithScore = false;
+	ScoreIndex returnScore;
 	if (!RootNode) {
 		// step2
 		// stop と最大探索深さのチェック
-
-		bool isReturn = false;
-		ScoreIndex resultScore = ScoreIndex::ScoreNone;
-
+		nodetypeProgram->DoStep2(
+			isReturnWithScore,
+			returnScore,
+			pos,
+			rucksack,
+			ss
+			);
+		/*
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
-			isReturn, resultScore, &rucksack, ss);
+			isReturnWithScore, returnScore, &rucksack, ss);
+			*/
 
-		if (isReturn)
+		if (isReturnWithScore)
 		{
-			return resultScore;
+			return returnScore;
 		}
 
 		// step3
-		// mate distance pruning
-		if (!RootNode) {
-			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
-			beta = std::min(UtilScore::MateIn(ss->m_ply + 1), beta);
-			if (beta <= alpha) {
-				return alpha;
-			}
+		nodetypeProgram->DoStep3(
+			isReturnWithScore,
+			returnScore,
+			ss,
+			alpha,
+			beta
+			);
+		if (isReturnWithScore)
+		{
+			return returnScore;
 		}
 	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	// step4
-	bool isReturnWithScore = false;
-	ScoreIndex returnScore;
 	nodetypeProgram->DoStep4(
 		isReturnWithScore,
 		returnScore,
@@ -180,54 +211,6 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	{
 		return returnScore;
 	}
-	/*
-	// trans position table lookup
-	excludedMove = ss->m_excludedMove;
-	posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
-	tte = rucksack.m_tt.Probe(posKey);
-	ttMove =
-		RootNode ? rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0] :
-		tte != nullptr ?
-		UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
-		g_MOVE_NONE;
-	ttScore = (tte != nullptr ? rucksack.ConvertScoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
-
-	if (!RootNode
-		&& tte != nullptr
-		&& depth <= tte->GetDepth()
-		&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
-		&& (PVNode ? tte->GetType() == BoundExact
-			: (beta <= ttScore ? (tte->GetType() & BoundLower)
-				: (tte->GetType() & BoundUpper))))
-	{
-		rucksack.m_tt.Refresh(tte);
-		ss->m_currentMove = ttMove; // Move::moveNone() もありえる。
-
-		if (beta <= ttScore
-			&& !ttMove.IsNone()
-			&& !ttMove.IsCaptureOrPawnPromotion()
-			&& ttMove != ss->m_killers[0])
-		{
-			ss->m_killers[1] = ss->m_killers[0];
-			ss->m_killers[0] = ttMove;
-		}
-		return ttScore;
-	}
-
-#if 1
-	if (!RootNode
-		&& !inCheck)
-	{
-		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
-			ss->m_staticEval = bestScore = UtilScore::MateIn(ss->m_ply);
-			rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss->m_ply), BoundExact, depth,
-				move, ss->m_staticEval);
-			bestMove = move;
-			return bestScore;
-		}
-	}
-#endif
-	//*/
 
 	// step5
 	bool isGotoIidStart = false;
