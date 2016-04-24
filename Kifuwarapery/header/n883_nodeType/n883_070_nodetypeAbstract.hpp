@@ -711,6 +711,7 @@ public:
 		Move& move,
 		Move& ttMove,
 		Flashlight* ss,
+		const bool& PVNode,
 		int& moveCount,
 		const bool& cutNode,
 		Depth& newDepth,
@@ -728,8 +729,8 @@ public:
 			&& ss->m_killers[0] != move
 			&& ss->m_killers[1] != move)
 		{
-			ss->m_reduction = g_reductions.reduction(this->IsPvNode(), depth, moveCount);
-			if (!this->IsPvNode() && cutNode) {
+			ss->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
+			if (!PVNode && cutNode) {
 				ss->m_reduction += OnePly;
 			}
 			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
