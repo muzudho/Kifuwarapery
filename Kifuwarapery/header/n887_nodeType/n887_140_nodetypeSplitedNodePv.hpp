@@ -26,7 +26,7 @@ public:
 		Rucksack& rucksack,
 		const TTEntry* pTtEntry,
 		Position& pos
-		)
+		)const
 	{
 		ttMove = pTtEntry != nullptr ?
 			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
@@ -41,7 +41,7 @@ public:
 		bool& singularExtensionNode,
 		Move& excludedMove,
 		const TTEntry* pTtEntry
-		)
+		)const
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
@@ -57,8 +57,53 @@ public:
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
-		) {
+		)const {
 		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+	}
+
+	virtual inline void DoStep11Bc_LoopHeader(
+		Rucksack& rucksack,
+		int& moveCount
+		) const {
+		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+	}
+
+	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep11Bb_LoopHeader(
+		bool& isContinue,
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
+		) const {
+			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+				isContinue = true;
+				return;
+			}
+			moveCount = ++(*ppSplitedNode)->m_moveCount;
+			(*ppSplitedNode)->m_mutex.unlock();
+	}
+
+	virtual inline void DoStep13a(
+		bool& isContinue,
+		Rucksack& rucksack,
+		bool& captureOrPawnPromotion,
+		bool& inCheck,
+		bool& dangerous,
+		ScoreIndex& bestScore,
+		Move& move,
+		Move& ttMove,
+		const Depth depth,
+		int& moveCount,
+		Move& threatMove,
+		Position& pos,
+		SplitedNode** ppSplitedNode,
+		Depth& newDepth,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta
+		) const {
+		// PVノードには無いぜ☆！（＾ｑ＾）
 	}
 
 	inline void DoStep19(
@@ -77,7 +122,7 @@ public:
 		NextmoveEvent& mp,
 		NodeType NT,
 		const bool cutNode
-		) {
+		)const {
 		// スプリット・ポイントにステップ１９は無いぜ☆（＾ｑ＾）
 		UNREACHABLE;
 	}
@@ -95,7 +140,7 @@ public:
 		bool& inCheck,
 		Position& pos,
 		Move movesSearched[64]
-		) {
+		)const {
 		// スプリット・ポイントにステップ２０は無いぜ☆（＾ｑ＾）
 		UNREACHABLE;
 	}

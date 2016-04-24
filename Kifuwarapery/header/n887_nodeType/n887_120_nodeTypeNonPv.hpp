@@ -28,7 +28,7 @@ public:
 	inline void DoStep1c(
 		Military** ppThisThread,
 		Flashlight** ppFlashlight
-		) {
+		)const {
 		// PVノードではないので空っぽだぜ☆（＾ｑ＾）
 	}
 
@@ -38,7 +38,7 @@ public:
 		Rucksack& rucksack,
 		const TTEntry* pTtEntry,
 		Position& pos
-		)
+		)const
 	{
 		ttMove = pTtEntry != nullptr ?
 			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
@@ -53,7 +53,7 @@ public:
 		bool& singularExtensionNode,
 		Move& excludedMove,
 		const TTEntry* pTtEntry
-		)
+		)const
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
@@ -69,9 +69,51 @@ public:
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
-		) {
+		)const {
 		// 非ルートノードには無いぜ☆！（＾ｑ＾）
 	}
+
+	virtual inline void DoStep11Bc_LoopHeader(
+		Rucksack& rucksack,
+		int& moveCount
+		) const {
+		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+	}
+
+	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep11Bb_LoopHeader(
+		bool& isContinue,
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
+		) const {
+			++moveCount;
+	}
+
+	virtual inline void DoStep16a(
+		bool& doFullDepthSearch,
+		ScoreIndex& alpha,
+		SplitedNode** ppSplitedNode
+		)const {
+		// 非スプリットノードには無いぜ☆！（＾ｑ＾）
+	}
+
+	virtual inline void DoStep16c(
+		Rucksack& rucksack,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		ScoreIndex& beta,
+		Depth& newDepth,
+		bool& givesCheck,
+		Position& pos,
+		Flashlight** ppFlashlight
+		)const {
+		// 非PVノードには無いぜ☆！（＾ｑ＾）
+	}
+
 
 	inline Bound GetBoundAtStep20(bool bestMoveExists) const {
 		return Bound::BoundUpper;

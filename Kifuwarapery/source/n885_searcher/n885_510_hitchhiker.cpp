@@ -339,6 +339,20 @@ split_point_start:
 		{
 			continue;
 		}
+
+		nodetypeProgram->DoStep11Bb_LoopHeader(
+			isContinue,
+			pos,
+			move,
+			ci,
+			moveCount,
+			&pSplitedNode
+			);
+		if (isContinue)
+		{
+			continue;
+		}
+
 		nodetypeProgram->DoStep11Bb_LoopHeader(
 			isContinue,
 			rucksack,
@@ -348,18 +362,19 @@ split_point_start:
 		{
 			continue;
 		}
-		nodetypeProgram->DoStep11B_LoopHeader(
-			isContinue,
+
+		nodetypeProgram->DoStep11Bc_LoopHeader(
 			rucksack,
-			move,
-			excludedMove,
-			pos,
-			ci,
-			moveCount,
-			&pSplitedNode,
+			moveCount
+			);
+
+		nodetypeProgram->DoStep11B_LoopHeader(
 			extension,
 			captureOrPawnPromotion,
+			move,
 			givesCheck,
+			ci,
+			pos,
 			dangerous
 			);
 		if (isContinue)
@@ -387,6 +402,24 @@ split_point_start:
 			);
 
 		// step13
+		nodetypeProgram->DoStep13a(
+			isContinue,
+			rucksack,
+			captureOrPawnPromotion,
+			inCheck,
+			dangerous,
+			bestScore,
+			move,
+			ttMove,
+			depth,
+			moveCount,
+			threatMove,
+			pos,
+			&pSplitedNode,
+			newDepth,
+			&pFlashlight,
+			beta
+			);
 		nodetypeProgram->DoStep13(
 			isContinue,
 			rucksack,
@@ -445,19 +478,32 @@ split_point_start:
 			);
 
 		// step16
-		nodetypeProgram->DoStep16(
+		nodetypeProgram->DoStep16a(
+			doFullDepthSearch,
+			alpha,
+			&pSplitedNode
+			);
+		nodetypeProgram->DoStep16b(
 			rucksack,
 			doFullDepthSearch,
-			&pSplitedNode,
-			alpha,
 			score,
 			newDepth,
 			givesCheck,
 			pos,
 			&pFlashlight,
-			cutNode,
+			alpha,
+			cutNode
+			);
+		nodetypeProgram->DoStep16c(
+			rucksack,
 			isPVMove,
-			beta
+			alpha,
+			score,
+			beta,
+			newDepth,
+			givesCheck,
+			pos,
+			&pFlashlight
 			);
 
 		// step17
