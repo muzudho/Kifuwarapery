@@ -9,16 +9,17 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// RootNode = false;
 class NodetypeSplitedNodePv : public NodetypeAbstract {
 public:
 
 	inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
-		UNREACHABLE;
+		// スルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	inline const bool IsPvNode() const { return true; };
 	inline const bool IsSplitedNode() const { return true; };
-	inline const bool IsRootNode() const { return false; }
 
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
 	virtual inline void DoStep4x(
@@ -58,14 +59,16 @@ public:
 		const Rucksack& rucksack,
 		const Move& move
 		)const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep11Bc_LoopHeader(
 		Rucksack& rucksack,
 		int& moveCount
 		) const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
@@ -103,7 +106,74 @@ public:
 		Flashlight** ppFlashlight,
 		ScoreIndex& beta
 		) const {
-		// PVノードには無いぜ☆！（＾ｑ＾）
+		// PVノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	virtual inline void DoStep13b(
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		bool& isContinue
+		) const {
+		// ルートノード、スプリットポイントはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	virtual inline bool IsBetaLargeAtStep16c(
+		ScoreIndex& score,
+		ScoreIndex& beta
+		) const {
+		// 非ルートノードの場合☆（＾ｑ＾）
+		return score < beta;
+	}
+
+	virtual inline void DoStep18a(
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos
+		) const {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	// スプリット・ポイントの場合☆（＾ｑ＾）
+	virtual inline void DoStep18b(
+		bool& isBreak,
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos,
+		ScoreIndex& bestScore,
+		SplitedNode** ppSplitedNode,
+		Move& bestMove,
+		ScoreIndex& beta
+		)const {
+
+		if (bestScore < score) {
+			bestScore = (*ppSplitedNode)->m_bestScore = score;
+
+			if (alpha < score) {
+				bestMove = (*ppSplitedNode)->m_bestMove = move;
+
+				if (this->IsPvNode() && score < beta) {
+					alpha = (*ppSplitedNode)->m_alpha = score;
+				}
+				else {
+					// fail high
+					(*ppSplitedNode)->m_cutoff = true;
+					isBreak = true;
+					return;
+				}
+			}
+		}
+
 	}
 
 	inline void DoStep19(
@@ -123,8 +193,8 @@ public:
 		NodeType NT,
 		const bool cutNode
 		)const {
-		// スプリット・ポイントにステップ１９は無いぜ☆（＾ｑ＾）
-		UNREACHABLE;
+		// スプリット・ポイントはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	inline void DoStep20(
@@ -141,8 +211,8 @@ public:
 		Position& pos,
 		Move movesSearched[64]
 		)const {
-		// スプリット・ポイントにステップ２０は無いぜ☆（＾ｑ＾）
-		UNREACHABLE;
+		// スプリット・ポイントはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	inline Bound GetBoundAtStep20(bool bestMoveExists) const {

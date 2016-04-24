@@ -9,6 +9,7 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// RootNode = false;
 class NodetypeNonPv : public NodetypeAbstract {
 public:
 
@@ -23,13 +24,13 @@ public:
 
 	inline const bool IsPvNode() const { return false; };
 	inline const bool IsSplitedNode() const { return false; };
-	inline const bool IsRootNode() const { return false; }
 
 	inline void DoStep1c(
 		Military** ppThisThread,
 		Flashlight** ppFlashlight
 		)const {
-		// PVノードではないので空っぽだぜ☆（＾ｑ＾）
+		// 非PVノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
@@ -70,14 +71,16 @@ public:
 		const Rucksack& rucksack,
 		const Move& move
 		)const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep11Bc_LoopHeader(
 		Rucksack& rucksack,
 		int& moveCount
 		) const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
@@ -97,7 +100,8 @@ public:
 		ScoreIndex& alpha,
 		SplitedNode** ppSplitedNode
 		)const {
-		// 非スプリットノードには無いぜ☆！（＾ｑ＾）
+		// 非スプリットノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep16c(
@@ -111,9 +115,62 @@ public:
 		Position& pos,
 		Flashlight** ppFlashlight
 		)const {
-		// 非PVノードには無いぜ☆！（＾ｑ＾）
+		// 非PVノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
+	virtual inline bool IsBetaLargeAtStep16c(
+		ScoreIndex& score,
+		ScoreIndex& beta
+		) const {
+		// 非ルートノードの場合☆（＾ｑ＾）
+		return score < beta;
+	}
+
+	virtual inline void DoStep18a(
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos
+		) const {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	// 非スプリット・ポイントの場合☆（＾ｑ＾）
+	virtual inline void DoStep18b(
+		bool& isBreak,
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos,
+		ScoreIndex& bestScore,
+		SplitedNode** ppSplitedNode,
+		Move& bestMove,
+		ScoreIndex& beta
+		)const {
+
+		if (bestScore < score) {
+			bestScore = score;
+
+			if (alpha < score) {
+				bestMove = move;
+
+				if (this->IsPvNode() && score < beta) {
+					alpha = score;
+				}
+				else {
+					isBreak = true;
+					return;
+				}
+			}
+		}
+
+	}
 
 	inline Bound GetBoundAtStep20(bool bestMoveExists) const {
 		return Bound::BoundUpper;

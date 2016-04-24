@@ -25,7 +25,6 @@ public:
 
 	virtual inline const bool IsPvNode() const = 0;
 	virtual inline const bool IsSplitedNode() const = 0;
-	virtual inline const bool IsRootNode() const = 0;
 
 	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
@@ -92,6 +91,7 @@ public:
 		}
 	}
 
+	// ルートノード以外が実行するぜ☆（＾ｑ＾）
 	virtual inline void DoStep2(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
@@ -105,6 +105,7 @@ public:
 			isReturnWithScore, returnScore, &rucksack, (*ppFlashlight));
 	}
 
+	// ルートノード以外が実行するぜ☆（＾ｑ＾）
 	virtual inline void DoStep3(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
@@ -703,7 +704,23 @@ public:
 		}
 	}
 
-	virtual inline void DoStep13(
+	// ルートノード、スプリットポイントはしない手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep13b(
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		bool& isContinue
+		) const {
+		// RootNode, SPNode はすでに合法手であることを確認済み。
+		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+			--moveCount;
+			isContinue = true;
+			return;
+		}
+	}
+
+	virtual inline void DoStep13c(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,
@@ -725,13 +742,6 @@ public:
 		int& playedMoveCount,
 		Move movesSearched[64]
 		)const {
-
-		// RootNode, SPNode はすでに合法手であることを確認済み。
-		if (!this->IsRootNode() && !this->IsSplitedNode() && !pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-			--moveCount;
-			isContinue = true;
-			return;
-		}
 
 		isPVMove = (this->IsPvNode() && moveCount == 1);
 		(*ppFlashlight)->m_currentMove = move;
@@ -856,7 +866,10 @@ public:
 		)const {
 
 		// 通常の探索
-		if ((isPVMove || (alpha < score && (this->IsRootNode() || score < beta)))) {
+		if (
+			isPVMove ||
+			(alpha < score && this->IsBetaLargeAtStep16c(score,beta))
+		) {
 			score = (newDepth < OnePly ?
 				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
 					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
@@ -867,7 +880,11 @@ public:
 					rucksack, N01_PV, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
 		}
 	}
-
+	virtual inline bool IsBetaLargeAtStep16c(
+		ScoreIndex& score,
+		ScoreIndex& beta
+		) const = 0;
+		
 	virtual inline void DoStep17(
 		Position& pos,
 		Move& move
@@ -875,7 +892,42 @@ public:
 		pos.UndoMove(move);
 	}
 
-	virtual inline void DoStep18(
+	// ルートノードだけが実行するぜ☆！（＾ｑ＾）
+	virtual inline void DoStep18a(
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos
+		) const{
+
+		RootMove& rm = *std::find(rucksack.m_rootMoves.begin(), rucksack.m_rootMoves.end(), move);
+		if (isPVMove || alpha < score) {
+			// PV move or new best move
+			rm.m_score_ = score;
+#if defined BISHOP_IN_DANGER
+			if ((bishopInDangerFlag == BlackBishopInDangerIn28 && GetMove.ToCSA() == "0082KA")
+				|| (bishopInDangerFlag == WhiteBishopInDangerIn28 && GetMove.ToCSA() == "0028KA")
+				|| (bishopInDangerFlag == BlackBishopInDangerIn78 && GetMove.ToCSA() == "0032KA")
+				|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && GetMove.ToCSA() == "0078KA"))
+			{
+				rm.m_score_ -= m_engineOptions["Danger_Demerit_Score"];
+			}
+#endif
+			rm.ExtractPvFromTT(pos);
+
+			if (!isPVMove) {
+				++rucksack.m_bestMoveChanges;
+			}
+		}
+		else {
+			rm.m_score_ = -ScoreInfinite;
+		}
+	}
+
+	// スプリット・ポイントかどうかで分かれるぜ☆！（＾ｑ＾）
+	virtual inline void DoStep18b(
 		bool& isBreak,
 		Rucksack& rucksack,
 		Move& move,
@@ -887,55 +939,9 @@ public:
 		SplitedNode** ppSplitedNode,
 		Move& bestMove,
 		ScoreIndex& beta
-		)const {
+		)const = 0;
 
-		if (this->IsRootNode()) {
-			RootMove& rm = *std::find(rucksack.m_rootMoves.begin(), rucksack.m_rootMoves.end(), move);
-			if (isPVMove || alpha < score) {
-				// PV move or new best move
-				rm.m_score_ = score;
-#if defined BISHOP_IN_DANGER
-				if ((bishopInDangerFlag == BlackBishopInDangerIn28 && GetMove.ToCSA() == "0082KA")
-					|| (bishopInDangerFlag == WhiteBishopInDangerIn28 && GetMove.ToCSA() == "0028KA")
-					|| (bishopInDangerFlag == BlackBishopInDangerIn78 && GetMove.ToCSA() == "0032KA")
-					|| (bishopInDangerFlag == WhiteBishopInDangerIn78 && GetMove.ToCSA() == "0078KA"))
-				{
-					rm.m_score_ -= m_engineOptions["Danger_Demerit_Score"];
-				}
-#endif
-				rm.ExtractPvFromTT(pos);
-
-				if (!isPVMove) {
-					++rucksack.m_bestMoveChanges;
-				}
-			}
-			else {
-				rm.m_score_ = -ScoreInfinite;
-			}
-		}
-
-		if (bestScore < score) {
-			bestScore = (this->IsSplitedNode() ? (*ppSplitedNode)->m_bestScore = score : score);
-
-			if (alpha < score) {
-				bestMove = (this->IsSplitedNode() ? (*ppSplitedNode)->m_bestMove = move : move);
-
-				if (this->IsPvNode() && score < beta) {
-					alpha = (this->IsSplitedNode() ? (*ppSplitedNode)->m_alpha = score : score);
-				}
-				else {
-					// fail high
-					if (this->IsSplitedNode()) {
-						(*ppSplitedNode)->m_cutoff = true;
-					}
-					isBreak = true;
-					return;
-				}
-			}
-		}
-
-	}
-
+	// 非スプリットポイントでだけ実行するぜ☆（＾ｑ＾）
 	virtual inline void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,
@@ -953,8 +959,8 @@ public:
 		NodeType& NT,
 		const bool cutNode
 		)const {
-		if (!this->IsSplitedNode()
-			&& rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
+
+		if (rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
 			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
 			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{

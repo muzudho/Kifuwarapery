@@ -9,6 +9,7 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// RootNode = false;
 class NodetypePv : public NodetypeAbstract {
 public:
 
@@ -23,7 +24,6 @@ public:
 
 	inline const bool IsPvNode() const { return true; };
 	inline const bool IsSplitedNode() const { return false; };
-	inline const bool IsRootNode() const { return false; }
 
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
 	virtual inline void DoStep4x(
@@ -63,14 +63,16 @@ public:
 		const Rucksack& rucksack,
 		const Move& move
 		)const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep11Bc_LoopHeader(
 		Rucksack& rucksack,
 		int& moveCount
 		) const {
-		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
@@ -103,7 +105,8 @@ public:
 		Flashlight** ppFlashlight,
 		ScoreIndex& beta
 		) const {
-		// PVノードには無いぜ☆！（＾ｑ＾）
+		// PVノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep16a(
@@ -111,7 +114,61 @@ public:
 		ScoreIndex& alpha,
 		SplitedNode** ppSplitedNode
 		)const {
-		// 非スプリットノードには無いぜ☆！（＾ｑ＾）
+		// 非スプリットノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	virtual inline bool IsBetaLargeAtStep16c(
+		ScoreIndex& score,
+		ScoreIndex& beta
+		) const {
+		// 非ルートノードの場合☆（＾ｑ＾）
+		return score < beta;
+	}
+
+	virtual inline void DoStep18a(
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos
+		) const {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
+	}
+
+	// 非スプリット・ポイントの場合☆（＾ｑ＾）
+	virtual inline void DoStep18b(
+		bool& isBreak,
+		Rucksack& rucksack,
+		Move& move,
+		bool& isPVMove,
+		ScoreIndex& alpha,
+		ScoreIndex& score,
+		Position& pos,
+		ScoreIndex& bestScore,
+		SplitedNode** ppSplitedNode,
+		Move& bestMove,
+		ScoreIndex& beta
+		)const {
+
+		if (bestScore < score) {
+			bestScore = score;
+
+			if (alpha < score) {
+				bestMove = move;
+
+				if (this->IsPvNode() && score < beta) {
+					alpha = score;
+				}
+				else {
+					isBreak = true;
+					return;
+				}
+			}
+		}
+
 	}
 
 	inline Bound GetBoundAtStep20(bool bestMoveExists) const {

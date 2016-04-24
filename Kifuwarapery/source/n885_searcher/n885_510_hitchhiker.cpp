@@ -133,33 +133,32 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
-	if (!nodetypeProgram->IsRootNode()) {
-		// step2
-		nodetypeProgram->DoStep2(
-			isReturnWithScore,
-			returnScore,
-			pos,
-			rucksack,
-			&pFlashlight
+
+	// step2
+	nodetypeProgram->DoStep2(
+		isReturnWithScore,
+		returnScore,
+		pos,
+		rucksack,
+		&pFlashlight
+	);
+
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
+
+	// step3
+	nodetypeProgram->DoStep3(
+		isReturnWithScore,
+		returnScore,
+		&pFlashlight,
+		alpha,
+		beta
 		);
-
-		if (isReturnWithScore)
-		{
-			return returnScore;
-		}
-
-		// step3
-		nodetypeProgram->DoStep3(
-			isReturnWithScore,
-			returnScore,
-			&pFlashlight,
-			alpha,
-			beta
-			);
-		if (isReturnWithScore)
-		{
-			return returnScore;
-		}
+	if (isReturnWithScore)
+	{
+		return returnScore;
 	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
@@ -420,7 +419,14 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
-		nodetypeProgram->DoStep13(
+		nodetypeProgram->DoStep13b(
+			pos,
+			move,
+			ci,
+			moveCount,
+			isContinue
+			);
+		nodetypeProgram->DoStep13c(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,
@@ -525,8 +531,16 @@ split_point_start:
 			return score;
 		}
 
+		nodetypeProgram->DoStep18a(
+			rucksack,
+			move,
+			isPVMove,
+			alpha,
+			score,
+			pos
+			);
 		bool isBreak = false;
-		nodetypeProgram->DoStep18(
+		nodetypeProgram->DoStep18b(
 			isBreak,
 			rucksack,
 			move,
