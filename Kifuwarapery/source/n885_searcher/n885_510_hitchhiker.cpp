@@ -326,7 +326,12 @@ split_point_start:
 
 	// step11
 	// Loop through moves
-	while (!(move = mp.GetNextMove(nodetypeProgram->IsSplitedNode())).IsNone()) {
+	while (
+		!(
+			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
+			move = nodetypeProgram->GetMoveAtStep11(mp)
+		).IsNone()
+	) {
 
 		bool isContinue = false;
 		nodetypeProgram->DoStep11Ba_LoopHeader(
@@ -521,17 +526,17 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
-		if (nodetypeProgram->IsSplitedNode()) {
-			pSplitedNode->m_mutex.lock();
-			bestScore = pSplitedNode->m_bestScore;
-			alpha = pSplitedNode->m_alpha;
-		}
+		nodetypeProgram->DoStep18a(
+			&pSplitedNode,
+			bestScore,
+			alpha
+			);
 
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}
 
-		nodetypeProgram->DoStep18a(
+		nodetypeProgram->DoStep18b(
 			rucksack,
 			move,
 			isPVMove,
@@ -540,7 +545,7 @@ split_point_start:
 			pos
 			);
 		bool isBreak = false;
-		nodetypeProgram->DoStep18b(
+		nodetypeProgram->DoStep18c(
 			isBreak,
 			rucksack,
 			move,
@@ -580,7 +585,7 @@ split_point_start:
 		}
 	}
 
-	if (nodetypeProgram->IsSplitedNode()) {
+	if (nodetypeProgram->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
 
@@ -707,7 +712,7 @@ ScoreIndex Hitchhiker::Qsearch(Rucksack& rucksack, NodeType NT, bool INCHECK,
 	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, (ss - 1)->m_currentMove.To());
 	const CheckInfo ci(pos);
 
-	while (!(move = mp.GetNextMove(false)).IsNone())
+	while (!(move = mp.GetNextMove_NonSplitedNode()).IsNone())
 	{
 		assert(pos.IsOK());
 

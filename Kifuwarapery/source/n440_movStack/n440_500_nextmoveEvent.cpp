@@ -126,28 +126,24 @@ NextmoveEvent::NextmoveEvent(
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
-Move NextmoveEvent::GetNextMove(bool isSplitedNode) {
-	if (isSplitedNode)
-	{
-		return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove(false);
-	}
-	else
-	{
-		do {
-			// lastMove() に達したら次の phase に移る。
-			while (GetCurrMove() == GetLastMove()) {
-				GoNextPhase();
-			}
+Move NextmoveEvent::GetNextMove_SplitedNode() {
+	return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove_NonSplitedNode();
+}
+Move NextmoveEvent::GetNextMove_NonSplitedNode() {
+	do {
+		// lastMove() に達したら次の phase に移る。
+		while (GetCurrMove() == GetLastMove()) {
+			GoNextPhase();
+		}
 
-			Move resultMove;
-			bool isGotNext = g_movePhaseArray[GetPhase()]->GetNext2Move(resultMove, *this);
+		Move resultMove;
+		bool isGotNext = g_movePhaseArray[GetPhase()]->GetNext2Move(resultMove, *this);
 
-			if (isGotNext) {
-				return resultMove;
-			}
+		if (isGotNext) {
+			return resultMove;
+		}
 
-		} while (true);
-	}
+	} while (true);
 }
 
 const ScoreIndex LVATable[N15_PieceTypeNum] = {

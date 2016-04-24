@@ -89,6 +89,13 @@ public:
 		//UNREACHABLE;
 	}
 
+	virtual inline Move GetMoveAtStep11(
+		NextmoveEvent& mp
+		) const {
+		// スプリットポイントの場合
+		return mp.GetNextMove_SplitedNode();
+	};
+
 	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
@@ -163,7 +170,7 @@ public:
 	}
 
 	// スプリット・ポイントの場合☆（＾ｑ＾）
-	virtual inline void DoStep18b(
+	virtual inline void DoStep18c(
 		bool& isBreak,
 		Rucksack& rucksack,
 		Move& move,
@@ -234,6 +241,11 @@ public:
 		)const {
 		// スプリット・ポイントはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
+	}
+
+	virtual inline bool GetReturnBeforeStep20() const {
+		// スプリット・ポイントは　ステップ２０を実行する前に途中抜けするぜ☆（＾ｑ＾）
+		return true;
 	}
 
 	inline Bound GetBoundAtStep20(bool bestMoveExists) const {

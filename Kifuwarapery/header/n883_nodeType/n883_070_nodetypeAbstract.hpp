@@ -438,7 +438,7 @@ public:
 			// move.cap() は前回(一手前)の指し手で取った駒の種類
 			NextmoveEvent mp(pos, ttMove, rucksack.m_history, move.GetCap());
 			const CheckInfo ci(pos);
-			while (!(move = mp.GetNextMove(false)).IsNone()) {
+			while (!(move = mp.GetNextMove_NonSplitedNode()).IsNone()) {
 				if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 					(*ppFlashlight)->m_currentMove = move;
 					pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
@@ -503,6 +503,10 @@ public:
 				g_MOVE_NONE);
 		}
 	}
+
+	virtual inline Move GetMoveAtStep11(
+		NextmoveEvent& mp
+		) const = 0;
 
 	// ルートノードか、そうでないかで分かれるぜ☆（＾ｑ＾）
 	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
@@ -892,8 +896,19 @@ public:
 		pos.UndoMove(move);
 	}
 
-	// ルートノードだけが実行するぜ☆！（＾ｑ＾）
+	// スプリット・ポイントだけが実行するぜ☆！（＾ｑ＾）
 	virtual inline void DoStep18a(
+		SplitedNode** ppSplitedNode,
+		ScoreIndex& bestScore,
+		ScoreIndex& alpha
+		)const {
+			(*ppSplitedNode)->m_mutex.lock();
+			bestScore = (*ppSplitedNode)->m_bestScore;
+			alpha = (*ppSplitedNode)->m_alpha;
+	}
+
+	// ルートノードだけが実行するぜ☆！（＾ｑ＾）
+	virtual inline void DoStep18b(
 		Rucksack& rucksack,
 		Move& move,
 		bool& isPVMove,
@@ -927,7 +942,7 @@ public:
 	}
 
 	// スプリット・ポイントかどうかで分かれるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep18b(
+	virtual inline void DoStep18c(
 		bool& isBreak,
 		Rucksack& rucksack,
 		Move& move,
@@ -976,6 +991,9 @@ public:
 		}
 
 	}
+
+	// スプリット・ポイントは　ステップ２０を実行する前に終了するぜ☆（＾ｑ＾）
+	virtual inline bool GetReturnBeforeStep20() const = 0;
 
 	virtual inline void DoStep20(
 		int& moveCount,

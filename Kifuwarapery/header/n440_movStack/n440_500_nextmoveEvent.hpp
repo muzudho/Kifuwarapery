@@ -32,7 +32,8 @@ public:
 
 	NextmoveEvent(const Position& pos, const Move ttm, const History& history, const PieceType pt);
 
-	Move GetNextMove(bool isSplitedNode);
+	inline Move GetNextMove_SplitedNode();
+	inline Move GetNextMove_NonSplitedNode();
 
 	inline void IncrementCurMove() {
 		++this->m_currMove_;
