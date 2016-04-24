@@ -33,8 +33,8 @@ public:
 		int& playedMoveCount,
 		bool& inCheck,
 		Position& pos,
-		SplitedNode* splitedNode,
-		Flashlight* ss,
+		SplitedNode** ppSplitedNode,
+		Flashlight** ppSs,
 		Move& bestMove,
 		Move& threatMove,
 		ScoreIndex& bestScore,
@@ -48,18 +48,18 @@ public:
 		inCheck = pos.InCheck();
 
 		if (this->IsSplitedNode()) {
-			splitedNode = ss->m_splitedNode;
-			bestMove = splitedNode->m_bestMove;
-			threatMove = splitedNode->m_threatMove;
-			bestScore = splitedNode->m_bestScore;
+			*ppSplitedNode = (*ppSs)->m_splitedNode;
+			bestMove = (*ppSplitedNode)->m_bestMove;
+			threatMove = (*ppSplitedNode)->m_threatMove;
+			bestScore = (*ppSplitedNode)->m_bestScore;
 			//tte = nullptr;
 			ttMove = excludedMove = g_MOVE_NONE;
 			ttScore = ScoreNone;
 
 			Evaluation09 evaluation;
-			evaluation.evaluate(pos, ss);
+			evaluation.evaluate(pos, *ppSs);
 
-			assert(-ScoreInfinite < splitedNode->m_bestScore && 0 < splitedNode->m_moveCount);
+			assert(-ScoreInfinite < (*ppSplitedNode)->m_bestScore && 0 < (*ppSplitedNode)->m_moveCount);
 
 			isGotoSplitPointStart = true;
 			return;
@@ -95,6 +95,7 @@ public:
 		Flashlight* ss
 		)
 	{
+		// stop と最大探索深さのチェック
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
 			isReturnWithScore, returnScore, &rucksack, ss);
 	}
