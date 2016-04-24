@@ -27,7 +27,7 @@ public:
 	virtual const bool IsSplitedNode() const = 0;
 	virtual const bool IsRootNode() const = 0;
 
-	void DoStep1(
+	void DoStep1a(
 		bool& isGotoSplitPointStart,
 		int& moveCount,
 		int& playedMoveCount,
@@ -40,9 +40,8 @@ public:
 		ScoreIndex& bestScore,
 		Move& ttMove,
 		Move& excludedMove,
-		ScoreIndex& ttScore,
-		Military* thisThread
-		) {
+		ScoreIndex& ttScore
+	) {
 
 		// initialize node
 		moveCount = playedMoveCount = 0;
@@ -66,6 +65,15 @@ public:
 			return;
 			//goto split_point_start;
 		}
+	}
+
+	void DoStep1b(
+		ScoreIndex& bestScore,
+		Flashlight* ss,
+		Move& threatMove,
+		Move& bestMove,
+		Military* thisThread
+		) {
 
 		bestScore = -ScoreInfinite;
 		ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;

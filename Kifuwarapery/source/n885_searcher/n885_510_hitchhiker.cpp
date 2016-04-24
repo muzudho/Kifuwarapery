@@ -100,20 +100,6 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	/*
 	bool isGotoSplitPointStart = false;
 	nodetypeProgram->DoStep1(
-		isGotoSplitPointStart,
-		moveCount,
-		playedMoveCount,
-		inCheck,
-		pos,
-		splitedNode,
-		ss,
-		bestMove,
-		threatMove,
-		bestScore,
-		ttMove,
-		excludedMove,
-		ttScore,
-		thisThread
 		);
 	if (isGotoSplitPointStart)
 	{
@@ -142,7 +128,16 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 		goto split_point_start;
 	}
+	//*/
 
+	nodetypeProgram->DoStep1b(
+		bestScore,
+		ss,
+		threatMove,
+		bestMove,
+		thisThread
+	);
+	/*
 	bestScore = -ScoreInfinite;
 	ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;
 	ss->m_ply = (ss - 1)->m_ply + 1;
