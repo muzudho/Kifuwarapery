@@ -330,9 +330,27 @@ split_point_start:
 	while (!(move = mp.GetNextMove(nodetypeProgram->IsSplitedNode())).IsNone()) {
 
 		bool isContinue = false;
-		nodetypeProgram->DoStep11B_LoopHeader(
-			rucksack,
+		nodetypeProgram->DoStep11Ba_LoopHeader(
 			isContinue,
+			move,
+			excludedMove
+			);
+		if (isContinue)
+		{
+			continue;
+		}
+		nodetypeProgram->DoStep11Bb_LoopHeader(
+			isContinue,
+			rucksack,
+			move
+			);
+		if (isContinue)
+		{
+			continue;
+		}
+		nodetypeProgram->DoStep11B_LoopHeader(
+			isContinue,
+			rucksack,
 			move,
 			excludedMove,
 			pos,

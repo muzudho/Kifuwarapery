@@ -33,6 +33,34 @@ public:
 			g_MOVE_NONE;
 	}
 
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
+		const Depth depth,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
+		const TTEntry* pTtEntry
+		)
+	{
+		// ルートでない場合はこういう感じ☆（＾ｑ＾）
+		score = bestScore;
+		singularExtensionNode = !this - IsSplitedNode()
+			&& 8 * Depth::OnePly <= depth
+			&& !ttMove.IsNone()
+			&& excludedMove.IsNone()
+			&& (pTtEntry->GetType() & BoundLower)
+			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
+	}
+
+	virtual inline void DoStep11Bb_LoopHeader(
+		bool& isContinue,
+		const Rucksack& rucksack,
+		const Move& move
+		) {
+		// 非ルートノードには無いぜ☆！（＾ｑ＾）
+	}
+
 	inline void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,

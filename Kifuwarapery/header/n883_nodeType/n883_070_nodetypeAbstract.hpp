@@ -112,15 +112,14 @@ public:
 		ScoreIndex& alpha,
 		ScoreIndex& beta
 	) {
-		if (!this->IsRootNode()) {
-			alpha = std::max(UtilScore::MatedIn((*ppFlashlight)->m_ply), alpha);
-			beta = std::min(UtilScore::MateIn((*ppFlashlight)->m_ply + 1), beta);
-			if (beta <= alpha) {
-				isReturnWithScore = true;
-				returnScore = alpha;
-				return;
-				//return alpha;
-			}
+		// ルート以外のみで行われる手続きだぜ☆（＾ｑ＾）！
+		alpha = std::max(UtilScore::MatedIn((*ppFlashlight)->m_ply), alpha);
+		beta = std::min(UtilScore::MateIn((*ppFlashlight)->m_ply + 1), beta);
+		if (beta <= alpha) {
+			isReturnWithScore = true;
+			returnScore = alpha;
+			return;
+			//return alpha;
 		}
 	}
 
@@ -504,6 +503,7 @@ public:
 		}
 	}
 
+	// ルートノードか、そうでないかで分かれるぜ☆（＾ｑ＾）
 	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
@@ -512,24 +512,39 @@ public:
 		bool& singularExtensionNode,
 		Move& excludedMove,
 		const TTEntry* pTtEntry
+		) = 0;
+
+	virtual inline void DoStep11Ba_LoopHeader(
+		bool& isContinue,
+		const Move& move,
+		const Move& excludedMove
 		)
 	{
-		//NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, this->IsPvNode() ? -ScoreInfinite : beta);
-		//const CheckInfo ci(pos);
-		score = bestScore;
-		singularExtensionNode =
-			!this->IsRootNode()
-			&& !this-IsSplitedNode()
-			&& 8 * Depth::OnePly <= depth
-			&& !ttMove.IsNone()
-			&& excludedMove.IsNone()
-			&& (pTtEntry->GetType() & BoundLower)
-			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
+		if (move == excludedMove) {
+			isContinue = true;
+			return;
+		}
 	}
 
-	virtual inline void DoStep11B_LoopHeader(
-		Rucksack& rucksack,
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
+		const Rucksack& rucksack,
+		const Move& move
+		) {
+		// ルートノードにのみある手続きだぜ☆！（＾ｑ＾）
+		if (std::find(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx,
+				rucksack.m_rootMoves.end(),
+				move) == rucksack.m_rootMoves.end())
+		{
+			isContinue = true;
+			return;
+		}
+	}
+
+
+	virtual inline void DoStep11B_LoopHeader(
+		bool& isContinue,
+		Rucksack& rucksack,
 		Move& move,
 		Move& excludedMove,
 		Position& pos,
@@ -542,20 +557,6 @@ public:
 		bool& dangerous
 		)
 	{
-		if (move == excludedMove) {
-			isContinue = true;
-			return;
-		}
-
-		if (this->IsRootNode()
-			&& std::find(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx,
-				rucksack.m_rootMoves.end(),
-				move) == rucksack.m_rootMoves.end())
-		{
-			isContinue = true;
-			return;
-		}
-
 		if (this->IsSplitedNode()) {
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				isContinue = true;
@@ -596,7 +597,7 @@ public:
 		bool& singularExtensionNode,
 		Move& ttMove,
 		ScoreIndex& ttScore,
-		const CheckInfo ci,
+		const CheckInfo& ci,
 		const Depth depth,
 		Flashlight** ppFlashlight,
 		ScoreIndex& score,
@@ -655,7 +656,7 @@ public:
 		Depth& newDepth,
 		Flashlight** ppFlashlight,
 		ScoreIndex& beta,
-		const CheckInfo ci,
+		const CheckInfo& ci,
 		bool& isPVMove,
 		int& playedMoveCount,
 		Move movesSearched[64]
@@ -730,7 +731,7 @@ public:
 		Position& pos,
 		Move& move,
 		StateInfo& st,
-		const CheckInfo ci,
+		const CheckInfo& ci,
 		bool& givesCheck,
 		Flashlight** ppFlashlight
 		) {

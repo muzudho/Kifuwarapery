@@ -26,6 +26,16 @@ public:
 	inline const bool IsSplitedNode() const { return false; };
 	inline const bool IsRootNode() const { return true; }
 
+	virtual inline void DoStep3(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Flashlight** ppFlashlight,
+		ScoreIndex& alpha,
+		ScoreIndex& beta
+		) {
+		// ルートには無いぜ☆（＾ｑ＾）！
+	}
+
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
 	virtual inline void DoStep4x(
 		Move& ttMove,
@@ -65,6 +75,21 @@ public:
 		Move& bestMove
 		) {
 		// ルートノードには無いぜ☆（＾ｑ＾）
+	}
+
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
+		const Depth depth,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
+		const TTEntry* pTtEntry
+		)
+	{
+		// ルートはこういう感じ☆（＾ｑ＾）
+		score = bestScore;
+		singularExtensionNode = false;
 	}
 
 	virtual inline Bound GetBoundAtStep20(bool bestMoveExists) const {
