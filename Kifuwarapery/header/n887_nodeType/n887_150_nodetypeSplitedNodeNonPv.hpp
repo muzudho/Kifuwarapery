@@ -12,15 +12,35 @@
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {
 public:
 
-	void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
+	inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
 		UNREACHABLE;
 	}
 
-	const bool IsPvNode() const { return false; };
-	const bool IsSplitedNode() const { return true; };
-	const bool IsRootNode() const { return false; }
+	inline const bool IsPvNode() const { return false; };
+	inline const bool IsSplitedNode() const { return true; };
+	inline const bool IsRootNode() const { return false; }
 
-	void DoStep19(
+	inline void DoStep1c(
+		Military** ppThisThread,
+		Flashlight** ppFlashlight
+		) {
+		// PVノードではないので空っぽだぜ☆（＾ｑ＾）
+	}
+
+	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
+	virtual inline void DoStep4x(
+		Move& ttMove,
+		Rucksack& rucksack,
+		const TTEntry* pTtEntry,
+		Position& pos
+		)
+	{
+		ttMove = pTtEntry != nullptr ?
+			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
+			g_MOVE_NONE;
+	}
+
+	inline void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -41,7 +61,7 @@ public:
 		UNREACHABLE;
 	}
 
-	void DoStep20(
+	inline void DoStep20(
 		Rucksack& rucksack,
 		ScoreIndex& alpha,
 		Flashlight& ss,

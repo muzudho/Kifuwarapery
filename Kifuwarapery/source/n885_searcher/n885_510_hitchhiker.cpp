@@ -124,9 +124,12 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		bestScore,
 		&pFlashlight,
 		threatMove,
-		bestMove,
-		&pThisThread
+		bestMove
 	);
+	nodetypeProgram->DoStep1c(
+		&pThisThread,
+		pFlashlight
+		);
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
@@ -163,21 +166,46 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 	// step4
 	nodetypeProgram->DoStep4(
-		isReturnWithScore,
-		returnScore,
-		rucksack,
 		excludedMove,
 		&pFlashlight,
 		posKey,
 		pos,
 		pTtEntry,
+		rucksack,
+		ttScore
+		);
+	nodetypeProgram->DoStep4x(
 		ttMove,
-		ttScore,
+		rucksack,
+		pTtEntry,
+		pos
+		);
+	nodetypeProgram->DoStep4y(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		pTtEntry,
 		depth,
+		ttScore,
 		beta,
+		&pFlashlight,
+		ttMove
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
+	nodetypeProgram->DoStep4z(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
 		inCheck,
 		move,
+		pos,
+		&pFlashlight,
 		bestScore,
+		posKey,
+		depth,
 		bestMove
 		);
 	if (isReturnWithScore)

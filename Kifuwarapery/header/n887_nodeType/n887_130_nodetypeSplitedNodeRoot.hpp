@@ -14,15 +14,56 @@
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
 
-	void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
+	inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const {
 		UNREACHABLE;
 	}
 
-	const bool IsPvNode() const { return true; };
-	const bool IsSplitedNode() const { return true; };
-	const bool IsRootNode() const { return true; }
+	inline const bool IsPvNode() const { return true; };
+	inline const bool IsSplitedNode() const { return true; };
+	inline const bool IsRootNode() const { return true; }
 
-	void DoStep19(
+	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
+	virtual inline void DoStep4x(
+		Move& ttMove,
+		Rucksack& rucksack,
+		const TTEntry* pTtEntry,
+		Position& pos
+		)
+	{
+		ttMove = rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0];
+	}
+
+	virtual inline void DoStep4y(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		const TTEntry* pTtEntry,
+		const Depth depth,
+		ScoreIndex& ttScore,
+		ScoreIndex& beta,
+		Flashlight** ppFlashlight,
+		Move& ttMove
+		) {
+		// ルートノードには無いぜ☆（＾ｑ＾）
+	}
+
+	virtual inline void DoStep4z(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		bool& inCheck,
+		Move& move,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& bestScore,
+		Key& posKey,
+		const Depth depth,
+		Move& bestMove
+		) {
+		// ルートノードには無いぜ☆（＾ｑ＾）
+	}
+
+	virtual inline void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -43,7 +84,7 @@ public:
 		UNREACHABLE;
 	}
 
-	void DoStep20(
+	inline void DoStep20(
 		Rucksack& rucksack,
 		ScoreIndex& alpha,
 		Flashlight& ss,

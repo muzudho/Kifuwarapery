@@ -21,13 +21,13 @@ class NodetypeAbstract {
 public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	virtual void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
+	virtual inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
 
-	virtual const bool IsPvNode() const = 0;
-	virtual const bool IsSplitedNode() const = 0;
-	virtual const bool IsRootNode() const = 0;
+	virtual inline const bool IsPvNode() const = 0;
+	virtual inline const bool IsSplitedNode() const = 0;
+	virtual inline const bool IsRootNode() const = 0;
 
-	void DoStep1a(
+	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
 		int& moveCount,
 		int& playedMoveCount,
@@ -67,12 +67,11 @@ public:
 		}
 	}
 
-	void DoStep1b(
+	virtual inline void DoStep1b(
 		ScoreIndex& bestScore,
 		Flashlight** ppFlashlight,
 		Move& threatMove,
-		Move& bestMove,
-		Military** ppThisThread
+		Move& bestMove
 		) {
 
 		bestScore = -ScoreInfinite;
@@ -81,13 +80,19 @@ public:
 		((*ppFlashlight) + 1)->m_skipNullMove = false;
 		((*ppFlashlight) + 1)->m_reduction = Depth0;
 		((*ppFlashlight) + 2)->m_killers[0] = ((*ppFlashlight) + 2)->m_killers[1] = g_MOVE_NONE;
+	}
 
-		if (this->IsPvNode() && (*ppThisThread)->m_maxPly < (*ppFlashlight)->m_ply) {
-			(*ppThisThread)->m_maxPly = (*ppFlashlight)->m_ply;
+	virtual inline void DoStep1c(
+		Military** ppThisThread,
+		const Flashlight* pFlashlight
+		) {
+		// PVノードのみ、最大Plyの更新の可能性があるぜ☆（＾ｑ＾）
+		if ((*ppThisThread)->m_maxPly < pFlashlight->m_ply) {
+			(*ppThisThread)->m_maxPly = pFlashlight->m_ply;
 		}
 	}
 
-	void DoStep2(
+	virtual inline void DoStep2(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Position& pos,
@@ -100,7 +105,7 @@ public:
 			isReturnWithScore, returnScore, &rucksack, (*ppFlashlight));
 	}
 
-	void DoStep3(
+	virtual inline void DoStep3(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Flashlight** ppFlashlight,
@@ -119,37 +124,44 @@ public:
 		}
 	}
 
-	void DoStep4(
-		bool& isReturnWithScore,
-		ScoreIndex& returnScore,
-		Rucksack& rucksack,
+	virtual inline void DoStep4(
 		Move& excludedMove,
 		Flashlight** ppFlashlight,
 		Key& posKey,
 		Position& pos,
 		const TTEntry* pTtEntry,
-		Move& ttMove,
-		ScoreIndex& ttScore,
-		const Depth depth,
-		ScoreIndex& beta,
-		bool& inCheck,
-		Move& move,
-		ScoreIndex& bestScore,
-		Move& bestMove
+		Rucksack& rucksack,
+		ScoreIndex& ttScore
 	) {
 		// trans position table lookup
 		excludedMove = (*ppFlashlight)->m_excludedMove;
 		posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
 		pTtEntry = rucksack.m_tt.Probe(posKey);
-		ttMove =
-			this->IsRootNode() ? rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0] :
-			pTtEntry != nullptr ?
-			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
-			g_MOVE_NONE;
 		ttScore = (pTtEntry != nullptr ? rucksack.ConvertScoreFromTT(pTtEntry->GetScore(), (*ppFlashlight)->m_ply) : ScoreNone);
+	}
 
-		if (!this->IsRootNode()
-			&& pTtEntry != nullptr
+	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
+	virtual inline void DoStep4x(
+		Move& ttMove,
+		Rucksack& rucksack,
+		const TTEntry* pTtEntry,
+		Position& pos
+		) = 0;
+
+	virtual inline void DoStep4y(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		const TTEntry* pTtEntry,
+		const Depth depth,
+		ScoreIndex& ttScore,
+		ScoreIndex& beta,
+		Flashlight** ppFlashlight,
+		Move& ttMove
+		) {
+
+		// ルートノード以外だけにある手続きだぜ☆（＾ｑ＾）
+		if (pTtEntry != nullptr
 			&& depth <= pTtEntry->GetDepth()
 			&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
 			&& (this->IsPvNode() ? pTtEntry->GetType() == BoundExact
@@ -173,10 +185,24 @@ public:
 			return;
 			//return ttScore;
 		}
+	}
 
+	virtual inline void DoStep4z(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		bool& inCheck,
+		Move& move,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& bestScore,
+		Key& posKey,
+		const Depth depth,
+		Move& bestMove
+		) {
+		// ルートノード以外だけにある手続きだぜ☆（＾ｑ＾）
 #if 1
-		if (!this->IsRootNode()
-			&& !inCheck)
+		if (!inCheck)
 		{
 			if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
 				(*ppFlashlight)->m_staticEval = bestScore = UtilScore::MateIn((*ppFlashlight)->m_ply);
@@ -193,7 +219,7 @@ public:
 #endif
 	}
 
-	void DoStep5(
+	virtual inline void DoStep5(
 		bool& isGotoIidStart,
 		Rucksack& rucksack,
 		ScoreIndex& eval,
@@ -239,7 +265,7 @@ public:
 		}
 	}
 
-	void DoStep6(
+	virtual inline void DoStep6(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -268,7 +294,7 @@ public:
 		}
 	}
 
-	void DoStep7(
+	virtual inline void DoStep7(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Flashlight** ppFlashlight,
@@ -290,7 +316,7 @@ public:
 		}
 	}
 
-	void DoStep8(
+	virtual inline void DoStep8(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -380,7 +406,7 @@ public:
 		}
 	}
 
-	void DoStep9(
+	virtual inline void DoStep9(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -433,7 +459,7 @@ public:
 		}
 	}
 
-	void DoStep10(
+	virtual inline void DoStep10(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -478,7 +504,7 @@ public:
 		}
 	}
 
-	void DoStep11A_BeforeLoop_SplitPointStart(
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
 		ScoreIndex& score,
@@ -501,7 +527,7 @@ public:
 			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
-	void DoStep11B_LoopHeader(
+	virtual inline void DoStep11B_LoopHeader(
 		Rucksack& rucksack,
 		bool& isContinue,
 		Move& move,
@@ -561,7 +587,7 @@ public:
 
 	}
 
-	void DoStep12(
+	virtual inline void DoStep12(
 		Rucksack& rucksack,
 		bool& givesCheck,
 		Position& pos,
@@ -612,7 +638,7 @@ public:
 		newDepth = depth - OnePly + extension;
 	}
 
-	void DoStep13(
+	virtual inline void DoStep13(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,
@@ -700,7 +726,7 @@ public:
 
 	}
 
-	void DoStep14(
+	virtual inline void DoStep14(
 		Position& pos,
 		Move& move,
 		StateInfo& st,
@@ -712,7 +738,7 @@ public:
 		((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreIndex::ScoreNotEvaluated;
 	}
 
-	void DoStep15(
+	virtual inline void DoStep15(
 		Rucksack& rucksack,
 		const Depth depth,
 		bool& isPVMove,
@@ -761,7 +787,7 @@ public:
 		}
 	}
 
-	void DoStep16(
+	virtual inline void DoStep16(
 		Rucksack& rucksack,
 		bool& doFullDepthSearch,
 		SplitedNode** ppSplitedNode,
@@ -806,14 +832,14 @@ public:
 
 	}
 
-	void DoStep17(
+	virtual inline void DoStep17(
 		Position& pos,
 		Move& move
 		) {
 		pos.UndoMove(move);
 	}
 
-	void DoStep18(
+	virtual inline void DoStep18(
 		bool& isBreak,
 		Rucksack& rucksack,
 		Move& move,
@@ -874,7 +900,7 @@ public:
 
 	}
 
-	void DoStep19(
+	virtual inline void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,
 		const Depth depth,
@@ -909,7 +935,7 @@ public:
 
 	}
 
-	void DoStep20(
+	virtual inline void DoStep20(
 		int& moveCount,
 		Move& excludedMove,
 		Rucksack& rucksack,
@@ -973,7 +999,7 @@ public:
 	}
 
 	// スタティック・メソッドは継承できないので、スタティックにはしないぜ☆（＾ｑ＾）
-	virtual Bound GetBoundAtStep20(bool bestMoveExists) const = 0;
+	virtual inline Bound GetBoundAtStep20(bool bestMoveExists) const = 0;
 
 
 };
