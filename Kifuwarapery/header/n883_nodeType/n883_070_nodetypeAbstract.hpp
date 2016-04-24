@@ -621,15 +621,15 @@ public:
 		ScoreIndex& bestScore,
 		Move& move,
 		Move& ttMove,
-		const Depth& depth,
+		const Depth depth,
 		int& moveCount,
 		Move& threatMove,
 		Position& pos,
-		SplitedNode* splitedNode,
+		SplitedNode** ppSplitedNode,
 		Depth& newDepth,
-		Flashlight& ss,
+		Flashlight** ppFlashlight,
 		ScoreIndex& beta,
-		const CheckInfo& ci,
+		const CheckInfo ci,
 		bool& isPVMove,
 		int& playedMoveCount,
 		Move movesSearched[64]
@@ -650,7 +650,7 @@ public:
 				&& (threatMove.IsNone() || !rucksack.refutes(pos, move, threatMove)))
 			{
 				if (this->IsSplitedNode()) {
-					splitedNode->m_mutex.lock();
+					(*ppSplitedNode)->m_mutex.lock();
 				}
 				isContinue = true;
 				return;
@@ -659,15 +659,15 @@ public:
 			// score based pruning
 			const Depth predictedDepth = newDepth - g_reductions.reduction(this->IsPvNode(), depth, moveCount);
 			// gain を 2倍にする。
-			const ScoreIndex futilityScore = ss.m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
+			const ScoreIndex futilityScore = (*ppFlashlight)->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
 				+ 2 * rucksack.m_gains.GetValue(move.IsDrop(), ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
 				if (this->IsSplitedNode()) {
-					splitedNode->m_mutex.lock();
-					if (splitedNode->m_bestScore < bestScore) {
-						splitedNode->m_bestScore = bestScore;
+					(*ppSplitedNode)->m_mutex.lock();
+					if ((*ppSplitedNode)->m_bestScore < bestScore) {
+						(*ppSplitedNode)->m_bestScore = bestScore;
 					}
 				}
 				isContinue = true;
@@ -678,7 +678,7 @@ public:
 				&& pos.GetSeeSign(move) < ScoreZero)
 			{
 				if (this->IsSplitedNode()) {
-					splitedNode->m_mutex.lock();
+					(*ppSplitedNode)->m_mutex.lock();
 				}
 				isContinue = true;
 				return;
@@ -693,7 +693,7 @@ public:
 		}
 
 		isPVMove = (this->IsPvNode() && moveCount == 1);
-		ss.m_currentMove = move;
+		(*ppFlashlight)->m_currentMove = move;
 		if (!this->IsSplitedNode() && !captureOrPawnPromotion && playedMoveCount < 64) {
 			movesSearched[playedMoveCount++] = move;
 		}
@@ -704,28 +704,28 @@ public:
 		Position& pos,
 		Move& move,
 		StateInfo& st,
-		const CheckInfo& ci,
+		const CheckInfo ci,
 		bool& givesCheck,
-		Flashlight* ss
+		Flashlight** ppFlashlight
 		) {
 		pos.DoMove(move, st, ci, givesCheck);
-		(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreIndex::ScoreNotEvaluated;
+		((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreIndex::ScoreNotEvaluated;
 	}
 
 	void DoStep15(
 		Rucksack& rucksack,
-		const Depth& depth,
+		const Depth depth,
 		bool& isPVMove,
 		bool& captureOrPawnPromotion,
 		Move& move,
 		Move& ttMove,
-		Flashlight* ss,
-		const bool& PVNode,
+		Flashlight** ppFlashlight,
+		const bool PVNode,
 		int& moveCount,
-		const bool& cutNode,
+		const bool cutNode,
 		Depth& newDepth,
 		ScoreIndex& alpha,
-		SplitedNode* splitedNode,
+		SplitedNode** ppSplitedNode,
 		ScoreIndex& score,
 		Position& pos,
 		bool& doFullDepthSearch
@@ -735,26 +735,26 @@ public:
 			&& !isPVMove
 			&& !captureOrPawnPromotion
 			&& move != ttMove
-			&& ss->m_killers[0] != move
-			&& ss->m_killers[1] != move)
+			&& (*ppFlashlight)->m_killers[0] != move
+			&& (*ppFlashlight)->m_killers[1] != move)
 		{
-			ss->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
+			(*ppFlashlight)->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
 			if (!PVNode && cutNode) {
-				ss->m_reduction += OnePly;
+				(*ppFlashlight)->m_reduction += OnePly;
 			}
-			const Depth d = std::max(newDepth - ss->m_reduction, OnePly);
+			const Depth d = std::max(newDepth - (*ppFlashlight)->m_reduction, OnePly);
 			if (this->IsSplitedNode()) {
-				alpha = splitedNode->m_alpha;
+				alpha = (*ppSplitedNode)->m_alpha;
 			}
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVS
 			score = -Hitchhiker::Travel_885_510(
-				rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, d, true);
+				rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, d, true);
 
-			doFullDepthSearch = (alpha < score && ss->m_reduction != Depth0);
-			ss->m_reduction = Depth0;
+			doFullDepthSearch = (alpha < score && (*ppFlashlight)->m_reduction != Depth0);
+			(*ppFlashlight)->m_reduction = Depth0;
 		}
 		else {
 			doFullDepthSearch = !isPVMove;
@@ -764,13 +764,13 @@ public:
 	void DoStep16(
 		Rucksack& rucksack,
 		bool& doFullDepthSearch,
-		SplitedNode* splitedNode,
+		SplitedNode** ppSplitedNode,
 		ScoreIndex& alpha,
 		ScoreIndex& score,
 		Depth& newDepth,
 		bool& givesCheck,
 		Position& pos,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		const bool& cutNode,
 		bool& isPVMove,
 		ScoreIndex& beta
@@ -780,28 +780,28 @@ public:
 		// PVS
 		if (doFullDepthSearch) {
 			if (this->IsSplitedNode()) {
-				alpha = splitedNode->m_alpha;
+				alpha = (*ppSplitedNode)->m_alpha;
 			}
 			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N02_NonPV, true, pos, ss + 1, -(alpha + 1), -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -(alpha + 1), -alpha, Depth0))
+				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N02_NonPV, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
+					: -Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
 				: -Hitchhiker::Travel_885_510(
-					rucksack, N02_NonPV, pos, ss + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
+					rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 
 		// 通常の探索
 		if (this->IsPvNode() && (isPVMove || (alpha < score && (this->IsRootNode() || score < beta)))) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, ss + 1, -beta, -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, ss + 1, -beta, -alpha, Depth0))
+				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
 				: -Hitchhiker::Travel_885_510(
-					rucksack, N01_PV, pos, ss + 1, -beta, -alpha, newDepth, false));
+					rucksack, N01_PV, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
 		}
 
 	}
@@ -822,7 +822,7 @@ public:
 		ScoreIndex& score,
 		Position& pos,
 		ScoreIndex& bestScore,
-		SplitedNode* splitedNode,
+		SplitedNode** ppSplitedNode,
 		Move& bestMove,
 		ScoreIndex& beta
 		) {
@@ -853,18 +853,18 @@ public:
 		}
 
 		if (bestScore < score) {
-			bestScore = (this->IsSplitedNode() ? splitedNode->m_bestScore = score : score);
+			bestScore = (this->IsSplitedNode() ? (*ppSplitedNode)->m_bestScore = score : score);
 
 			if (alpha < score) {
-				bestMove = (this->IsSplitedNode() ? splitedNode->m_bestMove = move : move);
+				bestMove = (this->IsSplitedNode() ? (*ppSplitedNode)->m_bestMove = move : move);
 
 				if (this->IsPvNode() && score < beta) {
-					alpha = (this->IsSplitedNode() ? splitedNode->m_alpha = score : score);
+					alpha = (this->IsSplitedNode() ? (*ppSplitedNode)->m_alpha = score : score);
 				}
 				else {
 					// fail high
 					if (this->IsSplitedNode()) {
-						splitedNode->m_cutoff = true;
+						(*ppSplitedNode)->m_cutoff = true;
 					}
 					isBreak = true;
 					return;
@@ -877,28 +877,28 @@ public:
 	void DoStep19(
 		bool& isBreak,
 		Rucksack& rucksack,
-		const Depth& depth,
-		Military* pThisThread,
+		const Depth depth,
+		Military** ppThisThread,
 		ScoreIndex& bestScore,
 		ScoreIndex& beta,
 		Position& pos,
-		Flashlight& ss,
+		Flashlight** ppFlashlight,
 		ScoreIndex& alpha,
 		Move& bestMove,
 		Move& threatMove,
 		int& moveCount,
 		NextmoveEvent& mp,
-		NodeType NT,
+		NodeType& NT,
 		const bool cutNode
 		){
 		if (!this->IsSplitedNode()
 			&& rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
-			&& rucksack.m_ownerHerosPub.GetAvailableSlave(pThisThread)
-			&& pThisThread->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
+			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
+			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
-			pThisThread->ForkNewFighter<Rucksack::FakeSplit>(
-				pos, &ss, alpha, beta, bestScore, bestMove,
+			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
+				pos, *ppFlashlight, alpha, beta, bestScore, bestMove,
 				depth, threatMove, moveCount, mp, NT, cutNode
 				);
 			if (beta <= bestScore) {
@@ -919,7 +919,7 @@ public:
 		int& playedMoveCount,
 		ScoreIndex& beta,
 		Key& posKey,
-		const Depth& depth,
+		const Depth depth,
 		Move& bestMove,
 		bool& inCheck,
 		Position& pos,

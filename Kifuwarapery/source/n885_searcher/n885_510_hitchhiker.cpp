@@ -354,9 +354,9 @@ split_point_start:
 			moveCount,
 			threatMove,
 			pos,
-			pSplitedNode,
+			&pSplitedNode,
 			newDepth,
-			*pFlashlight,
+			&pFlashlight,
 			beta,
 			ci,
 			isPVMove,
@@ -375,7 +375,7 @@ split_point_start:
 			st,
 			ci,
 			givesCheck,
-			pFlashlight
+			&pFlashlight
 			);
 
 		// step15
@@ -386,13 +386,13 @@ split_point_start:
 			captureOrPawnPromotion,
 			move,
 			ttMove,
-			pFlashlight,
+			&pFlashlight,
 			nodetypeProgram->IsPvNode(),
 			moveCount,
 			cutNode,
 			newDepth,
 			alpha,
-			pSplitedNode,
+			&pSplitedNode,
 			score,
 			pos,
 			doFullDepthSearch
@@ -402,13 +402,13 @@ split_point_start:
 		nodetypeProgram->DoStep16(
 			rucksack,
 			doFullDepthSearch,
-			pSplitedNode,
+			&pSplitedNode,
 			alpha,
 			score,
 			newDepth,
 			givesCheck,
 			pos,
-			pFlashlight,
+			&pFlashlight,
 			cutNode,
 			isPVMove,
 			beta
@@ -443,7 +443,7 @@ split_point_start:
 			score,
 			pos,
 			bestScore,
-			pSplitedNode,
+			&pSplitedNode,
 			bestMove,
 			beta
 			);
@@ -456,11 +456,11 @@ split_point_start:
 			isBreak,
 			rucksack,
 			depth,
-			pThisThread,
+			&pThisThread,
 			bestScore,
 			beta,
 			pos,
-			*pFlashlight,
+			&pFlashlight,
 			alpha,
 			bestMove,
 			threatMove,
