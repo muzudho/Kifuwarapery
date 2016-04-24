@@ -122,10 +122,10 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 	nodetypeProgram->DoStep1b(
 		bestScore,
-		pFlashlight,
+		&pFlashlight,
 		threatMove,
 		bestMove,
-		pThisThread
+		&pThisThread
 	);
 
 	bool isReturnWithScore = false;
@@ -137,7 +137,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 			returnScore,
 			pos,
 			rucksack,
-			pFlashlight
+			&pFlashlight
 		);
 
 		if (isReturnWithScore)
@@ -149,7 +149,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		nodetypeProgram->DoStep3(
 			isReturnWithScore,
 			returnScore,
-			pFlashlight,
+			&pFlashlight,
 			alpha,
 			beta
 			);
@@ -167,7 +167,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		returnScore,
 		rucksack,
 		excludedMove,
-		pFlashlight,
+		&pFlashlight,
 		posKey,
 		pos,
 		pTtEntry,
@@ -191,7 +191,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isGotoIidStart,
 		rucksack,
 		eval,
-		pFlashlight,
+		&pFlashlight,
 		pos,
 		inCheck,
 		pTtEntry,
@@ -213,7 +213,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		beta,
 		ttMove,
 		pos,
-		pFlashlight
+		&pFlashlight
 		);
 	if (isReturnWithScore)
 	{
@@ -224,7 +224,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	nodetypeProgram->DoStep7(
 		isReturnWithScore,
 		returnScore,
-		pFlashlight,
+		&pFlashlight,
 		depth,
 		beta,
 		eval
@@ -235,7 +235,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
-		pFlashlight,
+		&pFlashlight,
 		depth,
 		beta,
 		eval,
@@ -254,7 +254,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isReturnWithScore,
 		rucksack,
 		depth,
-		pFlashlight,
+		&pFlashlight,
 		beta,
 		move,
 		pos,
@@ -275,7 +275,7 @@ iid_start:
 		ttMove,
 		inCheck,
 		beta,
-		pFlashlight,
+		&pFlashlight,
 		rucksack,
 		pos,
 		alpha,
@@ -310,7 +310,7 @@ split_point_start:
 			pos,
 			ci,
 			moveCount,
-			pSplitedNode,
+			&pSplitedNode,
 			extension,
 			captureOrPawnPromotion,
 			givesCheck,
@@ -333,7 +333,7 @@ split_point_start:
 			ttScore,
 			ci,
 			depth,
-			pFlashlight,
+			&pFlashlight,
 			score,
 			cutNode,
 			beta,

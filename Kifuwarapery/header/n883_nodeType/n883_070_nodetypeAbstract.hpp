@@ -34,7 +34,7 @@ public:
 		bool& inCheck,
 		Position& pos,
 		SplitedNode** ppSplitedNode,
-		Flashlight** ppSs,
+		Flashlight** ppFlashlight,
 		Move& bestMove,
 		Move& threatMove,
 		ScoreIndex& bestScore,
@@ -48,7 +48,7 @@ public:
 		inCheck = pos.InCheck();
 
 		if (this->IsSplitedNode()) {
-			*ppSplitedNode = (*ppSs)->m_splitedNode;
+			*ppSplitedNode = (*ppFlashlight)->m_splitedNode;
 			bestMove = (*ppSplitedNode)->m_bestMove;
 			threatMove = (*ppSplitedNode)->m_threatMove;
 			bestScore = (*ppSplitedNode)->m_bestScore;
@@ -57,7 +57,7 @@ public:
 			ttScore = ScoreNone;
 
 			Evaluation09 evaluation;
-			evaluation.evaluate(pos, *ppSs);
+			evaluation.evaluate(pos, *ppFlashlight);
 
 			assert(-ScoreInfinite < (*ppSplitedNode)->m_bestScore && 0 < (*ppSplitedNode)->m_moveCount);
 
@@ -69,21 +69,21 @@ public:
 
 	void DoStep1b(
 		ScoreIndex& bestScore,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		Move& threatMove,
 		Move& bestMove,
-		Military* thisThread
+		Military** ppThisThread
 		) {
 
 		bestScore = -ScoreInfinite;
-		ss->m_currentMove = threatMove = bestMove = (ss + 1)->m_excludedMove = g_MOVE_NONE;
-		ss->m_ply = (ss - 1)->m_ply + 1;
-		(ss + 1)->m_skipNullMove = false;
-		(ss + 1)->m_reduction = Depth0;
-		(ss + 2)->m_killers[0] = (ss + 2)->m_killers[1] = g_MOVE_NONE;
+		(*ppFlashlight)->m_currentMove = threatMove = bestMove = ((*ppFlashlight) + 1)->m_excludedMove = g_MOVE_NONE;
+		(*ppFlashlight)->m_ply = ((*ppFlashlight) - 1)->m_ply + 1;
+		((*ppFlashlight) + 1)->m_skipNullMove = false;
+		((*ppFlashlight) + 1)->m_reduction = Depth0;
+		((*ppFlashlight) + 2)->m_killers[0] = ((*ppFlashlight) + 2)->m_killers[1] = g_MOVE_NONE;
 
-		if (this->IsPvNode() && thisThread->m_maxPly < ss->m_ply) {
-			thisThread->m_maxPly = ss->m_ply;
+		if (this->IsPvNode() && (*ppThisThread)->m_maxPly < (*ppFlashlight)->m_ply) {
+			(*ppThisThread)->m_maxPly = (*ppFlashlight)->m_ply;
 		}
 	}
 
@@ -92,24 +92,24 @@ public:
 		ScoreIndex& returnScore,
 		Position& pos,
 		Rucksack& rucksack,
-		Flashlight* ss
+		Flashlight** ppFlashlight
 		)
 	{
 		// stop と最大探索深さのチェック
 		g_repetitionTypeArray.m_repetitionTypeArray[pos.IsDraw(16)]->CheckStopAndMaxPly(
-			isReturnWithScore, returnScore, &rucksack, ss);
+			isReturnWithScore, returnScore, &rucksack, (*ppFlashlight));
 	}
 
 	void DoStep3(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		ScoreIndex& alpha,
 		ScoreIndex& beta
 	) {
 		if (!this->IsRootNode()) {
-			alpha = std::max(UtilScore::MatedIn(ss->m_ply), alpha);
-			beta = std::min(UtilScore::MateIn(ss->m_ply + 1), beta);
+			alpha = std::max(UtilScore::MatedIn((*ppFlashlight)->m_ply), alpha);
+			beta = std::min(UtilScore::MateIn((*ppFlashlight)->m_ply + 1), beta);
 			if (beta <= alpha) {
 				isReturnWithScore = true;
 				returnScore = alpha;
@@ -124,13 +124,13 @@ public:
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
 		Move& excludedMove,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		Key& posKey,
 		Position& pos,
-		const TTEntry* tte,
+		const TTEntry* pTtEntry,
 		Move& ttMove,
 		ScoreIndex& ttScore,
-		const Depth& depth,
+		const Depth depth,
 		ScoreIndex& beta,
 		bool& inCheck,
 		Move& move,
@@ -138,34 +138,34 @@ public:
 		Move& bestMove
 	) {
 		// trans position table lookup
-		excludedMove = ss->m_excludedMove;
+		excludedMove = (*ppFlashlight)->m_excludedMove;
 		posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
-		tte = rucksack.m_tt.Probe(posKey);
+		pTtEntry = rucksack.m_tt.Probe(posKey);
 		ttMove =
 			this->IsRootNode() ? rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0] :
-			tte != nullptr ?
-			UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
+			pTtEntry != nullptr ?
+			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
 			g_MOVE_NONE;
-		ttScore = (tte != nullptr ? rucksack.ConvertScoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
+		ttScore = (pTtEntry != nullptr ? rucksack.ConvertScoreFromTT(pTtEntry->GetScore(), (*ppFlashlight)->m_ply) : ScoreNone);
 
 		if (!this->IsRootNode()
-			&& tte != nullptr
-			&& depth <= tte->GetDepth()
+			&& pTtEntry != nullptr
+			&& depth <= pTtEntry->GetDepth()
 			&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
-			&& (this->IsPvNode() ? tte->GetType() == BoundExact
-				: (beta <= ttScore ? (tte->GetType() & BoundLower)
-					: (tte->GetType() & BoundUpper))))
+			&& (this->IsPvNode() ? pTtEntry->GetType() == BoundExact
+				: (beta <= ttScore ? (pTtEntry->GetType() & BoundLower)
+					: (pTtEntry->GetType() & BoundUpper))))
 		{
-			rucksack.m_tt.Refresh(tte);
-			ss->m_currentMove = ttMove; // Move::moveNone() もありえる。
+			rucksack.m_tt.Refresh(pTtEntry);
+			(*ppFlashlight)->m_currentMove = ttMove; // Move::moveNone() もありえる。
 
 			if (beta <= ttScore
 				&& !ttMove.IsNone()
 				&& !ttMove.IsCaptureOrPawnPromotion()
-				&& ttMove != ss->m_killers[0])
+				&& ttMove != (*ppFlashlight)->m_killers[0])
 			{
-				ss->m_killers[1] = ss->m_killers[0];
-				ss->m_killers[0] = ttMove;
+				(*ppFlashlight)->m_killers[1] = (*ppFlashlight)->m_killers[0];
+				(*ppFlashlight)->m_killers[0] = ttMove;
 			}
 
 			isReturnWithScore = true;
@@ -179,9 +179,9 @@ public:
 			&& !inCheck)
 		{
 			if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
-				ss->m_staticEval = bestScore = UtilScore::MateIn(ss->m_ply);
-				rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss->m_ply), BoundExact, depth,
-					move, ss->m_staticEval);
+				(*ppFlashlight)->m_staticEval = bestScore = UtilScore::MateIn((*ppFlashlight)->m_ply);
+				rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, (*ppFlashlight)->m_ply), BoundExact, depth,
+					move, (*ppFlashlight)->m_staticEval);
 				bestMove = move;
 
 				isReturnWithScore = true;
@@ -197,45 +197,45 @@ public:
 		bool& isGotoIidStart,
 		Rucksack& rucksack,
 		ScoreIndex& eval,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		Position& pos,
 		bool& inCheck,
-		const TTEntry* tte,
+		const TTEntry* pTtEntry,
 		ScoreIndex& ttScore,
 		Key& posKey,
 		Move& move
 	) {
 		// evaluate the position statically
 		Evaluation09 evaluation;
-		eval = ss->m_staticEval = evaluation.evaluate(pos, ss); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
+		eval = (*ppFlashlight)->m_staticEval = evaluation.evaluate(pos, (*ppFlashlight)); // Bonanza の差分評価の為、evaluate() を常に呼ぶ。
 		if (inCheck) {
-			eval = ss->m_staticEval = ScoreNone;
+			eval = (*ppFlashlight)->m_staticEval = ScoreNone;
 			isGotoIidStart = true;
 			return;
 			//goto iid_start;
 		}
-		else if (tte != nullptr) {
+		else if (pTtEntry != nullptr) {
 			if (ttScore != ScoreNone
-				&& (tte->GetType() & (eval < ttScore ? Bound::BoundLower : Bound::BoundUpper)))
+				&& (pTtEntry->GetType() & (eval < ttScore ? Bound::BoundLower : Bound::BoundUpper)))
 			{
 				eval = ttScore;
 			}
 		}
 		else {
 			rucksack.m_tt.Store(posKey, ScoreNone, BoundNone, DepthNone,
-				g_MOVE_NONE, ss->m_staticEval);
+				g_MOVE_NONE, (*ppFlashlight)->m_staticEval);
 		}
 
 		// 一手前の指し手について、history を更新する。
 		// todo: ここの条件はもう少し考えた方が良い。
-		if ((move = (ss - 1)->m_currentMove) != g_MOVE_NULL
-			&& (ss - 1)->m_staticEval != ScoreNone
-			&& ss->m_staticEval != ScoreNone
+		if ((move = ((*ppFlashlight) - 1)->m_currentMove) != g_MOVE_NULL
+			&& ((*ppFlashlight) - 1)->m_staticEval != ScoreNone
+			&& (*ppFlashlight)->m_staticEval != ScoreNone
 			&& !move.IsCaptureOrPawnPromotion() // 前回(一手前)の指し手が駒取りでなかった。
 			)
 		{
 			const Square to = move.To();
-			rucksack.m_gains.Update(move.IsDrop(), pos.GetPiece(to), to, -(ss - 1)->m_staticEval - ss->m_staticEval);
+			rucksack.m_gains.Update(move.IsDrop(), pos.GetPiece(to), to, -((*ppFlashlight) - 1)->m_staticEval - (*ppFlashlight)->m_staticEval);
 		}
 	}
 
@@ -243,12 +243,12 @@ public:
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
-		const Depth& depth,
+		const Depth depth,
 		ScoreIndex& eval,
 		ScoreIndex& beta,
 		Move& ttMove,
 		Position& pos,
-		Flashlight* ss
+		Flashlight** ppFlashlight
 	) {
 		// razoring
 		if (!this->IsPvNode()
@@ -258,7 +258,7 @@ public:
 			&& abs(beta) < ScoreMateInMaxPly)
 		{
 			const ScoreIndex rbeta = beta - rucksack.razorMargin(depth);
-			const ScoreIndex s = Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss, rbeta - 1, rbeta, Depth0);
+			const ScoreIndex s = Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
 			if (s < rbeta) {
 				isReturnWithScore = true;
 				returnScore = s;
@@ -271,14 +271,14 @@ public:
 	void DoStep7(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
-		Flashlight* ss,
-		const Depth& depth,
+		Flashlight** ppFlashlight,
+		const Depth depth,
 		ScoreIndex& beta,
 		ScoreIndex& eval
 	) {
 		// static null move pruning
 		if (!this->IsPvNode()
-			&& !ss->m_skipNullMove
+			&& !(*ppFlashlight)->m_skipNullMove
 			&& depth < 4 * OnePly
 			&& beta <= eval - g_futilityMargins.m_FutilityMargins[depth][0]
 			&& abs(beta) < ScoreMateInMaxPly)
@@ -294,25 +294,25 @@ public:
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
-		Flashlight* ss,
-		const Depth& depth,
+		Flashlight** ppFlashlight,
+		const Depth depth,
 		ScoreIndex& beta,
 		ScoreIndex& eval,
 		Position& pos,
 		StateInfo& st,
 		ScoreIndex& alpha,
-		const bool& cutNode,
+		const bool cutNode,
 		Move& threatMove
 	) {
 
 		// null move
 		if (!this->IsPvNode()
-			&& !ss->m_skipNullMove
+			&& !(*ppFlashlight)->m_skipNullMove
 			&& 2 * OnePly <= depth
 			&& beta <= eval
 			&& abs(beta) < ScoreMateInMaxPly)
 		{
-			ss->m_currentMove = g_MOVE_NULL;
+			(*ppFlashlight)->m_currentMove = g_MOVE_NULL;
 			Depth reduction = static_cast<Depth>(3) * OnePly + depth / 4;
 
 			if (beta < eval - PieceScore::m_pawn) {
@@ -320,20 +320,20 @@ public:
 			}
 
 			pos.DoNullMove(true, st);
-			(ss + 1)->m_staticEvalRaw = (ss)->m_staticEvalRaw; // 評価値の差分評価の為。
-			(ss + 1)->m_skipNullMove = true;
+			((*ppFlashlight) + 1)->m_staticEvalRaw = (*ppFlashlight)->m_staticEvalRaw; // 評価値の差分評価の為。
+			((*ppFlashlight) + 1)->m_skipNullMove = true;
 
 			ScoreIndex nullScore = (depth - reduction < OnePly ?
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				-Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, ss + 1, -beta, -alpha, Depth0)
+				-Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -beta, -alpha, depth - reduction, !cutNode));
+				: -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode));
 
-			(ss + 1)->m_skipNullMove = false;
+			((*ppFlashlight) + 1)->m_skipNullMove = false;
 			pos.DoNullMove(false, st);
 
 			if (beta <= nullScore) {
@@ -348,13 +348,13 @@ public:
 					//return nullScore;
 				}
 
-				ss->m_skipNullMove = true;
+				(*ppFlashlight)->m_skipNullMove = true;
 				assert(Depth0 < depth - reduction);
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				const ScoreIndex s = Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, depth - reduction, false);
-				ss->m_skipNullMove = false;
+				const ScoreIndex s = Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
+				(*ppFlashlight)->m_skipNullMove = false;
 
 				if (beta <= s) {
 					isReturnWithScore = true;
@@ -365,11 +365,11 @@ public:
 			}
 			else {
 				// fail low
-				threatMove = (ss + 1)->m_currentMove;
+				threatMove = ((*ppFlashlight) + 1)->m_currentMove;
 				if (depth < 5 * OnePly
-					&& (ss - 1)->m_reduction != Depth0
+					&& ((*ppFlashlight) - 1)->m_reduction != Depth0
 					&& !threatMove.IsNone()
-					&& rucksack.allows(pos, (ss - 1)->m_currentMove, threatMove))
+					&& rucksack.allows(pos, ((*ppFlashlight) - 1)->m_currentMove, threatMove))
 				{
 					isReturnWithScore = true;
 					returnScore = beta - 1;
@@ -384,20 +384,20 @@ public:
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		ScoreIndex& beta,
 		Move& move,
 		Position& pos,
 		Move& ttMove,
 		StateInfo& st,
 		ScoreIndex& score,
-		const bool& cutNode
+		const bool cutNode
 		) {
 
 		// probcut
 		if (!this->IsPvNode()
 			&& 5 * OnePly <= depth
-			&& !ss->m_skipNullMove
+			&& !(*ppFlashlight)->m_skipNullMove
 			// 確実にバグらせないようにする。
 			&& abs(beta) < ScoreInfinite - 200)
 		{
@@ -405,23 +405,23 @@ public:
 			const Depth rdepth = depth - OnePly - 3 * OnePly;
 
 			assert(OnePly <= rdepth);
-			assert(!(ss - 1)->m_currentMove.IsNone());
-			assert((ss - 1)->m_currentMove != g_MOVE_NULL);
+			assert(!((*ppFlashlight) - 1)->m_currentMove.IsNone());
+			assert(((*ppFlashlight) - 1)->m_currentMove != g_MOVE_NULL);
 
-			assert(move == (ss - 1)->m_currentMove);
+			assert(move == (ppFlashlight - 1)->m_currentMove);
 			// move.cap() は前回(一手前)の指し手で取った駒の種類
 			NextmoveEvent mp(pos, ttMove, rucksack.m_history, move.GetCap());
 			const CheckInfo ci(pos);
 			while (!(move = mp.GetNextMove(false)).IsNone()) {
 				if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-					ss->m_currentMove = move;
+					(*ppFlashlight)->m_currentMove = move;
 					pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
-					(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
+					((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）
 					//────────────────────────────────────────────────────────────────────────────────
-					score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+					score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
 					pos.UndoMove(move);
 					if (rbeta <= score) {
 						isReturnWithScore = true;
@@ -434,58 +434,58 @@ public:
 	}
 
 	void DoStep10(
-		const Depth& depth,
+		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
 		ScoreIndex& beta,
-		Flashlight* ss,
+		Flashlight** ppFlashlight,
 		Rucksack& rucksack,
 		Position& pos,
 		ScoreIndex& alpha,
-		const TTEntry* tte,
+		const TTEntry* pTtEntry,
 		Key& posKey
 		)
 	{
 		// internal iterative deepening
 		if ((this->IsPvNode() ? 5 * OnePly : 8 * OnePly) <= depth
 			&& ttMove.IsNone()
-			&& (this->IsPvNode() || (!inCheck && beta <= ss->m_staticEval + static_cast<ScoreIndex>(256))))
+			&& (this->IsPvNode() || (!inCheck && beta <= (*ppFlashlight)->m_staticEval + static_cast<ScoreIndex>(256))))
 		{
 			//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
 			const Depth d = (this->IsPvNode() ? depth - 2 * OnePly : depth / 2);
 
-			ss->m_skipNullMove = true;
+			(*ppFlashlight)->m_skipNullMove = true;
 			if (this->IsPvNode())
 			{
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, ss, alpha, beta, d, true);
+				Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
 			}
 			else
 			{
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, ss, alpha, beta, d, true);
+				Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, d, true);
 			}
-			ss->m_skipNullMove = false;
+			(*ppFlashlight)->m_skipNullMove = false;
 
-			tte = rucksack.m_tt.Probe(posKey);
-			ttMove = (tte != nullptr ?
-				UtilMoveStack::Move16toMove(tte->GetMove(), pos) :
+			pTtEntry = rucksack.m_tt.Probe(posKey);
+			ttMove = (pTtEntry != nullptr ?
+				UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
 				g_MOVE_NONE);
 		}
 	}
 
 	void DoStep11A_BeforeLoop_SplitPointStart(
 		Move& ttMove,
-		const Depth& depth,
+		const Depth depth,
 		ScoreIndex& score,
 		ScoreIndex& bestScore,
 		bool& singularExtensionNode,
 		Move& excludedMove,
-		const TTEntry* tte
+		const TTEntry* pTtEntry
 		)
 	{
 		//NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, this->IsPvNode() ? -ScoreInfinite : beta);
@@ -497,8 +497,8 @@ public:
 			&& 8 * Depth::OnePly <= depth
 			&& !ttMove.IsNone()
 			&& excludedMove.IsNone()
-			&& (tte->GetType() & BoundLower)
-			&& depth - 3 * Depth::OnePly <= tte->GetDepth();
+			&& (pTtEntry->GetType() & BoundLower)
+			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
 	void DoStep11B_LoopHeader(
@@ -509,7 +509,7 @@ public:
 		Position& pos,
 		const CheckInfo& ci,
 		int& moveCount,
-		SplitedNode* splitedNode,
+		SplitedNode** ppSplitedNode,
 		Depth& extension,
 		bool& captureOrPawnPromotion,
 		bool& givesCheck,
@@ -535,8 +535,8 @@ public:
 				isContinue = true;
 				return;
 			}
-			moveCount = ++splitedNode->m_moveCount;
-			splitedNode->m_mutex.unlock();
+			moveCount = ++(*ppSplitedNode)->m_moveCount;
+			(*ppSplitedNode)->m_mutex.unlock();
 		}
 		else {
 			++moveCount;
@@ -570,11 +570,11 @@ public:
 		bool& singularExtensionNode,
 		Move& ttMove,
 		ScoreIndex& ttScore,
-		const CheckInfo& ci,
-		const Depth& depth,
-		Flashlight* ss,
+		const CheckInfo ci,
+		const Depth depth,
+		Flashlight** ppFlashlight,
 		ScoreIndex& score,
-		const bool& cutNode,
+		const bool cutNode,
 		ScoreIndex& beta,
 		Depth& newDepth
 		) {
@@ -594,14 +594,14 @@ public:
 			assert(ttScore != ScoreNone);
 
 			const ScoreIndex rBeta = ttScore - static_cast<ScoreIndex>(depth);
-			ss->m_excludedMove = move;
-			ss->m_skipNullMove = true;
+			(*ppFlashlight)->m_excludedMove = move;
+			(*ppFlashlight)->m_skipNullMove = true;
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
-			score = Hitchhiker::Travel_885_510(rucksack, N02_NonPV, pos, ss, rBeta - 1, rBeta, depth / 2, cutNode);
-			ss->m_skipNullMove = false;
-			ss->m_excludedMove = g_MOVE_NONE;
+			score = Hitchhiker::Travel_885_510(rucksack, N02_NonPV, pos, (*ppFlashlight), rBeta - 1, rBeta, depth / 2, cutNode);
+			(*ppFlashlight)->m_skipNullMove = false;
+			(*ppFlashlight)->m_excludedMove = g_MOVE_NONE;
 
 			if (score < rBeta) {
 				//extension = OnePly;
@@ -771,7 +771,7 @@ public:
 		bool& givesCheck,
 		Position& pos,
 		Flashlight** ppFlashlight,
-		const bool& cutNode,
+		const bool cutNode,
 		bool& isPVMove,
 		ScoreIndex& beta
 		) {
