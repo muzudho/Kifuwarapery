@@ -910,19 +910,26 @@ public:
 	}
 
 	void DoStep20(
+		int& moveCount,
+		Move& excludedMove,
 		Rucksack& rucksack,
 		ScoreIndex& alpha,
-		Flashlight& ss,
+		Flashlight** ppFlashlight,//サーチスタック
 		ScoreIndex& bestScore,
 		int& playedMoveCount,
 		ScoreIndex& beta,
 		Key& posKey,
-		const Depth depth,
+		const Depth& depth,
 		Move& bestMove,
 		bool& inCheck,
 		Position& pos,
 		Move movesSearched[64]
 	) {
+		if (moveCount == 0) {
+			bestScore = !excludedMove.IsNone() ? alpha : UtilScore::MatedIn((*ppFlashlight)->m_ply);
+			return;
+		}
+
 		if (bestScore == -ScoreInfinite) {
 			assert(playedMoveCount == 0);
 			bestScore = alpha;
@@ -930,13 +937,13 @@ public:
 
 		if (beta <= bestScore) {
 			// failed high
-			rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss.m_ply), BoundLower, depth,
-				bestMove, ss.m_staticEval);
+			rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, (*ppFlashlight)->m_ply), BoundLower, depth,
+				bestMove, (*ppFlashlight)->m_staticEval);
 
 			if (!bestMove.IsCaptureOrPawnPromotion() && !inCheck) {
-				if (bestMove != ss.m_killers[0]) {
-					ss.m_killers[1] = ss.m_killers[0];
-					ss.m_killers[0] = bestMove;
+				if (bestMove != (*ppFlashlight)->m_killers[0]) {
+					(*ppFlashlight)->m_killers[1] = (*ppFlashlight)->m_killers[0];
+					(*ppFlashlight)->m_killers[0] = bestMove;
 				}
 
 				const ScoreIndex bonus = static_cast<ScoreIndex>(depth * depth);
@@ -952,12 +959,23 @@ public:
 		}
 		else {
 			// failed low or PV search
-			rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss.m_ply),
-				((this->IsPvNode() && !bestMove.IsNone()) ? BoundExact : BoundUpper),
-				depth, bestMove, ss.m_staticEval);
+			rucksack.m_tt.Store(
+				posKey,
+				rucksack.ConvertScoreToTT(bestScore, (*ppFlashlight)->m_ply),
+				this->GetBoundAtStep20(!bestMove.IsNone()), //((this->IsPvNode() && !bestMove.IsNone()) ? Bound::BoundExact : Bound::BoundUpper),
+				depth,
+				bestMove,
+				(*ppFlashlight)->m_staticEval
+			);
 		}
 
+		assert(-ScoreIndex::ScoreInfinite < bestScore && bestScore < ScoreIndex::ScoreInfinite);
 	}
+
+	// スタティック・メソッドは継承できないので、スタティックにはしないぜ☆（＾ｑ＾）
+	virtual Bound GetBoundAtStep20(bool bestMoveExists) const = 0;
+
+
 };
 
 

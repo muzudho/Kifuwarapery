@@ -54,23 +54,25 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 ScoreIndex Hitchhiker::Travel_885_510(
 	Rucksack& rucksack,
 	NodeType NT,
-	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth, const bool cutNode
+	Position& pos,
+	Flashlight* pFlashlight,//サーチスタック
+	ScoreIndex alpha,
+	ScoreIndex beta,
+	const Depth depth,
+	const bool cutNode
 	) {
 	NodetypeAbstract* nodetypeProgram = g_NODETYPE_PROGRAMS[NT];
-	const bool PVNode = nodetypeProgram->IsPvNode();
-	const bool SPNode = nodetypeProgram->IsSplitedNode();
-	const bool RootNode = nodetypeProgram->IsRootNode();
 
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	assert(PVNode || (alpha == beta - 1));
+	assert(nodetypeProgram->IsPvNode() || (alpha == beta - 1));
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
 	Move movesSearched[64];
 	StateInfo st;
-	const TTEntry* tte = nullptr;//(^q^)
-	SplitedNode* splitedNode = nullptr;//(^q^)
+	const TTEntry* pTtEntry = nullptr;//(^q^)トランスポジション・テーブル・エントリー☆？
+	SplitedNode* pSplitedNode = nullptr;//(^q^)
 	Key posKey;
 	Move ttMove;
 	Move move;
@@ -95,9 +97,8 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 	// step1
 	// initialize node
-	Military* thisThread = pos.GetThisThread();
+	Military* pThisThread = pos.GetThisThread();
 
-	//*
 	bool isGotoSplitPointStart = false;
 	nodetypeProgram->DoStep1a(
 		isGotoSplitPointStart,
@@ -105,8 +106,8 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		playedMoveCount,
 		inCheck,
 		pos,
-		&splitedNode,
-		&ss,
+		&pSplitedNode,
+		&pFlashlight,
 		bestMove,
 		threatMove,
 		bestScore,
@@ -118,49 +119,25 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	{
 		goto split_point_start;
 	}
-	//*/
-
-	/*
-	// initialize node
-	moveCount = playedMoveCount = 0;
-	inCheck = pos.InCheck();
-
-	if (SPNode) {
-		splitedNode = ss->m_splitedNode;
-		bestMove = splitedNode->m_bestMove;
-		threatMove = splitedNode->m_threatMove;
-		bestScore = splitedNode->m_bestScore;
-		//tte = nullptr;
-		ttMove = excludedMove = g_MOVE_NONE;
-		ttScore = ScoreNone;
-
-		Evaluation09 evaluation;
-		evaluation.evaluate(pos, ss);
-
-		assert(-ScoreInfinite < splitedNode->m_bestScore && 0 < splitedNode->m_moveCount);
-
-		goto split_point_start;
-	}
-	//*/
 
 	nodetypeProgram->DoStep1b(
 		bestScore,
-		ss,
+		pFlashlight,
 		threatMove,
 		bestMove,
-		thisThread
+		pThisThread
 	);
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
-	if (!RootNode) {
+	if (!nodetypeProgram->IsRootNode()) {
 		// step2
 		nodetypeProgram->DoStep2(
 			isReturnWithScore,
 			returnScore,
 			pos,
 			rucksack,
-			ss
+			pFlashlight
 		);
 
 		if (isReturnWithScore)
@@ -172,7 +149,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		nodetypeProgram->DoStep3(
 			isReturnWithScore,
 			returnScore,
-			ss,
+			pFlashlight,
 			alpha,
 			beta
 			);
@@ -190,10 +167,10 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		returnScore,
 		rucksack,
 		excludedMove,
-		ss,
+		pFlashlight,
 		posKey,
 		pos,
-		tte,
+		pTtEntry,
 		ttMove,
 		ttScore,
 		depth,
@@ -214,10 +191,10 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isGotoIidStart,
 		rucksack,
 		eval,
-		ss,
+		pFlashlight,
 		pos,
 		inCheck,
-		tte,
+		pTtEntry,
 		ttScore,
 		posKey,
 		move
@@ -236,7 +213,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		beta,
 		ttMove,
 		pos,
-		ss
+		pFlashlight
 		);
 	if (isReturnWithScore)
 	{
@@ -247,7 +224,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	nodetypeProgram->DoStep7(
 		isReturnWithScore,
 		returnScore,
-		ss,
+		pFlashlight,
 		depth,
 		beta,
 		eval
@@ -258,7 +235,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
-		ss,
+		pFlashlight,
 		depth,
 		beta,
 		eval,
@@ -277,7 +254,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		isReturnWithScore,
 		rucksack,
 		depth,
-		ss,
+		pFlashlight,
 		beta,
 		move,
 		pos,
@@ -298,16 +275,16 @@ iid_start:
 		ttMove,
 		inCheck,
 		beta,
-		ss,
+		pFlashlight,
 		rucksack,
 		pos,
 		alpha,
-		tte,
+		pTtEntry,
 		posKey
 		);
 
 split_point_start:
-	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, ss, PVNode ? -ScoreInfinite : beta);
+	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, pFlashlight, nodetypeProgram->IsPvNode() ? -ScoreInfinite : beta);
 	const CheckInfo ci(pos);
 
 	nodetypeProgram->DoStep11A_BeforeLoop_SplitPointStart(
@@ -317,12 +294,12 @@ split_point_start:
 		bestScore,
 		singularExtensionNode,
 		excludedMove,
-		tte
+		pTtEntry
 		);
 
 	// step11
 	// Loop through moves
-	while (!(move = mp.GetNextMove(SPNode)).IsNone()) {
+	while (!(move = mp.GetNextMove(nodetypeProgram->IsSplitedNode())).IsNone()) {
 
 		bool isContinue = false;
 		nodetypeProgram->DoStep11B_LoopHeader(
@@ -333,7 +310,7 @@ split_point_start:
 			pos,
 			ci,
 			moveCount,
-			splitedNode,
+			pSplitedNode,
 			extension,
 			captureOrPawnPromotion,
 			givesCheck,
@@ -356,7 +333,7 @@ split_point_start:
 			ttScore,
 			ci,
 			depth,
-			ss,
+			pFlashlight,
 			score,
 			cutNode,
 			beta,
@@ -377,9 +354,9 @@ split_point_start:
 			moveCount,
 			threatMove,
 			pos,
-			splitedNode,
+			pSplitedNode,
 			newDepth,
-			*ss,
+			*pFlashlight,
 			beta,
 			ci,
 			isPVMove,
@@ -398,7 +375,7 @@ split_point_start:
 			st,
 			ci,
 			givesCheck,
-			ss
+			pFlashlight
 			);
 
 		// step15
@@ -409,13 +386,13 @@ split_point_start:
 			captureOrPawnPromotion,
 			move,
 			ttMove,
-			ss,
-			PVNode,
+			pFlashlight,
+			nodetypeProgram->IsPvNode(),
 			moveCount,
 			cutNode,
 			newDepth,
 			alpha,
-			splitedNode,
+			pSplitedNode,
 			score,
 			pos,
 			doFullDepthSearch
@@ -425,13 +402,13 @@ split_point_start:
 		nodetypeProgram->DoStep16(
 			rucksack,
 			doFullDepthSearch,
-			splitedNode,
+			pSplitedNode,
 			alpha,
 			score,
 			newDepth,
 			givesCheck,
 			pos,
-			ss,
+			pFlashlight,
 			cutNode,
 			isPVMove,
 			beta
@@ -446,13 +423,13 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
-		if (SPNode) {
-			splitedNode->m_mutex.lock();
-			bestScore = splitedNode->m_bestScore;
-			alpha = splitedNode->m_alpha;
+		if (nodetypeProgram->IsSplitedNode()) {
+			pSplitedNode->m_mutex.lock();
+			bestScore = pSplitedNode->m_bestScore;
+			alpha = pSplitedNode->m_alpha;
 		}
 
-		if (rucksack.m_signals.m_stop || thisThread->CutoffOccurred()) {
+		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}
 
@@ -466,7 +443,7 @@ split_point_start:
 			score,
 			pos,
 			bestScore,
-			splitedNode,
+			pSplitedNode,
 			bestMove,
 			beta
 			);
@@ -479,11 +456,11 @@ split_point_start:
 			isBreak,
 			rucksack,
 			depth,
-			thisThread,
+			pThisThread,
 			bestScore,
 			beta,
 			pos,
-			*ss,
+			*pFlashlight,
 			alpha,
 			bestMove,
 			threatMove,
@@ -497,18 +474,17 @@ split_point_start:
 		}
 	}
 
-	if (SPNode) {
+	if (nodetypeProgram->IsSplitedNode()) {
 		return bestScore;
 	}
 
 	// step20
-	if (moveCount == 0) {
-		return !excludedMove.IsNone() ? alpha : UtilScore::MatedIn(ss->m_ply);
-	}
 	nodetypeProgram->DoStep20(
+		moveCount,
+		excludedMove,
 		rucksack,
 		alpha,
-		*ss,
+		&pFlashlight,
 		bestScore,
 		playedMoveCount,
 		beta,
@@ -519,8 +495,6 @@ split_point_start:
 		pos,
 		movesSearched
 		);
-
-	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
 
 	return bestScore;
 }

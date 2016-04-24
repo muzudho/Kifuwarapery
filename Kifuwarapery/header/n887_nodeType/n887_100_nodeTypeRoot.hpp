@@ -26,6 +26,10 @@ public:
 	const bool IsSplitedNode() const { return false; };
 	const bool IsRootNode() const { return true; }
 
+	inline Bound GetBoundAtStep20(bool bestMoveExists) const {
+		return bestMoveExists ? Bound::BoundExact : Bound::BoundUpper;
+	}
+
 };
 
 

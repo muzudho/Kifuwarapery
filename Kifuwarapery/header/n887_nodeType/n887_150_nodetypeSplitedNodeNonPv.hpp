@@ -59,6 +59,10 @@ public:
 		UNREACHABLE;
 	}
 
+	inline Bound GetBoundAtStep20(bool bestMoveExists) const {
+		return Bound::BoundUpper;
+	}
+
 };
 
 
