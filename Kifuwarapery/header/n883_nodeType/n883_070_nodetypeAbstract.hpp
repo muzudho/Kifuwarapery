@@ -24,8 +24,8 @@ public:
 	virtual inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
 
 	virtual inline const bool IsPvNode() const = 0;
-	virtual inline const bool IsSplitedNode() const = 0;
 
+	// スプリット・ポイントのみ実行☆（＾ｑ＾）
 	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
 		int& moveCount,
@@ -43,27 +43,23 @@ public:
 	)const {
 
 		// initialize node
-		moveCount = playedMoveCount = 0;
-		inCheck = pos.InCheck();
 
-		if (this->IsSplitedNode()) {
-			*ppSplitedNode = (*ppFlashlight)->m_splitedNode;
-			bestMove = (*ppSplitedNode)->m_bestMove;
-			threatMove = (*ppSplitedNode)->m_threatMove;
-			bestScore = (*ppSplitedNode)->m_bestScore;
-			//tte = nullptr;
-			ttMove = excludedMove = g_MOVE_NONE;
-			ttScore = ScoreNone;
+		*ppSplitedNode = (*ppFlashlight)->m_splitedNode;
+		bestMove = (*ppSplitedNode)->m_bestMove;
+		threatMove = (*ppSplitedNode)->m_threatMove;
+		bestScore = (*ppSplitedNode)->m_bestScore;
+		//tte = nullptr;
+		ttMove = excludedMove = g_MOVE_NONE;
+		ttScore = ScoreNone;
 
-			Evaluation09 evaluation;
-			evaluation.evaluate(pos, *ppFlashlight);
+		Evaluation09 evaluation;
+		evaluation.evaluate(pos, *ppFlashlight);
 
-			assert(-ScoreInfinite < (*ppSplitedNode)->m_bestScore && 0 < (*ppSplitedNode)->m_moveCount);
+		assert(-ScoreInfinite < (*ppSplitedNode)->m_bestScore && 0 < (*ppSplitedNode)->m_moveCount);
 
-			isGotoSplitPointStart = true;
-			return;
-			//goto split_point_start;
-		}
+		isGotoSplitPointStart = true;
+		return;
+		//goto split_point_start;
 	}
 
 	virtual inline void DoStep1b(
@@ -504,6 +500,12 @@ public:
 		}
 	}
 
+	// これはベータ値☆ PVノードか、そうでないかで値が変わるぜ☆（＾ｑ＾）
+	virtual inline ScoreIndex GetBetaAtStep11(
+		ScoreIndex beta
+		) const = 0;
+
+	// これはムーブ☆
 	virtual inline Move GetMoveAtStep11(
 		NextmoveEvent& mp
 		) const = 0;
@@ -677,7 +679,7 @@ public:
 			}
 
 			// score based pruning
-			const Depth predictedDepth = newDepth - g_reductions.reduction(this->IsPvNode(), depth, moveCount);
+			const Depth predictedDepth = this->GetPredictedDepthInStep13a( newDepth, depth, moveCount);
 			// gain を 2倍にする。
 			const ScoreIndex futilityScore = (*ppFlashlight)->m_staticEval + g_futilityMargins.GetFutilityMargin(predictedDepth, moveCount)
 				+ 2 * rucksack.m_gains.GetValue(move.IsDrop(), ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(pos.GetTurn(), move.GetPieceTypeFromOrDropped()), move.To());
@@ -701,6 +703,13 @@ public:
 			}
 		}
 	}
+
+	// PVノードか、そうでないかで変わるぜ☆！（＾ｑ＾）
+	virtual inline const Depth GetPredictedDepthInStep13a(
+		Depth& newDepth,
+		const Depth depth,
+		int& moveCount
+		) const = 0;
 
 	// スプリット・ポイントでだけ実行☆（＾ｑ＾）！
 	virtual inline void LockInStep13a(
@@ -737,6 +746,7 @@ public:
 		}
 	}
 
+	// スプリット・ポイントか、PVノードかで手続きが変わるぜ☆！（＾ｑ＾）
 	virtual inline void DoStep13c(
 		bool& isContinue,
 		Rucksack& rucksack,
@@ -758,11 +768,7 @@ public:
 		bool& isPVMove,
 		int& playedMoveCount,
 		Move movesSearched[64]
-		)const {
-
-		isPVMove = (this->IsPvNode() && moveCount == 1);
-		(*ppFlashlight)->m_currentMove = move;
-	}
+		)const = 0;
 
 	// 非スプリットポイントのみ実行☆（＾ｑ＾）
 	virtual inline void DoStep13d(
@@ -807,6 +813,7 @@ public:
 		Position& pos,
 		bool& doFullDepthSearch
 		)const {
+
 		// LMR
 		if (3 * OnePly <= depth
 			&& !isPVMove
@@ -815,11 +822,13 @@ public:
 			&& (*ppFlashlight)->m_killers[0] != move
 			&& (*ppFlashlight)->m_killers[1] != move)
 		{
-			(*ppFlashlight)->m_reduction = g_reductions.reduction(PVNode, depth, moveCount);
-			if (!PVNode && cutNode) {
-				(*ppFlashlight)->m_reduction += OnePly;
-			}
-			const Depth d = std::max(newDepth - (*ppFlashlight)->m_reduction, OnePly);
+			this->SetReductionInStep15(
+				ppFlashlight,
+				depth,
+				moveCount,
+				cutNode
+				);
+			const Depth d = std::max(newDepth - (*ppFlashlight)->m_reduction, Depth::OnePly);
 
 			// スプリットポイントではアルファを更新☆
 			this->UpdateAlphaInStep15(
@@ -841,6 +850,14 @@ public:
 			doFullDepthSearch = !isPVMove;
 		}
 	}
+
+	// Pvノードかどうかで手続きが変わるぜ☆！（＾ｑ＾）
+	virtual inline void SetReductionInStep15(
+		Flashlight** ppFlashlight,
+		const Depth depth,
+		int& moveCount,
+		const bool cutNode
+		) const = 0;
 
 	// スプリットノードだけが実行するぜ☆！（＾ｑ＾）
 	virtual inline void UpdateAlphaInStep15(
@@ -1083,7 +1100,7 @@ public:
 			rucksack.m_tt.Store(
 				posKey,
 				rucksack.ConvertScoreToTT(bestScore, (*ppFlashlight)->m_ply),
-				this->GetBoundAtStep20(!bestMove.IsNone()), //((this->IsPvNode() && !bestMove.IsNone()) ? Bound::BoundExact : Bound::BoundUpper),
+				this->GetBoundAtStep20(!bestMove.IsNone()),
 				depth,
 				bestMove,
 				(*ppFlashlight)->m_staticEval

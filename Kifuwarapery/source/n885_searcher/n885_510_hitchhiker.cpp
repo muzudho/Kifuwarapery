@@ -98,6 +98,8 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	// step1
 	// initialize node
 	Military* pThisThread = pos.GetThisThread();
+	moveCount = playedMoveCount = 0;
+	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
 	nodetypeProgram->DoStep1a(
@@ -311,7 +313,14 @@ iid_start:
 		);
 
 split_point_start:
-	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, pFlashlight, nodetypeProgram->IsPvNode() ? -ScoreInfinite : beta);
+	NextmoveEvent mp(
+		pos,
+		ttMove,
+		depth,
+		rucksack.m_history,
+		pFlashlight,
+		nodetypeProgram->GetBetaAtStep11( beta)//PVƒm[ƒh‚©A‚»‚¤‚Å‚È‚¢‚©‚Å‰Šú’l‚ð•Ï‚¦‚é‚º™iO‚‘Oj
+	);
 	const CheckInfo ci(pos);
 
 	nodetypeProgram->DoStep11A_BeforeLoop_SplitPointStart(

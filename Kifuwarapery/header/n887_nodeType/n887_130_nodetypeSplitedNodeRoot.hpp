@@ -11,6 +11,7 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// SplitedNode = true
 // RootNode = true
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
@@ -21,7 +22,6 @@ public:
 	}
 
 	inline const bool IsPvNode() const { return true; };
-	inline const bool IsSplitedNode() const { return true; };
 
 	virtual inline void DoStep2(
 		bool& isReturnWithScore,
@@ -89,6 +89,13 @@ public:
 		//UNREACHABLE;
 	}
 
+	virtual inline ScoreIndex GetBetaAtStep11(
+		ScoreIndex beta
+		) const {
+		// PVノードの場合☆（＾ｑ＾）
+		return -ScoreIndex::ScoreInfinite;
+	}
+
 	virtual inline Move GetMoveAtStep11(
 		NextmoveEvent& mp
 		) const {
@@ -150,6 +157,16 @@ public:
 		//UNREACHABLE;
 	}
 
+	// PVノードか、そうでないかで変わるぜ☆！（＾ｑ＾）
+	virtual inline const Depth GetPredictedDepthInStep13a(
+		Depth& newDepth,
+		const Depth depth,
+		int& moveCount
+		) const {
+		// PVノードのとき
+		return newDepth - g_reductions.DoReduction_PvNode(depth, moveCount);
+	}
+
 	virtual inline void DoStep13b(
 		Position& pos,
 		Move& move,
@@ -161,6 +178,35 @@ public:
 		//UNREACHABLE;
 	}
 
+	// スプリット・ポイントか、PVノードかで手続きが変わるぜ☆！（＾ｑ＾）
+	virtual inline void DoStep13c(
+		bool& isContinue,
+		Rucksack& rucksack,
+		bool& captureOrPawnPromotion,
+		bool& inCheck,
+		bool& dangerous,
+		ScoreIndex& bestScore,
+		Move& move,
+		Move& ttMove,
+		const Depth depth,
+		int& moveCount,
+		Move& threatMove,
+		Position& pos,
+		SplitedNode** ppSplitedNode,
+		Depth& newDepth,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		const CheckInfo& ci,
+		bool& isPVMove,
+		int& playedMoveCount,
+		Move movesSearched[64]
+		)const {
+
+		// PVノードだぜ☆（＾ｑ＾）
+		isPVMove = (moveCount == 1);
+		(*ppFlashlight)->m_currentMove = move;
+	}
+
 	virtual inline void DoStep13d(
 		bool& captureOrPawnPromotion,
 		int& playedMoveCount,
@@ -168,6 +214,17 @@ public:
 		) const {
 
 		// スプリットポイントではスルー☆！（＾ｑ＾）
+	}
+
+	// Pvノードかどうかで手続きが変わるぜ☆！（＾ｑ＾）
+	virtual inline void SetReductionInStep15(
+		Flashlight** ppFlashlight,
+		const Depth depth,
+		int& moveCount,
+		const bool cutNode
+		) const {
+		// Pvノードのとき☆！（＾ｑ＾）
+		(*ppFlashlight)->m_reduction = g_reductions.DoReduction_PvNode(depth, moveCount);
 	}
 
 	virtual inline bool IsBetaLargeAtStep16c(
@@ -199,7 +256,8 @@ public:
 			if (alpha < score) {
 				bestMove = (*ppSplitedNode)->m_bestMove = move;
 
-				if (this->IsPvNode() && score < beta) {
+				// （＾ｑ＾）PVノードの場合☆
+				if (score < beta) {
 					alpha = (*ppSplitedNode)->m_alpha = score;
 				}
 				else {
