@@ -169,7 +169,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		&pFlashlight,
 		posKey,
 		pos,
-		pTtEntry,
+		&pTtEntry,//セットされる☆
 		rucksack,
 		ttScore
 		);
@@ -306,7 +306,7 @@ iid_start:
 		rucksack,
 		pos,
 		alpha,
-		pTtEntry,
+		&pTtEntry,//セットされるぜ☆
 		posKey
 		);
 
@@ -321,7 +321,7 @@ split_point_start:
 		bestScore,
 		singularExtensionNode,
 		excludedMove,
-		pTtEntry
+		pTtEntry//pv,nonPv の２つで、nullptrはダメ☆
 		);
 
 	// step11
@@ -457,6 +457,12 @@ split_point_start:
 		{
 			continue;
 		}
+		nodetypeProgram->DoStep13d(
+			captureOrPawnPromotion,
+			playedMoveCount,
+			movesSearched,
+			move
+			);
 
 		// step14
 		nodetypeProgram->DoStep14(

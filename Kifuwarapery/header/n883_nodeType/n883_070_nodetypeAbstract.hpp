@@ -129,15 +129,15 @@ public:
 		Flashlight** ppFlashlight,
 		Key& posKey,
 		Position& pos,
-		const TTEntry* pTtEntry,
+		const TTEntry** ppTtEntry,//セットされるぜ☆（＾ｑ＾）
 		Rucksack& rucksack,
 		ScoreIndex& ttScore
 	)const {
 		// trans position table lookup
 		excludedMove = (*ppFlashlight)->m_excludedMove;
 		posKey = (excludedMove.IsNone() ? pos.GetKey() : pos.GetExclusionKey());
-		pTtEntry = rucksack.m_tt.Probe(posKey);
-		ttScore = (pTtEntry != nullptr ? rucksack.ConvertScoreFromTT(pTtEntry->GetScore(), (*ppFlashlight)->m_ply) : ScoreNone);
+		(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
+		ttScore = ((*ppTtEntry) != nullptr ? rucksack.ConvertScoreFromTT((*ppTtEntry)->GetScore(), (*ppFlashlight)->m_ply) : ScoreNone);
 	}
 
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
@@ -468,7 +468,7 @@ public:
 		Rucksack& rucksack,
 		Position& pos,
 		ScoreIndex& alpha,
-		const TTEntry* pTtEntry,
+		const TTEntry** ppTtEntry,//セットされるぜ☆
 		Key& posKey
 		)const
 	{
@@ -497,9 +497,9 @@ public:
 			}
 			(*ppFlashlight)->m_skipNullMove = false;
 
-			pTtEntry = rucksack.m_tt.Probe(posKey);
-			ttMove = (pTtEntry != nullptr ?
-				UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
+			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
+			ttMove = ((*ppTtEntry) != nullptr ?
+				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
 				g_MOVE_NONE);
 		}
 	}
@@ -671,9 +671,7 @@ public:
 				&& g_futilityMoveCounts.m_futilityMoveCounts[depth] <= moveCount
 				&& (threatMove.IsNone() || !rucksack.refutes(pos, move, threatMove)))
 			{
-				if (this->IsSplitedNode()) {
-					(*ppSplitedNode)->m_mutex.lock();
-				}
+				this->LockInStep13a(ppSplitedNode);
 				isContinue = true;
 				return;
 			}
@@ -686,12 +684,10 @@ public:
 
 			if (futilityScore < beta) {
 				bestScore = std::max(bestScore, futilityScore);
-				if (this->IsSplitedNode()) {
-					(*ppSplitedNode)->m_mutex.lock();
-					if ((*ppSplitedNode)->m_bestScore < bestScore) {
-						(*ppSplitedNode)->m_bestScore = bestScore;
-					}
-				}
+				this->LockAndUpdateBestScoreInStep13a(
+					ppSplitedNode,
+					bestScore
+					);
 				isContinue = true;
 				return;
 			}
@@ -699,12 +695,29 @@ public:
 			if (predictedDepth < 4 * OnePly
 				&& pos.GetSeeSign(move) < ScoreZero)
 			{
-				if (this->IsSplitedNode()) {
-					(*ppSplitedNode)->m_mutex.lock();
-				}
+				this->LockInStep13a(ppSplitedNode);
 				isContinue = true;
 				return;
 			}
+		}
+	}
+
+	// スプリット・ポイントでだけ実行☆（＾ｑ＾）！
+	virtual inline void LockInStep13a(
+		SplitedNode** ppSplitedNode
+		) const
+	{
+		(*ppSplitedNode)->m_mutex.lock();
+	}
+	// スプリット・ポイントでだけ実行☆（＾ｑ＾）！
+	virtual inline void LockAndUpdateBestScoreInStep13a(
+		SplitedNode** ppSplitedNode,
+		ScoreIndex& bestScore
+		) const {
+
+		(*ppSplitedNode)->m_mutex.lock();
+		if ((*ppSplitedNode)->m_bestScore < bestScore) {
+			(*ppSplitedNode)->m_bestScore = bestScore;
 		}
 	}
 
@@ -749,10 +762,19 @@ public:
 
 		isPVMove = (this->IsPvNode() && moveCount == 1);
 		(*ppFlashlight)->m_currentMove = move;
-		if (!this->IsSplitedNode() && !captureOrPawnPromotion && playedMoveCount < 64) {
+	}
+
+	// 非スプリットポイントのみ実行☆（＾ｑ＾）
+	virtual inline void DoStep13d(
+		bool& captureOrPawnPromotion,
+		int& playedMoveCount,
+		Move movesSearched[64],
+		Move& move
+		) const {
+
+		if (!captureOrPawnPromotion && playedMoveCount < 64) {
 			movesSearched[playedMoveCount++] = move;
 		}
-
 	}
 
 	virtual inline void DoStep14(
@@ -798,9 +820,13 @@ public:
 				(*ppFlashlight)->m_reduction += OnePly;
 			}
 			const Depth d = std::max(newDepth - (*ppFlashlight)->m_reduction, OnePly);
-			if (this->IsSplitedNode()) {
-				alpha = (*ppSplitedNode)->m_alpha;
-			}
+
+			// スプリットポイントではアルファを更新☆
+			this->UpdateAlphaInStep15(
+				alpha,
+				ppSplitedNode
+				);
+
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
@@ -814,6 +840,15 @@ public:
 		else {
 			doFullDepthSearch = !isPVMove;
 		}
+	}
+
+	// スプリットノードだけが実行するぜ☆！（＾ｑ＾）
+	virtual inline void UpdateAlphaInStep15(
+		ScoreIndex& alpha,
+		SplitedNode** ppSplitedNode
+		) const {
+
+		alpha = (*ppSplitedNode)->m_alpha;
 	}
 
 	// スプリットノードだけが実行するぜ☆！（＾ｑ＾）

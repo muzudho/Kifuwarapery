@@ -53,12 +53,7 @@ public:
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		singularExtensionNode = !this - IsSplitedNode()
-			&& 8 * Depth::OnePly <= depth
-			&& !ttMove.IsNone()
-			&& excludedMove.IsNone()
-			&& (pTtEntry->GetType() & BoundLower)
-			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
+		singularExtensionNode = false;
 	}
 
 	virtual inline void DoStep11Bb_LoopHeader(
@@ -126,6 +121,15 @@ public:
 		) const {
 		// ルートノード、スプリットポイントはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
+	}
+
+	virtual inline void DoStep13d(
+		bool& captureOrPawnPromotion,
+		int& playedMoveCount,
+		Move movesSearched[64]
+		) const {
+
+		// スプリットポイントではスルー☆！（＾ｑ＾）
 	}
 
 	virtual inline bool IsBetaLargeAtStep16c(

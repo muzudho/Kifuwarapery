@@ -148,6 +148,19 @@ public:
 		//UNREACHABLE;
 	}
 
+	virtual inline void LockInStep13a(
+		SplitedNode** ppSplitedNode
+		) const
+	{
+		// 非スプリット・ポイントではスルー☆！（＾ｑ＾）
+	}
+	virtual inline void LockAndUpdateBestScoreInStep13a(
+		SplitedNode** ppSplitedNode,
+		ScoreIndex& bestScore
+		) const {
+		// 非スプリット・ポイントではスルー☆！（＾ｑ＾）
+	}
+
 	virtual inline void DoStep13b(
 		Position& pos,
 		Move& move,
@@ -157,6 +170,14 @@ public:
 		) const {
 		// ルートノード、スプリットポイントはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
+	}
+
+	virtual inline void UpdateAlphaInStep15(
+		ScoreIndex& alpha,
+		SplitedNode** ppSplitedNode
+		) const {
+
+		// 非スプリットノードではスルー☆！（＾ｑ＾）
 	}
 
 	virtual inline void DoStep16a(

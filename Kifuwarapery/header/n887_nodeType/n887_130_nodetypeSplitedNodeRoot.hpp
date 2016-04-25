@@ -161,6 +161,15 @@ public:
 		//UNREACHABLE;
 	}
 
+	virtual inline void DoStep13d(
+		bool& captureOrPawnPromotion,
+		int& playedMoveCount,
+		Move movesSearched[64]
+		) const {
+
+		// スプリットポイントではスルー☆！（＾ｑ＾）
+	}
+
 	virtual inline bool IsBetaLargeAtStep16c(
 		ScoreIndex& score,
 		ScoreIndex& beta
