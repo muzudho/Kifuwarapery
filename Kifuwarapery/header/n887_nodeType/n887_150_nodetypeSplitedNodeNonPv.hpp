@@ -9,6 +9,7 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// PvNode = false
 // SplitedNode = true
 // RootNode = false
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {
@@ -19,7 +20,6 @@ public:
 		//UNREACHABLE;
 	}
 
-	inline const bool IsPvNode() const { return false; };
 
 	inline void DoStep1c(
 		Military** ppThisThread,
@@ -40,6 +40,64 @@ public:
 		ttMove = pTtEntry != nullptr ?
 			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
 			g_MOVE_NONE;
+	}
+
+	// 非PVノードの場合☆（＾ｑ＾）
+	virtual inline bool GetConditionInStep4y(
+		const TTEntry* pTtEntry,
+		ScoreIndex& beta,
+		ScoreIndex& ttScore
+		) const {
+		return  beta <= ttScore ?
+			(pTtEntry->GetType() & Bound::BoundLower)
+			:
+			(pTtEntry->GetType() & Bound::BoundUpper);
+	}
+
+	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
+	virtual inline void DoStep10(
+		const Depth depth,
+		Move& ttMove,
+		bool& inCheck,
+		ScoreIndex& beta,
+		Flashlight** ppFlashlight,
+		Rucksack& rucksack,
+		Position& pos,
+		ScoreIndex& alpha,
+		const TTEntry** ppTtEntry,//セットされるぜ☆
+		Key& posKey
+		)const
+	{
+		// internal iterative deepening
+		if (
+			// 非PVノードの場合、８倍☆
+			(8 * OnePly) <= depth
+			&& ttMove.IsNone()
+			// 非PVノードの場合、さらに条件☆
+			&& (
+				!inCheck && beta <= (*ppFlashlight)->m_staticEval + static_cast<ScoreIndex>(256)
+				)
+			)
+		{
+			//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
+			// 非PVノードの場合☆
+			const Depth d = depth / 2;
+
+			(*ppFlashlight)->m_skipNullMove = true;
+
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			// 非PVノードの場合☆
+			Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, d, true);
+
+			(*ppFlashlight)->m_skipNullMove = false;
+
+			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
+			ttMove = ((*ppTtEntry) != nullptr ?
+				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
+				g_MOVE_NONE);
+		}
 	}
 
 	virtual inline ScoreIndex GetBetaAtStep11(

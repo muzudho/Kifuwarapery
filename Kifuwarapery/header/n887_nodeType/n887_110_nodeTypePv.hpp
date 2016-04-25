@@ -9,6 +9,7 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+// PvNode = true
 // SplitedNode = false
 // RootNode = false
 class NodetypePv : public NodetypeAbstract {
@@ -23,7 +24,15 @@ public:
 			pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
 	}
 
-	inline const bool IsPvNode() const { return true; };
+
+	// 非PVノードはassertをするぜ☆（＾ｑ＾）
+	virtual inline void AssertBeforeStep1(
+		ScoreIndex alpha,
+		ScoreIndex beta
+		) const {
+		// PVノードはスルー☆！（＾ｑ＾）
+		assert(alpha == beta - 1);
+	}
 
 	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
@@ -54,6 +63,119 @@ public:
 		ttMove = pTtEntry != nullptr ?
 			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
 			g_MOVE_NONE;
+	}
+
+	// PVノードの場合☆（＾ｑ＾）
+	virtual inline bool GetConditionInStep4y(
+		const TTEntry* pTtEntry,
+		ScoreIndex& beta,
+		ScoreIndex& ttScore
+		) const {
+		return pTtEntry->GetType() == Bound::BoundExact;
+	}
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep6(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		const Depth depth,
+		ScoreIndex& eval,
+		ScoreIndex& beta,
+		Move& ttMove,
+		Position& pos,
+		Flashlight** ppFlashlight
+		)const {
+		// PVノードはスルー☆！（＾ｑ＾）
+	}
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep7(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Flashlight** ppFlashlight,
+		const Depth depth,
+		ScoreIndex& beta,
+		ScoreIndex& eval
+		)const {
+		// PVノードはスルー☆！（＾ｑ＾）
+	}
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep8(
+		bool& isReturnWithScore,
+		ScoreIndex& returnScore,
+		Rucksack& rucksack,
+		Flashlight** ppFlashlight,
+		const Depth depth,
+		ScoreIndex& beta,
+		ScoreIndex& eval,
+		Position& pos,
+		StateInfo& st,
+		ScoreIndex& alpha,
+		const bool cutNode,
+		Move& threatMove
+		)const {
+		// PVノードはスルー☆！（＾ｑ＾）
+	}
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep9(
+		bool& isReturnWithScore,
+		Rucksack& rucksack,
+		const Depth& depth,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		Move& move,
+		Position& pos,
+		Move& ttMove,
+		StateInfo& st,
+		ScoreIndex& score,
+		const bool cutNode
+		)const {
+		// 非PVノードはスルー☆！（＾ｑ＾）
+	}
+
+	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
+	virtual inline void DoStep10(
+		const Depth depth,
+		Move& ttMove,
+		bool& inCheck,
+		ScoreIndex& beta,
+		Flashlight** ppFlashlight,
+		Rucksack& rucksack,
+		Position& pos,
+		ScoreIndex& alpha,
+		const TTEntry** ppTtEntry,//セットされるぜ☆
+		Key& posKey
+		)const
+	{
+		// internal iterative deepening
+		if (
+			// PVノードの場合、５倍☆
+			(5 * OnePly) <= depth
+			&& ttMove.IsNone()
+			)
+		{
+			//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
+			// PVノードの場合☆
+			const Depth d = depth - 2 * OnePly;
+
+			(*ppFlashlight)->m_skipNullMove = true;
+
+			//────────────────────────────────────────────────────────────────────────────────
+			// 探索☆？（＾ｑ＾）
+			//────────────────────────────────────────────────────────────────────────────────
+			// PVノードの場合☆
+			Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
+
+			(*ppFlashlight)->m_skipNullMove = false;
+
+			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
+			ttMove = ((*ppTtEntry) != nullptr ?
+				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
+				g_MOVE_NONE);
+		}
 	}
 
 	virtual inline ScoreIndex GetBetaAtStep11(

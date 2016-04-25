@@ -65,7 +65,10 @@ ScoreIndex Hitchhiker::Travel_885_510(
 
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	assert(nodetypeProgram->IsPvNode() || (alpha == beta - 1));
+	nodetypeProgram->AssertBeforeStep1(
+		alpha,
+		beta
+		);
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
@@ -492,7 +495,6 @@ split_point_start:
 			move,
 			ttMove,
 			&pFlashlight,
-			nodetypeProgram->IsPvNode(),
 			moveCount,
 			cutNode,
 			newDepth,
