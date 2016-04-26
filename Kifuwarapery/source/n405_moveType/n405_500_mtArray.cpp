@@ -1,7 +1,4 @@
-﻿#include "../../header/n405_moveType/n405_500_mtArray.hpp"
-
-
-#include "../../header/n405_moveType/n405_070_mtAbstract.hpp"
+﻿#include "../../header/n405_moveType/n405_070_mtAbstract.hpp"
 #include "../../header/n405_moveType/n405_100_mtCapture.hpp"
 #include "../../header/n405_moveType/n405_110_mtNonCapture.hpp"
 #include "../../header/n405_moveType/n405_120_mtDrop.hpp"

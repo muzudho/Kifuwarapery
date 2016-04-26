@@ -379,6 +379,10 @@
     <ClInclude Include="header\n800_learn___\n800_500_learner.hpp" />
     <ClInclude Include="header\n883_nodeType\n883_070_nodetypeAbstract.hpp" />
     <ClInclude Include="header\n885_searcher\n885_040_rucksack.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_310_hitchhikerQsearchAbstract.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_320_hitchhikerQsearchPv.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_330_hitchhikerQsearchNonPv.hpp" />
+    <ClInclude Include="header\n885_searcher\n885_340_hitchhikerQsearchPrograms.hpp" />
     <ClInclude Include="header\n885_searcher\n885_480_hitchhikerNyugyoku.hpp" />
     <ClInclude Include="header\n885_searcher\n885_510_hitchhiker.hpp" />
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp" />
@@ -584,6 +588,10 @@
     <ClCompile Include="source\n800_learn___\n800_100_stopwatch.cpp" />
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp" />
     <ClCompile Include="source\n885_searcher\n885_040_rucksack.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_310_hitchhikerQsearchAbstract.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_320_hitchhikerQsearchPv.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_330_hitchhikerQsearchNonPv.cpp" />
+    <ClCompile Include="source\n885_searcher\n885_340_hitchhikerQsearchPrograms.cpp" />
     <ClCompile Include="source\n885_searcher\n885_480_hitchhikerNyugyoku.cpp" />
     <ClCompile Include="source\n885_searcher\n885_510_hitchhiker.cpp" />
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp" />

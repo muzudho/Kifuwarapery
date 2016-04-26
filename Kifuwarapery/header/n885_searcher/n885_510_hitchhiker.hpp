@@ -54,8 +54,5 @@ public:
 		);
 
 
-	// Ｑサーチ？
-	static ScoreIndex Qsearch(Rucksack& rucksack, NodeType NT, bool INCHECK,
-		Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth);
 
 };

@@ -987,6 +987,18 @@
     <ClInclude Include="header\n885_searcher\n885_480_hitchhikerNyugyoku.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_310_hitchhikerQsearchAbstract.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_320_hitchhikerQsearchPv.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_330_hitchhikerQsearchNonPv.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n885_searcher\n885_340_hitchhikerQsearchPrograms.hpp">
+      <Filter>header\n885_searcher</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1572,6 +1584,18 @@
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
     <ClCompile Include="source\n885_searcher\n885_480_hitchhikerNyugyoku.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_310_hitchhikerQsearchAbstract.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_320_hitchhikerQsearchPv.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_330_hitchhikerQsearchNonPv.cpp">
+      <Filter>source\n885_searcher</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n885_searcher\n885_340_hitchhikerQsearchPrograms.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
   </ItemGroup>

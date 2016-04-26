@@ -11,6 +11,8 @@
 #include "../n640_searcher/n640_520_futilityMoveCounts.hpp"
 
 #include "../n885_searcher/n885_040_rucksack.hpp"//FIXME:
+#include "../n885_searcher/n885_310_hitchhikerQsearchAbstract.hpp"//FIXME:
+#include "../n885_searcher/n885_340_hitchhikerQsearchPrograms.hpp"//FIXME:
 #include "../n886_repeType/n886_500_rtArray.hpp"//FIXME:
 //class Rucksack;
 
@@ -22,6 +24,20 @@ public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
+
+	/*
+	virtual inline ScoreIndex GoToTheAdventure(
+		Rucksack& rucksack,
+		NodeType NT,
+		Position& pos,
+		Flashlight* pFlashlight,//サーチスタック
+		ScoreIndex alpha,
+		ScoreIndex beta,
+		const Depth depth,
+		const bool cutNode
+		) {
+	}
+	*/
 
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
@@ -280,7 +296,8 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep6(
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）Qサーチは、スプリットポイントかどうかは見てないのかだぜ☆（＾ｑ＾）
+	virtual inline void DoStep6_NonPV(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -300,7 +317,7 @@ public:
 			&& abs(beta) < ScoreMateInMaxPly)
 		{
 			const ScoreIndex rbeta = beta - rucksack.razorMargin(depth);
-			const ScoreIndex s = Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
+			const ScoreIndex s = HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
 			if (s < rbeta) {
 				isReturnWithScore = true;
 				returnScore = s;
@@ -335,7 +352,8 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep8(
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline void DoStep8_NonPV(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -373,7 +391,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				-Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
@@ -876,7 +894,8 @@ public:
 		}
 	}
 
-	virtual inline void DoStep16b(
+	// （＾ｑ＾）N02_NonPV扱いで実行するみたいなんだがなんだこれだぜ☆
+	virtual inline void DoStep16b_NonPVAtukai(
 		Rucksack& rucksack,
 		bool& doFullDepthSearch,
 		ScoreIndex& score,
@@ -892,8 +911,8 @@ public:
 		// PVS
 		if (doFullDepthSearch) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N02_NonPV, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
@@ -903,6 +922,7 @@ public:
 	}
 
 	// PVノードだけが実行するぜ☆！（＾ｑ＾）
+	// N01_PV扱いで実行するみたいだが……☆（＾ｑ＾）
 	virtual inline void DoStep16c(
 		Rucksack& rucksack,
 		bool& isPVMove,
@@ -921,8 +941,8 @@ public:
 			(alpha < score && this->IsBetaLargeAtStep16c(score,beta))
 		) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -Hitchhiker::Qsearch(rucksack, N01_PV, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
-					: -Hitchhiker::Qsearch(rucksack, N01_PV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->Qsearch_N01PV_N02NonPV(rucksack, N01_PV, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->Qsearch_N01PV_N02NonPV(rucksack, N01_PV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────

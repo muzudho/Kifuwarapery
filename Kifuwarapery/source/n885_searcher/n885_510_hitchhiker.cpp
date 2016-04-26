@@ -61,6 +61,20 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	const Depth depth,
 	const bool cutNode
 	) {
+
+	/*
+	g_NODETYPE_PROGRAMS[NT]->GoToTheAdventure(
+		rucksack,
+		NT,
+		pos,
+		pFlashlight,//サーチスタック
+		alpha,
+		beta,
+		depth,
+		cutNode
+		);
+		*/
+
 	NodetypeAbstract* nodetypeProgram = g_NODETYPE_PROGRAMS[NT];
 
 
@@ -236,7 +250,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 	}
 
 	// step6
-	nodetypeProgram->DoStep6(
+	nodetypeProgram->DoStep6_NonPV(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -263,7 +277,7 @@ ScoreIndex Hitchhiker::Travel_885_510(
 		);
 
 	// step8
-	nodetypeProgram->DoStep8(
+	nodetypeProgram->DoStep8_NonPV(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -511,7 +525,7 @@ split_point_start:
 			alpha,
 			&pSplitedNode
 			);
-		nodetypeProgram->DoStep16b(
+		nodetypeProgram->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
 			score,
@@ -628,197 +642,6 @@ split_point_start:
 }
 
 
-ScoreIndex Hitchhiker::Qsearch(Rucksack& rucksack, NodeType NT, bool INCHECK,
-	Position& pos, Flashlight* ss, ScoreIndex alpha, ScoreIndex beta, const Depth depth) {
-	const bool PVNode = (NT == N01_PV);
-
-	assert(NT == N01_PV || NT == N02_NonPV);
-	assert(INCHECK == pos.InCheck());
-	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	assert(PVNode || (alpha == beta - 1));
-	assert(depth <= Depth0);
-
-	StateInfo st;
-	const TTEntry* tte;
-	Key posKey;
-	Move ttMove;
-	Move move;
-	Move bestMove;
-	ScoreIndex bestScore;
-	ScoreIndex score;
-	ScoreIndex ttScore;
-	ScoreIndex futilityScore;
-	ScoreIndex futilityBase;
-	ScoreIndex oldAlpha;
-	bool givesCheck;
-	bool evasionPrunable;
-	Depth ttDepth;
-
-	if (PVNode) {
-		oldAlpha = alpha;
-	}
-
-	ss->m_currentMove = bestMove = g_MOVE_NONE;
-	ss->m_ply = (ss - 1)->m_ply + 1;
-
-	if (g_maxPly < ss->m_ply) {
-		return ScoreDraw;
-	}
-
-	ttDepth = ((INCHECK || DepthQChecks <= depth) ? DepthQChecks : DepthQNoChecks);
-
-	posKey = pos.GetKey();
-	tte = rucksack.m_tt.Probe(posKey);
-	ttMove = (tte != nullptr ? UtilMoveStack::Move16toMove(tte->GetMove(), pos) : g_MOVE_NONE);
-	ttScore = (tte != nullptr ? rucksack.ConvertScoreFromTT(tte->GetScore(), ss->m_ply) : ScoreNone);
-
-	if (tte != nullptr
-		&& ttDepth <= tte->GetDepth()
-		&& ttScore != ScoreNone // アクセス競合が起きたときのみ、ここに引っかかる。
-		&& (PVNode ? tte->GetType() == BoundExact
-			: (beta <= ttScore ? (tte->GetType() & BoundLower)
-				: (tte->GetType() & BoundUpper))))
-	{
-		ss->m_currentMove = ttMove;
-		return ttScore;
-	}
-
-	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
-
-	if (INCHECK) {
-		ss->m_staticEval = ScoreNone;
-		bestScore = futilityBase = -ScoreInfinite;
-	}
-	else {
-		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
-			return UtilScore::MateIn(ss->m_ply);
-		}
-
-		if (tte != nullptr) {
-			if (
-				(ss->m_staticEval = bestScore = tte->GetEvalScore()) == ScoreNone
-				) {
-				Evaluation09 evaluation;
-				ss->m_staticEval = bestScore = evaluation.evaluate(pos, ss);
-			}
-		}
-		else {
-			Evaluation09 evaluation;
-			ss->m_staticEval = bestScore = evaluation.evaluate(pos, ss);
-		}
-
-		if (beta <= bestScore) {
-			if (tte == nullptr) {
-				rucksack.m_tt.Store(pos.GetKey(), rucksack.ConvertScoreToTT(bestScore, ss->m_ply), BoundLower,
-					DepthNone, g_MOVE_NONE, ss->m_staticEval);
-			}
-
-			return bestScore;
-		}
-
-		if (PVNode && alpha < bestScore) {
-			alpha = bestScore;
-		}
-
-		futilityBase = bestScore + 128; // todo: 128 より大きくて良いと思う。
-	}
-
-	Evaluation09 evaluation;
-	evaluation.evaluate(pos, ss);
-
-	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, (ss - 1)->m_currentMove.To());
-	const CheckInfo ci(pos);
-
-	while (!(move = mp.GetNextMove_NonSplitedNode()).IsNone())
-	{
-		assert(pos.IsOK());
-
-		givesCheck = pos.IsMoveGivesCheck(move, ci);
-
-		// futility pruning
-		if (!PVNode
-			&& !INCHECK // 駒打ちは王手回避のみなので、ここで弾かれる。
-			&& !givesCheck
-			&& move != ttMove)
-		{
-			futilityScore =
-				futilityBase + PieceScore::GetCapturePieceScore(pos.GetPiece(move.To()));
-			if (move.IsPromotion()) {
-				futilityScore += PieceScore::GetPromotePieceScore(move.GetPieceTypeFrom());
-			}
-
-			if (futilityScore < beta) {
-				bestScore = std::max(bestScore, futilityScore);
-				continue;
-			}
-
-			// todo: ＭｏｖｅＰｉｃｋｅｒ のオーダリングで SEE してるので、ここで SEE するの勿体無い。
-			if (futilityBase < beta
-				&& depth < Depth0
-				&& pos.GetSee(move, beta - futilityBase) <= ScoreZero)
-			{
-				bestScore = std::max(bestScore, futilityBase);
-				continue;
-			}
-		}
-
-		evasionPrunable = (INCHECK
-			&& ScoreMatedInMaxPly < bestScore
-			&& !move.IsCaptureOrPawnPromotion());
-
-		if (!PVNode
-			&& (!INCHECK || evasionPrunable)
-			&& move != ttMove
-			&& (!move.IsPromotion() || move.GetPieceTypeFrom() != N01_Pawn)
-			&& pos.GetSeeSign(move) < 0)
-		{
-			continue;
-		}
-
-		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-			continue;
-		}
-
-		ss->m_currentMove = move;
-
-		pos.DoMove(move, st, ci, givesCheck);
-		(ss + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-		score = (givesCheck ? -Hitchhiker::Qsearch(rucksack, NT, true, pos, ss + 1, -beta, -alpha, depth - OnePly)
-			: -Hitchhiker::Qsearch(rucksack, NT, false, pos, ss + 1, -beta, -alpha, depth - OnePly));
-		pos.UndoMove(move);
-
-		assert(-ScoreInfinite < score && score < ScoreInfinite);
-
-		if (bestScore < score) {
-			bestScore = score;
-
-			if (alpha < score) {
-				if (PVNode && score < beta) {
-					alpha = score;
-					bestMove = move;
-				}
-				else {
-					// fail high
-					rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(score, ss->m_ply), BoundLower,
-						ttDepth, move, ss->m_staticEval);
-					return score;
-				}
-			}
-		}
-	}
-
-	if (INCHECK && bestScore == -ScoreInfinite) {
-		return UtilScore::MatedIn(ss->m_ply);
-	}
-
-	rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, ss->m_ply),
-		((PVNode && oldAlpha < bestScore) ? BoundExact : BoundUpper),
-		ttDepth, bestMove, ss->m_staticEval);
-
-	assert(-ScoreInfinite < bestScore && bestScore < ScoreInfinite);
-
-	return bestScore;
-}
 
 
 
