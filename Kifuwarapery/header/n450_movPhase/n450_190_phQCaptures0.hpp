@@ -16,7 +16,7 @@ class NextmoveEvent;
 class PhQCaptures0 : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		Move move = UtilMoveStack::PickBest(nmEvent.GetCurrMove(), nmEvent.GetLastMove())->m_move;
 		nmEvent.IncrementCurMove();
 		if (move != nmEvent.GetTranspositionTableMove()) {
@@ -26,7 +26,7 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetLastMove(g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro,nmEvent.GetFirstMove(), nmEvent.GetPos()));
 		nmEvent.ScoreCaptures();
 	}

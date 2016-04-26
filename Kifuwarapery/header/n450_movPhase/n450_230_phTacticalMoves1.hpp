@@ -16,7 +16,7 @@ class NextmoveEvent;
 class PhTacticalMoves1 : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		MoveStack* pMoveStack = UtilMoveStack::PickBest(nmEvent.GetCurrMove(), nmEvent.GetLastMove());
 		nmEvent.IncrementCurMove();
 
@@ -28,7 +28,7 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetLastMove(g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro,nmEvent.GetCurrMove(), nmEvent.GetPos()));
 		nmEvent.ScoreCaptures();
 	}

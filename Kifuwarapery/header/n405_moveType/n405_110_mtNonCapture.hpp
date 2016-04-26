@@ -13,7 +13,8 @@ public:
 	// 指し手生成 functor
 	// テンプレート引数が複数あり、部分特殊化したかったので、関数ではなく、struct にした。
 	// ALL == true のとき、歩、飛、角の不成、香の2段目の不成、香の3段目の駒を取らない不成も生成する。
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		MoveType MT = N01_NonCapture;
 		Color us = pos.GetTurn();
 

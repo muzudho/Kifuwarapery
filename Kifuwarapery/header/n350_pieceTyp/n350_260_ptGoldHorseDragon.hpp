@@ -19,11 +19,11 @@
 class PtGoldHorseDragon : public PtAbstract {
 public:
 
-	PieceType GetNumber() const {
+	PieceType GetNumber() const override {
 		return PieceType::N16_GoldHorseDragon;
 	}
 
-	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {
 		return g_nullBitboard;
 	}
 
@@ -34,7 +34,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) const {
+		) const override {
 		return;
 	}
 
@@ -43,6 +43,6 @@ public:
 		Bitboard& attackers,
 		PieceType nextPT,
 		const PieceTypeSeeEvent ptsEvent
-		) const;
+		) const override;
 
 };

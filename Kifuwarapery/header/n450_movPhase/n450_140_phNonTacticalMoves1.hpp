@@ -13,7 +13,7 @@ class NextmoveEvent;
 class PhNonTacticalMoves1 : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		Move move = nmEvent.GetCurrMove()->m_move;
 		nmEvent.IncrementCurMove();
 		if (move != nmEvent.GetTranspositionTableMove()
@@ -27,7 +27,7 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetCurrMove(nmEvent.GetLastMove());
 		nmEvent.SetLastMove(nmEvent.GetLastNonCapture());
 

@@ -15,7 +15,8 @@ public:
 	// 王手が掛かっていないときの指し手生成
 	// これには、玉が相手駒の利きのある地点に移動する自殺手と、pin されている駒を動かす自殺手を含む。
 	// ここで生成した手は pseudo legal
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		Bitboard target = pos.GetEmptyBB();
 		Color us = pos.GetTurn();
 

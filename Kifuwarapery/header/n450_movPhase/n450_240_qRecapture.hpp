@@ -14,12 +14,12 @@ class NextmoveEvent;
 class QRecapture : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		UNREACHABLE;
 		return false;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		// これが無いと、MainSearch の後に EvasionSearch が始まったりしてしまう。
 		nmEvent.SetPhase(GenerateMovePhase::N16_PH_Stop);
 		nmEvent.SetLastMove(nmEvent.GetCurrMove() + 1);

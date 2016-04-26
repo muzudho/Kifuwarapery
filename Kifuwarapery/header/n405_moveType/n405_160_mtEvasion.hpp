@@ -16,7 +16,8 @@ public:
 	// 王手をしている駒による王手は避けるが、
 	// 玉の移動先に敵の利きがある場合と、pinされている味方の駒を動かした場合、非合法手を生成する。
 	// そのため、pseudo legal である。
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		assert(pos.IsOK());
 		assert(pos.InCheck());
 

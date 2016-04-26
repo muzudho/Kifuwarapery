@@ -13,7 +13,8 @@
 
 class PieceBDragon : public PieceAbstract {
 public:
-	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq
+		) const override {
 		if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 			// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 			// dragonAttackToEdge(checkSq) は使えない。

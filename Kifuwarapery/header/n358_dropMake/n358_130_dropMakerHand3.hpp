@@ -22,7 +22,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank9BB;
 		do {
 			while (toBB.GetP(0)) {
@@ -55,7 +55,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank8BB;
 		do {
 			while (toBB.GetP(0)) {
@@ -88,7 +88,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & ~(dmEvent.m_tRank8BB | dmEvent.m_tRank9BB);
 		do {
 			while (toBB.GetP(0)) {

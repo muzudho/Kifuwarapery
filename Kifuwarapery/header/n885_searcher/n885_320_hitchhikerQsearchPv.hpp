@@ -11,14 +11,14 @@ public:
 	virtual inline void DoAssert(
 		ScoreIndex alpha,
 		ScoreIndex beta
-		) const {
+		) const override {
 		//スルー☆！（＾ｑ＾）
 	}
 
 	virtual inline void SetOldAlpha(
 		ScoreIndex& oldAlpha,
 		ScoreIndex alpha
-		) const {
+		) const override {
 		oldAlpha = alpha;
 	}
 
@@ -26,7 +26,7 @@ public:
 		const TTEntry** ppTtEntry,
 		ScoreIndex beta,
 		ScoreIndex ttScore
-		) const {
+		) const override {
 		// PVノードのとき☆（＾ｑ＾）
 		return (*ppTtEntry)->GetType() == Bound::BoundExact;
 	}
@@ -34,7 +34,7 @@ public:
 	virtual inline void SetAlpha(
 		ScoreIndex& alpha,
 		ScoreIndex bestScore
-		) const {
+		) const override {
 		// PVノードのとき☆（＾ｑ＾）
 		if (alpha < bestScore) {
 			alpha = bestScore;
@@ -53,7 +53,7 @@ public:
 		ScoreIndex& beta,
 		ScoreIndex& bestScore,
 		const Depth depth
-		)const {
+		)const override {
 		// スルーだぜ☆！（＾ｑ＾）
 	}
 
@@ -80,7 +80,7 @@ public:
 		Flashlight** ppFlashlight,
 		Depth ttDepth,
 		Move move
-		)const {
+		)const override {
 		if (
 			// PVノードのときは条件付きで別手続きがあるぜ☆（＾ｑ＾）
 			score < beta
@@ -102,7 +102,7 @@ public:
 	virtual inline Bound GetBound01(
 		ScoreIndex& oldAlpha,
 		ScoreIndex& bestScore
-		)const {
+		)const override {
 		return (oldAlpha < bestScore) ?
 			Bound::BoundExact
 			:

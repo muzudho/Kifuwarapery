@@ -22,7 +22,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank9BB;
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
@@ -41,7 +41,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & dmEvent.m_tRank8BB;
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
@@ -60,7 +60,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		Bitboard toBB = dmEvent.m_target & ~(dmEvent.m_tRank8BB | dmEvent.m_tRank9BB);
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();

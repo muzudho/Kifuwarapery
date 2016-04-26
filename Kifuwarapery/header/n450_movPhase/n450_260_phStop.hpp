@@ -13,12 +13,12 @@ class NextmoveEvent;
 class PhStop : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		resultMove = g_MOVE_NONE;
 		return true;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetLastMove(nmEvent.GetCurrMove() + 1);
 	}
 

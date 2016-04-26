@@ -12,7 +12,7 @@ public:
 
 	void CheckStopAndMaxPly(
 		bool& isReturn, ScoreIndex& resultScore, const Rucksack* pSearcher, Flashlight* pFlashlightBox
-	) const {
+	) const override {
 		if (pFlashlightBox->m_ply != 2) {
 			isReturn = true;
 			resultScore = ScoreMateInMaxPly;

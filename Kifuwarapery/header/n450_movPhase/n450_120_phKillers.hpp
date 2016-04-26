@@ -13,7 +13,7 @@ class NextmoveEvent;
 class PhKillers : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		Move move = nmEvent.GetCurrMove()->m_move;
 		nmEvent.IncrementCurMove();
 		if (!move.IsNone()
@@ -27,7 +27,7 @@ public:
 		return false;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetCurrMove(nmEvent.GetKillerMoves());//m_currMove_ = m_killerMoves_;
 		nmEvent.SetLastMove(nmEvent.GetCurrMove() + 2);
 	}

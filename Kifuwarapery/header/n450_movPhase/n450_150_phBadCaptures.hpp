@@ -13,14 +13,14 @@ class NextmoveEvent;
 class PhBadCaptures : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		resultMove = nmEvent.GetCurrMove()->m_move;
 		nmEvent.DecrementCurMove();
 
 		return true;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		nmEvent.SetCurrMove(nmEvent.GetLegalMoves() + Move::m_MAX_LEGAL_MOVES - 1 );
 		nmEvent.SetLastMove(nmEvent.GetEndBadCaptures());
 	}

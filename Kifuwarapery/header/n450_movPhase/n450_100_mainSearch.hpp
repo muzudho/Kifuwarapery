@@ -13,13 +13,13 @@ class NextmoveEvent;
 class MainSearch : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const {
+	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
 		nmEvent.IncrementCurMove();
 		resultMove = nmEvent.GetTranspositionTableMove();
 		return true;
 	};
 
-	void GoNext2Phase(NextmoveEvent& nmEvent) {
+	void GoNext2Phase(NextmoveEvent& nmEvent) override {
 		UNREACHABLE;
 	}
 

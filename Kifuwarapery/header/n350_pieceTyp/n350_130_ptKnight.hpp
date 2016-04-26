@@ -21,11 +21,11 @@
 class PtKnight : public PtAbstract {
 public:
 
-	PieceType GetNumber() const {
+	PieceType GetNumber() const override {
 		return PieceType::N03_Knight;
 	}
 
-	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {
 		return g_knightAttackBb.GetControllBb(ptEvent.m_c, ptEvent.m_sq);
 	}
 
@@ -36,7 +36,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-		) const {
+		) const override {
 		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(this->GetNumber(), from, to, pos);
 
 		if (
@@ -55,6 +55,6 @@ public:
 		Bitboard& attackers,
 		PieceType nextPT,
 		const PieceTypeSeeEvent ptsEvent
-		) const;
+		) const override;
 
 };

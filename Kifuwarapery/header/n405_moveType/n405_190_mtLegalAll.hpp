@@ -14,7 +14,8 @@ class MoveTypeLegalAll : public MoveTypeAbstract {
 public:
 	// 部分特殊化
 	// Evasion のときに歩、飛、角と、香の2段目の不成も生成する。
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		Color us = pos.GetTurn();
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();

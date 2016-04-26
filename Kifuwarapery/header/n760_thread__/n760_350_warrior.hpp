@@ -12,7 +12,7 @@ public:
 
 	explicit Warrior(Rucksack* s) : Military(s), m_lifetimeMilliseconds(0) {}
 
-	virtual void IdleLoop();
+	virtual void IdleLoop()override;
 
 	// ｍｓｅｃはミリ秒☆？ 0にするとタイマーが止まるらしい☆（＾ｑ＾）？
 	int m_lifetimeMilliseconds;

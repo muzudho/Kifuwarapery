@@ -13,7 +13,7 @@ public:
 
 	void CheckStopAndMaxPly(
 		bool& isReturn, ScoreIndex& resultScore, const Rucksack* pSearcher, Flashlight* pFlashlightBox
-	) const {
+	) const override {
 		isReturn = true;
 		resultScore = UtilScore::MatedIn(pFlashlightBox->m_ply);
 		return;

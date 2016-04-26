@@ -21,7 +21,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const  {
+	) const override {
 		// 桂馬、香車 以外の持ち駒がない。
 		return pMovestack;
 	}
@@ -30,7 +30,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		// 桂馬 以外の持ち駒がない。
 		return pMovestack;
 	}
@@ -39,7 +39,7 @@ public:
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
 		PieceType haveHandArr[6]
-	) const {
+	) const override {
 		assert(false);// 最適化の為のダミー
 		return pMovestack;
 	}

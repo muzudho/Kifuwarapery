@@ -9,7 +9,8 @@
 
 class PieceNone : public PieceAbstract {
 public:
-	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq) const {
+	void MakeBanned2KingTo(Bitboard& bannedKingToBB, const Position& pos, const Square checkSq, const Square ksq
+		) const override {
 		UNREACHABLE;
 	}
 };

@@ -12,7 +12,7 @@ public:
 
 	explicit Captain(Rucksack* s) : Military(s), m_isThinking(true) {}
 
-	virtual void IdleLoop();
+	virtual void IdleLoop()override;
 
 	volatile bool m_isThinking;
 };

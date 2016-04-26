@@ -15,7 +15,8 @@ public:
 	// 部分特殊化
 	// 連続王手の千日手以外の反則手を排除した合法手生成
 	// そんなに速度が要求されるところでは呼ばない。
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		Color us = pos.GetTurn();
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();

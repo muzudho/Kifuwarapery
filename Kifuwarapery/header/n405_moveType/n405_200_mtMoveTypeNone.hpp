@@ -10,7 +10,8 @@
 
 class MoveTypeNone : public MoveTypeAbstract {
 public:
-	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false) const {
+	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
+		) const override {
 		return moveStackList;
 	}
 

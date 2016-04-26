@@ -18,11 +18,11 @@
 class PtOccupied : public PtAbstract {
 public:
 
-	PieceType GetNumber() const {
+	PieceType GetNumber() const override {
 		return PieceType::N00_Occupied;
 	}
 
-	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const {
+	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {
 		return Bitboard::CreateAllZeroBB();
 	}
 
@@ -32,7 +32,7 @@ public:
 		const Square from,
 		const Square to,
 		const Color us
-	) const {
+	) const override {
 		// 最適化の為のダミー
 		assert(false);
 	}
@@ -42,7 +42,7 @@ public:
 		Bitboard& attackers,
 		PieceType nextPT,
 		const PieceTypeSeeEvent ptsEvent
-		) const {
+		) const override {
 		PieceType PT = PieceType::N00_Occupied;
 
 		UNREACHABLE;

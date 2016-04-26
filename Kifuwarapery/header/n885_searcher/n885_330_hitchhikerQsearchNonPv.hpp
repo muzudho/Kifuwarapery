@@ -11,14 +11,14 @@ public:
 	virtual inline void DoAssert(
 		ScoreIndex alpha,
 		ScoreIndex beta
-		) const {
+		) const override {
 		assert(alpha == beta - 1);
 	}
 
 	virtual inline void SetOldAlpha(
 		ScoreIndex& oldAlpha,
 		ScoreIndex alpha
-		) const {
+		) const override {
 		//スルー☆！（＾ｑ＾）
 	}
 
@@ -26,7 +26,7 @@ public:
 		const TTEntry** ppTtEntry,
 		ScoreIndex beta,
 		ScoreIndex ttScore
-		) const {
+		) const override {
 		// NonPVノードのとき☆（＾ｑ＾）
 		return beta <= ttScore ?
 			((*ppTtEntry)->GetType() & BoundLower)
@@ -37,7 +37,7 @@ public:
 	virtual inline void SetAlpha(
 		ScoreIndex& alpha,
 		ScoreIndex bestScore
-		) const {
+		) const override {
 		// スルーするぜ☆！（＾ｑ＾）
 	}
 
@@ -53,7 +53,7 @@ public:
 		ScoreIndex& beta,
 		ScoreIndex& bestScore,
 		const Depth depth
-		)const {
+		)const override {
 		// 非PVノードのとき☆（＾ｑ＾）
 		if (!INCHECK // 駒打ちは王手回避のみなので、ここで弾かれる。
 			&& !givesCheck
@@ -90,7 +90,7 @@ public:
 		Move& move,
 		Move& ttMove,
 		Position& pos
-		)const {
+		)const override {
 		// PVノードでない場合☆（＾ｑ＾）
 		if ((!INCHECK || evasionPrunable)
 			&& move != ttMove
@@ -115,7 +115,7 @@ public:
 		Flashlight** ppFlashlight,
 		Depth ttDepth,
 		Move move
-		)const {
+		)const override {
 		// fail high
 		rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(score, (*ppFlashlight)->m_ply), Bound::BoundLower,
 			ttDepth, move, (*ppFlashlight)->m_staticEval);
@@ -128,7 +128,7 @@ public:
 	virtual inline Bound GetBound01(
 		ScoreIndex& oldAlpha,
 		ScoreIndex& bestScore
-		)const {
+		)const override {
 		return Bound::BoundUpper;
 	}
 
