@@ -67,7 +67,8 @@ using namespace std;
 extern const InFrontMaskBb g_inFrontMaskBb;
 */
 class NodetypeAbstract; // 同じファイル内の後ろの方でクラス定義があるとき☆（＾ｑ＾）
-extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+
 
 extern RepetitionTypeArray g_repetitionTypeArray;
 
@@ -76,7 +77,8 @@ class NodetypeAbstract {
 public:
 
 	// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
-	virtual inline void GoSearch_AsSplitedNode(
+	// 依存関係の都合上、インラインにはしないぜ☆（＾ｑ＾）
+	virtual void GoSearch_AsSplitedNode(
 		Rucksack& searcher,
 		Position& pos,
 		Flashlight* ss,
@@ -453,7 +455,16 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode)
+				this->GotoTheAdventure01InStep8_NonPV(
+					rucksack,
+					pos,
+					ppFlashlight,
+					beta,
+					alpha,
+					depth,
+					reduction,
+					cutNode
+					)
 			);
 
 			((*ppFlashlight) + 1)->m_skipNullMove = false;
@@ -476,7 +487,17 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
+				const ScoreIndex s = this->GotoTheAdventure02InStep8_NonPV(
+					rucksack,
+					pos,
+					ppFlashlight,
+					beta,
+					alpha,
+					depth,
+					reduction,
+					cutNode
+					);
+				
 				(*ppFlashlight)->m_skipNullMove = false;
 
 				if (beta <= s) {
@@ -504,7 +525,38 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9(
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline ScoreIndex GotoTheAdventure01InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const {
+		return ScoreIndex::ScoreNone;//ここを実行してはいけない☆
+	};
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline ScoreIndex GotoTheAdventure02InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const {
+		return ScoreIndex::ScoreNone;//ここを実行してはいけない☆
+	};
+
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep9_NonPv(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -546,7 +598,14 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）
 					//────────────────────────────────────────────────────────────────────────────────
-					score =	-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+					score = this->GotoTheAdventure03InStep9_NonPV(
+						rucksack,
+						pos,
+						ppFlashlight,
+						rbeta,
+						rdepth,
+						cutNode
+						);
 					pos.UndoMove(move);
 					if (rbeta <= score) {
 						isReturnWithScore = true;
@@ -557,6 +616,19 @@ public:
 			}
 		}
 	}
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline ScoreIndex GotoTheAdventure03InStep9_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		const ScoreIndex rbeta,
+		const Depth rdepth,
+		const bool cutNode
+		) const {
+		return ScoreIndex::ScoreNone;//ここを実行してはいけない☆
+	};
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
 	virtual inline void DoStep10(
@@ -969,12 +1041,12 @@ public:
 		// PVS
 		if (doFullDepthSearch) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
-					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[NodeType::N02_NonPV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[NodeType::N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
+				: -g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 	}
 
@@ -998,12 +1070,12 @@ public:
 			(alpha < score && this->IsBetaLargeAtStep16c(score,beta))
 		) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
-					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[NodeType::N01_PV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[NodeType::N01_PV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -g_NODETYPE_PROGRAMS[N01_PV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
+				: -g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
 		}
 	}
 	virtual inline bool IsBetaLargeAtStep16c(

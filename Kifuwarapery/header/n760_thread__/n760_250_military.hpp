@@ -12,6 +12,7 @@
 #include "../n640_searcher/n640_440_splitedNode.hpp" // 持ち合い
 
 class Rucksack;
+class NodetypeAbstract;
 
 
 const int g_MaxSplitedNodesPerThread = 8;
@@ -50,7 +51,7 @@ public:
 		const Move threatMove,
 		const int moveCount,
 		NextmoveEvent& mp,
-		const NodeType nodeType,
+		const NodetypeAbstract* pNodetype,
 		const bool cutNode
 	);
 

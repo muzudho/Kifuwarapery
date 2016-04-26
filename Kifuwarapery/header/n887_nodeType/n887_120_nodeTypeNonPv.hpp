@@ -11,21 +11,20 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+//#include "../n887_nodeType/n887_150_nodetypeSplitedNodeNonPv.hpp"//FIXME:
+//extern const NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
+
+
 // PvNode = false
 // SplitedNode = false
 // RootNode = false
 class NodetypeNonPv : public NodetypeAbstract {
 public:
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	inline void GoSearch_AsSplitedNode(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
-		//────────────────────────────────────────────────────────────────────────────────
-		// 探索☆？（＾ｑ＾）
-		//────────────────────────────────────────────────────────────────────────────────
-		// スプリットポイントに変えて探索かだぜ☆（＾ｑ＾）
-		g_NODETYPE_PROGRAMS[NodeType::SplitedNodeNonPV]->GoToTheAdventure_new(
-			rucksack, pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
-	}
+	// 依存関係の都合上、インラインにはしないぜ☆（＾ｑ＾）
+	void GoSearch_AsSplitedNode(
+		Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp
+		) const override;
 
 
 	virtual inline void DoStep1a(
@@ -79,6 +78,68 @@ public:
 			(pTtEntry->GetType() & Bound::BoundUpper);
 	}
 
+	virtual inline ScoreIndex GotoTheAdventure01InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const override {
+		return - this->GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight) + 1,
+			-beta,
+			-alpha,
+			depth - reduction,
+			!cutNode
+			);
+	};
+	virtual inline ScoreIndex GotoTheAdventure02InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const override {
+		return this->GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight),
+			alpha,
+			beta,
+			depth - reduction,
+			false
+			);
+	};
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline ScoreIndex GotoTheAdventure03InStep9_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		const ScoreIndex rbeta,
+		const Depth rdepth,
+		const bool cutNode
+		) const override {
+		return -this->GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight) + 1,
+			-rbeta,
+			-rbeta + 1,
+			rdepth,
+			!cutNode
+			);
+	};
+
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
 	virtual inline void DoStep10(
 		const Depth depth,
@@ -114,7 +175,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// 非PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(
+			this->GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -377,7 +438,7 @@ public:
 				threatMove,
 				moveCount,
 				mp,
-				NodeType::N02_NonPV,
+				this,
 				cutNode
 				);
 			if (beta <= bestScore) {
@@ -400,5 +461,5 @@ public:
 };
 
 
-extern NodetypeNonPv g_nodetypeNonPv;
+extern const NodetypeNonPv g_NODETYPE_NON_PV;
 

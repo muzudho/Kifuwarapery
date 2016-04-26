@@ -9,6 +9,7 @@
 #include "../n640_searcher/n640_500_reductions.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
+#include "../n887_nodeType/n887_120_nodetypeNonPv.hpp"
 
 
 // PvNode = false
@@ -17,7 +18,9 @@
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {
 public:
 
-	inline void GoSearch_AsSplitedNode(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
+	inline void GoSearch_AsSplitedNode(
+		Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp
+		) const override {
 		// スルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -56,6 +59,72 @@ public:
 			(pTtEntry->GetType() & Bound::BoundUpper);
 	}
 
+	virtual inline ScoreIndex GotoTheAdventure01InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const override  {
+
+		// スプリット・ポイントではない方の関数を使うぜ☆（＾ｑ＾）
+		return - g_NODETYPE_NON_PV.GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight) + 1,
+			-beta,
+			-alpha,
+			depth - reduction,
+			!cutNode
+			);
+	};
+	virtual inline ScoreIndex GotoTheAdventure02InStep8_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& beta,
+		ScoreIndex& alpha,
+		const Depth depth,
+		const Depth reduction,
+		const bool cutNode
+		) const override {
+
+		// スプリット・ポイントではない方の関数を使うぜ☆（＾ｑ＾）
+		return g_NODETYPE_NON_PV.GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight),
+			alpha,
+			beta,
+			depth - reduction,
+			false
+			);
+	};
+
+	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
+	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
+	virtual inline ScoreIndex GotoTheAdventure03InStep9_NonPV(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		const ScoreIndex rbeta,
+		const Depth rdepth,
+		const bool cutNode
+		) const override {
+		return -g_NODETYPE_NON_PV.GoToTheAdventure_new(
+			rucksack,
+			pos,
+			(*ppFlashlight) + 1,
+			-rbeta,
+			-rbeta + 1,
+			rdepth,
+			!cutNode
+			);
+	};
+
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
 	virtual inline void DoStep10(
 		const Depth depth,
@@ -91,7 +160,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// 非PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(
+			g_NODETYPE_NON_PV.GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -357,5 +426,5 @@ public:
 };
 
 
-extern NodetypeSplitedNodeNonPv g_nodetypeSplitedNodeNonPv;
+extern const NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
 

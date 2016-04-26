@@ -11,21 +11,20 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
+//#include "../n887_nodeType/n887_140_nodetypeSplitedNodePv.hpp"//FIXME:
+//extern const NodetypeSplitedNodePv g_NODETYPE_SPLITEDNODE_PV;
+
+
 // PvNode = true
 // SplitedNode = false
 // RootNode = false
 class NodetypePv : public NodetypeAbstract {
 public:
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	inline void GoSearch_AsSplitedNode(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
-		//────────────────────────────────────────────────────────────────────────────────
-		// 探索☆？（＾ｑ＾）
-		//────────────────────────────────────────────────────────────────────────────────
-		// スプリットポイントに変えて探索かだぜ☆（＾ｑ＾）
-		g_NODETYPE_PROGRAMS[NodeType::SplitedNodePV]->GoToTheAdventure_new(
-			rucksack, pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
-	}
+	// 依存関係の都合上、インラインにはしないぜ☆（＾ｑ＾）
+	void GoSearch_AsSplitedNode(
+		Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp
+		) const override;
 
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
@@ -123,7 +122,7 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9(
+	virtual inline void DoStep9_NonPv(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -170,8 +169,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
-				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
+			this->GoToTheAdventure_new(	rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 
@@ -442,7 +440,7 @@ public:
 				threatMove,
 				moveCount,
 				mp,
-				NodeType::N01_PV,
+				this,
 				cutNode
 				);
 			if (beta <= bestScore) {
@@ -465,5 +463,5 @@ public:
 };
 
 
-extern NodetypePv g_nodetypePv;
+extern const NodetypePv g_NODETYPE_PV;
 

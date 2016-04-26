@@ -10,11 +10,11 @@
 
 // サーチ☆
 // 主に、反復深化探索の中で呼び出される☆
-NodetypeAbstract* g_NODETYPE_PROGRAMS[6] = {
-	&g_nodetypeRoot,
-	&g_nodetypePv,
-	&g_nodetypeNonPv,
-	&g_nodetypeSplitedNodeRoot,
-	&g_nodetypeSplitedNodePv,
-	&g_nodetypeSplitedNodeNonPv
+const NodetypeAbstract* g_NODETYPE_PROGRAMS[6] = {
+	&g_NODETYPE_ROOT,
+	&g_NODETYPE_PV,
+	&g_NODETYPE_NON_PV,
+	&g_NODETYPE_SPLITEDNODE_ROOT,
+	&g_NODETYPE_SPLITEDNODE_PV,
+	&g_NODETYPE_SPLITEDNODE_NON_PV
 };

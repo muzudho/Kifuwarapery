@@ -56,7 +56,7 @@ using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
-extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
@@ -288,7 +288,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	}
 
 	// step9
-	this->DoStep9(
+	this->DoStep9_NonPv(
 		isReturnWithScore,
 		rucksack,
 		depth,

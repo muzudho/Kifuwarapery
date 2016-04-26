@@ -9,6 +9,7 @@
 #include "../n640_searcher/n640_500_reductions.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
+#include "../n887_nodeType/n887_110_nodetypePv.hpp"
 
 
 // PvNode = true
@@ -17,7 +18,9 @@
 class NodetypeSplitedNodePv : public NodetypeAbstract {
 public:
 
-	inline void GoSearch_AsSplitedNode(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
+	inline void GoSearch_AsSplitedNode(
+		Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp
+		) const override {
 		// スルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -100,7 +103,7 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9(
+	virtual inline void DoStep9_NonPv(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -147,7 +150,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
+			g_NODETYPE_PV.GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -422,5 +425,5 @@ public:
 };
 
 
-extern NodetypeSplitedNodePv g_nodetypeSplitedNodePv;
+extern const NodetypeSplitedNodePv g_NODETYPE_SPLITEDNODE_PV;
 

@@ -393,9 +393,6 @@
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
@@ -998,6 +995,9 @@
     </ClInclude>
     <ClInclude Include="header\n885_searcher\n885_340_hitchhikerQsearchPrograms.hpp">
       <Filter>header\n885_searcher</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
