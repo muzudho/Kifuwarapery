@@ -1,22 +1,75 @@
 ﻿#pragma once
 
-
+/*
+#include <iostream>
 #include <algorithm>
+#include "../n119_score___/n119_200_pieceScore.hpp"
+#include "../n160_board___/n160_106_inFrontMaskBb.hpp"
+#include "../n160_board___/n160_220_queenAttackBb.hpp"
+#include "../n160_board___/n160_230_setMaskBb.hpp"
+
+#include "../n220_position/n220_100_repetitionType.hpp"
+#include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_670_makePromoteMove.hpp"
+#include "../n220_position/n220_750_charToPieceUSI.hpp"
+
+#include "../n223_move____/n223_040_nodeType.hpp"
+#include "../n223_move____/n223_300_moveAndScoreIndex.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
+
+#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
+#include "../n440_movStack/n440_500_nextmoveEvent.hpp"
+#include "../n520_evaluate/n520_700_evaluation09.hpp"
+#include "../n560_timeMng_/n560_500_timeManager.hpp"
+#include "../n600_book____/n600_500_book.hpp"
+
 #include "../n640_searcher/n640_440_splitedNode.hpp" // Searcherと持ち合い
 #include "../n640_searcher/n640_500_reductions.hpp"
+*/
 #include "../n640_searcher/n640_510_futilityMargins.hpp"
 #include "../n640_searcher/n640_520_futilityMoveCounts.hpp"
+/*
+#include "../n680_egOption/n680_240_engineOptionsMap.hpp"
+#include "../n680_egOption/n680_300_engineOptionSetup.hpp"
+#include "../n760_thread__/n760_400_herosPub.hpp"
+
+#include "../n800_learn___/n800_100_stopwatch.hpp"
+#include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
 #include "../n885_searcher/n885_040_rucksack.hpp"//FIXME:
 #include "../n885_searcher/n885_310_hitchhikerQsearchAbstract.hpp"//FIXME:
+*/
 #include "../n885_searcher/n885_340_hitchhikerQsearchPrograms.hpp"//FIXME:
+/*
+#include "../n885_searcher/n885_480_hitchhikerNyugyoku.hpp"
+#include "../n885_searcher/n885_510_hitchhiker.hpp"
+#include "../n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
+
+#include "../n886_repeType/n886_100_rtNot.hpp"
+#include "../n886_repeType/n886_110_rtDraw.hpp"
+#include "../n886_repeType/n886_120_rtWin.hpp"
+#include "../n886_repeType/n886_130_rtLose.hpp"
+#include "../n886_repeType/n886_140_rtSuperior.hpp"
+#include "../n886_repeType/n886_150_rtInferior.hpp"
+*/
 #include "../n886_repeType/n886_500_rtArray.hpp"//FIXME:
+/*
 //class Rucksack;
 
+#include "../n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
+
+
 using namespace std;
+
+
+extern const InFrontMaskBb g_inFrontMaskBb;
+*/
+class NodetypeAbstract; // 同じファイル内の後ろの方でクラス定義があるとき☆（＾ｑ＾）
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+
+extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 class NodetypeAbstract {
@@ -25,19 +78,17 @@ public:
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
 
-	/*
-	virtual inline ScoreIndex GoToTheAdventure(
+
+	ScoreIndex GoToTheAdventure(
 		Rucksack& rucksack,
-		NodeType NT,
+		NodeType NT,//スレッドが実行するプログラムを切り替えます。
 		Position& pos,
 		Flashlight* pFlashlight,//サーチスタック
 		ScoreIndex alpha,
 		ScoreIndex beta,
 		const Depth depth,
 		const bool cutNode
-		) {
-	}
-	*/
+		) const;
 
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
@@ -317,7 +368,8 @@ public:
 			&& abs(beta) < ScoreMateInMaxPly)
 		{
 			const ScoreIndex rbeta = beta - rucksack.razorMargin(depth);
-			const ScoreIndex s = HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
+			const ScoreIndex s = HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(
+				rucksack, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
 			if (s < rbeta) {
 				isReturnWithScore = true;
 				returnScore = s;
@@ -391,11 +443,14 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(
+					rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode));
+				:
+				-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode)
+			);
 
 			((*ppFlashlight) + 1)->m_skipNullMove = false;
 			pos.DoNullMove(false, st);
@@ -417,7 +472,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				const ScoreIndex s = Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
+				const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
 				(*ppFlashlight)->m_skipNullMove = false;
 
 				if (beta <= s) {
@@ -487,7 +542,7 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）
 					//────────────────────────────────────────────────────────────────────────────────
-					score = -Hitchhiker::Travel_885_510(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+					score =	-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
 					pos.UndoMove(move);
 					if (rbeta <= score) {
 						isReturnWithScore = true;
@@ -640,7 +695,7 @@ public:
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
-			score = Hitchhiker::Travel_885_510(rucksack, N02_NonPV, pos, (*ppFlashlight), rBeta - 1, rBeta, depth / 2, cutNode);
+			score =	g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight), rBeta - 1, rBeta, depth / 2, cutNode);
 			(*ppFlashlight)->m_skipNullMove = false;
 			(*ppFlashlight)->m_excludedMove = g_MOVE_NONE;
 
@@ -852,8 +907,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVS
-			score = -Hitchhiker::Travel_885_510(
-				rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, d, true);
+			score = -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, d, true);
 
 			doFullDepthSearch = (alpha < score && (*ppFlashlight)->m_reduction != Depth0);
 			(*ppFlashlight)->m_reduction = Depth0;
@@ -916,8 +970,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -Hitchhiker::Travel_885_510(
-					rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
+				: -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 	}
 
@@ -946,8 +999,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -Hitchhiker::Travel_885_510(
-					rucksack, N01_PV, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
+				: -g_NODETYPE_PROGRAMS[N01_PV]->GoToTheAdventure(rucksack, N01_PV, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
 		}
 	}
 	virtual inline bool IsBetaLargeAtStep16c(
@@ -1037,7 +1089,7 @@ public:
 		Move& threatMove,
 		int& moveCount,
 		NextmoveEvent& mp,
-		NodeType& NT,
+		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
 		const bool cutNode
 		)const {
 
@@ -1048,7 +1100,7 @@ public:
 			assert(bestScore < beta);
 			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
 				pos, *ppFlashlight, alpha, beta, bestScore, bestMove,
-				depth, threatMove, moveCount, mp, NT, cutNode
+				depth, threatMove, moveCount, mp, nodeType, cutNode
 				);
 			if (beta <= bestScore) {
 				isBreak = true;
@@ -1129,5 +1181,4 @@ public:
 
 
 };
-
 

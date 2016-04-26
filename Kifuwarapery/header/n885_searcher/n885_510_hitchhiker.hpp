@@ -40,6 +40,7 @@ public:
 	// 入玉勝ち判定
 	static bool Hitchhiker::IsNyugyokuWin(const Position& pos);
 
+	/*
 	// サーチ☆
 	// 主に、反復深化探索の中で呼び出される☆
 	static ScoreIndex Travel_885_510(
@@ -52,7 +53,5 @@ public:
 		const Depth depth,
 		const bool cutNode
 		);
-
-
-
+		*/
 };

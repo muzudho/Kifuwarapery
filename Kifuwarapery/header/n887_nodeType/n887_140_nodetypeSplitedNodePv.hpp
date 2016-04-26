@@ -2,9 +2,11 @@
 
 
 #include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
+#include "../n640_searcher/n640_500_reductions.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
@@ -145,7 +147,8 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure(
+				rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 

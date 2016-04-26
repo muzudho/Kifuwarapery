@@ -6,8 +6,12 @@
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
+#include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "n885_040_rucksack.hpp"
 #include "n885_580_skill.hpp"
+
+
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 
 
 // 深い反復ループ☆？（iterative deepening loop）
@@ -128,8 +132,7 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）　１回目のぐるんぐるんだぜ～☆　ルート～☆
 					//────────────────────────────────────────────────────────────────────────────────
-					bestScore = Hitchhiker::Travel_885_510(	rucksack, NodeType::N00_Root,
-						pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
+					bestScore = g_NODETYPE_PROGRAMS[NodeType::N00_Root]->GoToTheAdventure(rucksack, NodeType::N00_Root, pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 
 					// 先頭が最善手になるようにソート
 					UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
@@ -257,7 +260,7 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// さあ、探索に潜るぜ～☆！（＾ｑ＾）　２回目のぐるんぐるんだぜ～☆ ノンＰＶ～☆
 					//────────────────────────────────────────────────────────────────────────────────
-					const ScoreIndex s = Hitchhiker::Travel_885_510(
+					const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(
 						rucksack, NodeType::N02_NonPV,
 						pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
 

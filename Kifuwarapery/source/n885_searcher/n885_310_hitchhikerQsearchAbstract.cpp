@@ -166,12 +166,8 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 
 		pos.DoMove(move, st, ci, givesCheck);
 		(pFlashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-		score = (givesCheck ?
-			// 再帰関数☆（＾ｑ＾）
-			-this->DoQsearch(rucksack, true, pos, pFlashlight + 1, -beta, -alpha, depth - OnePly)
-			:
-			// 再帰関数☆（＾ｑ＾）
-			-this->DoQsearch(rucksack, false, pos, pFlashlight + 1, -beta, -alpha, depth - OnePly));
+		score = // 再帰関数☆（＾ｑ＾）
+			-this->DoQsearch(rucksack, givesCheck, pos, pFlashlight + 1, -beta, -alpha, depth - OnePly);
 		pos.UndoMove(move);
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);

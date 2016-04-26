@@ -8,6 +8,8 @@
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"
 
 
+// サーチ☆
+// 主に、反復深化探索の中で呼び出される☆
 NodetypeAbstract* g_NODETYPE_PROGRAMS[6] = {
 	&g_nodetypeRoot,
 	&g_nodetypePv,

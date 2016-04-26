@@ -3,12 +3,15 @@
 
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n220_position/n220_665_utilMoveStack.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
+#include "../n640_searcher/n640_500_reductions.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
+#include "../n887_nodeType/n887_100_nodetypeRoot.hpp"
 
 
 // PvNode = true
@@ -21,7 +24,7 @@ public:
 		//────────────────────────────────────────────────────────────────────────────────
 		// 探索☆？（＾ｑ＾）
 		//────────────────────────────────────────────────────────────────────────────────
-		Hitchhiker::Travel_885_510(	rucksack, NodeType::SplitedNodeRoot,
+		g_NODETYPE_PROGRAMS[NodeType::SplitedNodeRoot]->GoToTheAdventure( rucksack, NodeType::SplitedNodeRoot,
 			pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
 	}
 
@@ -222,7 +225,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			Hitchhiker::Travel_885_510(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 
