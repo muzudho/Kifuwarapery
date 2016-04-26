@@ -125,4 +125,11 @@ public:
 		//return score;
 	}
 
+	virtual inline Bound GetBound01(
+		ScoreIndex& oldAlpha,
+		ScoreIndex& bestScore
+		)const {
+		return Bound::BoundUpper;
+	}
+
 };

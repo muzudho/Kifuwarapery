@@ -317,7 +317,7 @@ public:
 			&& abs(beta) < ScoreMateInMaxPly)
 		{
 			const ScoreIndex rbeta = beta - rucksack.razorMargin(depth);
-			const ScoreIndex s = HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
+			const ScoreIndex s = HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight), rbeta - 1, rbeta, Depth0);
 			if (s < rbeta) {
 				isReturnWithScore = true;
 				returnScore = s;
@@ -391,7 +391,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）以上なら　クイックな探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
@@ -911,8 +911,8 @@ public:
 		// PVS
 		if (doFullDepthSearch) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
-					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->Qsearch_N01PV_N02NonPV(rucksack, N02_NonPV, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
@@ -941,8 +941,8 @@ public:
 			(alpha < score && this->IsBetaLargeAtStep16c(score,beta))
 		) {
 			score = (newDepth < OnePly ?
-				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->Qsearch_N01PV_N02NonPV(rucksack, N01_PV, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
-					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->Qsearch_N01PV_N02NonPV(rucksack, N01_PV, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
+				(givesCheck ? -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->DoQsearch(rucksack, true, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+					: -HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N01_PV]->DoQsearch(rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0))
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────

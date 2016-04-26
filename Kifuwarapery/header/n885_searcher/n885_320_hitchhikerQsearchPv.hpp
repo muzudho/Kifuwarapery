@@ -99,4 +99,15 @@ public:
 		}
 	}
 
+	virtual inline Bound GetBound01(
+		ScoreIndex& oldAlpha,
+		ScoreIndex& bestScore
+		)const {
+		return (oldAlpha < bestScore) ?
+			Bound::BoundExact
+			:
+			Bound::BoundUpper
+			;
+	}
+
 };

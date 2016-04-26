@@ -15,9 +15,8 @@ public:
 
 	// Ｑサーチ？
 	// N01_PV か、N02_NonPV でだけ使うことができるぜ☆（＾ｑ＾）
-	virtual ScoreIndex Qsearch_N01PV_N02NonPV(
+	virtual ScoreIndex DoQsearch(
 		Rucksack& rucksack,
-		NodeType NT,
 		bool INCHECK,
 		Position& pos,
 		Flashlight* ss,
@@ -84,4 +83,8 @@ public:
 		Move move
 		)const = 0;
 
+	virtual inline Bound GetBound01(
+		ScoreIndex& oldAlpha,
+		ScoreIndex& bestScore
+		)const = 0;
 };

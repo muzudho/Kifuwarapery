@@ -28,9 +28,14 @@ void TranspositionTable::Clear() {
 	memset(m_entries_, 0, GetSize() * sizeof(TTCluster));
 }
 
-void TranspositionTable::Store(const Key posKey, const ScoreIndex score, const Bound bound, Depth depth,
-							   Move move, const ScoreIndex evalScore)
-{
+void TranspositionTable::Store(
+	const Key posKey,
+	const ScoreIndex score,
+	const Bound bound,
+	Depth depth,
+	Move move,
+	const ScoreIndex evalScore
+){
 	TTEntry* tte = FirstEntry(posKey);
 	TTEntry* replace = tte;
 	const u32 posKeyHigh32 = posKey >> 32;
