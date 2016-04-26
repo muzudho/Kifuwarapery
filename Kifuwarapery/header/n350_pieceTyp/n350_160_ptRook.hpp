@@ -17,11 +17,15 @@
 #include "n350_070_ptAbstract.hpp"
 
 
+const static Move g_PTROOK_AS_MOVE = ConvMove::FROM_PIECE_TYPE10(PieceType::N06_Rook);
+
+
+// PieceType::N06_Rook
 class PtRook : public PtAbstract {
 public:
 
-	PieceType GetNumber() const override {
-		return PieceType::N06_Rook;
+	virtual Move AsMove() const override {
+		return g_PTROOK_AS_MOVE;
 	}
 
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {
@@ -36,14 +40,15 @@ public:
 		const Square to,
 		const Color us
 	) const override {
-		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(this->GetNumber(), from, to, pos);
+		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			this->AsMove(), from, to, pos);
 
 		if (
 			ConvSquare::CAN_PROMOTE10(us, ConvSquare::TO_RANK10(to))
 			|
 			ConvSquare::CAN_PROMOTE10(us, ConvSquare::TO_RANK10(from))
 		){
-			MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, N00_Capture, this->GetNumber()
+			MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 		}
 
 		moveStackList++;

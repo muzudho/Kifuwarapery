@@ -16,11 +16,13 @@
 #include "n350_070_ptAbstract.hpp"
 
 
+// PieceType::N16_GoldHorseDragon
 class PtGoldHorseDragon : public PtAbstract {
 public:
 
-	PieceType GetNumber() const override {
-		return PieceType::N16_GoldHorseDragon;
+	virtual Move AsMove() const override {
+		UNREACHABLE;
+		return g_MOVE_NONE;// Ç±ÇÍÇÕégÇ¡ÇƒÇÕÇ¢ÇØÇ»Ç¢ÅB
 	}
 
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {

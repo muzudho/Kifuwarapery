@@ -23,7 +23,11 @@ public:
 	static inline Square Convert10_Drop2From(const PieceType pt) { return static_cast<Square>(SquareNum - 1 + pt); }
 
 	// 移動する駒の種類から指し手に変換
-	static inline Move FROM_PIECE_TYPE10(const PieceType pt) { return static_cast<Move>(pt << 16); }
+	static inline Move FROM_PIECE_TYPE10(
+		const PieceType pt
+	) {
+		return static_cast<Move>(pt << 16);
+	}
 
 	// 取った駒の種類から指し手に変換
 	static inline Move FROM_CAPTURED_PIECE_TYPE10(const PieceType captured) { return static_cast<Move>(captured << 20); }
@@ -31,9 +35,25 @@ public:
 	// 駒打ち(移動元)から指し手に変換
 	static inline Move FROM_DROP20(const PieceType pt) { return static_cast<Move>(ConvMove::Convert10_Drop2From(pt) << 7); }
 
-	// 移動元、移動先、移動する駒の種類から指し手に変換
-	static inline Move FROM_PT_SRC_DST30(const PieceType pt, const Square from, const Square to) {
-		return ConvMove::FROM_PIECE_TYPE10(pt) | ConvMove::FROM_SRC10(from) | ConvMove::FROM_DST10(to);
+	// 移動する駒の種類、移動元、移動先　から指し手に変換
+	static inline Move FROM_PT_SRC_DST20( //新型☆（＾ｑ＾）
+		const Move pieceTypeAsMove,
+		const Square from,
+		const Square to
+		) {
+		return pieceTypeAsMove |
+			ConvMove::FROM_SRC10(from) |
+			ConvMove::FROM_DST10(to);
+	}
+	static inline Move FROM_PT_SRC_DST30( //旧型☆（＾ｑ＾）
+		const PieceType pt, // ここをムーブにできないか☆（＾ｑ＾）
+		const Square from,
+		const Square to
+	) {
+		return ConvMove::FROM_PIECE_TYPE10(pt) // ピースタイプをムーブに変換するだけ☆
+			|
+			ConvMove::FROM_SRC10(from) |
+			ConvMove::FROM_DST10(to);
 	}
 
 	// 駒打ちの makeMove()

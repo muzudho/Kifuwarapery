@@ -60,9 +60,8 @@ extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
-ScoreIndex NodetypeAbstract::GoToTheAdventure(
+ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	Rucksack& rucksack,
-	NodeType NT,//スレッドが実行するプログラムを切り替えます。
 	Position& pos,
 	Flashlight* pFlashlight,//サーチスタック
 	ScoreIndex alpha,
@@ -71,11 +70,8 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	const bool cutNode
 	) const {
 
-	NodetypeAbstract* nodetypeProgram = g_NODETYPE_PROGRAMS[NT];
-
-
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	nodetypeProgram->AssertBeforeStep1(
+	this->AssertBeforeStep1(
 		alpha,
 		beta
 		);
@@ -115,7 +111,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
-	nodetypeProgram->DoStep1a(
+	this->DoStep1a(
 		isGotoSplitPointStart,
 		moveCount,
 		playedMoveCount,
@@ -135,13 +131,13 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 		goto split_point_start;
 	}
 
-	nodetypeProgram->DoStep1b(
+	this->DoStep1b(
 		bestScore,
 		&pFlashlight,
 		threatMove,
 		bestMove
 		);
-	nodetypeProgram->DoStep1c(
+	this->DoStep1c(
 		&pThisThread,
 		pFlashlight
 		);
@@ -150,7 +146,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 
 	// step2
-	nodetypeProgram->DoStep2(
+	this->DoStep2(
 		isReturnWithScore,
 		returnScore,
 		pos,
@@ -164,7 +160,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	}
 
 	// step3
-	nodetypeProgram->DoStep3(
+	this->DoStep3(
 		isReturnWithScore,
 		returnScore,
 		&pFlashlight,
@@ -179,7 +175,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	// step4
-	nodetypeProgram->DoStep4(
+	this->DoStep4(
 		excludedMove,
 		&pFlashlight,
 		posKey,
@@ -188,13 +184,13 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 		rucksack,
 		ttScore
 		);
-	nodetypeProgram->DoStep4x(
+	this->DoStep4x(
 		ttMove,
 		rucksack,
 		pTtEntry,
 		pos
 		);
-	nodetypeProgram->DoStep4y(
+	this->DoStep4y(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -209,7 +205,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	{
 		return returnScore;
 	}
-	nodetypeProgram->DoStep4z(
+	this->DoStep4z(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -229,7 +225,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 
 	// step5
 	bool isGotoIidStart = false;
-	nodetypeProgram->DoStep5(
+	this->DoStep5(
 		isGotoIidStart,
 		rucksack,
 		eval,
@@ -246,7 +242,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	}
 
 	// step6
-	nodetypeProgram->DoStep6_NonPV(
+	this->DoStep6_NonPV(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -263,7 +259,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	}
 
 	// step7
-	nodetypeProgram->DoStep7(
+	this->DoStep7(
 		isReturnWithScore,
 		returnScore,
 		&pFlashlight,
@@ -273,7 +269,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 		);
 
 	// step8
-	nodetypeProgram->DoStep8_NonPV(
+	this->DoStep8_NonPV(
 		isReturnWithScore,
 		returnScore,
 		rucksack,
@@ -292,7 +288,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	}
 
 	// step9
-	nodetypeProgram->DoStep9(
+	this->DoStep9(
 		isReturnWithScore,
 		rucksack,
 		depth,
@@ -312,7 +308,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure(
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
 	// step10
-	nodetypeProgram->DoStep10(
+	this->DoStep10(
 		depth,
 		ttMove,
 		inCheck,
@@ -332,11 +328,11 @@ split_point_start:
 		depth,
 		rucksack.m_history,
 		pFlashlight,
-		nodetypeProgram->GetBetaAtStep11(beta)//PVノードか、そうでないかで初期値を変えるぜ☆（＾ｑ＾）
+		this->GetBetaAtStep11(beta)//PVノードか、そうでないかで初期値を変えるぜ☆（＾ｑ＾）
 		);
 	const CheckInfo ci(pos);
 
-	nodetypeProgram->DoStep11A_BeforeLoop_SplitPointStart(
+	this->DoStep11A_BeforeLoop_SplitPointStart(
 		ttMove,
 		depth,
 		score,
@@ -351,12 +347,12 @@ split_point_start:
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = nodetypeProgram->GetMoveAtStep11(mp)
+			move = this->GetMoveAtStep11(mp)
 			).IsNone()
 		) {
 
 		bool isContinue = false;
-		nodetypeProgram->DoStep11Ba_LoopHeader(
+		this->DoStep11Ba_LoopHeader(
 			isContinue,
 			move,
 			excludedMove
@@ -366,7 +362,7 @@ split_point_start:
 			continue;
 		}
 
-		nodetypeProgram->DoStep11Bb_LoopHeader(
+		this->DoStep11Bb_LoopHeader(
 			isContinue,
 			pos,
 			move,
@@ -379,7 +375,7 @@ split_point_start:
 			continue;
 		}
 
-		nodetypeProgram->DoStep11Bb_LoopHeader(
+		this->DoStep11Bb_LoopHeader(
 			isContinue,
 			rucksack,
 			move
@@ -389,12 +385,12 @@ split_point_start:
 			continue;
 		}
 
-		nodetypeProgram->DoStep11Bc_LoopHeader(
+		this->DoStep11Bc_LoopHeader(
 			rucksack,
 			moveCount
 			);
 
-		nodetypeProgram->DoStep11B_LoopHeader(
+		this->DoStep11B_LoopHeader(
 			extension,
 			captureOrPawnPromotion,
 			move,
@@ -409,7 +405,7 @@ split_point_start:
 		}
 
 		// step12
-		nodetypeProgram->DoStep12(
+		this->DoStep12(
 			rucksack,
 			givesCheck,
 			pos,
@@ -428,7 +424,7 @@ split_point_start:
 			);
 
 		// step13
-		nodetypeProgram->DoStep13a(
+		this->DoStep13a(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,
@@ -446,14 +442,14 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
-		nodetypeProgram->DoStep13b(
+		this->DoStep13b(
 			pos,
 			move,
 			ci,
 			moveCount,
 			isContinue
 			);
-		nodetypeProgram->DoStep13c(
+		this->DoStep13c(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,
@@ -479,7 +475,7 @@ split_point_start:
 		{
 			continue;
 		}
-		nodetypeProgram->DoStep13d(
+		this->DoStep13d(
 			captureOrPawnPromotion,
 			playedMoveCount,
 			movesSearched,
@@ -487,7 +483,7 @@ split_point_start:
 			);
 
 		// step14
-		nodetypeProgram->DoStep14(
+		this->DoStep14(
 			pos,
 			move,
 			st,
@@ -497,7 +493,7 @@ split_point_start:
 			);
 
 		// step15
-		nodetypeProgram->DoStep15(
+		this->DoStep15(
 			rucksack,
 			depth,
 			isPVMove,
@@ -516,12 +512,12 @@ split_point_start:
 			);
 
 		// step16
-		nodetypeProgram->DoStep16a(
+		this->DoStep16a(
 			doFullDepthSearch,
 			alpha,
 			&pSplitedNode
 			);
-		nodetypeProgram->DoStep16b_NonPVAtukai(
+		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
 			score,
@@ -532,7 +528,7 @@ split_point_start:
 			alpha,
 			cutNode
 			);
-		nodetypeProgram->DoStep16c(
+		this->DoStep16c(
 			rucksack,
 			isPVMove,
 			alpha,
@@ -545,7 +541,7 @@ split_point_start:
 			);
 
 		// step17
-		nodetypeProgram->DoStep17(
+		this->DoStep17(
 			pos,
 			move
 			);
@@ -553,7 +549,7 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
-		nodetypeProgram->DoStep18a(
+		this->DoStep18a(
 			&pSplitedNode,
 			bestScore,
 			alpha
@@ -563,7 +559,7 @@ split_point_start:
 			return score;
 		}
 
-		nodetypeProgram->DoStep18b(
+		this->DoStep18b(
 			rucksack,
 			move,
 			isPVMove,
@@ -572,7 +568,7 @@ split_point_start:
 			pos
 			);
 		bool isBreak = false;
-		nodetypeProgram->DoStep18c(
+		this->DoStep18c(
 			isBreak,
 			rucksack,
 			move,
@@ -590,7 +586,7 @@ split_point_start:
 		}
 
 		// step19
-		nodetypeProgram->DoStep19(
+		this->DoStep19(
 			isBreak,
 			rucksack,
 			depth,
@@ -604,7 +600,6 @@ split_point_start:
 			threatMove,
 			moveCount,
 			mp,
-			NT,//スレッドが実行するプログラムを切り替えます。
 			cutNode
 			);
 		if (isBreak) {
@@ -612,12 +607,12 @@ split_point_start:
 		}
 	}
 
-	if (nodetypeProgram->GetReturnBeforeStep20()) {
+	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
 
 	// step20
-	nodetypeProgram->DoStep20(
+	this->DoStep20(
 		moveCount,
 		excludedMove,
 		rucksack,

@@ -75,13 +75,17 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 class NodetypeAbstract {
 public:
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	virtual inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const = 0;
+	// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
+	virtual inline void GoSearch_AsSplitedNode(
+		Rucksack& searcher,
+		Position& pos,
+		Flashlight* ss,
+		SplitedNode& sp
+	) const = 0;
 
 
-	ScoreIndex GoToTheAdventure(
+	ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
-		NodeType NT,//スレッドが実行するプログラムを切り替えます。
 		Position& pos,
 		Flashlight* pFlashlight,//サーチスタック
 		ScoreIndex alpha,
@@ -445,11 +449,11 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				-HitchhikerQsearchPrograms::m_pHitchhikerQsearchPrograms[N02_NonPV]->DoQsearch(
 					rucksack, false, pos, (*ppFlashlight) + 1, -beta, -alpha, Depth0)
+				:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 深さが２手（先後１組）未満なら　ふつーの探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				:
-				-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode)
+				-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -beta, -alpha, depth - reduction, !cutNode)
 			);
 
 			((*ppFlashlight) + 1)->m_skipNullMove = false;
@@ -472,7 +476,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
+				const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight), alpha, beta, depth - reduction, false);
 				(*ppFlashlight)->m_skipNullMove = false;
 
 				if (beta <= s) {
@@ -542,7 +546,7 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）
 					//────────────────────────────────────────────────────────────────────────────────
-					score =	-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
+					score =	-g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -rbeta, -rbeta + 1, rdepth, !cutNode);
 					pos.UndoMove(move);
 					if (rbeta <= score) {
 						isReturnWithScore = true;
@@ -695,7 +699,7 @@ public:
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
-			score =	g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight), rBeta - 1, rBeta, depth / 2, cutNode);
+			score =	g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight), rBeta - 1, rBeta, depth / 2, cutNode);
 			(*ppFlashlight)->m_skipNullMove = false;
 			(*ppFlashlight)->m_excludedMove = g_MOVE_NONE;
 
@@ -907,7 +911,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVS
-			score = -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, d, true);
+			score = -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, d, true);
 
 			doFullDepthSearch = (alpha < score && (*ppFlashlight)->m_reduction != Depth0);
 			(*ppFlashlight)->m_reduction = Depth0;
@@ -970,7 +974,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure(rucksack, N02_NonPV, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
+				: -g_NODETYPE_PROGRAMS[N02_NonPV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -(alpha + 1), -alpha, newDepth, !cutNode));
 		}
 	}
 
@@ -999,7 +1003,7 @@ public:
 				//────────────────────────────────────────────────────────────────────────────────
 				// 探索☆？（＾ｑ＾）
 				//────────────────────────────────────────────────────────────────────────────────
-				: -g_NODETYPE_PROGRAMS[N01_PV]->GoToTheAdventure(rucksack, N01_PV, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
+				: -g_NODETYPE_PROGRAMS[N01_PV]->GoToTheAdventure_new(rucksack, pos, (*ppFlashlight) + 1, -beta, -alpha, newDepth, false));
 		}
 	}
 	virtual inline bool IsBetaLargeAtStep16c(
@@ -1089,7 +1093,6 @@ public:
 		Move& threatMove,
 		int& moveCount,
 		NextmoveEvent& mp,
-		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
 		const bool cutNode
 		)const = 0;
 

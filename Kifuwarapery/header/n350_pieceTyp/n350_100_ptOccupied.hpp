@@ -15,11 +15,15 @@
 #include "n350_070_ptAbstract.hpp"
 
 
+const static Move g_PTOCCUPIED_AS_MOVE = ConvMove::FROM_PIECE_TYPE10(PieceType::N00_Occupied);
+
+
+// PieceType::N00_Occupied
 class PtOccupied : public PtAbstract {
 public:
 
-	PieceType GetNumber() const override {
-		return PieceType::N00_Occupied;
+	virtual Move AsMove() const override {
+		return g_PTOCCUPIED_AS_MOVE;
 	}
 
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {

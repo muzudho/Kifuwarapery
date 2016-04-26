@@ -30,7 +30,8 @@ struct SplitedNode {
 
 	ScoreIndex				m_beta;
 
-	NodeType			m_nodeType;
+	// スプリット・ポイントは　ノード・タイプを持っている☆？（＾ｑ＾）
+	NodeType			m_nodeType01;
 
 	Move				m_threatMove;
 

@@ -28,7 +28,21 @@ public:
 		return move;
 	}
 	// 非キャプチャー系と分かっているならこちら☆（＾ｑ＾）
-	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory( const PieceType pt, const Square from, const Square to, const Position& pos) {
+	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(// 新型☆（＾ｑ＾）
+		const Move pieceTypeAsMove,
+		const Square from,
+		const Square to,
+		const Position& pos
+		) {
+		//MoveType mt_forAssert, assert(!(mt_forAssert == N01_NonCapture || mt_forAssert == N04_NonCaptureMinusPro), "");
+		return UtilMovePos::MakeCaptureMove(pieceTypeAsMove, from, to, pos);
+	}
+	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(// 旧型☆（＾ｑ＾）
+		const PieceType pt, // TODO: ここをムーブにできないか☆？（＾ｑ＾） FIXME: ピースタイプで分けないとダメなのかだぜ☆？（＾ｑ＾）？
+		const Square from,
+		const Square to,
+		const Position& pos
+	) {
 		//MoveType mt_forAssert, assert(!(mt_forAssert == N01_NonCapture || mt_forAssert == N04_NonCaptureMinusPro), "");
 		return UtilMovePos::MakeCaptureMove(pt, from, to, pos);
 	}

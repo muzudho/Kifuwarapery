@@ -90,8 +90,14 @@ public:
 		}
 		else {
 			// fail high
-			rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(score, (*ppFlashlight)->m_ply), Bound::BoundLower,
-				ttDepth, move, (*ppFlashlight)->m_staticEval);
+			rucksack.m_tt.Store(
+				posKey,
+				rucksack.ConvertScoreToTT(score, (*ppFlashlight)->m_ply),
+				Bound::BoundLower,
+				ttDepth,
+				move,
+				(*ppFlashlight)->m_staticEval
+			);
 			isReturnWithScore = true;
 			returnScore = score;
 			return;

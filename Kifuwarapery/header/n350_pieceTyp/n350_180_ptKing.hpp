@@ -17,11 +17,15 @@
 #include "n350_070_ptAbstract.hpp"
 
 
+const static Move g_PTKING_AS_MOVE = ConvMove::FROM_PIECE_TYPE10(PieceType::N08_King);
+
+
+// PieceType::N08_King
 class PtKing : public PtAbstract {
 public:
 
-	PieceType GetNumber() const override {
-		return PieceType::N08_King;
+	virtual Move AsMove() const override {
+		return g_PTKING_AS_MOVE;
 	}
 
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {
@@ -36,7 +40,8 @@ public:
 		const Square to,
 		const Color us
 		) const override {
-		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(this->GetNumber(), from, to, pos);
+		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			this->AsMove(), from, to, pos);
 		moveStackList++;
 	}
 

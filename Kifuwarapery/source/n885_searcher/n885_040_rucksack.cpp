@@ -321,40 +321,41 @@ void Military::IdleLoop() {
 
 			m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 			assert(m_searching);
-			SplitedNode* sp = m_activeSplitedNode;
+			SplitedNode* pSplitedNode = m_activeSplitedNode;
 			m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 
 			Flashlight ss[g_maxPlyPlus2];
-			Position pos(*sp->m_position, this);
+			Position pos(*pSplitedNode->m_position, this);
 
-			memcpy(ss, sp->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
-			(ss+1)->m_splitedNode = sp;
+			memcpy(ss, pSplitedNode->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
+			(ss+1)->m_splitedNode = pSplitedNode;
 
-			sp->m_mutex.lock();
+			pSplitedNode->m_mutex.lock();
 
 			assert(m_activePosition == nullptr);
 
 			m_activePosition = &pos;
 
 
-			g_NODETYPE_PROGRAMS[sp->m_nodeType]->GoSearch(*m_pRucksack, pos, ss, *sp);
+			// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
+			g_NODETYPE_PROGRAMS[pSplitedNode->m_nodeType01]->GoSearch_AsSplitedNode(*m_pRucksack, pos, ss, *pSplitedNode);
 
 
 			assert(m_searching);
 			m_searching = false;
 			m_activePosition = nullptr;
-			assert(sp->m_slavesMask & (UINT64_C(1) << m_idx));
-			sp->m_slavesMask ^= (UINT64_C(1) << m_idx);
-			sp->m_nodes += pos.GetNodesSearched();
+			assert(pSplitedNode->m_slavesMask & (UINT64_C(1) << m_idx));
+			pSplitedNode->m_slavesMask ^= (UINT64_C(1) << m_idx);
+			pSplitedNode->m_nodes += pos.GetNodesSearched();
 
 			if (m_pRucksack->m_ownerHerosPub.m_isSleepWhileIdle_
-				&& this != sp->m_masterThread
-				&& !sp->m_slavesMask)
+				&& this != pSplitedNode->m_masterThread
+				&& !pSplitedNode->m_slavesMask)
 			{
-				assert(!sp->m_masterThread->m_searching);
-				sp->m_masterThread->NotifyOne();
+				assert(!pSplitedNode->m_masterThread->m_searching);
+				pSplitedNode->m_masterThread->NotifyOne();
 			}
-			sp->m_mutex.unlock();
+			pSplitedNode->m_mutex.unlock();
 		}
 
 		if (thisSp != nullptr && !thisSp->m_slavesMask) {

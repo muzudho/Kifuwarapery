@@ -17,7 +17,7 @@
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {
 public:
 
-	inline void GoSearch(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
+	inline void GoSearch_AsSplitedNode(Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
 		// スルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -91,8 +91,8 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// 非PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(
-				rucksack, NodeType::N02_NonPV, pos, (*ppFlashlight), alpha, beta, d, true);
+			g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(
+				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 
@@ -320,7 +320,6 @@ public:
 		Move& threatMove,
 		int& moveCount,
 		NextmoveEvent& mp,
-		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
 		const bool cutNode
 		)const override {
 		// スプリット・ポイントはスルー☆！（＾ｑ＾）

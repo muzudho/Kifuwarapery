@@ -18,12 +18,13 @@ class NodetypePv : public NodetypeAbstract {
 public:
 
 	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
-	inline void GoSearch(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
+	inline void GoSearch_AsSplitedNode(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
 		//────────────────────────────────────────────────────────────────────────────────
 		// 探索☆？（＾ｑ＾）
 		//────────────────────────────────────────────────────────────────────────────────
-		g_NODETYPE_PROGRAMS[NodeType::SplitedNodePV]->GoToTheAdventure(	rucksack, NodeType::SplitedNodePV,
-			pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
+		// スプリットポイントに変えて探索かだぜ☆（＾ｑ＾）
+		g_NODETYPE_PROGRAMS[NodeType::SplitedNodePV]->GoToTheAdventure_new(
+			rucksack, pos, ss + 1, sp.m_alpha, sp.m_beta, sp.m_depth, sp.m_cutNode);
 	}
 
 
@@ -169,7 +170,8 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure(rucksack, NodeType::N01_PV, pos, (*ppFlashlight), alpha, beta, d, true);
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
+				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 
@@ -421,7 +423,6 @@ public:
 		Move& threatMove,
 		int& moveCount,
 		NextmoveEvent& mp,
-		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
 		const bool cutNode
 		)const override {
 
@@ -441,7 +442,7 @@ public:
 				threatMove,
 				moveCount,
 				mp,
-				nodeType,
+				NodeType::N01_PV,
 				cutNode
 				);
 			if (beta <= bestScore) {

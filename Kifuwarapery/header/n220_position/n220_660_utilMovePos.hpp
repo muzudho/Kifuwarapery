@@ -23,8 +23,29 @@ public:
 
 	// 取った駒を判別する必要がある。
 	// この関数は駒を取らないときにも使える。
-	static inline Move MakeCaptureMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return UtilMovePos::GetCapturedPieceType2Move2(to, pos) | ConvMove::FROM_PT_SRC_DST30(pt, from, to);
+	static inline Move MakeCaptureMove( // 新型☆（＾ｑ＾）
+		const Move pieceTypeAsMove,
+		const Square from,
+		const Square to,
+		const Position& pos
+		) {
+
+		return UtilMovePos::GetCapturedPieceType2Move2(to, pos) |
+			ConvMove::FROM_PT_SRC_DST20( pieceTypeAsMove, from,	to);
+	}
+	static inline Move MakeCaptureMove( // 旧型☆（＾ｑ＾）
+		const PieceType pt, // ここをムーブにできないか☆（＾ｑ＾）
+		const Square from,
+		const Square to,
+		const Position& pos
+		) {
+
+		return UtilMovePos::GetCapturedPieceType2Move2(to, pos) |
+			ConvMove::FROM_PT_SRC_DST30(
+				pt,// ピースタイプを、ムーブに変換する決まりきった処理☆
+				from,
+				to
+			);
 	}
 
 	// makeCaptureMove() かつ 成り

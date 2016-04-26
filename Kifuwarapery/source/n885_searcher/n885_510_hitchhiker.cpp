@@ -57,35 +57,6 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 
-/*
-ScoreIndex Hitchhiker::Travel_885_510(
-	Rucksack& rucksack,
-	NodeType NT,
-	Position& pos,
-	Flashlight* pFlashlight,//サーチスタック
-	ScoreIndex alpha,
-	ScoreIndex beta,
-	const Depth depth,
-	const bool cutNode
-	) {
-
-	return g_NODETYPE_PROGRAMS[NT]->GoToTheAdventure(
-		rucksack,
-		NT,
-		pos,
-		pFlashlight,//サーチスタック
-		alpha,
-		beta,
-		depth,
-		cutNode
-		);
-
-}
-*/
-
-
-
-
 void Hitchhiker::Think(Rucksack& rucksack) {
 
 	Position& pos = rucksack.m_rootPosition;

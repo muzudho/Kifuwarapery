@@ -77,31 +77,32 @@ void Military::ForkNewFighter(
 	assert(m_searching);
 	assert(m_splitedNodesSize < g_MaxSplitedNodesPerThread);
 
-	SplitedNode& sp = m_SplitedNodes[m_splitedNodesSize];
+	// 個定数のスプリット・ポイント☆（＾ｑ＾）
+	SplitedNode& splitedNode = m_SplitedNodes[m_splitedNodesSize];
 
-	sp.m_masterThread = this;
-	sp.m_pParentSplitedNode = m_activeSplitedNode;
-	sp.m_slavesMask = UINT64_C(1) << m_idx;
-	sp.m_depth = depth;
-	sp.m_bestMove = bestMove;
-	sp.m_threatMove = threatMove;
-	sp.m_alpha = alpha;
-	sp.m_beta = beta;
-	sp.m_nodeType = nodeType;
-	sp.m_cutNode = cutNode;
-	sp.m_bestScore = bestScore;
-	sp.m_pNextmoveEvent = &mp;
-	sp.m_moveCount = moveCount;
-	sp.m_position = &pos;
-	sp.m_nodes = 0;
-	sp.m_cutoff = false;
-	sp.m_pFlashlightBox = pFlashlightBox;
+	splitedNode.m_masterThread = this;
+	splitedNode.m_pParentSplitedNode = m_activeSplitedNode;
+	splitedNode.m_slavesMask = UINT64_C(1) << m_idx;
+	splitedNode.m_depth = depth;
+	splitedNode.m_bestMove = bestMove;
+	splitedNode.m_threatMove = threatMove;
+	splitedNode.m_alpha = alpha;
+	splitedNode.m_beta = beta;
+	splitedNode.m_nodeType01 = nodeType;	// ノード・タイプ（実行するプログラム）を切り替える変数みたいだぜ☆（＾ｑ＾）
+	splitedNode.m_cutNode = cutNode;
+	splitedNode.m_bestScore = bestScore;
+	splitedNode.m_pNextmoveEvent = &mp;
+	splitedNode.m_moveCount = moveCount;
+	splitedNode.m_position = &pos;
+	splitedNode.m_nodes = 0;
+	splitedNode.m_cutoff = false;
+	splitedNode.m_pFlashlightBox = pFlashlightBox;
 
 	m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
-	sp.m_mutex.lock();
+	splitedNode.m_mutex.lock();
 
 	++m_splitedNodesSize;
-	m_activeSplitedNode = &sp;
+	m_activeSplitedNode = &splitedNode;
 	m_activePosition = nullptr;
 
 	// thisThread が常に含まれるので 1
@@ -111,32 +112,32 @@ void Military::ForkNewFighter(
 	while ((slave = m_pRucksack->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
 		&& ++slavesCount <= m_pRucksack->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
 	{
-		sp.m_slavesMask |= UINT64_C(1) << slave->m_idx;
-		slave->m_activeSplitedNode = &sp;
+		splitedNode.m_slavesMask |= UINT64_C(1) << slave->m_idx;
+		slave->m_activeSplitedNode = &splitedNode;
 		slave->m_searching = true;
 		slave->NotifyOne();
 	}
 
 	if (1 < slavesCount || Fake) {
-		sp.m_mutex.unlock();
+		splitedNode.m_mutex.unlock();
 		m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 		Military::IdleLoop();
 		assert(!m_searching);
 		assert(!m_activePosition);
 		m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
-		sp.m_mutex.lock();
+		splitedNode.m_mutex.lock();
 	}
 
 	m_searching = true;
 	--m_splitedNodesSize;
-	m_activeSplitedNode = sp.m_pParentSplitedNode;
+	m_activeSplitedNode = splitedNode.m_pParentSplitedNode;
 	m_activePosition = &pos;
-	pos.SetNodesSearched(pos.GetNodesSearched() + sp.m_nodes);
-	bestMove = sp.m_bestMove;
-	bestScore = sp.m_bestScore;
+	pos.SetNodesSearched(pos.GetNodesSearched() + splitedNode.m_nodes);
+	bestMove = splitedNode.m_bestMove;
+	bestScore = splitedNode.m_bestScore;
 
 	m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
-	sp.m_mutex.unlock();
+	splitedNode.m_mutex.unlock();
 }
 
 template void Military::ForkNewFighter<true >(

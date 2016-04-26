@@ -132,7 +132,7 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// 探索☆？（＾ｑ＾）　１回目のぐるんぐるんだぜ～☆　ルート～☆
 					//────────────────────────────────────────────────────────────────────────────────
-					bestScore = g_NODETYPE_PROGRAMS[NodeType::N00_Root]->GoToTheAdventure(rucksack, NodeType::N00_Root, pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
+					bestScore = g_NODETYPE_PROGRAMS[NodeType::N00_Root]->GoToTheAdventure_new(rucksack, pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 
 					// 先頭が最善手になるようにソート
 					UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
@@ -260,9 +260,8 @@ public:
 					//────────────────────────────────────────────────────────────────────────────────
 					// さあ、探索に潜るぜ～☆！（＾ｑ＾）　２回目のぐるんぐるんだぜ～☆ ノンＰＶ～☆
 					//────────────────────────────────────────────────────────────────────────────────
-					const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure(
-						rucksack, NodeType::N02_NonPV,
-						pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
+					const ScoreIndex s = g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(
+						rucksack, pos, flashlight + 1, rBeta - 1, rBeta, (depth - 3) * OnePly, true);
 
 					(flashlight + 1)->m_skipNullMove = false;
 					(flashlight + 1)->m_excludedMove = g_MOVE_NONE;

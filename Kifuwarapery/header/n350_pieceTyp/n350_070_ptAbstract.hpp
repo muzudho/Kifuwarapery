@@ -17,7 +17,9 @@
 class PtAbstract {
 public:
 
-	virtual PieceType GetNumber() const = 0;
+
+	virtual Move AsMove() const = 0;//V•û®iO‚‘Oj
+
 
 	virtual Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const = 0;
 
