@@ -20,7 +20,7 @@
 class NodetypeRoot : public NodetypeAbstract {
 public:
 
-	inline void GoSearch(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const {
+	inline void GoSearch(Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp) const override {
 		//────────────────────────────────────────────────────────────────────────────────
 		// 探索☆？（＾ｑ＾）
 		//────────────────────────────────────────────────────────────────────────────────
@@ -34,7 +34,7 @@ public:
 	virtual inline void AssertBeforeStep1(
 		ScoreIndex alpha,
 		ScoreIndex beta
-		) const {
+		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
 		assert(alpha == beta - 1);
 	}
@@ -53,7 +53,7 @@ public:
 		Move& ttMove,
 		Move& excludedMove,
 		ScoreIndex& ttScore
-		)const {
+		)const override {
 		// 非スプリット・ポイントはスルー☆！（＾ｑ＾）
 	}
 
@@ -63,7 +63,7 @@ public:
 		Position& pos,
 		Rucksack& rucksack,
 		Flashlight** ppFlashlight
-		)const
+		)const override
 	{
 		// ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
@@ -75,7 +75,7 @@ public:
 		Flashlight** ppFlashlight,
 		ScoreIndex& alpha,
 		ScoreIndex& beta
-		)const {
+		)const override {
 		// ルートには無いぜ☆（＾ｑ＾）！
 		//UNREACHABLE;
 	}
@@ -86,7 +86,7 @@ public:
 		Rucksack& rucksack,
 		const TTEntry* pTtEntry,
 		Position& pos
-		)const
+		)const override
 	{
 		ttMove = rucksack.m_rootMoves[rucksack.m_pvIdx].m_pv_[0];
 	}
@@ -101,7 +101,7 @@ public:
 		ScoreIndex& beta,
 		Flashlight** ppFlashlight,
 		Move& ttMove
-		)const {
+		)const override {
 		// ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -111,7 +111,7 @@ public:
 		const TTEntry* pTtEntry,
 		ScoreIndex& beta,
 		ScoreIndex& ttScore
-		) const {
+		) const override {
 		return pTtEntry->GetType() == Bound::BoundExact;
 	}
 
@@ -127,13 +127,13 @@ public:
 		Key& posKey,
 		const Depth depth,
 		Move& bestMove
-		)const {
+		)const override {
 		// ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep6(
+	virtual inline void DoStep6_NonPV(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -143,7 +143,7 @@ public:
 		Move& ttMove,
 		Position& pos,
 		Flashlight** ppFlashlight
-		)const {
+		)const override {
 		// PVノードはスルー☆！（＾ｑ＾）
 	}
 
@@ -155,12 +155,12 @@ public:
 		const Depth depth,
 		ScoreIndex& beta,
 		ScoreIndex& eval
-		)const {
+		)const override {
 		// PVノードはスルー☆！（＾ｑ＾）
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep8(
+	virtual inline void DoStep8_NonPV(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,
 		Rucksack& rucksack,
@@ -173,7 +173,7 @@ public:
 		ScoreIndex& alpha,
 		const bool cutNode,
 		Move& threatMove
-		)const {
+		)const override {
 		// PVノードはスルー☆！（＾ｑ＾）
 	}
 
@@ -190,7 +190,7 @@ public:
 		StateInfo& st,
 		ScoreIndex& score,
 		const bool cutNode
-		)const {
+		)const override {
 		// 非PVノードはスルー☆！（＾ｑ＾）
 	}
 
@@ -206,7 +206,7 @@ public:
 		ScoreIndex& alpha,
 		const TTEntry** ppTtEntry,//セットされるぜ☆
 		Key& posKey
-		)const
+		)const override
 	{
 		// internal iterative deepening
 		if (
@@ -238,14 +238,14 @@ public:
 
 	virtual inline ScoreIndex GetBetaAtStep11(
 		ScoreIndex beta
-		) const {
+		) const override {
 		// PVノードの場合☆（＾ｑ＾）
 		return -ScoreIndex::ScoreInfinite;
 	}
 
 	virtual inline Move GetMoveAtStep11(
 		NextmoveEvent& mp
-		) const {
+		) const override {
 		// 非スプリットポイントの場合
 		return mp.GetNextMove_NonSplitedNode();
 	};
@@ -258,7 +258,7 @@ public:
 		bool& singularExtensionNode,
 		Move& excludedMove,
 		const TTEntry* pTtEntry
-		)const
+		)const override
 	{
 		// ルートはこういう感じ☆（＾ｑ＾）
 		score = bestScore;
@@ -273,7 +273,7 @@ public:
 		const CheckInfo& ci,
 		int& moveCount,
 		SplitedNode** ppSplitedNode
-		) const {
+		) const override {
 			++moveCount;
 	}
 
@@ -294,7 +294,7 @@ public:
 		Depth& newDepth,
 		Flashlight** ppFlashlight,
 		ScoreIndex& beta
-		) const {
+		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -304,21 +304,21 @@ public:
 		Depth& newDepth,
 		const Depth depth,
 		int& moveCount
-		) const {
+		) const override {
 		// PVノードのとき
 		return newDepth - g_reductions.DoReduction_PvNode(depth, moveCount);
 	}
 
 	virtual inline void LockInStep13a(
 		SplitedNode** ppSplitedNode
-		) const
+		) const override
 	{
 		// 非スプリット・ポイントではスルー☆！（＾ｑ＾）
 	}
 	virtual inline void LockAndUpdateBestScoreInStep13a(
 		SplitedNode** ppSplitedNode,
 		ScoreIndex& bestScore
-		) const {
+		) const override {
 		// 非スプリット・ポイントではスルー☆！（＾ｑ＾）
 	}
 
@@ -328,7 +328,7 @@ public:
 		const CheckInfo& ci,
 		int& moveCount,
 		bool& isContinue
-		) const {
+		) const override {
 		// ルートノード、スプリットポイントはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -355,7 +355,7 @@ public:
 		bool& isPVMove,
 		int& playedMoveCount,
 		Move movesSearched[64]
-		)const {
+		)const override {
 
 		// PVノードだぜ☆！（＾ｑ＾）
 		isPVMove = (moveCount == 1);
@@ -365,7 +365,7 @@ public:
 	virtual inline void UpdateAlphaInStep15(
 		ScoreIndex& alpha,
 		SplitedNode** ppSplitedNode
-		) const {
+		) const override {
 
 		// 非スプリットノードではスルー☆！（＾ｑ＾）
 	}
@@ -376,7 +376,7 @@ public:
 		const Depth depth,
 		int& moveCount,
 		const bool cutNode
-		) const {
+		) const override {
 		// Pvノードのとき☆！（＾ｑ＾）
 		(*ppFlashlight)->m_reduction = g_reductions.DoReduction_PvNode(depth, moveCount);
 	}
@@ -385,7 +385,7 @@ public:
 		bool& doFullDepthSearch,
 		ScoreIndex& alpha,
 		SplitedNode** ppSplitedNode
-		)const {
+		)const override {
 		// 非スプリットノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
@@ -393,7 +393,7 @@ public:
 	virtual inline bool IsBetaLargeAtStep16c(
 		ScoreIndex& score,
 		ScoreIndex& beta
-		) const {
+		) const override {
 		// ルートノードの場合☆（＾ｑ＾）
 		return true;
 	}
@@ -402,7 +402,7 @@ public:
 		SplitedNode** ppSplitedNode,
 		ScoreIndex& bestScore,
 		ScoreIndex& alpha
-		)const {
+		)const override {
 		// 非スプリット・ポイントはスルー☆！（＾ｑ＾）
 	}
 
@@ -419,7 +419,7 @@ public:
 		SplitedNode** ppSplitedNode,
 		Move& bestMove,
 		ScoreIndex& beta
-		)const {
+		)const override {
 
 		if (bestScore < score) {
 			bestScore = score;
@@ -437,15 +437,60 @@ public:
 				}
 			}
 		}
+	}
+
+	// 非スプリットポイントでだけ実行するぜ☆（＾ｑ＾）
+	virtual inline void DoStep19(
+		bool& isBreak,
+		Rucksack& rucksack,
+		const Depth depth,
+		Military** ppThisThread,
+		ScoreIndex& bestScore,
+		ScoreIndex& beta,
+		Position& pos,
+		Flashlight** ppFlashlight,
+		ScoreIndex& alpha,
+		Move& bestMove,
+		Move& threatMove,
+		int& moveCount,
+		NextmoveEvent& mp,
+		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
+		const bool cutNode
+		)const override {
+
+		if (rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
+			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
+			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
+		{
+			assert(bestScore < beta);
+			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
+				pos,
+				*ppFlashlight,
+				alpha,
+				beta,
+				bestScore,
+				bestMove,
+				depth,
+				threatMove,
+				moveCount,
+				mp,
+				nodeType,
+				cutNode
+				);
+			if (beta <= bestScore) {
+				isBreak = true;
+				return;
+			}
+		}
 
 	}
 
-	virtual inline bool GetReturnBeforeStep20() const {
+	virtual inline bool GetReturnBeforeStep20() const override {
 		// 非スプリット・ポイントは　ステップ２０を実行する前に途中抜けはしないぜ☆（＾ｑ＾）
 		return false;
 	}
 
-	virtual inline Bound GetBoundAtStep20(bool bestMoveExists) const {
+	virtual inline Bound GetBoundAtStep20(bool bestMoveExists) const override {
 		return bestMoveExists ? Bound::BoundExact : Bound::BoundUpper;
 	}
 

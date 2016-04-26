@@ -1091,24 +1091,8 @@ public:
 		NextmoveEvent& mp,
 		NodeType& nodeType,//スレッドが実行するプログラムを変えます。
 		const bool cutNode
-		)const {
+		)const = 0;
 
-		if (rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
-			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
-			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
-		{
-			assert(bestScore < beta);
-			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
-				pos, *ppFlashlight, alpha, beta, bestScore, bestMove,
-				depth, threatMove, moveCount, mp, nodeType, cutNode
-				);
-			if (beta <= bestScore) {
-				isBreak = true;
-				return;
-			}
-		}
-
-	}
 
 	// スプリット・ポイントは　ステップ２０を実行する前に終了するぜ☆（＾ｑ＾）
 	virtual inline bool GetReturnBeforeStep20() const = 0;
