@@ -371,6 +371,10 @@
     <ClInclude Include="header\n680_egOption\n680_300_engineOptionSetup.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_300_benchmark.hpp" />
+    <ClInclude Include="header\n755_sword___\n755_070_SwordAbstract.hpp" />
+    <ClInclude Include="header\n755_sword___\n755_100_SwordRoot.hpp" />
+    <ClInclude Include="header\n755_sword___\n755_110_SwordPv.hpp" />
+    <ClInclude Include="header\n755_sword___\n755_120_SwordNonPv.hpp" />
     <ClInclude Include="header\n760_thread__\n760_250_military.hpp" />
     <ClInclude Include="header\n760_thread__\n760_300_captain.hpp" />
     <ClInclude Include="header\n760_thread__\n760_350_warrior.hpp" />
@@ -581,6 +585,10 @@
     <ClCompile Include="source\n680_egOption\n680_300_engineOptionSetup.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_300_benchmark.cpp" />
+    <ClCompile Include="source\n755_sword___\n755_070_SwordAbstract.cpp" />
+    <ClCompile Include="source\n755_sword___\n755_100_SwordRoot.cpp" />
+    <ClCompile Include="source\n755_sword___\n755_110_SwordPv.cpp" />
+    <ClCompile Include="source\n755_sword___\n755_120_SwordNonPv.cpp" />
     <ClCompile Include="source\n760_thread__\n760_250_military.cpp" />
     <ClCompile Include="source\n760_thread__\n760_300_captain.cpp" />
     <ClCompile Include="source\n760_thread__\n760_350_warrior.cpp" />

@@ -7,11 +7,9 @@
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n640_searcher/n640_440_splitedNode.hpp"
+#include "../../header/n755_sword___/n755_070_SwordAbstract.hpp"
 #include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
-
-
-class NodetypeAbstract;
 
 
 Military::Military(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
@@ -68,7 +66,7 @@ void Military::ForkNewFighter(
 	const Move threatMove,
 	const int moveCount,
 	NextmoveEvent& mp,
-	const NodetypeAbstract* pNodetype,
+	const SwordAbstract* pSword,
 	const bool cutNode
 	)
 {
@@ -91,7 +89,7 @@ void Military::ForkNewFighter(
 	splitedNode.m_threatMove = threatMove;
 	splitedNode.m_alpha = alpha;
 	splitedNode.m_beta = beta;
-	splitedNode.m_pNodeType01 = pNodetype;	// ノード・タイプ（実行するプログラム）を切り替える変数みたいだぜ☆（＾ｑ＾）
+	splitedNode.m_pSword01 = pSword;	// ノード・タイプ（実行するプログラム）を切り替える変数みたいだぜ☆（＾ｑ＾）
 	splitedNode.m_cutNode = cutNode;
 	splitedNode.m_bestScore = bestScore;
 	splitedNode.m_pNextmoveEvent = &mp;
@@ -146,11 +144,11 @@ void Military::ForkNewFighter(
 template void Military::ForkNewFighter<true >(
 	Position& pos, Flashlight* ss, const ScoreIndex alpha, const ScoreIndex beta, ScoreIndex& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	NextmoveEvent& mp, const NodetypeAbstract* pNodetype, const bool cutNode
+	NextmoveEvent& mp, const SwordAbstract* pSword, const bool cutNode
 );
 
 template void Military::ForkNewFighter<false>(
 	Position& pos, Flashlight* ss, const ScoreIndex alpha, const ScoreIndex beta, ScoreIndex& bestScore,
 	Move& bestMove, const Depth depth, const Move threatMove, const int moveCount,
-	NextmoveEvent& mp, const NodetypeAbstract* pNodetype, const bool cutNode
+	NextmoveEvent& mp, const SwordAbstract* pSword, const bool cutNode
 );

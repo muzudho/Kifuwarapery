@@ -12,7 +12,7 @@
 
 
 class Military;
-class NodetypeAbstract;
+class SwordAbstract;
 
 
 // 元の名前は ＳｐｌｉｔＰｏｉｎｔ☆
@@ -32,7 +32,7 @@ struct SplitedNode {
 	ScoreIndex				m_beta;
 
 	// スプリット・ポイントは　ノード・タイプ別のプログラムを持つぜ☆！（＾ｑ＾）
-	const NodetypeAbstract*	m_pNodeType01;
+	const SwordAbstract*	m_pSword01;
 
 	Move				m_threatMove;
 

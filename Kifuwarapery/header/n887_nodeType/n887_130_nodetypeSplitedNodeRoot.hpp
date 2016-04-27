@@ -23,14 +23,6 @@ extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
 
-	inline void GoSearch_AsSplitedNode(
-		Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp
-	) const override {
-		// スルー☆！（＾ｑ＾）
-		//UNREACHABLE;
-	}
-
-
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
 		ScoreIndex alpha,

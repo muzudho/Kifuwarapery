@@ -10,9 +10,9 @@
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp" // 持ち合い
+#include "../n755_sword___/n755_070_SwordAbstract.hpp"
 
 class Rucksack;
-class NodetypeAbstract;
 
 
 const int g_MaxSplitedNodesPerThread = 8;
@@ -51,7 +51,7 @@ public:
 		const Move threatMove,
 		const int moveCount,
 		NextmoveEvent& mp,
-		const NodetypeAbstract* pNodetype,
+		const SwordAbstract* pSword,
 		const bool cutNode
 	);
 

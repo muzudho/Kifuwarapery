@@ -7,6 +7,7 @@
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n640_searcher/n640_500_reductions.hpp"
+#include "../n755_sword___/n755_110_SwordPv.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
@@ -20,12 +21,6 @@
 // RootNode = false
 class NodetypePv : public NodetypeAbstract {
 public:
-
-	// 依存関係の都合上、インラインにはしないぜ☆（＾ｑ＾）
-	void GoSearch_AsSplitedNode(
-		Rucksack& rucksack, Position& pos, Flashlight* ss, SplitedNode& sp
-		) const override;
-
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
@@ -440,7 +435,7 @@ public:
 				threatMove,
 				moveCount,
 				mp,
-				this,
+			    &g_SWORD_PV,
 				cutNode
 				);
 			if (beta <= bestScore) {

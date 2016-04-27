@@ -327,11 +327,11 @@ void Military::IdleLoop() {
 			SplitedNode* pSplitedNode = m_activeSplitedNode;
 			m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 
-			Flashlight ss[g_maxPlyPlus2];
+			Flashlight flashlightArr[g_maxPlyPlus2];
 			Position pos(*pSplitedNode->m_position, this);
 
-			memcpy(ss, pSplitedNode->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
-			(ss+1)->m_splitedNode = pSplitedNode;
+			memcpy(flashlightArr, pSplitedNode->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
+			(flashlightArr+1)->m_splitedNode = pSplitedNode;
 
 			pSplitedNode->m_mutex.lock();
 
@@ -341,7 +341,12 @@ void Military::IdleLoop() {
 
 
 			// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
-			pSplitedNode->m_pNodeType01->GoSearch_AsSplitedNode(*m_pRucksack, pos, ss, *pSplitedNode);
+			pSplitedNode->m_pSword01->GoSearch_AsSplitedNode(
+				*pSplitedNode,
+				*m_pRucksack,
+				pos,
+				flashlightArr
+			);
 
 
 			assert(m_searching);

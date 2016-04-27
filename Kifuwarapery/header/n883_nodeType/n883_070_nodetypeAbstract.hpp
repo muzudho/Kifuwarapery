@@ -76,16 +76,6 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 class NodetypeAbstract {
 public:
 
-	// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
-	// 依存関係の都合上、インラインにはしないぜ☆（＾ｑ＾）
-	virtual void GoSearch_AsSplitedNode(
-		Rucksack& searcher,
-		Position& pos,
-		Flashlight* ss,
-		SplitedNode& sp
-	) const = 0;
-
-
 	ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,

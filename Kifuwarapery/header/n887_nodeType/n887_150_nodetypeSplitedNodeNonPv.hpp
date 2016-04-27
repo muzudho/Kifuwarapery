@@ -18,14 +18,6 @@
 class NodetypeSplitedNodeNonPv : public NodetypeAbstract {
 public:
 
-	inline void GoSearch_AsSplitedNode(
-		Rucksack& searcher, Position& pos, Flashlight* ss, SplitedNode& sp
-		) const override {
-		// スルー☆！（＾ｑ＾）
-		//UNREACHABLE;
-	}
-
-
 	inline void DoStep1c(
 		Military** ppThisThread,
 		const Flashlight* pFlashlight
