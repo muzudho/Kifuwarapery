@@ -12,13 +12,14 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_670_makePromoteMove.hpp"
+#include "n350_030_makePromoteMove.hpp""
 #include "n350_040_ptEvent.hpp"
 #include "n350_045_pieceTypeSeeEvent.hpp"
 #include "n350_070_ptAbstract.hpp"
 
 
-const static Move g_PTKNIGHT_AS_MOVE = ConvMove::FROM_PIECE_TYPE10(PieceType::N03_Knight);
+const static Move g_PTKNIGHT_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N03_Knight);
+const static Move g_PTKNIGHT_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N03_Knight);
 
 
 // PieceType::N03_Knight
@@ -26,7 +27,7 @@ class PtKnight : public PtAbstract {
 public:
 
 	virtual Move AsMove() const override {
-		return g_PTKNIGHT_AS_MOVE;
+		return g_PTKNIGHT_ONBOARD_AS_MOVE;
 	}
 
 	Bitboard GetAttacks2From(const PieceTypeEvent& ptEvent) const override {

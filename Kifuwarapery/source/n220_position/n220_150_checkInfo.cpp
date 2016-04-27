@@ -5,7 +5,7 @@
 #include "../../header/n160_board___/n160_100_bitboard.hpp"
 #include "../../header/n220_position/n220_150_checkInfo.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
+#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
 #include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_110_ptPawn.hpp"
 #include "../../header/n350_pieceTyp/n350_120_ptLance.hpp"

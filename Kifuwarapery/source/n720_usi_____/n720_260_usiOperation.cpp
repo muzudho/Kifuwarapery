@@ -3,7 +3,8 @@
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_600_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
+
+#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
@@ -166,7 +167,7 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 			return g_MOVE_NONE;
 		}
 		const Square to = ConvSquare::FROM_FILE_RANK10(toFile, toRank);
-		move = ConvMove::Convert30_MakeDropMove(ptTo, to);
+		move = ConvMove::Convert30_MakeDropMove_old(ptTo, to);
 	}
 	else {
 		const File fromFile = ConvFile::FROM_CHAR_USI10(moveStr[0]);
@@ -182,14 +183,18 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = ConvSquare::FROM_FILE_RANK10(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+				ConvMove::FROM_PIECETYPE_ONBOARD10( ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from))), // （＾ｑ＾）
+				from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return g_MOVE_NONE;
 			}
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
-			MakePromoteMove::APPEND_PROMOTE_FLAG(move);//, N00_Capture, UtilPiece::ToPieceType(pos.GetPiece(from))
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+				ConvMove::FROM_PIECETYPE_ONBOARD10( ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from))),
+				from, to, pos);
+			MakePromoteMove::APPEND_PROMOTE_FLAG(move);
 		}
 		else {
 			return g_MOVE_NONE;
@@ -222,7 +227,7 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 	Move move;
 	if (moveStr[0] == '0' && moveStr[1] == '0') {
 		// drop
-		move = ConvMove::Convert30_MakeDropMove(ptTo, to);
+		move = ConvMove::Convert30_MakeDropMove_old(ptTo, to);
 	}
 	else {
 		const File fromFile = ConvFile::FROM_CHAR_CSA10(moveStr[0]);
@@ -234,11 +239,15 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ptFrom, from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+				ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom),
+				from, to, pos);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ptFrom, from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+				ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom),
+				from, to, pos);
 			MakePromoteMove::APPEND_PROMOTE_FLAG(move);//, N00_Capture, ptFrom
 		}
 		else {

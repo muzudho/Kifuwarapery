@@ -216,7 +216,6 @@
     <ClInclude Include="header\n220_position\n220_640_utilAttack.hpp" />
     <ClInclude Include="header\n220_position\n220_660_utilMovePos.hpp" />
     <ClInclude Include="header\n220_position\n220_665_utilMoveStack.hpp" />
-    <ClInclude Include="header\n220_position\n220_670_makePromoteMove.hpp" />
     <ClInclude Include="header\n220_position\n220_750_charToPieceUSI.hpp" />
     <ClInclude Include="header\n220_position\n220_400_evalList.hpp" />
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp" />
@@ -229,6 +228,7 @@
     <ClInclude Include="header\n080_common__\n080_100_common.hpp" />
     <ClInclude Include="header\n080_common__\n080_150_overloadEnumOperators.hpp" />
     <ClInclude Include="header\n160_board___\n160_600_bitboardAll.hpp" />
+    <ClInclude Include="header\n350_pieceTyp\n350_030_makePromoteMove.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_040_ptEvent.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_045_pieceTypeSeeEvent.hpp" />
     <ClInclude Include="header\n350_pieceTyp\n350_070_ptAbstract.hpp" />
@@ -446,7 +446,6 @@
     <ClCompile Include="source\n163_sqDistan\n163_600_utilSquareDistance.cpp" />
     <ClCompile Include="source\n165_movStack\n165_400_move.cpp" />
     <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp" />
-    <ClCompile Include="source\n165_movStack\n165_700_makePromoteMove.cpp" />
     <ClCompile Include="source\n205_repeType\n886_070_rtAbstract.cpp" />
     <ClCompile Include="source\n205_repeType\n886_100_rtNot.cpp" />
     <ClCompile Include="source\n205_repeType\n886_110_rtDraw.cpp" />
@@ -461,6 +460,7 @@
     <ClCompile Include="source\n220_position\n220_750_charToPieceUSI.cpp" />
     <ClCompile Include="source\n220_position\n220_400_evalList.cpp" />
     <ClCompile Include="source\n223_move____\n223_300_moveAndScoreIndex.cpp" />
+    <ClCompile Include="source\n350_pieceTyp\n350_030_makePromoteMove.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_070_ptAbstract.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_080_ptPromote.cpp" />
     <ClCompile Include="source\n350_pieceTyp\n350_100_ptOccupied.cpp" />

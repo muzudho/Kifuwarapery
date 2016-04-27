@@ -16,19 +16,47 @@
 class MakePromoteMove {
 public:
 
-	//(^q^)新型
+	//(^q^)新型2
 	// MoveType によって指し手生成関数を使い分ける。
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	static inline Move GetSelectedMakeMove_ExceptPromote_mt(MoveType mt, const PieceType pt, const Square from, const Square to, const Position& pos) {
+	static inline Move GetSelectedMakeMove_ExceptPromote_mt2(
+		MoveType mt,
+		const Move pieceTypeAsMove, // これ Move にならないのかだぜ☆？（＾ｑ＾）？
+		const Square from, const Square to, const Position& pos) {
+
 		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
-			ConvMove::FROM_PT_SRC_DST30(pt, from, to) :
-			UtilMovePos::MakeCaptureMove(pt, from, to, pos)
+			ConvMove::FROM_PT_SRC_DST20(
+				pieceTypeAsMove,
+				from, to) :
+			UtilMovePos::MakeCaptureMove(
+				pieceTypeAsMove,// これ Move にならないのかだぜ☆？（＾ｑ＾）？
+				from, to, pos)
+			);
+		return move;
+	}
+	//(^q^)新型1
+	// MoveType によって指し手生成関数を使い分ける。
+	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
+	static inline Move GetSelectedMakeMove_ExceptPromote_mt1(
+		MoveType mt,
+		const PieceType pt, // 新型２ならここを Move にできるぜ☆（＾ｑ＾）
+		const Square from, const Square to, const Position& pos) {
+
+		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）
+		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
+			ConvMove::FROM_PT_SRC_DST20(
+				ConvMove::FROM_PIECETYPE_ONBOARD10(pt),
+			from, to) :
+			UtilMovePos::MakeCaptureMove(
+				ConvMove::FROM_PIECETYPE_ONBOARD10( pt),
+			from, to, pos)
 		);
 		return move;
 	}
+
 	// 非キャプチャー系と分かっているならこちら☆（＾ｑ＾）
-	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(// 新型☆（＾ｑ＾）
+	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(
 		const Move pieceTypeAsMove,
 		const Square from,
 		const Square to,
@@ -36,15 +64,6 @@ public:
 		) {
 		//MoveType mt_forAssert, assert(!(mt_forAssert == N01_NonCapture || mt_forAssert == N04_NonCaptureMinusPro), "");
 		return UtilMovePos::MakeCaptureMove(pieceTypeAsMove, from, to, pos);
-	}
-	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(// 旧型☆（＾ｑ＾）
-		const PieceType pt, // TODO: ここをムーブにできないか☆？（＾ｑ＾） FIXME: ピースタイプで分けないとダメなのかだぜ☆？（＾ｑ＾）？
-		const Square from,
-		const Square to,
-		const Position& pos
-	) {
-		//MoveType mt_forAssert, assert(!(mt_forAssert == N01_NonCapture || mt_forAssert == N04_NonCaptureMinusPro), "");
-		return UtilMovePos::MakeCaptureMove(pt, from, to, pos);
 	}
 
 	static inline void APPEND_PROMOTE_FLAG(Move& move)

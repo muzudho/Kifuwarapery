@@ -338,12 +338,13 @@ private:
 
 	static Key GetZobHand(const HandPiece hp, const Color c);
 
-	// byTypeBB は敵、味方の駒を区別しない。
-	Bitboard m_byTypeBB_[N15_PieceTypeNum];
+	// このポジションをピースタイプ毎にビットボードにしたもの。（byTypeBB は敵、味方の駒を区別しない）
+	Bitboard m_BB_ByPiecetype_[g_PIECETYPE_NUM];
 
-	// byColorBB は駒の種類を区別しない。
-	Bitboard m_byColorBB_[ColorNum];
+	// このポジションを白黒毎にビットボードにしたもの。（byColorBB は駒の種類を区別しない）
+	Bitboard m_BB_ByColor_[ColorNum];
 
+	// このポジションのカナゴマをビットボードにしたもの。
 	Bitboard m_goldsBB_;
 
 	// 各マスの状態

@@ -15,7 +15,7 @@
 #include "n350_070_ptAbstract.hpp"
 
 
-const static Move g_PTPROMOTE_AS_MOVE = ConvMove::FROM_PIECE_TYPE10(PieceType::PTPromote);
+const static Move g_PTPROMOTE_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::PTPromote);
 
 
 // PieceType::PTPromote;

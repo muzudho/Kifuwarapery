@@ -10,8 +10,8 @@
 #include "../../header/n165_movStack/n165_500_moveStack.hpp"
 #include "../../header/n165_movStack/n165_600_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 
+#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
 #include "../../header/n350_pieceTyp/n350_040_ptEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_045_pieceTypeSeeEvent.hpp"
 #include "../../header/n350_pieceTyp/n350_070_ptAbstract.hpp"

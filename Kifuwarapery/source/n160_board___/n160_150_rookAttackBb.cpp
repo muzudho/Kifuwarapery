@@ -75,7 +75,7 @@ Bitboard RookAttackBb::RookAttackCalc(const Square square, const Bitboard& occup
 		ConvSquare::CONTAINS_OF10(sq) && abs(ConvSquare::TO_RANK10(sq - delta) - ConvSquare::TO_RANK10(sq)) <= 1;
 			sq += delta)
 		{
-			g_setMaskBb.SetBit(&result, sq);
+			g_setMaskBb.AddBit(&result, sq);
 			if (g_setMaskBb.IsSet(&occupied, sq))
 				break;
 		}

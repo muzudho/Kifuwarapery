@@ -9,6 +9,7 @@
 #include "../n160_board___/n160_600_bitboardAll.hpp"
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n350_pieceTyp/n350_110_ptPawn.hpp"
 #include "../n358_dropMake/n358_100_dropMakerHand0.hpp"
 #include "../n358_dropMake/n358_110_dropMakerHand1.hpp"
 #include "../n358_dropMake/n358_120_dropMakerHand2.hpp"
@@ -85,7 +86,7 @@ public:
 					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
-						(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove(N01_Pawn, pawnDropCheckSquare);
+						(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove_da(g_PTPAWN_DA_AS_MOVE, pawnDropCheckSquare);
 					}
 					g_setMaskBb.XorBit(&toBB, pawnDropCheckSquare);
 				}
@@ -93,7 +94,7 @@ public:
 
 			Square to;
 			FOREACH_BB(toBB, to, {
-				(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove(N01_Pawn, to);
+				(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove_da(g_PTPAWN_DA_AS_MOVE, to);
 			});
 		}
 

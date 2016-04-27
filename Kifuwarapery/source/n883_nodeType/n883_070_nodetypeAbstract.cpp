@@ -9,13 +9,13 @@
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 #include "../../header/n220_position/n220_665_utilMoveStack.hpp"
-#include "../../header/n220_position/n220_670_makePromoteMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
 
+#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"

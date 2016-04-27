@@ -64,7 +64,7 @@ public:
 			const Square to = bb.PopFirstOneFromI9();
 			// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 			// attackersTo() が重いので、ＭｏｖｅＰｉｃｋｅｒ か search で合法手か調べる。
-			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(N08_King, ksq, to, pos);
+			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory( g_PTKING_ONBOARD_AS_MOVE, ksq, to, pos);
 			moveStackList++;
 		}
 

@@ -28,18 +28,18 @@ public:
 			while (toBB.GetP(0)) {
 				Square iTo = toBB.PopFirstOneRightFromI9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
 					pMovestack++;
 				};
 			}
 			while (toBB.GetP(1)) {
 				Square iTo = toBB.PopFirstOneLeftFromB9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightLanceIdx + 1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightLanceIdx + 0], iTo);
 					pMovestack++;
 				};
 			}
@@ -57,18 +57,18 @@ public:
 			while (toBB.GetP(0)) {
 				Square iTo = toBB.PopFirstOneRightFromI9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
 					pMovestack++;
 				};
 			}
 			while (toBB.GetP(1)) {
 				Square iTo = toBB.PopFirstOneLeftFromB9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightIdx + 1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[dmEvent.m_noKnightIdx + 0], iTo);
 					pMovestack++;
 				};
 			}
@@ -86,18 +86,18 @@ public:
 			while (toBB.GetP(0)) {
 				Square iTo = toBB.PopFirstOneRightFromI9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[0], iTo);
 					pMovestack++;
 				};
 			}
 			while (toBB.GetP(1)) {
 				Square iTo = toBB.PopFirstOneLeftFromB9();
 				{
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[1], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[1], iTo);
 					pMovestack++;
-					pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[0], iTo);
+					pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[0], iTo);
 					pMovestack++;
 				};
 			}

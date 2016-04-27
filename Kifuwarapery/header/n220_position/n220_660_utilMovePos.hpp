@@ -12,45 +12,46 @@
 class UtilMovePos {
 public:
 
-	// 移動先と、Position から （取った駒の種類 CapturedPieceType を判別し）　指し手に変換
+	// 取った駒を Move書式に変換☆
 	// 駒を取らないときは、0 (MoveNone) を返す。
-	static inline Move GetCapturedPieceType2Move2(const Square dst, const Position& pos) {
+	static inline Move GET_CAPTURED_PIECE_FROM_SQ(const Square dst, const Position& pos) {
 
-		const PieceType captured = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(dst));
-
-		return ConvMove::FROM_CAPTURED_PIECE_TYPE10(captured);
+		// 盤面から計算で求めるぜ☆（＾ｑ＾）
+		return ConvMove::FROM_CAPTURED_PIECE_TYPE10(
+			ConvPiece::TO_PIECE_TYPE10(
+				pos.GetPiece(dst)//取った駒☆
+				)
+			);
 	}
 
 	// 取った駒を判別する必要がある。
 	// この関数は駒を取らないときにも使える。
-	static inline Move MakeCaptureMove( // 新型☆（＾ｑ＾）
+	static inline Move MakeCaptureMove(
 		const Move pieceTypeAsMove,
 		const Square from,
 		const Square to,
 		const Position& pos
 		) {
 
-		return UtilMovePos::GetCapturedPieceType2Move2(to, pos) |
-			ConvMove::FROM_PT_SRC_DST20( pieceTypeAsMove, from,	to);
-	}
-	static inline Move MakeCaptureMove( // 旧型☆（＾ｑ＾）
-		const PieceType pt, // ここをムーブにできないか☆（＾ｑ＾）
-		const Square from,
-		const Square to,
-		const Position& pos
-		) {
-
-		return UtilMovePos::GetCapturedPieceType2Move2(to, pos) |
-			ConvMove::FROM_PT_SRC_DST30(
-				pt,// ピースタイプを、ムーブに変換する決まりきった処理☆
-				from,
-				to
-			);
+		return
+			UtilMovePos::GET_CAPTURED_PIECE_FROM_SQ(to, pos)
+			|
+			ConvMove::FROM_PT_SRC_DST20( pieceTypeAsMove, from,	to)
+			;
 	}
 
 	// makeCaptureMove() かつ 成り
-	static inline Move MakeCapturePromoteMove(const PieceType pt, const Square from, const Square to, const Position& pos) {
-		return UtilMovePos::MakeCaptureMove(pt, from, to, pos) | g_MOVE_PROMOTE_FLAG;//UtilMove::GetPromoteFlag()
+	static inline Move MakeCapturePromoteMove(
+		const Move pieceTypeAsMove,
+		const Square from,
+		const Square to,
+		const Position& pos
+	) {
+		return
+			UtilMovePos::MakeCaptureMove(pieceTypeAsMove, from, to, pos)
+			|
+			g_MOVE_PROMOTE_FLAG
+			;
 	}
 
 };

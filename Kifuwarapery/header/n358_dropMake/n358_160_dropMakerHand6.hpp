@@ -47,32 +47,32 @@ public:
 		//do {
 		while (toBB.GetP(0)) {
 			Square iTo = toBB.PopFirstOneRightFromI9();
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[5], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[5], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[4], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[4], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[3], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[3], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[2], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[2], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[1], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[1], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[0], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[0], iTo);
 			pMovestack++;
 		}
 		while (toBB.GetP(1)) {
 			Square iTo = toBB.PopFirstOneLeftFromB9();
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[5], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[5], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[4], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[4], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[3], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[3], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[2], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[2], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[1], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[1], iTo);
 			pMovestack++;
-			pMovestack->m_move = ConvMove::Convert30_MakeDropMove(haveHandArr[0], iTo);
+			pMovestack->m_move = ConvMove::Convert30_MakeDropMove_old(haveHandArr[0], iTo);
 			pMovestack++;
 		}
 		//} while (false);

@@ -28,3 +28,5 @@ enum PieceType {
 	N16_GoldHorseDragon // 単にtemnplate引数として使用
 };
 OverloadEnumOperators(PieceType);
+
+static const int g_PIECETYPE_NUM = PieceType::N15_PieceTypeNum; // TODO: 列挙型のサイズは、列挙型の外に出したいぜ☆（＾ｑ＾）

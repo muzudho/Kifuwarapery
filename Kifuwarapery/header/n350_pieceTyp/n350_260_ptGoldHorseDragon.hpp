@@ -10,7 +10,7 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n165_movStack/n165_600_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_670_makePromoteMove.hpp"
+#include "n350_030_makePromoteMove.hpp"
 #include "n350_040_ptEvent.hpp"
 #include "n350_045_pieceTypeSeeEvent.hpp"
 #include "n350_070_ptAbstract.hpp"

@@ -108,7 +108,7 @@ public:
 
 	bool IsSet(const Bitboard* thisBitboard, const Square sq) const;
 
-	void SetBit(Bitboard* thisBitboard, const Square sq) const;
+	void AddBit(Bitboard* thisBitboard, const Square sq) const;
 
 public:
 	Bitboard IndexToOccupied(const int index, const int bits, const Bitboard& blockMask) const;

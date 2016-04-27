@@ -18,7 +18,7 @@ namespace {
 	//────────────────────────────────────────────────────────────────────────────────
 	// 非クラスメンバ 秘密 静的グローバル・オブジェクト
 	//────────────────────────────────────────────────────────────────────────────────
-	static const std::string g_CONV_PIECE_TYPE_STRING_TABLE[PieceType::N15_PieceTypeNum] = {
+	static const std::string g_CONV_PIECE_TYPE_STRING_TABLE[g_PIECETYPE_NUM] = {
 		"", "FU", "KY", "KE", "GI", "KA", "HI", "KI", "OU", "TO", "NY", "NK", "NG", "UM", "RY"
 	};
 
@@ -27,7 +27,7 @@ namespace {
 	//────────────────────────────────────────────────────────────────────────────────
 	// pc が遠隔駒であるか
 	static inline constexpr bool G_IS_SLIDER10(const PieceType pt) { return (g_CONV_PIECE_TYPE_SLIDER_VAL & (1 << pt)) != 0; }
-	static const bool g_CONV_PIECE_TYPE_IS_SLIDER[PieceType::N15_PieceTypeNum] = {
+	static const bool g_CONV_PIECE_TYPE_IS_SLIDER[g_PIECETYPE_NUM] = {
 		G_IS_SLIDER10(PieceType::N00_Occupied),
 		G_IS_SLIDER10(PieceType::N01_Pawn),
 		G_IS_SLIDER10(PieceType::N02_Lance),

@@ -11,6 +11,6 @@ enum HandPiece {
 OverloadEnumOperators(HandPiece);
 
 
-extern const HandPiece g_pieceTypeToHandPieceTable[N15_PieceTypeNum];
+extern const HandPiece g_PIECETYPE_TO_HANDPIECE_TABLE[g_PIECETYPE_NUM];
 
 

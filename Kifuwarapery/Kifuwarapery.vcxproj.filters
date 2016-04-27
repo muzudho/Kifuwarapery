@@ -435,9 +435,6 @@
     <ClInclude Include="header\n220_position\n220_660_utilMovePos.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n220_position\n220_670_makePromoteMove.hpp">
-      <Filter>header\n220_position</Filter>
-    </ClInclude>
     <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp">
       <Filter>header\n225_movPhase</Filter>
     </ClInclude>
@@ -1017,6 +1014,9 @@
     <ClInclude Include="header\n755_sword___\n755_120_SwordNonPv.hpp">
       <Filter>header\n755_sword___</Filter>
     </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_030_makePromoteMove.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1132,9 +1132,6 @@
     </ClCompile>
     <ClCompile Include="source\n220_position\n220_640_utilAttack.cpp">
       <Filter>source\n220_position</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n165_movStack\n165_700_makePromoteMove.cpp">
-      <Filter>source\n165_movStack</Filter>
     </ClCompile>
     <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp">
       <Filter>source\n720_usi_____</Filter>
@@ -1627,6 +1624,9 @@
     </ClCompile>
     <ClCompile Include="source\n755_sword___\n755_120_SwordNonPv.cpp">
       <Filter>source\n755_sword___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n350_pieceTyp\n350_030_makePromoteMove.cpp">
+      <Filter>source\n350_pieceTyp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

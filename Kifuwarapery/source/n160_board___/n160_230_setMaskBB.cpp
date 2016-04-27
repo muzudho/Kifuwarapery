@@ -30,7 +30,7 @@ bool SetMaskBb::IsSet(const Bitboard* thisBitboard, const Square sq) const
 	return thisBitboard->AndIsNot0(g_setMaskBb.m_setMaskBB_[sq]);
 }
 
-void SetMaskBb::SetBit(Bitboard* thisBitboard, const Square sq) const
+void SetMaskBb::AddBit(Bitboard* thisBitboard, const Square sq) const
 {
 	*thisBitboard |= g_setMaskBb.m_setMaskBB_[sq];
 }
@@ -47,7 +47,7 @@ Bitboard SetMaskBb::IndexToOccupied(const int index, const int bits, const Bitbo
 	for (int i = 0; i < bits; ++i) {
 		const Square sq = tmpBlockMask.PopFirstOneFromI9();
 		if (index & (1 << i))
-			this->SetBit(&result, sq);
+			this->AddBit(&result, sq);
 	}
 	return result;
 }

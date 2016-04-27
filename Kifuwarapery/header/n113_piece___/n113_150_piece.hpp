@@ -42,3 +42,6 @@ enum Piece {
 	N31_PieceNone // PieceNone = 31  これを 32 にした方が多重配列のときに有利か。
 };
 OverloadEnumOperators(Piece);
+
+static const int g_PIECE_NUM = 32;//列挙型の主に使う要素の数
+

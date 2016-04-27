@@ -60,7 +60,7 @@ Bitboard BishopAttackBb::BishopBlockMaskCalc(const Square square) const {
 		const Rank r = ConvSquare::TO_RANK10(sq);
 		const File f = ConvSquare::TO_FILE10(sq);
 		if (abs(rank - r) == abs(file - f))
-			g_setMaskBb.SetBit(&result, sq);
+			g_setMaskBb.AddBit(&result, sq);
 	}
 	result &= ~(
 		g_rankMaskBb.GetRankMask<Rank1>() |
@@ -83,7 +83,7 @@ Bitboard BishopAttackBb::BishopAttackCalc(const Square square, const Bitboard& o
 		ConvSquare::CONTAINS_OF10(sq) && abs(ConvSquare::TO_RANK10(sq - delta) - ConvSquare::TO_RANK10(sq)) <= 1;
 			sq += delta)
 		{
-			g_setMaskBb.SetBit(&result, sq);
+			g_setMaskBb.AddBit(&result, sq);
 			if (g_setMaskBb.IsSet(&occupied, sq))
 				break;
 		}

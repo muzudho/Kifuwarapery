@@ -130,17 +130,17 @@ MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fN
 			const Square to = tmp.To();
 			if (tmp.IsDrop()) {
 				const PieceType ptDropped = tmp.GetPieceTypeDropped();
-				move = ConvMove::Convert30_MakeDropMove(ptDropped, to);
+				move = ConvMove::Convert30_MakeDropMove_old(ptDropped, to);
 			}
 			else {
+				// 定跡の手（持ち駒以外）を、ムーブの書式に変換している？？（＾ｑ＾）？
 				const Square from = tmp.From();
-				const PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(position.GetPiece(from));
-				const bool promo = tmp.IsPromotion();
-				if (promo) {
-					move = UtilMovePos::MakeCapturePromoteMove(ptFrom, from, to, position);
+				const Move fromMove = ConvMove::FROM_PIECETYPE_ONBOARD10(ConvPiece::TO_PIECE_TYPE10(position.GetPiece(from)));
+				if (tmp.IsPromotion()) {
+					move = UtilMovePos::MakeCapturePromoteMove(	fromMove, from, to, position);
 				}
 				else {
-					move = UtilMovePos::MakeCaptureMove(ptFrom, from, to, position);
+					move = UtilMovePos::MakeCaptureMove( fromMove, from, to, position);
 				}
 			}
 			score = entry.m_score;
