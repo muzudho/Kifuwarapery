@@ -18,25 +18,22 @@
 class DropMakerAbstract {
 public:
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank9ExceptNL(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank8ExceptN(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
-	// テンプレートを使っている関数で使うには、static にするしかないぜ☆（＾ｑ＾）
 	virtual MoveStack* MakeDropMovesToRank1234567(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
 };

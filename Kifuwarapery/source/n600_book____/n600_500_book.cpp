@@ -130,7 +130,7 @@ MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fN
 			const Square to = tmp.To();
 			if (tmp.IsDrop()) {
 				const PieceType ptDropped = tmp.GetPieceTypeDropped();
-				move = ConvMove::Convert30_MakeDropMove_old(ptDropped, to);
+				move = ConvMove::Convert30_MakeDropMove_da(ConvMove::FROM_PIECETYPE_DA10(ptDropped), to);
 			}
 			else {
 				// 定跡の手（持ち駒以外）を、ムーブの書式に変換している？？（＾ｑ＾）？

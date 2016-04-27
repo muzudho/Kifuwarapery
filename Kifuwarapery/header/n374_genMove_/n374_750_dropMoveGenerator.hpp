@@ -101,7 +101,11 @@ public:
 
 		// 歩 以外の駒を持っているか
 		if (Hand::ExceptPawnExists(hand)) {
+
+
 			PieceType haveHandArr[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
+									  // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
+
 			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
 								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
@@ -136,7 +140,7 @@ public:
 			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightLanceIdx]->MakeDropMovesToRank9ExceptNL(
 				pMovestack,
 				dmEvent,
-				haveHandArr
+				haveHandArr // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 				);
 
 			// 桂馬以外の持ち駒があれば、
@@ -144,14 +148,14 @@ public:
 			pMovestack = this->m_pDropMakerArray[haveHandNum - noKnightIdx]->MakeDropMovesToRank8ExceptN(
 				pMovestack,
 				dmEvent,
-				haveHandArr
+				haveHandArr // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 				);
 
 			// 一、二段目以外に対して、全ての持ち駒の指し手を生成。
 			pMovestack = this->m_pDropMakerArray[haveHandNum]->MakeDropMovesToRank1234567(
 				pMovestack,
 				dmEvent,
-				haveHandArr
+				haveHandArr // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 				);
 		}
 

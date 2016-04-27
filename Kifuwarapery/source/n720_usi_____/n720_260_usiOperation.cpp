@@ -167,7 +167,7 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 			return g_MOVE_NONE;
 		}
 		const Square to = ConvSquare::FROM_FILE_RANK10(toFile, toRank);
-		move = ConvMove::Convert30_MakeDropMove_old(ptTo, to);
+		move = ConvMove::Convert30_MakeDropMove_da(ConvMove::FROM_PIECETYPE_DA10(ptTo), to);
 	}
 	else {
 		const File fromFile = ConvFile::FROM_CHAR_USI10(moveStr[0]);
@@ -227,7 +227,7 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 	Move move;
 	if (moveStr[0] == '0' && moveStr[1] == '0') {
 		// drop
-		move = ConvMove::Convert30_MakeDropMove_old(ptTo, to);
+		move = ConvMove::Convert30_MakeDropMove_da(ConvMove::FROM_PIECETYPE_DA10(ptTo), to);
 	}
 	else {
 		const File fromFile = ConvFile::FROM_CHAR_CSA10(moveStr[0]);

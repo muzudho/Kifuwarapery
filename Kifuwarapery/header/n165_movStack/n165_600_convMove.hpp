@@ -123,21 +123,7 @@ public:
 		const Move pieceTypeAsDaMove,
 		const Square to) {
 		return
-			// 打とうとしている駒の種類（TODO: PieceType を HandPiece に変更したい）を、持駒用の特別升番号（from）に変換☆
-			// これを Move書式に 再フォーマット☆
-			pieceTypeAsDaMove//暗算表を使うぜ☆（＾ｑ＾）
-			|
-			static_cast<Move>(to) // 移動先の Square→Move は、書式変換要らず☆（＾ｑ＾）
-			;
-	}
-	// 駒を打つ手の符号（Move）を作成するぜ☆（＾ｑ＾）
-	static inline Move Convert30_MakeDropMove_old(
-		const PieceType pt,// TODO:これをムーブ（打）にできないかだぜ☆？（＾ｑ＾）
-		const Square to) {
-		return 
-			// 打とうとしている駒の種類（TODO: PieceType を HandPiece に変更したい）を、持駒用の特別升番号（from）に変換☆
-			// これを Move書式に 再フォーマット☆
-			g_CONV_MOVE_PT_TO_DA_MOVE[pt]//暗算表を使うぜ☆（＾ｑ＾）
+			pieceTypeAsDaMove//（打とうとしている駒の種類の）打のMove書式だぜ☆（＾ｑ＾）
 			|
 			static_cast<Move>(to) // 移動先の Square→Move は、書式変換要らず☆（＾ｑ＾）
 			;
