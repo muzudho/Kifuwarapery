@@ -28,5 +28,5 @@ public:
 
 
 	// pc が遠隔駒であるか
-	static inline bool IS_SLIDER10(const Piece     pc) { return (ConvPieceType::SLIDER_VAL & (1 << pc)) != 0; }
+	static inline bool IS_SLIDER10(const Piece     pc) { return (g_CONV_PIECE_TYPE_SLIDER_VAL & (1 << pc)) != 0; }
 };
