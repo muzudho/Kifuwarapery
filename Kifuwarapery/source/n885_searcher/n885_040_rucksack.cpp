@@ -30,9 +30,10 @@
 #include "../../header/n640_searcher/n640_520_futilityMoveCounts.hpp"
 #include "../../header/n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
+#include "../../header/n755_sword___/n755_070_SwordAbstract.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
-
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
+
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
@@ -43,10 +44,7 @@ using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
-
-//class NodetypeAbstract;
-extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
-
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
@@ -327,11 +325,11 @@ void Military::IdleLoop() {
 			SplitedNode* pSplitedNode = m_activeSplitedNode;
 			m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 
-			Flashlight flashlightArr[g_maxPlyPlus2];
+			Flashlight ss[g_maxPlyPlus2];
 			Position pos(*pSplitedNode->m_position, this);
 
-			memcpy(flashlightArr, pSplitedNode->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
-			(flashlightArr+1)->m_splitedNode = pSplitedNode;
+			memcpy(ss, pSplitedNode->m_pFlashlightBox - 1, 4 * sizeof(Flashlight));
+			(ss+1)->m_splitedNode = pSplitedNode;
 
 			pSplitedNode->m_mutex.lock();
 
@@ -342,11 +340,7 @@ void Military::IdleLoop() {
 
 			// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
 			pSplitedNode->m_pSword01->GoSearch_AsSplitedNode(
-				*pSplitedNode,
-				*m_pRucksack,
-				pos,
-				flashlightArr
-			);
+				*pSplitedNode, *m_pRucksack, pos, ss);
 
 
 			assert(m_searching);

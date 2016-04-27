@@ -10,7 +10,7 @@
 
 // サーチ☆
 // 主に、反復深化探索の中で呼び出される☆
-const NodetypeAbstract* g_NODETYPE_PROGRAMS[6] = {
+NodetypeAbstract* g_NODETYPE_PROGRAMS[6] = {
 	&g_NODETYPE_ROOT,
 	&g_NODETYPE_PV,
 	&g_NODETYPE_NON_PV,

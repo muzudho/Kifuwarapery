@@ -12,10 +12,6 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
-//#include "../n887_nodeType/n887_140_nodetypeSplitedNodePv.hpp"//FIXME:
-//extern const NodetypeSplitedNodePv g_NODETYPE_SPLITEDNODE_PV;
-
-
 // PvNode = true
 // SplitedNode = false
 // RootNode = false
@@ -117,7 +113,7 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9_NonPv(
+	virtual inline void DoStep9(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -164,7 +160,8 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			this->GoToTheAdventure_new(	rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
+				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
 
@@ -189,26 +186,26 @@ public:
 		return mp.GetNextMove_NonSplitedNode();
 	};
 
-	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
-		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
-		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
-		const Move& ttMove,
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
 		const Depth depth,
-		const ScoreIndex bestScore,
-		const Move& excludedMove,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		isSingularExtensionNode = 8 * Depth::OnePly <= depth
+		singularExtensionNode = 8 * Depth::OnePly <= depth
 			&& !ttMove.IsNone()
 			&& excludedMove.IsNone()
 			&& (pTtEntry->GetType() & Bound::BoundLower)
 			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
-	virtual inline void DoStep11d_LoopHeader(
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
@@ -217,22 +214,22 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11e_LoopHeader(
+	virtual inline void DoStep11Bc_LoopHeader(
 		Rucksack& rucksack,
-		const int moveCount
+		int& moveCount
 		) const override {
 		// 非ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
-		int& moveCount,//セットするぜ☆（＾ｑ＾）
-		SplitedNode** ppSplitedNode,
-		const Position& pos,
-		const Move& move,
-		const CheckInfo& ci
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
 		) const override {
 			++moveCount;
 	}
@@ -435,7 +432,7 @@ public:
 				threatMove,
 				moveCount,
 				mp,
-			    &g_SWORD_PV,
+				&g_SWORD_PV,
 				cutNode
 				);
 			if (beta <= bestScore) {
@@ -458,5 +455,5 @@ public:
 };
 
 
-extern const NodetypePv g_NODETYPE_PV;
+extern NodetypePv g_NODETYPE_PV;
 

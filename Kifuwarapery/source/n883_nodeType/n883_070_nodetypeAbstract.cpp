@@ -56,7 +56,7 @@ using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
-extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
@@ -78,7 +78,8 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
-	StateInfo stateInfo;
+	Move movesSearched[64];
+	StateInfo st;
 	const TTEntry* pTtEntry = nullptr;//(^q^)トランスポジション・テーブル・エントリー☆？
 	SplitedNode* pSplitedNode = nullptr;//(^q^)
 	Key posKey;
@@ -88,13 +89,17 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	Move bestMove;
 	Move threatMove;
 	Depth newDepth;
+	Depth extension;
 	ScoreIndex bestScore;
 	ScoreIndex score;
 	ScoreIndex ttScore;
 	ScoreIndex eval;
 	bool inCheck;
+	bool givesCheck;
 	bool isPVMove;
-	bool isSingularExtensionNode;
+	bool singularExtensionNode;
+	bool captureOrPawnPromotion;
+	bool dangerous;
 	bool doFullDepthSearch;
 	int moveCount;
 	int playedMoveCount;
@@ -273,7 +278,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 		beta,
 		eval,
 		pos,
-		stateInfo,
+		st,
 		alpha,
 		cutNode,
 		threatMove
@@ -283,7 +288,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	}
 
 	// step9
-	this->DoStep9_NonPv(
+	this->DoStep9(
 		isReturnWithScore,
 		rucksack,
 		depth,
@@ -292,7 +297,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 		move,
 		pos,
 		ttMove,
-		stateInfo,
+		st,
 		score,
 		cutNode
 		);
@@ -327,18 +332,15 @@ split_point_start:
 		);
 	const CheckInfo ci(pos);
 
-	this->DoStep11a_BeforeLoop_SplitPointStart(
-		score,//セットするぜ☆（＾ｑ＾）
-		isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
+	this->DoStep11A_BeforeLoop_SplitPointStart(
 		ttMove,
 		depth,
+		score,
 		bestScore,
+		singularExtensionNode,
 		excludedMove,
 		pTtEntry//pv,nonPv の２つで、nullptrはダメ☆
 		);
-
-
-	Move movesSearched[64];
 
 	// step11
 	// Loop through moves
@@ -350,7 +352,7 @@ split_point_start:
 		) {
 
 		bool isContinue = false;
-		this->DoStep11b_LoopHeader(
+		this->DoStep11Ba_LoopHeader(
 			isContinue,
 			move,
 			excludedMove
@@ -360,20 +362,20 @@ split_point_start:
 			continue;
 		}
 
-		this->DoStep11c_LoopHeader(
+		this->DoStep11Bb_LoopHeader(
 			isContinue,
-			moveCount,
-			&pSplitedNode,
 			pos,
 			move,
-			ci
+			ci,
+			moveCount,
+			&pSplitedNode
 			);
 		if (isContinue)
 		{
 			continue;
 		}
 
-		this->DoStep11d_LoopHeader(
+		this->DoStep11Bb_LoopHeader(
 			isContinue,
 			rucksack,
 			move
@@ -383,24 +385,19 @@ split_point_start:
 			continue;
 		}
 
-		this->DoStep11e_LoopHeader(
-			rucksack,// セットするぜ☆
+		this->DoStep11Bc_LoopHeader(
+			rucksack,
 			moveCount
 			);
 
-
-		Depth isExtension;
-		bool isCaptureOrPawnPromotion;
-		bool isGivesCheck;
-		bool isDangerous;
 		this->DoStep11B_LoopHeader(
-			isExtension,// セットするぜ☆
-			isCaptureOrPawnPromotion,// セットするぜ☆
-			isGivesCheck,// セットするぜ☆
-			isDangerous,// セットするぜ☆
+			extension,
+			captureOrPawnPromotion,
 			move,
+			givesCheck,
 			ci,
-			pos
+			pos,
+			dangerous
 			);
 		if (isContinue)
 		{
@@ -410,11 +407,11 @@ split_point_start:
 		// step12
 		this->DoStep12(
 			rucksack,
-			isGivesCheck,
+			givesCheck,
 			pos,
 			move,
-			isExtension,
-			isSingularExtensionNode,
+			extension,
+			singularExtensionNode,
 			ttMove,
 			ttScore,
 			ci,
@@ -430,9 +427,9 @@ split_point_start:
 		this->DoStep13a(
 			isContinue,
 			rucksack,
-			isCaptureOrPawnPromotion,
+			captureOrPawnPromotion,
 			inCheck,
-			isDangerous,
+			dangerous,
 			bestScore,
 			move,
 			ttMove,
@@ -452,13 +449,12 @@ split_point_start:
 			moveCount,
 			isContinue
 			);
-
 		this->DoStep13c(
 			isContinue,
 			rucksack,
-			isCaptureOrPawnPromotion,
+			captureOrPawnPromotion,
 			inCheck,
-			isDangerous,
+			dangerous,
 			bestScore,
 			move,
 			ttMove,
@@ -480,7 +476,7 @@ split_point_start:
 			continue;
 		}
 		this->DoStep13d(
-			isCaptureOrPawnPromotion,
+			captureOrPawnPromotion,
 			playedMoveCount,
 			movesSearched,
 			move
@@ -490,9 +486,9 @@ split_point_start:
 		this->DoStep14(
 			pos,
 			move,
-			stateInfo,
+			st,
 			ci,
-			isGivesCheck,
+			givesCheck,
 			&pFlashlight
 			);
 
@@ -501,7 +497,7 @@ split_point_start:
 			rucksack,
 			depth,
 			isPVMove,
-			isCaptureOrPawnPromotion,
+			captureOrPawnPromotion,
 			move,
 			ttMove,
 			&pFlashlight,
@@ -526,7 +522,7 @@ split_point_start:
 			doFullDepthSearch,
 			score,
 			newDepth,
-			isGivesCheck,
+			givesCheck,
 			pos,
 			&pFlashlight,
 			alpha,
@@ -539,7 +535,7 @@ split_point_start:
 			score,
 			beta,
 			newDepth,
-			isGivesCheck,
+			givesCheck,
 			pos,
 			&pFlashlight
 			);

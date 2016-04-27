@@ -51,16 +51,14 @@ public:
 				FOREACH_BB(toOn789BB, to, {
 					const Square from = to + TDeltaS;
 
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(
-						ptEvent.m_mt, N01_Pawn, from, to, ptEvent.m_pos);
-					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
+					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N01_Pawn, from, to, ptEvent.m_pos);
+					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N01_Pawn
 					moveStackList++;
 
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
 						const Rank TRank9 = (ptEvent.m_us == Black ? Rank9 : Rank1);
 						if (ConvSquare::TO_RANK10(to) != TRank9) {
-							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(
-								ptEvent.m_mt, N01_Pawn, from, to, ptEvent.m_pos);
+							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt(ptEvent.m_mt, N01_Pawn, from, to, ptEvent.m_pos);
 							moveStackList++;
 						}
 					}

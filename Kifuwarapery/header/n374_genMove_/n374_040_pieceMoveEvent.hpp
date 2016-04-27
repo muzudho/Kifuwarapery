@@ -11,6 +11,9 @@
 
 class PieceMoveEvent {
 public:
+	void* m_pDontUseThisMember__;// FIXME: ／（＾ｑ＾）＼これを消すと bench コマンドの実行時に強制終了してしまう☆ 使ってないけど置いておく必要があるぜ☆（＾～＾）
+
+public:
 
 	const MoveType m_mt;
 	const Color m_us;

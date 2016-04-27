@@ -7,7 +7,6 @@
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n640_searcher/n640_440_splitedNode.hpp"
-#include "../../header/n755_sword___/n755_070_SwordAbstract.hpp"
 #include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
 

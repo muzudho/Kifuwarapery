@@ -11,10 +11,9 @@
 #include "../n640_searcher/n640_500_reductions.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
-#include "../n887_nodeType/n887_110_nodetypePv.hpp"
 
 
-extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 
 
 // PvNode = true
@@ -153,7 +152,7 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9_NonPv(
+	virtual inline void DoStep9(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -200,7 +199,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// PVノードの場合☆
-			g_NODETYPE_PV.GoToTheAdventure_new(
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -226,29 +225,29 @@ public:
 		return mp.GetNextMove_SplitedNode();
 	};
 
-	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
-		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
-		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
-		const Move& ttMove,
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
 		const Depth depth,
-		const ScoreIndex bestScore,
-		const Move& excludedMove,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートはこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		isSingularExtensionNode = false;
+		singularExtensionNode = false;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
-		bool& isContinue,//セットするぜ☆（＾ｑ＾）
-		int& moveCount,//セットするぜ☆（＾ｑ＾）
-		SplitedNode** ppSplitedNode,//セットするぜ☆（＾ｑ＾）
-		const Position& pos,
-		const Move& move,
-		const CheckInfo& ci
+	virtual inline void DoStep11Bb_LoopHeader(
+		bool& isContinue,
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
 		) const override {
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				isContinue = true;
@@ -446,5 +445,5 @@ public:
 };
 
 
-extern const NodetypeSplitedNodeRoot g_NODETYPE_SPLITEDNODE_ROOT;
+extern NodetypeSplitedNodeRoot g_NODETYPE_SPLITEDNODE_ROOT;
 

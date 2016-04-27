@@ -12,11 +12,7 @@
 #include "../n755_sword___/n755_100_SwordRoot.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "../n885_searcher/n885_040_rucksack.hpp"
-
-
-#include "../n887_nodeType/n887_110_nodetypePv.hpp"//FIXME:
-//extern class NodetypePv;
-extern const NodetypePv g_NODETYPE_PV;
+#include "../n887_nodeType/n887_100_nodetypeRoot.hpp"
 
 
 // PvNode = true
@@ -173,7 +169,7 @@ public:
 	}
 
 	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep9_NonPv(
+	virtual inline void DoStep9(
 		bool& isReturnWithScore,
 		Rucksack& rucksack,
 		const Depth& depth,
@@ -219,8 +215,8 @@ public:
 			//────────────────────────────────────────────────────────────────────────────────
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
-			// PVノードの場合☆ ルートからPVへ変更☆（＾ｑ＾）
-			g_NODETYPE_PV.GoToTheAdventure_new(
+			// PVノードの場合☆
+			g_NODETYPE_PROGRAMS[NodeType::N01_PV]->GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -246,29 +242,29 @@ public:
 		return mp.GetNextMove_NonSplitedNode();
 	};
 
-	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
-		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
-		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
-		const Move& ttMove,
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
 		const Depth depth,
-		const ScoreIndex bestScore,
-		const Move& excludedMove,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートはこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		isSingularExtensionNode = false;
+		singularExtensionNode = false;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
-		int& moveCount,//セットするぜ☆（＾ｑ＾）
-		SplitedNode** ppSplitedNode,
-		const Position& pos,
-		const Move& move,
-		const CheckInfo& ci
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
 		) const override {
 			++moveCount;
 	}
@@ -492,5 +488,5 @@ public:
 };
 
 
-extern const NodetypeRoot g_NODETYPE_ROOT;
+extern NodetypeRoot g_NODETYPE_ROOT;
 

@@ -52,7 +52,7 @@ using namespace std;
 
 
 extern const InFrontMaskBb g_inFrontMaskBb;
-extern const NodetypeAbstract* g_NODETYPE_PROGRAMS[];
+extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 

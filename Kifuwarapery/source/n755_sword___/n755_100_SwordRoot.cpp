@@ -2,7 +2,7 @@
 #include "../../header/n887_nodeType/n887_130_nodetypeSplitedNodeRoot.hpp"
 
 
-extern const NodetypeSplitedNodeRoot g_NODETYPE_SPLITEDNODE_ROOT;
+//extern const NodetypeSplitedNodeRoot g_NODETYPE_SPLITEDNODE_ROOT;
 
 
 const SwordRoot g_SWORD_ROOT;

@@ -12,10 +12,6 @@
 #include "../n885_searcher/n885_040_rucksack.hpp"
 
 
-//#include "../n887_nodeType/n887_150_nodetypeSplitedNodeNonPv.hpp"//FIXME:
-//extern const NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
-
-
 // PvNode = false
 // SplitedNode = false
 // RootNode = false
@@ -73,68 +69,6 @@ public:
 			(pTtEntry->GetType() & Bound::BoundUpper);
 	}
 
-	virtual inline ScoreIndex GotoTheAdventure01InStep8_NonPV(
-		Rucksack& rucksack,
-		Position& pos,
-		Flashlight** ppFlashlight,
-		ScoreIndex& beta,
-		ScoreIndex& alpha,
-		const Depth depth,
-		const Depth reduction,
-		const bool cutNode
-		) const override {
-		return - this->GoToTheAdventure_new(
-			rucksack,
-			pos,
-			(*ppFlashlight) + 1,
-			-beta,
-			-alpha,
-			depth - reduction,
-			!cutNode
-			);
-	};
-	virtual inline ScoreIndex GotoTheAdventure02InStep8_NonPV(
-		Rucksack& rucksack,
-		Position& pos,
-		Flashlight** ppFlashlight,
-		ScoreIndex& beta,
-		ScoreIndex& alpha,
-		const Depth depth,
-		const Depth reduction,
-		const bool cutNode
-		) const override {
-		return this->GoToTheAdventure_new(
-			rucksack,
-			pos,
-			(*ppFlashlight),
-			alpha,
-			beta,
-			depth - reduction,
-			false
-			);
-	};
-
-	// 非PVノードだけが実行する手続きだぜ☆！（＾ｑ＾）
-	// N02_NonPV扱いで実行する関数があるぜ、なんだこれ☆（＾ｑ＾）
-	virtual inline ScoreIndex GotoTheAdventure03InStep9_NonPV(
-		Rucksack& rucksack,
-		Position& pos,
-		Flashlight** ppFlashlight,
-		const ScoreIndex rbeta,
-		const Depth rdepth,
-		const bool cutNode
-		) const override {
-		return -this->GoToTheAdventure_new(
-			rucksack,
-			pos,
-			(*ppFlashlight) + 1,
-			-rbeta,
-			-rbeta + 1,
-			rdepth,
-			!cutNode
-			);
-	};
-
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
 	virtual inline void DoStep10(
 		const Depth depth,
@@ -170,7 +104,7 @@ public:
 			// 探索☆？（＾ｑ＾）
 			//────────────────────────────────────────────────────────────────────────────────
 			// 非PVノードの場合☆
-			this->GoToTheAdventure_new(
+			g_NODETYPE_PROGRAMS[NodeType::N02_NonPV]->GoToTheAdventure_new(
 				rucksack, pos, (*ppFlashlight), alpha, beta, d, true);
 
 			(*ppFlashlight)->m_skipNullMove = false;
@@ -196,26 +130,26 @@ public:
 		return mp.GetNextMove_NonSplitedNode();
 	};
 
-	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
-		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
-		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
-		const Move& ttMove,
+	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+		Move& ttMove,
 		const Depth depth,
-		const ScoreIndex bestScore,
-		const Move& excludedMove,
+		ScoreIndex& score,
+		ScoreIndex& bestScore,
+		bool& singularExtensionNode,
+		Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		isSingularExtensionNode = 8 * Depth::OnePly <= depth
+		singularExtensionNode = 8 * Depth::OnePly <= depth
 			&& !ttMove.IsNone()
 			&& excludedMove.IsNone()
 			&& (pTtEntry->GetType() & Bound::BoundLower)
 			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
-	virtual inline void DoStep11d_LoopHeader(
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
@@ -224,22 +158,22 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11e_LoopHeader(
+	virtual inline void DoStep11Bc_LoopHeader(
 		Rucksack& rucksack,
-		const int moveCount
+		int& moveCount
 		) const override {
 		// 非ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
+	virtual inline void DoStep11Bb_LoopHeader(
 		bool& isContinue,
-		int& moveCount,//セットするぜ☆（＾ｑ＾）
-		SplitedNode** ppSplitedNode,
-		const Position& pos,
-		const Move& move,
-		const CheckInfo& ci
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
 		) const override {
 			++moveCount;
 	}
@@ -456,5 +390,5 @@ public:
 };
 
 
-extern const NodetypeNonPv g_NODETYPE_NON_PV;
+extern NodetypeNonPv g_NODETYPE_NON_PV;
 

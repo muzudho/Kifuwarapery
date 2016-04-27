@@ -31,8 +31,8 @@ struct SplitedNode {
 
 	ScoreIndex				m_beta;
 
-	// スプリット・ポイントは　ノード・タイプ別のプログラムを持つぜ☆！（＾ｑ＾）
-	const SwordAbstract*	m_pSword01;
+	// スプリット・ポイントは　ノード・タイプを持っている☆？（＾ｑ＾）
+	const SwordAbstract*		m_pSword01;
 
 	Move				m_threatMove;
 

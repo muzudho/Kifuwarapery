@@ -236,10 +236,10 @@
       <UniqueIdentifier>{b4e903c8-38e7-4086-94b5-1c996286b26b}</UniqueIdentifier>
     </Filter>
     <Filter Include="header\n755_sword___">
-      <UniqueIdentifier>{0d15c060-6e68-41ab-b1de-04ac2bbc3283}</UniqueIdentifier>
+      <UniqueIdentifier>{e7d9e0f5-7ff8-4176-9a4e-2753105886e6}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n755_sword___">
-      <UniqueIdentifier>{97594168-c21d-4135-8232-36e0563f21ab}</UniqueIdentifier>
+      <UniqueIdentifier>{5351d633-45f1-4ccf-8719-591e7126cc0c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -398,6 +398,9 @@
     </ClInclude>
     <ClInclude Include="header\n119_score___\n119_500_EvalSum.hpp">
       <Filter>header\n119_score___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
+      <Filter>header\n223_move____</Filter>
     </ClInclude>
     <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
       <Filter>header\n223_move____</Filter>
@@ -1002,19 +1005,16 @@
     <ClInclude Include="header\n885_searcher\n885_340_hitchhikerQsearchPrograms.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n755_sword___\n755_070_SwordAbstract.hpp">
+      <Filter>header\n755_sword___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n755_sword___\n755_100_SwordRoot.hpp">
       <Filter>header\n755_sword___</Filter>
     </ClInclude>
     <ClInclude Include="header\n755_sword___\n755_110_SwordPv.hpp">
       <Filter>header\n755_sword___</Filter>
     </ClInclude>
     <ClInclude Include="header\n755_sword___\n755_120_SwordNonPv.hpp">
-      <Filter>header\n755_sword___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n755_sword___\n755_100_SwordRoot.hpp">
       <Filter>header\n755_sword___</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1619,13 +1619,13 @@
     <ClCompile Include="source\n755_sword___\n755_070_SwordAbstract.cpp">
       <Filter>source\n755_sword___</Filter>
     </ClCompile>
+    <ClCompile Include="source\n755_sword___\n755_100_SwordRoot.cpp">
+      <Filter>source\n755_sword___</Filter>
+    </ClCompile>
     <ClCompile Include="source\n755_sword___\n755_110_SwordPv.cpp">
       <Filter>source\n755_sword___</Filter>
     </ClCompile>
     <ClCompile Include="source\n755_sword___\n755_120_SwordNonPv.cpp">
-      <Filter>source\n755_sword___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n755_sword___\n755_100_SwordRoot.cpp">
       <Filter>source\n755_sword___</Filter>
     </ClCompile>
   </ItemGroup>

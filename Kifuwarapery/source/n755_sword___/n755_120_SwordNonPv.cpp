@@ -2,7 +2,7 @@
 #include "../../header/n887_nodeType/n887_150_nodetypeSplitedNodeNonPv.hpp"
 
 
-extern const NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
+//extern const NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
 
 
 const SwordNonPv g_SWORD_NON_PV;
