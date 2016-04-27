@@ -97,7 +97,11 @@ public:
 #endif
 
 		// 反復深化で探索を行う。
-		while (++depth <= g_maxPly && !rucksack.m_signals.m_stop && (!rucksack.m_limits.m_depth || depth <= rucksack.m_limits.m_depth)) {
+		while (
+			++depth <= g_maxPly &&
+			!rucksack.m_signals.m_stop &&
+			(!rucksack.m_limits.m_depth || depth <= rucksack.m_limits.m_depth)
+		) {
 
 			// 前回の iteration の結果を全てコピー
 			for (size_t i = 0; i < rucksack.m_rootMoves.size(); ++i) {

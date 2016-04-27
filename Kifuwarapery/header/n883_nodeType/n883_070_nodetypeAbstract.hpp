@@ -655,17 +655,17 @@ public:
 		) const = 0;
 
 	// ルートノードか、そうでないかで分かれるぜ☆（＾ｑ＾）
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
-		Move& ttMove,
-		const Depth depth,
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
 		ScoreIndex& score,
-		ScoreIndex& bestScore,
-		bool& singularExtensionNode,
-		Move& excludedMove,
+		bool& isSingularExtensionNode,
+		const Move& ttMove,
+		const Depth depth,
+		const ScoreIndex bestScore,
+		const Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const = 0;
 
-	virtual inline void DoStep11Ba_LoopHeader(
+	virtual inline void DoStep11b_LoopHeader(
 		bool& isContinue,
 		const Move& move,
 		const Move& excludedMove
@@ -677,8 +677,8 @@ public:
 		}
 	}
 
-	virtual inline void DoStep11Bb_LoopHeader(
-		bool& isContinue,
+	virtual inline void DoStep11d_LoopHeader(
+		bool& isContinue,// セットするぜ☆
 		const Rucksack& rucksack,
 		const Move& move
 		)const {
@@ -693,19 +693,19 @@ public:
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
-		bool& isContinue,
-		Position& pos,
-		Move& move,
-		const CheckInfo& ci,
-		int& moveCount,
-		SplitedNode** ppSplitedNode
+	virtual inline void DoStep11c_LoopHeader(
+		bool& isContinue,//セットされるぜ☆
+		int& moveCount,//セットされるぜ☆
+		SplitedNode** ppSplitedNode,//セットされるぜ☆
+		const Position& pos,
+		const Move& move,
+		const CheckInfo& ci
 		) const = 0;
 
 	// ルートノードだけ実行する手続きだぜ☆（＾ｑ＾）
-	virtual inline void DoStep11Bc_LoopHeader(
-		Rucksack& rucksack,
-		int& moveCount
+	virtual inline void DoStep11e_LoopHeader(
+		Rucksack& rucksack,//セットするぜ☆
+		const int moveCount
 		) const {
 		rucksack.m_signals.m_firstRootMove = (moveCount == 1);
 #if 0
@@ -718,19 +718,19 @@ public:
 	}
 
 	virtual inline void DoStep11B_LoopHeader(
-		Depth& extension,
-		bool& captureOrPawnPromotion,
-		Move& move,
-		bool& givesCheck,
-		const CheckInfo& ci,
-		Position& pos,
-		bool& dangerous
+		Depth& extension,// セットするぜ☆
+		bool& isCaptureOrPawnPromotion,// セットするぜ☆
+		bool& isGivesCheck, // セットするぜ☆
+		bool& isDangerous, // セットするぜ☆
+		const Move& move,//読むだけ☆
+		const CheckInfo& ci,//読むだけ☆
+		const Position& pos//読むだけ☆
 		)const
 	{
 		extension = Depth0;
-		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
-		givesCheck = pos.IsMoveGivesCheck(move, ci);
-		dangerous = givesCheck; // todo: not implement
+		isCaptureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
+		isGivesCheck = pos.IsMoveGivesCheck(move, ci);
+		isDangerous = isGivesCheck; // todo: not implement
 	}
 
 	virtual inline void DoStep12(

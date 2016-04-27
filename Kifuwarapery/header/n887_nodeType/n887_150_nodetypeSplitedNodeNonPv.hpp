@@ -186,22 +186,22 @@ public:
 		return mp.GetNextMove_SplitedNode();
 	};
 
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
-		Move& ttMove,
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
+		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
+		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
+		const Move& ttMove,
 		const Depth depth,
-		ScoreIndex& score,
-		ScoreIndex& bestScore,
-		bool& singularExtensionNode,
-		Move& excludedMove,
+		const ScoreIndex bestScore,
+		const Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートでない場合はこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		singularExtensionNode = false;
+		isSingularExtensionNode = false;
 	}
 
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11d_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
@@ -210,22 +210,22 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11Bc_LoopHeader(
+	virtual inline void DoStep11e_LoopHeader(
 		Rucksack& rucksack,
-		int& moveCount
+		const int moveCount
 		) const override {
 		// 非ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
-		bool& isContinue,
-		Position& pos,
-		Move& move,
-		const CheckInfo& ci,
-		int& moveCount,
-		SplitedNode** ppSplitedNode
+	virtual inline void DoStep11c_LoopHeader(
+		bool& isContinue,//セットするぜ☆（＾ｑ＾）
+		int& moveCount,//セットするぜ☆（＾ｑ＾）
+		SplitedNode** ppSplitedNode,//セットするぜ☆（＾ｑ＾）
+		const Position& pos,
+		const Move& move,
+		const CheckInfo& ci
 		) const override {
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				isContinue = true;

@@ -182,14 +182,16 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = ConvSquare::FROM_FILE_RANK10(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory_pt(
+				ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return g_MOVE_NONE;
 			}
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
-			MakePromoteMove::APPEND_PROMOTE_FLAG(move);//, N00_Capture, UtilPiece::ToPieceType(pos.GetPiece(from))
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory_pt(
+				ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from)), from, to, pos);
+			MakePromoteMove::APPEND_PROMOTE_FLAG(move);
 		}
 		else {
 			return g_MOVE_NONE;
@@ -234,11 +236,11 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ptFrom, from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory_pt(ptFrom, from, to, pos);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(ptFrom, from, to, pos);
+			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory_pt(ptFrom, from, to, pos);
 			MakePromoteMove::APPEND_PROMOTE_FLAG(move);//, N00_Capture, ptFrom
 		}
 		else {

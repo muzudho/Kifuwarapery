@@ -251,29 +251,29 @@ public:
 		return mp.GetNextMove_NonSplitedNode();
 	};
 
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
-		Move& ttMove,
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
+		ScoreIndex& score,//セットするぜ☆（＾ｑ＾）
+		bool& isSingularExtensionNode,//セットするぜ☆（＾ｑ＾）
+		const Move& ttMove,
 		const Depth depth,
-		ScoreIndex& score,
-		ScoreIndex& bestScore,
-		bool& singularExtensionNode,
-		Move& excludedMove,
+		const ScoreIndex bestScore,
+		const Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const override
 	{
 		// ルートはこういう感じ☆（＾ｑ＾）
 		score = bestScore;
-		singularExtensionNode = false;
+		isSingularExtensionNode = false;
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
-		Position& pos,
-		Move& move,
-		const CheckInfo& ci,
-		int& moveCount,
-		SplitedNode** ppSplitedNode
+		int& moveCount,//セットするぜ☆（＾ｑ＾）
+		SplitedNode** ppSplitedNode,
+		const Position& pos,
+		const Move& move,
+		const CheckInfo& ci
 		) const override {
 			++moveCount;
 	}
