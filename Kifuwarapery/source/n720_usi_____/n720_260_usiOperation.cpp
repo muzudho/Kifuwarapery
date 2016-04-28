@@ -47,23 +47,40 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 	// go にも種類がある☆
 	while (ssCmd >> token) {
 		if      (token == "ponder"     ) { limits.m_ponder = true; }
-		else if (token == "btime"      ) { ssCmd >> limits.m_time[Black]; }
-		else if (token == "wtime"      ) { ssCmd >> limits.m_time[White]; }
+		else if (token == "btime"      ) { limits.SetNokoriTimeByStream( Color::Black, ssCmd); }
+		else if (token == "wtime"      ) { limits.SetNokoriTimeByStream( Color::White, ssCmd); }
 		else if (token == "infinite"   ) { limits.m_infinite = true; }
 		else if (token == "byoyomi" ||
 				 token == "movetime"   ) {
 			// btime wtime の後に byoyomi が来る前提になっているので良くない。
-			ssCmd >> limits.m_moveTime;
-			if (limits.m_moveTime != 0) { limits.m_moveTime -= pos.GetRucksack()->m_engineOptions["Byoyomi_Margin"]; }
+			limits.SetMoveTimeFromStream(ssCmd);
+			if (limits.GetMoveTime() != 0) {
+//#if !defined(FISCHER_RULE)
+				// フィッシャー・ルールでないときは、秒読みがあるのだろう☆（＾ｑ＾）
+				limits.DecrementMoveTime( pos.GetRucksack()->m_engineOptions["Byoyomi_Margin"]);
+//#endif
+			}
 		}
 		else if (token == "depth"      ) { ssCmd >> limits.m_depth; }
-		else if (token == "nodes"      ) { ssCmd >> limits.m_nodes; }
+		else if (token == "nodes"      ) { ssCmd >> limits.m_nodes01; }
 		else if (token == "searchmoves") {
 			UsiOperation usiOperation;
 			while (ssCmd >> token)
 			{
 				moves.push_back(usiOperation.UsiToMove(pos, token));
 			}
+		}
+		// 追加☆（＾ｑ＾）
+		else if (token == "movestogo") {// こんなコマンド、飛んでこないと思うんだぜ☆（＾ｑ＾）？
+			ssCmd >> limits.m_movesToGo;
+		}
+		// 追加☆（＾ｑ＾）
+		else if (token == "winc") {
+			ssCmd >> limits.m_increment[Color::White];
+		}
+		// 追加☆（＾ｑ＾）
+		else if (token == "binc") {
+			ssCmd >> limits.m_increment[Color::Black];
 		}
 	}
 	pos.GetRucksack()->m_ourMoves = moves;

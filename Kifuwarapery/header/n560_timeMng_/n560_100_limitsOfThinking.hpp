@@ -6,23 +6,102 @@
 
 // 元の名前：ＬｉｍｉｔｓＴｙｐｅ
 // 時間や探索深さの制限を格納する為の構造体
-struct LimitsOfThinking {
+class LimitsOfThinking {
+public:
 
-	LimitsOfThinking() { memset(this, 0, sizeof(LimitsOfThinking)); }
-
-	bool IsUseTimeManagement() const {
-		return !(m_depth | m_nodes | m_moveTime | static_cast<int>(m_infinite));
+	LimitsOfThinking() {
+		//memset(this, 0, sizeof(LimitsOfThinking));
 	}
 
-	int m_time[ColorNum];
-	int m_increment[ColorNum];
+	// 元の名前：　ｕｓｅＴｉｍｅＭａｎａｇｅｍｅｎｔ
+	// 時間管理が新品かどうか☆（＾ｑ＾）？
+	// 反復深化探索に潜るために真であることが必要☆
+	bool IsBrandnewTimeManagement() const {
+		// 以下の全てが 0 の場合に真☆？（＾ｑ＾）
+		return !(
+			this->m_depth
+			|
+			this->m_nodes01
+			|
+			this->GetMoveTime()
+			|
+			static_cast<int>(this->m_infinite)
+			);
+	}
 
-	// どこで設定しているのか☆（＾ｑ＾）
-	int m_movesToGo;
+	// 深さ☆？
+	Ply m_depth = 0;
 
-	Ply m_depth;
-	u32 m_nodes;
-	int m_moveTime;
-	bool m_infinite;
-	bool m_ponder;
+	u32 m_nodes01 = 0;
+
+
+	bool m_infinite = false;
+
+	bool m_ponder = false;
+
+
+public:
+
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// インクリメントとは何なのか☆？（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	// フィッシャータイムの追加時間☆？ということにしておこう☆（＾ｑ＾）
+	int m_increment[ColorNum] = { 0 };
+	inline int GetIncrement(Color us) const {
+		return this->m_increment[us];
+	}
+
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 残り時間だぜ☆（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	// 元の名前：ｔｉｍｅ
+	// ミリ秒単位だぜ☆（＾ｑ＾）
+	int m_nokoriTime[ColorNum] = { 0 };
+	inline int GetNokoriTime(Color us)const {
+		return this->m_nokoriTime[us];
+	}
+	// btime, wtime コマンドをそのまま受け取るぜ☆（＾ｑ＾）
+	inline void SetNokoriTimeByStream(Color us, std::istringstream& ssCmd) {
+		ssCmd >> this->m_nokoriTime[us];
+	}
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// ムーブス・ツー・ゴーって何☆？（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	// どこで設定しているのか☆（＾ｑ＾）常に０じゃないかだぜ☆？（＾ｑ＾）
+	int m_movesToGo = 0;
+	inline int GetMovesToGo() const {
+		return this->m_movesToGo;
+	}
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// ムーブタイムって何☆？（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	inline int GetMoveTime() const {
+		return this->m_moveTime_;
+	}
+	// 思考開始時、初期化を行った際にある条件下で０クリアする☆？
+	inline void ZeroClearMoveTime() {
+		this->m_moveTime_ = 0;
+	}
+	// ポンダーヒットをしたときに、ムーブタイムが０でなければ、消費した時間分、加算するのに使います。
+	inline void IncreaseMoveTime(int value) {
+		this->m_moveTime_ += value;
+	}
+	// go byoyomi 等の場合に、マージン分減らすのに使う☆？
+	inline void DecrementMoveTime(int value) {
+		this->m_moveTime_ -= value;
+	}
+	inline void SetMoveTimeFromStream(std::istringstream& ssCmd) {
+		ssCmd >> this->m_moveTime_;
+	}
+
+private:
+
+	// ☆？ ポンダー・ヒットの経過時間が足しこまれる☆？（＾ｑ＾）
+	// 秒読みマージンは引かれる☆
+	int m_moveTime_ = 0;
+
 };

@@ -1017,6 +1017,9 @@
     <ClInclude Include="header\n350_pieceTyp\n350_030_makePromoteMove.hpp">
       <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
+    <ClInclude Include="header\n560_timeMng_\n560_150_TimeType.hpp">
+      <Filter>header\n560_timeMng_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">

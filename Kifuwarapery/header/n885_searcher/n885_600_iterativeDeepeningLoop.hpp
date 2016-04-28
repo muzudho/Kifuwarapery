@@ -214,7 +214,11 @@ public:
 			//	skill.pickMove();
 			//}
 
-			if (rucksack.m_limits.IsUseTimeManagement() && !rucksack.m_signals.m_stopOnPonderHit) {
+			if (
+				rucksack.m_limits.IsBrandnewTimeManagement() // 反復深化探索に潜るために真であることが必要☆
+				&&
+				!rucksack.m_signals.m_stopOnPonderHit
+			) {
 				bool stop = false;
 
 				// 深さが 5 ～ 49 で、PVサイズが 1 のとき。
@@ -224,8 +228,7 @@ public:
 
 				// 次のイテレーションを回す時間が無いなら、ストップ
 				if (
-					// 有効時間の62%が、思考経過時間（ミリ秒）に満たない場合。
-					(rucksack.m_timeManager.GetAvailableTime() * 62) / 100 < rucksack.m_stopwatch.GetElapsed()
+					rucksack.m_timeManager.CanNotNextIteration(rucksack.m_stopwatch.GetElapsed())
 					) {
 					stop = true;
 				}
@@ -247,9 +250,7 @@ public:
 						rucksack.m_rootMoves.size() == 1
 						||
 						// または、利用可能時間の40%が、思考経過時間未満の場合。
-						rucksack.m_timeManager.GetAvailableTime() * 40 / 100
-						<
-						rucksack.m_stopwatch.GetElapsed()
+						rucksack.m_timeManager.CanThinking02_TimeOk_ForIterativeDeepingLoop(rucksack.m_stopwatch.GetElapsed())
 					)
 				) {
 					const ScoreIndex rBeta = bestScore - 2 * PieceScore::m_capturePawn;

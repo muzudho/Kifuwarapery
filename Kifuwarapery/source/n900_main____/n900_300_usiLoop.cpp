@@ -122,8 +122,8 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 				searcher.m_limits.m_ponder = false;
 			}
 
-			if (token == "ponderhit" && searcher.m_limits.m_moveTime != 0) {
-				searcher.m_limits.m_moveTime += searcher.m_stopwatch.GetElapsed();
+			if (token == "ponderhit" && searcher.m_limits.GetMoveTime() != 0) {
+				searcher.m_limits.IncreaseMoveTime( searcher.m_stopwatch.GetElapsed());
 			}
 		}
 		else if (token == "usinewgame") {

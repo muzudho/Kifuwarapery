@@ -255,7 +255,7 @@ void Rucksack::CheckTime() {
 		return;
 
 	s64 nodes = 0;
-	if (m_limits.m_nodes) {
+	if (m_limits.m_nodes01) {
 		std::unique_lock<Mutex> lock(m_ownerHerosPub.m_mutex_);
 
 		nodes = m_rootPosition.GetNodesSearched();
@@ -277,21 +277,29 @@ void Rucksack::CheckTime() {
 		}
 	}
 
-	const int e = m_stopwatch.GetElapsed();
+	// 経過時間☆？
+	const int elapsed = m_stopwatch.GetElapsed();
 
+	// まだ最初の指し手☆？（＾～＾）？
 	const bool stillAtFirstMove =
+		// 最初の指し手で☆
 		m_signals.m_firstRootMove
+		// フェイル・ロウではなくて☆？
 		&& !m_signals.m_failedLowAtRoot
-		&& m_timeManager.GetAvailableTime() < e;
+		&& m_timeManager.CanThinking01_TimeOver_AtFirstMove( elapsed);
 
+	// これ以上の時間がないか☆？（＾ｑ＾）？
 	const bool noMoreTime =
-		m_timeManager.GetMaximumTime() - 2 * TimerResolution < e
+		m_timeManager.IsNoMoreTime(TimerResolution , elapsed)
 		|| stillAtFirstMove;
 
-	if ((m_limits.IsUseTimeManagement() && noMoreTime)
-		|| (m_limits.m_moveTime != 0 && m_limits.m_moveTime < e)
-		|| (m_limits.m_nodes != 0 && m_limits.m_nodes < nodes))
-	{
+	if (
+		(m_limits.IsBrandnewTimeManagement() && noMoreTime)//反復深化探索をしたいときに、もう時間がない☆？（＾ｑ＾）
+		||
+		(m_limits.GetMoveTime() != 0 && m_limits.GetMoveTime() < elapsed)
+		||
+		(m_limits.m_nodes01 != 0 && m_limits.m_nodes01 < nodes)
+	){
 		m_signals.m_stop = true;
 	}
 }
@@ -301,7 +309,7 @@ void Military::IdleLoop() {
 	assert(!thisSp || (thisSp->m_masterThread == this && m_searching));
 
 	while (true) {
-		while ((!m_searching && m_pRucksack->m_ownerHerosPub.m_isSleepWhileIdle_) || m_exit)
+		while ((!m_searching && this->m_pRucksack->m_ownerHerosPub.m_isSleepWhileIdle_) || m_exit)
 		{
 			if (m_exit) {
 				assert(thisSp == nullptr);
@@ -321,10 +329,10 @@ void Military::IdleLoop() {
 		if (m_searching) {
 			assert(!m_exit);
 
-			m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
+			this->m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 			assert(m_searching);
 			SplitedNode* pSplitedNode = m_activeSplitedNode;
-			m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
+			this->m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 
 			Flashlight ss[g_maxPlyPlus2];
 			Position pos(*pSplitedNode->m_position, this);
@@ -341,7 +349,7 @@ void Military::IdleLoop() {
 
 			// スプリット・ポイント用の検索に変えるぜ☆（＾ｑ＾）
 			pSplitedNode->m_pSword01->GoSearch_AsSplitedNode(
-				*pSplitedNode, *m_pRucksack, pos, ss);
+				*pSplitedNode, *this->m_pRucksack, pos, ss);
 
 
 			assert(m_searching);
@@ -351,7 +359,7 @@ void Military::IdleLoop() {
 			pSplitedNode->m_slavesMask ^= (UINT64_C(1) << m_idx);
 			pSplitedNode->m_nodes += pos.GetNodesSearched();
 
-			if (m_pRucksack->m_ownerHerosPub.m_isSleepWhileIdle_
+			if (this->m_pRucksack->m_ownerHerosPub.m_isSleepWhileIdle_
 				&& this != pSplitedNode->m_masterThread
 				&& !pSplitedNode->m_slavesMask)
 			{

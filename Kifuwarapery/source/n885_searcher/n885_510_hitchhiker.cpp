@@ -57,10 +57,20 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 
 
 
-void Hitchhiker::Think(Rucksack& rucksack) {
+void Hitchhiker::Think(
+	Rucksack& captainsRucksack // キャプテンの持っているＳｅａｒｃｈｅｒ☆
+	) {
 
-	Position& pos = rucksack.m_rootPosition;
-	rucksack.m_timeManager.Init(rucksack.m_limits, pos.GetGamePly(), pos.GetTurn(), &rucksack);
+	Position& pos = captainsRucksack.m_rootPosition;
+
+	bool isMoveTime0Clear = false;
+	captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted(
+		isMoveTime0Clear, captainsRucksack.m_limits, pos.GetGamePly(), pos.GetTurn(), &captainsRucksack);
+	if (isMoveTime0Clear) {
+		captainsRucksack.m_limits.ZeroClearMoveTime();
+	}
+	SYNCCOUT << "info string limits move time = " << captainsRucksack.m_limits.GetMoveTime() << SYNCENDL;//旧表示はなかった☆
+
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 入玉勝ちかを調べるぜ☆（＾ｑ＾）
@@ -70,7 +80,7 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 		//────────────────────────────────────────────────────────────────────────────────
 		// 探索☆？（＾ｑ＾）
 		//────────────────────────────────────────────────────────────────────────────────
-		HitchhikerNyugyoku::Travel_885_480(rucksack,pos);
+		HitchhikerNyugyoku::Travel_885_480(captainsRucksack,pos);
 		return;
 	}
 #endif
@@ -80,40 +90,40 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 	//────────────────────────────────────────────────────────────────────────────────
 	static Book book;
 	std::uniform_int_distribution<int> dist(
-		rucksack.m_engineOptions["Min_Book_Ply"], rucksack.m_engineOptions["Max_Book_Ply"]);
+		captainsRucksack.m_engineOptions["Min_Book_Ply"], captainsRucksack.m_engineOptions["Max_Book_Ply"]);
 
 	const Ply book_ply = dist(g_randomTimeSeed);
 
 	pos.SetNodesSearched(0);
 
 #if defined LEARN
-	rucksack.m_ownerHerosPub[0]->m_searching = true;
+	captainsRucksack.m_ownerHerosPub[0]->m_searching = true;
 #else
-	rucksack.m_tt.SetSize(rucksack.m_engineOptions["USI_Hash"]); // operator int() 呼び出し。
+	captainsRucksack.m_tt.SetSize(captainsRucksack.m_engineOptions["USI_Hash"]); // operator int() 呼び出し。
 
 	SYNCCOUT << "info string book_ply " << book_ply << SYNCENDL;
 	if (
 		// 定跡が使える手数のとき☆（＾ｑ＾）？
-		rucksack.m_engineOptions["OwnBook"] &&
+		captainsRucksack.m_engineOptions["OwnBook"] &&
 		pos.GetGamePly() <= book_ply
 	) {
 		const MoveAndScoreIndex bookMoveScore = book.GetProbe(
-			pos, rucksack.m_engineOptions["Book_File"], rucksack.m_engineOptions["Best_Book_Move"]);
+			pos, captainsRucksack.m_engineOptions["Book_File"], captainsRucksack.m_engineOptions["Best_Book_Move"]);
 
 		if (
 			!bookMoveScore.m_move.IsNone()
 			&&
 			std::find(
-				rucksack.m_rootMoves.begin(),
-				rucksack.m_rootMoves.end(),
+				captainsRucksack.m_rootMoves.begin(),
+				captainsRucksack.m_rootMoves.end(),
 				bookMoveScore.m_move
-			) != rucksack.m_rootMoves.end()
+			) != captainsRucksack.m_rootMoves.end()
 		){
-			std::swap(rucksack.m_rootMoves[0], *std::find(rucksack.m_rootMoves.begin(),
-				rucksack.m_rootMoves.end(),
+			std::swap(captainsRucksack.m_rootMoves[0], *std::find(captainsRucksack.m_rootMoves.begin(),
+				captainsRucksack.m_rootMoves.end(),
 				bookMoveScore.m_move));
 			SYNCCOUT << "info"
-				<< " score " << rucksack.scoreToUSI(bookMoveScore.m_scoreIndex)
+				<< " score " << captainsRucksack.scoreToUSI(bookMoveScore.m_scoreIndex)
 				<< " pv " << bookMoveScore.m_move.ToUSI()
 				<< SYNCENDL;
 
@@ -122,18 +132,26 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 	}
 
 	// 全スレッドの初期化か何か☆？
-	rucksack.m_ownerHerosPub.WakeUp(&rucksack);
+	captainsRucksack.m_ownerHerosPub.WakeUp(&captainsRucksack);
 
 	// 下級戦士の寿命（ミリ秒）を設定するぜ☆
-	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds =
-		(rucksack.m_limits.IsUseTimeManagement() ?
-			std::min(100, std::max(rucksack.m_timeManager.GetAvailableTime() / 16, rucksack.TimerResolution)) :
-			rucksack.m_limits.m_nodes ?
-			2 * rucksack.TimerResolution :
+	captainsRucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds =
+		(
+			captainsRucksack.m_limits.IsBrandnewTimeManagement() ? // 反復深化をしたい☆？（＾ｑ＾）
+			// する場合
+			std::min(100,
+				std::max(
+					captainsRucksack.m_timeManager.GetWarriorLifeTime(),
+					captainsRucksack.TimerResolution
+				))
+			:
+			// できない場合☆
+			captainsRucksack.m_limits.m_nodes01 ?
+			2 * captainsRucksack.TimerResolution :
 			100
 			);
 
-	rucksack.m_ownerHerosPub.GetCurrWarrior()->NotifyOne();
+	captainsRucksack.m_ownerHerosPub.GetCurrWarrior()->NotifyOne();
 
 #if defined INANIWA_SHIFT
 	detectInaniwa(GetPos);
@@ -145,29 +163,29 @@ void Hitchhiker::Think(Rucksack& rucksack) {
 	//────────────────────────────────────────────────────────────────────────────────
 	// 反復深化探索を始めるぜ☆（＾ｑ＾）
 	//────────────────────────────────────────────────────────────────────────────────
-	IterativeDeepeningLoop::Execute885_500(rucksack, pos);//ExecuteIterativeDeepeningLoop(pos);
+	IterativeDeepeningLoop::Execute885_500(captainsRucksack, pos);//ExecuteIterativeDeepeningLoop(pos);
 
 #if defined LEARN
 #else
-	rucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds = 0; // timer を止める。
-	rucksack.m_ownerHerosPub.Sleep();
+	captainsRucksack.m_ownerHerosPub.GetCurrWarrior()->m_lifetimeMilliseconds = 0; // timer を止める。
+	captainsRucksack.m_ownerHerosPub.Sleep();
 
 finalize:
 
 	SYNCCOUT << "info nodes " << pos.GetNodesSearched()
-		<< " time " << rucksack.m_stopwatch.GetElapsed() << SYNCENDL;
+		<< " time " << captainsRucksack.m_stopwatch.GetElapsed() << SYNCENDL;
 
-	if (!rucksack.m_signals.m_stop && (rucksack.m_limits.m_ponder || rucksack.m_limits.m_infinite)) {
-		rucksack.m_signals.m_stopOnPonderHit = true;
-		pos.GetThisThread()->WaitFor(rucksack.m_signals.m_stop);
+	if (!captainsRucksack.m_signals.m_stop && (captainsRucksack.m_limits.m_ponder || captainsRucksack.m_limits.m_infinite)) {
+		captainsRucksack.m_signals.m_stopOnPonderHit = true;
+		pos.GetThisThread()->WaitFor(captainsRucksack.m_signals.m_stop);
 	}
 
-	if (rucksack.m_rootMoves[0].m_pv_[0].IsNone()) {
+	if (captainsRucksack.m_rootMoves[0].m_pv_[0].IsNone()) {
 		SYNCCOUT << "bestmove resign" << SYNCENDL;
 	}
 	else {
-		SYNCCOUT << "bestmove " << rucksack.m_rootMoves[0].m_pv_[0].ToUSI()
-			<< " ponder " << rucksack.m_rootMoves[0].m_pv_[1].ToUSI()
+		SYNCCOUT << "bestmove " << captainsRucksack.m_rootMoves[0].m_pv_[0].ToUSI()
+			<< " ponder " << captainsRucksack.m_rootMoves[0].m_pv_[1].ToUSI()
 			<< SYNCENDL;
 	}
 #endif

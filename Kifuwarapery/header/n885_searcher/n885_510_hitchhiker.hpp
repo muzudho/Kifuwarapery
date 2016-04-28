@@ -35,7 +35,9 @@ public:
 	// メイン・スレッドの　アイドル・ループの中で呼び出される。
 	// （１）入玉勝ち判定
 	// （２）反復深化探索を行うぜ☆
-	static void	Think(Rucksack& rucksack);
+	static void	Think(
+		Rucksack& captainsRucksack // キャプテンの持っているＳｅａｒｃｈｅｒ☆
+	);
 
 	// 入玉勝ち判定
 	static bool Hitchhiker::IsNyugyokuWin(const Position& pos);

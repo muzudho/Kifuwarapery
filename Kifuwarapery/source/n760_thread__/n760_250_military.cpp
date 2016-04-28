@@ -12,14 +12,14 @@
 
 
 Military::Military(Rucksack* searcher) /*: ＳｐｌｉｔＰｏｉｎｔｓ()*/ {
-	m_pRucksack = searcher;
-	m_exit = false;
-	m_searching = false;
-	m_splitedNodesSize = 0;
-	m_maxPly = 0;
-	m_activeSplitedNode = nullptr;
-	m_activePosition = nullptr;
-	m_idx = searcher->m_ownerHerosPub.size();
+	this->m_pRucksack = searcher;
+	this->m_exit = false;
+	this->m_searching = false;
+	this->m_splitedNodesSize = 0;
+	this->m_maxPly = 0;
+	this->m_activeSplitedNode = nullptr;
+	this->m_activePosition = nullptr;
+	this->m_idx = searcher->m_ownerHerosPub.size();
 }
 
 void Military::NotifyOne() {
@@ -72,7 +72,7 @@ void Military::ForkNewFighter(
 	assert(pos.IsOK());
 	assert(bestScore <= alpha && alpha < beta && beta <= ScoreInfinite);
 	assert(-ScoreInfinite < bestScore);
-	assert(m_pRucksack->m_ownerHerosPub.GetMinSplitDepth() <= depth);
+	assert(this->m_pRucksack->m_ownerHerosPub.GetMinSplitDepth() <= depth);
 
 	assert(m_searching);
 	assert(m_splitedNodesSize < g_MaxSplitedNodesPerThread);
@@ -98,7 +98,7 @@ void Military::ForkNewFighter(
 	splitedNode.m_cutoff = false;
 	splitedNode.m_pFlashlightBox = pFlashlightBox;
 
-	m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
+	this->m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 	splitedNode.m_mutex.lock();
 
 	++m_splitedNodesSize;
@@ -109,8 +109,8 @@ void Military::ForkNewFighter(
 	size_t slavesCount = 1;
 	Military* slave;
 
-	while ((slave = m_pRucksack->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
-		&& ++slavesCount <= m_pRucksack->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
+	while ((slave = this->m_pRucksack->m_ownerHerosPub.GetAvailableSlave(this)) != nullptr
+		&& ++slavesCount <= this->m_pRucksack->m_ownerHerosPub.m_maxThreadsPerSplitedNode_ && !Fake)
 	{
 		splitedNode.m_slavesMask |= UINT64_C(1) << slave->m_idx;
 		slave->m_activeSplitedNode = &splitedNode;
@@ -120,11 +120,11 @@ void Military::ForkNewFighter(
 
 	if (1 < slavesCount || Fake) {
 		splitedNode.m_mutex.unlock();
-		m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
+		this->m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 		Military::IdleLoop();
 		assert(!m_searching);
 		assert(!m_activePosition);
-		m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
+		this->m_pRucksack->m_ownerHerosPub.m_mutex_.lock();
 		splitedNode.m_mutex.lock();
 	}
 
@@ -136,7 +136,7 @@ void Military::ForkNewFighter(
 	bestMove = splitedNode.m_bestMove;
 	bestScore = splitedNode.m_bestScore;
 
-	m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
+	this->m_pRucksack->m_ownerHerosPub.m_mutex_.unlock();
 	splitedNode.m_mutex.unlock();
 }
 
