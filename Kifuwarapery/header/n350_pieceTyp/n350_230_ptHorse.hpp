@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 
 #include "../n105_color___/n105_100_color.hpp"
@@ -23,7 +23,7 @@
 const static Move g_PTHORSE_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N13_Horse);
 
 
-// PieceType::N13_Horse
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ１３＿Ｈｏｒｓｅ
 class PtHorse : public PtAbstract {
 public:
 
@@ -35,7 +35,7 @@ public:
 		return g_horseAttackBb.GetControllBb(ptEvent.m_occupied, ptEvent.m_sq);
 	}
 
-	// pin �͏Ȃ��Ȃ��B
+	// pin は省かない。
 	void Generate2RecaptureMoves(//FORCE_INLINE
 		MoveStack* moveStackList,
 		const Position& pos,

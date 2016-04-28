@@ -147,7 +147,7 @@ Move NextmoveEvent::GetNextMove_NonSplitedNode() {
 	} while (true);
 }
 
-const ScoreIndex LVATable[N15_PieceTypeNum] = {
+const ScoreIndex LVATable[g_PIECETYPE_NUM] = {
 	ScoreIndex(0),
 	ScoreIndex(1),
 	ScoreIndex(2),

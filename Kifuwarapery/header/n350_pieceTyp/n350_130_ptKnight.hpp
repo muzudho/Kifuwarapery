@@ -22,7 +22,7 @@ const static Move g_PTKNIGHT_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD1
 const static Move g_PTKNIGHT_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N03_Knight);
 
 
-// PieceType::N03_Knight
+// ‚o‚‰‚…‚ƒ‚…‚s‚™‚‚…FF‚m‚O‚RQ‚j‚‚‰‚‡‚ˆ‚”
 class PtKnight : public PtAbstract {
 public:
 

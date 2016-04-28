@@ -10,6 +10,12 @@
 #include "../n165_movStack/n165_500_moveStack.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n350_pieceTyp/n350_110_ptPawn.hpp"
+#include "../n350_pieceTyp/n350_120_ptLance.hpp"
+#include "../n350_pieceTyp/n350_130_ptKnight.hpp"
+#include "../n350_pieceTyp/n350_140_ptSilver.hpp"
+#include "../n350_pieceTyp/n350_150_ptBishop.hpp"
+#include "../n350_pieceTyp/n350_160_ptRook.hpp"
+#include "../n350_pieceTyp/n350_170_ptGold.hpp"
 #include "../n358_dropMake/n358_100_dropMakerHand0.hpp"
 #include "../n358_dropMake/n358_110_dropMakerHand1.hpp"
 #include "../n358_dropMake/n358_120_dropMakerHand2.hpp"
@@ -103,20 +109,20 @@ public:
 		if (Hand::ExceptPawnExists(hand)) {
 
 
-			PieceType haveHandArr[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
+			Move haveHandArr[6]; // 歩以外の持ち駒。vector 使いたいけど、速度を求めるので使わない。
 									  // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 
 			int haveHandNum = 0; // 持ち駒の駒の種類の数
 
 								 // 桂馬、香車、それ以外の順番で格納する。(駒を打てる位置が限定的な順)
-			if (Hand::Exists_HKnight(hand)) { haveHandArr[haveHandNum++] = PieceType::N03_Knight; }
+			if (Hand::Exists_HKnight(hand)) { haveHandArr[haveHandNum++] = g_PTKNIGHT_DA_AS_MOVE; }//桂打
 			const int noKnightIdx = haveHandNum; // 桂馬を除く駒でループするときのループの初期値
-			if (Hand::Exists_HLance(hand)) { haveHandArr[haveHandNum++] = PieceType::N02_Lance; }
+			if (Hand::Exists_HLance(hand)) { haveHandArr[haveHandNum++] = g_PTLANCE_DA_AS_MOVE; }//香打
 			const int noKnightLanceIdx = haveHandNum; // 桂馬, 香車を除く駒でループするときのループの初期値
-			if (Hand::Exists_HSilver(hand)) { haveHandArr[haveHandNum++] = PieceType::N04_Silver; }
-			if (Hand::Exists_HGold(hand)) { haveHandArr[haveHandNum++] = PieceType::N07_Gold; }
-			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = PieceType::N05_Bishop; }
-			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = PieceType::N06_Rook; }
+			if (Hand::Exists_HSilver(hand)) { haveHandArr[haveHandNum++] = g_PTSILVER_DA_AS_MOVE; }//銀打
+			if (Hand::Exists_HGold(hand)) { haveHandArr[haveHandNum++] = g_PTGOLD_DA_AS_MOVE; }//金打
+			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = g_PTBISHOP_DA_AS_MOVE; }//角打
+			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = g_PTROOK_DA_AS_MOVE; }//飛打
 
 			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
 			const Rank tRank9 = (us == Black ? Rank9 : Rank1);

@@ -38,7 +38,7 @@
 
 
 
-Key Position::m_ZOBRIST_[N15_PieceTypeNum][SquareNum][ColorNum];
+Key Position::m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][ColorNum];
 Key Position::m_ZOB_HAND_[HandPieceNum][ColorNum];
 Key Position::m_ZOB_EXCLUSION_;
 
@@ -1348,9 +1348,7 @@ silver_drop_end:
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
-								this->XorBBs(
-									N02_Lance,//TODO:　改善できないかだぜ☆？（＾ｑ＾）
-									from, US);
+								this->XorBBs(N02_Lance,	from, US);
 								return UtilMovePos::MakeCapturePromoteMove(	g_PTLANCE_ONBOARD_AS_MOVE,from, to, *this);
 							}
 						}
@@ -1490,7 +1488,7 @@ void Position::InitZobrist() {
 	// zobTurn_ は 1 であり、その他は 1桁目を使わない。
 	// zobTurn のみ xor で更新する為、他の桁に影響しないようにする為。
 	// hash値の更新は普通は全て xor を使うが、持ち駒の更新の為に +, - を使用した方が都合が良い。
-	for (PieceType pt = N00_Occupied; pt < N15_PieceTypeNum; ++pt) {
+	for (PieceType pt = N00_Occupied; pt < g_PIECETYPE_NUM; ++pt) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			for (Color c = Black; c < ColorNum; ++c) {
 				m_ZOBRIST_[pt][sq][c] = g_mt64bit.GetRandom() & ~UINT64_C(1);
@@ -1570,8 +1568,8 @@ bool Position::IsOK() const {
 		{
 			goto incorrect_position;
 		}
-		for (PieceType pt1 = N01_Pawn; pt1 < N15_PieceTypeNum; ++pt1) {
-			for (PieceType pt2 = pt1 + 1; pt2 < N15_PieceTypeNum; ++pt2) {
+		for (PieceType pt1 = N01_Pawn; pt1 < g_PIECETYPE_NUM; ++pt1) {
+			for (PieceType pt2 = pt1 + 1; pt2 < g_PIECETYPE_NUM; ++pt2) {
 				if ((GetBbOf(pt1) & GetBbOf(pt2)).Exists1Bit()) {
 					goto incorrect_position;
 				}
@@ -2247,7 +2245,7 @@ void Position::FindCheckers()
 
 ScoreIndex Position::ComputeMaterial() const {
 	ScoreIndex s = ScoreZero;
-	for (PieceType pt = N01_Pawn; pt < N15_PieceTypeNum; ++pt) {
+	for (PieceType pt = N01_Pawn; pt < g_PIECETYPE_NUM; ++pt) {
 		const int num = this->GetBbOf20(pt, Black).PopCount() - this->GetBbOf20(pt, White).PopCount();
 		s += num * PieceScore::GetPieceScore(pt);
 	}

@@ -23,7 +23,7 @@
 const static Move g_PTDRAGON_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N14_Dragon);
 
 
-// PieceType::N14_Dragon
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ１４＿Ｄｒａｇｏｎ
 class PtDragon : public PtAbstract {
 public:
 

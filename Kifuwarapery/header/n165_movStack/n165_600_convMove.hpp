@@ -19,7 +19,7 @@ namespace {
 	// 駒打ちの駒の種類(pt)から移動元(from)に変換
 	// todo: PieceType を HandPiece に変更
 	static inline constexpr Square G_PIECETYPE_TO_HANDSQ(const PieceType pt) { return static_cast<Square>(Square::SquareNum - 1 + pt); }
-	static const Square g_CONV_MOVE_PIECETYPE_TO_HANDSQ[PieceType::N15_PieceTypeNum] = {
+	static const Square g_CONV_MOVE_PIECETYPE_TO_HANDSQ[g_PIECETYPE_NUM] = {
 		G_PIECETYPE_TO_HANDSQ(PieceType::N00_Occupied),
 		G_PIECETYPE_TO_HANDSQ(PieceType::N01_Pawn),
 		G_PIECETYPE_TO_HANDSQ(PieceType::N02_Lance),

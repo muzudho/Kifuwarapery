@@ -36,7 +36,7 @@ const PtHorse PiecetypePrograms::m_HORSE;
 const PtDragon PiecetypePrograms::m_DRAGON;
 
 // ポインタの配列にするのが正解☆（＾ｑ＾）
-const PtAbstract* PiecetypePrograms::m_PIECETYPE_PROGRAMS[PieceType::N15_PieceTypeNum] = {
+const PtAbstract* PiecetypePrograms::m_PIECETYPE_PROGRAMS[g_PIECETYPE_NUM] = {
 	&PiecetypePrograms::m_OCCUPIED,
 	&PiecetypePrograms::m_PAWN,
 	&PiecetypePrograms::m_LANCE,

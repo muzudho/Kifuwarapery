@@ -21,7 +21,7 @@ const static Move g_PTBISHOP_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD1
 const static Move g_PTBISHOP_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N05_Bishop);
 
 
-// PieceType::N05_Bishop
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ０５＿Ｂｉｓｈｏｐ
 class PtBishop : public PtAbstract {
 public:
 

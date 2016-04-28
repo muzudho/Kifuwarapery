@@ -20,7 +20,7 @@ public:
 	MoveStack* MakeDropMovesToRank9ExceptNL(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		Move haveHandArr[6]
 	) const override {
 		// 桂馬、香車 以外の持ち駒がない。
 		return pMovestack;
@@ -29,7 +29,7 @@ public:
 	MoveStack* MakeDropMovesToRank8ExceptN(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		Move haveHandArr[6]
 	) const override {
 		// 桂馬 以外の持ち駒がない。
 		return pMovestack;
@@ -38,7 +38,7 @@ public:
 	MoveStack* MakeDropMovesToRank1234567(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6]
+		Move haveHandArr[6]
 	) const override {
 		assert(false);// 最適化の為のダミー
 		return pMovestack;

@@ -12,5 +12,5 @@ struct CheckInfo {
 	explicit CheckInfo(const Position&);
 	Bitboard m_dcBB; // discoverd check candidates bitboard
 	Bitboard m_pinned;
-	Bitboard m_checkBB[N15_PieceTypeNum];
+	Bitboard m_checkBB[g_PIECETYPE_NUM];
 };

@@ -23,7 +23,7 @@ const static Move g_PTPAWN_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(
 const static Move g_PTPAWN_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N01_Pawn);
 
 
-// PieceType::N01_Pawn
+// ÇoÇâÇÖÇÉÇÖÇsÇôÇêÇÖÅFÅFÇmÇOÇPÅQÇoÇÅÇóÇé
 class PtPawn : public PtAbstract {
 public:
 

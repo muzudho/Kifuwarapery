@@ -3,6 +3,6 @@
 
 
 
-const HandPiece g_PIECETYPE_TO_HANDPIECE_TABLE[N15_PieceTypeNum] = {
+const HandPiece g_PIECETYPE_TO_HANDPIECE_TABLE[g_PIECETYPE_NUM] = {
 	HandPieceNum, HPawn, HLance, HKnight, HSilver, HBishop, HRook, HGold, HandPieceNum, HPawn, HLance, HKnight, HSilver, HBishop, HRook
 };

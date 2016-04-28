@@ -21,19 +21,19 @@ public:
 	virtual MoveStack* MakeDropMovesToRank9ExceptNL(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
+		Move haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
 	virtual MoveStack* MakeDropMovesToRank8ExceptN(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
+		Move haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
 	virtual MoveStack* MakeDropMovesToRank1234567(
 		MoveStack* pMovestack,
 		const DropMakerEvent& dmEvent,
-		PieceType haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
+		Move haveHandArr[6] // TODO: これ打ムーブにできないかだぜ☆？（＾ｑ＾）
 	) const = 0;
 
 };

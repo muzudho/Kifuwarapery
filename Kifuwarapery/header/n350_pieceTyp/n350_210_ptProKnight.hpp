@@ -23,7 +23,7 @@
 const static Move g_PTPROKNIGHT_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N11_ProKnight);
 
 
-// PieceType::N11_ProKnight
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ１１＿ＰｒｏＫｎｉｇｈｔ
 class PtProKnight : public PtAbstract {
 public:
 

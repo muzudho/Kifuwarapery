@@ -22,7 +22,7 @@ const static Move g_PTGOLD_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(
 const static Move g_PTGOLD_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N07_Gold);
 
 
-// PieceType::N07_Gold
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ０７＿Ｇｏｌｄ
 class PtGold : public PtAbstract {
 public:
 

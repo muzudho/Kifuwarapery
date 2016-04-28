@@ -23,7 +23,7 @@ const static Move g_PTSILVER_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD1
 const static Move g_PTSILVER_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N04_Silver);
 
 
-// PieceType::N04_Silver
+// ‚o‚‰‚…‚ƒ‚…‚s‚™‚‚…FF‚m‚O‚SQ‚r‚‰‚Œ‚–‚…‚’
 class PtSilver : public PtAbstract {
 public:
 

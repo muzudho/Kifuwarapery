@@ -51,18 +51,14 @@ public:
 				FOREACH_BB(toOn789BB, to, {
 					const Square from = to + TDeltaS;
 
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-						g_PTPAWN_ONBOARD_AS_MOVE,//N01_Pawn,
-						from, to, ptEvent.m_pos);
-					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N01_Pawn
+					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTPAWN_ONBOARD_AS_MOVE,from, to, ptEvent.m_pos);
+					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 					moveStackList++;
 
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
 						const Rank TRank9 = (ptEvent.m_us == Black ? Rank9 : Rank1);
 						if (ConvSquare::TO_RANK10(to) != TRank9) {
-							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-								g_PTPAWN_ONBOARD_AS_MOVE,//N01_Pawn,
-							from, to, ptEvent.m_pos);
+							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTPAWN_ONBOARD_AS_MOVE,from, to, ptEvent.m_pos);
 							moveStackList++;
 						}
 					}
@@ -104,36 +100,28 @@ public:
 					const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 					if (toCanPromote) {
 
-						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-							g_PTLANCE_ONBOARD_AS_MOVE,//N02_Lance,
-							from, to, ptEvent.m_pos);
-						MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N02_Lance
+						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTLANCE_ONBOARD_AS_MOVE,	from, to, ptEvent.m_pos);
+						MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 						moveStackList++;
 
 						if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
 							if (ConvSquare::IS_BEHIND10(ptEvent.m_us, Rank9, Rank1, ConvSquare::TO_RANK10(to))) // 1段目の不成は省く
 							{
-								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-									g_PTLANCE_ONBOARD_AS_MOVE, //N02_Lance,
-									from, to, ptEvent.m_pos);
+								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTLANCE_ONBOARD_AS_MOVE,	from, to, ptEvent.m_pos);
 								moveStackList++;
 							}
 						}
 						else if (ptEvent.m_mt != N01_NonCapture && ptEvent.m_mt != N04_NonCaptureMinusPro) { // 駒を取らない3段目の不成を省く
 							if (ConvSquare::IS_BEHIND10(ptEvent.m_us, Rank8, Rank2, ConvSquare::TO_RANK10(to))) // 2段目の不成を省く
 							{
-								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-									g_PTLANCE_ONBOARD_AS_MOVE, //N02_Lance,
-									from, to, ptEvent.m_pos);
+								moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTLANCE_ONBOARD_AS_MOVE,	from, to, ptEvent.m_pos);
 								moveStackList++;
 							}
 						}
 					}
 					else
 					{
-						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-							g_PTLANCE_ONBOARD_AS_MOVE, //N02_Lance,
-							from, to, ptEvent.m_pos);
+						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTLANCE_ONBOARD_AS_MOVE,	from, to, ptEvent.m_pos);
 						moveStackList++;
 					}
 				}
@@ -197,16 +185,12 @@ public:
 				const Square to = toBB.PopFirstOneFromI9();
 				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
 				if (fromCanPromote | toCanPromote) {
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-						g_PTSILVER_ONBOARD_AS_MOVE,//N04_Silver
-						from, to, ptEvent.m_pos);
-					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);//, ptEvent.m_mt, N04_Silver
+					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTSILVER_ONBOARD_AS_MOVE,	from, to, ptEvent.m_pos);
+					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 					moveStackList++;
 				}
 
-				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-					g_PTSILVER_ONBOARD_AS_MOVE,//N04_Silver
-					from, to, ptEvent.m_pos);
+				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTSILVER_ONBOARD_AS_MOVE,from, to, ptEvent.m_pos);
 				moveStackList++;
 			}
 		}
@@ -272,9 +256,7 @@ public:
 		Bitboard toBB = PiecetypePrograms::m_KING.GetAttacks2From(ptEvent1) & target;
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
-			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,
-				g_PTKING_ONBOARD_AS_MOVE,//N08_King,
-				from, to, ptEvent.m_pos);
+			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTKING_ONBOARD_AS_MOVE,from, to, ptEvent.m_pos);
 			moveStackList++;
 		}
 		return moveStackList;

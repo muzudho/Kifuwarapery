@@ -20,7 +20,7 @@
 const static Move g_PTKING_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N08_King);
 
 
-// PieceType::N08_King
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ０８＿Ｋｉｎｇ
 class PtKing : public PtAbstract {
 public:
 

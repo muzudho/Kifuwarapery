@@ -23,7 +23,7 @@
 const static Move g_PTPROSILVER_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N12_ProSilver);
 
 
-// PieceType::N12_ProSilver
+// ＰｉｅｃｅＴｙｐｅ：：ＰｒｏＳｉｌｖｅｒ
 class PtProSilver : public PtAbstract {
 public:
 

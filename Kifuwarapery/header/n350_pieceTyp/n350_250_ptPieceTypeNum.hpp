@@ -16,7 +16,7 @@
 #include "n350_070_ptAbstract.hpp"
 
 
-// PieceType::N15_PieceTypeNum
+// ‚o‚‰‚…‚ƒ‚…‚s‚™‚‚…FF‚m‚P‚TQ‚o‚‰‚…‚ƒ‚…‚s‚™‚‚…‚m‚•‚
 class PtPieceTypeNum : public PtAbstract {
 public:
 

@@ -43,6 +43,6 @@ public:
 	static const PtHorse m_HORSE;
 	static const PtDragon m_DRAGON;
 
-	static const PtAbstract* m_PIECETYPE_PROGRAMS[PieceType::N15_PieceTypeNum];
+	static const PtAbstract* m_PIECETYPE_PROGRAMS[g_PIECETYPE_NUM];
 
 };

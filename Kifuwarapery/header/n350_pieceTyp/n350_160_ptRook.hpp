@@ -21,7 +21,7 @@ const static Move g_PTROOK_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(
 const static Move g_PTROOK_DA_AS_MOVE = ConvMove::FROM_PIECETYPE_DA10(PieceType::N06_Rook);
 
 
-// PieceType::N06_Rook
+// ＰｉｅｃｅＴｙｐｅ：：Ｎ０６＿Ｒｏｏｋ
 class PtRook : public PtAbstract {
 public:
 

@@ -22,7 +22,7 @@
 const static Move g_PTPROPAWN_ONBOARD_AS_MOVE = ConvMove::FROM_PIECETYPE_ONBOARD10(PieceType::N09_ProPawn);
 
 
-// PieceType::N09_ProPawn
+// ‚o‚‰‚…‚ƒ‚…‚s‚™‚‚…FF‚o‚’‚‚o‚‚—‚
 class PtProPawn : public PtAbstract {
 public:
 

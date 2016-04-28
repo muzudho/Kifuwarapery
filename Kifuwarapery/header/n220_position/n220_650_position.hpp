@@ -372,7 +372,7 @@ private:
 
 	Rucksack* m_pRucksack_;
 
-	static Key m_ZOBRIST_[N15_PieceTypeNum][SquareNum][ColorNum];
+	static Key m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][ColorNum];
 
 	static const Key m_zobTurn_ = 1;
 
