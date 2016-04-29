@@ -56,31 +56,56 @@ private:
 	// なんだかんだで、使っちゃうつもりの時間☆（＾ｑ＾）
 	int GetTukatteiiTime() const {
 		// 予定思考タイム　＋　遊びタイム
-		return this->GetYoteiSikoTime() + this->GetSikoAsobiTime();
+		return this->GetYoteiBothTurnTime() + this->GetSikoAsobiTime();
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────
-	// 今回使おうと思っている思考時間
+	// 相手の手番（Oppo teban）で使おうと思っている思考時間
 	//────────────────────────────────────────────────────────────────────────────────
-	inline int GetYoteiSikoTime() const {
-		return this->m_yoteiSikoTime_;
+	inline int GetYosouOppoTurnTime() const {
+		return this->m_yosouOppoTurnTime_;
 	}
-	inline void SetYoteiSikoTime(int value) {
-		this->m_yoteiSikoTime_ = value;
+	inline void SetYosouOppoTurnTime(int value) {
+		this->m_yosouOppoTurnTime_ = value;
 	}
-	inline void IncreaseYoteiSikoTime(int value) {
-		this->m_yoteiSikoTime_ += value;
+	inline void ZeroclearYosouOppoTurnTime()
+	{
+		this->m_yosouOppoTurnTime_ = 0;
+	}
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 自分の手番と相手の手番の両方（Both turn）で使おうと思っている思考時間
+	//────────────────────────────────────────────────────────────────────────────────
+	inline int GetYoteiBothTurnTime() const {
+		return this->m_yoteiMyTurnTime_ + this->m_yosouOppoTurnTime_;
+	}
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 自分の手番（My turn）で使おうと思っている思考時間
+	//────────────────────────────────────────────────────────────────────────────────
+	inline int GetYoteiMyTurnTime() const {
+		return this->m_yoteiMyTurnTime_;
+	}
+	inline void SetYoteiMyTurnTime(int value) {
+		this->m_yoteiMyTurnTime_ = value;
+	}
+	inline void IncreaseYoteiMyTurnTime(int value) {
+		this->m_yoteiMyTurnTime_ += value;
 	}
 	// 少なくなっていた場合、更新します。
-	inline void SmallUpdate_YoteiSikoTime(int value) {
-		this->SetYoteiSikoTime( std::min(
-			this->GetYoteiSikoTime(), // 元の値
-			value
-			));
+	inline void SmallUpdate_YoteiMyTurnTime(int newValue) {
+
+		if (newValue < this->GetYoteiBothTurnTime() ) {
+			this->SetYoteiMyTurnTime( newValue - this->GetYosouOppoTurnTime() );
+		}
 	}
 	// 大きくなっていた場合、更新します。
-	inline void LargeUpdate_YoteiSikoTime(int value) {
-		this->SetYoteiSikoTime( std::max(this->m_yoteiSikoTime_, value));
+	inline void LargeUpdate_YoteiMyTurnTime(int newValue) {
+
+		if (this->GetYoteiBothTurnTime() < newValue)
+		{
+			this->SetYoteiMyTurnTime( newValue - this->GetYosouOppoTurnTime() );
+		}
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────
@@ -112,18 +137,22 @@ private:
 	inline void SetSikoAsobiTime(int value) {
 		this->m_sikoAsobiTime_ = value;
 	}
-	inline void ZeroClearSikoAsobiTime() {
+	inline void ZeroclearSikoAsobiTime() {
 		this->SetSikoAsobiTime( 0);
 	}
 
 private:
 
 	//────────────────────────────────────────────────────────────────────────────────
-	// 今回使おうと思っている思考時間
+	// 相手の手番（Oppo turn）で使おうと思っている思考時間
+	//────────────────────────────────────────────────────────────────────────────────
+	int m_yosouOppoTurnTime_;
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 自分の手番（my turn）で使おうと思っている思考時間
 	//────────────────────────────────────────────────────────────────────────────────
 	// 元の名前：ＯｐｔｉｍｕｍＳｅａｒｃｈＴｉｍｅ
-	// 理想的な思考時間？　（何かの単位のようだぜ☆）
-	int m_yoteiSikoTime_;
+	int m_yoteiMyTurnTime_;
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 思考の最大延長時間
