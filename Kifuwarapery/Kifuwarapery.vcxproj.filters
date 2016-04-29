@@ -190,9 +190,6 @@
     <Filter Include="source\n885_searcher">
       <UniqueIdentifier>{9ce0590a-7a3d-4d4a-8c9c-fefe2f61d93c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n883_search__">
-      <UniqueIdentifier>{12f8086c-e13c-4268-92e4-0a5751f5846d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n883_nodeType">
       <UniqueIdentifier>{3845759c-eaf6-48cf-a64c-c96beef0726e}</UniqueIdentifier>
     </Filter>
@@ -240,6 +237,9 @@
     </Filter>
     <Filter Include="source\n755_sword___">
       <UniqueIdentifier>{5351d633-45f1-4ccf-8719-591e7126cc0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n883_nodeType">
+      <UniqueIdentifier>{12f8086c-e13c-4268-92e4-0a5751f5846d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1589,9 +1589,6 @@
     <ClCompile Include="source\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.cpp">
       <Filter>source\n887_nodeType</Filter>
     </ClCompile>
-    <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
-      <Filter>source\n883_search__</Filter>
-    </ClCompile>
     <ClCompile Include="source\n885_searcher\n885_510_hitchhiker.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
@@ -1627,6 +1624,9 @@
     </ClCompile>
     <ClCompile Include="source\n350_pieceTyp\n350_030_makePromoteMove.cpp">
       <Filter>source\n350_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
+      <Filter>source\n883_nodeType</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

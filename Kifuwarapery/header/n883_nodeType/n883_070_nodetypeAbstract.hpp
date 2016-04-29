@@ -110,7 +110,9 @@ public:
 		Move& ttMove,
 		Move& excludedMove,
 		ScoreIndex& ttScore
-	)const {
+		)const// = 0;
+	// /*
+	{
 
 		// initialize node
 
@@ -131,6 +133,7 @@ public:
 		return;
 		//goto split_point_start;
 	}
+	//*/
 
 	virtual inline void DoStep1b(
 		ScoreIndex& bestScore,

@@ -43,6 +43,45 @@ public:
 		assert(alpha == beta - 1);
 	}
 
+	/*
+	// スプリット・ポイントのみ実行☆（＾ｑ＾）
+	virtual inline void DoStep1a(
+		bool& isGotoSplitPointStart,
+		int& moveCount,
+		int& playedMoveCount,
+		bool& inCheck,
+		Position& pos,
+		SplitedNode** ppSplitedNode,
+		Flashlight** ppFlashlight,
+		Move& bestMove,
+		Move& threatMove,
+		ScoreIndex& bestScore,
+		Move& ttMove,
+		Move& excludedMove,
+		ScoreIndex& ttScore
+		)const override {
+
+		// initialize node
+
+		*ppSplitedNode = (*ppFlashlight)->m_splitedNode;
+		bestMove = (*ppSplitedNode)->m_bestMove;
+		threatMove = (*ppSplitedNode)->m_threatMove;
+		bestScore = (*ppSplitedNode)->m_bestScore;
+		//tte = nullptr;
+		ttMove = excludedMove = g_MOVE_NONE;
+		ttScore = ScoreNone;
+
+		Evaluation09 evaluation;
+		evaluation.evaluate(pos, *ppFlashlight);
+
+		assert(-ScoreInfinite < (*ppSplitedNode)->m_bestScore && 0 < (*ppSplitedNode)->m_moveCount);
+
+		isGotoSplitPointStart = true;
+		return;
+		//goto split_point_start;
+	}
+	//*/
+
 	virtual inline void DoStep2(
 		bool& isReturnWithScore,
 		ScoreIndex& returnScore,

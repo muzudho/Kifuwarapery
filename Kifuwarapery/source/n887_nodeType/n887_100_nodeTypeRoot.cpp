@@ -75,10 +75,6 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	) const {
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
-	this->AssertBeforeStep1(
-		alpha,
-		beta
-		);
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
@@ -115,6 +111,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
+	/* ok
 	this->DoStep1a(
 		isGotoSplitPointStart,
 		moveCount,
@@ -134,6 +131,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		goto split_point_start;
 	}
+	//*/
 
 	this->DoStep1b(
 		bestScore,
@@ -150,6 +148,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 
 	// step2
+	//*
 	this->DoStep2(
 		isReturnWithScore,
 		returnScore,
@@ -157,11 +156,11 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 		rucksack,
 		&pFlashlight
 		);
-
 	if (isReturnWithScore)
 	{
 		return returnScore;
 	}
+	//*/
 
 	// step3
 	this->DoStep3(
