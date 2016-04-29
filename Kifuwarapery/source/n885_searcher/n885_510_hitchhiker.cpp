@@ -65,7 +65,12 @@ void Hitchhiker::Think(
 
 	bool isMoveTime0Clear = false;
 	captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted(
-		isMoveTime0Clear, captainsRucksack.m_limits, pos.GetGamePly(), pos.GetTurn(), &captainsRucksack);
+		isMoveTime0Clear,
+		captainsRucksack.m_limits,
+		//pos.GetGamePly(),
+		pos.GetTurn(),
+		&captainsRucksack
+		);
 	if (isMoveTime0Clear) {
 		captainsRucksack.m_limits.ZeroClearMoveTime();
 	}

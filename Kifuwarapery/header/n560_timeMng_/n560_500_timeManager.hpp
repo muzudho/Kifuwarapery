@@ -14,7 +14,7 @@ public:
 	void InitializeTimeManager_OnHitchhikerThinkStarted(
 		bool& isMoveTime0Clear,
 		const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
-		const Ply currentPly,
+		//const Ply currentPly,
 		const Color us,
 		Rucksack* pRucksack
 		);

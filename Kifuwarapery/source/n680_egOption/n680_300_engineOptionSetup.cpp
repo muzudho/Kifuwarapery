@@ -43,12 +43,12 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Rucksack * pRucksack)
 	pMap->Put("Max_Random_Score_Diff_Ply"	, EngineOption(40, 0, SHRT_MAX));
 
 	//────────────────────────────────────────────────────────────────────────────────
-	// 時間制御関連か☆？（＾ｑ＾）
+	// 時間制御関連☆（＾ｑ＾）
 	//────────────────────────────────────────────────────────────────────────────────
 	pMap->Put("Emergency_Move_Horizon"		, EngineOption(40, 0, 50));
 	//pMap->Put("Emergency_Base_Time"			, EngineOption(   200,  0, 30000));	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
 	//pMap->Put("Emergency_Move_Time"			, EngineOption(    70,  0,  5000));	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
-	pMap->Put("Slow_Mover"					, EngineOption(   100, 10,  1000));//スロー・ムーバーとは何なのか☆？（＾ｑ＾）？
+	//pMap->Put("Slow_Mover"					, EngineOption(   100, 10,  1000));//スロー・ムーバーとは何なのか☆？（＾ｑ＾）？
 #if defined(FISCHER_RULE)
 	pMap->Put("Minimum_Thinking_Time"		, EngineOption(  9000,  0, INT_MAX));// 10秒加算されると見越して、9秒は最低使えるということにしようぜ☆（＾ｑ＾）
 #else
