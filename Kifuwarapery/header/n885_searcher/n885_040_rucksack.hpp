@@ -67,8 +67,21 @@ public:
 	// タイム・マネージャー？
 	TimeManager				m_timeManager;
 
-	// ベストムーブ？
-	Ply						m_bestMoveChanges;
+	//────────────────────────────────────────────────────────────────────────────────
+	// ベストムーブ・チェンジスって何だぜ☆？（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	inline Ply GetBestMovePlyChanges()
+	{
+		return this->m_bestMovePlyChanges_;
+	}
+	inline void ZeroclearBestMovePlyChanges()
+	{
+		this->m_bestMovePlyChanges_ = 0;
+	}
+	inline void IncreaseBestMovePlyChanges()
+	{
+		++this->m_bestMovePlyChanges_;
+	}
 
 	// ヒストリー？
 	History					m_history;
@@ -287,6 +300,13 @@ public://private:
 		return false;
 	}
 
+
+private:
+	//────────────────────────────────────────────────────────────────────────────────
+	// ベストムーブ・チェンジスって何だぜ☆？（＾ｑ＾）
+	//────────────────────────────────────────────────────────────────────────────────
+	// 元の名前：ｂｅｓｔＭｏｖｅＣｈａｎｇｅｓ
+	Ply						m_bestMovePlyChanges_;
 
 };
 

@@ -85,10 +85,142 @@ namespace {
 	// 大会は256手目までだぜ☆（＾ｑ＾）読みの配列インデックス・オーバーも考慮して、256手目の先も２倍分用意しておくぜ☆（＾ｑ＾）
 	// 全部 0 にすると、おそらく残り時間＝予定思考時間＝最大延長時間　になるぜ☆（＾ｑ＾）
 	const int g_SYOHI_OMOMI_BY_TEME_NUM = 512;
+
+	const int g_SYOHI_OMOMI_BY_TEME_PLY016 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY032 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY048 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY064 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY080 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY096 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY112 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY128 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY144 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY160 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY176 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY192 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY208 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY224 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY240 = 1000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY256 = 1000;
+
+	/* 序盤で1分も使う息切れタイプ☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY016 = 881467929;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY032 =  55091745;//  1/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY048 =   6886468;//  2/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY064 =   1291212;//  3/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY080 =    322803;//  4/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY096 =    100876;//  5/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY112 =     37828;//  6/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY128 =     16550;//  7/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY144 =      8275;//  8/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY160 =      4654;//  9/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY176 =      2909;// 10/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY192 =      2000;// 11/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY208 =      1500;// 12/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY224 =      1218;// 13/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY240 =      1066;// 14/16 にした☆
+	const int g_SYOHI_OMOMI_BY_TEME_PLY256 =      1000;// 15/16 にした☆
+	*/
+
+	/* 序盤で40秒も使う序盤型になってしまったぜ☆（＾ｑ＾）息切れタイプ☆（＾ｑ＾）
+	const int g_SYOHI_OMOMI_BY_TEME_PLY016 = 8815626;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY032 = 8264650;// 15/16 にした☆(-550976)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY048 = 7231569;// 14/16 にした☆(-1033081)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY064 = 5875650;// 13/16 にした☆(-1355919)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY080 = 4406738;// 12/16 にした☆(-1468912)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY096 = 3029633;// 11/16 にした☆(-1377105)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY112 = 1893521;// 10/16 にした☆(-1136112)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY128 = 1065106;//  9/16 にした☆(-828415)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY144 =  532553;//  8/16 にした☆(-532553)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY160 =  232992;//  7/16 にした☆(-299561)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY176 =   87372;//  6/16 にした☆(-145620)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY192 =   27304;//  5/16 にした☆(-60068)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY208 =    6826;//  4/16 にした☆(-20478)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY224 =    1280;//  3/16 にした☆(-5546)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY240 =     160;//  2/16 にした☆(-1120)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY256 =      10;//  1/16 にした☆(-150)
+	*/
+
+	/* ↓30手目で持ち時間半分使い切って、総矢倉とか定跡形を組んで評価値 -127 とかいいことないぜ☆（＾ｑ＾）
+	const int g_SYOHI_OMOMI_BY_TEME_PLY016 = 100000;
+	const int g_SYOHI_OMOMI_BY_TEME_PLY032 = 93750;// 次は 15/16 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY048 = 87500;// 次は 14/15 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY064 = 81250;// 次は 13/14 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY080 = 75000;// 次は 12/13 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY096 = 68750;// 次は 11/12 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY112 = 62500;// 次は 10/11 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY128 = 56250;// 次は  9/10 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY144 = 50000;// 次は  8/ 9 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY160 = 43750;// 次は  7/ 8 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY176 = 37500;// 次は  6/ 7 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY192 = 31250;// 次は  5/ 6 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY208 = 25000;// 次は  4/ 5 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY224 = 18750;// 次は  3/ 4 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY240 = 12500;// 次は  2/ 3 に☆(-6250)
+	const int g_SYOHI_OMOMI_BY_TEME_PLY256 =  6250;// 次は  1/ 2 に☆(-6250)
+	//*/
+
 	const int g_SYOHI_OMOMI_BY_TEME[g_SYOHI_OMOMI_BY_TEME_NUM] = {
+		//
+		// カーブにしないとな☆（＾ｑ＾）
+		//
+		// 1～16
+		g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016, g_SYOHI_OMOMI_BY_TEME_PLY016,
+		// 17～32
+		g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032, g_SYOHI_OMOMI_BY_TEME_PLY032,
+		// 33～48
+		g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048, g_SYOHI_OMOMI_BY_TEME_PLY048,
+		// 49～64
+		g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064, g_SYOHI_OMOMI_BY_TEME_PLY064,
+		// 65～80
+		g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080, g_SYOHI_OMOMI_BY_TEME_PLY080,
+		// 81～96
+		g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096, g_SYOHI_OMOMI_BY_TEME_PLY096,
+		// 97～112
+		g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112, g_SYOHI_OMOMI_BY_TEME_PLY112,
+		// 113～128
+		g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128, g_SYOHI_OMOMI_BY_TEME_PLY128,
+		// 129～144
+		g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144, g_SYOHI_OMOMI_BY_TEME_PLY144,
+		// 145～160
+		g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160, g_SYOHI_OMOMI_BY_TEME_PLY160,
+		// 161～176
+		g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176, g_SYOHI_OMOMI_BY_TEME_PLY176,
+		// 177～192
+		g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192, g_SYOHI_OMOMI_BY_TEME_PLY192,
+		// 193～208
+		g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208, g_SYOHI_OMOMI_BY_TEME_PLY208,
+		// 209～224
+		g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224, g_SYOHI_OMOMI_BY_TEME_PLY224,
+		// 225～240
+		g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240, g_SYOHI_OMOMI_BY_TEME_PLY240,
+		// 241～256
+		g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256, g_SYOHI_OMOMI_BY_TEME_PLY256,
+		//────────────────────────────────────────────────────────────────────────────────
+		// 以降手抜き☆
+		//────────────────────────────────────────────────────────────────────────────────
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 1);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 2);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 3);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 4);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 5);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 6);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 7);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 8);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// ( 9);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (10);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (11);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (12);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (13);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (14);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (15);
+		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0 	// (16);
+		/*
 		//
 		// 逆にしてみたぜ☆（＾ｑ＾）１手目付近が小さく、２５６手目付近が大きく☆
 		// これで　１手目付近は　１７秒ぐらい使っているぜ☆　逆にすると１手目付近から３０秒ぐらい使ってしまってタイヘンだったぜ☆（＾ｑ＾）
+		//
+		// FIXME: 150手目あたりで ５分残して 14秒 ぐらいしか使わなくなるぜ☆（＾ｑ＾） 20秒ぐらい使ってほしいのに☆
 		//
 		//────────────────────────────────────────────────────────────────────────────────
 		// 1～32手目の重み☆ 4/3 ぐらい上昇☆
@@ -156,6 +288,7 @@ namespace {
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (14);
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,	// (15);
 		0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,    0 	// (16);
+		//*/
 	};
 
 	// 旧名：ｇｅｔＭｏｖｅＩｍｐｏｒｔａｎｃｅ
@@ -248,14 +381,14 @@ namespace {
 
 
 // 旧名：ＳｅｔＰｖＩｎｓｔａｂｉｌｉｔｙ
-void TimeManager::SetPvInstability(
-	const int currChanges,
-	const int prevChanges
+void TimeManager::SetPvInstability_AtIterativeDeepeningStarted(
+	const Ply currBestMovePlyChanges,
+	const Ply prevBestMovePlyChanges
 ) {
 	this->SetSikoAsobiTime(
-		currChanges * (this->GetYoteiSikoTime() / 2)
+		currBestMovePlyChanges * (this->GetYoteiSikoTime() / 2)
 		+
-		prevChanges * (this->GetYoteiSikoTime() / 3)
+		prevBestMovePlyChanges * (this->GetYoteiSikoTime() / 3)
 		);
 }
 
@@ -310,14 +443,16 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	}
 
 	if (pRucksack->m_engineOptions["USI_Ponder"]) {
-		// ポンダーを使う設定☆？（＾ｑ＾）？
-		// 思考予定タイムには、 4分の1　のボーナスを追加します。
+		// 相手の思考中にも読み続ける設定の場合☆（＾ｑ＾）
+
+		// 相手が何秒考えるかなんて分からないので☆（＾～＾）
+		// 思考予定タイムには、 4分の1　のボーナスを追加しておくことにするぜ☆（＾▽＾）
 		this->IncreaseYoteiSikoTime( this->GetYoteiSikoTime() / 4);
 	}
 
-	// 大きくなっていれば更新します。
+	// 予定思考時間よりも最低思考時間の方が大きいようなら、予定思考時間は最低思考時間と等しくします。
 	this->LargeUpdate_YoteiSikoTime( minThinkingTime);
-	// 小さくなっていれば更新します。
+	// 予定思考時間よりも最大延長時間の方が小さいようなら、予定思考時間は最大延長時間と等しくします。
 	this->SmallUpdate_YoteiSikoTime( this->GetSaidaiEnchoTime() );
 
 	if (limits.GetMoveTime() != 0) {//（＾ｑ＾）いつも　０　な気がするぜ☆
@@ -336,6 +471,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	}
 	//旧表示：optimum_search_time
 	//旧表示：maximum_search_time	
-	SYNCCOUT << "info string limits inc time " << limits.GetIncrement(us) << SYNCENDL;
+	SYNCCOUT << "info string old limits move time " << limits.GetMoveTime() << SYNCENDL;
+	// SYNCCOUT << "info string limits inc time " << limits.GetIncrement(us) << SYNCENDL; // 加算時間はちゃんと取得できていたぜ☆
 	SYNCCOUT << "info string tukatteii time " << this->GetTukatteiiTime() << " ( yotei " << this->GetYoteiSikoTime() << " + asobi " << this->GetSikoAsobiTime() << ") / saidai encho " << this->GetSaidaiEnchoTime() << SYNCENDL;
 }

@@ -1046,7 +1046,7 @@ public:
 			rm.ExtractPvFromTT(pos);
 
 			if (!isPVMove) {
-				++rucksack.m_bestMoveChanges;
+				rucksack.IncreaseBestMovePlyChanges();
 			}
 		}
 		else {

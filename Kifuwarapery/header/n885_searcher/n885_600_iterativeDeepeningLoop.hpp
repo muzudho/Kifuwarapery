@@ -23,7 +23,10 @@ public:
 	{
 		Flashlight flashlight[g_maxPlyPlus2];
 		Ply depth;
-		Ply prevBestMoveChanges;
+
+		// ベストムーブは何手目かだろうかなんだぜ☆？（＾ｑ＾）？
+		Ply prevBestMovePlyChanges;
+
 		ScoreIndex bestScore = -ScoreInfinite;
 		ScoreIndex delta = -ScoreInfinite;
 		ScoreIndex alpha = -ScoreInfinite;
@@ -32,7 +35,7 @@ public:
 		int lastInfoTime = -1; // 将棋所のコンソールが詰まる問題への対処用
 
 		memset(flashlight, 0, 4 * sizeof(Flashlight));
-		rucksack.m_bestMoveChanges = 0;
+		rucksack.ZeroclearBestMovePlyChanges();
 #if defined LEARN
 		// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
 		GetDepth = std::max<Ply>(0, m_limits.GetDepth - 1);
@@ -97,8 +100,8 @@ public:
 				rucksack.m_rootMoves[i].m_prevScore_ = rucksack.m_rootMoves[i].m_score_;
 			}
 
-			prevBestMoveChanges = rucksack.m_bestMoveChanges;
-			rucksack.m_bestMoveChanges = 0;
+			prevBestMovePlyChanges = rucksack.GetBestMovePlyChanges();
+			rucksack.ZeroclearBestMovePlyChanges(); // 退避したので、ゼロクリアーするぜ☆（＾ｑ＾）
 
 			// Multi PV loop
 			for (rucksack.m_pvIdx = 0; rucksack.m_pvIdx < rucksack.m_pvSize && !rucksack.m_signals.m_stop; ++rucksack.m_pvIdx) {
@@ -223,7 +226,7 @@ public:
 
 				// 深さが 5 ～ 49 で、PVサイズが 1 のとき。
 				if (4 < depth && depth < 50 && rucksack.m_pvSize == 1) {
-					rucksack.m_timeManager.SetPvInstability(rucksack.m_bestMoveChanges, prevBestMoveChanges);
+					rucksack.m_timeManager.SetPvInstability_AtIterativeDeepeningStarted(rucksack.GetBestMovePlyChanges(), prevBestMovePlyChanges);
 				}
 
 				// 次のイテレーションを回す時間が無いなら、ストップ
@@ -233,7 +236,7 @@ public:
 					stop = true;
 				}
 
-				if (2 < depth && rucksack.m_bestMoveChanges) {
+				if (2 < depth && rucksack.GetBestMovePlyChanges()) {
 					bestMoveNeverChanged = false;
 				}
 

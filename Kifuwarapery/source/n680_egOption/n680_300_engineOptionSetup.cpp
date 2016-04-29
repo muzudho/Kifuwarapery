@@ -49,7 +49,11 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Rucksack * pRucksack)
 	//pMap->Put("Emergency_Base_Time"			, EngineOption(   200,  0, 30000));	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
 	//pMap->Put("Emergency_Move_Time"			, EngineOption(    70,  0,  5000));	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
 	pMap->Put("Slow_Mover"					, EngineOption(   100, 10,  1000));//スロー・ムーバーとは何なのか☆？（＾ｑ＾）？
-	pMap->Put("Minimum_Thinking_Time"		, EngineOption(  5500,  0, INT_MAX));//元の値：初期値 1500（1.5）秒☆？
+#if defined(FISCHER_RULE)
+	pMap->Put("Minimum_Thinking_Time"		, EngineOption(  9000,  0, INT_MAX));// 10秒加算されると見越して、9秒は最低使えるということにしようぜ☆（＾ｑ＾）
+#else
+	pMap->Put("Minimum_Thinking_Time", EngineOption(1500, 0, INT_MAX));// 元の値：初期値 1500（1.5）秒☆
+#endif
 
 	//────────────────────────────────────────────────────────────────────────────────
 	//

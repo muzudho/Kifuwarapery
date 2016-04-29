@@ -20,7 +20,10 @@ public:
 		);
 
 	// 本譜の情勢不安定さ☆？をセットするぜ☆
-	void SetPvInstability(const int currChanges, const int prevChanges);
+	void SetPvInstability_AtIterativeDeepeningStarted(
+		const Ply currBestmovePlyChanges,
+		const Ply prevBestmovePlyChanges
+		);
 
 	// 使っていい時間をオーバーしちゃったかどうかだぜ☆（＾ｑ＾）最初の指し手のときに使うぜ☆
 	inline bool CanThinking01_TimeOver_AtFirstMove(const int elapsed) { return this->GetTukatteiiTime() < elapsed; }
@@ -52,6 +55,7 @@ private:
 	// 元の名前：ＡｖａｉｌａｂｌｅＴｉｍｅ
 	// なんだかんだで、使っちゃうつもりの時間☆（＾ｑ＾）
 	int GetTukatteiiTime() const {
+		// 予定思考タイム　＋　遊びタイム
 		return this->GetYoteiSikoTime() + this->GetSikoAsobiTime();
 	}
 
@@ -109,7 +113,7 @@ private:
 		this->m_sikoAsobiTime_ = value;
 	}
 	inline void ZeroClearSikoAsobiTime() {
-		this->m_sikoAsobiTime_ = 0;
+		this->SetSikoAsobiTime( 0);
 	}
 
 private:
