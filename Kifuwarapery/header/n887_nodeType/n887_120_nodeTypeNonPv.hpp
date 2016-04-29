@@ -18,6 +18,16 @@
 class NodetypeNonPv : public NodetypeAbstract {
 public:
 
+	virtual ScoreIndex GoToTheAdventure_new(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight* pFlashlight,//サーチスタック
+		ScoreIndex alpha,
+		ScoreIndex beta,
+		const Depth depth,
+		const bool cutNode
+		) const override;
+
 	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
 		int& moveCount,
@@ -130,7 +140,7 @@ public:
 		return mp.GetNextMove_NonSplitedNode();
 	};
 
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
 		ScoreIndex& score,
@@ -149,7 +159,7 @@ public:
 			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11d_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
@@ -158,7 +168,7 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11Bc_LoopHeader(
+	virtual inline void DoStep11e_LoopHeader(
 		Rucksack& rucksack,
 		int& moveCount
 		) const override {
@@ -167,7 +177,7 @@ public:
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
 		Position& pos,
 		Move& move,

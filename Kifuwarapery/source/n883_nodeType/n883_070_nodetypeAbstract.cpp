@@ -47,7 +47,6 @@
 #include "../../header/n886_repeType/n886_140_rtSuperior.hpp"
 #include "../../header/n886_repeType/n886_150_rtInferior.hpp"
 #include "../../header/n886_repeType/n886_500_rtArray.hpp"//FIXME:
-//class Rucksack;
 
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
 
@@ -60,6 +59,7 @@ extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
+/*
 ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	Rucksack& rucksack,
 	Position& pos,
@@ -267,6 +267,9 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 		beta,
 		eval
 		);
+	if (isReturnWithScore) {
+		return returnScore;
+	}
 
 	// step8
 	this->DoStep8_NonPV(
@@ -332,7 +335,7 @@ split_point_start:
 		);
 	const CheckInfo ci(pos);
 
-	this->DoStep11A_BeforeLoop_SplitPointStart(
+	this->DoStep11a_BeforeLoop_SplitPointStart(
 		ttMove,
 		depth,
 		score,
@@ -352,7 +355,7 @@ split_point_start:
 		) {
 
 		bool isContinue = false;
-		this->DoStep11Ba_LoopHeader(
+		this->DoStep11b_LoopHeader(
 			isContinue,
 			move,
 			excludedMove
@@ -362,7 +365,7 @@ split_point_start:
 			continue;
 		}
 
-		this->DoStep11Bb_LoopHeader(
+		this->DoStep11c_LoopHeader(
 			isContinue,
 			pos,
 			move,
@@ -375,7 +378,7 @@ split_point_start:
 			continue;
 		}
 
-		this->DoStep11Bb_LoopHeader(
+		this->DoStep11d_LoopHeader(
 			isContinue,
 			rucksack,
 			move
@@ -385,7 +388,7 @@ split_point_start:
 			continue;
 		}
 
-		this->DoStep11Bc_LoopHeader(
+		this->DoStep11e_LoopHeader(
 			rucksack,
 			moveCount
 			);
@@ -632,3 +635,4 @@ split_point_start:
 	return bestScore;
 
 }
+*/

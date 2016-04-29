@@ -8,9 +8,14 @@
 namespace {
 #if 1
 	//────────────────────────────────────────────────────────────────────────────────
-	// MaxRatio …… 1.0 より大きくする感じ☆？ 残り時間に何か影響する☆？
-	//
+	// MoveHorizon …… 消費する思考時間の配分にだけ関係するみたいだが☆？（＾ｑ＾）？ 初期値47☆
+	// MaxRatio …… 1.0 より大きくする感じ☆？ 最大延長時間にだけ関係するみたいだが☆？（＾ｑ＾）？ 
 	//────────────────────────────────────────────────────────────────────────────────
+	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
+	const int g_MOVE_HORIZON = 55;	// 
+	const float g_MAX_RATIO = 800.0f; // 
+									 //────────────────────────────────────────────────────────────────────────────────
+#elif 11
 	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
 	const int g_MOVE_HORIZON = 55;	// 消費する思考時間の配分にだけ関係するみたいだが☆？（＾ｑ＾）？ 初期値47☆
 	const float g_MAX_RATIO = 10.0f; // 最大延長時間にだけ関係するみたいだが☆？（＾ｑ＾）？ 5.0 で 長考は 通常の3倍☆？
@@ -201,7 +206,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 		motiTime = std::max(motiTime, 0); // 0以上を確保するぜ☆（＾ｑ＾）
 
 		// 思考予定タイムが、少なくなっていれば更新します。
-		this->SmallUpdate_YoteiMyTurnTime(
+		this->SmallUpdateMyTime_CompareBothTime(
 
 			// 手番 i での、消費後の残り時間
 			static_cast<int>(motiTime * G_TimeBairitu_YoteiSiko(iMovesToGo)) + nokositeokuTime// (消費時間は倍率で指定) + 残しておく時間
@@ -219,13 +224,12 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 		// 相手が何秒考えるかなんて分からないので☆（＾～＾）
 		// 思考予定タイムには、 4分の1　のボーナスを追加しておくことにするぜ☆（＾▽＾）
 		this->SetYosouOppoTurnTime(this->GetYoteiMyTurnTime() / 4);
-		//this->IncreaseYoteiSikoTime(ponderBonus);
 	}
 
 	// 「予定思考時間＋予想ポンダー時間」よりも「残しておく時間」の方が大きいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、「残しておく時間」と等しくします。
-	this->LargeUpdate_YoteiMyTurnTime( nokositeokuTime);
+	this->LargeUpdateMyTime_CompareBothTime( nokositeokuTime);
 	// 「予定思考時間＋予想ポンダー時間」よりも「最大延長時間」の方が小さいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、は「最大延長時間」と等しくします。
-	this->SmallUpdate_YoteiMyTurnTime( this->GetSaidaiEnchoTime() );
+	this->SmallUpdateMyTime_CompareBothTime( this->GetSaidaiEnchoTime() );
 
 	if (limits.GetMoveTime() != 0) {//（＾ｑ＾）いつも　０　な気がするぜ☆
 		// こんなとこ、実行されないんじゃないかだぜ☆？（＾ｑ＾）？

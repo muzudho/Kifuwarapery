@@ -14,7 +14,6 @@ public:
 	void InitializeTimeManager_OnHitchhikerThinkStarted(
 		bool& isMoveTime0Clear,
 		const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
-		//const Ply currentPly,
 		const Color us,
 		Rucksack* pRucksack
 		);
@@ -93,14 +92,16 @@ private:
 		this->m_yoteiMyTurnTime_ += value;
 	}
 	// 少なくなっていた場合、更新します。
-	inline void SmallUpdate_YoteiMyTurnTime(int newValue) {
+	// 「予定思考時間＋予想ポンダー時間」よりも「最大延長時間」の方が小さいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、は「最大延長時間」と等しくします。
+	inline void SmallUpdateMyTime_CompareBothTime(int newValue) {
 
 		if (newValue < this->GetYoteiBothTurnTime() ) {
 			this->SetYoteiMyTurnTime( newValue - this->GetYosouOppoTurnTime() );
 		}
 	}
 	// 大きくなっていた場合、更新します。
-	inline void LargeUpdate_YoteiMyTurnTime(int newValue) {
+	// 「予定思考時間＋予想ポンダー時間」よりも「残しておく時間」の方が大きいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、「残しておく時間」と等しくします。
+	inline void LargeUpdateMyTime_CompareBothTime(int newValue) {
 
 		if (this->GetYoteiBothTurnTime() < newValue)
 		{

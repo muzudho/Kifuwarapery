@@ -75,7 +75,7 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 class NodetypeAbstract {
 public:
 
-	ScoreIndex GoToTheAdventure_new(
+	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
 		Flashlight* pFlashlight,//サーチスタック
@@ -83,7 +83,7 @@ public:
 		ScoreIndex beta,
 		const Depth depth,
 		const bool cutNode
-		) const;
+		) const = 0;
 
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
@@ -574,7 +574,7 @@ public:
 		) const = 0;
 
 	// ルートノードか、そうでないかで分かれるぜ☆（＾ｑ＾）
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
 		ScoreIndex& score,
@@ -584,7 +584,7 @@ public:
 		const TTEntry* pTtEntry
 		)const = 0;
 
-	virtual inline void DoStep11Ba_LoopHeader(
+	virtual inline void DoStep11b_LoopHeader(
 		bool& isContinue,
 		const Move& move,
 		const Move& excludedMove
@@ -596,7 +596,7 @@ public:
 		}
 	}
 
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11d_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
 		const Move& move
@@ -612,7 +612,7 @@ public:
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
 		Position& pos,
 		Move& move,
@@ -622,7 +622,7 @@ public:
 		) const = 0;
 
 	// ルートノードだけ実行する手続きだぜ☆（＾ｑ＾）
-	virtual inline void DoStep11Bc_LoopHeader(
+	virtual inline void DoStep11e_LoopHeader(
 		Rucksack& rucksack,
 		int& moveCount
 		) const {

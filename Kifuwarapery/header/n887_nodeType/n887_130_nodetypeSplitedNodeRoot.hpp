@@ -22,13 +22,22 @@ extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
 
+	virtual ScoreIndex GoToTheAdventure_new(
+		Rucksack& rucksack,
+		Position& pos,
+		Flashlight* pFlashlight,//サーチスタック
+		ScoreIndex alpha,
+		ScoreIndex beta,
+		const Depth depth,
+		const bool cutNode
+		) const override;
+
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
 		ScoreIndex alpha,
 		ScoreIndex beta
 		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
-		assert(alpha == beta - 1);
 	}
 
 	virtual inline void DoStep2(
@@ -225,7 +234,7 @@ public:
 		return mp.GetNextMove_SplitedNode();
 	};
 
-	virtual inline void DoStep11A_BeforeLoop_SplitPointStart(
+	virtual inline void DoStep11a_BeforeLoop_SplitPointStart(
 		Move& ttMove,
 		const Depth depth,
 		ScoreIndex& score,
@@ -241,7 +250,7 @@ public:
 	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11Bb_LoopHeader(
+	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
 		Position& pos,
 		Move& move,
