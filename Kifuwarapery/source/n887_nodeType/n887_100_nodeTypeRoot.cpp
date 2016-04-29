@@ -250,7 +250,7 @@ split_point_start:
 			moveCount
 			);
 
-		this->DoStep11B_LoopHeader(
+		this->DoStep11f_LoopHeader(
 			extension,
 			captureOrPawnPromotion,
 			move,
@@ -380,6 +380,7 @@ split_point_start:
 
 		// step18
 
+		// これは実行するのかだぜ☆？（＾ｑ＾）？
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}

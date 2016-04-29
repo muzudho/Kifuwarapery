@@ -596,6 +596,16 @@ public:
 		}
 	}
 
+	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep11c_LoopHeader(
+		bool& isContinue,
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
+		) const = 0;
+
 	virtual inline void DoStep11d_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
@@ -610,16 +620,6 @@ public:
 			return;
 		}
 	}
-
-	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
-		bool& isContinue,
-		Position& pos,
-		Move& move,
-		const CheckInfo& ci,
-		int& moveCount,
-		SplitedNode** ppSplitedNode
-		) const = 0;
 
 	// ルートノードだけ実行する手続きだぜ☆（＾ｑ＾）
 	virtual inline void DoStep11e_LoopHeader(
@@ -636,7 +636,7 @@ public:
 #endif
 	}
 
-	virtual inline void DoStep11B_LoopHeader(
+	virtual inline void DoStep11f_LoopHeader(
 		Depth& extension,
 		bool& captureOrPawnPromotion,
 		Move& move,
@@ -644,8 +644,7 @@ public:
 		const CheckInfo& ci,
 		Position& pos,
 		bool& dangerous
-		)const
-	{
+		)const {
 		extension = Depth0;
 		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
 		givesCheck = pos.IsMoveGivesCheck(move, ci);

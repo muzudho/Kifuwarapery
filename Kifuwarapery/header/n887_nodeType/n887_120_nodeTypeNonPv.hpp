@@ -290,6 +290,7 @@ public:
 		ScoreIndex& score,
 		ScoreIndex& beta
 		) const override {
+		// FIXME: 使ってるか☆？（＾ｑ＾）
 		// 非ルートノードの場合☆（＾ｑ＾）
 		return score < beta;
 	}

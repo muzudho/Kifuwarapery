@@ -357,7 +357,9 @@ split_point_start:
 			).IsNone()
 		) {
 
+		// このループの中で使うフラグを、ループの先頭でクリアーするんだぜ☆（＾ｑ＾）
 		bool isContinue = false;
+
 		this->DoStep11b_LoopHeader(
 			isContinue,
 			move,
@@ -396,7 +398,7 @@ split_point_start:
 			moveCount
 			);
 
-		this->DoStep11B_LoopHeader(
+		this->DoStep11f_LoopHeader(
 			extension,
 			captureOrPawnPromotion,
 			move,
@@ -448,6 +450,10 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
+		if (isContinue)
+		{
+			continue;
+		}
 		this->DoStep13b(
 			pos,
 			move,
