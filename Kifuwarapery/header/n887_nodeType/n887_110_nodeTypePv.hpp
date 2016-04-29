@@ -18,6 +18,7 @@
 class NodetypePv : public NodetypeAbstract {
 public:
 
+	//*
 	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
@@ -27,6 +28,7 @@ public:
 		const Depth depth,
 		const bool cutNode
 		) const override;
+	//*/
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
@@ -34,6 +36,7 @@ public:
 		ScoreIndex beta
 		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
+		assert(alpha == beta - 1);
 	}
 
 	virtual inline void DoStep1a(
@@ -223,14 +226,6 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11e_LoopHeader(
-		Rucksack& rucksack,
-		int& moveCount
-		) const override {
-		// 非ルートノードはスルー☆！（＾ｑ＾）
-		//UNREACHABLE;
-	}
-
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
 	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
@@ -240,7 +235,15 @@ public:
 		int& moveCount,
 		SplitedNode** ppSplitedNode
 		) const override {
-			++moveCount;
+		++moveCount;
+	}
+
+	virtual inline void DoStep11e_LoopHeader(
+		Rucksack& rucksack,
+		int& moveCount
+		) const override {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep13a(

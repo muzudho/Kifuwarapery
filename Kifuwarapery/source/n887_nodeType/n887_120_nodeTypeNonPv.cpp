@@ -63,6 +63,7 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 NodetypeNonPv g_NODETYPE_NON_PV;
 
 
+//*
 ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	Rucksack& rucksack,
 	Position& pos,
@@ -75,9 +76,9 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
 	this->AssertBeforeStep1(
-	alpha,
-	beta
-	);
+		alpha,
+		beta
+		);
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
@@ -114,12 +115,35 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
+	this->DoStep1a(
+		isGotoSplitPointStart,
+		moveCount,
+		playedMoveCount,
+		inCheck,
+		pos,
+		&pSplitedNode,
+		&pFlashlight,
+		bestMove,
+		threatMove,
+		bestScore,
+		ttMove,
+		excludedMove,
+		ttScore
+		);
+	if (isGotoSplitPointStart)
+	{
+		goto split_point_start;
+	}
 
 	this->DoStep1b(
 		bestScore,
 		&pFlashlight,
 		threatMove,
 		bestMove
+		);
+	this->DoStep1c(
+		&pThisThread,
+		pFlashlight
 		);
 
 	bool isReturnWithScore = false;
@@ -247,9 +271,6 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 		beta,
 		eval
 		);
-	if (isReturnWithScore) {
-		return returnScore;
-	}
 
 	// step8
 	this->DoStep8_NonPV(
@@ -358,6 +379,21 @@ split_point_start:
 			continue;
 		}
 
+		this->DoStep11d_LoopHeader(
+			isContinue,
+			rucksack,
+			move
+			);
+		if (isContinue)
+		{
+			continue;
+		}
+
+		this->DoStep11e_LoopHeader(
+			rucksack,
+			moveCount
+			);
+
 		this->DoStep11f_LoopHeader(
 			extension,
 			captureOrPawnPromotion,
@@ -392,6 +428,24 @@ split_point_start:
 			);
 
 		// step13
+		this->DoStep13a(
+			isContinue,
+			rucksack,
+			captureOrPawnPromotion,
+			inCheck,
+			dangerous,
+			bestScore,
+			move,
+			ttMove,
+			depth,
+			moveCount,
+			threatMove,
+			pos,
+			&pSplitedNode,
+			newDepth,
+			&pFlashlight,
+			beta
+			);
 		this->DoStep13b(
 			pos,
 			move,
@@ -442,7 +496,31 @@ split_point_start:
 			&pFlashlight
 			);
 
+		// step15
+		this->DoStep15(
+			rucksack,
+			depth,
+			isPVMove,
+			captureOrPawnPromotion,
+			move,
+			ttMove,
+			&pFlashlight,
+			moveCount,
+			cutNode,
+			newDepth,
+			alpha,
+			&pSplitedNode,
+			score,
+			pos,
+			doFullDepthSearch
+			);
+
 		// step16
+		this->DoStep16a(
+			doFullDepthSearch,
+			alpha,
+			&pSplitedNode
+			);
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -454,6 +532,17 @@ split_point_start:
 			alpha,
 			cutNode
 			);
+		this->DoStep16c(
+			rucksack,
+			isPVMove,
+			alpha,
+			score,
+			beta,
+			newDepth,
+			givesCheck,
+			pos,
+			&pFlashlight
+			);
 
 		// step17
 		this->DoStep17(
@@ -464,12 +553,24 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
+		this->DoStep18a(
+			&pSplitedNode,
+			bestScore,
+			alpha
+			);
 
-		// これは実行するのかだぜ☆？（＾ｑ＾）？
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}
 
+		this->DoStep18b(
+			rucksack,
+			move,
+			isPVMove,
+			alpha,
+			score,
+			pos
+			);
 		bool isBreak = false;
 		this->DoStep18c(
 			isBreak,
@@ -535,3 +636,4 @@ split_point_start:
 	return bestScore;
 
 }
+//*/

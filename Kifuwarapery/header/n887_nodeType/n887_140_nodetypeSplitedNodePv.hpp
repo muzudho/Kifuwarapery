@@ -17,6 +17,7 @@
 class NodetypeSplitedNodePv : public NodetypeAbstract {
 public:
 
+	//*
 	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
@@ -26,6 +27,7 @@ public:
 		const Depth depth,
 		const bool cutNode
 		) const override;
+	//*/
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
@@ -33,6 +35,7 @@ public:
 		ScoreIndex beta
 		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
+		assert(alpha == beta - 1);
 	}
 
 	// ルートノードか、それ以外かで　値が分かれるぜ☆（＾ｑ＾）
@@ -191,6 +194,23 @@ public:
 		singularExtensionNode = false;
 	}
 
+	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
+	virtual inline void DoStep11c_LoopHeader(
+		bool& isContinue,
+		Position& pos,
+		Move& move,
+		const CheckInfo& ci,
+		int& moveCount,
+		SplitedNode** ppSplitedNode
+		) const override {
+		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+			isContinue = true;
+			return;
+		}
+		moveCount = ++(*ppSplitedNode)->m_moveCount;
+		(*ppSplitedNode)->m_mutex.unlock();
+	}
+
 	virtual inline void DoStep11d_LoopHeader(
 		bool& isContinue,
 		const Rucksack& rucksack,
@@ -206,23 +226,6 @@ public:
 		) const override {
 		// 非ルートノードはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
-	}
-
-	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
-	virtual inline void DoStep11c_LoopHeader(
-		bool& isContinue,
-		Position& pos,
-		Move& move,
-		const CheckInfo& ci,
-		int& moveCount,
-		SplitedNode** ppSplitedNode
-		) const override {
-			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
-				isContinue = true;
-				return;
-			}
-			moveCount = ++(*ppSplitedNode)->m_moveCount;
-			(*ppSplitedNode)->m_mutex.unlock();
 	}
 
 	virtual inline void DoStep13a(

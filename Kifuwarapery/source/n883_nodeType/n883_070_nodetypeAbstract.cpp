@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿/*
+#include <iostream>
 #include <algorithm>
 #include "../../header/n119_score___/n119_200_pieceScore.hpp"
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
@@ -33,12 +34,12 @@
 #include "../../header/n800_learn___/n800_100_stopwatch.hpp"
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
-#include "../../header/n885_searcher/n885_040_rucksack.hpp"//FIXME:
-#include "../../header/n885_searcher/n885_310_hitchhikerQsearchAbstract.hpp"//FIXME:
-#include "../../header/n885_searcher/n885_340_hitchhikerQsearchPrograms.hpp"//FIXME:
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"
+#include "../../header/n885_searcher/n885_310_hitchhikerQsearchAbstract.hpp"
+#include "../../header/n885_searcher/n885_340_hitchhikerQsearchPrograms.hpp"
 #include "../../header/n885_searcher/n885_480_hitchhikerNyugyoku.hpp"
 #include "../../header/n885_searcher/n885_510_hitchhiker.hpp"
-#include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
+#include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"
 
 #include "../../header/n886_repeType/n886_100_rtNot.hpp"
 #include "../../header/n886_repeType/n886_110_rtDraw.hpp"
@@ -46,9 +47,9 @@
 #include "../../header/n886_repeType/n886_130_rtLose.hpp"
 #include "../../header/n886_repeType/n886_140_rtSuperior.hpp"
 #include "../../header/n886_repeType/n886_150_rtInferior.hpp"
-#include "../../header/n886_repeType/n886_500_rtArray.hpp"//FIXME:
+#include "../../header/n886_repeType/n886_500_rtArray.hpp"
 
-#include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
+#include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"
 
 
 using namespace std;
@@ -59,7 +60,6 @@ extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 extern RepetitionTypeArray g_repetitionTypeArray;
 
 
-/*
 ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	Rucksack& rucksack,
 	Position& pos,
@@ -267,9 +267,6 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 		beta,
 		eval
 		);
-	if (isReturnWithScore) {
-		return returnScore;
-	}
 
 	// step8
 	this->DoStep8_NonPV(
@@ -445,10 +442,6 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
-		if (isContinue)
-		{
-			continue;
-		}
 		this->DoStep13b(
 			pos,
 			move,
@@ -639,4 +632,4 @@ split_point_start:
 	return bestScore;
 
 }
-*/
+//*/

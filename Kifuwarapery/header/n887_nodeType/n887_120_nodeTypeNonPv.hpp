@@ -18,6 +18,7 @@
 class NodetypeNonPv : public NodetypeAbstract {
 public:
 
+	//*
 	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
@@ -27,6 +28,7 @@ public:
 		const Depth depth,
 		const bool cutNode
 		) const override;
+	//*/
 
 	virtual inline void DoStep1a(
 		bool& isGotoSplitPointStart,
@@ -168,14 +170,6 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep11e_LoopHeader(
-		Rucksack& rucksack,
-		int& moveCount
-		) const override {
-		// 非ルートノードはスルー☆！（＾ｑ＾）
-		//UNREACHABLE;
-	}
-
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
 	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
@@ -185,7 +179,15 @@ public:
 		int& moveCount,
 		SplitedNode** ppSplitedNode
 		) const override {
-			++moveCount;
+		++moveCount;
+	}
+
+	virtual inline void DoStep11e_LoopHeader(
+		Rucksack& rucksack,
+		int& moveCount
+		) const override {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	// PVノードか、そうでないかで変わるぜ☆！（＾ｑ＾）
@@ -290,7 +292,6 @@ public:
 		ScoreIndex& score,
 		ScoreIndex& beta
 		) const override {
-		// FIXME: 使ってるか☆？（＾ｑ＾）
 		// 非ルートノードの場合☆（＾ｑ＾）
 		return score < beta;
 	}

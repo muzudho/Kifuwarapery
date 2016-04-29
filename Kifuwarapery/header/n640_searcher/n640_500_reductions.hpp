@@ -13,6 +13,13 @@ public:
 public:
 	void Initialize();
 
+
+	inline Depth DoReduction(
+		bool PVNode,
+		const Depth depth, const int moveCount
+	) {
+		return static_cast<Depth>(this->m_reductions[PVNode][std::min(Depth(depth / OnePly), Depth(63))][std::min(moveCount, 63)]);
+	}
 	inline Depth DoReduction_PvNode(
 		const Depth depth, const int moveCount
 		) {

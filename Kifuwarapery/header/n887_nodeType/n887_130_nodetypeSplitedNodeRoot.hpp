@@ -22,6 +22,7 @@ extern NodetypeAbstract* g_NODETYPE_PROGRAMS[];
 class NodetypeSplitedNodeRoot : public NodetypeAbstract {
 public:
 
+	//*
 	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
@@ -31,6 +32,7 @@ public:
 		const Depth depth,
 		const bool cutNode
 		) const override;
+	//*/
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
@@ -38,6 +40,7 @@ public:
 		ScoreIndex beta
 		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
+		assert(alpha == beta - 1);
 	}
 
 	virtual inline void DoStep2(

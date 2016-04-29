@@ -644,7 +644,8 @@ public:
 		const CheckInfo& ci,
 		Position& pos,
 		bool& dangerous
-		)const {
+		)const
+	{
 		extension = Depth0;
 		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
 		givesCheck = pos.IsMoveGivesCheck(move, ci);

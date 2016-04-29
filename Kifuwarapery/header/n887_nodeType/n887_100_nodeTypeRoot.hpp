@@ -21,6 +21,7 @@
 class NodetypeRoot : public NodetypeAbstract {
 public:
 
+	//*
 	virtual ScoreIndex GoToTheAdventure_new(
 		Rucksack& rucksack,
 		Position& pos,
@@ -30,6 +31,7 @@ public:
 		const Depth depth,
 		const bool cutNode
 		) const override;
+	//*/
 
 	// 非PVノードはassertをするぜ☆（＾ｑ＾）
 	virtual inline void AssertBeforeStep1(
@@ -37,6 +39,7 @@ public:
 		ScoreIndex beta
 		) const override {
 		// PVノードはスルー☆！（＾ｑ＾）
+		assert(alpha == beta - 1);
 	}
 
 	virtual inline void DoStep1a(
@@ -306,8 +309,6 @@ public:
 		const Depth depth,
 		int& moveCount
 		) const override {
-		// FIXME: 使ってるか☆？（＾ｑ＾）
-
 		// PVノードのとき
 		return newDepth - g_reductions.DoReduction_PvNode(depth, moveCount);
 	}

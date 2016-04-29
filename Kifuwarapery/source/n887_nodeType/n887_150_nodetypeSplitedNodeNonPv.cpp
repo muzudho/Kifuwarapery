@@ -63,6 +63,7 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 NodetypeSplitedNodeNonPv g_NODETYPE_SPLITEDNODE_NON_PV;
 
 
+//*
 ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 	Rucksack& rucksack,
 	Position& pos,
@@ -75,9 +76,9 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
 	this->AssertBeforeStep1(
-	alpha,
-	beta
-	);
+		alpha,
+		beta
+		);
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
@@ -270,9 +271,6 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 		beta,
 		eval
 		);
-	if (isReturnWithScore) {
-		return returnScore;
-	}
 
 	// step8
 	this->DoStep8_NonPV(
@@ -357,9 +355,7 @@ split_point_start:
 			).IsNone()
 		) {
 
-		// このループの中で使うフラグを、ループの先頭でクリアーするんだぜ☆（＾ｑ＾）
 		bool isContinue = false;
-
 		this->DoStep11b_LoopHeader(
 			isContinue,
 			move,
@@ -450,10 +446,6 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
-		if (isContinue)
-		{
-			continue;
-		}
 		this->DoStep13b(
 			pos,
 			move,
@@ -644,3 +636,4 @@ split_point_start:
 	return bestScore;
 
 }
+//*/

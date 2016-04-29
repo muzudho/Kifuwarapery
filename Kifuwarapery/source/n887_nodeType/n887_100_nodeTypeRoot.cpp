@@ -63,6 +63,7 @@ extern RepetitionTypeArray g_repetitionTypeArray;
 NodetypeRoot g_NODETYPE_ROOT;
 
 
+//*
 ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	Rucksack& rucksack,
 	Position& pos,
@@ -74,6 +75,10 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	) const {
 
 	assert(-ScoreInfinite <= alpha && alpha < beta && beta <= ScoreInfinite);
+	this->AssertBeforeStep1(
+		alpha,
+		beta
+		);
 	assert(Depth0 < depth);
 
 	// 途中で goto を使用している為、先に全部の変数を定義しておいた方が安全。
@@ -110,6 +115,25 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
+	this->DoStep1a(
+		isGotoSplitPointStart,
+		moveCount,
+		playedMoveCount,
+		inCheck,
+		pos,
+		&pSplitedNode,
+		&pFlashlight,
+		bestMove,
+		threatMove,
+		bestScore,
+		ttMove,
+		excludedMove,
+		ttScore
+		);
+	if (isGotoSplitPointStart)
+	{
+		goto split_point_start;
+	}
 
 	this->DoStep1b(
 		bestScore,
@@ -122,7 +146,35 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 		pFlashlight
 		);
 
+	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
+
+	// step2
+	this->DoStep2(
+		isReturnWithScore,
+		returnScore,
+		pos,
+		rucksack,
+		&pFlashlight
+		);
+
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
+
+	// step3
+	this->DoStep3(
+		isReturnWithScore,
+		returnScore,
+		&pFlashlight,
+		alpha,
+		beta
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
@@ -142,7 +194,38 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 		pTtEntry,
 		pos
 		);
-
+	this->DoStep4y(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		pTtEntry,
+		depth,
+		ttScore,
+		beta,
+		&pFlashlight,
+		ttMove
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
+	this->DoStep4z(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		inCheck,
+		move,
+		pos,
+		&pFlashlight,
+		bestScore,
+		posKey,
+		depth,
+		bestMove
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
 
 	// step5
 	bool isGotoIidStart = false;
@@ -162,8 +245,69 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 		goto iid_start;
 	}
 
-	bool isReturnWithScore = false;
+	// step6
+	this->DoStep6_NonPV(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		depth,
+		eval,
+		beta,
+		ttMove,
+		pos,
+		&pFlashlight
+		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
 
+	// step7
+	this->DoStep7(
+		isReturnWithScore,
+		returnScore,
+		&pFlashlight,
+		depth,
+		beta,
+		eval
+		);
+
+	// step8
+	this->DoStep8_NonPV(
+		isReturnWithScore,
+		returnScore,
+		rucksack,
+		&pFlashlight,
+		depth,
+		beta,
+		eval,
+		pos,
+		st,
+		alpha,
+		cutNode,
+		threatMove
+		);
+	if (isReturnWithScore) {
+		return returnScore;
+	}
+
+	// step9
+	this->DoStep9(
+		isReturnWithScore,
+		rucksack,
+		depth,
+		&pFlashlight,
+		beta,
+		move,
+		pos,
+		ttMove,
+		st,
+		score,
+		cutNode
+		);
+	if (isReturnWithScore) {
+		return score;
+	}
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
@@ -284,6 +428,31 @@ split_point_start:
 			);
 
 		// step13
+		this->DoStep13a(
+			isContinue,
+			rucksack,
+			captureOrPawnPromotion,
+			inCheck,
+			dangerous,
+			bestScore,
+			move,
+			ttMove,
+			depth,
+			moveCount,
+			threatMove,
+			pos,
+			&pSplitedNode,
+			newDepth,
+			&pFlashlight,
+			beta
+			);
+		this->DoStep13b(
+			pos,
+			move,
+			ci,
+			moveCount,
+			isContinue
+			);
 		this->DoStep13c(
 			isContinue,
 			rucksack,
@@ -347,6 +516,11 @@ split_point_start:
 			);
 
 		// step16
+		this->DoStep16a(
+			doFullDepthSearch,
+			alpha,
+			&pSplitedNode
+			);
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -379,8 +553,12 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
+		this->DoStep18a(
+			&pSplitedNode,
+			bestScore,
+			alpha
+			);
 
-		// これは実行するのかだぜ☆？（＾ｑ＾）？
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}
@@ -458,3 +636,4 @@ split_point_start:
 	return bestScore;
 
 }
+//*/
