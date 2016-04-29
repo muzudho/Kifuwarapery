@@ -1,7 +1,6 @@
 ﻿#include <algorithm> // std::min
 #include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
-#include "../../header/n560_timeMng_/n560_150_TimeType.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
 
@@ -165,15 +164,15 @@ namespace {
 		return g_SYOHI_OMOMI_BY_TEME[std::min(ply, g_SYOHI_OMOMI_BY_TEME_NUM-1)];//511
 	}
 
+	// 旧名：ｒｅｍａｉｎｉｎｇ
 	// 次回の残り時間☆
-	template <TimeType T> int G_Remaining(
-		const int myTime,		// これが叩き台となる時間だぜ☆（＾ｑ＾）
+	inline float G_TimeBairitu_YoteiSiko(
 		const int movesToGo,	//ムーブ・ホライズン以下の値☆（＾ｑ＾）
 		const Ply currentPly,
 		const int slowMover
 	) {
-		const float tMaxRatio   = (T == OptimumTime ? 1 : g_MAX_RATIO); // 予定思考時間なら 1、最大延長時間なら 定数指定☆
-		const float tStealRatio = (T == OptimumTime ? 0 : g_STEAL_RATIO); // 予定思考時間なら 0、最大延長時間なら 定数指定☆
+		const float tMaxRatio   = 1; // 予定思考時間なら 1、最大延長時間なら 定数指定☆
+		const float tStealRatio = 0; // 予定思考時間なら 0、最大延長時間なら 定数指定☆
 
 		// 旧名：ｔｈｉｓＭｏｖｅＩｍｐｏｒｔａｎｃｅ
 		// 現在の手の、ムーブ・インポータンス☆（＾ｑ＾）
@@ -203,7 +202,46 @@ namespace {
 			/
 			static_cast<float>(nokoriOmomiRuikei + currentOmomi);
 
-		return static_cast<int>(myTime * std::min(ratio1, ratio2));
+		return std::min(ratio1, ratio2);
+	}
+
+	inline float G_TimeBairitu_SaidaiEncho(
+		const int movesToGo,	//ムーブ・ホライズン以下の値☆（＾ｑ＾）
+		const Ply currentPly,
+		const int slowMover
+		) {
+		const float tMaxRatio = g_MAX_RATIO; // 予定思考時間なら 1、最大延長時間なら 定数指定☆
+		const float tStealRatio = g_STEAL_RATIO; // 予定思考時間なら 0、最大延長時間なら 定数指定☆
+
+																		  // 旧名：ｔｈｉｓＭｏｖｅＩｍｐｏｒｔａｎｃｅ
+																		  // 現在の手の、ムーブ・インポータンス☆（＾ｑ＾）
+		const float currentOmomi = G_GetSyohiOmomiByTeme(currentPly) * slowMover / 100;
+		// スロー・ムーバーの設定が 100 のときは、moveImportance そのまんまの値になるぜ☆（＾ｑ＾）
+
+		// 旧名：ｏｔｈｅｒＭｏｖｅＩｍｐｏｒｔａｎｃｅ
+		// 残りの手の、ムーブ・インポータンスの合計☆（＾ｑ＾）
+		float nokoriOmomiRuikei = 0;
+
+		for (int i = 1; i < movesToGo; ++i) {
+			// 現在の手数から、白黒手番の数×ループ回数分の moveImportance を足しこみだぜ☆（＾ｑ＾）
+			// 自分の手番だけを足したいので、1つ飛ばしだぜ☆（＾ｑ＾）
+			nokoriOmomiRuikei += G_GetSyohiOmomiByTeme(currentPly + 2 * i);
+		}
+
+		// ２種類の比率を調べて、小さい方を取るぜ☆（＾ｑ＾）
+		const float ratio1 =
+			(tMaxRatio * currentOmomi)
+			/
+			// １／１の分母に　残り重み累計　を加算した形☆
+			static_cast<float>(tMaxRatio * currentOmomi + nokoriOmomiRuikei);
+
+		const float ratio2 =
+			// 分子の重みに スティール比率 を掛けた形☆
+			(tStealRatio * nokoriOmomiRuikei + currentOmomi)
+			/
+			static_cast<float>(nokoriOmomiRuikei + currentOmomi);
+
+		return std::min(ratio1, ratio2);
 	}
 }
 
@@ -245,14 +283,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	for (
 		// ムーブス・ツー・ゴー
 		int iHypMtg = 1; // ループ・カウンター☆
-		iHypMtg <= (
-			limits.GetMovesToGo() ?
-			// 0以外なら、最大でもムーブ・ホライゾンまで☆
-			std::min(limits.GetMovesToGo(), g_MOVE_HORIZON)
-			:
-			// 0なら、ムーブ・ホライゾンまで☆
-			g_MOVE_HORIZON
-		);
+		iHypMtg <= g_MOVE_HORIZON;
 		++iHypMtg
 	) {
 		// 元の名前：ｈｙｐＭｙＴｉｍｅ
@@ -269,12 +300,12 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 
 		// 思考予定タイムが、少なくなっていれば更新します。
 		this->SmallUpdate_YoteiSikoTime(
-			minThinkingTime + G_Remaining<OptimumTime>(tatakidaiTime, iHypMtg, currentPly, slowMover)// 思考時間＋残り時間
+			static_cast<int>(tatakidaiTime * G_TimeBairitu_YoteiSiko(iHypMtg, currentPly, slowMover)) + minThinkingTime// 残り時間 × 倍率 + 最低思考時間
 			); 
 
 		// 最大延長タイムが、少なくなっていれば更新します。
 		this->SmallUpdate_SaidaiEnchoTime(
-			minThinkingTime + G_Remaining<MaxTime>(tatakidaiTime, iHypMtg, currentPly, slowMover) // 思考時間＋残り時間
+			static_cast<int>(tatakidaiTime * G_TimeBairitu_SaidaiEncho(iHypMtg, currentPly, slowMover)) + minThinkingTime// 残り時間 × 倍率 + 最低思考時間
 		);
 	}
 
@@ -305,6 +336,6 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	}
 	//旧表示：optimum_search_time
 	//旧表示：maximum_search_time	
-	SYNCCOUT << "info string limits movesToGo " << limits.GetMovesToGo() << SYNCENDL;
+	SYNCCOUT << "info string limits inc time " << limits.GetIncrement(us) << SYNCENDL;
 	SYNCCOUT << "info string tukatteii time " << this->GetTukatteiiTime() << " ( yotei " << this->GetYoteiSikoTime() << " + asobi " << this->GetSikoAsobiTime() << ") / saidai encho " << this->GetSaidaiEnchoTime() << SYNCENDL;
 }

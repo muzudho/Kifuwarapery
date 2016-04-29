@@ -71,10 +71,6 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 			}
 		}
 		// 追加☆（＾ｑ＾）
-		else if (token == "movestogo") {// こんなコマンド、飛んでこないと思うんだぜ☆（＾ｑ＾）？
-			ssCmd >> limits.m_movesToGo;
-		}
-		// 追加☆（＾ｑ＾）
 		else if (token == "winc") {
 			ssCmd >> limits.m_increment[Color::White];
 		}
