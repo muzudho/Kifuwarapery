@@ -267,6 +267,10 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 		beta,
 		eval
 		);
+	if (isReturnWithScore)
+	{
+		return returnScore;
+	}
 
 	// step8
 	this->DoStep8_NonPV(
@@ -399,10 +403,6 @@ split_point_start:
 			pos,
 			dangerous
 			);
-		if (isContinue)
-		{
-			continue;
-		}
 
 		// step12
 		this->DoStep12(
@@ -442,13 +442,21 @@ split_point_start:
 			&pFlashlight,
 			beta
 			);
+		if (isContinue)
+		{
+			continue;
+		}
 		this->DoStep13b(
+			isContinue,
 			pos,
 			move,
 			ci,
-			moveCount,
-			isContinue
+			moveCount
 			);
+		if (isContinue)
+		{
+			continue;
+		}
 		this->DoStep13c(
 			isContinue,
 			rucksack,

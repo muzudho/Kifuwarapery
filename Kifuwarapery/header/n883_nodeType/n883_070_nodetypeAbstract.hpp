@@ -795,11 +795,11 @@ public:
 
 	// ルートノード、スプリットポイントはしない手続きだぜ☆！（＾ｑ＾）
 	virtual inline void DoStep13b(
+		bool& isContinue,
 		Position& pos,
 		Move& move,
 		const CheckInfo& ci,
-		int& moveCount,
-		bool& isContinue
+		int& moveCount
 		) const {
 		// RootNode, SPNode はすでに合法手であることを確認済み。
 		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {

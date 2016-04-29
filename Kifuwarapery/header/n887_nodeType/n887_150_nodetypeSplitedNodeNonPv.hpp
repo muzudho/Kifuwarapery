@@ -183,11 +183,11 @@ public:
 	}
 
 	virtual inline void DoStep13b(
+		bool& isContinue,
 		Position& pos,
 		Move& move,
 		const CheckInfo& ci,
-		int& moveCount,
-		bool& isContinue
+		int& moveCount
 		) const override {
 		// ルートノード、スプリットポイントはスルー☆！（＾ｑ＾）
 		//UNREACHABLE;
