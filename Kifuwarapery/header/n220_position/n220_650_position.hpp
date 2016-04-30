@@ -342,7 +342,7 @@ private:
 	Bitboard m_BB_ByPiecetype_[g_PIECETYPE_NUM];
 
 	// このポジションを白黒毎にビットボードにしたもの。（byColorBB は駒の種類を区別しない）
-	Bitboard m_BB_ByColor_[ColorNum];
+	Bitboard m_BB_ByColor_[g_COLOR_NUM];
 
 	// このポジションのカナゴマをビットボードにしたもの。
 	Bitboard m_goldsBB_;
@@ -350,10 +350,10 @@ private:
 	// 各マスの状態
 	Piece m_piece_[SquareNum];
 
-	Square m_kingSquare_[ColorNum];
+	Square m_kingSquare_[g_COLOR_NUM];
 
 	// 手駒
-	Hand m_hand_[ColorNum];
+	Hand m_hand_[g_COLOR_NUM];
 
 	Color m_turn_;
 
@@ -372,11 +372,11 @@ private:
 
 	Rucksack* m_pRucksack_;
 
-	static Key m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][ColorNum];
+	static Key m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][g_COLOR_NUM];
 
 	static const Key m_zobTurn_ = 1;
 
-	static Key m_ZOB_HAND_[HandPieceNum][ColorNum];
+	static Key m_ZOB_HAND_[HandPieceNum][g_COLOR_NUM];
 
 	static Key m_ZOB_EXCLUSION_; // todo: これが必要か、要検討
 

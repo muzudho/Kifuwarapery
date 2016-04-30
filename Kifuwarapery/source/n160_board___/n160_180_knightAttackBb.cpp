@@ -15,7 +15,7 @@ KnightAttackBb g_knightAttackBb;//本当はconst にしたいが、やり方が�
 //────────────────────────────────────────────────────────────────────────────────
 void KnightAttackBb::Initialize()
 {
-	for (Color c = Black; c < ColorNum; ++c) {
+	for (Color c = Black; c < g_COLOR_NUM; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_knightAttackBb.m_controllBb_[c][sq] = Bitboard::CreateAllZeroBB();
 			const Bitboard bb = g_pawnAttackBb.GetControllBb(c, sq);
@@ -30,7 +30,7 @@ void KnightAttackBb::Initialize()
 }
 
 void KnightAttackBb::InitCheckTableKnight() {
-	for (Color color = Black; color < ColorNum; ++color) {
+	for (Color color = Black; color < g_COLOR_NUM; ++color) {
 		const Color opponent = ConvColor::OPPOSITE_COLOR10(color);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_knightCheckTable_[color][sq] = Bitboard::CreateAllZeroBB();

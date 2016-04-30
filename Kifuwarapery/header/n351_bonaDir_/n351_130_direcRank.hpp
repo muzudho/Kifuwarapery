@@ -23,7 +23,7 @@ public:
 	}
 
 	void Do2Move(Position& position, Square from, const Square ksq, const Color us) const {
-		const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), Color::ColorNum, ksq);
+		const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), Color::Null, ksq);
 		position.GetStateInfo()->m_checkersBB |=
 			PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1) &
 			position.GetBbOf(PieceType::N06_Rook, PieceType::N14_Dragon, us);

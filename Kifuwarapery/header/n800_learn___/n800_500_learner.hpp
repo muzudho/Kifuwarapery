@@ -242,10 +242,10 @@ private:
 	// 学習に使う棋譜から、手と手に対する補助的な情報を付けでデータ保持する。
 	// 50000局程度に対して10秒程度で終わるからシングルコアで良い。
 	void setLearnMoves(Position& GetPos, std::SetP<std::pair<Key, Move> >& dict, std::string& s0, std::string& s1,
-					   const std::array<bool, ColorNum>& useTurnMove)
+					   const std::array<bool, g_COLOR_NUM>& useTurnMove)
 	{
 		bookMovesDatum_.push_back(std::vector<BookMoveData>());
-		BookMoveData bmdBase[ColorNum];
+		BookMoveData bmdBase[g_COLOR_NUM];
 		bmdBase[Black].GetMove = bmdBase[White].GetMove = Move::GetMoveNone();
 		std::stringstream textA(s0);
 		std::string elem;
@@ -285,7 +285,7 @@ private:
 			GetPos.DoMove(GetMove, m_setUpStates->top());
 		}
 	}
-	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& GetPos, const std::string& record, const std::array<bool, ColorNum>& useTurnMove, const s64 gameNum)
+	void readBookBody(std::SetP<std::pair<Key, Move> >& dict, Position& GetPos, const std::string& record, const std::array<bool, g_COLOR_NUM>& useTurnMove, const s64 gameNum)
 	{
 		if (record == "-") // "-" なら棋譜ファイルを読み込まない。
 			return;

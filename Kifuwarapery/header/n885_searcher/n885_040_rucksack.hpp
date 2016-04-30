@@ -277,7 +277,7 @@ public://private:
 			const Color them = ConvColor::OPPOSITE_COLOR10(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const PieceTypeEvent ptEventL(occ, them, m2to);
-			const PieceTypeEvent ptEventRB(occ, Color::ColorNum, m2to);
+			const PieceTypeEvent ptEventRB(occ, Color::Null, m2to);
 			const Bitboard xray =
 				(PiecetypePrograms::m_LANCE.GetAttacks2From(ptEventL) & pos.GetBbOf20(N02_Lance, us))
 				| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEventRB) & pos.GetBbOf(N06_Rook, N14_Dragon, us))

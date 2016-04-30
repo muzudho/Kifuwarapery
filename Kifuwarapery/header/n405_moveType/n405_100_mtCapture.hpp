@@ -33,6 +33,7 @@ public:
 		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
 
 
+		// FIXME: 色をテンプレート化するのは良さげ☆
 		const PieceMoveEvent pmEvent( MT, us, all, pos, ksq);
 		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn(moveStackList, pmEvent, targetPawn);
 		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, targetOther);

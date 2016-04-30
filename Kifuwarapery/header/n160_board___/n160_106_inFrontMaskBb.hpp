@@ -36,7 +36,7 @@ public:
 	const Bitboard m_ofRank9White = m_ofRank8White | g_rankMaskBb.GetRankMask<Rank8>();
 
 
-	const Bitboard m_inFrontMask[ColorNum][RankNum] = {
+	const Bitboard m_inFrontMask[g_COLOR_NUM][RankNum] = {
 		{
 			this->m_ofRank9Black,
 			this->m_ofRank8Black,

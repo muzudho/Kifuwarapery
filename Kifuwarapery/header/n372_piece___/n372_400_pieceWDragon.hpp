@@ -18,7 +18,7 @@ public:
 		if (g_squareRelation.GetSquareRelation(checkSq, ksq) & N04_DirecDiag) {
 			// 斜めから王手したときは、玉の移動先と王手した駒の間に駒があることがあるので、
 			// dragonAttackToEdge(checkSq) は使えない。
-			const PieceTypeEvent ptEvent1(pos.GetOccupiedBB(), Color::ColorNum, checkSq);
+			const PieceTypeEvent ptEvent1(pos.GetOccupiedBB(), Color::Null, checkSq);
 			bannedKingToBB |= PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent1);
 		}
 		else {

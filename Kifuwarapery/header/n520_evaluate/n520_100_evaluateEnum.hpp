@@ -52,4 +52,4 @@ const int g_FVScale = 32;
 
 
 extern const int kppArray[31];//(^q^)
-extern const int kppHandArray[ColorNum][HandPieceNum];//(^q^)
+extern const int kppHandArray[g_COLOR_NUM][HandPieceNum];//(^q^)

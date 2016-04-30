@@ -13,12 +13,12 @@
 class LanceAttackBb {
 public:
 	// メモリ節約をせず、無駄なメモリを持っている。
-	Bitboard m_controllBb[ColorNum][SquareNum][128];
+	Bitboard m_controllBb[g_COLOR_NUM][SquareNum][128];
 
 private:
 	// メモリ節約をせず、無駄なメモリを持っている。
-	Bitboard m_controllBbToEdge_[ColorNum][SquareNum];
-	Bitboard m_lanceCheckTable_[ColorNum][SquareNum];
+	Bitboard m_controllBbToEdge_[g_COLOR_NUM][SquareNum];
+	Bitboard m_lanceCheckTable_[g_COLOR_NUM][SquareNum];
 
 public:
 

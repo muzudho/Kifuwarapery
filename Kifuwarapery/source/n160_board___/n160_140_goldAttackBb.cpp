@@ -11,7 +11,7 @@ GoldAttackBb g_goldAttackBb;//本当はconst にしたいが、やり方がわ�
 
 void GoldAttackBb::Initialize()
 {
-	for (Color c = Black; c < ColorNum; ++c)
+	for (Color c = Black; c < g_COLOR_NUM; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_goldAttackBb.m_controllBb_[c][sq] =
 			(
@@ -22,7 +22,7 @@ void GoldAttackBb::Initialize()
 }
 
 void GoldAttackBb::InitCheckTableGold() {
-	for (Color c = Black; c < ColorNum; ++c) {
+	for (Color c = Black; c < g_COLOR_NUM; ++c) {
 		const Color opp = ConvColor::OPPOSITE_COLOR10(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			g_goldAttackBb.m_goldCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();

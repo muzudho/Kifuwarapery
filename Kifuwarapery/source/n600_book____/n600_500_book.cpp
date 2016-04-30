@@ -189,7 +189,7 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 		ss >> elem; // 後手
 		const std::string gote = elem;
 		ss >> elem; // (0:引き分け,1:先手の勝ち,2:後手の勝ち)
-		const Color winner = (elem == "1" ? Black : elem == "2" ? White : ColorNum);
+		const Color winner = (elem == "1" ? Black : elem == "2" ? White : Color::Null);
 		// 勝った方の指し手を記録していく。
 		// 又は稲庭戦法側を記録していく。
 		const Color saveColor = winner;

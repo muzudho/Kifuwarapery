@@ -16,7 +16,7 @@ LanceAttackBb g_lanceAttackBb;//本当はconst にしたいが、やり方がわ
 void LanceAttackBb::Initialize()
 {
 	// LanceBlockMask, g_lanceAttack の値を設定する。
-	for (Color c = Black; c < ColorNum; ++c) {
+	for (Color c = Black; c < g_COLOR_NUM; ++c) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			const Bitboard blockMask = this->LanceBlockMask(sq);
 			//const int num1s = blockMask.popCount(); // 常に 7
@@ -32,7 +32,7 @@ void LanceAttackBb::Initialize()
 
 
 void LanceAttackBb::InitCheckTableLance() {
-	for (Color c = Black; c < ColorNum; ++c) {
+	for (Color c = Black; c < g_COLOR_NUM; ++c) {
 		const Color opp = ConvColor::OPPOSITE_COLOR10(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_lanceCheckTable_[c][sq] = this->GetControllBbToEdge(opp, sq);

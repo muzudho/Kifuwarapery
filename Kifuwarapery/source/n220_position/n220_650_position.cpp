@@ -38,8 +38,8 @@
 
 
 
-Key Position::m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][ColorNum];
-Key Position::m_ZOB_HAND_[HandPieceNum][ColorNum];
+Key Position::m_ZOBRIST_[g_PIECETYPE_NUM][SquareNum][g_COLOR_NUM];
+Key Position::m_ZOB_HAND_[HandPieceNum][g_COLOR_NUM];
 Key Position::m_ZOB_EXCLUSION_;
 
 
@@ -825,7 +825,7 @@ silver_drop_end:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// 遠隔王手は考えない。
-			const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::ColorNum, from);
+			const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::Null, from);
 			Bitboard toBB = moveTarget & PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent1);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N14_Dragon, from, US);
@@ -840,7 +840,7 @@ silver_drop_end:
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、王手した駒が pin されていない
 						const PieceTypeEvent ptEvent2(
-							this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to);
+							this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
 						if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
@@ -868,7 +868,7 @@ silver_drop_end:
 			fromBB.AndEqualNot(TRank789BB);
 			do {
 				const Square from = fromOn789BB.PopFirstOneFromI9();
-				const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::ColorNum, from);
+				const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::Null, from);
 				Bitboard toBB = moveTarget & PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1);
 				if (toBB.Exists1Bit()) {
 					XorBBs(N06_Rook, from, US);
@@ -878,7 +878,7 @@ silver_drop_end:
 					do {
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							const PieceTypeEvent ptEvent2(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to);
+							const PieceTypeEvent ptEvent2(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
 							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
@@ -897,7 +897,7 @@ silver_drop_end:
 		// from が 4~9 段目
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const PieceTypeEvent ptEvent3(this->GetOccupiedBB(), Color::ColorNum, from);
+			const PieceTypeEvent ptEvent3(this->GetOccupiedBB(), Color::Null, from);
 			Bitboard toBB = moveTarget & PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent3) &
 				(g_rookAttackBb.RookStepAttacks(ksq) | TRank789BB);
 			if (toBB.Exists1Bit()) {
@@ -912,7 +912,7 @@ silver_drop_end:
 						const Square to = toOn789BB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							const PieceTypeEvent ptEvent4(
-								this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::ColorNum, to);
+								this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
 							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent4))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, Them, to, dcBB_betweenIsThem_after))
@@ -951,7 +951,7 @@ silver_drop_end:
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			// 遠隔王手は考えない。
-			const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::ColorNum, from);
+			const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::Null, from);
 			Bitboard toBB = moveTarget & PiecetypePrograms::m_HORSE.GetAttacks2From(ptEvent1);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N13_Horse, from, US);
@@ -989,7 +989,7 @@ silver_drop_end:
 			fromBB.AndEqualNot(TRank789BB);
 			do {
 				const Square from = fromOn789BB.PopFirstOneFromI9();
-				const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::ColorNum, from);
+				const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), Color::Null, from);
 				Bitboard toBB = moveTarget & PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent1);
 				if (toBB.Exists1Bit()) {
 					XorBBs(N05_Bishop, from, US);
@@ -1017,7 +1017,7 @@ silver_drop_end:
 		// from が 4~9 段目
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const PieceTypeEvent ptEvent2(this->GetOccupiedBB(), Color::ColorNum, from);
+			const PieceTypeEvent ptEvent2(this->GetOccupiedBB(), Color::Null, from);
 			Bitboard toBB = moveTarget & PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent2) & (g_bishopAttackBb.BishopStepAttacks(ksq) | TRank789BB);
 			if (toBB.Exists1Bit()) {
 				XorBBs(N05_Bishop, from, US);
@@ -1490,7 +1490,7 @@ void Position::InitZobrist() {
 	// hash値の更新は普通は全て xor を使うが、持ち駒の更新の為に +, - を使用した方が都合が良い。
 	for (PieceType pt = N00_Occupied; pt < g_PIECETYPE_NUM; ++pt) {
 		for (Square sq = I9; sq < SquareNum; ++sq) {
-			for (Color c = Black; c < ColorNum; ++c) {
+			for (Color c = Black; c < g_COLOR_NUM; ++c) {
 				m_ZOBRIST_[pt][sq][c] = g_mt64bit.GetRandom() & ~UINT64_C(1);
 			}
 		}
@@ -1579,7 +1579,7 @@ bool Position::IsOK() const {
 
 	++failedStep;
 	if (debugKingCount) {
-		int kingCount[ColorNum] = { 0, 0 };
+		int kingCount[g_COLOR_NUM] = { 0, 0 };
 		if (GetBbOf(N08_King).PopCount() != 2) {
 			goto incorrect_position;
 		}
@@ -1706,7 +1706,7 @@ Key Position::GetComputeBoardKey() const {
 Key Position::GetComputeHandKey() const {
 	Key result = 0;
 	for (HandPiece hp = HPawn; hp < HandPieceNum; ++hp) {
-		for (Color c = Black; c < ColorNum; ++c) {
+		for (Color c = Black; c < g_COLOR_NUM; ++c) {
 			const int num = this->GetHand(c).NumOf(hp);
 			for (int i = 0; i < num; ++i) {
 				result += this->GetZobHand(hp, c);
@@ -2175,7 +2175,7 @@ Bitboard Position::GetAttackersTo(const Square sq, const Bitboard& occupied) con
 
 	const PieceTypeEvent ptEventB(occupied, Color::Black, sq);
 	const PieceTypeEvent ptEventW(occupied, Color::White, sq);
-	const PieceTypeEvent ptEvent0(occupied, Color::ColorNum, sq);
+	const PieceTypeEvent ptEvent0(occupied, Color::Null, sq);
 
 	return (((PiecetypePrograms::m_PAWN.GetAttacks2From(ptEventB) & this->GetBbOf10(N01_Pawn))
 		| (PiecetypePrograms::m_LANCE.GetAttacks2From(ptEventB) & this->GetBbOf10(N02_Lance))

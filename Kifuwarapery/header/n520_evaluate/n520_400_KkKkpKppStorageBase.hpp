@@ -63,20 +63,20 @@ struct KkKkpKppStorageBase {
 
 		// e は Effect の頭文字で利きを表す。(Control = 利き という説もあり。)
 		// todo: 玉の利きは全く無視しているけれど、それで良いのか？
-		KPPType kpe[SquareNoLeftNum][fe_end][ColorNum][SquareNum];
-		KPPType kee[SquareNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_kpe_b[N31_PieceNone][17][17][ColorNum][17][17];
-		KPPType r_kpe_h[fe_hand_end][ColorNum][17][17];
-		KPPType r_kee[ColorNum][17][17][ColorNum][17][17];
-		KPPType xpe[FileNoLeftNum][fe_end][ColorNum][SquareNum];
-		KPPType xee[FileNoLeftNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType ype[RankNum][fe_end][ColorNum][SquareNum];
-		KPPType yee[RankNum][ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType pe[fe_end][ColorNum][SquareNum];
-		KPPType ee[ColorNum][SquareNum][ColorNum][SquareNum];
-		KPPType r_pe_b[N31_PieceNone][ColorNum][17][17];
-		KPPType r_pe_h[fe_hand_end][ColorNum];
-		KPPType r_ee[ColorNum][ColorNum][17][17];
+		KPPType kpe[SquareNoLeftNum][fe_end][g_COLOR_NUM][SquareNum];
+		KPPType kee[SquareNoLeftNum][g_COLOR_NUM][SquareNum][g_COLOR_NUM][SquareNum];
+		KPPType r_kpe_b[N31_PieceNone][17][17][g_COLOR_NUM][17][17];
+		KPPType r_kpe_h[fe_hand_end][g_COLOR_NUM][17][17];
+		KPPType r_kee[g_COLOR_NUM][17][17][g_COLOR_NUM][17][17];
+		KPPType xpe[FileNoLeftNum][fe_end][g_COLOR_NUM][SquareNum];
+		KPPType xee[FileNoLeftNum][g_COLOR_NUM][SquareNum][g_COLOR_NUM][SquareNum];
+		KPPType ype[RankNum][fe_end][g_COLOR_NUM][SquareNum];
+		KPPType yee[RankNum][g_COLOR_NUM][SquareNum][g_COLOR_NUM][SquareNum];
+		KPPType pe[fe_end][g_COLOR_NUM][SquareNum];
+		KPPType ee[g_COLOR_NUM][SquareNum][g_COLOR_NUM][SquareNum];
+		KPPType r_pe_b[N31_PieceNone][g_COLOR_NUM][17][17];
+		KPPType r_pe_h[fe_hand_end][g_COLOR_NUM];
+		KPPType r_ee[g_COLOR_NUM][g_COLOR_NUM][17][17];
 	};
 	// （＾ｑ＾）ファイル名に連動しているので、頭に m_ を付けてはいけない☆！
 	KPPElements kpps;
@@ -94,10 +94,10 @@ struct KkKkpKppStorageBase {
 		KKPType r_kp_b[N31_PieceNone][17][17];
 		KKPType r_kp_h[fe_hand_end];
 
-		KKPType kke[SquareNoLeftNum][SquareNum][ColorNum][SquareNum];
-		KKPType ke[SquareNoLeftNum][ColorNum][SquareNum];
-		KKPType r_kke[17][17][ColorNum][17][17];
-		KKPType r_ke[ColorNum][17][17];
+		KKPType kke[SquareNoLeftNum][SquareNum][g_COLOR_NUM][SquareNum];
+		KKPType ke[SquareNoLeftNum][g_COLOR_NUM][SquareNum];
+		KKPType r_kke[17][17][g_COLOR_NUM][17][17];
+		KKPType r_ke[g_COLOR_NUM][17][17];
 	};
 	// （＾ｑ＾）ファイル名に連動しているので、頭に m_ を付けてはいけない☆！
 	KKPElements kkps;

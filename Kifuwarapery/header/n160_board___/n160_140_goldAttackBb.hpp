@@ -8,8 +8,8 @@
 //────────────────────────────────────────────────────────────────────────────────
 class GoldAttackBb {
 private:
-	Bitboard m_controllBb_[ColorNum][SquareNum];
-	Bitboard m_goldCheckTable_[ColorNum][SquareNum];
+	Bitboard m_controllBb_[g_COLOR_NUM][SquareNum];
+	Bitboard m_goldCheckTable_[g_COLOR_NUM][SquareNum];
 
 public:
 

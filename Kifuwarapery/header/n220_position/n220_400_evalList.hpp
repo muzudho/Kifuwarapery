@@ -18,5 +18,5 @@ public:
 	void Set(const Position& pos);
 };
 
-extern const Square g_HandPieceToSquareHand[ColorNum][HandPieceNum];
+extern const Square g_HandPieceToSquareHand[g_COLOR_NUM][HandPieceNum];
 

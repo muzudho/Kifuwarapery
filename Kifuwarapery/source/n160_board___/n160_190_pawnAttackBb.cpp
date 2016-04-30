@@ -12,7 +12,7 @@ PawnAttackBb g_pawnAttackBb;//本当はconst にしたいが、やり方がわ�
 //────────────────────────────────────────────────────────────────────────────────
 void PawnAttackBb::Initialize()
 {
-	for (Color c = Black; c < ColorNum; ++c)
+	for (Color c = Black; c < g_COLOR_NUM; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_pawnAttackBb.m_controllBb_[c][sq] =
 				g_silverAttackBb.GetControllBb(c, sq) ^ g_bishopAttackBb.BishopAttack(Bitboard::CreateAllOneBB(), sq);

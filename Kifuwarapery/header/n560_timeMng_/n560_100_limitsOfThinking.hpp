@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "../n080_common__/n080_100_common.hpp"	//u32
-#include "../n105_color___/n105_100_color.hpp"	//ColorNum
+#include "../n105_color___/n105_100_color.hpp"
 #include "../n119_score___/n119_090_scoreIndex.hpp"	//Ply
 
 // 元の名前：ＬｉｍｉｔｓＴｙｐｅ
@@ -47,7 +47,7 @@ public:
 	// インクリメントとは何なのか☆？（＾ｑ＾）
 	//────────────────────────────────────────────────────────────────────────────────
 	// フィッシャータイムの追加時間☆？ということにしておこう☆（＾ｑ＾）
-	int m_increment[ColorNum] = { 0 };
+	int m_increment[g_COLOR_NUM] = { 0 };
 	inline int GetIncrement(Color us) const {
 		return this->m_increment[us];
 	}
@@ -58,7 +58,7 @@ public:
 	//────────────────────────────────────────────────────────────────────────────────
 	// 元の名前：ｔｉｍｅ
 	// ミリ秒単位だぜ☆（＾ｑ＾）
-	int m_nokoriTime[ColorNum] = { 0 };
+	int m_nokoriTime[g_COLOR_NUM] = { 0 };
 	inline int GetNokoriTime(Color us)const {
 		return this->m_nokoriTime[us];
 	}

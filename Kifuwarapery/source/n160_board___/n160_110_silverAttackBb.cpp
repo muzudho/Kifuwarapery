@@ -12,7 +12,7 @@ SilverAttackBb g_silverAttackBb;//本当はconst にしたいが、やり方が�
 
 void SilverAttackBb::Initialize()
 {
-	for (Color c = Black; c < ColorNum; ++c)
+	for (Color c = Black; c < g_COLOR_NUM; ++c)
 		for (Square sq = I9; sq < SquareNum; ++sq)
 			g_silverAttackBb.m_controllBb_[c][sq] = (
 				g_kingAttackBb.GetControllBb(sq) &
@@ -22,7 +22,7 @@ void SilverAttackBb::Initialize()
 }
 
 void SilverAttackBb::InitCheckTableSilver() {
-	for (Color c = Black; c < ColorNum; ++c) {
+	for (Color c = Black; c < g_COLOR_NUM; ++c) {
 		const Color opp = ConvColor::OPPOSITE_COLOR10(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_silverCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();

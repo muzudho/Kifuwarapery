@@ -38,7 +38,7 @@ const int kppArray[31] = {
 	e_gold,   e_horse,  e_dragon
 };
 
-const int kppHandArray[ColorNum][HandPieceNum] = {
+const int kppHandArray[g_COLOR_NUM][HandPieceNum] = {
 	{f_hand_pawn, f_hand_lance, f_hand_knight, f_hand_silver,
 	 f_hand_gold, f_hand_bishop, f_hand_rook},
 	{e_hand_pawn, e_hand_lance, e_hand_knight, e_hand_silver,
