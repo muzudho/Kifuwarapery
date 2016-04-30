@@ -17,14 +17,32 @@ public:
 	// そんなに速度が要求されるところでは呼ばない。
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
 		) const override {
-		Color us = pos.GetTurn();
+
+		if (pos.GetTurn() == Color::Black)
+		{
+			moveStackList = MoveTypeLegal::GENERATE_MOVE_<Color::Black, Color::White>(moveStackList, pos, all);
+		}
+		else
+		{
+			moveStackList = MoveTypeLegal::GENERATE_MOVE_<Color::White, Color::Black>(moveStackList, pos, all);
+		}
+
+		return moveStackList;
+	}
+
+private:
+
+	template<Color US, Color THEM>
+	static inline MoveStack* GENERATE_MOVE_(MoveStack* moveStackList, const Position& pos, bool all = false
+		) {
+
 		MoveStack* curr = moveStackList;
 		const Bitboard pinned = pos.GetPinnedBB();
 
 		// 要素の追加☆
 		moveStackList = pos.InCheck() ?
-			MoveTypeEvasion().GenerateMove( moveStackList, pos) :
-			MoveTypeNonEvasion().GenerateMove( moveStackList, pos);
+			MoveTypeEvasion().GenerateMove(moveStackList, pos) :
+			MoveTypeNonEvasion().GenerateMove(moveStackList, pos);
 
 		// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
 		while (curr != moveStackList) {

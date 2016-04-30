@@ -30,7 +30,6 @@ public:
 		const Square from,
 		const Square to
 	) const = 0;
-
 	virtual void Generate2RecaptureMoves_usBlack(
 		MoveStack* moveStackList,
 		const Position& pos,
@@ -38,15 +37,6 @@ public:
 		const Square to
 		) const = 0;
 
-	/*
-	virtual void Generate2RecaptureMoves(
-		MoveStack* moveStackList,
-		const Position& pos,
-		const Square from,
-		const Square to,
-		const Color us
-		) const = 0;
-		*/
 
 	virtual PieceType AppendToNextAttackerAndTryPromote(
 		Bitboard& occupied,

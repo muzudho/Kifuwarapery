@@ -17,36 +17,42 @@ public:
 	// ここで生成した手は pseudo legal
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
 		) const override {
-		Bitboard target = pos.GetEmptyBB();
-		Color us = pos.GetTurn();
 
-		moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target);//<US>
-		target |= pos.GetBbOf10(ConvColor::OPPOSITE_COLOR10b(us));
-		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10b(us));
+		if (pos.GetTurn() == Color::Black)
+		{
+			moveStackList = MoveTypeNonEvasion::GENERATE_MOVE_<Color::Black, Color::White>(moveStackList, pos, all);
+		}
+		else
+		{
+			moveStackList = MoveTypeNonEvasion::GENERATE_MOVE_<Color::White, Color::Black>(moveStackList, pos, all);
+		}
+
+		return moveStackList;
+	}
+
+private:
+
+	template<Color US, Color THEM>
+	static inline MoveStack* GENERATE_MOVE_(MoveStack* moveStackList, const Position& pos, bool all = false
+		) {
+
+		Bitboard target = pos.GetEmptyBB();
+
+		moveStackList = g_dropMoveGenerator.GenerateDropMoves(US, moveStackList, pos, target);//<US>
+		target |= pos.GetBbOf10(THEM);
+		const Square ksq = pos.GetKingSquare(THEM);
 
 		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, false, pos, ksq);
 
-		if (us == Color::Black) {
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<Color::Black>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<Color::Black>(moveStackList, pmEvent, target);
-		}
-		else {
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<Color::White>(moveStackList, pmEvent, target);
-			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<Color::White>(moveStackList, pmEvent, target);
-		}
-		
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<US>(moveStackList, pmEvent, target);
+
 		return moveStackList;
 	}
 

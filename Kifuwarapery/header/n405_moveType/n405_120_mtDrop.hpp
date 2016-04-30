@@ -15,6 +15,7 @@ public:
 	// 駒打ち生成
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
 		) const override {
+
 		return g_dropMoveGenerator.GenerateDropMoves(
 			pos.GetTurn(),//us,
 			moveStackList,

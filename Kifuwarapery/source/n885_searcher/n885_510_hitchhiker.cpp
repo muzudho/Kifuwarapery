@@ -67,7 +67,7 @@ void Hitchhiker::Think(
 	captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted(
 		isMoveTime0Clear,
 		captainsRucksack.m_limits,
-		//pos.GetGamePly(),
+		pos.GetGamePly(),
 		pos.GetTurn(),
 		&captainsRucksack
 		);

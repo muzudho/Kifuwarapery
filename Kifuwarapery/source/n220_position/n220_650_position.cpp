@@ -471,24 +471,24 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	Bitboard attackers;
 	Bitboard opponentAttackers;
 
-	Color myTurn = this->GetTurn();
-	Color oppoTurn = ConvColor::OPPOSITE_COLOR10b(myTurn);
+	Color us = this->GetTurn();
+	Color them = ConvColor::OPPOSITE_COLOR10b(us);
 	
 
 	ScoreIndex swapList[32];
 	if (move.IsDrop()) {
-		opponentAttackers = this->GetAttackersTo_clr(oppoTurn, to, occ);
+		opponentAttackers = this->GetAttackersTo_clr(them, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			return ScoreZero;
 		}
-		attackers = opponentAttackers | this->GetAttackersTo_clr(myTurn, to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo_clr(us, to, occ);
 		swapList[0] = ScoreZero;
 		ptCaptured = move.GetPieceTypeDropped();
 	}
 	else {
 		from = move.From();
 		g_setMaskBb.XorBit(&occ, from);
-		opponentAttackers = this->GetAttackersTo_clr(oppoTurn, to, occ);
+		opponentAttackers = this->GetAttackersTo_clr(them, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			if (move.IsPromotion()) {
 				const PieceType ptFrom = move.GetPieceTypeFrom();
@@ -496,7 +496,7 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 			}
 			return PieceScore::GetCapturePieceScore(move.GetCap());
 		}
-		attackers = opponentAttackers | this->GetAttackersTo_clr(myTurn, to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo_clr(us, to, occ);
 		swapList[0] = PieceScore::GetCapturePieceScore(move.GetCap());
 		ptCaptured = move.GetPieceTypeFrom();
 		if (move.IsPromotion()) {
@@ -508,7 +508,7 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 
 	// 相手の駒がぶつかっている所？の数だけ回っているのかだぜ☆？（＾ｑ＾）？
 	int slIndex = 1;
-	Color iCurrTurn = oppoTurn; // ループ中にひっくり返るぜ☆（＾ｑ＾）
+	Color iCurrTurn = them; // ループ中にひっくり返るぜ☆（＾ｑ＾）
 	do {
 		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 

@@ -183,9 +183,12 @@ void TimeManager::SetPvInstability_AtIterativeDeepeningStarted(
 void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	bool& isMoveTime0Clear,// false を入れてくれ☆（＾ｑ＾）
 	const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
+	const Ply currentPly,
 	const Color us,
 	Rucksack* pRucksack
 	) {
+
+	const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 
 	const int emergencyMoveHorizon = pRucksack->m_engineOptions["Emergency_Move_Horizon"];
 	const int nokositeokuTime      = pRucksack->m_engineOptions["Minimum_Thinking_Time"];	// 手番で、使わずに残しておく思考時間☆
@@ -239,16 +242,37 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	if (pRucksack->m_engineOptions["USI_Ponder"]) {
 		// 相手の思考中にも読み続ける設定の場合☆（＾ｑ＾）
 
+
 		// 相手が何秒考えるかなんて分からないので☆（＾～＾）
 		// 思考予定タイムには、 4分の1　のボーナスを追加しておくことにするぜ☆（＾▽＾）
 		this->SetYosouOppoTurnTime(this->GetYoteiMyTurnTime() / 4);
-		//this->IncreaseYoteiSikoTime(ponderBonus);
+
+		// 独自実装☆（＾▽＾）：相手の残り時間より　多めに設定している場合は、相手の残り時間の最大値に合わせるんだぜ☆（＾▽＾）
+		int opponentNokoriTime = limits.GetNokoriTime(them);
+		if (opponentNokoriTime < this->GetYosouOppoTurnTime()) {
+			this->SetYosouOppoTurnTime(opponentNokoriTime);
+		}
 	}
+
+
+	// 独自実装☆（＾▽＾）： 終盤ほど時間を使ってもいいように、緩くするぜ☆
+	// 40 手目なら + 4000ミリ秒（4秒）、 110 手目なら + 11000ミリ秒（11秒）
+	//this->SetYoteiMyTurnTime( this->GetYoteiMyTurnTime() + currentPly * 100);
+
 
 	// 「予定思考時間＋予想ポンダー時間」よりも「残しておく時間」の方が大きいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、「残しておく時間」と等しくします。
 	this->LargeUpdate_YoteiMyTurnTime( nokositeokuTime);
 	// 「予定思考時間＋予想ポンダー時間」よりも「最大延長時間」の方が小さいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、は「最大延長時間」と等しくします。
 	this->SmallUpdate_YoteiMyTurnTime( this->GetSaidaiEnchoTime() );
+
+
+	// 独自実装☆（＾▽＾）：自分の残り時間 - 4　（4という数字は適当。大会会場の通信遅延を４秒と想定）より　予定自分手番時間を　多めに設定している場合は、
+	// 予定自分手番時間を　自分の残り時間 - 4　に合わせるぜ☆　予想相手手番時間は　いじらないぜ☆（＾ｑ＾）
+	int myNokoriTime = limits.GetNokoriTime(us);
+	if (myNokoriTime - 4 < this->GetYoteiMyTurnTime()) {
+		this->SetYoteiMyTurnTime(myNokoriTime - 4);
+	}
+
 
 	if (limits.GetMoveTime() != 0) {//（＾ｑ＾）いつも　０　な気がするぜ☆
 		// こんなとこ、実行されないんじゃないかだぜ☆？（＾ｑ＾）？
