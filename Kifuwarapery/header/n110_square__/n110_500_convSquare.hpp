@@ -21,6 +21,11 @@ public:
 		return (us == Color::Black ? (target < bRank) : (wRank < target));
 	}
 
+	template<Color US>
+	static inline bool IS_BEHIND10(Rank bRank, Rank wRank, const Rank target)
+	{
+		return (US == Black ? (bRank < target) : (target < wRank));
+	}
 	static inline bool IS_BEHIND10(Color us, Rank bRank, Rank wRank, const Rank target)
 	{
 		return (us == Black ? (bRank < target) : (target < wRank));
@@ -98,6 +103,17 @@ public:
 		return (c == Black ? sq : INVERSE10(sq));
 	}
 
+	template<Color US>
+	static inline bool CAN_PROMOTE10(const Rank fromOrToRank) {
+#if 1
+		static_assert(Black == 0, "");
+		static_assert(Rank9 == 0, "");
+		return static_cast<bool>(0x1c00007u & (1u << ((US << 4) + fromOrToRank)));
+#else
+		// 同じ意味。
+		return (US == Black ? IsInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : IsInFrontOf<White, Rank6, Rank4>(fromOrToRank));
+#endif
+	}
 	static inline bool CAN_PROMOTE10(const Color c, const Rank fromOrToRank) {
 #if 1
 		static_assert(Black == 0, "");

@@ -19,7 +19,7 @@ class BishopRookMovesGenerator {
 public:
 
 	// 角, 飛車の共通処理☆
-	template<bool isBishop>
+	template<const bool isBishop,const Color US>
 	static FORCE_INLINE MoveStack* GenerateBishopOrRookMoves(
 		MoveStack* moveStackList,
 		//const PieceType pt,
@@ -28,15 +28,15 @@ public:
 		const Bitboard& target
 		)
 	{
-		Bitboard fromBB = ptEvent.m_pos.GetBbOf20((isBishop ? PieceType::N05_Bishop : PieceType::N06_Rook), ptEvent.m_us);
+		Bitboard fromBB = ptEvent.m_pos.GetBbOf20<US>(isBishop ? PieceType::N05_Bishop : PieceType::N06_Rook);
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
-			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(from));
-			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), ptEvent.m_us, from);
+			const bool fromCanPromote = ConvSquare::CAN_PROMOTE10<US>(ConvSquare::TO_RANK10(from));
+			const PieceTypeEvent ptEvent1(ptEvent.m_pos.GetOccupiedBB(), US, from);
 			Bitboard toBB = PiecetypePrograms::m_PIECETYPE_PROGRAMS[(isBishop?PieceType::N05_Bishop:PieceType::N06_Rook)]->GetAttacks2From(ptEvent1) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				const bool toCanPromote = ConvSquare::CAN_PROMOTE10(ptEvent.m_us, ConvSquare::TO_RANK10(to));
+				const bool toCanPromote = ConvSquare::CAN_PROMOTE10<US>(ConvSquare::TO_RANK10(to));
 				if (fromCanPromote | toCanPromote) {
 
 					// 成りVer☆

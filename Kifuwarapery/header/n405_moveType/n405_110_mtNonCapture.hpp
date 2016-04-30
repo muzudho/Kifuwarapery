@@ -31,14 +31,27 @@ public:
 		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
 
 		const PieceMoveEvent pmEvent(MT, us, all, pos, ksq);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn( moveStackList, pmEvent, targetPawn);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King(moveStackList, pmEvent, targetOther);
+		
+		if (us == Color::Black) {
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::Black>(moveStackList, pmEvent, targetPawn);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<Color::Black>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<Color::Black>(moveStackList, pmEvent, targetOther);
+		}
+		else {
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::White>(moveStackList, pmEvent, targetPawn);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<Color::White>(moveStackList, pmEvent, targetOther);
+			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<Color::White>(moveStackList, pmEvent, targetOther);
+		}
 
 		return moveStackList;
 	}

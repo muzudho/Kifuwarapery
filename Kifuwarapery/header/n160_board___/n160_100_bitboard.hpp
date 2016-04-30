@@ -188,6 +188,10 @@ public://(^q^)
 	// 1段目には歩は存在しないので、1bit シフトで別の筋に行くことはない。
 	// ただし、from に歩以外の駒の Bitboard を入れると、別の筋のビットが立ってしまうことがあるので、
 	// 別の筋のビットが立たないか、立っても問題ないかを確認して使用すること。
+	template <Color US>
+	static inline Bitboard PawnAttack(const Bitboard& thisBitboard) { // thisはfrom
+		return (US == Black ? (thisBitboard >> 1) : (thisBitboard << 1));
+	}
 	static inline Bitboard PawnAttack(const Bitboard& thisBitboard, Color US) { // thisはfrom
 		return (US == Black ? (thisBitboard >> 1) : (thisBitboard << 1));
 	}

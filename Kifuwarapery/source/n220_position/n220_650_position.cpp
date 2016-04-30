@@ -676,7 +676,8 @@ inline void Position::XorBBs(const PieceType pt, const Square sq, const Color c)
 // 1手詰みなら、詰みに至る指し手の一部の情報(from, to のみとか)を返す。
 // 1手詰みでないなら、Move::moveNone() を返す。
 // Bitboard の状態を途中で更新する為、const 関数ではない。(更新後、元に戻すが。)
-template <Color US> Move Position::GetMateMoveIn1Ply() {
+template <Color US>
+Move Position::GetMateMoveIn1Ply() {
 	const Color Them = ConvColor::OPPOSITE_COLOR10(US);
 	const Square ksq = GetKingSquare(Them);
 	const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);

@@ -8,8 +8,6 @@
 #include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 
-// 定義☆（＾ｑ＾）
-//UtilAttack g_utilAttack;
 
 
 Bitboard UtilAttack::GetAttacksFrom(const PieceType pType, const Color c, const Square sq, const Bitboard& occupied) {//const

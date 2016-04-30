@@ -47,11 +47,25 @@ public:
 
 	void Set(const std::string& sfen, Military* th);
 
+	template<const Color US>
+	Bitboard GetBbOf10() const
+	{
+		return this->m_BB_ByColor_[US];
+	}
 	Bitboard GetBbOf10(const PieceType pt) const;
 
 	Bitboard GetBbOf10(const Color c) const;
 
+
+	template<Color US>
+	Bitboard GetBbOf20(const PieceType pt) const {
+		return this->GetBbOf10(pt) & this->GetBbOf10(US);
+	}
+
+
 	Bitboard GetBbOf20(const PieceType pt, const Color c) const;
+
+
 
 	Bitboard GetBbOf20(const PieceType pt1, const PieceType pt2) const;
 
@@ -126,6 +140,11 @@ public:
 
 	ScoreIndex GetMaterialDiff() const;
 
+	template<const Color US>
+	FORCE_INLINE Square GetKingSquare() const {
+		assert(m_kingSquare_[US] == this->GetBbOf<US>(N08_King).GetFirstOneFromI9());
+		return m_kingSquare_[US];
+	}
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
 		assert(m_kingSquare_[c] == this->GetBbOf(N08_King, c).GetFirstOneFromI9());
 		return m_kingSquare_[c];

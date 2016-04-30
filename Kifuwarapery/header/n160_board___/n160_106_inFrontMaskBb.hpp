@@ -63,9 +63,14 @@ public:
 
 public:
 
+	template <Color US>
+	inline Bitboard GetInFrontMask(const Rank r) const {
+		return this->m_inFrontMask[US][r];
+	}
 	inline Bitboard GetInFrontMask(const Color c, const Rank r) const {
 		return this->m_inFrontMask[c][r];
 	}
+
 };
 
 
