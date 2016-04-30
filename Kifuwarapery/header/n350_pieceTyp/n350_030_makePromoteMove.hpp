@@ -38,7 +38,7 @@ public:
 	//(^q^)新型1
 	// MoveType によって指し手生成関数を使い分ける。
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	static inline Move GetSelectedMakeMove_ExceptPromote_mt1(
+	static inline Move GetSelectedMakeMove_ExceptPromote_goldHorseDragon(
 		MoveType mt,
 		const PieceType pt, // 新型２ならここを Move にできるぜ☆（＾ｑ＾）
 		const Square from, const Square to, const Position& pos) {

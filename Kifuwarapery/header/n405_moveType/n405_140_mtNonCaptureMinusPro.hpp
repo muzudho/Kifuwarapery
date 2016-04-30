@@ -23,14 +23,14 @@ public:
 		const Rank TRank7 = (us == Black ? Rank7 : Rank3);
 		const Rank TRank8 = (us == Black ? Rank8 : Rank2);
 		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask(us, TRank6);
-		const Bitboard TRank1_6BB = g_inFrontMaskBb.GetInFrontMask(ConvColor::OPPOSITE_COLOR10(us), TRank7);
-		const Bitboard TRank1_7BB = g_inFrontMaskBb.GetInFrontMask(ConvColor::OPPOSITE_COLOR10(us), TRank8);
+		const Bitboard TRank1_6BB = g_inFrontMaskBb.GetInFrontMask(ConvColor::OPPOSITE_COLOR10b(us), TRank7);
+		const Bitboard TRank1_7BB = g_inFrontMaskBb.GetInFrontMask(ConvColor::OPPOSITE_COLOR10b(us), TRank8);
 
 		const Bitboard targetPawn = pos.GetOccupiedBB().NotThisAnd(TRank1_6BB);
 		const Bitboard targetOther = pos.GetEmptyBB();
-		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
+		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10b(us));
 
-		const PieceMoveEvent pmEvent(MT, us, all, pos, ksq);
+		const PieceMoveEvent pmEvent(MT, all, pos, ksq);
 
 		if (us == Color::Black) {
 			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::Black>(moveStackList, pmEvent, targetPawn);

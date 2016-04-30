@@ -30,12 +30,20 @@ public:
 	}
 
 	// pin ÇÕè»Ç©Ç»Ç¢ÅB//FORCE_INLINE
-	void Generate2RecaptureMoves(
+	void Generate2RecaptureMoves_usWhite(
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,
-		const Square to,
-		const Color us
+		const Square to
+		) const override {
+		return;
+	}
+
+	void Generate2RecaptureMoves_usBlack(
+		MoveStack* moveStackList,
+		const Position& pos,
+		const Square from,
+		const Square to
 		) const override {
 		return;
 	}

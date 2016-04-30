@@ -157,7 +157,24 @@ public:
 	// attacks
 	Bitboard GetAttackersTo(const Square sq, const Bitboard& occupied) const;
 
-	Bitboard GetAttackersTo(const Color c, const Square sq, const Bitboard& occupied) const;
+	template<
+		Color TURN1,
+		Color TURN2//TURN1の相手の色
+	>
+	Bitboard GetAttackersTo_a(const Square sq, const Bitboard& occupied) const{
+		const PieceTypeEvent ptEvent1(occupied, TURN2, sq);
+		return ((PiecetypePrograms::m_PAWN.GetAttacks2From(ptEvent1) & this->GetBbOf10(N01_Pawn))
+			| (PiecetypePrograms::m_LANCE.GetAttacks2From(ptEvent1) & this->GetBbOf10(N02_Lance))
+			| (PiecetypePrograms::m_KNIGHT.GetAttacks2From(ptEvent1) & this->GetBbOf10(N03_Knight))
+			| (PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent1) & this->GetBbOf10(N04_Silver))
+			| (PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent1) & GetGoldsBB())
+			| (PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent1) & this->GetBbOf20(N05_Bishop, N13_Horse))
+			| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1) & this->GetBbOf20(N06_Rook, N14_Dragon))
+			| (PiecetypePrograms::m_KING.GetAttacks2From(ptEvent1) & this->GetBbOf(N08_King, N13_Horse, N14_Dragon)))
+			& this->GetBbOf10(TURN1);
+	}
+
+	Bitboard GetAttackersTo_clr(const Color c, const Square sq, const Bitboard& occupied) const;
 
 	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
 
@@ -299,7 +316,7 @@ private:
 	Bitboard GetHiddenCheckers() const {
 		Bitboard result = Bitboard::CreateAllZeroBB();
 		const Color us = GetTurn();
-		const Color them = ConvColor::OPPOSITE_COLOR10(us);
+		const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 		// pin する遠隔駒
 		// まずは自駒か敵駒かで大雑把に判別
 		Bitboard pinners = this->GetBbOf10(FindPinned ? them : us);

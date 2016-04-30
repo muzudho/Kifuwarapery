@@ -189,7 +189,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
-iid_start:
+//iid_start:
 	// step10
 	this->DoStep10_InternalIterativeDeepening(
 		depth,

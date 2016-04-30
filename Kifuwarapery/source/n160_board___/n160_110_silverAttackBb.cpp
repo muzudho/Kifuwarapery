@@ -23,7 +23,7 @@ void SilverAttackBb::Initialize()
 
 void SilverAttackBb::InitCheckTableSilver() {
 	for (Color c = Black; c < g_COLOR_NUM; ++c) {
-		const Color opp = ConvColor::OPPOSITE_COLOR10(c);
+		const Color opp = ConvColor::OPPOSITE_COLOR10b(c);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_silverCheckTable_[c][sq] = Bitboard::CreateAllZeroBB();
 

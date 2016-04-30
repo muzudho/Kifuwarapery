@@ -37,6 +37,7 @@ public:
 
 		// Txxx は先手、後手の情報を吸収した変数。数字は先手に合わせている。
 		const Rank TRank6 = (US == Black ? Rank6 : Rank4);
+		const Rank TRank9 = (US == Black ? Rank9 : Rank1);
 		const Bitboard TRank789BB = g_inFrontMaskBb.GetInFrontMask<US>(TRank6);
 		const SquareDelta TDeltaS = (US == Black ? DeltaS : DeltaN);
 
@@ -59,7 +60,6 @@ public:
 					moveStackList++;
 
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all) {
-						const Rank TRank9 = (US == Black ? Rank9 : Rank1);
 						if (ConvSquare::TO_RANK10(to) != TRank9) {
 							moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,g_PTPAWN_ONBOARD_AS_MOVE,from, to, ptEvent.m_pos);
 							moveStackList++;
@@ -243,8 +243,8 @@ public:
 			Bitboard toBB = UtilAttack::GetAttacksFrom<US>(pt, from, ptEvent.m_pos.GetOccupiedBB()) & target;
 			while (toBB.Exists1Bit()) {
 				const Square to = toBB.PopFirstOneFromI9();
-				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt1(ptEvent.m_mt,
-					pt,//TODO:ここをムーブの埋め込みにしたいぜ☆（＾ｑ＾）
+				moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_goldHorseDragon(ptEvent.m_mt,
+					pt,// 金、成り金、馬、竜のいずれかだぜ☆（＾ｑ＾）
 					from, to, ptEvent.m_pos);
 				moveStackList++;
 			}

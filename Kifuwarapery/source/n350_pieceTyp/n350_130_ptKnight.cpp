@@ -36,10 +36,10 @@ PieceType PtKnight::AppendToNextAttackerAndTryPromote(
 		const Square from = bb.GetFirstOneFromI9();
 		g_setMaskBb.XorBit(&occupied, from);
 
-		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn), ptsEvent.m_to) &
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10b(ptsEvent.m_turn), ptsEvent.m_to) &
 			ptsEvent.m_pos.GetBbOf20(N02_Lance, ptsEvent.m_turn))
 			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) &
-				ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn)))
+				ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10b(ptsEvent.m_turn)))
 			| (g_rookAttackBb.GetControllBb(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N06_Rook, N14_Dragon))
 			| (g_bishopAttackBb.BishopAttack(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N05_Bishop, N13_Horse));
 

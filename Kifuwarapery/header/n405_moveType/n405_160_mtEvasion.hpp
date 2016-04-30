@@ -27,7 +27,7 @@ public:
 		const Square ksq = pos.GetKingSquare(us);
 
 		// 相手の色☆
-		const Color Them = ConvColor::OPPOSITE_COLOR10(us);
+		const Color Them = ConvColor::OPPOSITE_COLOR10b(us);
 
 		const Bitboard checkers = pos.GetCheckersBB();
 		Bitboard bb = checkers;
@@ -79,7 +79,7 @@ public:
 		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
 		const Bitboard target2 = target1 | checkers;
 
-		const PieceMoveEvent pmEvent(MoveType::N06_Evasion, us, all, pos, ksq);
+		const PieceMoveEvent pmEvent(MoveType::N06_Evasion, all, pos, ksq);
 
 		if (us == Color::Black) {
 			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::Black>(moveStackList, pmEvent, target2);

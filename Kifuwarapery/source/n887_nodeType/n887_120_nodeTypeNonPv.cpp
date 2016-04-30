@@ -306,7 +306,7 @@ iid_start:
 		posKey
 		);
 
-split_point_start:
+//split_point_start:
 	NextmoveEvent mp(
 		pos,
 		ttMove,

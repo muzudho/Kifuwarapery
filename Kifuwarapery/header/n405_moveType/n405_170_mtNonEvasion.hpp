@@ -21,10 +21,10 @@ public:
 		Color us = pos.GetTurn();
 
 		moveStackList = g_dropMoveGenerator.GenerateDropMoves(us, moveStackList, pos, target);//<US>
-		target |= pos.GetBbOf10(ConvColor::OPPOSITE_COLOR10(us));
-		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10(us));
+		target |= pos.GetBbOf10(ConvColor::OPPOSITE_COLOR10b(us));
+		const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10b(us));
 
-		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, us, false, pos, ksq);
+		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, false, pos, ksq);
 
 		if (us == Color::Black) {
 			moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<Color::Black>(moveStackList, pmEvent, target);

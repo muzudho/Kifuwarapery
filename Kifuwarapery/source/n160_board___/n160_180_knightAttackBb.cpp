@@ -31,7 +31,7 @@ void KnightAttackBb::Initialize()
 
 void KnightAttackBb::InitCheckTableKnight() {
 	for (Color color = Black; color < g_COLOR_NUM; ++color) {
-		const Color opponent = ConvColor::OPPOSITE_COLOR10(color);
+		const Color opponent = ConvColor::OPPOSITE_COLOR10b(color);
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_knightCheckTable_[color][sq] = Bitboard::CreateAllZeroBB();
 

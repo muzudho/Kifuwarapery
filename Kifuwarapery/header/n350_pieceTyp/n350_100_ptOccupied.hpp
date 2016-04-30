@@ -30,13 +30,22 @@ public:
 		return Bitboard::CreateAllZeroBB();
 	}
 
-	void Generate2RecaptureMoves(//FORCE_INLINE
+	void Generate2RecaptureMoves_usWhite(//FORCE_INLINE
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,
-		const Square to,
-		const Color us
+		const Square to
 	) const override {
+		// 最適化の為のダミー
+		assert(false);
+	}
+
+	void Generate2RecaptureMoves_usBlack(//FORCE_INLINE
+		MoveStack* moveStackList,
+		const Position& pos,
+		const Square from,
+		const Square to
+		) const override {
 		// 最適化の為のダミー
 		assert(false);
 	}

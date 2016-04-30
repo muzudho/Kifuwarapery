@@ -168,7 +168,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
-iid_start:
+//iid_start:
 	// step10
 	this->DoStep10_InternalIterativeDeepening(
 		depth,
@@ -183,7 +183,7 @@ iid_start:
 		posKey
 		);
 
-split_point_start:
+//split_point_start:
 	NextmoveEvent mp(
 		pos,
 		ttMove,

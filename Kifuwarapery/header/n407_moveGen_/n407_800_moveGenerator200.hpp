@@ -38,18 +38,22 @@ public:
 
 
 	// pin は省かない。リキャプチャー専用か。
-	MoveStack* GenerateMoves_3(
+	template<Color US, Color THEM>
+	static inline MoveStack* GenerateMoves_recapture(
 		MoveStack* moveStackList, const Position& pos, const Square to
-	) const {
-		const Color us = pos.GetTurn();
-
-		Bitboard fromBB = pos.GetAttackersTo(us, to, pos.GetOccupiedBB());
+	) {
+		Bitboard fromBB = pos.GetAttackersTo_a<US, THEM>(to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
 			const PieceType pieceType = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）
-			PiecetypePrograms::m_PIECETYPE_PROGRAMS[pieceType]->Generate2RecaptureMoves(moveStackList, pos, from, to, us);
+			US == Color::Black
+				?
+				PiecetypePrograms::m_PIECETYPE_PROGRAMS[pieceType]->Generate2RecaptureMoves_usBlack(moveStackList, pos, from, to)
+				:
+				PiecetypePrograms::m_PIECETYPE_PROGRAMS[pieceType]->Generate2RecaptureMoves_usWhite(moveStackList, pos, from, to)
+				;
 		}
 		return moveStackList;
 	}

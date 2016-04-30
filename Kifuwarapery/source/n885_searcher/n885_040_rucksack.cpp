@@ -165,7 +165,7 @@ void Position::DoNullMove(bool DO, StateInfo& backUpSt) {
 	dst->m_handKey       = src->m_handKey;
 	dst->m_pliesFromNull = src->m_pliesFromNull;
 	dst->m_hand = GetHand(GetTurn());
-	m_turn_ = ConvColor::OPPOSITE_COLOR10(GetTurn());
+	m_turn_ = ConvColor::OPPOSITE_COLOR10b(GetTurn());
 
 	if (DO) {
 		m_st_->m_boardKey ^= GetZobTurn();

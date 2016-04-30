@@ -18,7 +18,7 @@
 #include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
 CheckInfo::CheckInfo(const Position& position) {
-	const Color them = ConvColor::OPPOSITE_COLOR10(position.GetTurn());
+	const Color them = ConvColor::OPPOSITE_COLOR10b(position.GetTurn());
 	const Square ksq = position.GetKingSquare(them);
 
 	m_pinned = position.GetPinnedBB();

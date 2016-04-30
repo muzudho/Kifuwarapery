@@ -34,21 +34,40 @@ public:
 	}
 
 	// pin は省かない。
-	void Generate2RecaptureMoves(//FORCE_INLINE
+	void Generate2RecaptureMoves_usWhite(//FORCE_INLINE
 		MoveStack* moveStackList,
 		const Position& pos,
 		const Square from,
-		const Square to,
-		const Color us
+		const Square to
 		) const override {
 		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
 			this->AsMove(), from, to, pos);
 
 		if (
-			ConvSquare::CAN_PROMOTE10(us, ConvSquare::TO_RANK10(to))
+			ConvSquare::CAN_PROMOTE10<Color::White>(ConvSquare::TO_RANK10(to))
 			|
-			ConvSquare::CAN_PROMOTE10(us, ConvSquare::TO_RANK10(from))
+			ConvSquare::CAN_PROMOTE10<Color::White>(ConvSquare::TO_RANK10(from))
 		) {
+			MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
+		}
+
+		moveStackList++;
+	}
+
+	void Generate2RecaptureMoves_usBlack(//FORCE_INLINE
+		MoveStack* moveStackList,
+		const Position& pos,
+		const Square from,
+		const Square to
+		) const override {
+		moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			this->AsMove(), from, to, pos);
+
+		if (
+			ConvSquare::CAN_PROMOTE10<Color::Black>(ConvSquare::TO_RANK10(to))
+			|
+			ConvSquare::CAN_PROMOTE10<Color::Black>(ConvSquare::TO_RANK10(from))
+			) {
 			MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 		}
 

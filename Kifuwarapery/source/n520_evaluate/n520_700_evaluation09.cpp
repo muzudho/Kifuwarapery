@@ -244,16 +244,16 @@ int Evaluation09::make_list_unUseDiff(const Position& pos, int list0[EvalList::m
 		nlist += 1;
 		});
 	};
-	func(pos.GetBbOf10(N01_Pawn), f_pawn, e_pawn);
-	func(pos.GetBbOf10(N02_Lance), f_lance, e_lance);
-	func(pos.GetBbOf10(N03_Knight), f_knight, e_knight);
-	func(pos.GetBbOf10(N04_Silver), f_silver, e_silver);
+	func(pos.GetBbOf10(PieceType::N01_Pawn), f_pawn, e_pawn);
+	func(pos.GetBbOf10(PieceType::N02_Lance), f_lance, e_lance);
+	func(pos.GetBbOf10(PieceType::N03_Knight), f_knight, e_knight);
+	func(pos.GetBbOf10(PieceType::N04_Silver), f_silver, e_silver);
 	const Bitboard goldsBB = pos.GetGoldsBB();
 	func(goldsBB, f_gold, e_gold);
-	func(pos.GetBbOf10(N05_Bishop), f_bishop, e_bishop);
-	func(pos.GetBbOf10(N13_Horse), f_horse, e_horse);
-	func(pos.GetBbOf10(N06_Rook), f_rook, e_rook);
-	func(pos.GetBbOf10(N14_Dragon), f_dragon, e_dragon);
+	func(pos.GetBbOf10(PieceType::N05_Bishop), f_bishop, e_bishop);
+	func(pos.GetBbOf10(PieceType::N13_Horse), f_horse, e_horse);
+	func(pos.GetBbOf10(PieceType::N06_Rook), f_rook, e_rook);
+	func(pos.GetBbOf10(PieceType::N14_Dragon), f_dragon, e_dragon);
 
 	return nlist;
 }

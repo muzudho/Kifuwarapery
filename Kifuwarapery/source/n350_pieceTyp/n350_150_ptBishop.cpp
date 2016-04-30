@@ -37,8 +37,8 @@ PieceType PtBishop::AppendToNextAttackerAndTryPromote(
 		attackers |= (g_bishopAttackBb.BishopAttack(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N05_Bishop, N13_Horse));
 
 		// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
-		if (ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(ptsEvent.m_to)) ||
-			ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(from))) {
+		if (ConvSquare::CAN_PROMOTE10b(ptsEvent.m_turn, ConvSquare::TO_RANK10(ptsEvent.m_to)) ||
+			ConvSquare::CAN_PROMOTE10b(ptsEvent.m_turn, ConvSquare::TO_RANK10(from))) {
 			return PT + PTPromote;
 		}
 		// それ以外の駒種類は、そのまま返す☆

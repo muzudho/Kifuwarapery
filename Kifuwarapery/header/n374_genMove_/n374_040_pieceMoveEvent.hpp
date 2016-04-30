@@ -13,7 +13,6 @@ class PieceMoveEvent {
 public:
 
 	const MoveType m_mt;
-	const Color m_us;//FIXME:廃止予定☆（＾ｑ＾）templateにしたいぜ☆
 	const bool m_all;
 	const Position& m_pos;
 	const Square m_ksq;
@@ -21,13 +20,11 @@ public:
 public:
 	PieceMoveEvent (
 		const MoveType mt,
-		const Color us,
 		const bool all,
 		const Position& pos,
 		const Square ksq
 	):
 		m_mt(mt),
-		m_us(us),
 		m_all(all),
 		m_pos(pos),
 		m_ksq(ksq)

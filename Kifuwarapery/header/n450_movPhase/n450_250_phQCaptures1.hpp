@@ -24,8 +24,17 @@ public:
 		return true;
 	};
 
+	// virtual の派生クラスなので template化はできないぜ☆（＾ｑ＾）
 	void GoNext2Phase(NextmoveEvent& nmEvent) override {
-		nmEvent.SetLastMove(g_moveGenerator200.GenerateMoves_3(nmEvent.GetFirstMove(), nmEvent.GetPos(), nmEvent.GetRecaptureSquare()));//<Recapture>
+		const Color us = nmEvent.GetPos().GetTurn();
+
+		nmEvent.SetLastMove(
+			us == Color::Black
+			?
+			g_moveGenerator200.GenerateMoves_recapture<Color::Black, Color::White>(nmEvent.GetFirstMove(), nmEvent.GetPos(), nmEvent.GetRecaptureSquare())
+			:
+			g_moveGenerator200.GenerateMoves_recapture<Color::White, Color::Black>(nmEvent.GetFirstMove(), nmEvent.GetPos(), nmEvent.GetRecaptureSquare())
+		);//<Recapture>
 		nmEvent.ScoreCaptures();
 	}
 

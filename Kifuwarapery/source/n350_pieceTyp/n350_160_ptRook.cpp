@@ -34,13 +34,16 @@ PieceType PtRook::AppendToNextAttackerAndTryPromote(
 		const Square from = bb.GetFirstOneFromI9();
 		g_setMaskBb.XorBit(&occupied, from);
 
-		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn), ptsEvent.m_to) &
+		attackers |= (g_lanceAttackBb.GetControllBb(occupied, ConvColor::OPPOSITE_COLOR10b(ptsEvent.m_turn), ptsEvent.m_to) &
 			ptsEvent.m_pos.GetBbOf20(N02_Lance, ptsEvent.m_turn))
-			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10(ptsEvent.m_turn)))
+			| (g_lanceAttackBb.GetControllBb(occupied, ptsEvent.m_turn, ptsEvent.m_to) &
+				ptsEvent.m_pos.GetBbOf20(N02_Lance, ConvColor::OPPOSITE_COLOR10b(ptsEvent.m_turn)))
 			| (g_rookAttackBb.GetControllBb(occupied, ptsEvent.m_to) & ptsEvent.m_pos.GetBbOf20(N06_Rook, N14_Dragon));
 
 		// 銀、角、飛は　陣地に飛び込んだとき、または陣地から飛び出たとき、成れる時には成る☆
-		if (ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(ptsEvent.m_to)) || ConvSquare::CAN_PROMOTE10(ptsEvent.m_turn, ConvSquare::TO_RANK10(from))) {
+		if (ConvSquare::CAN_PROMOTE10b(ptsEvent.m_turn, ConvSquare::TO_RANK10(ptsEvent.m_to))
+			||
+			ConvSquare::CAN_PROMOTE10b(ptsEvent.m_turn, ConvSquare::TO_RANK10(from))) {
 			return PT + PTPromote;
 		}
 		// それ以外の駒種類は、そのまま返す☆

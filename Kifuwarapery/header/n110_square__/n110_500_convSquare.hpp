@@ -26,17 +26,17 @@ public:
 	{
 		return (US == Black ? (bRank < target) : (target < wRank));
 	}
-	static inline bool IS_BEHIND10(Color us, Rank bRank, Rank wRank, const Rank target)
-	{
-		return (us == Black ? (bRank < target) : (target < wRank));
+
+	// 未使用☆？
+	template<Color US>
+	static inline bool IS_LEFT_OF10(File bFile, File wFile, const File target) {
+		return (US == Black ? (bFile < target) : (target < wFile));
 	}
 
-	static inline bool IS_LEFT_OF10(Color us, File bFile, File wFile, const File target) {
-		return (us == Black ? (bFile < target) : (target < wFile));
-	}
-
-	static inline bool IS_RIGHT_OF10(Color us, File bFile, File wFile, const File target) {
-		return (us == Black ? (target < bFile) : (wFile < target));
+	// 未使用☆？
+	template<Color US>
+	static inline bool IS_RIGHT_OF10(File bFile, File wFile, const File target) {
+		return (US == Black ? (target < bFile) : (wFile < target));
 	}
 
 	// s が Square の中に含まれているか判定
@@ -99,6 +99,7 @@ public:
 		);
 	}
 
+	// ビショップ・イン・デンジャーで使用☆
 	static inline constexpr Square INVERSE_IF_WHITE20(const Color c, const Square sq) {
 		return (c == Black ? sq : INVERSE10(sq));
 	}
@@ -114,7 +115,7 @@ public:
 		return (US == Black ? IsInFrontOf<Black, Rank6, Rank4>(fromOrToRank) : IsInFrontOf<White, Rank6, Rank4>(fromOrToRank));
 #endif
 	}
-	static inline bool CAN_PROMOTE10(const Color c, const Rank fromOrToRank) {
+	static inline bool CAN_PROMOTE10b(const Color c, const Rank fromOrToRank) {
 #if 1
 		static_assert(Black == 0, "");
 		static_assert(Rank9 == 0, "");
