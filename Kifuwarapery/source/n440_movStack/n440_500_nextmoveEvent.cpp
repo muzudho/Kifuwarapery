@@ -128,6 +128,7 @@ NextmoveEvent::NextmoveEvent(
 }
 
 Move NextmoveEvent::GetNextMove_SplitedNode() {
+	// 分岐点の次のノード☆？（＾ｑ＾）？
 	return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove_NonSplitedNode();
 }
 Move NextmoveEvent::GetNextMove_NonSplitedNode() {

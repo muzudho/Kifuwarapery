@@ -115,27 +115,6 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
-	/*
-	this->DoStep1a(
-		isGotoSplitPointStart,
-		moveCount,
-		playedMoveCount,
-		inCheck,
-		pos,
-		&pSplitedNode,
-		&pFlashlight,
-		bestMove,
-		threatMove,
-		bestScore,
-		ttMove,
-		excludedMove,
-		ttScore
-		);
-	if (isGotoSplitPointStart)
-	{
-		goto split_point_start;
-	}
-	*/
 
 	this->DoStep1b(
 		bestScore,
@@ -143,12 +122,6 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 		threatMove,
 		bestMove
 		);
-	/*
-	this->DoStep1c(
-		&pThisThread,
-		pFlashlight
-		);
-		*/
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
@@ -232,7 +205,7 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	}
 
 	// step5
-	bool isGotoIidStart = false;
+	bool isGotoIidStart = false;//NonPVのとき使う☆
 	this->DoStep5(
 		isGotoIidStart,
 		rucksack,
@@ -320,7 +293,7 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
 	// step10
-	this->DoStep10(
+	this->DoStep10_InternalIterativeDeepening(
 		depth,
 		ttMove,
 		inCheck,
@@ -359,20 +332,16 @@ split_point_start:
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = this->GetMoveAtStep11(mp)
+			move = this->GetNextMove_AtStep11(mp)
 			).IsNone()
 		) {
 
-		bool isContinue = false;
-		this->DoStep11b_LoopHeader(
-			isContinue,
-			move,
-			excludedMove
-			);
-		if (isContinue)
-		{
+		// DoStep11b
+		if (move == excludedMove) { // ムーブが一致していれば、次のループへ☆
 			continue;
 		}
+
+		bool isContinue = false;
 
 		this->DoStep11c_LoopHeader(
 			isContinue,
@@ -386,25 +355,6 @@ split_point_start:
 		{
 			continue;
 		}
-
-		/*
-		this->DoStep11d_LoopHeader(
-			isContinue,
-			rucksack,
-			move
-			);
-		if (isContinue)
-		{
-			continue;
-		}
-		*/
-
-		/*
-		this->DoStep11e_LoopHeader(
-			rucksack,
-			moveCount
-			);
-			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -436,7 +386,8 @@ split_point_start:
 			);
 
 		// step13
-		this->DoStep13a(
+		// 無駄枝狩り☆（＾▽＾）非PVだけ行う☆！
+		this->DoStep13a_FutilityPruning(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,
@@ -532,13 +483,6 @@ split_point_start:
 			);
 
 		// step16
-		/*
-		this->DoStep16a(
-			doFullDepthSearch,
-			alpha,
-			&pSplitedNode
-			);
-			*/
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -550,19 +494,6 @@ split_point_start:
 			alpha,
 			cutNode
 			);
-		/*
-		this->DoStep16c(
-			rucksack,
-			isPVMove,
-			alpha,
-			score,
-			beta,
-			newDepth,
-			givesCheck,
-			pos,
-			&pFlashlight
-			);
-			*/
 
 		// step17
 		this->DoStep17(
@@ -573,13 +504,6 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
-		/*
-		this->DoStep18a(
-			&pSplitedNode,
-			bestScore,
-			alpha
-			);
-			*/
 
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;

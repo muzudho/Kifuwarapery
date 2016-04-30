@@ -219,7 +219,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -268,7 +268,7 @@ public:
 		return -ScoreIndex::ScoreInfinite;
 	}
 
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const override {
 		// スプリットポイントの場合
@@ -299,6 +299,7 @@ public:
 		int& moveCount,
 		SplitedNode** ppSplitedNode
 		) const override {
+		// DoStep11c
 			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 				isContinue = true;
 				return;
@@ -307,7 +308,8 @@ public:
 			(*ppSplitedNode)->m_mutex.unlock();
 	}
 
-	virtual inline void DoStep13a(
+	// 無駄枝狩り☆（＾▽＾）
+	virtual inline void DoStep13a_FutilityPruning(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,

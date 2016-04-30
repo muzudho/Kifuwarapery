@@ -141,12 +141,6 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 		threatMove,
 		bestMove
 		);
-	/*
-	this->DoStep1c(
-		&pThisThread,
-		pFlashlight
-		);
-		*/
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
@@ -230,7 +224,7 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 	}
 
 	// step5
-	bool isGotoIidStart = false;
+	bool isGotoIidStart = false;//NonPVのとき使う☆
 	this->DoStep5(
 		isGotoIidStart,
 		rucksack,
@@ -318,7 +312,7 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
 	// step10
-	this->DoStep10(
+	this->DoStep10_InternalIterativeDeepening(
 		depth,
 		ttMove,
 		inCheck,
@@ -357,20 +351,16 @@ split_point_start:
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = this->GetMoveAtStep11(mp)
+			move = this->GetNextMove_AtStep11(mp)
 			).IsNone()
 		) {
 
-		bool isContinue = false;
-		this->DoStep11b_LoopHeader(
-			isContinue,
-			move,
-			excludedMove
-			);
-		if (isContinue)
-		{
+		// DoStep11b
+		if (move == excludedMove) { // ムーブが一致していれば、次のループへ☆
 			continue;
 		}
+
+		bool isContinue = false;
 
 		this->DoStep11c_LoopHeader(
 			isContinue,
@@ -384,25 +374,6 @@ split_point_start:
 		{
 			continue;
 		}
-
-		/*
-		this->DoStep11d_LoopHeader(
-			isContinue,
-			rucksack,
-			move
-			);
-		if (isContinue)
-		{
-			continue;
-		}
-		*/
-
-		/*
-		this->DoStep11e_LoopHeader(
-			rucksack,
-			moveCount
-			);
-			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -434,7 +405,8 @@ split_point_start:
 			);
 
 		// step13
-		this->DoStep13a(
+		// 無駄枝狩り☆（＾▽＾）非PVだけ行う☆！
+		this->DoStep13a_FutilityPruning(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,
@@ -456,20 +428,6 @@ split_point_start:
 		{
 			continue;
 		}
-
-		/*
-		this->DoStep13b(
-			isContinue,
-			pos,
-			move,
-			ci,
-			moveCount
-			);
-		if (isContinue)
-		{
-			continue;
-		}
-		*/
 
 		this->DoStep13c(
 			isContinue,
@@ -497,15 +455,6 @@ split_point_start:
 		{
 			continue;
 		}
-
-		/*
-		this->DoStep13d(
-			captureOrPawnPromotion,
-			playedMoveCount,
-			movesSearched,
-			move
-			);
-			*/
 
 		// step14
 		this->DoStep14(
@@ -554,20 +503,6 @@ split_point_start:
 			cutNode
 			);
 
-		/*
-		this->DoStep16c(
-			rucksack,
-			isPVMove,
-			alpha,
-			score,
-			beta,
-			newDepth,
-			givesCheck,
-			pos,
-			&pFlashlight
-			);
-			*/
-
 		// step17
 		this->DoStep17(
 			pos,
@@ -587,17 +522,6 @@ split_point_start:
 			return score;
 		}
 
-		/*
-		this->DoStep18b(
-			rucksack,
-			move,
-			isPVMove,
-			alpha,
-			score,
-			pos
-			);
-			*/
-
 		bool isBreak = false;
 		this->DoStep18c(
 			isBreak,
@@ -615,54 +539,11 @@ split_point_start:
 		if (isBreak) {
 			break;
 		}
-
-		/*
-		// step19
-		this->DoStep19(
-			isBreak,
-			rucksack,
-			depth,
-			&pThisThread,
-			bestScore,
-			beta,
-			pos,
-			&pFlashlight,
-			alpha,
-			bestMove,
-			threatMove,
-			moveCount,
-			mp,
-			cutNode
-			);
-		if (isBreak) {
-			break;
-		}
-		*/
 	}
 
 	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
-
-	/*
-	// step20
-	this->DoStep20(
-		moveCount,
-		excludedMove,
-		rucksack,
-		alpha,
-		&pFlashlight,
-		bestScore,
-		playedMoveCount,
-		beta,
-		posKey,
-		depth,
-		bestMove,
-		inCheck,
-		pos,
-		movesSearched
-		);
-		*/
 
 	return bestScore;
 

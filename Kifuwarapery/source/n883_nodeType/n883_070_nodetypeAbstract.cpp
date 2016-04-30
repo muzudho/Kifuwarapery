@@ -312,7 +312,7 @@ ScoreIndex NodetypeAbstract::GoToTheAdventure_new(
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
 	// step10
-	this->DoStep10(
+	this->DoStep10_InternalIterativeDeepening(
 		depth,
 		ttMove,
 		inCheck,
@@ -351,20 +351,16 @@ split_point_start:
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = this->GetMoveAtStep11(mp)
+			move = this->GetNextMove_AtStep11(mp)
 			).IsNone()
 		) {
 
-		bool isContinue = false;
-		this->DoStep11b_LoopHeader(
-			isContinue,
-			move,
-			excludedMove
-			);
-		if (isContinue)
-		{
+		// DoStep11b
+		if (move == excludedMove) { // ムーブが一致していれば、次のループへ☆
 			continue;
 		}
+
+		bool isContinue = false;
 
 		this->DoStep11c_LoopHeader(
 			isContinue,
@@ -424,7 +420,8 @@ split_point_start:
 			);
 
 		// step13
-		this->DoStep13a(
+		// 無駄枝狩り☆（＾▽＾）
+		this->DoStep13a_FutilityPruning(
 			isContinue,
 			rucksack,
 			captureOrPawnPromotion,

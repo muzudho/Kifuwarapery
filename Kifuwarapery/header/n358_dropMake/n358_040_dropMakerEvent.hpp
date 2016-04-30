@@ -14,13 +14,13 @@ public:
 
 public:
 
-	const Color m_us;
+	const Color		m_us;
 	const Position& m_pos;
 	const Bitboard& m_target;
-	const Hand& m_hand;
-	const int m_haveHandNum;
-	const int m_noKnightIdx;
-	const int m_noKnightLanceIdx;
+	const Hand&		m_hand;
+	const int		m_haveHandNum;
+	const int		m_noKnightIdx;
+	const int		m_noKnightLanceIdx;
 	const Bitboard& m_tRank8BB;
 	const Bitboard& m_tRank9BB;
 	//PieceType m_haveHandArr[6];//(^q^)配列はコンストラクタに渡せないぜ☆！
@@ -39,15 +39,15 @@ public:
 		const Bitboard& tRank9BB
 		//PieceType haveHandArr[6]
 	) :
-		m_us(us),
-		m_pos(pos),
-		m_target(target),
-		m_hand(hand),
-		m_haveHandNum(haveHandNum),
-		m_noKnightIdx(m_noKnightIdx),
-		m_noKnightLanceIdx(m_noKnightLanceIdx),
-		m_tRank8BB(tRank8BB),
-		m_tRank9BB(tRank9BB)
+		m_us				(us),
+		m_pos				(pos),
+		m_target			(target),
+		m_hand				(hand),
+		m_haveHandNum		(haveHandNum),
+		m_noKnightIdx		(m_noKnightIdx),
+		m_noKnightLanceIdx	(m_noKnightLanceIdx),
+		m_tRank8BB			(tRank8BB),
+		m_tRank9BB			(tRank9BB)
 	{
 		//m_haveHandArr = haveHandArr;
 	}

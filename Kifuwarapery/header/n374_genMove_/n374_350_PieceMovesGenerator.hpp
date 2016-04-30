@@ -204,7 +204,7 @@ public:
 		const PieceMoveEvent ptEvent,
 		const Bitboard& target
 	) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves(moveStackList, PieceType::N05_Bishop, ptEvent, target);
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<true>(moveStackList, g_PTBISHOP_ONBOARD_AS_MOVE, ptEvent, target);
 	}
 
 
@@ -214,7 +214,7 @@ public:
 		const PieceMoveEvent ptEvent,
 		const Bitboard& target
 	) {
-		return BishopRookMovesGenerator::GenerateBishopOrRookMoves(moveStackList, PieceType::N06_Rook, ptEvent, target);
+		return BishopRookMovesGenerator::GenerateBishopOrRookMoves<false>(moveStackList, g_PTROOK_ONBOARD_AS_MOVE, ptEvent, target);
 	}
 
 

@@ -142,7 +142,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -191,7 +191,7 @@ public:
 		return -ScoreIndex::ScoreInfinite;
 	}
 
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const override {
 		// 非スプリットポイントの場合
@@ -246,7 +246,8 @@ public:
 		//UNREACHABLE;
 	}
 
-	virtual inline void DoStep13a(
+	// 無駄枝狩り☆（＾▽＾）
+	virtual inline void DoStep13a_FutilityPruning(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,
@@ -428,9 +429,12 @@ public:
 		const bool cutNode
 		)const override {
 
-		if (rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
-			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
-			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
+		if (
+			rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
+			&&
+			rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
+			&&
+			(*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
 			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
@@ -447,6 +451,7 @@ public:
 				&g_SWORD_PV,
 				cutNode
 				);
+
 			if (beta <= bestScore) {
 				isBreak = true;
 				return;

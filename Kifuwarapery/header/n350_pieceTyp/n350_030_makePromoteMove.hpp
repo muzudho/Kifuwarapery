@@ -21,7 +21,7 @@ public:
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
 	static inline Move GetSelectedMakeMove_ExceptPromote_mt2(
 		MoveType mt,
-		const Move pieceTypeAsMove, // これ Move にならないのかだぜ☆？（＾ｑ＾）？
+		const Move pieceTypeAsMove,
 		const Square from, const Square to, const Position& pos) {
 
 		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）

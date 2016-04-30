@@ -198,7 +198,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -214,13 +214,14 @@ public:
 		// internal iterative deepening
 		if (
 			// PVノードの場合、５倍☆
-			(5 * OnePly) <= depth
-			&& ttMove.IsNone()
+			(5 * OnePly) <= depth // 深さが５以上で☆
+			&&
+			ttMove.IsNone()	// トランスポジション・テーブルに指し手がない場合☆
 			)
 		{
 			//const Depth d = depth - 2 * OnePly - (PVNode ? Depth0 : depth / 4);
 			// PVノードの場合☆
-			const Depth d = depth - 2 * OnePly;
+			const Depth d = depth - 2 * OnePly; // 2手戻した深さ☆
 
 			(*ppFlashlight)->m_skipNullMove = true;
 
@@ -234,9 +235,14 @@ public:
 			(*ppFlashlight)->m_skipNullMove = false;
 
 			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
-			ttMove = ((*ppTtEntry) != nullptr ?
-				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
-				g_MOVE_NONE);
+
+			ttMove = (
+				(*ppTtEntry) != nullptr
+				?
+				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos)
+				:
+				g_MOVE_NONE
+				);
 		}
 	}
 
@@ -247,7 +253,7 @@ public:
 		return -ScoreIndex::ScoreInfinite;
 	}
 
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const override {
 		// 非スプリットポイントの場合
@@ -281,7 +287,8 @@ public:
 			++moveCount;
 	}
 
-	virtual inline void DoStep13a(
+	// 無駄枝狩り☆（＾▽＾）
+	virtual inline void DoStep13a_FutilityPruning(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,
@@ -461,9 +468,12 @@ public:
 		const bool cutNode
 		)const override {
 
-		if (rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
-			&& rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
-			&& (*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
+		if (
+			rucksack.m_ownerHerosPub.GetMinSplitDepth() <= depth
+			&&
+			rucksack.m_ownerHerosPub.GetAvailableSlave(*ppThisThread)
+			&&
+			(*ppThisThread)->m_splitedNodesSize < g_MaxSplitedNodesPerThread)
 		{
 			assert(bestScore < beta);
 			(*ppThisThread)->ForkNewFighter<Rucksack::FakeSplit>(
@@ -480,6 +490,7 @@ public:
 				&g_SWORD_ROOT,
 				cutNode
 				);
+
 			if (beta <= bestScore) {
 				isBreak = true;
 				return;

@@ -149,36 +149,6 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 
-	/*
-	// step2
-	this->DoStep2(
-		isReturnWithScore,
-		returnScore,
-		pos,
-		rucksack,
-		&pFlashlight
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
-
-	/*
-	// step3
-	this->DoStep3(
-		isReturnWithScore,
-		returnScore,
-		&pFlashlight,
-		alpha,
-		beta
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
-
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
 	// step4
@@ -197,46 +167,9 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 		pTtEntry,
 		pos
 		);
-	/*
-	this->DoStep4y(
-		isReturnWithScore,
-		returnScore,
-		rucksack,
-		pTtEntry,
-		depth,
-		ttScore,
-		beta,
-		&pFlashlight,
-		ttMove
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
-
-	/*
-	this->DoStep4z(
-		isReturnWithScore,
-		returnScore,
-		rucksack,
-		inCheck,
-		move,
-		pos,
-		&pFlashlight,
-		bestScore,
-		posKey,
-		depth,
-		bestMove
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
 
 	// step5
-	bool isGotoIidStart = false;
+	bool isGotoIidStart = false;//NonPVのとき使う☆
 	this->DoStep5(
 		isGotoIidStart,
 		rucksack,
@@ -249,90 +182,16 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 		posKey,
 		move
 		);
+	/*
 	if (isGotoIidStart) {
 		goto iid_start;
-	}
-
-	/*
-	// step6
-	this->DoStep6_NonPV(
-		isReturnWithScore,
-		returnScore,
-		rucksack,
-		depth,
-		eval,
-		beta,
-		ttMove,
-		pos,
-		&pFlashlight
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
-
-	/*
-	// step7
-	this->DoStep7(
-		isReturnWithScore,
-		returnScore,
-		&pFlashlight,
-		depth,
-		beta,
-		eval
-		);
-	if (isReturnWithScore)
-	{
-		return returnScore;
-	}
-	*/
-
-	/*
-	// step8
-	this->DoStep8_NonPV(
-		isReturnWithScore,
-		returnScore,
-		rucksack,
-		&pFlashlight,
-		depth,
-		beta,
-		eval,
-		pos,
-		st,
-		alpha,
-		cutNode,
-		threatMove
-		);
-	if (isReturnWithScore) {
-		return returnScore;
-	}
-	*/
-
-	/*
-	// step9
-	this->DoStep9(
-		isReturnWithScore,
-		rucksack,
-		depth,
-		&pFlashlight,
-		beta,
-		move,
-		pos,
-		ttMove,
-		st,
-		score,
-		cutNode
-		);
-	if (isReturnWithScore) {
-		return score;
 	}
 	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
 	// step10
-	this->DoStep10(
+	this->DoStep10_InternalIterativeDeepening(
 		depth,
 		ttMove,
 		inCheck,
@@ -371,20 +230,16 @@ split_point_start:
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = this->GetMoveAtStep11(mp)
+			move = this->GetNextMove_AtStep11(mp)
 			).IsNone()
 		) {
 
-		bool isContinue = false;
-		this->DoStep11b_LoopHeader(
-			isContinue,
-			move,
-			excludedMove
-			);
-		if (isContinue)
-		{
+		// DoStep11b
+		if (move == excludedMove) { // ムーブが一致していれば、次のループへ☆
 			continue;
 		}
+
+		bool isContinue = false;
 
 		this->DoStep11c_LoopHeader(
 			isContinue,
@@ -444,44 +299,6 @@ split_point_start:
 			);
 
 		// step13
-		/*
-		this->DoStep13a(
-			isContinue,
-			rucksack,
-			captureOrPawnPromotion,
-			inCheck,
-			dangerous,
-			bestScore,
-			move,
-			ttMove,
-			depth,
-			moveCount,
-			threatMove,
-			pos,
-			&pSplitedNode,
-			newDepth,
-			&pFlashlight,
-			beta
-			);
-		if (isContinue)
-		{
-			continue;
-		}
-		*/
-
-		/*
-		this->DoStep13b(
-			isContinue,
-			pos,
-			move,
-			ci,
-			moveCount
-			);
-		if (isContinue)
-		{
-			continue;
-		}
-		*/
 
 		this->DoStep13c(
 			isContinue,
@@ -509,15 +326,6 @@ split_point_start:
 		{
 			continue;
 		}
-
-		/*
-		this->DoStep13d(
-			captureOrPawnPromotion,
-			playedMoveCount,
-			movesSearched,
-			move
-			);
-			*/
 
 		// step14
 		this->DoStep14(
@@ -621,54 +429,11 @@ split_point_start:
 		if (isBreak) {
 			break;
 		}
-
-		/*
-		// step19
-		this->DoStep19(
-			isBreak,
-			rucksack,
-			depth,
-			&pThisThread,
-			bestScore,
-			beta,
-			pos,
-			&pFlashlight,
-			alpha,
-			bestMove,
-			threatMove,
-			moveCount,
-			mp,
-			cutNode
-			);
-		if (isBreak) {
-			break;
-		}
-		*/
 	}
 
 	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
-
-	/*
-	// step20
-	this->DoStep20(
-		moveCount,
-		excludedMove,
-		rucksack,
-		alpha,
-		&pFlashlight,
-		bestScore,
-		playedMoveCount,
-		beta,
-		posKey,
-		depth,
-		bestMove,
-		inCheck,
-		pos,
-		movesSearched
-		);
-		*/
 
 	return bestScore;
 

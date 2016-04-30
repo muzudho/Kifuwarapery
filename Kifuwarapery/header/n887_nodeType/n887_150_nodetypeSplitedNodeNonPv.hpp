@@ -102,7 +102,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -142,9 +142,13 @@ public:
 			(*ppFlashlight)->m_skipNullMove = false;
 
 			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
-			ttMove = ((*ppTtEntry) != nullptr ?
-				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
-				g_MOVE_NONE);
+			ttMove = (
+				(*ppTtEntry) != nullptr
+				?
+				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos)
+				:
+				g_MOVE_NONE
+				);
 		}
 	}
 
@@ -155,7 +159,7 @@ public:
 		return beta;
 	}
 
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const override {
 		// スプリットポイントの場合
@@ -186,6 +190,7 @@ public:
 		int& moveCount,
 		SplitedNode** ppSplitedNode
 		) const override {
+		// DoStep11c
 		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
 			isContinue = true;
 			return;

@@ -82,7 +82,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -135,7 +135,7 @@ public:
 		return beta;
 	}
 
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const override {
 		// 非スプリットポイントの場合
@@ -382,6 +382,7 @@ public:
 				&g_SWORD_NON_PV,
 				cutNode
 				);
+
 			if (beta <= bestScore) {
 				isBreak = true;
 				return;

@@ -553,7 +553,7 @@ public:
 	}
 
 	// PVノードか、そうでないかで手続きが変わるぜ☆！（＾ｑ＾）
-	virtual inline void DoStep10(
+	virtual inline void DoStep10_InternalIterativeDeepening(
 		const Depth depth,
 		Move& ttMove,
 		bool& inCheck,
@@ -572,7 +572,7 @@ public:
 		) const = 0;
 
 	// これはムーブ☆
-	virtual inline Move GetMoveAtStep11(
+	virtual inline Move GetNextMove_AtStep11(
 		NextmoveEvent& mp
 		) const = 0;
 
@@ -586,18 +586,6 @@ public:
 		Move& excludedMove,
 		const TTEntry* pTtEntry
 		)const = 0;
-
-	virtual inline void DoStep11b_LoopHeader(
-		bool& isContinue,
-		const Move& move,
-		const Move& excludedMove
-		)const
-	{
-		if (move == excludedMove) {
-			isContinue = true;
-			return;
-		}
-	}
 
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
 	virtual inline void DoStep11c_LoopHeader(
@@ -706,8 +694,9 @@ public:
 		newDepth = depth - OnePly + extension;
 	}
 
+	// 無駄枝狩り☆（＾▽＾）
 	// 非PVノードだけ実行するぜ☆！（＾ｑ＾）
-	virtual inline void DoStep13a(
+	virtual inline void DoStep13a_FutilityPruning(
 		bool& isContinue,
 		Rucksack& rucksack,
 		bool& captureOrPawnPromotion,
@@ -731,7 +720,7 @@ public:
 			&& !inCheck
 			&& !dangerous
 			//&& move != ttMove // 次の行がtrueならこれもtrueなので条件から省く。
-			&& ScoreMatedInMaxPly < bestScore)
+			&& ScoreIndex::ScoreMatedInMaxPly < bestScore)
 		{
 			assert(move != ttMove);
 			// move count based pruning
