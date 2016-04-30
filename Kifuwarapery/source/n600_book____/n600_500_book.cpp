@@ -29,8 +29,8 @@ void Book::Init() {
 	m_ZobTurn = m_mt64bit_.GetRandom();
 }
 
-bool Book::Open(const char* fName) {
-	m_fileName_ = "";
+bool Book::OpenBook(const char* fName) {
+	this->m_fileName_ = "";
 
 	if (is_open()) {
 		close();
@@ -42,14 +42,14 @@ bool Book::Open(const char* fName) {
 		return false;
 	}
 
-	m_size_ = tellg() / sizeof(BookEntry);
+	this->m_size_ = tellg() / sizeof(BookEntry);
 
 	if (!good()) {
 		std::cerr << "Failed to open book file " << fName  << std::endl;
 		exit(EXIT_FAILURE);
 	}
 
-	m_fileName_ = fName;
+	this->m_fileName_ = fName;
 	return true;
 }
 
@@ -109,7 +109,8 @@ MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fN
 	const ScoreIndex min_book_score = static_cast<ScoreIndex>(static_cast<int>(position.GetRucksack()->m_engineOptions["Min_Book_Score"]));
 	ScoreIndex score = ScoreZero;
 
-	if (m_fileName_ != fName && !Open(fName.c_str())) {
+	if (this->m_fileName_ != fName && !this->OpenBook(fName.c_str())) {
+		// 定跡ファイルが開けなかった場合☆
 		return MoveAndScoreIndex(g_MOVE_NONE, ScoreNone);
 	}
 

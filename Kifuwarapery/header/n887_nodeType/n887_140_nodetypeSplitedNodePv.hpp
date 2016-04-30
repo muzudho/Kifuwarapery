@@ -34,7 +34,6 @@ public:
 		ScoreIndex alpha,
 		ScoreIndex beta
 		) const override {
-		// PVノードはスルー☆！（＾ｑ＾）
 		assert(alpha == beta - 1);
 	}
 

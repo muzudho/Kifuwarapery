@@ -115,6 +115,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
+	/*
 	this->DoStep1a(
 		isGotoSplitPointStart,
 		moveCount,
@@ -134,6 +135,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	{
 		goto split_point_start;
 	}
+	*/
 
 	this->DoStep1b(
 		bestScore,
@@ -245,6 +247,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 		goto iid_start;
 	}
 
+	/*
 	// step6
 	this->DoStep6_NonPV(
 		isReturnWithScore,
@@ -261,7 +264,9 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step7
 	this->DoStep7(
 		isReturnWithScore,
@@ -275,7 +280,9 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step8
 	this->DoStep8_NonPV(
 		isReturnWithScore,
@@ -294,7 +301,9 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step9
 	this->DoStep9(
 		isReturnWithScore,
@@ -312,6 +321,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return score;
 	}
+	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
@@ -383,6 +393,7 @@ split_point_start:
 			continue;
 		}
 
+		/*
 		this->DoStep11d_LoopHeader(
 			isContinue,
 			rucksack,
@@ -392,11 +403,14 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 
+		/*
 		this->DoStep11e_LoopHeader(
 			rucksack,
 			moveCount
 			);
+			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -427,6 +441,7 @@ split_point_start:
 			newDepth
 			);
 
+		/*
 		// step13
 		this->DoStep13a(
 			isContinue,
@@ -450,6 +465,8 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+
 		this->DoStep13b(
 			isContinue,
 			pos,
@@ -504,6 +521,7 @@ split_point_start:
 			&pFlashlight
 			);
 
+		/*
 		// step15
 		this->DoStep15(
 			rucksack,
@@ -522,13 +540,16 @@ split_point_start:
 			pos,
 			doFullDepthSearch
 			);
+			*/
 
+		/*
 		// step16
 		this->DoStep16a(
 			doFullDepthSearch,
 			alpha,
 			&pSplitedNode
 			);
+			*/
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -560,17 +581,20 @@ split_point_start:
 
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
+		/*
 		// step18
 		this->DoStep18a(
 			&pSplitedNode,
 			bestScore,
 			alpha
 			);
+			*/
 
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
 		}
 
+		/*
 		this->DoStep18b(
 			rucksack,
 			move,
@@ -579,6 +603,7 @@ split_point_start:
 			score,
 			pos
 			);
+			*/
 		bool isBreak = false;
 		this->DoStep18c(
 			isBreak,

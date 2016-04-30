@@ -141,10 +141,12 @@ ScoreIndex NodetypeSplitedNodeNonPv::GoToTheAdventure_new(
 		threatMove,
 		bestMove
 		);
+	/*
 	this->DoStep1c(
 		&pThisThread,
 		pFlashlight
 		);
+		*/
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
@@ -383,6 +385,7 @@ split_point_start:
 			continue;
 		}
 
+		/*
 		this->DoStep11d_LoopHeader(
 			isContinue,
 			rucksack,
@@ -392,11 +395,14 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 
+		/*
 		this->DoStep11e_LoopHeader(
 			rucksack,
 			moveCount
 			);
+			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -450,6 +456,8 @@ split_point_start:
 		{
 			continue;
 		}
+
+		/*
 		this->DoStep13b(
 			isContinue,
 			pos,
@@ -461,6 +469,8 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+
 		this->DoStep13c(
 			isContinue,
 			rucksack,
@@ -487,12 +497,15 @@ split_point_start:
 		{
 			continue;
 		}
+
+		/*
 		this->DoStep13d(
 			captureOrPawnPromotion,
 			playedMoveCount,
 			movesSearched,
 			move
 			);
+			*/
 
 		// step14
 		this->DoStep14(
@@ -540,6 +553,8 @@ split_point_start:
 			alpha,
 			cutNode
 			);
+
+		/*
 		this->DoStep16c(
 			rucksack,
 			isPVMove,
@@ -551,6 +566,7 @@ split_point_start:
 			pos,
 			&pFlashlight
 			);
+			*/
 
 		// step17
 		this->DoStep17(
@@ -571,6 +587,7 @@ split_point_start:
 			return score;
 		}
 
+		/*
 		this->DoStep18b(
 			rucksack,
 			move,
@@ -579,6 +596,8 @@ split_point_start:
 			score,
 			pos
 			);
+			*/
+
 		bool isBreak = false;
 		this->DoStep18c(
 			isBreak,
@@ -597,6 +616,7 @@ split_point_start:
 			break;
 		}
 
+		/*
 		// step19
 		this->DoStep19(
 			isBreak,
@@ -617,12 +637,14 @@ split_point_start:
 		if (isBreak) {
 			break;
 		}
+		*/
 	}
 
 	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
 
+	/*
 	// step20
 	this->DoStep20(
 		moveCount,
@@ -640,6 +662,7 @@ split_point_start:
 		pos,
 		movesSearched
 		);
+		*/
 
 	return bestScore;
 

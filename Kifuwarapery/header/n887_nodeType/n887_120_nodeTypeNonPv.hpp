@@ -161,15 +161,6 @@ public:
 			&& depth - 3 * Depth::OnePly <= pTtEntry->GetDepth();
 	}
 
-	virtual inline void DoStep11d_LoopHeader(
-		bool& isContinue,
-		const Rucksack& rucksack,
-		const Move& move
-		)const override {
-		// 非ルートノードはスルー☆！（＾ｑ＾）
-		//UNREACHABLE;
-	}
-
 	// スプリット・ポイントかどうかで変わる手続きだぜ☆！（＾ｑ＾）
 	virtual inline void DoStep11c_LoopHeader(
 		bool& isContinue,
@@ -180,6 +171,15 @@ public:
 		SplitedNode** ppSplitedNode
 		) const override {
 		++moveCount;
+	}
+
+	virtual inline void DoStep11d_LoopHeader(
+		bool& isContinue,
+		const Rucksack& rucksack,
+		const Move& move
+		)const override {
+		// 非ルートノードはスルー☆！（＾ｑ＾）
+		//UNREACHABLE;
 	}
 
 	virtual inline void DoStep11e_LoopHeader(

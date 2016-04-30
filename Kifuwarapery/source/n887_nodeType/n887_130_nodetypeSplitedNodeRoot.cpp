@@ -149,6 +149,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 
+	/*
 	// step2
 	this->DoStep2(
 		isReturnWithScore,
@@ -157,12 +158,13 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 		rucksack,
 		&pFlashlight
 		);
-
 	if (isReturnWithScore)
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step3
 	this->DoStep3(
 		isReturnWithScore,
@@ -175,6 +177,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
@@ -194,6 +197,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 		pTtEntry,
 		pos
 		);
+	/*
 	this->DoStep4y(
 		isReturnWithScore,
 		returnScore,
@@ -209,6 +213,9 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
+
+	/*
 	this->DoStep4z(
 		isReturnWithScore,
 		returnScore,
@@ -226,6 +233,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	// step5
 	bool isGotoIidStart = false;
@@ -245,6 +253,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 		goto iid_start;
 	}
 
+	/*
 	// step6
 	this->DoStep6_NonPV(
 		isReturnWithScore,
@@ -261,7 +270,9 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step7
 	this->DoStep7(
 		isReturnWithScore,
@@ -275,7 +286,9 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step8
 	this->DoStep8_NonPV(
 		isReturnWithScore,
@@ -294,7 +307,9 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step9
 	this->DoStep9(
 		isReturnWithScore,
@@ -312,6 +327,7 @@ ScoreIndex NodetypeSplitedNodeRoot::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return score;
 	}
+	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
@@ -428,6 +444,7 @@ split_point_start:
 			);
 
 		// step13
+		/*
 		this->DoStep13a(
 			isContinue,
 			rucksack,
@@ -450,6 +467,9 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+
+		/*
 		this->DoStep13b(
 			isContinue,
 			pos,
@@ -461,6 +481,8 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+
 		this->DoStep13c(
 			isContinue,
 			rucksack,
@@ -487,12 +509,15 @@ split_point_start:
 		{
 			continue;
 		}
+
+		/*
 		this->DoStep13d(
 			captureOrPawnPromotion,
 			playedMoveCount,
 			movesSearched,
 			move
 			);
+			*/
 
 		// step14
 		this->DoStep14(
@@ -597,6 +622,7 @@ split_point_start:
 			break;
 		}
 
+		/*
 		// step19
 		this->DoStep19(
 			isBreak,
@@ -617,12 +643,14 @@ split_point_start:
 		if (isBreak) {
 			break;
 		}
+		*/
 	}
 
 	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
 
+	/*
 	// step20
 	this->DoStep20(
 		moveCount,
@@ -640,6 +668,7 @@ split_point_start:
 		pos,
 		movesSearched
 		);
+		*/
 
 	return bestScore;
 

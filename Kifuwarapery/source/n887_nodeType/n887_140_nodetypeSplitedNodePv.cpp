@@ -245,6 +245,7 @@ ScoreIndex NodetypeSplitedNodePv::GoToTheAdventure_new(
 		goto iid_start;
 	}
 
+	/*
 	// step6
 	this->DoStep6_NonPV(
 		isReturnWithScore,
@@ -261,7 +262,9 @@ ScoreIndex NodetypeSplitedNodePv::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step7
 	this->DoStep7(
 		isReturnWithScore,
@@ -275,7 +278,9 @@ ScoreIndex NodetypeSplitedNodePv::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step8
 	this->DoStep8_NonPV(
 		isReturnWithScore,
@@ -294,7 +299,9 @@ ScoreIndex NodetypeSplitedNodePv::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return returnScore;
 	}
+	*/
 
+	/*
 	// step9
 	this->DoStep9(
 		isReturnWithScore,
@@ -312,6 +319,7 @@ ScoreIndex NodetypeSplitedNodePv::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return score;
 	}
+	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
@@ -383,6 +391,7 @@ split_point_start:
 			continue;
 		}
 
+		/*
 		this->DoStep11d_LoopHeader(
 			isContinue,
 			rucksack,
@@ -392,11 +401,14 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 
+		/*
 		this->DoStep11e_LoopHeader(
 			rucksack,
 			moveCount
 			);
+			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -427,6 +439,7 @@ split_point_start:
 			newDepth
 			);
 
+		/*
 		// step13
 		this->DoStep13a(
 			isContinue,
@@ -450,6 +463,8 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+		/*
 		this->DoStep13b(
 			isContinue,
 			pos,
@@ -461,6 +476,7 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 		this->DoStep13c(
 			isContinue,
 			rucksack,
@@ -487,12 +503,14 @@ split_point_start:
 		{
 			continue;
 		}
+		/*
 		this->DoStep13d(
 			captureOrPawnPromotion,
 			playedMoveCount,
 			movesSearched,
 			move
 			);
+			*/
 
 		// step14
 		this->DoStep14(
@@ -571,6 +589,7 @@ split_point_start:
 			return score;
 		}
 
+		/*
 		this->DoStep18b(
 			rucksack,
 			move,
@@ -579,6 +598,7 @@ split_point_start:
 			score,
 			pos
 			);
+			*/
 		bool isBreak = false;
 		this->DoStep18c(
 			isBreak,
@@ -597,6 +617,7 @@ split_point_start:
 			break;
 		}
 
+		/*
 		// step19
 		this->DoStep19(
 			isBreak,
@@ -617,12 +638,14 @@ split_point_start:
 		if (isBreak) {
 			break;
 		}
+		*/
 	}
 
 	if (this->GetReturnBeforeStep20()) {
 		return bestScore;
 	}
 
+	/*
 	// step20
 	this->DoStep20(
 		moveCount,
@@ -640,6 +663,7 @@ split_point_start:
 		pos,
 		movesSearched
 		);
+		*/
 
 	return bestScore;
 

@@ -26,7 +26,8 @@ public:
 
 private:
 
-	bool Open(const char* fName);
+	// 旧名：Ｏｐｅｎ
+	bool OpenBook(const char* fName);
 
 	void Binary_search(const Key key);
 

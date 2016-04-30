@@ -115,6 +115,7 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	inCheck = pos.InCheck();
 
 	bool isGotoSplitPointStart = false;
+	/*
 	this->DoStep1a(
 		isGotoSplitPointStart,
 		moveCount,
@@ -134,6 +135,7 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 	{
 		goto split_point_start;
 	}
+	*/
 
 	this->DoStep1b(
 		bestScore,
@@ -141,10 +143,12 @@ ScoreIndex NodetypeNonPv::GoToTheAdventure_new(
 		threatMove,
 		bestMove
 		);
+	/*
 	this->DoStep1c(
 		&pThisThread,
 		pFlashlight
 		);
+		*/
 
 	bool isReturnWithScore = false;
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
@@ -383,6 +387,7 @@ split_point_start:
 			continue;
 		}
 
+		/*
 		this->DoStep11d_LoopHeader(
 			isContinue,
 			rucksack,
@@ -392,11 +397,14 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 
+		/*
 		this->DoStep11e_LoopHeader(
 			rucksack,
 			moveCount
 			);
+			*/
 
 		this->DoStep11f_LoopHeader(
 			extension,
@@ -524,11 +532,13 @@ split_point_start:
 			);
 
 		// step16
+		/*
 		this->DoStep16a(
 			doFullDepthSearch,
 			alpha,
 			&pSplitedNode
 			);
+			*/
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -540,6 +550,7 @@ split_point_start:
 			alpha,
 			cutNode
 			);
+		/*
 		this->DoStep16c(
 			rucksack,
 			isPVMove,
@@ -551,6 +562,7 @@ split_point_start:
 			pos,
 			&pFlashlight
 			);
+			*/
 
 		// step17
 		this->DoStep17(
@@ -561,11 +573,13 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
+		/*
 		this->DoStep18a(
 			&pSplitedNode,
 			bestScore,
 			alpha
 			);
+			*/
 
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;

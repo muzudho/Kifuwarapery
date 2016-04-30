@@ -148,7 +148,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	ScoreIndex returnScore = ScoreIndex::ScoreNone;
 
 	// step2
-	//*
+	/*
 	this->DoStep2(
 		isReturnWithScore,
 		returnScore,
@@ -162,6 +162,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	}
 	//*/
 
+	/*
 	// step3
 	this->DoStep3(
 		isReturnWithScore,
@@ -174,6 +175,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	pos.SetNodesSearched(pos.GetNodesSearched() + 1);
 
@@ -193,6 +195,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 		pTtEntry,
 		pos
 		);
+	/*
 	this->DoStep4y(
 		isReturnWithScore,
 		returnScore,
@@ -208,6 +211,8 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
+	/*
 	this->DoStep4z(
 		isReturnWithScore,
 		returnScore,
@@ -225,6 +230,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	// step5
 	bool isGotoIidStart = false;
@@ -245,6 +251,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	}
 
 	// step6
+	/*
 	this->DoStep6_NonPV(
 		isReturnWithScore,
 		returnScore,
@@ -260,8 +267,10 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	// step7
+	/*
 	this->DoStep7(
 		isReturnWithScore,
 		returnScore,
@@ -274,8 +283,10 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	{
 		return returnScore;
 	}
+	*/
 
 	// step8
+	/*
 	this->DoStep8_NonPV(
 		isReturnWithScore,
 		returnScore,
@@ -293,8 +304,10 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return returnScore;
 	}
+	*/
 
 	// step9
+	/*
 	this->DoStep9(
 		isReturnWithScore,
 		rucksack,
@@ -311,6 +324,7 @@ ScoreIndex NodetypeRoot::GoToTheAdventure_new(
 	if (isReturnWithScore) {
 		return score;
 	}
+	*/
 
 	// 内側の反復深化探索☆？（＾ｑ＾）
 iid_start:
@@ -427,6 +441,7 @@ split_point_start:
 			);
 
 		// step13
+		/*
 		this->DoStep13a(
 			isContinue,
 			rucksack,
@@ -449,6 +464,8 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
+		/*
 		this->DoStep13b(
 			isContinue,
 			pos,
@@ -460,6 +477,7 @@ split_point_start:
 		{
 			continue;
 		}
+		*/
 		this->DoStep13c(
 			isContinue,
 			rucksack,
@@ -523,11 +541,13 @@ split_point_start:
 			);
 
 		// step16
+		/*
 		this->DoStep16a(
 			doFullDepthSearch,
 			alpha,
 			&pSplitedNode
 			);
+			*/
 		this->DoStep16b_NonPVAtukai(
 			rucksack,
 			doFullDepthSearch,
@@ -560,11 +580,13 @@ split_point_start:
 		assert(-ScoreInfinite < score && score < ScoreInfinite);
 
 		// step18
+		/*
 		this->DoStep18a(
 			&pSplitedNode,
 			bestScore,
 			alpha
 			);
+			*/
 
 		if (rucksack.m_signals.m_stop || pThisThread->CutoffOccurred()) {
 			return score;
