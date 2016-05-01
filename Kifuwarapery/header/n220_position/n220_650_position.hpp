@@ -99,6 +99,11 @@ public:
 	Piece GetPiece(const Square sq) const;
 
 	// hand
+	template<Color CLR>
+	Hand GetHand() const
+	{
+		return this->m_hand_[CLR];
+	}
 	Hand GetHand(const Color c) const;
 
 	// turn() 側が pin されている Bitboard を返す。
@@ -386,10 +391,20 @@ private:
 
 	void PrintHand(const Color c) const;
 
+	template<Color CLR>
+	static Key GetZobrist(const PieceType pt, const Square sq)
+	{
+		return Position::m_ZOBRIST_[pt][sq][CLR];
+	}
 	static Key GetZobrist(const PieceType pt, const Square sq, const Color c);
 
 	static Key GetZobTurn();
 
+	template<Color CLR>
+	static Key GetZobHand(const HandPiece hp)
+	{
+		return Position::m_ZOB_HAND_[hp][CLR];
+	}
 	static Key GetZobHand(const HandPiece hp, const Color c);
 
 	// このポジションをピースタイプ毎にビットボードにしたもの。（byTypeBB は敵、味方の駒を区別しない）

@@ -242,7 +242,6 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 	m_st_->m_cl.m_size = 1;
 
-	//const Color us = GetTurn();
 	const Square to = move.To();
 	const PieceType ptCaptured = move.GetCap();
 	PieceType ptTo;
@@ -250,12 +249,12 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		ptTo = move.GetPieceTypeDropped();
 		const HandPiece hpTo = ConvHandPiece::FromPieceType(ptTo);
 
-		handKey -= this->GetZobHand(hpTo, US);
-		boardKey += this->GetZobrist(ptTo, to, US);
+		handKey -= this->GetZobHand<US>(hpTo);
+		boardKey += this->GetZobrist<US>(ptTo, to);
 
 		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 
-		const int handnum = this->GetHand(US).NumOf(hpTo);
+		const int handnum = this->GetHand<US>().NumOf(hpTo);
 		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[US][hpTo] + handnum];
 		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
 		m_st_->m_cl.m_listindex[0] = listIndex;
@@ -294,16 +293,15 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		g_setMaskBb.XorBit(&m_BB_ByColor_[US], from, to);
 		m_piece_[from] = N00_Empty;
 		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
-		boardKey -= this->GetZobrist(ptFrom, from, US);
-		boardKey += this->GetZobrist(ptTo, to, US);
+		boardKey -= this->GetZobrist<US>(ptFrom, from);
+		boardKey += this->GetZobrist<US>(ptTo, to);
 
 		if (ptCaptured) {
 			// 駒を取ったとき
 			const HandPiece hpCaptured = ConvHandPiece::FromPieceType(ptCaptured);
-			//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 
-			boardKey -= this->GetZobrist(ptCaptured, to, THEM);
-			handKey += this->GetZobHand(hpCaptured, US);
+			boardKey -= this->GetZobrist<THEM>(ptCaptured, to);
+			handKey += this->GetZobHand<US>(hpCaptured);
 
 			g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptCaptured], to);
 			g_setMaskBb.XorBit(&m_BB_ByColor_[THEM], to);
