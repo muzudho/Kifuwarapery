@@ -230,8 +230,10 @@ public:
 	bool MoveIsLegal(const Move GetMove) const;
 #endif
 
+	template<Color US,Color THEM>
 	void DoMove(const Move move, StateInfo& newSt);
 
+	template<Color US, Color THEM>
 	void DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck);
 
 	void UndoMove(const Move move);

@@ -217,12 +217,16 @@ bool Position::MoveIsLegal(const Move GetMove) const {
 #endif
 
 // 局面の更新
+template<Color US, Color THEM>
 void Position::DoMove(const Move move, StateInfo& newSt) {
 	const CheckInfo ci(*this);
-	DoMove(move, newSt, ci, IsMoveGivesCheck(move, ci));
+	DoMove<US, THEM>(move, newSt, ci, IsMoveGivesCheck(move, ci));
 }
+template void Position::DoMove<Color::Black, Color::White>(const Move move, StateInfo& newSt);
+template void Position::DoMove<Color::White, Color::Black>(const Move move, StateInfo& newSt);
 
 // 局面の更新
+template<Color US, Color THEM>
 void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck) {
 	assert(IsOK());
 	assert(!move.IsNone());
@@ -238,7 +242,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 	m_st_->m_cl.m_size = 1;
 
-	const Color us = GetTurn();
+	//const Color us = GetTurn();
 	const Square to = move.To();
 	const PieceType ptCaptured = move.GetCap();
 	PieceType ptTo;
@@ -246,14 +250,14 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		ptTo = move.GetPieceTypeDropped();
 		const HandPiece hpTo = ConvHandPiece::FromPieceType(ptTo);
 
-		handKey -= GetZobHand(hpTo, us);
-		boardKey += GetZobrist(ptTo, to, us);
+		handKey -= this->GetZobHand(hpTo, US);
+		boardKey += this->GetZobrist(ptTo, to, US);
 
 		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 
-		const int handnum = GetHand(us).NumOf(hpTo);
-		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[us][hpTo] + handnum];
-		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
+		const int handnum = this->GetHand(US).NumOf(hpTo);
+		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[US][hpTo] + handnum];
+		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
 		m_st_->m_cl.m_listindex[0] = listIndex;
 		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.m_list0[listIndex];
 		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[listIndex];
@@ -266,18 +270,18 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		m_st_->m_cl.m_clistpair[0].m_newlist[0] = m_evalList_.m_list0[listIndex];
 		m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.m_list1[listIndex];
 
-		m_hand_[us].MinusOne(hpTo);
-		XorBBs(ptTo, to, us);
-		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
+		m_hand_[US].MinusOne(hpTo);
+		XorBBs(ptTo, to, US);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
 
 		if (moveIsCheck) {
 			// Direct checks
 			m_st_->m_checkersBB = g_setMaskBb.GetSetMaskBb(to);
-			m_st_->m_continuousCheck[us] += 2;
+			m_st_->m_continuousCheck[US] += 2;
 		}
 		else {
 			m_st_->m_checkersBB = Bitboard::CreateAllZeroBB();
-			m_st_->m_continuousCheck[us] = 0;
+			m_st_->m_continuousCheck[US] = 0;
 		}
 	}
 	else {
@@ -287,41 +291,41 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptFrom], from);
 		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptTo], to);
-		g_setMaskBb.XorBit(&m_BB_ByColor_[us], from, to);
+		g_setMaskBb.XorBit(&m_BB_ByColor_[US], from, to);
 		m_piece_[from] = N00_Empty;
-		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
-		boardKey -= GetZobrist(ptFrom, from, us);
-		boardKey += GetZobrist(ptTo, to, us);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
+		boardKey -= this->GetZobrist(ptFrom, from, US);
+		boardKey += this->GetZobrist(ptTo, to, US);
 
 		if (ptCaptured) {
 			// 駒を取ったとき
 			const HandPiece hpCaptured = ConvHandPiece::FromPieceType(ptCaptured);
-			const Color them = ConvColor::OPPOSITE_COLOR10b(us);
+			//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 
-			boardKey -= GetZobrist(ptCaptured, to, them);
-			handKey += GetZobHand(hpCaptured, us);
+			boardKey -= this->GetZobrist(ptCaptured, to, THEM);
+			handKey += this->GetZobHand(hpCaptured, US);
 
 			g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptCaptured], to);
-			g_setMaskBb.XorBit(&m_BB_ByColor_[them], to);
+			g_setMaskBb.XorBit(&m_BB_ByColor_[THEM], to);
 
-			m_hand_[us].PlusOne(hpCaptured);
+			m_hand_[US].PlusOne(hpCaptured);
 			const int toListIndex = m_evalList_.m_squareHandToList[to];
 			m_st_->m_cl.m_listindex[1] = toListIndex;
 			m_st_->m_cl.m_clistpair[1].m_oldlist[0] = m_evalList_.m_list0[toListIndex];
 			m_st_->m_cl.m_clistpair[1].m_oldlist[1] = m_evalList_.m_list1[toListIndex];
 			m_st_->m_cl.m_size = 2;
 
-			const int handnum = GetHand(us).NumOf(hpCaptured);
-			m_evalList_.m_list0[toListIndex] = kppHandArray[us][hpCaptured] + handnum;
-			m_evalList_.m_list1[toListIndex] = kppHandArray[them][hpCaptured] + handnum;
-			const Square squarehand = g_HandPieceToSquareHand[us][hpCaptured] + handnum;
+			const int handnum = this->GetHand(US).NumOf(hpCaptured);
+			m_evalList_.m_list0[toListIndex] = kppHandArray[US][hpCaptured] + handnum;
+			m_evalList_.m_list1[toListIndex] = kppHandArray[THEM][hpCaptured] + handnum;
+			const Square squarehand = g_HandPieceToSquareHand[US][hpCaptured] + handnum;
 			m_evalList_.m_listToSquareHand[toListIndex] = squarehand;
 			m_evalList_.m_squareHandToList[squarehand] = toListIndex;
 
 			m_st_->m_cl.m_clistpair[1].m_newlist[0] = m_evalList_.m_list0[toListIndex];
 			m_st_->m_cl.m_clistpair[1].m_newlist[1] = m_evalList_.m_list1[toListIndex];
 
-			m_st_->m_material += (us == Black ?
+			m_st_->m_material += (US == Black ?
 				PieceScore::GetCapturePieceScore(ptCaptured) :
 				-PieceScore::GetCapturePieceScore(ptCaptured)
 			);
@@ -329,13 +333,13 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
 		// Black と White の or を取る方が速いはず。
-		m_BB_ByPiecetype_[N00_Occupied] = this->GetBbOf10(Black) | this->GetBbOf10(White);
+		m_BB_ByPiecetype_[N00_Occupied] = this->GetBbOf10<Color::Black>() | this->GetBbOf10<Color::White>();
 
 		if (ptTo == N08_King) {
-			m_kingSquare_[us] = to;
+			m_kingSquare_[US] = to;
 		}
 		else {
-			const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptTo);
+			const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
 			const int fromListIndex = m_evalList_.m_squareHandToList[from];
 
 			m_st_->m_cl.m_listindex[0] = fromListIndex;
@@ -352,7 +356,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		}
 
 		if (move.IsPromotion()) {
-			m_st_->m_material += (us == Black ?
+			m_st_->m_material += (US == Black ?
 				(PieceScore::GetPieceScore(ptTo) - PieceScore::GetPieceScore(ptFrom))
 				: -(PieceScore::GetPieceScore(ptTo) - PieceScore::GetPieceScore(ptFrom)));
 		}
@@ -362,15 +366,15 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_checkersBB = ci.m_checkBB[ptTo] & g_setMaskBb.GetSetMaskBb(to);
 
 			// Discovery checks
-			const Square ksq = GetKingSquare(ConvColor::OPPOSITE_COLOR10b(us));
+			const Square ksq = GetKingSquare(THEM);
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
-				g_bonaDirArray[g_squareRelation.GetSquareRelation(from, ksq)]->Do2Move(*this, from, ksq, us);
+				g_bonaDirArray[g_squareRelation.GetSquareRelation(from, ksq)]->Do2Move(*this, from, ksq, US);
 			}
-			m_st_->m_continuousCheck[us] += 2;
+			m_st_->m_continuousCheck[US] += 2;
 		}
 		else {
 			m_st_->m_checkersBB = Bitboard::CreateAllZeroBB();
-			m_st_->m_continuousCheck[us] = 0;
+			m_st_->m_continuousCheck[US] = 0;
 		}
 	}
 	m_goldsBB_ = this->GetBbOf(N07_Gold, N09_ProPawn, N10_ProLance, N11_ProKnight, N12_ProSilver);
@@ -379,11 +383,14 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 	m_st_->m_handKey = handKey;
 	++m_st_->m_pliesFromNull;
 
-	m_turn_ = ConvColor::OPPOSITE_COLOR10b(us);
-	m_st_->m_hand = GetHand(GetTurn());
+	m_turn_ = THEM;
+	m_st_->m_hand = GetHand(this->GetTurn());
 
 	assert(IsOK());
 }
+template void Position::DoMove<Color::Black, Color::White>(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck);
+template void Position::DoMove<Color::White, Color::Black>(const Move move, StateInfo& newSt, const CheckInfo& ci, const bool moveIsCheck);
+
 
 void Position::UndoMove(const Move move) {
 	assert(IsOK());

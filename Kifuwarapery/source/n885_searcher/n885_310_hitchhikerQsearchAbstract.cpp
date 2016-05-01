@@ -180,7 +180,13 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 
 		pFlashlight->m_currentMove = move;
 
-		pos.DoMove(move, st, ci, givesCheck);
+		pos.GetTurn()==Color::Black
+			?
+			pos.DoMove<Color::Black,Color::White>(move, st, ci, givesCheck)
+			:
+			pos.DoMove<Color::White,Color::Black>(move, st, ci, givesCheck)
+			;
+
 		(pFlashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 		score = // 再帰関数☆（＾ｑ＾）
 			-this->DoQsearch(rucksack, givesCheck, pos, pFlashlight + 1, -beta, -alpha, depth - OnePly);

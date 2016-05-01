@@ -194,7 +194,14 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 		m_pv_.push_back(m);
 
 		assert(pos.MoveIsLegal(m_pv_[ply]));
-		pos.DoMove(m_pv_[ply++], *st++);
+
+		pos.GetTurn()==Color::Black
+			?
+			pos.DoMove<Color::Black,Color::White>(m_pv_[ply++], *st++)
+			:
+			pos.DoMove<Color::White,Color::Black>(m_pv_[ply++], *st++)
+			;
+
 		tte = pos.GetConstRucksack()->m_tt.Probe(pos.GetKey());
 	} while (tte != nullptr
 		// このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
@@ -239,7 +246,14 @@ void RootMove::InsertPvInTT(Position& pos) {
 		}
 
 		assert(pos.MoveIsLegal(m_pv_[ply]));
-		pos.DoMove(m_pv_[ply++], *st++);
+
+		pos.GetTurn()==Color::Black
+			?
+			pos.DoMove<Color::Black,Color::White>(m_pv_[ply++], *st++)
+			:
+			pos.DoMove<Color::White,Color::Black>(m_pv_[ply++], *st++)
+			;
+
 	} while (!m_pv_[ply].IsNone());
 
 	while (ply) {

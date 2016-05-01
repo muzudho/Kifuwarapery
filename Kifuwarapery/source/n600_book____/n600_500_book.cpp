@@ -232,7 +232,12 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 				if (isFind == false) {
 #if defined MAKE_SEARCHED_BOOK
 					SetUpStates->push(StateInfo());
-					pos.DoMove(move, SetUpStates->top());
+					pos.GetTurn()==Color::Black
+						?
+						pos.DoMove<Color::Black,Color::White>(move, SetUpStates->top())
+						:
+						pos.DoMove<Color::White,Color::Black>(move, SetUpStates->top())
+						;
 
 					std::istringstream ssCmd("byoyomi 1000");
 					UsiOperation usiOperation;
@@ -257,7 +262,15 @@ void MakeBook(Position& pos, std::istringstream& ssCmd) {
 				}
 			}
 			SetUpStates->push(StateInfo());
-			pos.DoMove(move, SetUpStates->top());
+
+			pos.GetTurn() == Color::Black
+				?
+				pos.DoMove<Color::Black,Color::White>(move, SetUpStates->top())
+				:
+				pos.DoMove<Color::White,Color::Black>(move, SetUpStates->top())
+				;
+			
+
 		}
 	}
 

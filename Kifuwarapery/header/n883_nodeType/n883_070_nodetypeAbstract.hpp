@@ -548,7 +548,14 @@ public:
 					pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(move, ci.m_pinned)
 					) {
 					(*ppFlashlight)->m_currentMove = move;
-					pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
+
+					pos.GetTurn()==Color::Black
+						?
+						pos.DoMove<Color::Black,Color::White>(move, st, ci, pos.IsMoveGivesCheck(move, ci))
+						:
+						pos.DoMove<Color::White,Color::Black>(move, st, ci, pos.IsMoveGivesCheck(move, ci))
+						;
+
 					((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
 
 					//────────────────────────────────────────────────────────────────────────────────
@@ -886,7 +893,14 @@ public:
 		bool& givesCheck,
 		Flashlight** ppFlashlight
 		)const {
-		pos.DoMove(move, st, ci, givesCheck);
+
+		pos.GetTurn()==Color::Black
+			?
+			pos.DoMove<Color::Black,Color::White>(move, st, ci, givesCheck)
+			:
+			pos.DoMove<Color::White,Color::Black>(move, st, ci, givesCheck)
+			;
+
 		((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreIndex::ScoreNotEvaluated;
 	}
 

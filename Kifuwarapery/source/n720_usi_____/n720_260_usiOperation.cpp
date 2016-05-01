@@ -160,7 +160,14 @@ void UsiOperation::SetPosition(Position& pos, std::istringstream& ssCmd) {
 		const Move move = this->UsiToMove(pos, token);
 		if (move.IsNone()) break;
 		pos.GetRucksack()->m_setUpStates->push(StateInfo());
-		pos.DoMove(move, pos.GetRucksack()->m_setUpStates->top());
+
+		pos.GetTurn() == Color::Black
+			?
+			pos.DoMove<Color::Black,Color::White>(move, pos.GetRucksack()->m_setUpStates->top())
+			:
+			pos.DoMove<Color::White,Color::Black>(move, pos.GetRucksack()->m_setUpStates->top())
+			;
+
 		++currentPly;
 	}
 	pos.SetStartPosPly(currentPly);
