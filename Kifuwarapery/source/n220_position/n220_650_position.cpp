@@ -256,7 +256,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 
 		const int handnum = this->GetHand<US>().NumOf(hpTo);
 		const int listIndex = m_evalList_.m_squareHandToList[g_HandPieceToSquareHand[US][hpTo] + handnum];
-		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
+		const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptTo);
 		m_st_->m_cl.m_listindex[0] = listIndex;
 		m_st_->m_cl.m_clistpair[0].m_oldlist[0] = m_evalList_.m_list0[listIndex];
 		m_st_->m_cl.m_clistpair[0].m_oldlist[1] = m_evalList_.m_list1[listIndex];
@@ -270,8 +270,8 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		m_st_->m_cl.m_clistpair[0].m_newlist[1] = m_evalList_.m_list1[listIndex];
 
 		m_hand_[US].MinusOne(hpTo);
-		XorBBs(ptTo, to, US);
-		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
+		this->XorBBs<US>(ptTo, to);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptTo);
 
 		if (moveIsCheck) {
 			// Direct checks
@@ -292,7 +292,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptTo], to);
 		g_setMaskBb.XorBit(&m_BB_ByColor_[US], from, to);
 		m_piece_[from] = N00_Empty;
-		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
+		m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptTo);
 		boardKey -= this->GetZobrist<US>(ptFrom, from);
 		boardKey += this->GetZobrist<US>(ptTo, to);
 
@@ -313,7 +313,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_cl.m_clistpair[1].m_oldlist[1] = m_evalList_.m_list1[toListIndex];
 			m_st_->m_cl.m_size = 2;
 
-			const int handnum = this->GetHand(US).NumOf(hpCaptured);
+			const int handnum = this->GetHand<US>().NumOf(hpCaptured);
 			m_evalList_.m_list0[toListIndex] = kppHandArray[US][hpCaptured] + handnum;
 			m_evalList_.m_list1[toListIndex] = kppHandArray[THEM][hpCaptured] + handnum;
 			const Square squarehand = g_HandPieceToSquareHand[US][hpCaptured] + handnum;
@@ -337,7 +337,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_kingSquare_[US] = to;
 		}
 		else {
-			const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(US, ptTo);
+			const Piece pcTo = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptTo);
 			const int fromListIndex = m_evalList_.m_squareHandToList[from];
 
 			m_st_->m_cl.m_listindex[0] = fromListIndex;
@@ -364,7 +364,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			m_st_->m_checkersBB = ci.m_checkBB[ptTo] & g_setMaskBb.GetSetMaskBb(to);
 
 			// Discovery checks
-			const Square ksq = GetKingSquare(THEM);
+			const Square ksq = this->GetKingSquare<THEM>();
 			if (IsDiscoveredCheck(from, to, ksq, ci.m_dcBB)) {
 				g_bonaDirArray[g_squareRelation.GetSquareRelation(from, ksq)]->Do2Move(*this, from, ksq, US);
 			}
@@ -394,8 +394,10 @@ void Position::UndoMove(const Move move) {
 	assert(IsOK());
 	assert(!move.IsNone());
 
+	// themとusが普段とは逆☆（＾ｑ＾）
 	const Color them = GetTurn();
 	const Color us = ConvColor::OPPOSITE_COLOR10b(them);
+
 	const Square to = move.To();
 	m_turn_ = us;
 	// ここで先に turn_ を戻したので、以下、move は us の指し手とする。
@@ -586,7 +588,31 @@ namespace {
 	// bb : sq の利きのある場所のBitboard。よって、玉は bb のビットが立っている場所には行けない。
 	// sq と ksq の位置の Occupied Bitboard のみは、ここで更新して評価し、元に戻す。
 	// (実際にはテンポラリのOccupied Bitboard を使うので、元には戻さない。)
-	bool canKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
+	template<Color US,Color THEM>
+	bool G_CanKingEscape(const Position& pos, const Square sq, const Bitboard& bb) {
+		const Square ksq = pos.GetKingSquare(THEM);
+		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf10<THEM>().NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
+		g_setMaskBb.ClearBit(&kingMoveBB, sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
+
+		if (kingMoveBB.Exists1Bit()) {
+			Bitboard tempOccupied = pos.GetOccupiedBB();
+			g_setMaskBb.AddBit(&tempOccupied, sq);
+			g_setMaskBb.ClearBit(&tempOccupied, ksq);
+			do {
+				const Square to = kingMoveBB.PopFirstOneFromI9();
+				// 玉の移動先に、us 側の利きが無ければ、true
+				if (!pos.IsAttackersToIsNot0(US, to, tempOccupied)) {
+					return true;
+				}
+			} while (kingMoveBB.Exists1Bit());
+		}
+		// 玉の移動先が無い。
+		return false;
+	}
+	template bool G_CanKingEscape<Color::Black, Color::White>(const Position& pos, const Square sq, const Bitboard& bb);
+	template bool G_CanKingEscape<Color::White, Color::Black>(const Position& pos, const Square sq, const Bitboard& bb);
+
+	bool G_CanKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
 		const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 		const Square ksq = pos.GetKingSquare(them);
 		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf10(them).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
@@ -607,6 +633,7 @@ namespace {
 		// 玉の移動先が無い。
 		return false;
 	}
+
 	// them(相手) 側の玉以外の駒が sq にある us 側の駒を取れるか。
 	bool canPieceCapture(const Position& pos, const Color them, const Square sq, const Bitboard& dcBB) {
 		// 玉以外で打った駒を取れる相手側の駒の Bitboard
@@ -692,9 +719,9 @@ bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 }
 
 inline void Position::XorBBs(const PieceType pt, const Square sq, const Color c) {
-	g_setMaskBb.XorBit(&m_BB_ByPiecetype_[N00_Occupied], sq);
-	g_setMaskBb.XorBit(&m_BB_ByPiecetype_[pt], sq);
-	g_setMaskBb.XorBit(&m_BB_ByColor_[c], sq);
+	g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[N00_Occupied], sq);
+	g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[pt], sq);
+	g_setMaskBb.XorBit(&this->m_BB_ByColor_[c], sq);
 }
 
 // 相手玉が1手詰みかどうかを判定。
@@ -726,7 +753,7 @@ Move Position::GetMateMoveIn1Ply() {
 			// 駒を打った場所に自駒の利きがあるか。(無ければ玉で取られて詰まない)
 			if (IsAttackersToIsNot0(US, to)) {
 				// 玉が逃げられず、他の駒で取ることも出来ないか
-				if (!canKingEscape(*this, US, to, g_rookAttackBb.GetControllBbToEdge(to))
+				if (!G_CanKingEscape<US,THEM>(*this, to, g_rookAttackBb.GetControllBbToEdge(to))
 					&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 				{
 					return ConvMove::Convert30_MakeDropMove_da(g_PTROOK_DA_AS_MOVE, to);
@@ -743,7 +770,7 @@ Move Position::GetMateMoveIn1Ply() {
 	) {
 		const Square to = ksq + TDeltaS;
 		if (GetPiece(to) == N00_Empty && IsAttackersToIsNot0(US, to)) {
-			if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
+			if (!G_CanKingEscape<US,THEM>(*this, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 				&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 			{
 				return ConvMove::Convert30_MakeDropMove_da(g_PTLANCE_DA_AS_MOVE, to);
@@ -757,7 +784,7 @@ Move Position::GetMateMoveIn1Ply() {
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			if (IsAttackersToIsNot0(US, to)) {
-				if (!canKingEscape(*this, US, to, g_bishopAttackBb.GetControllBbToEdge(to))
+				if (!G_CanKingEscape<US,THEM>(*this, to, g_bishopAttackBb.GetControllBbToEdge(to))
 					&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 				{
 					return ConvMove::Convert30_MakeDropMove_da(g_PTBISHOP_DA_AS_MOVE, to);
@@ -779,7 +806,7 @@ Move Position::GetMateMoveIn1Ply() {
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			if (IsAttackersToIsNot0(US, to)) {
-				if (!canKingEscape(*this, US, to, g_goldAttackBb.GetControllBb(US, to))
+				if (!G_CanKingEscape<US,THEM>(*this, to, g_goldAttackBb.GetControllBb(US, to))
 					&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 				{
 					return ConvMove::Convert30_MakeDropMove_da(g_PTGOLD_DA_AS_MOVE, to);
@@ -812,7 +839,7 @@ Move Position::GetMateMoveIn1Ply() {
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			if (IsAttackersToIsNot0(US, to)) {
-				if (!canKingEscape(*this, US, to, g_silverAttackBb.GetControllBb(US, to))
+				if (!G_CanKingEscape<US, THEM>(*this, to, g_silverAttackBb.GetControllBb(US, to))
 					&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 				{
 					return ConvMove::Convert30_MakeDropMove_da(g_PTSILVER_DA_AS_MOVE, to);
@@ -827,8 +854,8 @@ silver_drop_end:
 		while (toBB.Exists1Bit()) {
 			const Square to = toBB.PopFirstOneFromI9();
 			// 桂馬は紐が付いている必要はない。
-			// よって、このcanKingEscape() 内での to の位置に逃げられないようにする処理は無駄。
-			if (!canKingEscape(*this, US, to, Bitboard::CreateAllZeroBB())
+			// よって、このG_CanKingEscape() 内での to の位置に逃げられないようにする処理は無駄。
+			if (!G_CanKingEscape<US, THEM>(*this, to, Bitboard::CreateAllZeroBB())
 				&& !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem))
 			{
 				return ConvMove::Convert30_MakeDropMove_da(g_PTKNIGHT_DA_AS_MOVE, to);
@@ -858,7 +885,7 @@ silver_drop_end:
 
 				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-				// to の位置の Bitboard は canKingEscape の中で更新する。
+				// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 				do {
 					const Square to = toBB.PopFirstOneFromI9();
 					// 王手した駒の場所に自駒の利きがあるか。(無ければ玉で取られて詰まない)
@@ -868,7 +895,7 @@ silver_drop_end:
 						// かつ、王手した駒が pin されていない
 						const PieceTypeEvent ptEvent2(
 							this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
-						if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
+						if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -903,12 +930,12 @@ silver_drop_end:
 
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					do {
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							const PieceTypeEvent ptEvent2(this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent2))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -942,7 +969,7 @@ silver_drop_end:
 						if (IsUnDropCheckIsSupported(US, to)) {
 							const PieceTypeEvent ptEvent4(
 								this->GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(ksq), Color::Null, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent4))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_DRAGON.GetAttacks2From(ptEvent4))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -959,7 +986,7 @@ silver_drop_end:
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					if (IsUnDropCheckIsSupported(US, to)) {
-						if (!canKingEscape(*this, US, to, g_rookAttackBb.GetControllBbToEdge(to))
+						if (!G_CanKingEscape<US, THEM>(*this, to, g_rookAttackBb.GetControllBbToEdge(to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -988,7 +1015,7 @@ silver_drop_end:
 
 				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-				// to の位置の Bitboard は canKingEscape の中で更新する。
+				// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 				do {
 					const Square to = toBB.PopFirstOneFromI9();
 					// 王手した駒の場所に自駒の利きがあるか。(無ければ玉で取られて詰まない)
@@ -996,7 +1023,7 @@ silver_drop_end:
 						// 玉が逃げられない
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、動かした駒が pin されていない)
-						if (!canKingEscape(*this, US, to, g_horseAttackBb.GetControllBbToEdge(to)) // 竜の場合と違って、常に最大の利きを使用して良い。
+						if (!G_CanKingEscape<US, THEM>(*this, to, g_horseAttackBb.GetControllBbToEdge(to)) // 竜の場合と違って、常に最大の利きを使用して良い。
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1028,11 +1055,11 @@ silver_drop_end:
 
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					do {
 						const Square to = toBB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, g_horseAttackBb.GetControllBbToEdge(to))
+							if (!G_CanKingEscape<US, THEM>(*this, to, g_horseAttackBb.GetControllBbToEdge(to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1064,7 +1091,7 @@ silver_drop_end:
 					do {
 						const Square to = toOn789BB.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
-							if (!canKingEscape(*this, US, to, g_horseAttackBb.GetControllBbToEdge(to))
+							if (!G_CanKingEscape<US, THEM>(*this, to, g_horseAttackBb.GetControllBbToEdge(to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1081,7 +1108,7 @@ silver_drop_end:
 				while (toBB.Exists1Bit()) {
 					const Square to = toBB.PopFirstOneFromI9();
 					if (IsUnDropCheckIsSupported(US, to)) {
-						if (!canKingEscape(*this, US, to, g_bishopAttackBb.GetControllBbToEdge(to))
+						if (!G_CanKingEscape<US, THEM>(*this, to, g_bishopAttackBb.GetControllBbToEdge(to))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1113,7 +1140,7 @@ silver_drop_end:
 
 				const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-				// to の位置の Bitboard は canKingEscape の中で更新する。
+				// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 				do {
 					const Square to = toBB.PopFirstOneFromI9();
 					// 王手した駒の場所に自駒の利きがあるか。(無ければ玉で取られて詰まない)
@@ -1122,7 +1149,7 @@ silver_drop_end:
 						// かつ、(空き王手 または 他の駒で取れない)
 						// かつ、動かした駒が pin されていない)
 						const PieceTypeEvent ptEvent2(g_nullBitboard, US, to);
-						if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent2))
+						if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent2))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1166,13 +1193,13 @@ silver_drop_end:
 
 						const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-						// to の位置の Bitboard は canKingEscape の中で更新する。
+						// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 						while (toBB_promo.Exists1Bit()) {
 							const Square to = toBB_promo.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 成り
 								const PieceTypeEvent ptEvent3(g_nullBitboard, US, to);
-								if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
+								if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1191,7 +1218,7 @@ silver_drop_end:
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 不成
 								const PieceTypeEvent ptEvent4(g_nullBitboard, US, to);
-								if (!canKingEscape(*this, US, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent4))
+								if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent4))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1222,13 +1249,13 @@ silver_drop_end:
 
 						const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-						// to の位置の Bitboard は canKingEscape の中で更新する。
+						// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 						while (toBB.Exists1Bit()) {
 							const Square to = toBB.PopFirstOneFromI9();
 							if (IsUnDropCheckIsSupported(US, to)) {
 								// 不成
 								const PieceTypeEvent ptEvent6(g_nullBitboard, US, to);
-								if (!canKingEscape(*this, US, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent6))
+								if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent6))
 									&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 										|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1257,13 +1284,13 @@ silver_drop_end:
 					this->XorBBs(N04_Silver, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					while (toBB_promo.Exists1Bit()) {
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
 							const PieceTypeEvent ptEvent8(g_nullBitboard, US, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent8))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent8))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1279,7 +1306,7 @@ silver_drop_end:
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 不成
 							const PieceTypeEvent ptEvent9(g_nullBitboard, US, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent9))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_SILVER.GetAttacks2From(ptEvent9))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1316,13 +1343,13 @@ silver_drop_end:
 
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					while (toBB_promo.Exists1Bit()) {
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
 							const PieceTypeEvent ptEvent3(g_nullBitboard, US, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
 								&& (IsDiscoveredCheck<true>(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
@@ -1337,7 +1364,7 @@ silver_drop_end:
 						const Square to = toBB.PopFirstOneFromI9();
 						// 桂馬は紐が付いてなくて良いので、紐が付いているかは調べない。
 						// 不成
-						if (!canKingEscape(*this, US, to, Bitboard::CreateAllZeroBB())
+						if (!G_CanKingEscape<US, THEM>(*this, to, Bitboard::CreateAllZeroBB())
 							&& (IsDiscoveredCheck<true>(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
@@ -1378,14 +1405,14 @@ silver_drop_end:
 					this->XorBBs(N02_Lance, from, US);
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 
 					while (toBB_promo.Exists1Bit()) {
 						const Square to = toBB_promo.PopFirstOneFromI9();
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 成り
 							const PieceTypeEvent ptEvent3(g_nullBitboard, US, to);
-							if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
+							if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent3))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1402,7 +1429,7 @@ silver_drop_end:
 						const Square to = ksq + TDeltaS;
 						if (IsUnDropCheckIsSupported(US, to)) {
 							// 不成
-							if (!canKingEscape(*this, US, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
+							if (!G_CanKingEscape<US, THEM>(*this, to, g_lanceAttackBb.GetControllBbToEdge(US, to))
 								&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 									|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1445,11 +1472,11 @@ silver_drop_end:
 
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					if (IsUnDropCheckIsSupported(US, to)) {
 						// 成り
 						const PieceTypeEvent ptEvent2(g_nullBitboard, US, to);
-						if (!canKingEscape(*this, US, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent2))
+						if (!G_CanKingEscape<US, THEM>(*this, to, PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent2))
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
@@ -1473,10 +1500,10 @@ silver_drop_end:
 					// 動いた後の dcBB: to の位置の occupied や checkers は関係ないので、ここで生成できる。
 					const Bitboard dcBB_betweenIsThem_after = DiscoveredCheckBB<US, THEM, false>();
 
-					// to の位置の Bitboard は canKingEscape の中で更新する。
+					// to の位置の Bitboard は G_CanKingEscape の中で更新する。
 					if (IsUnDropCheckIsSupported(US, to)) {
 						// 不成
-						if (!canKingEscape(*this, US, to, Bitboard::CreateAllZeroBB())
+						if (!G_CanKingEscape<US, THEM>(*this, to, Bitboard::CreateAllZeroBB())
 							&& (IsDiscoveredCheck(from, to, ksq, dcBB_betweenIsUs)
 								|| !canPieceCapture(*this, THEM, to, dcBB_betweenIsThem_after))
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))

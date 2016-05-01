@@ -201,6 +201,8 @@ public:
 	static inline bool IS_SLIDER10(const Piece pc) { return g_CONV_PIECE_IS_SLIDER10[pc]; }//暗算表を使うぜ☆（＾ｑ＾）
 
 	// これは計算しないとタイヘンか☆（＾ｑ＾）
+	template<Color CLR>
+	static inline Piece FROM_COLOR_AND_PIECE_TYPE10(const PieceType pt) { return static_cast<Piece>((CLR << 4) | pt); }
 	static inline Piece FROM_COLOR_AND_PIECE_TYPE10(const Color c, const PieceType pt) { return static_cast<Piece>((c << 4) | pt); }
 
 };

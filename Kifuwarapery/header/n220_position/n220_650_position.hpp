@@ -161,10 +161,10 @@ public:
 
 	ScoreIndex GetMaterialDiff() const;
 
-	template<const Color US>
+	template<const Color CLR>
 	FORCE_INLINE Square GetKingSquare() const {
-		assert(m_kingSquare_[US] == this->GetBbOf<US>(N08_King).GetFirstOneFromI9());
-		return m_kingSquare_[US];
+		assert(m_kingSquare_[CLR] == this->GetBbOf<CLR>(N08_King).GetFirstOneFromI9());
+		return m_kingSquare_[CLR];
 	}
 	FORCE_INLINE Square GetKingSquare(const Color c) const {
 		assert(m_kingSquare_[c] == this->GetBbOf(N08_King, c).GetFirstOneFromI9());
@@ -331,6 +331,12 @@ private:
 
 	ScoreIndex ComputeMaterial() const;
 
+	template<Color CLR>
+	inline void XorBBs(const PieceType pt, const Square sq) {
+		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[N00_Occupied], sq);
+		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[pt], sq);
+		g_setMaskBb.XorBit(&this->m_BB_ByColor_[CLR], sq);
+	}
 	void XorBBs(const PieceType pt, const Square sq, const Color c);
 
 	// turn() 側が
