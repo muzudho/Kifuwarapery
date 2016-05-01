@@ -22,7 +22,12 @@ CheckInfo::CheckInfo(const Position& position) {
 	const Square ksq = position.GetKingSquare(them);
 
 	m_pinned = position.GetPinnedBB();
-	m_dcBB = position.DiscoveredCheckBB();
+	m_dcBB = position.GetTurn()==Color::Black
+		?
+		position.DiscoveredCheckBB<Color::Black,Color::White>()
+		:
+		position.DiscoveredCheckBB<Color::White, Color::Black>()
+		;
 
 	const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), them, ksq);
 

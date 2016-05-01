@@ -283,7 +283,15 @@ public:
 #if 1
 		if (!inCheck)
 		{
-			if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
+			if (!(move =
+				(
+					pos.GetTurn()==Color::Black
+					?
+					pos.GetMateMoveIn1Ply<Color::Black,Color::White>()
+					:
+					pos.GetMateMoveIn1Ply<Color::White,Color::Black>()
+					)				
+				).IsNone()) {
 				(*ppFlashlight)->m_staticEval = bestScore = UtilScore::MateIn((*ppFlashlight)->m_ply);
 				rucksack.m_tt.Store(posKey, rucksack.ConvertScoreToTT(bestScore, (*ppFlashlight)->m_ply), BoundExact, depth,
 					move, (*ppFlashlight)->m_staticEval);
@@ -726,8 +734,19 @@ public:
 			// move count based pruning
 			if (depth < 16 * OnePly
 				&& g_futilityMoveCounts.m_futilityMoveCounts[depth] <= moveCount
-				&& (threatMove.IsNone() || !rucksack.refutes(pos, move, threatMove)))
-			{
+				&& (
+					threatMove.IsNone()
+					||
+					!
+					(
+						pos.GetTurn()==Color::Black
+						?
+						rucksack.refutes<Color::Black,Color::White>(pos, move, threatMove)
+						:
+						rucksack.refutes<Color::White,Color::Black>(pos, move, threatMove)
+					)
+					)
+			){
 				this->LockInStep13a(ppSplitedNode);
 				isContinue = true;
 				return;

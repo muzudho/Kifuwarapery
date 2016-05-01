@@ -16,12 +16,21 @@ public:
 	MoveStack* GenerateMove(MoveStack* moveStackList, const Position& pos, bool all = false
 		) const override {
 
-		return g_dropMoveGenerator.GenerateDropMoves(
-			pos.GetTurn(),//us,
-			moveStackList,
-			pos,
-			pos.GetEmptyBB()//target
-		);
+		if (pos.GetTurn() == Color::Black) {
+			return g_dropMoveGenerator.GenerateDropMoves<Color::Black,Color::White>(
+				moveStackList,
+				pos,
+				pos.GetEmptyBB()//target
+				);
+		}
+		else
+		{
+			return g_dropMoveGenerator.GenerateDropMoves<Color::White, Color::Black>(
+				moveStackList,
+				pos,
+				pos.GetEmptyBB()//target
+				);
+		}
 	}
 
 };

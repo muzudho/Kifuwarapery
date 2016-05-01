@@ -56,8 +56,25 @@ private:
 	// なんだかんだで、使っちゃうつもりの時間☆（＾ｑ＾）
 	int GetTukatteiiTime() const {
 		// 予定思考タイム　＋　遊びタイム
-		return this->GetYoteiBothTurnTime() + this->GetSikoAsobiTime();
+		return this->GetYoteiBothTurnTime()
+			//+ this->GetTemeBonusTime()
+			+ this->GetSikoAsobiTime();
 	}
+
+	/*
+	//────────────────────────────────────────────────────────────────────────────────
+	// 手目に応じて調整される時間☆
+	//────────────────────────────────────────────────────────────────────────────────
+	inline int GetTemeBonusTime() const {
+		return this->m_temeBonusTime_;
+	}
+	inline void ZeroclearTemeBonusTime() {
+		this->m_temeBonusTime_ = 0;
+	}
+	inline void SetTemeBonusTime(int value) {
+		this->m_temeBonusTime_ = value;
+	}
+	//*/
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 相手の手番（Oppo teban）で使おうと思っている思考時間
@@ -142,6 +159,11 @@ private:
 	}
 
 private:
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 手目に応じて調整される時間☆
+	//────────────────────────────────────────────────────────────────────────────────
+	//int m_temeBonusTime_;
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 相手の手番（Oppo turn）で使おうと思っている思考時間

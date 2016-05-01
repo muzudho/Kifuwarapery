@@ -233,6 +233,7 @@ public://private:
 	}
 
 	// fitst move によって、first move の相手側の second move を違法手にするか。
+	template<Color US, Color THEM>
 	bool refutes(const Position& pos, const Move first, const Move second) {
 		assert(pos.IsOK());
 
@@ -256,7 +257,7 @@ public://private:
 			// first により、新たに m2to に当たりになる駒があるなら true
 			assert(!second.IsDrop());
 
-			const Color us = pos.GetTurn();
+			//const Color us = pos.GetTurn();
 			const Square m1to = first.To();
 			const Square m2from = second.From();
 			Bitboard occ = pos.GetOccupiedBB() ^ g_setMaskBb.GetSetMaskBb(m2from) ^ g_setMaskBb.GetSetMaskBb(m1to);
@@ -270,18 +271,18 @@ public://private:
 				occ ^= g_setMaskBb.GetSetMaskBb(m1from);
 			}
 
-			if (g_setMaskBb.IsSet(&UtilAttack::GetAttacksFrom(m1ptTo, us, m1to, occ), m2to)) {
+			if (g_setMaskBb.IsSet(&UtilAttack::GetAttacksFrom(m1ptTo, US, m1to, occ), m2to)) {
 				return true;
 			}
 
-			const Color them = ConvColor::OPPOSITE_COLOR10b(us);
+			//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
-			const PieceTypeEvent ptEventL(occ, them, m2to);
+			const PieceTypeEvent ptEventL(occ, THEM, m2to);
 			const PieceTypeEvent ptEventRB(occ, Color::Null, m2to);
 			const Bitboard xray =
-				(PiecetypePrograms::m_LANCE.GetAttacks2From(ptEventL) & pos.GetBbOf20(N02_Lance, us))
-				| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEventRB) & pos.GetBbOf(N06_Rook, N14_Dragon, us))
-				| (PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEventRB) & pos.GetBbOf(N05_Bishop, N13_Horse, us));
+				(PiecetypePrograms::m_LANCE.GetAttacks2From(ptEventL) & pos.GetBbOf20<US>(N02_Lance))
+				| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEventRB) & pos.GetBbOf30<US>(N06_Rook, N14_Dragon))
+				| (PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEventRB) & pos.GetBbOf30<US>(N05_Bishop, N13_Horse));
 
 			// sq へ当たりになっている駒のうち、first で動くことによって新たに当たりになったものがあるなら true
 			if (xray.Exists1Bit() && (xray ^ (xray & g_queenAttackBb.GetControllBb(pos.GetOccupiedBB(), m2to))).Exists1Bit()) {

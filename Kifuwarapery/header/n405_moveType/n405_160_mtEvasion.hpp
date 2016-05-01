@@ -103,7 +103,7 @@ private:
 		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<US>(moveStackList, pmEvent, target2);
 
 		if (target1.Exists1Bit()) {
-			moveStackList = g_dropMoveGenerator.GenerateDropMoves(US, moveStackList, pos, target1);//<US>
+			moveStackList = g_dropMoveGenerator.GenerateDropMoves<US,THEM>(moveStackList, pos, target1);
 		}
 
 		return moveStackList;

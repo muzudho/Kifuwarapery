@@ -14,13 +14,13 @@ namespace {
 	// 知見
 	// ・長考し過ぎて良い手を指しても、長考してないときに凡打を指して悪くしてしまう☆　続きを打てない☆
 	//────────────────────────────────────────────────────────────────────────────────
-	//*
-	// 定跡ＯＦＦとの相性がかなり良いぜ☆（＾▽＾）相手の時間を使って戦うぜ☆！（＾▽＾）！
+	/*
 	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
 	const int g_MOVE_HORIZON = 150;	// 150手先まで時間を残した息の長い早指し☆
 	const float g_MAX_RATIO = 10000.0f; // 長考したいときは　もっと　たっぷり☆
 									   //────────────────────────────────────────────────────────────────────────────────
-									   //*/
+	*/
+/*
 #elif 12
 	//*
 	// 定跡ＯＦＦとの相性がかなり良いぜ☆（＾▽＾）相手の時間を使って戦うぜ☆！（＾▽＾）！
@@ -28,13 +28,19 @@ namespace {
 	const int g_MOVE_HORIZON = 150;	// 150手先まで時間を残した息の長い早指し☆
 	const float g_MAX_RATIO = 1000.0f; // 長考したいときはたっぷり☆
 									//────────────────────────────────────────────────────────────────────────────────
-	//*/
+*/
+	const int g_MOVE_HORIZON = 38;	//
+	const float g_MAX_RATIO = 3.0f; // 
+	//const int g_MOVE_HORIZON = 40;	//
+	//const float g_MAX_RATIO = 1.5f; // 
+									//────────────────────────────────────────────────────────────────────────────────
 #elif 11
-	// ★これはこれで面白い設定☆（＾ｑ＾）
-	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
+	// ★↓これはこれで面白い設定☆（＾ｑ＾）
 	const int g_MOVE_HORIZON = 34;	// 34だと、40手目には 残り5分ぐらいになってしまい、100手目の終盤の入り口で 3分ぐらいしかなくて 息切れ逆転してしまうぜ☆
 									// ★でも、相手も息切れして頓死をする☆（＾ｑ＾）終盤に優勢で入るのはアドバンテージか☆？（＾▽＾）
-	//const int g_MOVE_HORIZON = 55; // 55だと終盤に頓死をよく見かける☆
+									// 上位相手に 序盤は100点ぐらい優勢になって、60手目に持ち時間すっからかん☆
+									// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
+									//const int g_MOVE_HORIZON = 55; // 55だと終盤に頓死をよく見かける☆
 	const float g_MAX_RATIO = 2.0f; // 
 	//const float g_MAX_RATIO = 10.0f; // 長考し過ぎて良い手を指しても、長考してないときに凡打を指して悪くしてしまう☆　続きを打てない☆
 									 //────────────────────────────────────────────────────────────────────────────────
@@ -193,6 +199,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	const int emergencyMoveHorizon = pRucksack->m_engineOptions["Emergency_Move_Horizon"];
 	const int nokositeokuTime      = pRucksack->m_engineOptions["Minimum_Thinking_Time"];	// 手番で、使わずに残しておく思考時間☆
 
+	//this->ZeroclearTemeBonusTime();
 	this->ZeroclearSikoAsobiTime();
 	this->ZeroclearYosouOppoTurnTime();
 	this->SetYoteiMyTurnTime( limits.GetNokoriTime(us));// 予定思考時間は、残り時間をそのまんま入れて初期化☆？（＾ｑ＾）？
@@ -256,8 +263,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 
 
 	// 独自実装☆（＾▽＾）： 終盤ほど時間を使ってもいいように、緩くするぜ☆
-	// 40 手目なら + 4000ミリ秒（4秒）、 110 手目なら + 11000ミリ秒（11秒）
-	//this->SetYoteiMyTurnTime( this->GetYoteiMyTurnTime() + currentPly * 100);
+	//this->SetTemeBonusTime( (currentPly-20) * 200);
 
 
 	// 「予定思考時間＋予想ポンダー時間」よりも「残しておく時間」の方が大きいようなら、「予定思考時間＋予想ポンダー時間」は、「予定思考時間」を調整し、「残しておく時間」と等しくします。
@@ -292,5 +298,11 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	//旧表示：maximum_search_time	
 	SYNCCOUT << "info string old limits move time " << limits.GetMoveTime() << SYNCENDL;
 	// SYNCCOUT << "info string limits inc time " << limits.GetIncrement(us) << SYNCENDL; // 加算時間はちゃんと取得できていたぜ☆
-	SYNCCOUT << "info string tukatteii time " << this->GetTukatteiiTime() << " ( yotei my turn " << this->GetYoteiMyTurnTime() << " + yosou opponent turn " << this->GetYosouOppoTurnTime() << " + asobi " << this->GetSikoAsobiTime() << ") / saidai encho " << this->GetSaidaiEnchoTime() << SYNCENDL;
+	SYNCCOUT << "info string tukatteii time " << this->GetTukatteiiTime()
+		<< " ( yotei my turn " << this->GetYoteiMyTurnTime()
+		<< " + yosou opponent turn " << this->GetYosouOppoTurnTime()
+		//<< " + teme bonus "	<< this->GetTemeBonusTime()
+		<< " + asobi " << this->GetSikoAsobiTime()
+		<< ")" << SYNCENDL;
+	SYNCCOUT << "info string saidai encho " << this->GetSaidaiEnchoTime() << SYNCENDL;
 }

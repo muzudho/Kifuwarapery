@@ -172,7 +172,15 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 		else if (token == "bench") { Benchmark(pos); }
 		else if (token == "d") { pos.Print(); }
 		else if (token == "s") { measureGenerateMoves(pos); }
-		else if (token == "t") { std::cout << pos.GetMateMoveIn1Ply().ToCSA() << std::endl; }
+		else if (token == "t") { std::cout <<
+			(
+				pos.GetTurn()==Color::Black
+				?
+				pos.GetMateMoveIn1Ply<Color::Black,Color::White>().ToCSA()
+				:
+				pos.GetMateMoveIn1Ply<Color::White,Color::Black>().ToCSA()
+			)			
+			<< std::endl; }
 		else if (token == "b") { MakeBook(pos, ssCmd); }
 #endif
 		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }

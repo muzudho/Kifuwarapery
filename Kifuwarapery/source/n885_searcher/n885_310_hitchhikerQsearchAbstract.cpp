@@ -77,7 +77,15 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 		bestScore = futilityBase = -ScoreInfinite;
 	}
 	else {
-		if (!(move = pos.GetMateMoveIn1Ply()).IsNone()) {
+		if (!(move =
+			(
+				pos.GetTurn()==Color::Black
+				?
+				pos.GetMateMoveIn1Ply<Color::Black,Color::White>()
+				:
+				pos.GetMateMoveIn1Ply<Color::White, Color::Black>()
+			)			
+			).IsNone()) {
 			return UtilScore::MateIn(pFlashlight->m_ply);
 		}
 

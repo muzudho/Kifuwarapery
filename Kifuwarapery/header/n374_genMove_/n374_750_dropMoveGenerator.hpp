@@ -54,14 +54,13 @@ public:
 	// 歩以外の持ち駒は、loop の前に持ち駒の種類の数によって ｓｗｉｔｃｈ で展開している。
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
+	template<Color US,Color THEM>
 	MoveStack* GenerateDropMoves(
-		Color us,
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target
 	) {
-		const Hand hand = pos.GetHand(us);
-
+		const Hand hand = pos.GetHand(US);
 
 		// まず、歩に対して指し手を生成
 		if (Hand::Exists_HPawn(hand)) {
@@ -69,27 +68,27 @@ public:
 			Bitboard toBB = target;
 			// 一段目には打てない
 
-			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Rank tRank9 = (US == Black ? Rank9 : Rank1);
 			toBB.AndEqualNot(g_rankMaskBb.GetRankMask(tRank9));
 
 			// 二歩の回避
-			Bitboard pawnsBB = pos.GetBbOf20(N01_Pawn, us);
+			Bitboard pawnsBB = pos.GetBbOf20<US>(N01_Pawn);
 			Square pawnsSquare;
 			foreachBB(pawnsBB, pawnsSquare, [&](const int part) {
 				toBB.SetP(part, toBB.GetP(part) & ~g_fileMaskBb.GetSquareFileMask(pawnsSquare).GetP(part));
 			});
 
 			// 打ち歩詰めの回避
-			const Rank tRank1 = (us == Black ? Rank1 : Rank9);
-			const SquareDelta tDeltaS = (us == Black ? DeltaS : DeltaN);
+			const Rank tRank1 = (US == Black ? Rank1 : Rank9);
+			const SquareDelta tDeltaS = (US == Black ? DeltaS : DeltaN);
 
-			const Square ksq = pos.GetKingSquare(ConvColor::OPPOSITE_COLOR10b(us));
+			const Square ksq = pos.GetKingSquare(THEM);
 			// 相手玉が九段目なら、歩で王手出来ないので、打ち歩詰めを調べる必要はない。
 			if (ConvSquare::TO_RANK10(ksq) != tRank1) {
 				const Square pawnDropCheckSquare = ksq + tDeltaS;
 				assert(ConvSquare::ContainsOf(pawnDropCheckSquare));
 				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
-					if (!pos.IsPawnDropCheckMate(us, pawnDropCheckSquare)) {
+					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove_da(g_PTPAWN_DA_AS_MOVE, pawnDropCheckSquare);
@@ -124,13 +123,13 @@ public:
 			if (Hand::Exists_HBishop(hand)) { haveHandArr[haveHandNum++] = g_PTBISHOP_DA_AS_MOVE; }//角打
 			if (Hand::Exists_HRook(hand)) { haveHandArr[haveHandNum++] = g_PTROOK_DA_AS_MOVE; }//飛打
 
-			const Rank tRank8 = (us == Black ? Rank8 : Rank2);
-			const Rank tRank9 = (us == Black ? Rank9 : Rank1);
+			const Rank tRank8 = (US == Black ? Rank8 : Rank2);
+			const Rank tRank9 = (US == Black ? Rank9 : Rank1);
 			const Bitboard TRank8BB = g_rankMaskBb.GetRankMask(tRank8);
 			const Bitboard TRank9BB = g_rankMaskBb.GetRankMask(tRank9);
 
 			const DropMakerEvent dmEvent(
-				us,
+				US,
 				pos,
 				target,
 				hand,

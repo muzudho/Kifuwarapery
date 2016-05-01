@@ -38,7 +38,7 @@ private:
 
 		Bitboard target = pos.GetEmptyBB();
 
-		moveStackList = g_dropMoveGenerator.GenerateDropMoves(US, moveStackList, pos, target);//<US>
+		moveStackList = g_dropMoveGenerator.GenerateDropMoves<US,THEM>(moveStackList, pos, target);
 		target |= pos.GetBbOf10(THEM);
 		const Square ksq = pos.GetKingSquare(THEM);
 

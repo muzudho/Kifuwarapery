@@ -26,7 +26,7 @@ public:
 		const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), Color::Null, ksq);
 		position.GetStateInfo()->m_checkersBB |=
 			PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1) &
-			position.GetBbOf(PieceType::N06_Rook, PieceType::N14_Dragon, us);
+			position.GetBbOf30(PieceType::N06_Rook, PieceType::N14_Dragon, us);
 	}
 
 };

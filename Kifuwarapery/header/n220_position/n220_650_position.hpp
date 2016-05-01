@@ -69,7 +69,12 @@ public:
 
 	Bitboard GetBbOf20(const PieceType pt1, const PieceType pt2) const;
 
-	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const Color c) const;
+	template<Color CLR>
+	Bitboard Position::GetBbOf30(const PieceType pt1, const PieceType pt2) const
+	{
+		return this->GetBbOf20(pt1, pt2) & this->GetBbOf10(CLR);
+	}
+	Bitboard GetBbOf30(const PieceType pt1, const PieceType pt2, const Color c) const;
 
 	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const;
 
@@ -105,9 +110,21 @@ public:
 	// checkersBB が更新されている必要はない。
 	// BetweenIsUs == true  : 間の駒が自駒。
 	// BetweenIsUs == false : 間の駒が敵駒。
-	template <bool BetweenIsUs = true>
+	template <Color US, Color THEM, bool BetweenIsUs = true>
 	Bitboard DiscoveredCheckBB() const {
-		return GetHiddenCheckers<false, BetweenIsUs>();
+
+		return GetHiddenCheckers<false, BetweenIsUs, US, THEM>();
+		/*
+		if (this->GetTurn() == Color::Black)
+		{
+			return GetHiddenCheckers<false, BetweenIsUs,Color::Black,Color::White>();
+		}
+		else
+		{
+			return GetHiddenCheckers<false, BetweenIsUs,Color::White,Color::Black>();
+		}
+		*/
+
 	}
 
 	// toFile と同じ筋に us の歩がないなら true
@@ -223,10 +240,9 @@ public:
 
 	ScoreIndex GetSeeSign(const Move move) const;
 
-	template <Color US>
+	template <Color US,Color THEM>
 	Move GetMateMoveIn1Ply();
-
-	Move GetMateMoveIn1Ply();
+	//Move GetMateMoveIn1Ply();
 
 	Ply GetGamePly() const;
 
@@ -312,21 +328,19 @@ private:
 	// pin されて(して)いる駒の Bitboard を返す。
 	// BetweenIsUs == true  : 間の駒が自駒。
 	// BetweenIsUs == false : 間の駒が敵駒。
-	template <bool FindPinned, bool BetweenIsUs>
+	template <bool FindPinned, bool BetweenIsUs, Color US, Color THEM>
 	Bitboard GetHiddenCheckers() const {
 		Bitboard result = Bitboard::CreateAllZeroBB();
-		const Color us = GetTurn();
-		const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 		// pin する遠隔駒
 		// まずは自駒か敵駒かで大雑把に判別
-		Bitboard pinners = this->GetBbOf10(FindPinned ? them : us);
+		Bitboard pinners = this->GetBbOf10(FindPinned ? THEM : US);
 
-		const Square ksq = GetKingSquare(FindPinned ? us : them);
+		const Square ksq = GetKingSquare(FindPinned ? US : THEM);
 
 		// 障害物が無ければ玉に到達出来る駒のBitboardだけ残す。
 		pinners &=	(
 						this->GetBbOf10(N02_Lance) &
-						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? us : them), ksq)
+						g_lanceAttackBb.GetControllBbToEdge((FindPinned ? US : THEM), ksq)
 					) |
 					(
 						this->GetBbOf20(N06_Rook, N14_Dragon) &
@@ -345,7 +359,7 @@ private:
 			// pin する遠隔駒と玉の間にある駒が1つで、かつ、引数の色のとき、その駒は(を) pin されて(して)いる。
 			if (between.Exists1Bit()
 				&& between.IsOneBit<false>()
-				&& between.AndIsNot0( this->GetBbOf10(BetweenIsUs ? us : them)))
+				&& between.AndIsNot0( this->GetBbOf10(BetweenIsUs ? US : THEM)))
 			{
 				result |= between;
 			}
