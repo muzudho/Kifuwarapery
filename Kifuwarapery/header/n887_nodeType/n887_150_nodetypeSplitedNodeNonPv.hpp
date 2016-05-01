@@ -189,7 +189,7 @@ public:
 		const CheckInfo& ci,
 		int& moveCount,
 		SplitedNode** ppSplitedNode
-		) const override {
+	) const override {
 		// DoStep11c
 		if (!
 			(

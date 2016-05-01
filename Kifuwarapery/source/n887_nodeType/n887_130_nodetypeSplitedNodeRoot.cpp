@@ -232,7 +232,7 @@ split_point_start:
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
 			move = this->GetNextMove_AtStep11(mp)
 			).IsNone()
-		) {
+	) {
 
 		// DoStep11b
 		if (move == excludedMove) { // ムーブが一致していれば、次のループへ☆

@@ -196,10 +196,16 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 		assert(pos.MoveIsLegal(m_pv_[ply]));
 		pos.DoMove(m_pv_[ply++], *st++);
 		tte = pos.GetConstRucksack()->m_tt.Probe(pos.GetKey());
-	}
-	while (tte != nullptr
-		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
-		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
+	} while (tte != nullptr
+		// このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
+		&&
+		(
+			pos.GetTurn() == Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
+		)				
 		   &&
 				(
 					pos.GetTurn()==Color::Black

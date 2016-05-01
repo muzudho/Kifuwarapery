@@ -241,14 +241,14 @@ public:
 		int& moveCount,
 		SplitedNode** ppSplitedNode
 	) const override {
-	// DoStep11c
+		// DoStep11c
 		if (!
 			(
-				pos.GetTurn() == Color::Black
+				pos.GetTurn()==Color::Black
 				?
-				pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black, Color::White>(move, ci.m_pinned)
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, ci.m_pinned)
 				:
-				pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(move, ci.m_pinned)
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, ci.m_pinned)
 			)
 		) {
 			isContinue = true;

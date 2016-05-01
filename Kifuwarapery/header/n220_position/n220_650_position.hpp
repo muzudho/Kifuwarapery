@@ -218,9 +218,12 @@ public:
 	template <bool MUSTNOTDROP, bool FROMMUSTNOTBEKING, Color US, Color THEM>
 	bool IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const;
 
+	// FIXME: これ使ってないのでは☆？（＾ｑ＾）？
+	template<Color US, Color THEM>
 	bool IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinned) const;
 
 	// checkPawnDrop : 二歩と打ち歩詰めも調べるなら true
+	template<Color US, Color THEM>
 	bool MoveIsPseudoLegal(const Move move, const bool checkPawnDrop = false) const;
 
 #if !defined NDEBUG

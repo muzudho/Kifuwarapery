@@ -78,7 +78,15 @@ NextmoveEvent::NextmoveEvent(
 		}
 	}
 
-	this->m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : g_MOVE_NONE);
+	this->m_ttMove_ = (!ttm.IsNone() &&
+		(
+			pos.GetTurn() == Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(ttm)
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(ttm)
+		)		
+		? ttm : g_MOVE_NONE);
 	this->m_lastMove_ += (!this->m_ttMove_.IsNone());
 }
 
@@ -102,7 +110,15 @@ NextmoveEvent::NextmoveEvent(
 		ttm = g_MOVE_NONE;
 	}
 
-	m_ttMove_ = (!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm) ? ttm : g_MOVE_NONE);
+	m_ttMove_ = (!ttm.IsNone() &&
+		(
+			pos.GetTurn()==Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(ttm)
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(ttm)
+		)		
+		? ttm : g_MOVE_NONE);
 	m_lastMove_ += !m_ttMove_.IsNone();
 }
 
@@ -118,7 +134,15 @@ NextmoveEvent::NextmoveEvent(
 
 	//m_captureThreshold_ = pos.GetCapturePieceScore(pt);
 	m_captureThreshold_ = PieceScore::GetCapturePieceScore(pt);
-	m_ttMove_ = ((!ttm.IsNone() && pos.MoveIsPseudoLegal(ttm)) ? ttm : g_MOVE_NONE);
+	m_ttMove_ = ((!ttm.IsNone() &&
+		(
+			pos.GetTurn()==Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(ttm)
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(ttm)
+			)		
+		) ? ttm : g_MOVE_NONE);
 
 	if (!m_ttMove_.IsNone() && (!m_ttMove_.IsCapture() || pos.GetSee(m_ttMove_) <= m_captureThreshold_)) {
 		m_ttMove_ = g_MOVE_NONE;

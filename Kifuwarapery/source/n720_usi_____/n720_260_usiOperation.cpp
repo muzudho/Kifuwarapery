@@ -214,7 +214,14 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 	}
 
-	if (pos.MoveIsPseudoLegal(move, true)
+	if (
+		(
+			pos.GetTurn() == Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(move, true)
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(move, true)
+		)		
 		&&
 		(
 			pos.GetTurn()==Color::Black
@@ -276,7 +283,13 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 	}
 
 	if (
-		pos.MoveIsPseudoLegal(move, true)
+		(
+			pos.GetTurn() == Color::Black
+			?
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(move, true)
+			:
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(move, true)
+		)		
 		&&
 		(
 			pos.GetTurn()==Color::Black

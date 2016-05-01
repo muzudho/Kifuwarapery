@@ -27,13 +27,13 @@ public:
 		// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
 		while (curr != moveStackList) {
 			if (!
-					(
+				(
 					pos.GetTurn()==Color::Black
 					?
 					pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black, Color::White>(curr->m_move, pinned)
 					:
 					pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(curr->m_move, pinned)
-					)
+				)
 			) {
 				curr->m_move = (--moveStackList)->m_move;
 			}

@@ -67,11 +67,9 @@ bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned)
 	}
 	assert(!move.IsDrop());
 
-	//const Color us = this->GetTurn();
 	const Square from = move.From();
 
 	if (!FROMMUSTNOTKING && ConvPiece::TO_PIECE_TYPE10(GetPiece(from)) == N08_King) {
-		//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
 		return !IsAttackersToIsNot0(THEM, move.To());
 	}
@@ -86,6 +84,7 @@ template bool Position::IsPseudoLegalMoveIsLegal<true, false, Color::Black, Colo
 template bool Position::IsPseudoLegalMoveIsLegal<true, false, Color::White, Color::Black>(const Move move, const Bitboard& pinned) const;
 
 
+template<Color US,Color THEM>
 bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinned) const {
 	assert(IsOK());
 
@@ -93,14 +92,8 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 	if (move.GetPieceTypeFrom() == N08_King) {
 		// 遠隔駒で王手されたとき、王手している遠隔駒の利きには移動しないように指し手を生成している。
 		// その為、移動先に他の駒の利きが無いか調べるだけで良い。
-		const bool canMove = !IsAttackersToIsNot0(ConvColor::OPPOSITE_COLOR10b(GetTurn()), move.To());
-		assert(canMove == (
-			this->GetTurn()==Color::Black
-			?
-			IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, pinned)
-			:
-			IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, pinned)
-		));
+		const bool canMove = !IsAttackersToIsNot0(THEM, move.To());
+		assert(canMove == IsPseudoLegalMoveIsLegal<false, US,THEM>(move, pinned));
 		return canMove;
 	}
 
@@ -113,20 +106,14 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 		return false;
 	}
 
-	const Color us = GetTurn();
+	//const Color us = GetTurn();
 	const Square to = move.To();
 	// 移動、又は打った駒が、王手をさえぎるか、王手している駒を取る必要がある。
-	target = g_betweenBb.GetBetweenBB(checkSq, GetKingSquare(us)) | GetCheckersBB();
-	return g_setMaskBb.IsSet(&target, to) &&
-		(
-			this->GetTurn()==Color::Black
-			?
-			IsPseudoLegalMoveIsLegal<false, true,Color::Black,Color::White>(move, pinned)
-			:
-			IsPseudoLegalMoveIsLegal<false, true,Color::White,Color::Black>(move, pinned)
-			)
-		;
+	target = g_betweenBb.GetBetweenBB(checkSq, GetKingSquare(US)) | GetCheckersBB();
+	return g_setMaskBb.IsSet(&target, to) && IsPseudoLegalMoveIsLegal<false, true,US,THEM>(move, pinned);
 }
+template bool Position::IsPseudoLegalMoveIsEvasion<Color::Black, Color::White>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsEvasion<Color::White, Color::Black>(const Move move, const Bitboard& pinned) const;
 
 
 
@@ -135,6 +122,7 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 
 // checkPawnDrop : 二歩と打ち歩詰めも調べるなら true
 //                 これが true のとき、駒打ちの場合のみ Legal であることが確定する。
+template<Color US, Color THEM>
 bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) const {
 	const Color us = GetTurn();
 	const Color them = ConvColor::OPPOSITE_COLOR10b(us);
@@ -216,6 +204,9 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 
 	return true;
 }
+template bool Position::MoveIsPseudoLegal<Color::Black,Color::White>(const Move move, const bool checkPawnDrop) const;
+template bool Position::MoveIsPseudoLegal<Color::White, Color::Black>(const Move move, const bool checkPawnDrop) const;
+
 
 #if !defined NDEBUG
 // 過去(又は現在)に生成した指し手が現在の局面でも有効か判定。

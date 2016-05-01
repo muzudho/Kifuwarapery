@@ -298,22 +298,22 @@ public:
 		const CheckInfo& ci,
 		int& moveCount,
 		SplitedNode** ppSplitedNode
-		) const override {
+	) const override {
 		// DoStep11c
-			if (!
-				(
-					pos.GetTurn() == Color::Black
-					?
-					pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black, Color::White>(move, ci.m_pinned)
-					:
-					pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(move, ci.m_pinned)
-				)
-			) {
-				isContinue = true;
-				return;
-			}
-			moveCount = ++(*ppSplitedNode)->m_moveCount;
-			(*ppSplitedNode)->m_mutex.unlock();
+		if (!
+			(
+				pos.GetTurn()==Color::Black
+				?
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, ci.m_pinned)
+				:
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, ci.m_pinned)
+			)
+		) {
+			isContinue = true;
+			return;
+		}
+		moveCount = ++(*ppSplitedNode)->m_moveCount;
+		(*ppSplitedNode)->m_mutex.unlock();
 	}
 
 	// 無駄枝狩り☆（＾▽＾）

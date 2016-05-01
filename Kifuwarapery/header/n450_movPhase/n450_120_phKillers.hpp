@@ -18,7 +18,14 @@ public:
 		nmEvent.IncrementCurMove();
 		if (!move.IsNone()
 			&& move != nmEvent.GetTranspositionTableMove()
-			&& nmEvent.GetPos().MoveIsPseudoLegal(move, true)
+			&&
+			(
+				nmEvent.GetPos().GetTurn()==Color::Black
+				?
+				nmEvent.GetPos().MoveIsPseudoLegal<Color::Black,Color::White>(move, true)
+				:
+				nmEvent.GetPos().MoveIsPseudoLegal<Color::White,Color::Black>(move, true)
+			)			
 			&& nmEvent.GetPos().GetPiece(move.To()) == N00_Empty)
 		{
 			resultMove = move;
