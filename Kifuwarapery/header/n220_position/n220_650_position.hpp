@@ -74,7 +74,6 @@ public:
 	{
 		return this->GetBbOf20(pt1, pt2) & this->GetBbOf10(CLR);
 	}
-	Bitboard GetBbOf30(const PieceType pt1, const PieceType pt2, const Color c) const;
 
 	Bitboard GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const;
 
@@ -216,7 +215,7 @@ public:
 	// ・連続王手の千日手の手を指す
 	// これらの反則手を含めた手の事と定義する。
 	// よって、打ち歩詰めや二歩の手は pseudoLegal では無い。
-	template <bool MUSTNOTDROP, bool FROMMUSTNOTBEKING>
+	template <bool MUSTNOTDROP, bool FROMMUSTNOTBEKING, Color US, Color THEM>
 	bool IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const;
 
 	bool IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinned) const;

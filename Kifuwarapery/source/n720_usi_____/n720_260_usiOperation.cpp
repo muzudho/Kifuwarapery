@@ -215,8 +215,15 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 	}
 
 	if (pos.MoveIsPseudoLegal(move, true)
-		&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
-	{
+		&&
+		(
+			pos.GetTurn()==Color::Black
+			?
+			pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, pos.GetPinnedBB())
+			:
+			pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, pos.GetPinnedBB())
+		)
+	){
 		return move;
 	}
 	return g_MOVE_NONE;
@@ -268,9 +275,17 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		}
 	}
 
-	if (pos.MoveIsPseudoLegal(move, true)
-		&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, pos.GetPinnedBB()))
-	{
+	if (
+		pos.MoveIsPseudoLegal(move, true)
+		&&
+		(
+			pos.GetTurn()==Color::Black
+			?
+			pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, pos.GetPinnedBB())
+			:
+			pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, pos.GetPinnedBB())
+			)
+	){
 		return move;
 	}
 	return g_MOVE_NONE;

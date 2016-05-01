@@ -540,7 +540,13 @@ public:
 			NextmoveEvent mp(pos, ttMove, rucksack.m_history, move.GetCap());
 			const CheckInfo ci(pos);
 			while (!(move = mp.GetNextMove_NonSplitedNode()).IsNone()) {
-				if (pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+				if (
+					pos.GetTurn()==Color::Black
+					?
+					pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black, Color::White>(move, ci.m_pinned)
+					:
+					pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(move, ci.m_pinned)
+					) {
 					(*ppFlashlight)->m_currentMove = move;
 					pos.DoMove(move, st, ci, pos.IsMoveGivesCheck(move, ci));
 					((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
@@ -678,7 +684,14 @@ public:
 		if (singularExtensionNode
 			&& extension == Depth0
 			&& move == ttMove
-			&& pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)
+			&&
+			(
+				pos.GetTurn() == Color::Black
+					?
+					pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black, Color::White>(move, ci.m_pinned)
+					:
+					pos.IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(move, ci.m_pinned)
+			)
 			&& abs(ttScore) < PieceScore::m_ScoreKnownWin)
 		{
 			assert(ttScore != ScoreNone);
@@ -813,7 +826,15 @@ public:
 		int& moveCount
 		) const {
 		// RootNode, SPNode はすでに合法手であることを確認済み。
-		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+		if (!
+			(
+				pos.GetTurn()==Color::Black
+				?
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, ci.m_pinned)
+				:
+				pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, ci.m_pinned)
+			)
+		) {
 			--moveCount;
 			isContinue = true;
 			return;

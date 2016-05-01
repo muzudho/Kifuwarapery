@@ -46,7 +46,7 @@ private:
 
 		// 玉の移動による自殺手と、pinされている駒の移動による自殺手を削除
 		while (curr != moveStackList) {
-			if (!pos.IsPseudoLegalMoveIsLegal<false, false>(curr->m_move, pinned)) {
+			if (!pos.IsPseudoLegalMoveIsLegal<false, false, US, THEM>(curr->m_move, pinned)) {
 				curr->m_move = (--moveStackList)->m_move;
 			}
 			else {

@@ -26,7 +26,14 @@ public:
 		const PieceTypeEvent ptEvent1(position.GetOccupiedBB(), Color::Null, ksq);
 		position.GetStateInfo()->m_checkersBB |=
 			PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent1) &
-			position.GetBbOf30(PieceType::N05_Bishop, PieceType::N13_Horse, us);
+			(
+				us==Color::Black
+				?
+				position.GetBbOf30<Color::Black>(PieceType::N05_Bishop, PieceType::N13_Horse)
+				:
+				position.GetBbOf30<Color::White>(PieceType::N05_Bishop, PieceType::N13_Horse)
+				)
+			;
 	}
 
 };

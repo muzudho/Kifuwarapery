@@ -200,7 +200,14 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 	while (tte != nullptr
 		   // このチェックは少し無駄。駒打ちのときはmove16toMove() 呼ばなくて良い。
 		   && pos.MoveIsPseudoLegal(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
-		   && pos.IsPseudoLegalMoveIsLegal<false, false>(m, pos.GetPinnedBB())
+		   &&
+				(
+					pos.GetTurn()==Color::Black
+					?
+					pos.IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(m, pos.GetPinnedBB())
+					:
+					pos.IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(m, pos.GetPinnedBB())
+					)
 		   && ply < g_maxPly
 		   && (!pos.IsDraw(20) || ply < 6));
 

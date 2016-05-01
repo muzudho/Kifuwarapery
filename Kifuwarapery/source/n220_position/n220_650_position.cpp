@@ -58,7 +58,7 @@ Color Position::GetTurn() const
 // 確実に玉の移動で無いときは、FROMMUSTNOTKING == true とする。英語として正しい？
 // 遠隔駒で王手されているとき、その駒の利きがある場所に逃げる手を検出出来ない場合があるので、
 // そのような手を指し手生成してはいけない。
-template <bool MUSTNOTDROP, bool FROMMUSTNOTKING>
+template <bool MUSTNOTDROP, bool FROMMUSTNOTKING,Color US,Color THEM>
 bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned) const {
 	// 駒打ちは、打ち歩詰めや二歩は指し手生成時や、killerを ＭｏｖｅＰｉｃｋｅｒ::nextMove() 内で排除しているので、常に合法手
 	// (連続王手の千日手は省いていないけれど。)
@@ -67,20 +67,23 @@ bool Position::IsPseudoLegalMoveIsLegal(const Move move, const Bitboard& pinned)
 	}
 	assert(!move.IsDrop());
 
-	const Color us = GetTurn();
+	//const Color us = this->GetTurn();
 	const Square from = move.From();
 
 	if (!FROMMUSTNOTKING && ConvPiece::TO_PIECE_TYPE10(GetPiece(from)) == N08_King) {
-		const Color them = ConvColor::OPPOSITE_COLOR10b(us);
+		//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 		// 玉の移動先に相手の駒の利きがあれば、合法手でないので、false
-		return !IsAttackersToIsNot0(them, move.To());
+		return !IsAttackersToIsNot0(THEM, move.To());
 	}
 	// 玉以外の駒の移動
-	return !IsPinnedIllegal(from, move.To(), GetKingSquare(us), pinned);
+	return !IsPinnedIllegal(from, move.To(), GetKingSquare(US), pinned);
 }
-template bool Position::IsPseudoLegalMoveIsLegal<false, false>(const Move move, const Bitboard& pinned) const;
-template bool Position::IsPseudoLegalMoveIsLegal<false, true >(const Move move, const Bitboard& pinned) const;
-template bool Position::IsPseudoLegalMoveIsLegal<true, false>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<false, false, Color::Black,Color::White>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<false, false, Color::White, Color::Black>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<false, true, Color::Black, Color::White>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<false, true, Color::White, Color::Black>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<true, false, Color::Black, Color::White>(const Move move, const Bitboard& pinned) const;
+template bool Position::IsPseudoLegalMoveIsLegal<true, false, Color::White, Color::Black>(const Move move, const Bitboard& pinned) const;
 
 
 bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinned) const {
@@ -91,7 +94,13 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 		// 遠隔駒で王手されたとき、王手している遠隔駒の利きには移動しないように指し手を生成している。
 		// その為、移動先に他の駒の利きが無いか調べるだけで良い。
 		const bool canMove = !IsAttackersToIsNot0(ConvColor::OPPOSITE_COLOR10b(GetTurn()), move.To());
-		assert(canMove == (IsPseudoLegalMoveIsLegal<false, false>(move, pinned)));
+		assert(canMove == (
+			this->GetTurn()==Color::Black
+			?
+			IsPseudoLegalMoveIsLegal<false, false,Color::Black,Color::White>(move, pinned)
+			:
+			IsPseudoLegalMoveIsLegal<false, false,Color::White,Color::Black>(move, pinned)
+		));
 		return canMove;
 	}
 
@@ -108,7 +117,15 @@ bool Position::IsPseudoLegalMoveIsEvasion(const Move move, const Bitboard& pinne
 	const Square to = move.To();
 	// 移動、又は打った駒が、王手をさえぎるか、王手している駒を取る必要がある。
 	target = g_betweenBb.GetBetweenBB(checkSq, GetKingSquare(us)) | GetCheckersBB();
-	return g_setMaskBb.IsSet(&target, to) && IsPseudoLegalMoveIsLegal<false, true>(move, pinned);
+	return g_setMaskBb.IsSet(&target, to) &&
+		(
+			this->GetTurn()==Color::Black
+			?
+			IsPseudoLegalMoveIsLegal<false, true,Color::Black,Color::White>(move, pinned)
+			:
+			IsPseudoLegalMoveIsLegal<false, true,Color::White,Color::Black>(move, pinned)
+			)
+		;
 }
 
 
@@ -2056,11 +2073,6 @@ Bitboard Position::GetBbOf20(const PieceType pt, const Color c) const
 Bitboard Position::GetBbOf20(const PieceType pt1, const PieceType pt2) const
 {
 	return this->GetBbOf10(pt1) | this->GetBbOf10(pt2);
-}
-
-Bitboard Position::GetBbOf30(const PieceType pt1, const PieceType pt2, const Color c) const
-{
-	return this->GetBbOf20(pt1, pt2) & this->GetBbOf10(c);
 }
 
 Bitboard Position::GetBbOf(const PieceType pt1, const PieceType pt2, const PieceType pt3) const

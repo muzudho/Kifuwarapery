@@ -166,7 +166,15 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 			continue;
 		}
 
-		if (!pos.IsPseudoLegalMoveIsLegal<false, false>(move, ci.m_pinned)) {
+		if (!
+			(
+				pos.GetTurn()==Color::Black
+				?
+				pos.IsPseudoLegalMoveIsLegal<false, false, Color::Black,Color::White>(move, ci.m_pinned)
+				:
+				pos.IsPseudoLegalMoveIsLegal<false, false, Color::White,Color::Black>(move, ci.m_pinned)
+			)
+		) {
 			continue;
 		}
 
