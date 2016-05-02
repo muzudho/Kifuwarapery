@@ -20,17 +20,56 @@ namespace {
 	const float g_MAX_RATIO = 10000.0f; // 長考したいときは　もっと　たっぷり☆
 									   //────────────────────────────────────────────────────────────────────────────────
 	*/
-/*
-#elif 12
-	//*
+
+//#elif 13
+
+	const int g_MOVE_HORIZON = 125;	// 勘で☆（＾－＾）
+	const float g_MAX_RATIO = 20.0f; // 夢のある数字に☆（＾▽＾）
+
+	/*
+	const int g_MOVE_HORIZON = 125;	// 勘で☆（＾－＾）
+	const float g_MAX_RATIO = 5.0f;
+	*/
+
+	/*
+	// 20秒ほどで丁度いいんだが、ずっと押し負ける☆ｗｗｗ（＾ｑ＾）
+	const int g_MOVE_HORIZON = 125;	// 勘で☆（＾－＾）
+	const float g_MAX_RATIO = 1.5f;
+	*/
+
+	/*
+	const int g_MOVE_HORIZON = 100;	// 勘で☆（＾－＾）
+	const float g_MAX_RATIO = 2.0f;
+	*/
+
+	/*
+	// 序盤から 30秒ペースで使ってしまう☆ 20～40☆ これもまだ多いぜ☆
+	const int g_MOVE_HORIZON = 75;	// 勘で☆（＾－＾）
+	const float g_MAX_RATIO = 2.0f;
+	*/
+
+	/*
+	//12手目には残り６分を切っているぜ☆
+	const int g_MOVE_HORIZON = 47;	// 結局初期設定でどうか☆？（＾－＾）？
+	const float g_MAX_RATIO = 3.0f;
+	*/
+
+	/* 17秒ぐらいしか使わなくなって Yajyuに負けているぜ☆
+	const int g_MOVE_HORIZON = 150;	// 150手先まで時間を残した息の長い早指し☆
+	const float g_MAX_RATIO = 3.0f;
+	*/
+									   /*
+	// ↓横歩で３：４４も長考するのはどうかと思うぜ☆
 	// 定跡ＯＦＦとの相性がかなり良いぜ☆（＾▽＾）相手の時間を使って戦うぜ☆！（＾▽＾）！
 	// フィッシャールール 10分 加算10秒用にするには☆？（＾ｑ＾）
 	const int g_MOVE_HORIZON = 150;	// 150手先まで時間を残した息の長い早指し☆
 	const float g_MAX_RATIO = 1000.0f; // 長考したいときはたっぷり☆
-									//────────────────────────────────────────────────────────────────────────────────
-*/
+	//*/
+#elif 12
+	/*４０手になる前に時間半分以下になって　６０手で 時間なくなって　評価値狂って頓死するぜ☆
 	const int g_MOVE_HORIZON = 38;	//
 	const float g_MAX_RATIO = 3.0f; // 
+	*/
 	//const int g_MOVE_HORIZON = 40;	//
 	//const float g_MAX_RATIO = 1.5f; // 
 									//────────────────────────────────────────────────────────────────────────────────

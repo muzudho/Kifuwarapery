@@ -99,13 +99,13 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 	std::string dir2 = dir1 + "/Kpp[" + std::to_string(k1) + "]";
 	std::string file3 = dir2 + "/Kpp[" + std::to_string(k1) + "][" + std::to_string(p1) + "].obj";
 
-	SYNCCOUT << "(WriteKppCache3Files 1/9) File: path3=[" << file3.c_str() << "]" << SYNCENDL;
+	//SYNCCOUT << "(WriteKppCache3Files 1/9) File: path3=[" << file3.c_str() << "]" << SYNCENDL;
 
 	// obj ディレクトリがなければ作ります。
 	if (!PathIsDirectoryA((LPCSTR)dir1.c_str()))
 	{
 		// ディレクトリーがないというのは正常動作です。
-		SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory. ok. : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
+		//SYNCCOUT << "(WriteKppCache3Files 2/9)Not found directory. ok. : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
 
 		UtilProgram utilProgram;
 		utilProgram.ErrorBegin();
@@ -114,7 +114,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 
 		if (result != 0)
 		{
-			SYNCCOUT << "(WriteKppCache3Files 3/9)Create directory : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
+			//SYNCCOUT << "(WriteKppCache3Files 3/9)Create directory : dir1=[" << dir1.c_str() << "]" << SYNCENDL;
 		}
 		else
 		{
@@ -132,7 +132,7 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 		//SYNCCOUT << "Not found directory : path2=[" << dir2 << "]" << SYNCENDL;
 		if (CreateDirectoryA((LPCSTR)dir2.c_str(), NULL))
 		{
-			SYNCCOUT << "(WriteKppCache3Files 5/9)Create directory : dir2=[" << dir2.c_str() << "]" << SYNCENDL;
+			//SYNCCOUT << "(WriteKppCache3Files 5/9)Create directory : dir2=[" << dir2.c_str() << "]" << SYNCENDL;
 		}
 		else
 		{
@@ -142,16 +142,15 @@ bool KppCacheIo::WriteLv3Files(const std::string & dirName, int k1, int p1, std:
 		}
 	}
 
-	SYNCCOUT << "(WriteKppCache3Files 7/9)" << SYNCENDL;
+	//SYNCCOUT << "(WriteKppCache3Files 7/9)" << SYNCENDL;
 
 	// ファイルは無いはず。
 	if (!isError)
 	{
 		this->WriteLv3FilesBody(file3, k1, p1, kppArray);
-		//this->WriteLv3FilesBody(dirName, k1, p1, kppArray);
-		SYNCCOUT << "(WriteKppCache3Files 8/9)" << SYNCENDL;
+		//SYNCCOUT << "(WriteKppCache3Files 8/9)" << SYNCENDL;
 	}
-	SYNCCOUT << "(WriteKppCache3Files 9/9)" << SYNCENDL;
+	//SYNCCOUT << "(WriteKppCache3Files 9/9)" << SYNCENDL;
 #endif
 	return !isError;
 }
