@@ -218,7 +218,7 @@ bool Position::MoveIsLegal(const Move GetMove) const {
 template<Color US, Color THEM>
 void Position::DoMove(const Move move, StateInfo& newSt) {
 	const CheckInfo ci(*this);
-	DoMove<US, THEM>(move, newSt, ci, IsMoveGivesCheck<US,THEM>(move, ci));
+	DoMove<US, THEM>(move, newSt, ci, IsMoveGivesCheck(move, ci));
 }
 template void Position::DoMove<Color::Black, Color::White>(const Move move, StateInfo& newSt);
 template void Position::DoMove<Color::White, Color::Black>(const Move move, StateInfo& newSt);
@@ -620,15 +620,7 @@ namespace {
 	// them(相手) 側の玉以外の駒が sq にある us 側の駒を取れるか。
 	bool canPieceCapture(const Position& pos, const Color them, const Square sq, const Bitboard& dcBB) {
 		// 玉以外で打った駒を取れる相手側の駒の Bitboard
-		Bitboard fromBB =
-			them ==Color::Black// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
-			?
-			pos.GetAttackersToExceptKing<Color::White,Color::Black>// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
-			(sq)
-			:
-			pos.GetAttackersToExceptKing<Color::Black,Color::White>// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
-			(sq)
-			;
+		Bitboard fromBB = pos.GetAttackersToExceptKing(them, sq);
 
 		if (fromBB.Exists1Bit()) {
 			const Square ksq = pos.GetKingSquare(them);
@@ -646,15 +638,7 @@ namespace {
 
 	// pos.discoveredCheckBB<false>() を遅延評価するバージョン。
 	bool canPieceCapture(const Position& pos, const Color them, const Square sq) {
-		Bitboard fromBB =
-			them == Color::Black // 相手のターンを見るぜ☆
-			?
-			pos.GetAttackersToExceptKing<Color::White, Color::Black>// 相手のターンを見るぜ☆
-			(sq)
-			:
-			pos.GetAttackersToExceptKing<Color::Black, Color::White>// 相手のターンを見るぜ☆
-			(sq)
-			;
+		Bitboard fromBB = pos.GetAttackersToExceptKing(them, sq);
 
 		if (fromBB.Exists1Bit()) {
 			const Square ksq = pos.GetKingSquare(them);
@@ -2024,8 +2008,8 @@ void Position::Set(const std::string& sfen, Military* th) {
 			goto INCORRECT;
 		}
 	}
-	this->m_kingSquare_[Black] = this->GetBbOf20<Color::Black>(N08_King).GetFirstOneFromI9();
-	this->m_kingSquare_[White] = this->GetBbOf20<Color::White>(N08_King).GetFirstOneFromI9();
+	this->m_kingSquare_[Black] = this->GetBbOf20(N08_King, Black).GetFirstOneFromI9();
+	this->m_kingSquare_[White] = this->GetBbOf20(N08_King, White).GetFirstOneFromI9();
 	this->m_goldsBB_ = this->GetBbOf(N07_Gold, N09_ProPawn, N10_ProLance, N11_ProKnight, N12_ProSilver);
 
 	// 手番
@@ -2071,14 +2055,7 @@ void Position::Set(const std::string& sfen, Military* th) {
 	this->m_st_->m_hand = this->GetHand(this->GetTurn());
 
 	this->SetEvalList();
-	
-	this->GetTurn()==Color::Black
-		?
-		this->FindCheckers<Color::Black,Color::White>()
-		:
-		this->FindCheckers<Color::White,Color::Black>()
-		;
-
+	this->FindCheckers();
 	this->m_st_->m_material = this->ComputeMaterial();
 	this->m_thisThread_ = th;
 
@@ -2194,16 +2171,11 @@ ScoreIndex Position::GetMaterialDiff() const
 	return this->m_st_->m_material - this->m_st_->m_previous->m_material;
 }
 
-template<Color US, Color THEM>
 bool Position::IsMoveGivesCheck(const Move move) const {
-	return this->IsMoveGivesCheck<US,THEM>(move, CheckInfo(*this));
+	return this->IsMoveGivesCheck(move, CheckInfo(*this));
 }
-template bool Position::IsMoveGivesCheck<Color::Black,Color::White>(const Move move) const;
-template bool Position::IsMoveGivesCheck<Color::White, Color::Black>(const Move move) const;
-
 
 // move が王手なら true
-template<Color US, Color THEM>
 bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 	assert(IsOK());
 	assert(ci.m_dcBB == this->DiscoveredCheckBB());
@@ -2227,17 +2199,13 @@ bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 		}
 
 		// Discovery Check ?
-		if (this->IsDiscoveredCheck(from, to, this->GetKingSquare<THEM>(), ci.m_dcBB)) {
+		if (this->IsDiscoveredCheck(from, to, this->GetKingSquare(ConvColor::OPPOSITE_COLOR10b(GetTurn())), ci.m_dcBB)) {
 			return true;
 		}
 	}
 
 	return false;
 }
-template bool Position::IsMoveGivesCheck<Color::Black, Color::White>(const Move move, const CheckInfo& ci) const;
-template bool Position::IsMoveGivesCheck<Color::White, Color::Black>(const Move move, const CheckInfo& ci) const;
-
-
 
 void Position::Clear() {
 	memset(this, 0, sizeof(Position));
@@ -2311,9 +2279,9 @@ Bitboard Position::GetAttackersTo_clr(const Color turn1, const Square sq, const 
 }
 
 // 玉以外で sq へ移動可能な c 側の駒の Bitboard を返す。
-template<Color US, Color THEM>
-Bitboard Position::GetAttackersToExceptKing(const Square sq) const {
-	const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), THEM, sq);
+Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) const {
+	const Color opposite = ConvColor::OPPOSITE_COLOR10b(c);
+	const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), opposite, sq);
 	return ((PiecetypePrograms::m_PAWN.GetAttacks2From(ptEvent1) & this->GetBbOf10(N01_Pawn))
 		| (PiecetypePrograms::m_LANCE.GetAttacks2From(ptEvent1) & this->GetBbOf10(N02_Lance))
 		| (PiecetypePrograms::m_KNIGHT.GetAttacks2From(ptEvent1) & this->GetBbOf10(N03_Knight))
@@ -2321,11 +2289,8 @@ Bitboard Position::GetAttackersToExceptKing(const Square sq) const {
 		| (PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent1) & (GetGoldsBB() | this->GetBbOf10(N13_Horse)))
 		| (PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent1) & this->GetBbOf20(N05_Bishop, N13_Horse))
 		| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1) & this->GetBbOf20(N06_Rook, N14_Dragon)))
-		& this->GetBbOf10<US>();
+		& this->GetBbOf10(c);
 }
-template Bitboard Position::GetAttackersToExceptKing<Color::Black,Color::White>(const Square sq) const;
-template Bitboard Position::GetAttackersToExceptKing<Color::White,Color::Black>(const Square sq) const;
-
 
 bool Position::IsAttackersToIsNot0(const Color c, const Square sq) const
 {
@@ -2342,16 +2307,10 @@ bool Position::IsUnDropCheckIsSupported(const Color c, const Square sq) const
 	return this->GetAttackersTo_clr(c, sq, this->GetOccupiedBB()).Exists1Bit();
 }
 
-template<Color US, Color THEM>
 void Position::FindCheckers()
 {
-	this->m_st_->m_checkersBB =
-		this->GetAttackersToExceptKing<THEM,US>//相手のターンから見るぜ☆（＾ｑ＾）
-		(GetKingSquare(US));
+	m_st_->m_checkersBB = GetAttackersToExceptKing(ConvColor::OPPOSITE_COLOR10b(GetTurn()), GetKingSquare(GetTurn()));
 }
-template void Position::FindCheckers<Color::Black,Color::White>();
-template void Position::FindCheckers<Color::White, Color::Black>();
-
 
 ScoreIndex Position::ComputeMaterial() const {
 	ScoreIndex s = ScoreZero;

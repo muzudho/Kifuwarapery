@@ -11,11 +11,11 @@ public:
 
 	// 元の名前：Ｉｎｉｔ
 	// Think開始時に初期設定をするぜ☆（＾▽＾）
-	template<Color US,Color THEM>
 	void InitializeTimeManager_OnHitchhikerThinkStarted(
 		bool& isMoveTime0Clear,
 		const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
 		const Ply currentPly,
+		const Color us,
 		Rucksack* pRucksack		
 		);
 

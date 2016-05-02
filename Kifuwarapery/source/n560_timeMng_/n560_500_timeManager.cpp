@@ -185,13 +185,16 @@ void TimeManager::SetPvInstability_AtIterativeDeepeningStarted(
 
 
 
-template<Color US, Color THEM>
+
 void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	bool& isMoveTime0Clear,// false を入れてくれ☆（＾ｑ＾）
 	const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
 	const Ply currentPly,
+	const Color us,
 	Rucksack* pRucksack
 	) {
+
+	const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 
 	const int emergencyMoveHorizon = pRucksack->m_engineOptions["Emergency_Move_Horizon"];
 	const int nokositeokuTime      = pRucksack->m_engineOptions["Minimum_Thinking_Time"];	// 手番で、使わずに残しておく思考時間☆
@@ -199,8 +202,8 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	//this->ZeroclearTemeBonusTime();
 	this->ZeroclearSikoAsobiTime();
 	this->ZeroclearYosouOppoTurnTime();
-	this->SetYoteiMyTurnTime( limits.GetNokoriTime<US>());// 予定思考時間は、残り時間をそのまんま入れて初期化☆？（＾ｑ＾）？
-	this->SetSaidaiEnchoTime( limits.GetNokoriTime<US>());// 最大延長時間も☆？（＾ｑ＾）？
+	this->SetYoteiMyTurnTime( limits.GetNokoriTime(us));// 予定思考時間は、残り時間をそのまんま入れて初期化☆？（＾ｑ＾）？
+	this->SetSaidaiEnchoTime( limits.GetNokoriTime(us));// 最大延長時間も☆？（＾ｑ＾）？
 
 	//────────────────────────────────────────────────────────────────────────────────
 	// 消費時間シミュレーション
@@ -221,8 +224,8 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 
 		// 0秒で指し続けたとしたときの、自分の手番での持ち時間☆（＾ｑ＾）
 		int motiTime =
-			limits.GetNokoriTime<US>()
-			+ limits.GetIncrement<US>() * (iMovesToGo - 1)	// 今後追加されるインクリメントの累計☆
+			limits.GetNokoriTime(us)
+			+ limits.GetIncrement(us) * (iMovesToGo - 1)	// 今後追加されるインクリメントの累計☆
 			//- emergencyBaseTime	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
 			//- emergencyMoveTime	// 緊急時用に残しておこうというタイム（ミリ秒）か☆？
 			//+ std::min(iHypMtg, emergencyMoveHorizon) // 1～255 ミリ秒を加算してどうするのか☆？（＾ｑ＾）
@@ -252,7 +255,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 		this->SetYosouOppoTurnTime(this->GetYoteiMyTurnTime() / 4);
 
 		// 独自実装☆（＾▽＾）：相手の残り時間より　多めに設定している場合は、相手の残り時間の最大値に合わせるんだぜ☆（＾▽＾）
-		int opponentNokoriTime = limits.GetNokoriTime(THEM);
+		int opponentNokoriTime = limits.GetNokoriTime(them);
 		if (opponentNokoriTime < this->GetYosouOppoTurnTime()) {
 			this->SetYosouOppoTurnTime(opponentNokoriTime);
 		}
@@ -271,7 +274,7 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 
 	// 独自実装☆（＾▽＾）：自分の残り時間 - 4　（4という数字は適当。大会会場の通信遅延を４秒と想定）より　予定自分手番時間を　多めに設定している場合は、
 	// 予定自分手番時間を　自分の残り時間 - 4　に合わせるぜ☆　予想相手手番時間は　いじらないぜ☆（＾ｑ＾）
-	int myNokoriTime = limits.GetNokoriTime<US>();
+	int myNokoriTime = limits.GetNokoriTime(us);
 	if (myNokoriTime - 4 < this->GetYoteiMyTurnTime()) {
 		this->SetYoteiMyTurnTime(myNokoriTime - 4);
 	}
@@ -280,21 +283,21 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 	if (limits.GetMoveTime() != 0) {//（＾ｑ＾）いつも　０　な気がするぜ☆
 		// こんなとこ、実行されないんじゃないかだぜ☆？（＾ｑ＾）？
 		if (this->GetYoteiBothTurnTime() < limits.GetMoveTime()) {
-			this->SetYoteiMyTurnTime( std::min(limits.GetNokoriTime<US>(), limits.GetMoveTime()) - this->GetYosouOppoTurnTime() );
+			this->SetYoteiMyTurnTime( std::min(limits.GetNokoriTime(us), limits.GetMoveTime()) - this->GetYosouOppoTurnTime() );
 		}
 		if (this->GetSaidaiEnchoTime() < limits.GetMoveTime()) {
-			this->SetSaidaiEnchoTime( std::min(limits.GetNokoriTime<US>(), limits.GetMoveTime()) );
+			this->SetSaidaiEnchoTime( std::min(limits.GetNokoriTime(us), limits.GetMoveTime()) );
 		}
 		this->IncreaseYoteiMyTurnTime( limits.GetMoveTime());
 		this->IncreaseSaidaiEnchoTime( limits.GetMoveTime());
-		if (limits.GetNokoriTime<US>() != 0) {
+		if (limits.GetNokoriTime(us) != 0) {
 			isMoveTime0Clear = true;
 		}
 	}
 	//旧表示：optimum_search_time
 	//旧表示：maximum_search_time	
 	SYNCCOUT << "info string old limits move time " << limits.GetMoveTime() << SYNCENDL;
-	// SYNCCOUT << "info string limits inc time " << limits.GetIncrement<US>() << SYNCENDL; // 加算時間はちゃんと取得できていたぜ☆
+	// SYNCCOUT << "info string limits inc time " << limits.GetIncrement(us) << SYNCENDL; // 加算時間はちゃんと取得できていたぜ☆
 	SYNCCOUT << "info string tukatteii time " << this->GetTukatteiiTime()
 		<< " ( yotei my turn " << this->GetYoteiMyTurnTime()
 		<< " + yosou opponent turn " << this->GetYosouOppoTurnTime()
@@ -303,16 +306,3 @@ void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted(
 		<< ")" << SYNCENDL;
 	SYNCCOUT << "info string saidai encho " << this->GetSaidaiEnchoTime() << SYNCENDL;
 }
-template void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted<Color::Black, Color::White>(
-	bool& isMoveTime0Clear,// false を入れてくれ☆（＾ｑ＾）
-	const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
-	const Ply currentPly,
-	Rucksack* pRucksack
-	);
-template void TimeManager::InitializeTimeManager_OnHitchhikerThinkStarted<Color::White, Color::Black>(
-	bool& isMoveTime0Clear,// false を入れてくれ☆（＾ｑ＾）
-	const LimitsOfThinking& limits, // m_moveTimeを 0にする場合があるぜ☆（＾ｑ＾）
-	const Ply currentPly,
-	Rucksack* pRucksack
-	);
-

@@ -63,11 +63,6 @@ public:
 	}
 
 
-	template<Color US>
-	Bitboard Position::GetBbOf20(const PieceType pt) const
-	{
-		return this->GetBbOf10(pt) & this->GetBbOf10(US);
-	}
 	Bitboard GetBbOf20(const PieceType pt, const Color c) const;
 
 
@@ -177,10 +172,8 @@ public:
 		return m_kingSquare_[c];
 	}
 
-	template<Color US, Color THEM>
 	bool IsMoveGivesCheck(const Move m) const;
 
-	template<Color US, Color THEM>
 	bool IsMoveGivesCheck(const Move move, const CheckInfo& ci) const;
 
 	// attacks
@@ -205,8 +198,7 @@ public:
 
 	Bitboard GetAttackersTo_clr(const Color c, const Square sq, const Bitboard& occupied) const;
 
-	template<Color US,Color THEM>
-	Bitboard GetAttackersToExceptKing(const Square sq) const;
+	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
 
 	// todo: 利きをデータとして持ったとき、attackersToIsNot0() を高速化すること。
 	bool IsAttackersToIsNot0(const Color c, const Square sq) const;
@@ -252,7 +244,6 @@ public:
 
 	void UndoMove(const Move move);
 
-	template<Color US,Color THEM>
 	void DoNullMove(bool DO, StateInfo& backUpSt);
 
 	template<Color US,Color THEM>
@@ -338,7 +329,6 @@ private:
 
 	// 手番側の玉へ check している駒を全て探して checkersBB_ にセットする。
 	// 最後の手が何か覚えておけば、attackersTo() を使用しなくても良いはずで、処理が軽くなる。
-	template<Color US,Color THEM>
 	void FindCheckers();
 
 	ScoreIndex ComputeMaterial() const;

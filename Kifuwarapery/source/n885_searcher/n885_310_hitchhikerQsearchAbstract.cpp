@@ -127,13 +127,7 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 	{
 		assert(pos.IsOK());
 
-		givesCheck =
-			pos.GetTurn()==Color::Black
-			?
-			pos.IsMoveGivesCheck<Color::Black,Color::White>(move, ci)
-			:
-			pos.IsMoveGivesCheck<Color::White,Color::Black>(move, ci)
-			;
+		givesCheck = pos.IsMoveGivesCheck(move, ci);
 
 		// futility pruning
 		// 非PVノードのとき☆（＾ｑ＾）

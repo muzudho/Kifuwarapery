@@ -64,24 +64,13 @@ void Hitchhiker::Think(
 	Position& pos = captainsRucksack.m_rootPosition;
 
 	bool isMoveTime0Clear = false;
-
-	pos.GetTurn()==Color::Black
-		?
-		captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted<Color::Black,Color::White>(
-			isMoveTime0Clear,
-			captainsRucksack.m_limits,
-			pos.GetGamePly(),
-			&captainsRucksack
-		)
-		:
-		captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted<Color::White,Color::Black>(
-			isMoveTime0Clear,
-			captainsRucksack.m_limits,
-			pos.GetGamePly(),
-			&captainsRucksack
-			)
-		;
-
+	captainsRucksack.m_timeManager.InitializeTimeManager_OnHitchhikerThinkStarted(
+		isMoveTime0Clear,
+		captainsRucksack.m_limits,
+		pos.GetGamePly(),
+		pos.GetTurn(),
+		&captainsRucksack
+		);
 	if (isMoveTime0Clear) {
 		captainsRucksack.m_limits.ZeroClearMoveTime();
 	}

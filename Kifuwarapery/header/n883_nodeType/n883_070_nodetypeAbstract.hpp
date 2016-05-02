@@ -441,13 +441,7 @@ public:
 				reduction += OnePly;
 			}
 
-			pos.GetTurn()==Color::Black
-				?
-				pos.DoNullMove<Color::Black,Color::White>(true, st)
-				:
-				pos.DoNullMove<Color::White,Color::Black>(true, st)
-				;
-
+			pos.DoNullMove(true, st);
 			((*ppFlashlight) + 1)->m_staticEvalRaw = (*ppFlashlight)->m_staticEvalRaw; // 評価値の差分評価の為。
 			((*ppFlashlight) + 1)->m_skipNullMove = true;
 
@@ -465,13 +459,7 @@ public:
 			);
 
 			((*ppFlashlight) + 1)->m_skipNullMove = false;
-
-			pos.GetTurn() == Color::Black
-				?
-				pos.DoNullMove<Color::Black,Color::White>(false, st)
-				:
-				pos.DoNullMove<Color::White,Color::Black>(false, st)
-				;
+			pos.DoNullMove(false, st);
 
 			if (beta <= nullScore) {
 				if (ScoreMateInMaxPly <= nullScore) {
@@ -563,9 +551,9 @@ public:
 
 					pos.GetTurn()==Color::Black
 						?
-						pos.DoMove<Color::Black,Color::White>(move, st, ci, pos.IsMoveGivesCheck<Color::Black, Color::White>(move, ci))
+						pos.DoMove<Color::Black,Color::White>(move, st, ci, pos.IsMoveGivesCheck(move, ci))
 						:
-						pos.DoMove<Color::White,Color::Black>(move, st, ci, pos.IsMoveGivesCheck<Color::White, Color::Black>(move, ci))
+						pos.DoMove<Color::White,Color::Black>(move, st, ci, pos.IsMoveGivesCheck(move, ci))
 						;
 
 					((*ppFlashlight) + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
@@ -672,14 +660,7 @@ public:
 	{
 		extension = Depth0;
 		captureOrPawnPromotion = move.IsCaptureOrPawnPromotion();
-		givesCheck =
-			pos.GetTurn()==Color::Black
-			?
-			pos.IsMoveGivesCheck<Color::Black,Color::White>(move, ci)
-			:
-			pos.IsMoveGivesCheck<Color::White,Color::Black>(move, ci)
-			;
-
+		givesCheck = pos.IsMoveGivesCheck(move, ci);
 		dangerous = givesCheck; // todo: not implement
 	}
 
