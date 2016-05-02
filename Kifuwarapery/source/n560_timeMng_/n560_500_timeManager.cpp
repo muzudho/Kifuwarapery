@@ -23,13 +23,13 @@ namespace {
 
 //#elif 13
 
+	/* 序盤40秒も使いすぎ☆
 	const int g_MOVE_HORIZON = 125;	// 勘で☆（＾－＾）
 	const float g_MAX_RATIO = 20.0f; // 夢のある数字に☆（＾▽＾）
+	*/
 
-	/*
 	const int g_MOVE_HORIZON = 125;	// 勘で☆（＾－＾）
 	const float g_MAX_RATIO = 5.0f;
-	*/
 
 	/*
 	// 20秒ほどで丁度いいんだが、ずっと押し負ける☆ｗｗｗ（＾ｑ＾）
