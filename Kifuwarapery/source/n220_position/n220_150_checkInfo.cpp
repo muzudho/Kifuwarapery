@@ -17,6 +17,7 @@
 #include "../../header/n350_pieceTyp/n350_180_ptKing.hpp"
 #include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
 
+// コンストラクター☆（＾ｑ＾）
 CheckInfo::CheckInfo(const Position& position) {
 	const Color them = ConvColor::OPPOSITE_COLOR10b(position.GetTurn());
 	const Square ksq = position.GetKingSquare(them);

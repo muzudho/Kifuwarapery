@@ -144,7 +144,15 @@ NextmoveEvent::NextmoveEvent(
 			)		
 		) ? ttm : g_MOVE_NONE);
 
-	if (!m_ttMove_.IsNone() && (!m_ttMove_.IsCapture() || pos.GetSee(m_ttMove_) <= m_captureThreshold_)) {
+	if (!m_ttMove_.IsNone() && (!m_ttMove_.IsCapture() ||
+		(
+			pos.GetTurn() == Color::Black
+			?
+			pos.GetSee1<Color::Black,Color::White>(m_ttMove_)
+			:
+			pos.GetSee1<Color::White,Color::Black>(m_ttMove_)
+		)
+		<= m_captureThreshold_)) {
 		m_ttMove_ = g_MOVE_NONE;
 	}
 

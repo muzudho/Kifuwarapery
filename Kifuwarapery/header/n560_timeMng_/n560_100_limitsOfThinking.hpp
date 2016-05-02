@@ -48,6 +48,11 @@ public:
 	//────────────────────────────────────────────────────────────────────────────────
 	// フィッシャータイムの追加時間☆？ということにしておこう☆（＾ｑ＾）
 	int m_increment[g_COLOR_NUM] = { 0 };
+
+	template<Color US>
+	inline int GetIncrement() const {
+		return this->m_increment[US];
+	}
 	inline int GetIncrement(Color us) const {
 		return this->m_increment[us];
 	}
@@ -59,9 +64,15 @@ public:
 	// 元の名前：ｔｉｍｅ
 	// ミリ秒単位だぜ☆（＾ｑ＾）
 	int m_nokoriTime[g_COLOR_NUM] = { 0 };
+
+	template<Color US>
+	inline int GetNokoriTime()const {
+		return this->m_nokoriTime[US];
+	}
 	inline int GetNokoriTime(Color us)const {
 		return this->m_nokoriTime[us];
 	}
+
 	// btime, wtime コマンドをそのまま受け取るぜ☆（＾ｑ＾）
 	inline void SetNokoriTimeByStream(Color us, std::istringstream& ssCmd) {
 		ssCmd >> this->m_nokoriTime[us];

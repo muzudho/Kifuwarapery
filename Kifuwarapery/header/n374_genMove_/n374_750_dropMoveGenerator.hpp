@@ -88,7 +88,7 @@ public:
 				const Square pawnDropCheckSquare = ksq + tDeltaS;
 				assert(ConvSquare::ContainsOf(pawnDropCheckSquare));
 				if (g_setMaskBb.IsSet(&toBB, pawnDropCheckSquare) && pos.GetPiece(pawnDropCheckSquare) == N00_Empty) {
-					if (!pos.IsPawnDropCheckMate(US, pawnDropCheckSquare)) {
+					if (!pos.IsPawnDropCheckMate<US,THEM>(pawnDropCheckSquare)) {
 						// ここで clearBit だけして MakeMove しないことも出来る。
 						// 指し手が生成される順番が変わり、王手が先に生成されるが、後で問題にならないか?
 						(*pMovestack++).m_move = ConvMove::Convert30_MakeDropMove_da(g_PTPAWN_DA_AS_MOVE, pawnDropCheckSquare);

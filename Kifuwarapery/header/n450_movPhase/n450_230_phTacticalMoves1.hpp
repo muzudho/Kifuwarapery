@@ -21,7 +21,15 @@ public:
 		nmEvent.IncrementCurMove();
 
 		// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
-		if (pMoveStack->m_move != nmEvent.GetTranspositionTableMove() && nmEvent.GetCaptureThreshold() < nmEvent.GetPos().GetSee(pMoveStack->m_move)) {
+		if (pMoveStack->m_move != nmEvent.GetTranspositionTableMove() && nmEvent.GetCaptureThreshold() <
+			(
+				nmEvent.GetPos().GetTurn()==Color::Black
+				?
+				nmEvent.GetPos().GetSee1<Color::Black,Color::White>(pMoveStack->m_move)
+				:
+				nmEvent.GetPos().GetSee1<Color::White,Color::Black>(pMoveStack->m_move)
+			)			
+		) {
 			resultMove = pMoveStack->m_move;
 			return true;
 		}

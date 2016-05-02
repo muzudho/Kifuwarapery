@@ -74,7 +74,15 @@ public:
 			// todo: ＭｏｖｅＰｉｃｋｅｒ のオーダリングで SEE してるので、ここで SEE するの勿体無い。
 			if (futilityBase < beta
 				&& depth < Depth0
-				&& pos.GetSee(move, beta - futilityBase) <= ScoreZero)
+				&&
+				(
+					pos.GetTurn()==Color::Black
+					?
+					pos.GetSee1<Color::Black,Color::White>(move, beta - futilityBase)
+					:
+					pos.GetSee1<Color::White,Color::Black>(move, beta - futilityBase)
+					)
+				<= ScoreZero)
 			{
 				bestScore = std::max(bestScore, futilityBase);
 				isContinue = true;

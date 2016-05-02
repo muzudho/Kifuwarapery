@@ -275,7 +275,6 @@ public://private:
 				return true;
 			}
 
-			//const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 			// first で動いた後、sq へ当たりになっている遠隔駒
 			const PieceTypeEvent ptEventL(occ, THEM, m2to);
 			const PieceTypeEvent ptEventRB(occ, Color::Null, m2to);

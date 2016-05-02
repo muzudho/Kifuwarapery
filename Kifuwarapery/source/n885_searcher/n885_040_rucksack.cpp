@@ -155,28 +155,35 @@ void Rucksack::detectBishopInDanger(const Position& GetPos) {
 	}
 }
 #endif
-void Position::DoNullMove(bool DO, StateInfo& backUpSt) {
-	assert(!InCheck());
 
-	StateInfo* src = (DO ? m_st_ : &backUpSt);
-	StateInfo* dst = (DO ? &backUpSt : m_st_);
+template<Color US, Color THEM>
+void Position::DoNullMove(bool DO, StateInfo& backUpSt) {
+
+	assert(!this->InCheck());
+
+	StateInfo* src = (DO ? this->m_st_ : &backUpSt);
+	StateInfo* dst = (DO ? &backUpSt : this->m_st_);
 
 	dst->m_boardKey      = src->m_boardKey;
 	dst->m_handKey       = src->m_handKey;
 	dst->m_pliesFromNull = src->m_pliesFromNull;
-	dst->m_hand = GetHand(GetTurn());
-	m_turn_ = ConvColor::OPPOSITE_COLOR10b(GetTurn());
+	dst->m_hand = this->GetHand(US);
+
+	// ここで手番が入れ替わるぜ☆（＾ｑ＾）
+	this->m_turn_ = THEM;
 
 	if (DO) {
-		m_st_->m_boardKey ^= GetZobTurn();
-		prefetch(GetConstRucksack()->m_tt.FirstEntry(m_st_->GetKey()));
-		m_st_->m_pliesFromNull = 0;
-		m_st_->m_continuousCheck[GetTurn()] = 0;
+		this->m_st_->m_boardKey ^= this->GetZobTurn();
+		prefetch(this->GetConstRucksack()->m_tt.FirstEntry(this->m_st_->GetKey()));
+		this->m_st_->m_pliesFromNull = 0;
+		this->m_st_->m_continuousCheck[THEM] = 0; // 手番が入れ替わったあとだぜ☆（＾ｑ＾）
 	}
-	m_st_->m_hand = GetHand(GetTurn());
+	this->m_st_->m_hand = this->GetHand(THEM); // 手番が入れ替わったあとだぜ☆（＾ｑ＾）
 
 	assert(IsOK());
 }
+template void Position::DoNullMove<Color::Black,Color::White>(bool DO, StateInfo& backUpSt);
+template void Position::DoNullMove<Color::White, Color::Black>(bool DO, StateInfo& backUpSt);
 
 
 void RootMove::ExtractPvFromTT(Position& pos) {

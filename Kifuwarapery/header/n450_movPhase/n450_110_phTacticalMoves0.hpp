@@ -23,7 +23,15 @@ public:
 		if (pMoveStack->m_move != nmEvent.GetTranspositionTableMove()) {
 			assert(nmEvent.GetCaptureThreshold() <= 0);
 
-			if (nmEvent.GetCaptureThreshold() <= nmEvent.GetPos().GetSee(pMoveStack->m_move)) {
+			if (nmEvent.GetCaptureThreshold() <=
+				(
+					nmEvent.GetPos().GetTurn()==Color::Black
+					?
+					nmEvent.GetPos().GetSee1<Color::Black,Color::White>(pMoveStack->m_move)
+					:
+					nmEvent.GetPos().GetSee1<Color::White,Color::Black>(pMoveStack->m_move)
+				)
+			) {
 				resultMove = pMoveStack->m_move;
 				return true;
 			}

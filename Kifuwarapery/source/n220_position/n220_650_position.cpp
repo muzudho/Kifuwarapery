@@ -124,19 +124,17 @@ template bool Position::IsPseudoLegalMoveIsEvasion<Color::White, Color::Black>(c
 //                 これが true のとき、駒打ちの場合のみ Legal であることが確定する。
 template<Color US, Color THEM>
 bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) const {
-	const Color us = GetTurn();
-	const Color them = ConvColor::OPPOSITE_COLOR10b(us);
 	const Square to = move.To();
 
 	if (move.IsDrop()) {
 		const PieceType ptFrom = move.GetPieceTypeDropped();
-		if (!GetHand(us).Exists(ConvHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != N00_Empty) {
+		if (!this->GetHand<US>().Exists(ConvHandPiece::FromPieceType(ptFrom)) || GetPiece(to) != N00_Empty) {
 			return false;
 		}
 
-		if (InCheck()) {
+		if (this->InCheck()) {
 			// 王手されているので、合駒でなければならない。
-			Bitboard target = GetCheckersBB();
+			Bitboard target = this->GetCheckersBB();
 			const Square checksq = target.PopFirstOneFromI9();
 
 			if (target.Exists1Bit()) {
@@ -144,7 +142,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 				return false;
 			}
 
-			target = g_betweenBb.GetBetweenBB(checksq, GetKingSquare(us));
+			target = g_betweenBb.GetBetweenBB(checksq, this->GetKingSquare<US>());
 			if (!g_setMaskBb.IsSet(&target, to)) {
 				// 玉と、王手した駒との間に駒を打っていない。
 				return false;
@@ -152,12 +150,12 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 		}
 
 		if (ptFrom == N01_Pawn && checkPawnDrop) {
-			if ((this->GetBbOf20(N01_Pawn, us) & g_fileMaskBb.GetFileMask(ConvSquare::TO_FILE10(to))).Exists1Bit()) {
+			if ((this->GetBbOf20<US>(N01_Pawn) & g_fileMaskBb.GetFileMask(ConvSquare::TO_FILE10(to))).Exists1Bit()) {
 				// 二歩
 				return false;
 			}
-			const SquareDelta TDeltaN = (us == Black ? DeltaN : DeltaS);
-			if (to + TDeltaN == GetKingSquare(them) && IsPawnDropCheckMate(us, to)) {
+			const SquareDelta TDeltaN = (US == Black ? DeltaN : DeltaS);
+			if (to + TDeltaN == this->GetKingSquare(THEM) && this->IsPawnDropCheckMate<US,THEM>(to)) {
 				// 王手かつ打ち歩詰め
 				return false;
 			}
@@ -166,11 +164,11 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 	else {
 		const Square from = move.From();
 		const PieceType ptFrom = move.GetPieceTypeFrom();
-		if (GetPiece(from) != ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptFrom) || g_setMaskBb.IsSet(&this->GetBbOf10(us), to)) {
+		if (GetPiece(from) != ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptFrom) || g_setMaskBb.IsSet(&this->GetBbOf10<US>(), to)) {
 			return false;
 		}
 
-		if (!g_setMaskBb.IsSet( &UtilAttack::GetAttacksFrom(ptFrom, us, from, this->GetOccupiedBB()), to)) {
+		if (!g_setMaskBb.IsSet( &UtilAttack::GetAttacksFrom(ptFrom, US, from, this->GetOccupiedBB()), to)) {
 			return false;
 		}
 
@@ -178,7 +176,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 			if (ptFrom == N08_King) {
 				Bitboard occ = GetOccupiedBB();
 				g_setMaskBb.ClearBit(&occ, from);
-				if (IsAttackersToIsNot0(them, to, occ)) {
+				if (this->IsAttackersToIsNot0(THEM, to, occ)) {
 					// 王手から逃げていない。
 					return false;
 				}
@@ -193,7 +191,7 @@ bool Position::MoveIsPseudoLegal(const Move move, const bool checkPawnDrop) cons
 					return false;
 				}
 
-				target = g_betweenBb.GetBetweenBB(checksq, GetKingSquare(us)) | GetCheckersBB();
+				target = g_betweenBb.GetBetweenBB(checksq, this->GetKingSquare<US>()) | GetCheckersBB();
 				if (!g_setMaskBb.IsSet(&target, to)) {
 					// 玉と、王手した駒との間に移動するか、王手した駒を取る以外は駄目。
 					return false;
@@ -220,7 +218,7 @@ bool Position::MoveIsLegal(const Move GetMove) const {
 template<Color US, Color THEM>
 void Position::DoMove(const Move move, StateInfo& newSt) {
 	const CheckInfo ci(*this);
-	DoMove<US, THEM>(move, newSt, ci, IsMoveGivesCheck(move, ci));
+	DoMove<US, THEM>(move, newSt, ci, IsMoveGivesCheck<US,THEM>(move, ci));
 }
 template void Position::DoMove<Color::Black, Color::White>(const Move move, StateInfo& newSt);
 template void Position::DoMove<Color::White, Color::Black>(const Move move, StateInfo& newSt);
@@ -477,8 +475,8 @@ void Position::UndoMove(const Move move) {
 
 
 
-
-ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
+template<Color US, Color THEM>
+ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 	const Square to = move.To();
 	Square from;
 	PieceType ptCaptured;
@@ -486,24 +484,21 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	Bitboard attackers;
 	Bitboard opponentAttackers;
 
-	Color us = this->GetTurn();
-	Color them = ConvColor::OPPOSITE_COLOR10b(us);
-	
 
 	ScoreIndex swapList[32];
 	if (move.IsDrop()) {
-		opponentAttackers = this->GetAttackersTo_clr(them, to, occ);
+		opponentAttackers = this->GetAttackersTo_clr(THEM, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			return ScoreZero;
 		}
-		attackers = opponentAttackers | this->GetAttackersTo_clr(us, to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo_clr(US, to, occ);
 		swapList[0] = ScoreZero;
 		ptCaptured = move.GetPieceTypeDropped();
 	}
 	else {
 		from = move.From();
 		g_setMaskBb.XorBit(&occ, from);
-		opponentAttackers = this->GetAttackersTo_clr(them, to, occ);
+		opponentAttackers = this->GetAttackersTo_clr(THEM, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			if (move.IsPromotion()) {
 				const PieceType ptFrom = move.GetPieceTypeFrom();
@@ -511,7 +506,7 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 			}
 			return PieceScore::GetCapturePieceScore(move.GetCap());
 		}
-		attackers = opponentAttackers | this->GetAttackersTo_clr(us, to, occ);
+		attackers = opponentAttackers | this->GetAttackersTo_clr(US, to, occ);
 		swapList[0] = PieceScore::GetCapturePieceScore(move.GetCap());
 		ptCaptured = move.GetPieceTypeFrom();
 		if (move.IsPromotion()) {
@@ -523,7 +518,7 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 
 	// 相手の駒がぶつかっている所？の数だけ回っているのかだぜ☆？（＾ｑ＾）？
 	int slIndex = 1;
-	Color iCurrTurn = them; // ループ中にひっくり返るぜ☆（＾ｑ＾）
+	Color iCurrTurn = THEM; // ループ中にひっくり返るぜ☆（＾ｑ＾）
 	do {
 		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 
@@ -570,6 +565,9 @@ ScoreIndex Position::GetSee(const Move move, const int asymmThreshold) const {
 	}
 	return swapList[0];
 }
+template ScoreIndex Position::GetSee1<Color::Black, Color::White>(const Move move, const int asymmThreshold) const;
+template ScoreIndex Position::GetSee1<Color::White, Color::Black>(const Move move, const int asymmThreshold) const;
+
 
 ScoreIndex Position::GetSeeSign(const Move move) const {
 	if (move.IsCapture()) {
@@ -579,7 +577,13 @@ ScoreIndex Position::GetSeeSign(const Move move) const {
 			return static_cast<ScoreIndex>(1);
 		}
 	}
-	return GetSee(move);
+	return
+		this->GetTurn()
+		?
+		GetSee1<Color::Black,Color::White>(move)
+		:
+		GetSee1<Color::White,Color::Black>(move)
+		;
 }
 
 namespace {
@@ -612,32 +616,19 @@ namespace {
 	template bool G_CanKingEscape<Color::Black, Color::White>(const Position& pos, const Square sq, const Bitboard& bb);
 	template bool G_CanKingEscape<Color::White, Color::Black>(const Position& pos, const Square sq, const Bitboard& bb);
 
-	bool G_CanKingEscape(const Position& pos, const Color us, const Square sq, const Bitboard& bb) {
-		const Color them = ConvColor::OPPOSITE_COLOR10b(us);
-		const Square ksq = pos.GetKingSquare(them);
-		Bitboard kingMoveBB = bb.NotThisAnd(pos.GetBbOf10(them).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
-		g_setMaskBb.ClearBit(&kingMoveBB, sq); // sq には行けないので、クリアする。xorBit(sq)ではダメ。
-
-		if (kingMoveBB.Exists1Bit()) {
-			Bitboard tempOccupied = pos.GetOccupiedBB();
-			g_setMaskBb.AddBit(&tempOccupied, sq);
-			g_setMaskBb.ClearBit(&tempOccupied, ksq);
-			do {
-				const Square to = kingMoveBB.PopFirstOneFromI9();
-				// 玉の移動先に、us 側の利きが無ければ、true
-				if (!pos.IsAttackersToIsNot0(us, to, tempOccupied)) {
-					return true;
-				}
-			} while (kingMoveBB.Exists1Bit());
-		}
-		// 玉の移動先が無い。
-		return false;
-	}
 
 	// them(相手) 側の玉以外の駒が sq にある us 側の駒を取れるか。
 	bool canPieceCapture(const Position& pos, const Color them, const Square sq, const Bitboard& dcBB) {
 		// 玉以外で打った駒を取れる相手側の駒の Bitboard
-		Bitboard fromBB = pos.GetAttackersToExceptKing(them, sq);
+		Bitboard fromBB =
+			them ==Color::Black// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
+			?
+			pos.GetAttackersToExceptKing<Color::White,Color::Black>// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
+			(sq)
+			:
+			pos.GetAttackersToExceptKing<Color::Black,Color::White>// 相手のターンから見るぜ☆（＾ｑ＾）白黒反転すること☆
+			(sq)
+			;
 
 		if (fromBB.Exists1Bit()) {
 			const Square ksq = pos.GetKingSquare(them);
@@ -655,7 +646,15 @@ namespace {
 
 	// pos.discoveredCheckBB<false>() を遅延評価するバージョン。
 	bool canPieceCapture(const Position& pos, const Color them, const Square sq) {
-		Bitboard fromBB = pos.GetAttackersToExceptKing(them, sq);
+		Bitboard fromBB =
+			them == Color::Black // 相手のターンを見るぜ☆
+			?
+			pos.GetAttackersToExceptKing<Color::White, Color::Black>// 相手のターンを見るぜ☆
+			(sq)
+			:
+			pos.GetAttackersToExceptKing<Color::Black, Color::White>// 相手のターンを見るぜ☆
+			(sq)
+			;
 
 		if (fromBB.Exists1Bit()) {
 			const Square ksq = pos.GetKingSquare(them);
@@ -688,14 +687,14 @@ bool Position::NoPawns(const Color us, const File toFile) const
 // us が sq へ歩を打ったとき、them の玉が詰むか。
 // us が sq へ歩を打つのは王手であると仮定する。
 // 打ち歩詰めのとき、true を返す。
-bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
-	const Color them = ConvColor::OPPOSITE_COLOR10b(us);
+template<Color US, Color THEM>
+bool Position::IsPawnDropCheckMate(const Square sq) const {
 	// 玉以外の駒で、打たれた歩が取れるなら、打ち歩詰めではない。
-	if (canPieceCapture(*this, them, sq)) {
+	if (canPieceCapture(*this, THEM, sq)) {
 		return false;
 	}
 	// todo: ここで玉の位置を求めるのは、上位で求めたものと2重になるので無駄。後で整理すること。
-	const Square ksq = this->GetKingSquare(them);
+	const Square ksq = this->GetKingSquare(THEM);
 
 	// 玉以外で打った歩を取れないとき、玉が歩を取るか、玉が逃げるか。
 
@@ -703,13 +702,13 @@ bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 	// ここでは歩の Bitboard は更新する必要がない。
 	// color の Bitboard も更新する必要がない。(相手玉が動くとき、こちらの打った歩で玉を取ることは無い為。)
 	const Bitboard tempOccupied = this->GetOccupiedBB() | g_setMaskBb.GetSetMaskBb(sq);
-	Bitboard kingMoveBB = this->GetBbOf10(them).NotThisAnd(g_kingAttackBb.GetControllBb(ksq));
+	Bitboard kingMoveBB = this->GetBbOf10<THEM>().NotThisAnd(g_kingAttackBb.GetControllBb(ksq));
 
 	// 少なくとも歩を取る方向には玉が動けるはずなので、do while を使用。
 	assert(kingMoveBB.Exists1Bit());
 	do {
 		const Square to = kingMoveBB.PopFirstOneFromI9();
-		if (!IsAttackersToIsNot0(us, to, tempOccupied)) {
+		if (!IsAttackersToIsNot0(US, to, tempOccupied)) {
 			// 相手玉の移動先に自駒の利きがないなら、打ち歩詰めではない。
 			return false;
 		}
@@ -717,6 +716,9 @@ bool Position::IsPawnDropCheckMate(const Color us, const Square sq) const {
 
 	return true;
 }
+template bool Position::IsPawnDropCheckMate<Color::Black, Color::White>(const Square sq) const;
+template bool Position::IsPawnDropCheckMate<Color::White, Color::Black>(const Square sq) const;
+
 
 inline void Position::XorBBs(const PieceType pt, const Square sq, const Color c) {
 	g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[N00_Occupied], sq);
@@ -2022,8 +2024,8 @@ void Position::Set(const std::string& sfen, Military* th) {
 			goto INCORRECT;
 		}
 	}
-	this->m_kingSquare_[Black] = this->GetBbOf20(N08_King, Black).GetFirstOneFromI9();
-	this->m_kingSquare_[White] = this->GetBbOf20(N08_King, White).GetFirstOneFromI9();
+	this->m_kingSquare_[Black] = this->GetBbOf20<Color::Black>(N08_King).GetFirstOneFromI9();
+	this->m_kingSquare_[White] = this->GetBbOf20<Color::White>(N08_King).GetFirstOneFromI9();
 	this->m_goldsBB_ = this->GetBbOf(N07_Gold, N09_ProPawn, N10_ProLance, N11_ProKnight, N12_ProSilver);
 
 	// 手番
@@ -2069,7 +2071,14 @@ void Position::Set(const std::string& sfen, Military* th) {
 	this->m_st_->m_hand = this->GetHand(this->GetTurn());
 
 	this->SetEvalList();
-	this->FindCheckers();
+	
+	this->GetTurn()==Color::Black
+		?
+		this->FindCheckers<Color::Black,Color::White>()
+		:
+		this->FindCheckers<Color::White,Color::Black>()
+		;
+
 	this->m_st_->m_material = this->ComputeMaterial();
 	this->m_thisThread_ = th;
 
@@ -2185,11 +2194,16 @@ ScoreIndex Position::GetMaterialDiff() const
 	return this->m_st_->m_material - this->m_st_->m_previous->m_material;
 }
 
+template<Color US, Color THEM>
 bool Position::IsMoveGivesCheck(const Move move) const {
-	return this->IsMoveGivesCheck(move, CheckInfo(*this));
+	return this->IsMoveGivesCheck<US,THEM>(move, CheckInfo(*this));
 }
+template bool Position::IsMoveGivesCheck<Color::Black,Color::White>(const Move move) const;
+template bool Position::IsMoveGivesCheck<Color::White, Color::Black>(const Move move) const;
+
 
 // move が王手なら true
+template<Color US, Color THEM>
 bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 	assert(IsOK());
 	assert(ci.m_dcBB == this->DiscoveredCheckBB());
@@ -2213,13 +2227,17 @@ bool Position::IsMoveGivesCheck(const Move move, const CheckInfo& ci) const {
 		}
 
 		// Discovery Check ?
-		if (this->IsDiscoveredCheck(from, to, this->GetKingSquare(ConvColor::OPPOSITE_COLOR10b(GetTurn())), ci.m_dcBB)) {
+		if (this->IsDiscoveredCheck(from, to, this->GetKingSquare<THEM>(), ci.m_dcBB)) {
 			return true;
 		}
 	}
 
 	return false;
 }
+template bool Position::IsMoveGivesCheck<Color::Black, Color::White>(const Move move, const CheckInfo& ci) const;
+template bool Position::IsMoveGivesCheck<Color::White, Color::Black>(const Move move, const CheckInfo& ci) const;
+
+
 
 void Position::Clear() {
 	memset(this, 0, sizeof(Position));
@@ -2293,9 +2311,9 @@ Bitboard Position::GetAttackersTo_clr(const Color turn1, const Square sq, const 
 }
 
 // 玉以外で sq へ移動可能な c 側の駒の Bitboard を返す。
-Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) const {
-	const Color opposite = ConvColor::OPPOSITE_COLOR10b(c);
-	const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), opposite, sq);
+template<Color US, Color THEM>
+Bitboard Position::GetAttackersToExceptKing(const Square sq) const {
+	const PieceTypeEvent ptEvent1(this->GetOccupiedBB(), THEM, sq);
 	return ((PiecetypePrograms::m_PAWN.GetAttacks2From(ptEvent1) & this->GetBbOf10(N01_Pawn))
 		| (PiecetypePrograms::m_LANCE.GetAttacks2From(ptEvent1) & this->GetBbOf10(N02_Lance))
 		| (PiecetypePrograms::m_KNIGHT.GetAttacks2From(ptEvent1) & this->GetBbOf10(N03_Knight))
@@ -2303,8 +2321,11 @@ Bitboard Position::GetAttackersToExceptKing(const Color c, const Square sq) cons
 		| (PiecetypePrograms::m_GOLD.GetAttacks2From(ptEvent1) & (GetGoldsBB() | this->GetBbOf10(N13_Horse)))
 		| (PiecetypePrograms::m_BISHOP.GetAttacks2From(ptEvent1) & this->GetBbOf20(N05_Bishop, N13_Horse))
 		| (PiecetypePrograms::m_ROOK.GetAttacks2From(ptEvent1) & this->GetBbOf20(N06_Rook, N14_Dragon)))
-		& this->GetBbOf10(c);
+		& this->GetBbOf10<US>();
 }
+template Bitboard Position::GetAttackersToExceptKing<Color::Black,Color::White>(const Square sq) const;
+template Bitboard Position::GetAttackersToExceptKing<Color::White,Color::Black>(const Square sq) const;
+
 
 bool Position::IsAttackersToIsNot0(const Color c, const Square sq) const
 {
@@ -2321,10 +2342,16 @@ bool Position::IsUnDropCheckIsSupported(const Color c, const Square sq) const
 	return this->GetAttackersTo_clr(c, sq, this->GetOccupiedBB()).Exists1Bit();
 }
 
+template<Color US, Color THEM>
 void Position::FindCheckers()
 {
-	m_st_->m_checkersBB = GetAttackersToExceptKing(ConvColor::OPPOSITE_COLOR10b(GetTurn()), GetKingSquare(GetTurn()));
+	this->m_st_->m_checkersBB =
+		this->GetAttackersToExceptKing<THEM,US>//相手のターンから見るぜ☆（＾ｑ＾）
+		(GetKingSquare(US));
 }
+template void Position::FindCheckers<Color::Black,Color::White>();
+template void Position::FindCheckers<Color::White, Color::Black>();
+
 
 ScoreIndex Position::ComputeMaterial() const {
 	ScoreIndex s = ScoreZero;

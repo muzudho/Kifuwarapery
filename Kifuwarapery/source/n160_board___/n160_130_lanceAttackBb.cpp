@@ -33,7 +33,7 @@ void LanceAttackBb::Initialize()
 
 void LanceAttackBb::InitCheckTableLance() {
 	for (Color c = Black; c < g_COLOR_NUM; ++c) {
-		const Color opp = ConvColor::OPPOSITE_COLOR10b(c);
+		const Color opp = ConvColor::OPPOSITE_COLOR10b(c);//色はループで交互になるぜ☆（＾ｑ＾）
 		for (Square sq = I9; sq < SquareNum; ++sq) {
 			this->m_lanceCheckTable_[c][sq] = this->GetControllBbToEdge(opp, sq);
 

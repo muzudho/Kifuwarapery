@@ -63,6 +63,11 @@ public:
 	}
 
 
+	template<Color US>
+	Bitboard Position::GetBbOf20(const PieceType pt) const
+	{
+		return this->GetBbOf10(pt) & this->GetBbOf10(US);
+	}
 	Bitboard GetBbOf20(const PieceType pt, const Color c) const;
 
 
@@ -134,7 +139,8 @@ public:
 	// toFile と同じ筋に us の歩がないなら true
 	bool NoPawns(const Color us, const File toFile) const;
 
-	bool IsPawnDropCheckMate(const Color us, const Square sq) const;
+	template<Color US,Color THEM>
+	bool IsPawnDropCheckMate(const Square sq) const;
 
 	// Pinされているfromの駒がtoに移動出来なければtrueを返す。
 	template <bool IsKnight = false>
@@ -171,8 +177,10 @@ public:
 		return m_kingSquare_[c];
 	}
 
+	template<Color US, Color THEM>
 	bool IsMoveGivesCheck(const Move m) const;
 
+	template<Color US, Color THEM>
 	bool IsMoveGivesCheck(const Move move, const CheckInfo& ci) const;
 
 	// attacks
@@ -197,7 +205,8 @@ public:
 
 	Bitboard GetAttackersTo_clr(const Color c, const Square sq, const Bitboard& occupied) const;
 
-	Bitboard GetAttackersToExceptKing(const Color c, const Square sq) const;
+	template<Color US,Color THEM>
+	Bitboard GetAttackersToExceptKing(const Square sq) const;
 
 	// todo: 利きをデータとして持ったとき、attackersToIsNot0() を高速化すること。
 	bool IsAttackersToIsNot0(const Color c, const Square sq) const;
@@ -243,9 +252,11 @@ public:
 
 	void UndoMove(const Move move);
 
+	template<Color US,Color THEM>
 	void DoNullMove(bool DO, StateInfo& backUpSt);
 
-	ScoreIndex GetSee(const Move move, const int asymmThreshold = 0) const;
+	template<Color US,Color THEM>
+	ScoreIndex GetSee1(const Move move, const int asymmThreshold = 0) const;
 
 	ScoreIndex GetSeeSign(const Move move) const;
 
@@ -327,6 +338,7 @@ private:
 
 	// 手番側の玉へ check している駒を全て探して checkersBB_ にセットする。
 	// 最後の手が何か覚えておけば、attackersTo() を使用しなくても良いはずで、処理が軽くなる。
+	template<Color US,Color THEM>
 	void FindCheckers();
 
 	ScoreIndex ComputeMaterial() const;
