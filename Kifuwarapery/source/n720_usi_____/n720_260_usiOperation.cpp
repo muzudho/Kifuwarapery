@@ -1,7 +1,7 @@
 ﻿#include <map>
 #include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
-#include "../../header/n165_movStack/n165_600_convMove.hpp"
+#include "../../header/n165_movStack/n165_420_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 
 #include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"

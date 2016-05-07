@@ -5,7 +5,7 @@
 #include "../n165_movStack/n165_300_moveType.hpp"
 #include "../n165_movStack/n165_310_promoteMode.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_660_utilMovePos.hpp"
 #include "../n220_position/n220_650_position.hpp"
 

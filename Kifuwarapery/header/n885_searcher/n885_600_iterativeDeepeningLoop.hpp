@@ -5,7 +5,7 @@
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMove01.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 #include "n885_040_rucksack.hpp"
@@ -139,7 +139,7 @@ public:
 					bestScore = g_NODETYPE_PROGRAMS[NodeType::N00_Root]->GoToTheAdventure_new(rucksack, pos, flashlight + 1, alpha, beta, static_cast<Depth>(depth * OnePly), false);
 
 					// 先頭が最善手になるようにソート
-					UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
+					UtilMove01::InsertionSort(rucksack.m_rootMoves.begin() + rucksack.m_pvIdx, rucksack.m_rootMoves.end());
 
 					for (size_t i = 0; i <= rucksack.m_pvIdx; ++i) {
 						flashlight->m_staticEvalRaw.m_p[0][0] = (flashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
@@ -198,7 +198,7 @@ public:
 					assert(-ScoreInfinite <= alpha && beta <= ScoreInfinite);
 				}
 
-				UtilMoveStack::InsertionSort(rucksack.m_rootMoves.begin(), rucksack.m_rootMoves.begin() + rucksack.m_pvIdx + 1);
+				UtilMove01::InsertionSort(rucksack.m_rootMoves.begin(), rucksack.m_rootMoves.begin() + rucksack.m_pvIdx + 1);
 
 				if (
 					(

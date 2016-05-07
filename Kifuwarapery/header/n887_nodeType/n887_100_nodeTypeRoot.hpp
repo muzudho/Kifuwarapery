@@ -3,7 +3,7 @@
 
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMove01.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
@@ -239,7 +239,7 @@ public:
 			ttMove = (
 				(*ppTtEntry) != nullptr
 				?
-				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos)
+				UtilMove01::Move16toMove((*ppTtEntry)->GetMove(), pos)
 				:
 				g_MOVE_NONE
 				);

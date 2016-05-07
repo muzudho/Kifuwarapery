@@ -423,9 +423,6 @@
     <ClInclude Include="header\n220_position\n220_640_utilAttack.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n165_movStack\n165_500_moveStack.hpp">
-      <Filter>header\n165_movStack</Filter>
-    </ClInclude>
     <ClInclude Include="header\n165_movStack\n165_400_move.hpp">
       <Filter>header\n165_movStack</Filter>
     </ClInclude>
@@ -440,9 +437,6 @@
     </ClInclude>
     <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp">
       <Filter>header\n225_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n220_position\n220_665_utilMoveStack.hpp">
-      <Filter>header\n220_position</Filter>
     </ClInclude>
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp">
       <Filter>header\n720_usi_____</Filter>
@@ -915,9 +909,6 @@
     <ClInclude Include="header\n885_searcher\n885_580_skill.hpp">
       <Filter>header\n885_searcher</Filter>
     </ClInclude>
-    <ClInclude Include="header\n165_movStack\n165_600_convMove.hpp">
-      <Filter>header\n165_movStack</Filter>
-    </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_105_convPieceType.hpp">
       <Filter>header\n113_piece___</Filter>
     </ClInclude>
@@ -1028,6 +1019,18 @@
     </ClInclude>
     <ClInclude Include="header\n800_stpWatch\n800_100_stopwatch.hpp">
       <Filter>header\n800_stpWatch</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n165_movStack\n165_420_convMove.hpp">
+      <Filter>header\n165_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n220_position\n220_665_utilMove01.hpp">
+      <Filter>header\n220_position</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_025_utilMoveStack.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n350_pieceTyp\n350_020_moveStack.hpp">
+      <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1565,9 +1568,6 @@
     <ClCompile Include="source\n885_searcher\n885_580_skill.cpp">
       <Filter>source\n885_searcher</Filter>
     </ClCompile>
-    <ClCompile Include="source\n165_movStack\n165_600_utilMove.cpp">
-      <Filter>source\n165_movStack</Filter>
-    </ClCompile>
     <ClCompile Include="source\n165_movStack\n165_400_move.cpp">
       <Filter>source\n165_movStack</Filter>
     </ClCompile>
@@ -1645,6 +1645,9 @@
     </ClCompile>
     <ClCompile Include="source\n800_stpWatch\n800_100_stopwatch.cpp">
       <Filter>source\n800_stpWatch</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n165_movStack\n165_420_convMove.cpp">
+      <Filter>source\n165_movStack</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

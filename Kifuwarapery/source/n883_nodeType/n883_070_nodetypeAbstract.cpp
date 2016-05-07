@@ -9,7 +9,7 @@
 #include "../../header/n220_position/n220_100_repetitionType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_665_utilMoveStack.hpp"
+#include "../../header/n220_position/n220_665_utilMove01.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 
 #include "../../header/n223_move____/n223_040_nodeType.hpp"

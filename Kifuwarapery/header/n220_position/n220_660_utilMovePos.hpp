@@ -5,7 +5,7 @@
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_155_convPiece.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
 
 

@@ -14,7 +14,7 @@
 #include "../../header/n220_position/n220_100_repetitionType.hpp"
 #include "../../header/n220_position/n220_640_utilAttack.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_665_utilMoveStack.hpp"
+#include "../../header/n220_position/n220_665_utilMove01.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
@@ -209,9 +209,9 @@ void RootMove::ExtractPvFromTT(Position& pos) {
 		(
 			pos.GetTurn() == Color::Black
 			?
-			pos.MoveIsPseudoLegal<Color::Black,Color::White>(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
+			pos.MoveIsPseudoLegal<Color::Black,Color::White>(m = UtilMove01::Move16toMove(tte->GetMove(), pos))
 			:
-			pos.MoveIsPseudoLegal<Color::White,Color::Black>(m = UtilMoveStack::Move16toMove(tte->GetMove(), pos))
+			pos.MoveIsPseudoLegal<Color::White,Color::Black>(m = UtilMove01::Move16toMove(tte->GetMove(), pos))
 		)				
 		   &&
 				(
@@ -240,7 +240,7 @@ void RootMove::InsertPvInTT(Position& pos) {
 		tte = pos.GetConstRucksack()->m_tt.Probe(pos.GetKey());
 
 		if (tte == nullptr
-			|| UtilMoveStack::Move16toMove(tte->GetMove(), pos) != m_pv_[ply])
+			|| UtilMove01::Move16toMove(tte->GetMove(), pos) != m_pv_[ply])
 		{
 			pos.GetRucksack()->m_tt.Store(pos.GetKey(), ScoreNone, BoundNone, DepthNone, m_pv_[ply], ScoreNone);
 		}

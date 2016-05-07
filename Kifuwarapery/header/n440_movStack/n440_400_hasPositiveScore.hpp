@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "../n165_movStack/n165_500_moveStack.hpp"
+#include "../n350_pieceTyp/n350_020_moveStack.hpp"
 
 
 struct HasPositiveScore {

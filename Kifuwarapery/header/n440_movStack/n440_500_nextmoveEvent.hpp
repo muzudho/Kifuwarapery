@@ -5,12 +5,12 @@
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 #include "../n225_movPhase/n225_050_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
+#include "../n350_pieceTyp/n350_020_moveStack.hpp"
 
 
 using History = Stats<false>;

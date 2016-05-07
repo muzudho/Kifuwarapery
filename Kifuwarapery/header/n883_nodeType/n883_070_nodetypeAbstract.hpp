@@ -11,7 +11,7 @@
 #include "../n220_position/n220_100_repetitionType.hpp"
 #include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMove01.hpp"
 #include "../n220_position/n220_670_makePromoteMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
 

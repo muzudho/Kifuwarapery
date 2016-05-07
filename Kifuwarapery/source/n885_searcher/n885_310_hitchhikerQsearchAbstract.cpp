@@ -1,6 +1,6 @@
 ﻿#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n220_position/n220_665_utilMoveStack.hpp"
+#include "../../header/n220_position/n220_665_utilMove01.hpp"
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
@@ -54,7 +54,7 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 
 	posKey = pos.GetKey();
 	pTtEntry = rucksack.m_tt.Probe(posKey);
-	ttMove = (pTtEntry != nullptr ? UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) : g_MOVE_NONE);
+	ttMove = (pTtEntry != nullptr ? UtilMove01::Move16toMove(pTtEntry->GetMove(), pos) : g_MOVE_NONE);
 	ttScore = (pTtEntry != nullptr ? rucksack.ConvertScoreFromTT(pTtEntry->GetScore(), pFlashlight->m_ply) : ScoreNone);
 
 	if (pTtEntry != nullptr

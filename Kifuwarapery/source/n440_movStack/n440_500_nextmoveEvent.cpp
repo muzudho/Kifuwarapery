@@ -1,11 +1,11 @@
 ﻿#include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
-#include "../../header/n165_movStack/n165_500_moveStack.hpp"
-#include "../../header/n165_movStack/n165_600_convMove.hpp"
+#include "../../header/n165_movStack/n165_420_convMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
 
+#include "../../header/n350_pieceTyp/n350_020_moveStack.hpp"
 #include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"

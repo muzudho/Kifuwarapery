@@ -9,9 +9,9 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_230_setMaskBB.hpp"
 #include "../n160_board___/n160_600_bitboardAll.hpp"
-#include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
+#include "../n350_pieceTyp/n350_020_moveStack.hpp"
 #include "n358_070_dropMakerAbstract.hpp"
 
 

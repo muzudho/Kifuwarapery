@@ -2,7 +2,7 @@
 
 
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_500_moveStack.hpp"
+#include "../n350_pieceTyp/n350_020_moveStack.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
 
 

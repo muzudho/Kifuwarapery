@@ -5,13 +5,12 @@
 #include "../n112_pieceTyp/n112_050_pieceType.hpp"
 #include "../n113_piece___/n113_105_convPieceType.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "../n220_position/n220_660_utilMovePos.hpp"
 
 
-class UtilMoveStack {
+class UtilMove01 {
 public:
 
 	// 汎用的な insertion sort. 要素数が少ない時、高速にソートできる。
@@ -36,14 +35,6 @@ public:
 				}
 			}
 		}
-	}
-
-	// 最も score の高い moveStack のポインタを返す。
-	// MoveStack の数が多いとかなり時間がかかるので、
-	// 駒打ちを含むときに使用してはならない。
-	static inline MoveStack* PickBest(MoveStack* currMove, MoveStack* lastMove) {
-		std::swap(*currMove, *std::max_element(currMove, lastMove));
-		return currMove;
 	}
 
 	static inline Move Move16toMove(const Move move, const Position& pos) {

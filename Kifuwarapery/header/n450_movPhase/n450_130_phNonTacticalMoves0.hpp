@@ -3,8 +3,8 @@
 
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_500_moveStack.hpp"
-#include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMove01.hpp"
+#include "../n350_pieceTyp/n350_020_moveStack.hpp"
 #include "../n407_moveGen_/n407_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_400_hasPositiveScore.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
@@ -44,7 +44,7 @@ public:
 		nmEvent.SetLastMove(std::partition(nmEvent.GetCurrMove(), nmEvent.GetLastNonCapture(), HasPositiveScore()));
 
 		// 要素数は10個くらいまでであることが多い。要素数が少ないので、insertionSort() を使用する。
-		UtilMoveStack::InsertionSort<MoveStack*, true>(nmEvent.GetCurrMove(), nmEvent.GetLastMove());
+		UtilMove01::InsertionSort<MoveStack*, true>(nmEvent.GetCurrMove(), nmEvent.GetLastMove());
 	}
 
 };

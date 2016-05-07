@@ -4,7 +4,7 @@
 #include "../n119_score___/n119_050_bound.hpp"
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
-#include "../n165_movStack/n165_600_convMove.hpp"
+#include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n223_move____/n223_200_depth.hpp"
 
 

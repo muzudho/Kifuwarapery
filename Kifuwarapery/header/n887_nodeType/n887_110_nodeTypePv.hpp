@@ -2,7 +2,7 @@
 
 
 #include "../n220_position/n220_650_position.hpp"
-#include "../n220_position/n220_665_utilMoveStack.hpp"
+#include "../n220_position/n220_665_utilMove01.hpp"
 #include "../n223_move____/n223_040_nodeType.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
@@ -66,7 +66,7 @@ public:
 		)const override
 	{
 		ttMove = pTtEntry != nullptr ?
-			UtilMoveStack::Move16toMove(pTtEntry->GetMove(), pos) :
+			UtilMove01::Move16toMove(pTtEntry->GetMove(), pos) :
 			g_MOVE_NONE;
 	}
 
@@ -179,7 +179,7 @@ public:
 
 			(*ppTtEntry) = rucksack.m_tt.Probe(posKey);
 			ttMove = ((*ppTtEntry) != nullptr ?
-				UtilMoveStack::Move16toMove((*ppTtEntry)->GetMove(), pos) :
+				UtilMove01::Move16toMove((*ppTtEntry)->GetMove(), pos) :
 				g_MOVE_NONE);
 		}
 	}
