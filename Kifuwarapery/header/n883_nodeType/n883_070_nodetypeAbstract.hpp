@@ -35,7 +35,7 @@
 #include "../n680_egOption/n680_300_engineOptionSetup.hpp"
 #include "../n760_thread__/n760_400_herosPub.hpp"
 
-#include "../n800_learn___/n800_100_stopwatch.hpp"
+#include "../n800_stpWatch/n800_100_stopwatch.hpp"
 #include "../n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
 #include "../n885_searcher/n885_040_rucksack.hpp"//FIXME:

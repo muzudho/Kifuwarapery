@@ -18,7 +18,7 @@
 #include "../n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n760_thread__/n760_400_herosPub.hpp"
-#include "../n800_learn___/n800_100_stopwatch.hpp"
+#include "../n800_stpWatch/n800_100_stopwatch.hpp"
 //#include "../n885_searcher/n885_600_iterativeDeepeningLoop.hpp"
 #include "n885_040_rucksack.hpp"	// FIXME:
 

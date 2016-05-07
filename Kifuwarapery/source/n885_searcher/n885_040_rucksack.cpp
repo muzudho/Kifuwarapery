@@ -3,7 +3,7 @@
 #include "../../header/n160_board___/n160_106_inFrontMaskBb.hpp"
 #include "../../header/n160_board___/n160_220_queenAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
-#include "../../header/n800_learn___/n800_100_stopwatch.hpp"
+#include "../../header/n800_stpWatch/n800_100_stopwatch.hpp"
 #include "../../header/n886_repeType/n886_100_rtNot.hpp"
 #include "../../header/n886_repeType/n886_110_rtDraw.hpp"
 #include "../../header/n886_repeType/n886_120_rtWin.hpp"

@@ -28,7 +28,7 @@
 #include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 
-#include "../../header/n800_learn___/n800_100_stopwatch.hpp"
+#include "../../header/n800_stpWatch/n800_100_stopwatch.hpp"
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
