@@ -1,11 +1,11 @@
 #pragma once
 
 
-#include "../n105_color___/n105_100_color.hpp"
-#include "../n112_pieceTyp/n112_050_pieceType.hpp"
-#include "../n113_piece___/n113_500_hand.hpp"
-#include "../n220_position/n220_650_position.hpp"
-#include "../n160_board___/n160_100_bitboard.hpp"
+#include "../../n105_color___/n105_100_color.hpp"
+#include "../../n112_pieceTyp/n112_050_pieceType.hpp"
+#include "../../n113_piece___/n113_500_hand.hpp"
+#include "../../n220_position/n220_650_position.hpp"
+#include "../../n160_board___/n160_100_bitboard.hpp"
 
 
 class DropMakerEvent {

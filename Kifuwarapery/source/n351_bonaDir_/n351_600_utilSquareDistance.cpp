@@ -4,8 +4,8 @@
 #include "../../header/n160_board___/n160_180_knightAttackBb.hpp"
 #include "../../header/n160_board___/n160_230_setMaskBb.hpp"
 #include "../../header/n161_sqDistan/n161_500_squareDistance.hpp"
-#include "../../header/n163_sqDistan/n163_600_utilSquareDistance.hpp"
 #include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
+#include "../../header/n351_bonaDir_/n351_600_utilSquareDistance.hpp"
 
 
 

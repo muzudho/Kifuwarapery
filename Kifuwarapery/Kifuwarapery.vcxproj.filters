@@ -136,20 +136,8 @@
     <Filter Include="source\n450_movPhase">
       <UniqueIdentifier>{70e0543a-956c-42a4-b7d8-b2da092e80aa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="source\n358_dropMake">
-      <UniqueIdentifier>{8a8036d6-ed46-4688-a199-1f54332cf5b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n358_dropMake">
-      <UniqueIdentifier>{4e94f1d8-6fd4-49f3-8e71-bdfb94a9eb03}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n080_common__">
       <UniqueIdentifier>{e0e1793b-1bf4-4e1d-b0bb-65e02c416b83}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n163_sqDistan">
-      <UniqueIdentifier>{d1f85262-f929-426e-ab77-ec43f8760a0b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n163_sqDistan">
-      <UniqueIdentifier>{dad1da8d-2da1-4b6f-8acd-5b2bb4b08143}</UniqueIdentifier>
     </Filter>
     <Filter Include="header\n162_bonaDir_">
       <UniqueIdentifier>{dafff2af-9957-43f5-a516-2b88aeac65ff}</UniqueIdentifier>
@@ -183,12 +171,6 @@
     </Filter>
     <Filter Include="source\n887_nodeType">
       <UniqueIdentifier>{151492f8-26d1-4d9b-ba6d-4cec723db3e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n374_genMove_">
-      <UniqueIdentifier>{a249484b-fd82-4fde-8283-32c301522d21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n374_genMove_">
-      <UniqueIdentifier>{af043c7c-3557-4655-9b9e-62012adf618d}</UniqueIdentifier>
     </Filter>
     <Filter Include="header\n372_piece___">
       <UniqueIdentifier>{d6120d15-fee6-4234-a3c8-0f12e9801996}</UniqueIdentifier>
@@ -246,6 +228,18 @@
     </Filter>
     <Filter Include="source\n300_moveGen_\n300_200_pieceTyp">
       <UniqueIdentifier>{75f980ee-7b7e-4c76-a09a-d4dd0895ed8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_300_dropMake">
+      <UniqueIdentifier>{d8589b53-86a6-4676-b468-dbe9447c2617}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_300_dropMake">
+      <UniqueIdentifier>{2ad9739b-16d5-49a8-bfef-1c9f6cdcf223}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_400_genMove_">
+      <UniqueIdentifier>{91868338-1ef7-4a53-bc3d-ef0486be8032}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_400_genMove_">
+      <UniqueIdentifier>{cdf20248-6fcd-4acf-9141-92fb6cb755db}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -582,38 +576,8 @@
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
       <Filter>header\n440_movStack</Filter>
     </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_070_dropMakerAbstract.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_100_dropMakerHand0.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_110_dropMakerHand1.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_120_dropMakerHand2.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_130_dropMakerHand3.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_140_dropMakerHand4.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_150_dropMakerHand5.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_160_dropMakerHand6.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_500_dropMakerArray.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
     <ClInclude Include="header\n162_bonaDir_\n162_070_bonaDirAbstract.hpp">
       <Filter>header\n162_bonaDir_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n163_sqDistan\n163_600_utilSquareDistance.hpp">
-      <Filter>header\n163_sqDistan</Filter>
     </ClInclude>
     <ClInclude Include="header\n161_sqDistan\n161_500_squareDistance.hpp">
       <Filter>header\n161_sqDistan</Filter>
@@ -638,15 +602,6 @@
     </ClInclude>
     <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
       <Filter>header\n351_bonaDir_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_750_dropMoveGenerator.hpp">
-      <Filter>header\n374_genMove_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_350_PieceMovesGenerator.hpp">
-      <Filter>header\n374_genMove_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_250_bishopRookMovesGenerator.hpp">
-      <Filter>header\n374_genMove_</Filter>
     </ClInclude>
     <ClInclude Include="header\n372_piece___\n372_070_pieceAbstract.hpp">
       <Filter>header\n372_piece___</Filter>
@@ -815,12 +770,6 @@
     </ClInclude>
     <ClInclude Include="header\n886_repeType\n886_500_rtArray.hpp">
       <Filter>header\n886_repeType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n358_dropMake\n358_040_dropMakerEvent.hpp">
-      <Filter>header\n358_dropMake</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n374_genMove_\n374_040_pieceMoveEvent.hpp">
-      <Filter>header\n374_genMove_</Filter>
     </ClInclude>
     <ClInclude Include="header\n440_movStack\n440_500_nextmoveEvent.hpp">
       <Filter>header\n440_movStack</Filter>
@@ -1034,6 +983,51 @@
     </ClInclude>
     <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_500_ptPrograms.hpp">
       <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n351_bonaDir_\n351_600_utilSquareDistance.hpp">
+      <Filter>header\n351_bonaDir_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_040_dropMakerEvent.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_070_dropMakerAbstract.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_100_dropMakerHand0.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_110_dropMakerHand1.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_120_dropMakerHand2.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_130_dropMakerHand3.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_140_dropMakerHand4.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_150_dropMakerHand5.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_160_dropMakerHand6.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_300_dropMake\n300_300_500_dropMakerArray.hpp">
+      <Filter>header\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_400_genMove_\n300_400_040_pieceMoveEvent.hpp">
+      <Filter>header\n300_moveGen_\n300_400_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_400_genMove_\n300_400_250_bishopRookMovesGenerator.hpp">
+      <Filter>header\n300_moveGen_\n300_400_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_400_genMove_\n300_400_350_PieceMovesGenerator.hpp">
+      <Filter>header\n300_moveGen_\n300_400_genMove_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_400_genMove_\n300_400_750_dropMoveGenerator.hpp">
+      <Filter>header\n300_moveGen_\n300_400_genMove_</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1265,38 +1259,8 @@
     <ClCompile Include="source\n450_movPhase\n450_500_movePhaseArray.cpp">
       <Filter>source\n450_movPhase</Filter>
     </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_070_dropMakerAbstract.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_100_dropMakerHand0.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_110_dropMakerHand1.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_120_dropMakerHand2.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_130_dropMakerHand3.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_140_dropMakerHand4.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_150_dropMakerHand5.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_160_dropMakerHand6.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n358_dropMake\n358_500_dropMakerArray.cpp">
-      <Filter>source\n358_dropMake</Filter>
-    </ClCompile>
     <ClCompile Include="source\n162_bonaDir_\n162_070_bonaDirAbstract.cpp">
       <Filter>source\n162_bonaDir_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n163_sqDistan\n163_600_utilSquareDistance.cpp">
-      <Filter>source\n163_sqDistan</Filter>
     </ClCompile>
     <ClCompile Include="source\n161_sqDistan\n161_500_squareDistance.cpp">
       <Filter>source\n161_sqDistan</Filter>
@@ -1321,9 +1285,6 @@
     </ClCompile>
     <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
       <Filter>source\n351_bonaDir_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n374_genMove_\n374_750_dropMoveGenerator.cpp">
-      <Filter>source\n374_genMove_</Filter>
     </ClCompile>
     <ClCompile Include="source\n372_piece___\n372_070_pieceAbstract.cpp">
       <Filter>source\n372_piece___</Filter>
@@ -1651,6 +1612,39 @@
     </ClCompile>
     <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_500_ptPrograms.cpp">
       <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n351_bonaDir_\n351_600_utilSquareDistance.cpp">
+      <Filter>source\n351_bonaDir_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_070_dropMakerAbstract.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_100_dropMakerHand0.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_110_dropMakerHand1.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_120_dropMakerHand2.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_130_dropMakerHand3.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_140_dropMakerHand4.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_150_dropMakerHand5.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_160_dropMakerHand6.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_300_dropMake\n300_300_500_dropMakerArray.cpp">
+      <Filter>source\n300_moveGen_\n300_300_dropMake</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_400_genMove_\n300_400_750_dropMoveGenerator.cpp">
+      <Filter>source\n300_moveGen_\n300_400_genMove_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

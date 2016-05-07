@@ -16,10 +16,8 @@
 #include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 #include "../n300_moveGen_/n300_200_pieceTyp/n300_200_040_ptEvent.hpp"
 #include "../n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
-#include "../n372_piece___/n372_070_pieceAbstract.hpp"
-#include "../n372_piece___/n372_500_pieceArray.hpp"
-#include "n374_040_pieceMoveEvent.hpp"
-#include "n374_250_bishopRookMovesGenerator.hpp"
+#include "n300_400_040_pieceMoveEvent.hpp"
+#include "n300_400_250_bishopRookMovesGenerator.hpp"
 
 
 class PieceMovesGenerator {
