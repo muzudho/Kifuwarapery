@@ -1,7 +1,7 @@
 ﻿#include "../../header/n080_common__/n080_100_common.hpp"
 #include "../../header/n165_movStack/n165_300_moveType.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
-#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
+#include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n640_searcher/n640_450_rootMove.hpp"
 #include "../../header/n760_thread__/n760_250_military.hpp"

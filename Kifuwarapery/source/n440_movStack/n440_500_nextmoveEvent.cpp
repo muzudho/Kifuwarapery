@@ -7,7 +7,7 @@
 
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
-#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
+#include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 
 #include "../../header/n450_movPhase/n450_100_mainSearch.hpp"

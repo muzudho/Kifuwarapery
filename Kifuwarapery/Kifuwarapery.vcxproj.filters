@@ -172,24 +172,6 @@
     <Filter Include="source\n887_nodeType">
       <UniqueIdentifier>{151492f8-26d1-4d9b-ba6d-4cec723db3e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n372_piece___">
-      <UniqueIdentifier>{d6120d15-fee6-4234-a3c8-0f12e9801996}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n372_piece___">
-      <UniqueIdentifier>{9b060656-b5ee-4dba-9036-f39b11ae405a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n407_moveGen_">
-      <UniqueIdentifier>{4e412930-2798-4962-89c3-20c8baa070cc}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n407_moveGen_">
-      <UniqueIdentifier>{db8ab5fc-94c5-48ef-88cf-748df4d57058}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n405_moveType">
-      <UniqueIdentifier>{69a42c4a-b2c6-4f2e-b638-ea3b7b6a08b4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n405_moveType">
-      <UniqueIdentifier>{6b73a060-0dc8-4622-95af-f377693e23bd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="header\n886_repeType">
       <UniqueIdentifier>{c0af112f-b935-48a8-9f32-0169f82cbc7f}</UniqueIdentifier>
     </Filter>
@@ -240,6 +222,24 @@
     </Filter>
     <Filter Include="source\n300_moveGen_\n300_400_genMove_">
       <UniqueIdentifier>{cdf20248-6fcd-4acf-9141-92fb6cb755db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_500_piece___">
+      <UniqueIdentifier>{26031b76-acf3-472e-8e8c-76809f8deea9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_500_piece___">
+      <UniqueIdentifier>{7084d4ec-e0fb-42a1-bc59-2915bc5de70c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_600_moveType">
+      <UniqueIdentifier>{7012d5dd-c8ab-48d9-a243-addd25842e26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_600_moveType">
+      <UniqueIdentifier>{0871cbf0-edff-409c-964e-71940b2bd5e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_700_moveGen_">
+      <UniqueIdentifier>{6d767767-487b-4ab9-9b4f-03d719973f75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_700_moveGen_">
+      <UniqueIdentifier>{e5656d50-711c-446c-bb5d-d196dbc25a64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -603,150 +603,6 @@
     <ClInclude Include="header\n351_bonaDir_\n351_500_bonaDirArray.hpp">
       <Filter>header\n351_bonaDir_</Filter>
     </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_070_pieceAbstract.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_080_pieceNull.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_100_pieceEmpty.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_110_pieceBPawn.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_120_pieceBLance.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_130_pieceBKnight.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_140_pieceBSilver.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_150_pieceBBishop.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_160_pieceBRook.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_170_pieceBGold.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_180_pieceBKing.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_190_pieceBProPawn.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_200_pieceBProLance.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_210_pieceBProKnight.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_220_pieceBProSilver.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_230_pieceBHorse.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_240_pieceBDragon.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_270_pieceWPawn.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_280_pieceWLance.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_290_pieceWKnight.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_300_pieceWSilver.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_310_pieceWBishop.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_320_pieceWRook.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_330_pieceWGold.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_340_pieceWKing.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_350_pieceWProPawn.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_360_pieceWProLance.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_370_pieceWProKnight.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_380_pieceWProSilver.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_390_pieceWHorse.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_400_pieceWDragon.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_410_pieceNone.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n372_piece___\n372_500_pieceArray.hpp">
-      <Filter>header\n372_piece___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n407_moveGen_\n407_800_moveGenerator200.hpp">
-      <Filter>header\n407_moveGen_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n407_moveGen_\n407_900_moveList.hpp">
-      <Filter>header\n407_moveGen_</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_070_mtAbstract.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_100_mtCapture.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_110_mtNonCapture.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_120_mtDrop.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_130_mtCapturePlusPro.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_140_mtNonCaptureMinusPro.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_150_mtRecapture.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_160_mtEvasion.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_170_mtNonEvasion.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_180_mtLegal.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_190_mtLegalAll.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_200_mtMoveTypeNone.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n405_moveType\n405_500_mtArray.hpp">
-      <Filter>header\n405_moveType</Filter>
-    </ClInclude>
     <ClInclude Include="header\n886_repeType\n886_070_rtAbstract.hpp">
       <Filter>header\n886_repeType</Filter>
     </ClInclude>
@@ -1029,6 +885,150 @@
     <ClInclude Include="header\n300_moveGen_\n300_400_genMove_\n300_400_750_dropMoveGenerator.hpp">
       <Filter>header\n300_moveGen_\n300_400_genMove_</Filter>
     </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_070_pieceAbstract.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_080_pieceNull.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_100_pieceEmpty.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_110_pieceBPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_120_pieceBLance.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_130_pieceBKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_140_pieceBSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_150_pieceBBishop.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_160_pieceBRook.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_170_pieceBGold.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_180_pieceBKing.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_190_pieceBProPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_200_pieceBProLance.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_210_pieceBProKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_220_pieceBProSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_230_pieceBHorse.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_240_pieceBDragon.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_270_pieceWPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_280_pieceWLance.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_290_pieceWKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_300_pieceWSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_310_pieceWBishop.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_320_pieceWRook.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_330_pieceWGold.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_340_pieceWKing.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_350_pieceWProPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_360_pieceWProLance.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_370_pieceWProKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_380_pieceWProSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_390_pieceWHorse.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_400_pieceWDragon.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_410_pieceNone.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_500_piece___\n300_500_500_pieceArray.hpp">
+      <Filter>header\n300_moveGen_\n300_500_piece___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_070_mtAbstract.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_100_mtCapture.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_110_mtNonCapture.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_120_mtDrop.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_130_mtCapturePlusPro.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_140_mtNonCaptureMinusPro.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_150_mtRecapture.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_160_mtEvasion.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_170_mtNonEvasion.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_180_mtLegal.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_190_mtLegalAll.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_200_mtMoveTypeNone.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_600_moveType\n300_600_500_mtArray.hpp">
+      <Filter>header\n300_moveGen_\n300_600_moveType</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_700_moveGen_\n300_700_800_moveGenerator200.hpp">
+      <Filter>header\n300_moveGen_\n300_700_moveGen_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_700_moveGen_\n300_700_900_moveList.hpp">
+      <Filter>header\n300_moveGen_\n300_700_moveGen_</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1286,150 +1286,6 @@
     <ClCompile Include="source\n351_bonaDir_\n351_500_bonaDirArray.cpp">
       <Filter>source\n351_bonaDir_</Filter>
     </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_070_pieceAbstract.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_080_pieceNull.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_100_pieceEmpty.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_110_pieceBPawn.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_120_pieceBLance.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_130_pieceBKnight.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_140_pieceBSilver.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_150_pieceBBishop.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_160_pieceBRook.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_170_pieceBGold.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_180_pieceBKing.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_190_pieceBProPawn.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_200_pieceBProLance.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_210_pieceBProKnight.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_220_pieceBProSilver.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_230_pieceBHorse.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_240_pieceBDragon.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_270_pieceWPawn.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_280_pieceWLance.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_290_pieceWKnight.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_300_pieceWSilver.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_310_pieceWBishop.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_320_pieceWRook.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_330_pieceWGold.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_340_pieceWKing.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_350_pieceWProPawn.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_360_pieceWProLance.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_370_pieceWProKnight.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_380_pieceWProSilver.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_390_pieceWHorse.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_400_pieceWDragon.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_410_pieceNone.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n372_piece___\n372_500_pieceArray.cpp">
-      <Filter>source\n372_piece___</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n407_moveGen_\n407_900_moveList.cpp">
-      <Filter>source\n407_moveGen_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n407_moveGen_\n407_800_moveGenerator200.cpp">
-      <Filter>source\n407_moveGen_</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_070_mtAbstract.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_100_mtCapture.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_110_mtNonCapture.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_120_mtDrop.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_130_mtCapturePlusPro.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_140_mtNonCaptureMinusPro.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_150_mtRecapture.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_160_mtEvasion.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_170_mtNonEvasion.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_180_mtLegal.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_190_mtLegalAll.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_200_mtMoveTypeNone.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n405_moveType\n405_500_mtArray.cpp">
-      <Filter>source\n405_moveType</Filter>
-    </ClCompile>
     <ClCompile Include="source\n205_repeType\n886_070_rtAbstract.cpp">
       <Filter>source\n886_repeType</Filter>
     </ClCompile>
@@ -1645,6 +1501,150 @@
     </ClCompile>
     <ClCompile Include="source\n300_moveGen_\n300_400_genMove_\n300_400_750_dropMoveGenerator.cpp">
       <Filter>source\n300_moveGen_\n300_400_genMove_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_070_pieceAbstract.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_080_pieceNull.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_100_pieceEmpty.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_110_pieceBPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_120_pieceBLance.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_130_pieceBKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_140_pieceBSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_150_pieceBBishop.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_160_pieceBRook.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_170_pieceBGold.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_180_pieceBKing.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_190_pieceBProPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_200_pieceBProLance.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_210_pieceBProKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_220_pieceBProSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_230_pieceBHorse.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_240_pieceBDragon.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_270_pieceWPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_280_pieceWLance.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_290_pieceWKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_300_pieceWSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_310_pieceWBishop.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_320_pieceWRook.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_330_pieceWGold.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_340_pieceWKing.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_350_pieceWProPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_360_pieceWProLance.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_370_pieceWProKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_380_pieceWProSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_390_pieceWHorse.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_400_pieceWDragon.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_410_pieceNone.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_500_piece___\n300_500_500_pieceArray.cpp">
+      <Filter>source\n300_moveGen_\n300_500_piece___</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_070_mtAbstract.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_100_mtCapture.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_110_mtNonCapture.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_120_mtDrop.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_130_mtCapturePlusPro.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_140_mtNonCaptureMinusPro.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_150_mtRecapture.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_160_mtEvasion.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_170_mtNonEvasion.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_180_mtLegal.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_190_mtLegalAll.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_200_mtMoveTypeNone.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_600_moveType\n300_600_500_mtArray.cpp">
+      <Filter>source\n300_moveGen_\n300_600_moveType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_700_moveGen_\n300_700_800_moveGenerator200.cpp">
+      <Filter>source\n300_moveGen_\n300_700_moveGen_</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_700_moveGen_\n300_700_900_moveList.cpp">
+      <Filter>source\n300_moveGen_\n300_700_moveGen_</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

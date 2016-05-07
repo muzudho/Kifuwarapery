@@ -1,12 +1,12 @@
 ﻿#pragma once
 
 
-#include "../n105_color___/n105_100_color.hpp"
-#include "../n110_square__/n110_100_square.hpp"
-#include "../n112_pieceTyp/n112_050_pieceType.hpp"
-#include "../n160_board___/n160_100_bitboard.hpp"
-#include "../n165_movStack/n165_300_moveType.hpp"
-#include "../n220_position/n220_650_position.hpp"
+#include "../../n105_color___/n105_100_color.hpp"
+#include "../../n110_square__/n110_100_square.hpp"
+#include "../../n112_pieceTyp/n112_050_pieceType.hpp"
+#include "../../n160_board___/n160_100_bitboard.hpp"
+#include "../../n165_movStack/n165_300_moveType.hpp"
+#include "../../n220_position/n220_650_position.hpp"
 
 
 class PieceMoveEvent {

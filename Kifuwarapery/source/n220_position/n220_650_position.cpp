@@ -29,8 +29,8 @@
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_230_ptHorse.hpp"
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_240_ptDragon.hpp"
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
+#include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
-#include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
