@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "../n080_common__/n080_090_syncCout.hpp"
 #include "../n520_evaluate/n520_400_KkKkpKppStorageBase.hpp"
 #include "../n520_evaluate/n520_490_KppCacheIo.hpp"
 

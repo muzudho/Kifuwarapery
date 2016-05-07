@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <thread>	//std::thread
+#include "../n080_common__/n080_085_mutex.hpp"	//Mutex
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"

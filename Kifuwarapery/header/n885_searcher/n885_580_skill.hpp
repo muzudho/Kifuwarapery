@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 
+#include "../../header/n080_common__/n080_090_syncCout.hpp"
 #include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"

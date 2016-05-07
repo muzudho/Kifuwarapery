@@ -10,7 +10,7 @@
 
 class Main01 {
 public:
-	std::unique_ptr<Rucksack> searcher;
+	std::unique_ptr<Rucksack> m_rucksack;
 
 public:
 	Main01();

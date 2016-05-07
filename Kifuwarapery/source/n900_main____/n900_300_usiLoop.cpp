@@ -15,52 +15,10 @@
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
 #include "../../header/n800_learn___/n800_500_learner.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
+#include "..\..\header/n900_main____\n900_200_usiItem.hpp"
 #include "..\..\header\n900_main____\n900_300_usiLoop.hpp"
 
 
-#if !defined MINIMUL
-// for debug
-// 指し手生成の速度を計測
-void measureGenerateMoves(const Position& pos) {
-	pos.Print();
-
-	MoveStack legalMoves[Move::m_MAX_LEGAL_MOVES];
-	for (int i = 0; i < Move::m_MAX_LEGAL_MOVES; ++i)
-	{
-		legalMoves[i].m_move = g_MOVE_NONE;
-	}
-	MoveStack* pms = &legalMoves[0];
-	const u64 num = 5000000;
-	Stopwatch t = Stopwatch::CreateStopwatchByCurrentTime();
-	if (pos.InCheck()) {
-		for (u64 i = 0; i < num; ++i) {
-			pms = &legalMoves[0];
-			pms = g_moveGenerator200.GenerateMoves_2(N06_Evasion,pms, pos);
-		}
-	}
-	else {
-		for (u64 i = 0; i < num; ++i) {
-			pms = &legalMoves[0];
-			pms = g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro,pms, pos);
-			pms = g_moveGenerator200.GenerateMoves_2(N04_NonCaptureMinusPro,pms, pos);
-			pms = g_moveGenerator200.GenerateMoves_2(N02_Drop,pms, pos);
-			//			pms = generateMoves<PseudoLegal>(pms, pos);
-			//			pms = generateMoves<Legal>(pms, pos);
-		}
-	}
-	const int elapsed = t.GetElapsed();
-	std::cout << "elapsed = " << elapsed << " [msec]" << std::endl;
-	if (elapsed != 0) {
-		std::cout << "times/s = " << num * 1000 / elapsed << " [times/sec]" << std::endl;
-	}
-	const ptrdiff_t count = pms - &legalMoves[0];
-	std::cout << "num of moves = " << count << std::endl;
-	for (int i = 0; i < count; ++i) {
-		std::cout << legalMoves[i].m_move.ToCSA() << ", ";
-	}
-	std::cout << std::endl;
-}
-#endif
 
 #ifdef NDEBUG
 const std::string MyName = "Kifuwarapery(Apery_Twig_SDT3)";
@@ -73,11 +31,15 @@ UsiLoop::UsiLoop()
 {
 }
 
-void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
+void UsiLoop::Mainloop(
+	int			argc,		// argv配列の要素数
+	char*		argv[],		// トークンが入っている
+	Rucksack&	rucksack
+	)
 {
-	Position pos(g_DefaultStartPositionSFEN, searcher.m_ownerHerosPub.GetFirstCaptain(), &searcher);
+	Position pos(g_DefaultStartPositionSFEN, rucksack.m_ownerHerosPub.GetFirstCaptain(), &rucksack);
 
-	std::string cmd;
+	std::string cmdStr;
 	std::string token;
 
 #if defined MPI_LEARN
@@ -89,20 +51,23 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 	}
 #endif
 
+	// コマンドライン引数を、スペース区切りでつなげるぜ☆（＾ｑ＾）
 	for (int i = 1; i < argc; ++i)
 	{
-		cmd += std::string(argv[i]) + " ";
+		cmdStr += std::string(argv[i]) + " ";
 	}
 
 	do {
-		if (argc == 1)
+		if (argc == 1) // コマンドライン引数が１個のときは
 		{
-			std::getline(std::cin, cmd);
+			std::getline(std::cin, cmdStr);
 		}
 
-		std::istringstream ssCmd(cmd);
+		// 文字列ストリームに１回変えて☆
+		std::istringstream issCmd(cmdStr);
 
-		ssCmd >> std::skipws >> token;
+		// 空白を読み飛ばしている☆？
+		issCmd >> std::skipws >> token;
 
 		UsiOperation usiOperation;
 
@@ -113,21 +78,21 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 			token == "gameover"
 		) {
 			if (token != "ponderhit" ||
-				searcher.m_signals.m_stopOnPonderHit
+				rucksack.m_signals.m_stopOnPonderHit
 			) {
-				searcher.m_signals.m_stop = true;
-				searcher.m_ownerHerosPub.GetFirstCaptain()->NotifyOne();
+				rucksack.m_signals.m_stop = true;
+				rucksack.m_ownerHerosPub.GetFirstCaptain()->NotifyOne();
 			}
 			else {
-				searcher.m_limits.m_ponder = false;
+				rucksack.m_limits.m_ponder = false;
 			}
 
-			if (token == "ponderhit" && searcher.m_limits.GetMoveTime() != 0) {
-				searcher.m_limits.IncreaseMoveTime( searcher.m_stopwatch.GetElapsed());
+			if (token == "ponderhit" && rucksack.m_limits.GetMoveTime() != 0) {
+				rucksack.m_limits.IncreaseMoveTime( rucksack.m_stopwatch.GetElapsed());
 			}
 		}
 		else if (token == "usinewgame") {
-			searcher.m_tt.Clear();
+			rucksack.m_tt.Clear();
 #if defined INANIWA_SHIFT
 			inaniwaFlag = NotInaniwa;
 #endif
@@ -142,20 +107,20 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 		else if (token == "usi") {
 			SYNCCOUT << "id name " << MyName
 				<< "\nid author (Derivation)Takahashi Satoshi (Base)Hiraoka Takuya"
-				<< "\n" << searcher.m_engineOptions
+				<< "\n" << rucksack.m_engineOptions
 				<< "\nusiok" << SYNCENDL;
 		}
 		else if (token == "go") {
-			usiOperation.Go(pos, ssCmd);
+			usiOperation.Go(pos, issCmd);
 		}
 		else if (token == "isready") {
 			SYNCCOUT << "readyok" << SYNCENDL;
 		}
 		else if (token == "position") {
-			usiOperation.SetPosition(pos, ssCmd);
+			usiOperation.SetPosition(pos, issCmd);
 		}
 		else if (token == "setoption") {
-			searcher.SetOption(ssCmd);
+			rucksack.SetOption(issCmd);
 		}
 #if defined LEARN
 		else if (token == "l") {
@@ -163,7 +128,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 #if defined MPI_LEARN
 			learner->learn(GetPos, env, world);
 #else
-			learner->learn(GetPos, ssCmd);
+			learner->learn(GetPos, issCmd);
 #endif
 		}
 #endif
@@ -171,7 +136,7 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 		// 以下、デバッグ用
 		else if (token == "bench") { Benchmark(pos); }
 		else if (token == "d") { pos.Print(); }
-		else if (token == "s") { measureGenerateMoves(pos); }
+		else if (token == "s") { UsiItem::MeasureGenerateMoves(pos); }
 		else if (token == "t") { std::cout <<
 			(
 				pos.GetTurn()==Color::Black
@@ -181,21 +146,21 @@ void UsiLoop::Mainloop(int argc, char* argv[], Rucksack& searcher)
 				pos.GetMateMoveIn1Ply<Color::White,Color::Black>().ToCSA()
 			)			
 			<< std::endl; }
-		else if (token == "b") { MakeBook(pos, ssCmd); }
+		else if (token == "b") { MakeBook(pos, issCmd); }
 #endif
-		else { SYNCCOUT << "unknown command: " << cmd << SYNCENDL; }
+		else { SYNCCOUT << "unknown command: " << cmdStr << SYNCENDL; }
 	} while (token != "quit" && argc == 1);
 
 	//────────────────────────────────────────────────────────────────────────────────
 
 	// 評価値ファイルを書き出す指定なら
-	if (searcher.m_engineOptions["Write_Synthesized_Eval"])
+	if (rucksack.m_engineOptions["Write_Synthesized_Eval"])
 	{
 		// シンセサイズド評価を書き出します。
-		KkKkpKppStorage1::WriteSynthesized(searcher.m_engineOptions["Eval_Dir"]);
+		KkKkpKppStorage1::WriteSynthesized(rucksack.m_engineOptions["Eval_Dir"]);
 	}
 
 	//────────────────────────────────────────────────────────────────────────────────
 
-	searcher.m_ownerHerosPub.WaitForThinkFinished();
+	rucksack.m_ownerHerosPub.WaitForThinkFinished();
 }

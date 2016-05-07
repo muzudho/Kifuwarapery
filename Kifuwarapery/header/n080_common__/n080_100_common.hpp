@@ -162,26 +162,6 @@ inline std::string putb(const T value, const int msb = sizeof(T)*8 - 1, const in
 	return str;
 }
 
-//────────────────────────────────────────────────────────────────────────────────
-// 同期入出力
-//────────────────────────────────────────────────────────────────────────────────
-enum SyncCout {
-	IOLock,
-	IOUnlock
-};
-std::ostream& operator << (std::ostream& os, SyncCout sc);
-#define SYNCCOUT std::cout << IOLock
-#define SYNCENDL std::endl << IOUnlock
-
-#if defined LEARN
-#undef SYNCCOUT
-#undef SYNCENDL
-class Eraser {};
-extern Eraser SYNCCOUT;
-extern Eraser SYNCENDL;
-template <typename T> Eraser& operator << (Eraser& temp, const T&) { return temp; }
-#endif
-
 // N 回ループを展開させる。t は lambda で書くと良い。
 // こんな感じに書くと、lambda がテンプレート引数の数値の分だけ繰り返し生成される。
 // Unroller<5>()([&](const int i){std::cout << i << std::endl;});
@@ -265,18 +245,8 @@ extern std::mt19937_64 g_randomTimeSeed;
 #undef WIN32_LEAN_AND_MEAN
 #undef NOMINMAX
 
-struct Mutex {
-	Mutex() { InitializeCriticalSection(&cs); }
-	~Mutex() { DeleteCriticalSection(&cs); }
-	void lock() { EnterCriticalSection(&cs); }
-	void unlock() { LeaveCriticalSection(&cs); }
-
-private:
-	CRITICAL_SECTION cs;
-};
 using ConditionVariable = std::condition_variable_any;
 #else
-using Mutex = std::mutex;
 using ConditionVariable = std::condition_variable;
 #endif
 

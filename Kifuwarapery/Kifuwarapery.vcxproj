@@ -152,6 +152,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="header\n080_common__\n080_085_mutex.hpp" />
+    <ClInclude Include="header\n080_common__\n080_090_syncCout.hpp" />
     <ClInclude Include="header\n080_common__\n080_200_utilProgram.hpp" />
     <ClInclude Include="header\n105_color___\n105_100_color.hpp" />
     <ClInclude Include="header\n105_color___\n105_500_convColor.hpp" />
@@ -406,12 +408,14 @@
     <ClInclude Include="header\n887_nodeType\n887_140_nodetypeSplitedNodePv.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_500_nodetypePrograms.hpp" />
+    <ClInclude Include="header\n900_main____\n900_200_usiItem.hpp" />
     <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
     <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\n080_common__\n080_090_syncCout.cpp" />
     <ClCompile Include="source\n080_common__\n080_100_common.cpp" />
     <ClCompile Include="source\n080_common__\n080_200_utilProgram.cpp" />
     <ClCompile Include="source\n110_square\n110_150_file.cpp" />
@@ -611,6 +615,7 @@
     <ClCompile Include="source\n887_nodeType\n887_140_nodetypeSplitedNodePv.cpp" />
     <ClCompile Include="source\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.cpp" />
     <ClCompile Include="source\n887_nodeType\n887_500_nodetypePrograms.cpp" />
+    <ClCompile Include="source\n900_main____\n900_200_usiItem.cpp" />
     <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp" />
     <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
     <ClCompile Include="source\n900_main____\n900_500_main.cpp" />

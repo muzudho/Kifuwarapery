@@ -1,4 +1,5 @@
 ﻿#include <algorithm> // std::min
+#include "../../header/n080_common__/n080_090_syncCout.hpp"
 #include "../../header/n119_score___/n119_090_scoreIndex.hpp"
 #include "../../header/n560_timeMng_/n560_100_limitsOfThinking.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"

@@ -1,4 +1,5 @@
 ﻿#include <windows.h> // ヘッダー・ファイルに書くとエラーになる。
+#include "../../header/n080_common__/n080_090_syncCout.hpp"
 #include "../../header/n080_common__/n080_100_common.hpp"
 #include "..\..\header\n080_common__\n080_200_utilProgram.hpp"
 

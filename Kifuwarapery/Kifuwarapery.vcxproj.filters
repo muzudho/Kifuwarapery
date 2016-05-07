@@ -1017,6 +1017,15 @@
     <ClInclude Include="header\n350_pieceTyp\n350_030_makePromoteMove.hpp">
       <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
+    <ClInclude Include="header\n900_main____\n900_200_usiItem.hpp">
+      <Filter>header\n900_main____</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_090_syncCout.hpp">
+      <Filter>header\n080_common__</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n080_common__\n080_085_mutex.hpp">
+      <Filter>header\n080_common__</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -1627,6 +1636,12 @@
     </ClCompile>
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
       <Filter>source\n883_nodeType</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n900_main____\n900_200_usiItem.cpp">
+      <Filter>source\n900_main____</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n080_common__\n080_090_syncCout.cpp">
+      <Filter>source\n080_common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

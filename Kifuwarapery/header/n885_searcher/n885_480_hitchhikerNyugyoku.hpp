@@ -2,6 +2,7 @@
 
 
 #include <iostream>
+#include "../n080_common__/n080_090_syncCout.hpp"
 #include "../n080_common__/n080_100_common.hpp"
 #include "../n220_position/n220_650_position.hpp"
 #include "n885_040_rucksack.hpp"

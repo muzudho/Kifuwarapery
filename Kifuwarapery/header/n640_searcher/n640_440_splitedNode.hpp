@@ -1,7 +1,9 @@
 ﻿#pragma once
 
 
-#include "../n080_common__/n080_100_common.hpp"	//Mutexなど
+#include "../n080_common__/n080_085_mutex.hpp"	//Mutex
+//#include "../n080_common__/n080_090_syncCout.hpp"
+#include "../n080_common__/n080_100_common.hpp"
 #include "../n119_score___/n119_090_scoreIndex.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_650_position.hpp"

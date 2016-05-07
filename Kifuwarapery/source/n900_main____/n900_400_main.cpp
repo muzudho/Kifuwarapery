@@ -26,12 +26,12 @@
 
 Main01::Main01()
 {
-	this->searcher = std::unique_ptr<Rucksack>(new Rucksack);
+	this->m_rucksack = std::unique_ptr<Rucksack>(new Rucksack);
 }
 
 Main01::~Main01()
 {
-	this->searcher.reset();
+	this->m_rucksack.reset();
 }
 
 void Main01::Initialize()
@@ -100,11 +100,11 @@ void Main01::Initialize()
 	Position::InitZobrist();
 
 	SYNCCOUT << "(^q^)main(3/6): searcher->init!" << SYNCENDL;
-	this->searcher->Init();
+	this->m_rucksack->Init();
 	// 一時オブジェクトの生成と破棄
 
 	SYNCCOUT << "(^q^)main(4/6): start Evaluater init!" << SYNCENDL;
-	std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(this->searcher->m_engineOptions["Eval_Dir"], true);
+	std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(this->m_rucksack->m_engineOptions["Eval_Dir"], true);
 	SYNCCOUT << "(^q^)main(5/6): end Evaluater init! ----> doUSICommandLoop" << SYNCENDL;
 
 }
@@ -112,11 +112,11 @@ void Main01::Initialize()
 void Main01::Body(int argc, char* argv[])
 {
 	UsiLoop usiLoop;
-	usiLoop.Mainloop(argc, argv, *this->searcher);
+	usiLoop.Mainloop(argc, argv, *this->m_rucksack);
 }
 
 void Main01::Finalize()
 {
 	SYNCCOUT << "(^q^)main(6/6): threads.exit! ----> doUSICommandLoop" << SYNCENDL;
-	this->searcher->m_ownerHerosPub.Exit();
+	this->m_rucksack->m_ownerHerosPub.Exit();
 }
