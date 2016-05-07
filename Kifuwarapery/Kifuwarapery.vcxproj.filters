@@ -76,12 +76,6 @@
     <Filter Include="source\n165_movStack">
       <UniqueIdentifier>{dfddf7b5-cf7d-4702-8a6b-80cd4ed49225}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n225_movPhase">
-      <UniqueIdentifier>{7db253da-80a6-4f9e-bab7-82b9306b8a24}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n225_movPhase">
-      <UniqueIdentifier>{9ba7289c-c609-4377-98bb-ea76463ae119}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\n760_thread__">
       <UniqueIdentifier>{513737b7-c031-4320-90e5-186023619924}</UniqueIdentifier>
     </Filter>
@@ -141,12 +135,6 @@
     </Filter>
     <Filter Include="source\n450_movPhase">
       <UniqueIdentifier>{70e0543a-956c-42a4-b7d8-b2da092e80aa}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="header\n350_pieceTyp">
-      <UniqueIdentifier>{6e24cefb-b320-47af-83c6-03f9d5829406}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="source\n350_pieceTyp">
-      <UniqueIdentifier>{d246aceb-580d-4ee5-8266-44212b5e919e}</UniqueIdentifier>
     </Filter>
     <Filter Include="source\n358_dropMake">
       <UniqueIdentifier>{8a8036d6-ed46-4688-a199-1f54332cf5b1}</UniqueIdentifier>
@@ -243,6 +231,21 @@
     </Filter>
     <Filter Include="header\n800_stpWatch">
       <UniqueIdentifier>{9f69d673-c8f5-46e5-8658-a8ad57f34fba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_">
+      <UniqueIdentifier>{c91a712b-5f47-42ed-a2c8-7307e3fb793a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_100_movPhase">
+      <UniqueIdentifier>{60941e59-b08c-4086-af1c-a446fde74726}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n300_moveGen_\n300_200_pieceTyp">
+      <UniqueIdentifier>{744d1fbe-3fdf-4319-982f-dbabd98bf93f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_">
+      <UniqueIdentifier>{9ba7289c-c609-4377-98bb-ea76463ae119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="source\n300_moveGen_\n300_200_pieceTyp">
+      <UniqueIdentifier>{75f980ee-7b7e-4c76-a09a-d4dd0895ed8f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -435,9 +438,6 @@
     <ClInclude Include="header\n220_position\n220_660_utilMovePos.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n225_movPhase\n225_050_generateMovePhase.hpp">
-      <Filter>header\n225_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp">
       <Filter>header\n720_usi_____</Filter>
     </ClInclude>
@@ -578,63 +578,6 @@
     </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_500_movePhaseArray.hpp">
       <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_070_ptAbstract.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_080_ptPromote.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_100_ptOccupied.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_110_ptPawn.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_120_ptLance.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_130_ptKnight.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_140_ptSilver.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_150_ptBishop.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_160_ptRook.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_170_ptGold.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_180_ptKing.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_190_ptProPawn.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_200_ptProLance.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_210_ptProKnight.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_220_ptProSilver.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_230_ptHorse.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_240_ptDragon.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_250_ptPieceTypeNum.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_260_ptGoldHorseDragon.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
     <ClInclude Include="header\n440_movStack\n440_400_hasPositiveScore.hpp">
       <Filter>header\n440_movStack</Filter>
@@ -933,17 +876,8 @@
     <ClInclude Include="header\n223_move____\n223_300_moveAndScoreIndex.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_040_ptEvent.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_045_pieceTypeSeeEvent.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
     <ClInclude Include="header\n105_color___\n105_500_convColor.hpp">
       <Filter>header\n105_color___</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_500_ptPrograms.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
     </ClInclude>
     <ClInclude Include="header\n887_nodeType\n887_500_nodetypePrograms.hpp">
       <Filter>header\n887_nodeType</Filter>
@@ -1002,9 +936,6 @@
     <ClInclude Include="header\n755_sword___\n755_120_SwordNonPv.hpp">
       <Filter>header\n755_sword___</Filter>
     </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_030_makePromoteMove.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
-    </ClInclude>
     <ClInclude Include="header\n900_main____\n900_200_usiItem.hpp">
       <Filter>header\n900_main____</Filter>
     </ClInclude>
@@ -1026,11 +957,83 @@
     <ClInclude Include="header\n220_position\n220_665_utilMove01.hpp">
       <Filter>header\n220_position</Filter>
     </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_025_utilMoveStack.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
+    <ClInclude Include="header\n300_moveGen_\n300_100_movPhase\n300_100_050_movegeneratorPhase.hpp">
+      <Filter>header\n300_moveGen_\n300_100_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n350_pieceTyp\n350_020_moveStack.hpp">
-      <Filter>header\n350_pieceTyp</Filter>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_020_moveStack.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_025_utilMoveStack.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_030_makePromoteMove.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_040_ptEvent.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_045_pieceTypeSeeEvent.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_070_ptAbstract.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_080_ptPromote.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_100_ptOccupied.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_110_ptPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_120_ptLance.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_130_ptKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_140_ptSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_150_ptBishop.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_160_ptRook.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_170_ptGold.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_180_ptKing.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_190_ptProPawn.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_200_ptProLance.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_210_ptProKnight.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_220_ptProSilver.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_230_ptHorse.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_240_ptDragon.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_250_ptPieceTypeNum.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_260_ptGoldHorseDragon.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_500_ptPrograms.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1261,63 +1264,6 @@
     </ClCompile>
     <ClCompile Include="source\n450_movPhase\n450_500_movePhaseArray.cpp">
       <Filter>source\n450_movPhase</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_070_ptAbstract.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_080_ptPromote.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_100_ptOccupied.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_110_ptPawn.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_120_ptLance.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_130_ptKnight.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_140_ptSilver.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_150_ptBishop.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_160_ptRook.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_170_ptGold.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_180_ptKing.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_190_ptProPawn.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_200_ptProLance.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_210_ptProKnight.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_220_ptProSilver.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_230_ptHorse.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_240_ptDragon.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_250_ptPieceTypeNum.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_260_ptGoldHorseDragon.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
     </ClCompile>
     <ClCompile Include="source\n358_dropMake\n358_070_dropMakerAbstract.cpp">
       <Filter>source\n358_dropMake</Filter>
@@ -1574,9 +1520,6 @@
     <ClCompile Include="source\n223_move____\n223_300_moveAndScoreIndex.cpp">
       <Filter>source\n223_move____</Filter>
     </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_500_ptPrograms.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
     <ClCompile Include="source\n887_nodeType\n887_500_nodetypePrograms.cpp">
       <Filter>source\n887_nodeType</Filter>
     </ClCompile>
@@ -1631,9 +1574,6 @@
     <ClCompile Include="source\n755_sword___\n755_120_SwordNonPv.cpp">
       <Filter>source\n755_sword___</Filter>
     </ClCompile>
-    <ClCompile Include="source\n350_pieceTyp\n350_030_makePromoteMove.cpp">
-      <Filter>source\n350_pieceTyp</Filter>
-    </ClCompile>
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp">
       <Filter>source\n883_nodeType</Filter>
     </ClCompile>
@@ -1648,6 +1588,69 @@
     </ClCompile>
     <ClCompile Include="source\n165_movStack\n165_420_convMove.cpp">
       <Filter>source\n165_movStack</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_030_makePromoteMove.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_070_ptAbstract.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_080_ptPromote.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_100_ptOccupied.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_110_ptPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_120_ptLance.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_130_ptKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_140_ptSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_150_ptBishop.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_160_ptRook.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_170_ptGold.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_180_ptKing.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_190_ptProPawn.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_200_ptProLance.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_210_ptProKnight.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_220_ptProSilver.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_230_ptHorse.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_240_ptDragon.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_250_ptPieceTypeNum.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_260_ptGoldHorseDragon.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClCompile>
+    <ClCompile Include="source\n300_moveGen_\n300_200_pieceTyp\n300_200_500_ptPrograms.cpp">
+      <Filter>source\n300_moveGen_\n300_200_pieceTyp</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

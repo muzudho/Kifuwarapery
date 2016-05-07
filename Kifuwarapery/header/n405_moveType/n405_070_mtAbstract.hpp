@@ -2,7 +2,7 @@
 
 
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_020_moveStack.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 
 
 class MoveTypeAbstract {

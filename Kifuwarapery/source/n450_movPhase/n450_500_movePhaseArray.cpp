@@ -18,7 +18,7 @@
 #include "../../header/n450_movPhase/n450_260_phStop.hpp"
 
 
-MovePhaseAbstract* g_movePhaseArray[GenerateMovePhase::GenerateMovePhaseNum] = {
+MovePhaseAbstract* g_movePhaseArray[g_MOVEGENERATOR_PHASE_NUM] = {
 	&g_mainSearch,
 	&g_phTacticalMoves0,
 	&g_phKillers,

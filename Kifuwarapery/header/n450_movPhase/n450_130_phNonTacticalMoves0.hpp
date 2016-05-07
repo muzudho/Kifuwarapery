@@ -4,7 +4,7 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_665_utilMove01.hpp"
-#include "../n350_pieceTyp/n350_020_moveStack.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 #include "../n407_moveGen_/n407_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_400_hasPositiveScore.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"

@@ -2,7 +2,7 @@
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_420_convMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_800_moveGenerator200.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"

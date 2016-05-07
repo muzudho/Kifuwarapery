@@ -7,10 +7,10 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
-#include "../n225_movPhase/n225_050_generateMovePhase.hpp"
 #include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
-#include "../n350_pieceTyp/n350_020_moveStack.hpp"
+#include "../n300_moveGen_/n300_100_movPhase/n300_100_050_movegeneratorPhase.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 
 
 using History = Stats<false>;
@@ -102,7 +102,7 @@ public:// もともと本当はプライベート・メソッド☆
 private:
 
 
-
+	// NextmoveEvent::GetNextMove_NonSplitedNode() で使われるぜ☆
 	void GoNextPhase();
 
 

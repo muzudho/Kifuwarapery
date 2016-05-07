@@ -15,8 +15,8 @@
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
 
-#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
-#include "../../header/n350_pieceTyp/n350_500_ptPrograms.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 #include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"

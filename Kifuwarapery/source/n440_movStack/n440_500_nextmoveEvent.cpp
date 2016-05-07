@@ -5,8 +5,8 @@
 #include "../../header/n223_move____/n223_060_stats.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
 
-#include "../../header/n350_pieceTyp/n350_020_moveStack.hpp"
-#include "../../header/n350_pieceTyp/n350_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
 #include "../../header/n407_moveGen_/n407_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
 
@@ -163,11 +163,14 @@ Move NextmoveEvent::GetNextMove_SplitedNode() {
 	// 分岐点の次のノード☆？（＾ｑ＾）？
 	return this->m_pFlashlightBox_->m_splitedNode->m_pNextmoveEvent->GetNextMove_NonSplitedNode();
 }
+// NextmoveEvent::GetNextMove_SplitedNode() や、DoStep9(...) 、
+// HitchhikerQsearchAbstract::DoQsearch(...) 、
+// GetNextMove_AtStep11() で使われるぜ☆
 Move NextmoveEvent::GetNextMove_NonSplitedNode() {
 	do {
 		// lastMove() に達したら次の phase に移る。
 		while (GetCurrMove() == GetLastMove()) {
-			GoNextPhase();
+			this->GoNextPhase();
 		}
 
 		Move resultMove;
@@ -226,9 +229,11 @@ void NextmoveEvent::ScoreEvasions() {
 	}
 }
 
+// NextmoveEvent::GetNextMove_NonSplitedNode() で使われるぜ☆
 void NextmoveEvent::GoNextPhase() {
-	m_currMove_ = GetFirstMove(); // legalMoves_[0] は番兵
-	++m_phase_;
+	// フェーズを１個進めるぜ☆（＾ｑ＾）
+	this->m_currMove_ = GetFirstMove(); // legalMoves_[0] は番兵
+	++this->m_phase_;
 
-	g_movePhaseArray[GetPhase()]->GoNext2Phase(*this);
+	g_movePhaseArray[this->GetPhase()]->GoNext2Phase(*this);
 }

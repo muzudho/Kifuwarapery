@@ -11,7 +11,7 @@
 #include "../n160_board___/n160_600_bitboardAll.hpp"
 #include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_020_moveStack.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
 #include "n358_040_dropMakerEvent.hpp"
 
 

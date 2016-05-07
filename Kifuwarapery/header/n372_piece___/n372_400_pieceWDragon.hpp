@@ -6,8 +6,8 @@
 #include "../n160_board___/n160_100_bitboard.hpp"
 #include "../n160_board___/n160_210_dragonAttackBb.hpp"
 #include "../n220_position/n220_650_position.hpp"
-#include "../n350_pieceTyp/n350_040_ptEvent.hpp"
-#include "../n350_pieceTyp/n350_500_ptPrograms.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_040_ptEvent.hpp"
+#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
 #include "../n372_piece___/n372_070_PieceAbstract.hpp"
 
 
