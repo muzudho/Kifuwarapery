@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_150_phBadCaptures.hpp"
+﻿#include "../../header/n450_movPhase/n450_150_N05_phBadCaptures.hpp"
 
 
-PhBadCaptures g_phBadCaptures;
+N05_PhBadCaptures g_phBadCaptures;

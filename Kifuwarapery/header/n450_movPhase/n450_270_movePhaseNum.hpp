@@ -14,14 +14,14 @@ class NextmoveEvent;
 class MovePhaseNum : public MovePhaseAbstract {
 public:
 
-	bool GetNext2Move(Move& resultMove, NextmoveEvent& nmEvent) const override {
+	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
+		UNREACHABLE;
+	}
+
+	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
 		UNREACHABLE;
 		return false;
 	};
-
-	void GoNext2Phase(NextmoveEvent& nmEvent) override {
-		UNREACHABLE;
-	}
 
 };
 

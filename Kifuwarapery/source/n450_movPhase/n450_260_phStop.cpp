@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_260_phStop.hpp"
+﻿#include "../../header/n450_movPhase/n450_260_N16_phStop.hpp"
 
 
-PhStop g_phStop;
+N16_PhStop g_phStop;

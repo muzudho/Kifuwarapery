@@ -9,8 +9,12 @@
 class MovePhaseAbstract {
 public:
 
-	virtual bool GetNext2Move( Move& resultMove, NextmoveEvent& nmEvent) const = 0;
+	// 旧名：goNextPhase
+	// 次のフェーズに遷移します。
+	virtual void Do02_ExtendTalon(NextmoveEvent& nmEvent) = 0;
 
-	virtual void GoNext2Phase(NextmoveEvent& nmEvent) = 0;
+	// 旧名：nextMove の中の switch～case文。
+	// カードを決定します。または、カーソルを次のカードへ移動させます。
+	virtual bool Do03_PickCard_OrNextCard( Move& pickedCard, NextmoveEvent& nmEvent) const = 0;
 
 };

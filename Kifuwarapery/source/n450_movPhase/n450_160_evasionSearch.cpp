@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_160_evasionSearch.hpp"
+﻿#include "../../header/n450_movPhase/n450_160_N06_evasionSearch.hpp"
 
 
-EvasionSearch g_evasionSearch;
+N06_EvasionSearch g_evasionSearch;

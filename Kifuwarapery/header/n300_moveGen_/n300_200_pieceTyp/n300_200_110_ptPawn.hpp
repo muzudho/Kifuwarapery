@@ -50,6 +50,7 @@ public:
 			pos
 		);
 
+		// 成れるか☆？
 		if (
 				ConvSquare::CAN_PROMOTE10<Color::White>(ConvSquare::TO_RANK10(to))
 				|

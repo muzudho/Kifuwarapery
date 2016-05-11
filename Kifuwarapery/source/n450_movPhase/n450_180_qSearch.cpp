@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_180_qSearch.hpp"
+﻿#include "../../header/n450_movPhase/n450_180_N08_qSearch.hpp"
 
 
-QSearch g_qSearch;
+N08_QSearch g_qSearch;

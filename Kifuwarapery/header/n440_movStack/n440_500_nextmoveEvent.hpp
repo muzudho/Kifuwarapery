@@ -35,34 +35,49 @@ public:
 	Move GetNextMove_SplitedNode();
 	Move GetNextMove_NonSplitedNode();
 
-	inline void IncrementCurMove() {
-		++this->m_currMove_;
-	};
-
-	inline void DecrementCurMove() {
-		--this->m_currMove_;
-	};
-
 	inline Move GetTranspositionTableMove() {
 		return this->m_ttMove_;
 	}
 
-	MoveStack* GetCurrMove() const { return this->m_currMove_; }
-	void SetCurrMove(MoveStack* value) { this->m_currMove_ = value; }
+	MoveStack* GetCurrCard() const { return this->m_currMove_; }
+	void SetCurrCard(MoveStack* value) { this->m_currMove_ = value; }
+	inline void GoNextCurCard() {
+		++this->m_currMove_;
+	};
+	inline void GoPreviousCurCard() {
+		--this->m_currMove_;
+	};
 
-	MoveStack* GetLastMove() const { return this->m_lastMove_; }
-	void SetLastMove(MoveStack* value) { this->m_lastMove_ = value; }
-	void SetLastMoveAndLastNonCaputre(MoveStack* value) {
+
+	// 旧名：ＧｅｔＬｅｇａｌＭｏｖｅｓ
+	// 山札の一番底（先頭）の１つ前（番兵）のカードを取得。
+	MoveStack* GetTalonZeroCard() { return this->m_legalMoves_; }
+
+	// 山札の一番底（先頭）のカードを取得。
+	MoveStack* GetTalonFirstCard() { return &m_legalMoves_[1]; } // [0] は番兵
+
+	MoveStack* GetTalonLastCard() const { return this->m_lastMove_; }
+	// 山札の一番上（最後）のカードを覚えておきます。
+	void SetTalonLastCard(MoveStack* value) { this->m_lastMove_ = value; }
+	void GotoNextTalonLastCard(int offset) { this->m_lastMove_ += offset; }
+	void SetTalonLastCardAndLastNonCaputre(MoveStack* value) {
 		this->m_lastMove_ = value;
 		this->m_lastNonCapture_ = value;
 	}
+	MoveStack* GetLastNonCapture() const { return m_lastNonCapture_; }
+
 
 	const Position& GetPos() const { return this->m_pos_; }
 
-	int GetCaptureThreshold() const { return this->m_captureThreshold_; }
 
-	MoveStack* GetEndBadCaptures() const { return this->m_endBadCaptures_; }
-	void DecrementEndBadCaptures() { this->m_endBadCaptures_--; }
+	// 駒取りの閾値☆？
+	int GetCaptureThreshold() const { return this->m_captureThreshold_; }
+	void SetCaptureThreshold(int value) { this->m_captureThreshold_ = value; }
+
+
+	MoveStack* GetEndBadCaptures() const { return this->m_pEndBadCaptures_; }
+	void GoToPreviousEndBadCaptures() { this->m_pEndBadCaptures_--; }
+	void SetEndBadCaptures(MoveStack* value) { this->m_pEndBadCaptures_ = value; }
 
 	MoveStack* GetKillerMoves() const { return (MoveStack*)this->m_killerMoves_; }
 	MoveStack GetKillerMove(int index) const { return this->m_killerMoves_[index]; }
@@ -70,8 +85,6 @@ public:
 	Square GetRecaptureSquare()const { return this->m_recaptureSquare_; }
 
 	Depth GetDepth() const { return this->m_depth_; }
-
-	MoveStack* GetLegalMoves() { return this->m_legalMoves_; }
 
 	void SetPhase(GenerateMovePhase value) { this->m_phase_ = value; }
 
@@ -81,7 +94,7 @@ public:// もともと本当はプライベート・メソッド☆
 	//template <bool IsDrop> void ScoreNonCapturesMinusPro();
 	template <bool IsDrop>
 	void NextmoveEvent::ScoreNonCapturesMinusPro() {
-		for (MoveStack* curr = GetCurrMove(); curr != GetLastMove(); ++curr) {
+		for (MoveStack* curr = this->GetCurrCard(); curr != this->GetTalonLastCard(); ++curr) {
 			const Move move = curr->m_move;
 			curr->m_score =
 				GetHistory().GetValue(IsDrop,
@@ -93,19 +106,9 @@ public:// もともと本当はプライベート・メソッド☆
 
 	void ScoreCaptures();
 
-	MoveStack* GetFirstMove() { return &m_legalMoves_[1]; } // [0] は番兵
-
-	MoveStack* GetLastNonCapture() const { return m_lastNonCapture_; }
-
 	void ScoreEvasions();
 
 private:
-
-
-	// NextmoveEvent::GetNextMove_NonSplitedNode() で使われるぜ☆
-	void GoNextPhase();
-
-
 
 	GenerateMovePhase GetPhase() const { return m_phase_; }
 
@@ -127,6 +130,7 @@ private:
 
 	Square				m_recaptureSquare_;
 
+	// 駒取りの閾値☆？（＾ｑ＾）？
 	int					m_captureThreshold_; // int で良いのか？
 
 	GenerateMovePhase	m_phase_;
@@ -137,7 +141,7 @@ private:
 
 	MoveStack*			m_lastNonCapture_;
 
-	MoveStack*			m_endBadCaptures_;
+	MoveStack*			m_pEndBadCaptures_;
 
 	// std::array にした方が良さそう。
 	MoveStack			m_legalMoves_[Move::m_MAX_LEGAL_MOVES];

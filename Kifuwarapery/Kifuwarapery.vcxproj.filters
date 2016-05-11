@@ -516,57 +516,6 @@
     <ClInclude Include="header\n450_movPhase\n450_070_movePhaseAbstract.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_100_mainSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_110_phTacticalMoves0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_120_phKillers.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_130_phNonTacticalMoves0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_140_phNonTacticalMoves1.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_150_phBadCaptures.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_160_evasionSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_170_phEvasions.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_180_qSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_190_phQCaptures0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_200_qEvasionSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_210_phQEvasions.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_220_probCut.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_230_phTacticalMoves1.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_240_qRecapture.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_250_phQCaptures1.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_260_phStop.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_270_movePhaseNum.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
@@ -1028,6 +977,57 @@
     </ClInclude>
     <ClInclude Include="header\n300_moveGen_\n300_700_moveGen_\n300_700_900_moveList.hpp">
       <Filter>header\n300_moveGen_\n300_700_moveGen_</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_100_N00_mainSearch.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_110_N01_phTacticalMoves0.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_120_N02_phKillers.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_130_N03_phNonTacticalMoves0.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_140_N04_phNonTacticalMoves1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_150_N05_phBadCaptures.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_160_N06_evasionSearch.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_170_N07_phEvasions.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_180_N08_qSearch.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_190_N09_phQCaptures0.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_200_N10_qEvasionSearch.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_210_N11_phQEvasions.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_220_N12_probCut.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_230_N13_phTacticalMoves1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_240_N14_qRecapture.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_250_N15_phQCaptures1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_260_N16_phStop.hpp">
+      <Filter>header\n450_movPhase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

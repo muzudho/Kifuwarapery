@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_120_phKillers.hpp"
+﻿#include "../../header/n450_movPhase/n450_120_N02_phKillers.hpp"
 
 
-PhKillers g_phKillers;
+N02_PhKillers g_phKillers;

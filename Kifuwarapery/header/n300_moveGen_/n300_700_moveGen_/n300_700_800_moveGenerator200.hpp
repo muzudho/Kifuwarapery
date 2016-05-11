@@ -45,6 +45,8 @@ public:
 		Bitboard fromBB = pos.GetAttackersTo_a<US, THEM>(to, pos.GetOccupiedBB());
 		while (fromBB.Exists1Bit()) {
 			const Square from = fromBB.PopFirstOneFromI9();
+
+			// 駒の種類によって違う☆（＾ｑ＾）
 			const PieceType pieceType = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 
 			// TODO: 配列のリミットチェックをしてないぜ☆（＾ｑ＾）

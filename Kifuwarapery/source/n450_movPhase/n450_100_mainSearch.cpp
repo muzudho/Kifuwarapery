@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_100_mainSearch.hpp"
+﻿#include "../../header/n450_movPhase/n450_100_N00_mainSearch.hpp"
 
 
-MainSearch g_mainSearch;
+N00_MainSearch g_mainSearch;

@@ -476,6 +476,7 @@ void Position::UndoMove(const Move move) {
 
 
 
+// 駒の取り合いをやっているのかなんだぜ☆？（＾ｑ＾）
 template<Color US, Color THEM>
 ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 	const Square to = move.To();

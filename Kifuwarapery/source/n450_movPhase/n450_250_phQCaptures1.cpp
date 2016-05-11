@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_250_phQCaptures1.hpp"
+﻿#include "../../header/n450_movPhase/n450_250_N15_phQCaptures1.hpp"
 
 
-PhQCaptures1 g_phQCaptures1;
+N15_PhQCaptures1 g_phQCaptures1;

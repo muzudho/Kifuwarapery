@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_240_qRecapture.hpp"
+﻿#include "../../header/n450_movPhase/n450_240_N14_qRecapture.hpp"
 
 
-QRecapture g_qRecapture;
+N14_QRecapture g_qRecapture;
