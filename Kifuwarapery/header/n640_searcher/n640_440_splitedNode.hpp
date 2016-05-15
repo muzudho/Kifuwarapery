@@ -40,7 +40,7 @@ struct SplitedNode {
 
 	bool				m_cutNode;
 
-	NextmoveEvent*		m_pNextmoveEvent;
+	NextmoveEvent*		m_pVideodeck;
 
 	SplitedNode*		m_pParentSplitedNode;
 

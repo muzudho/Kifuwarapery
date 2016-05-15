@@ -91,7 +91,7 @@ void Military::ForkNewFighter(
 	splitedNode.m_pSword01 = pSword;	// ノード・タイプ（実行するプログラム）を切り替える変数みたいだぜ☆（＾ｑ＾）
 	splitedNode.m_cutNode = cutNode;
 	splitedNode.m_bestScore = bestScore;
-	splitedNode.m_pNextmoveEvent = &mp;
+	splitedNode.m_pVideodeck = &mp;
 	splitedNode.m_moveCount = moveCount;
 	splitedNode.m_position = &pos;
 	splitedNode.m_nodes = 0;

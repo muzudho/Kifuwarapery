@@ -47,14 +47,14 @@ private:
 
 		const PieceMoveEvent pmEvent(MoveType::N03_CapturePlusPro, all, pos, ksq);
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<US>(moveStackList, pmEvent, targetPawn);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<US>(moveStackList, pmEvent, targetOther);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N01_Pawn<US>(moveStackList, pmEvent, targetPawn);
+		moveStackList = PieceMovesGenerator::BuildCards_N02_Lance<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N03_Knight<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N04_Silver<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N05_Bishop<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N06_Rook<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N16_GoldHorseDragon<US>(moveStackList, pmEvent, targetOther);
+		moveStackList = PieceMovesGenerator::BuildCards_N08_King<US>(moveStackList, pmEvent, targetOther);
 
 		return moveStackList;
 	}

@@ -15,10 +15,10 @@
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
 
-#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
-#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
+//#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n600_book____/n600_500_book.hpp"
 
@@ -246,7 +246,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 		);
 
 //split_point_start:
-	NextmoveEvent mp(
+	NextmoveEvent videodeck( // 通常の探索
 		pos,
 		ttMove,
 		depth,
@@ -271,7 +271,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 	while (
 		!(
 			// スプリット・ポイントかどうかで、取ってくる指し手が変わる☆
-			move = this->GetNextMove_AtStep11(mp)
+			move = this->GetNextMove_AtStep11(videodeck)
 			).IsNone()
 		) {
 
@@ -447,7 +447,7 @@ ScoreIndex NodetypePv::GoToTheAdventure_new(
 			bestMove,
 			threatMove,
 			moveCount,
-			mp,
+			videodeck,
 			cutNode
 			);
 		if (isBreak) {

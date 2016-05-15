@@ -1,4 +1,4 @@
-﻿#include "../../header/n450_movPhase/n450_210_N11_phQEvasions.hpp"
+﻿#include "../../header/n450_movPhase/n450_210_N11___QEvasions.hpp"
 
 
-N11_PhQEvasions g_phQEvasions;
+N11___QEvasions g_phQEvasions;

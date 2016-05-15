@@ -124,9 +124,6 @@
     <Filter Include="source\n480_tt______">
       <UniqueIdentifier>{392d096e-0a5e-43a5-b2a7-20115b18425f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n440_movStack">
-      <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\n440_movStack">
       <UniqueIdentifier>{ad9fc7a6-680b-4f05-a3bf-3eb6c76fa2f7}</UniqueIdentifier>
     </Filter>
@@ -187,9 +184,6 @@
     <Filter Include="source\n883_nodeType">
       <UniqueIdentifier>{12f8086c-e13c-4268-92e4-0a5751f5846d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="header\n810_learn___">
-      <UniqueIdentifier>{17969587-95d6-4dc6-be14-b3f2c0533f14}</UniqueIdentifier>
-    </Filter>
     <Filter Include="source\n800_stpWatch">
       <UniqueIdentifier>{b4e903c8-38e7-4086-94b5-1c996286b26b}</UniqueIdentifier>
     </Filter>
@@ -240,6 +234,15 @@
     </Filter>
     <Filter Include="header\n300_moveGen_\n300_700_moveGen_">
       <UniqueIdentifier>{e5656d50-711c-446c-bb5d-d196dbc25a64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n440_movStack">
+      <UniqueIdentifier>{707954fe-61d6-4ce8-86dd-f41c027e5cc6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n850_learn___">
+      <UniqueIdentifier>{17969587-95d6-4dc6-be14-b3f2c0533f14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="header\n830_evaluate">
+      <UniqueIdentifier>{11bb7783-6427-4d8f-bc9a-b83f83bfea7d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -402,9 +405,6 @@
     <ClInclude Include="header\n223_move____\n223_040_nodeType.hpp">
       <Filter>header\n223_move____</Filter>
     </ClInclude>
-    <ClInclude Include="header\n223_move____\n223_060_stats.hpp">
-      <Filter>header\n223_move____</Filter>
-    </ClInclude>
     <ClInclude Include="header\n113_piece___\n113_500_hand.hpp">
       <Filter>header\n113_piece___</Filter>
     </ClInclude>
@@ -496,9 +496,6 @@
       <Filter>header\n520_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n520_evaluate\n520_500_kkKkpKppStorage1.hpp">
-      <Filter>header\n520_evaluate</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n520_evaluate\n520_700_evaluation09.hpp">
       <Filter>header\n520_evaluate</Filter>
     </ClInclude>
     <ClInclude Include="header\n480_tt______\n480_280_tTEntry.hpp">
@@ -699,9 +696,6 @@
     <ClInclude Include="header\n080_common__\n080_085_mutex.hpp">
       <Filter>header\n080_common__</Filter>
     </ClInclude>
-    <ClInclude Include="header\n810_learn___\n810_500_learner.hpp">
-      <Filter>header\n810_learn___</Filter>
-    </ClInclude>
     <ClInclude Include="header\n800_stpWatch\n800_100_stopwatch.hpp">
       <Filter>header\n800_stpWatch</Filter>
     </ClInclude>
@@ -715,12 +709,6 @@
       <Filter>header\n300_moveGen_\n300_100_movPhase</Filter>
     </ClInclude>
     <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_020_moveStack.hpp">
-      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_025_utilMoveStack.hpp">
-      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_030_makePromoteMove.hpp">
       <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
     </ClInclude>
     <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_040_ptEvent.hpp">
@@ -981,53 +969,80 @@
     <ClInclude Include="header\n450_movPhase\n450_100_N00_mainSearch.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_110_N01_phTacticalMoves0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_120_N02_phKillers.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_130_N03_phNonTacticalMoves0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_140_N04_phNonTacticalMoves1.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_150_N05_phBadCaptures.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_160_N06_evasionSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_170_N07_phEvasions.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_180_N08_qSearch.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_190_N09_phQCaptures0.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_200_N10_qEvasionSearch.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_210_N11_phQEvasions.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_220_N12_probCut.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_230_N13_phTacticalMoves1.hpp">
-      <Filter>header\n450_movPhase</Filter>
-    </ClInclude>
     <ClInclude Include="header\n450_movPhase\n450_240_N14_qRecapture.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_250_N15_phQCaptures1.hpp">
+    <ClInclude Include="header\n450_movPhase\n450_025_utilMoveStack.hpp">
       <Filter>header\n450_movPhase</Filter>
     </ClInclude>
-    <ClInclude Include="header\n450_movPhase\n450_260_N16_phStop.hpp">
+    <ClInclude Include="header\n440_movStack\n440_060_stats.hpp">
+      <Filter>header\n440_movStack</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_110_N01___TacticalMoves0.hpp">
       <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_120_N02___Killers.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_130_N03___NonTacticalMoves0.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_140_N04___NonTacticalMoves1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_150_N05___BadCaptures.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_170_N07___Evasions.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_190_N09___QCaptures0.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_210_N11___QEvasions.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_230_N13___TacticalMoves1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_250_N15___QCaptures1.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n450_movPhase\n450_260_N16___Stop.hpp">
+      <Filter>header\n450_movPhase</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_030_moveMaker_ExceptPromote.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n300_moveGen_\n300_200_pieceTyp\n300_200_033_moveMaker_Promote.hpp">
+      <Filter>header\n300_moveGen_\n300_200_pieceTyp</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n850_learn___\n850_100_rawEvaluater.hpp">
+      <Filter>header\n850_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n850_learn___\n850_200_parse2Data.hpp">
+      <Filter>header\n850_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n850_learn___\n850_300_bookMoveData.hpp">
+      <Filter>header\n850_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n850_learn___\n850_500_learner.hpp">
+      <Filter>header\n850_learn___</Filter>
+    </ClInclude>
+    <ClInclude Include="header\n830_evaluate\n830_700_evaluation09.hpp">
+      <Filter>header\n830_evaluate</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

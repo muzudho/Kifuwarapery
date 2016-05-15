@@ -5,11 +5,19 @@
 #include "../n520_evaluate/n520_490_KppCacheIo.hpp"
 
 
-struct KkKkpKppStorage1 : public KkKkpKppStorageBase<std::array<s16, 2>, std::array<s32, 2>, std::array<s32, 2> > {
+struct KkKkpKppStorage1 :public
+	KkKkpKppStorageBase<
+		std::array<s16, 2>,
+		std::array<s32, 2>,
+		std::array<s32, 2>
+	>//継承☆（＾～＾）
+{
+
 	// 探索時に参照する評価関数テーブル
 	static std::array<s16, 2> KPP[SquareNum][fe_end][fe_end];
 	static std::array<s32, 2> KKP[SquareNum][SquareNum][fe_end];
 	static std::array<s32, 2> KK[SquareNum][SquareNum];
+
 #if defined USE_K_FIX_OFFSET
 	static const s32 K_Fix_Offset[SquareNum];
 #endif

@@ -19,10 +19,9 @@
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_300_moveAndScoreIndex.hpp"
 
-#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_500_ptPrograms.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
-#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n560_timeMng_/n560_500_timeManager.hpp"
 #include "../../header/n600_book____/n600_500_book.hpp"
 #include "../../header/n640_searcher/n640_440_splitedNode.hpp"
@@ -35,6 +34,7 @@
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n883_nodeType/n883_070_nodetypeAbstract.hpp"
 
+//#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
 #include "../../header/n885_searcher/n885_600_iterativeDeepeningLoop.hpp"//FIXME:
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:

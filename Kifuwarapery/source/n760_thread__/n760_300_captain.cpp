@@ -1,4 +1,4 @@
-﻿#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+﻿#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "../../header/n760_thread__/n760_250_military.hpp"
 #include "../../header/n760_thread__/n760_300_captain.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"

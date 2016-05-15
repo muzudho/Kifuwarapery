@@ -2,7 +2,7 @@
 #include "../../header/n165_movStack/n165_400_move.hpp"
 #include "../../header/n165_movStack/n165_420_convMove.hpp"
 #include "../../header/n220_position/n220_750_charToPieceUSI.hpp"
-#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_800_moveGenerator200.hpp"
 #include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n440_movStack/n440_500_nextmoveEvent.hpp"
@@ -13,7 +13,7 @@
 #include "../../header/n680_egOption/n680_245_engineOption.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n720_usi_____/n720_300_benchmark.hpp"
-#include "../../header/n810_learn___/n810_500_learner.hpp"
+#include "../../header/n850_learn___/n850_500_learner.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
 #include "..\..\header/n900_main____\n900_200_usiItem.hpp"
 #include "..\..\header\n900_main____\n900_300_usiLoop.hpp"
@@ -126,9 +126,9 @@ void UsiLoop::Mainloop(
 		else if (token == "l") {
 			auto learner = std::unique_ptr<Learner>(new Learner);
 #if defined MPI_LEARN
-			learner->learn(GetPos, env, world);
+			learner->learn(pos, env, world);
 #else
-			learner->learn(GetPos, issCmd);
+			learner->learn(pos, issCmd);
 #endif
 		}
 #endif

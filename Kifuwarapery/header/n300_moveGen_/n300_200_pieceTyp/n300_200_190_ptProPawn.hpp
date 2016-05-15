@@ -13,7 +13,7 @@
 #include "../../n165_movStack/n165_420_convMove.hpp"
 #include "../../n220_position/n220_650_position.hpp"
 #include "n300_200_020_moveStack.hpp"
-#include "n300_200_030_makePromoteMove.hpp"
+#include "n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "n300_200_040_ptEvent.hpp"
 #include "n300_200_045_pieceTypeSeeEvent.hpp"
 #include "n300_200_070_ptAbstract.hpp"
@@ -42,8 +42,8 @@ public:
 		const Square to
 		) const override {
 
-		pMoveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
-			this->AsMove(), from, to, pos);
+		pMoveStackList->m_move = g_makePromoteMove.BuildCard_CaptureCategory(
+			pos, this->AsMove(), from, to);
 
 		pMoveStackList++;
 	}
@@ -55,8 +55,8 @@ public:
 		const Square to
 		) const override {
 
-		pMoveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
-			this->AsMove(), from, to, pos);
+		pMoveStackList->m_move = g_makePromoteMove.BuildCard_CaptureCategory(
+			pos, this->AsMove(), from, to);
 
 		pMoveStackList++;
 	}

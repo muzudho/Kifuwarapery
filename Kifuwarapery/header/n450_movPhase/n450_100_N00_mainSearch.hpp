@@ -14,17 +14,24 @@ class N00_MainSearch : public MovePhaseAbstract {
 public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
+
+		// 山札の底（最初）のカードに、カーソルを合わせます。
+		nmEvent.BackToHome_CurrCard();
+
 		UNREACHABLE;
 	}
 
 	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
 
-		// トランスポジション・テーブルを読むだけ☆？
+		//────────────────────
+		// 進める☆
+		//────────────────────
 		nmEvent.GoNextCurCard();
 
 		//────────────────────────────────────────
 		// 確定　（Ｎｏｎｅの場合もあり☆？）
 		//────────────────────────────────────────
+		// トランスポジション・テーブルを読むだけ☆？
 		pickedCard = nmEvent.GetTranspositionTableMove();
 		return true;
 	};

@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "../n520_evaluate/n520_700_evaluation09.hpp"
 #include "../n560_timeMng_/n560_100_limitsOfThinking.hpp"
 
 class Rucksack;

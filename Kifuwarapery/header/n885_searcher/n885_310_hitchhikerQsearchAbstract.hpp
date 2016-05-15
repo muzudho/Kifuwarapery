@@ -13,8 +13,8 @@
 class HitchhikerQsearchAbstract {
 public:
 
-	// Ｑサーチ？
-	// N01_PV か、N02_NonPV でだけ使うことができるぜ☆（＾ｑ＾）
+	// 静止探索☆
+	// ルート以外でだけ使えるぜ☆（＾ｑ＾）スプリットポイントであるかどうかに関わらないぜ☆（＾ｑ＾）
 	virtual ScoreIndex DoQsearch(
 		Rucksack& rucksack,
 		bool INCHECK,

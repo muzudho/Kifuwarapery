@@ -12,14 +12,22 @@ class MoveList {
 public:
 
 	explicit MoveList(const Position& pos) :
-		m_curr_(m_moveStackList_), m_last_(g_moveGenerator200.GenerateMoves_2(MT,m_moveStackList_, pos)) {}
+		m_curr_(m_moveStackList_),
+		m_last_(g_moveGenerator200.GenerateMoves_2(MT,m_moveStackList_, pos))
+	{
+	}
 
 	void operator ++ () { ++m_curr_; }
 
 	bool IsEnd() const { return (m_curr_ == m_last_); }
 
+	//────────────────────────────────────────────────────────────────────────────────
+	// ムーブ
+	//────────────────────────────────────────────────────────────────────────────────
 	Move GetMove() const { return m_curr_->m_move; }
+
 	size_t GetSize() const { return static_cast<size_t>(m_last_ - m_moveStackList_); }
+
 	bool Contains(const Move move) const {
 		for (const MoveStack* it(m_moveStackList_); it != m_last_; ++it) {
 			if (it->m_move == move) {

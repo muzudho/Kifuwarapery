@@ -31,7 +31,12 @@ inline std::array<Tl, 2> operator -= (std::array<Tl, 2>& lhs, const std::array<T
 }
 
 
-template <typename KPPType, typename KKPType, typename KKType>
+static const int g_KPPIndicesMax = 3000;
+static const int g_KKPIndicesMax = 130;
+static const int g_KKIndicesMax = 7;
+
+
+template <typename KPPType, typename KKPType, typename KKType>// 型を読みやすく名前を付けているぜ☆（＾～＾）
 struct KkKkpKppStorageBase {
 
 	static const int m_R_Mid = 8; // 相対位置の中心のindex
@@ -129,9 +134,6 @@ struct KkKkpKppStorageBase {
 	constexpr size_t GetKkps_end_index() const { return sizeof(kkps) / sizeof(KKPType); }
 	constexpr size_t GetKks_end_index() const { return sizeof(kks) / sizeof(KKType); }
 
-	static const int g_KPPIndicesMax = 3000;
-	static const int g_KKPIndicesMax = 130;
-	static const int g_KKIndicesMax = 7;
 
 	// KPP に関する相対位置などの次元を落とした位置などのインデックスを全て返す。
 	// 負のインデックスは、正のインデックスに変換した位置の点数を引く事を意味する。

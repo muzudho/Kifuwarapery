@@ -2,13 +2,15 @@
 #include "../../header/n105_color___/n105_100_color.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
-#include "../../header/n520_evaluate/n520_700_evaluation09.hpp"
+#include "../../header/n830_evaluate/n830_700_evaluation09.hpp"
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;
+
 
 std::array<s16, 2> KkKkpKppStorage1::KPP[SquareNum][fe_end][fe_end];
 std::array<s32, 2> KkKkpKppStorage1::KKP[SquareNum][SquareNum][fe_end];
 std::array<s32, 2> KkKkpKppStorage1::KK[SquareNum][SquareNum];
+
 
 #if defined USE_K_FIX_OFFSET
 const s32 KkKkpKppStorage1::K_Fix_Offset[SquareNum] = {

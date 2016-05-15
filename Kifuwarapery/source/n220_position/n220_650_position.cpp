@@ -34,7 +34,7 @@
 
 #include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
-#include "../../header/n885_searcher/n885_040_rucksack.hpp"
+#include "../../header/n885_searcher/n885_040_rucksack.hpp"// FIXME:
 
 
 
@@ -287,8 +287,8 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		const PieceType ptFrom = move.GetPieceTypeFrom();
 		ptTo = move.GetPieceTypeTo(ptFrom);
 
-		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[ptFrom], from);
-		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[ptTo], to);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptFrom), from);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptTo), to);
 		g_setMaskBb.XorBit(&this->m_BB_ByColor_[US], from, to);
 		this->m_piece_[from] = N00_Empty;
 		this->m_piece_[to] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10<US>(ptTo);
@@ -302,7 +302,7 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 			boardKey -= this->GetZobrist<THEM>(ptCaptured, to);
 			handKey += this->GetZobHand<US>(hpCaptured);
 
-			g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[ptCaptured], to);
+			g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptCaptured), to);
 			g_setMaskBb.XorBit(&this->m_BB_ByColor_[THEM], to);
 
 			this->m_hand_[US].PlusOne(hpCaptured);
@@ -330,7 +330,10 @@ void Position::DoMove(const Move move, StateInfo& newSt, const CheckInfo& ci, co
 		prefetch(GetConstRucksack()->m_tt.FirstEntry(boardKey + handKey));
 		// Occupied は to, from の位置のビットを操作するよりも、
 		// Black と White の or を取る方が速いはず。
-		this->m_BB_ByPiecetype_[N00_Occupied] = this->GetBbOf10<Color::Black>() | this->GetBbOf10<Color::White>();
+		this->SetBbByPiecetype(
+			PieceType::N00_Occupied,
+			this->GetBbOf10<Color::Black>() | this->GetBbOf10<Color::White>()
+		);
 
 		if (ptTo == N08_King) {
 			this->m_kingSquare_[US] = to;
@@ -402,7 +405,7 @@ void Position::UndoMove(const Move move) {
 	// ここで先に turn_ を戻したので、以下、move は us の指し手とする。
 	if (move.IsDrop()) {
 		const PieceType ptTo = move.GetPieceTypeDropped();
-		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptTo], to);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptTo), to);
 		g_setMaskBb.XorBit(&m_BB_ByColor_[us], to);
 		m_piece_[to] = N00_Empty;
 
@@ -437,7 +440,7 @@ void Position::UndoMove(const Move move) {
 
 		if (ptCaptured) {
 			// 駒を取ったとき
-			g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptCaptured], to);
+			g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptCaptured), to);
 			g_setMaskBb.XorBit(&m_BB_ByColor_[them], to);
 			const HandPiece hpCaptured = ConvHandPiece::FromPieceType(ptCaptured);
 			const Piece pcCaptured = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(them, ptCaptured);
@@ -457,14 +460,18 @@ void Position::UndoMove(const Move move) {
 			// 16 になると困るので、駒を取らないときは明示的に Empty にする。
 			m_piece_[to] = N00_Empty;
 		}
-		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptFrom], from);
-		g_setMaskBb.XorBit(&m_BB_ByPiecetype_[ptTo], to);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptFrom), from);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(ptTo), to);
 		g_setMaskBb.XorBit(&m_BB_ByColor_[us], from, to);
 		m_piece_[from] = ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(us, ptFrom);
 	}
 	// Occupied は to, from の位置のビットを操作するよりも、
 	// Black と White の or を取る方が速いはず。
-	m_BB_ByPiecetype_[N00_Occupied] = this->GetBbOf10(Black) | this->GetBbOf10(White);
+	this->SetBbByPiecetype(
+		PieceType::N00_Occupied,
+		this->GetBbOf10(Black) | this->GetBbOf10(White)
+	);
+
 	m_goldsBB_ = this->GetBbOf(N07_Gold, N09_ProPawn, N10_ProLance, N11_ProKnight, N12_ProSilver);
 
 	// key などは StateInfo にまとめられているので、
@@ -479,6 +486,7 @@ void Position::UndoMove(const Move move) {
 // 駒の取り合いをやっているのかなんだぜ☆？（＾ｑ＾）
 template<Color US, Color THEM>
 ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
+
 	const Square to = move.To();
 	Square from;
 	PieceType ptCaptured;
@@ -487,14 +495,16 @@ ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 	Bitboard opponentAttackers;
 
 
-	ScoreIndex swapList[32];
+	// 旧名：ｓｗａｐＬｉｓｔ
+	ScoreIndex seeRankingArr[32];
+
 	if (move.IsDrop()) {
 		opponentAttackers = this->GetAttackersTo_clr(THEM, to, occ);
 		if (!opponentAttackers.Exists1Bit()) {
 			return ScoreZero;
 		}
 		attackers = opponentAttackers | this->GetAttackersTo_clr(US, to, occ);
-		swapList[0] = ScoreZero;
+		seeRankingArr[0] = ScoreIndex::ScoreZero;
 		ptCaptured = move.GetPieceTypeDropped();
 	}
 	else {
@@ -509,11 +519,15 @@ ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 			return PieceScore::GetCapturePieceScore(move.GetCap());
 		}
 		attackers = opponentAttackers | this->GetAttackersTo_clr(US, to, occ);
-		swapList[0] = PieceScore::GetCapturePieceScore(move.GetCap());
+
+		seeRankingArr[0] = PieceScore::GetCapturePieceScore(move.GetCap());
+
 		ptCaptured = move.GetPieceTypeFrom();
 		if (move.IsPromotion()) {
 			const PieceType ptFrom = move.GetPieceTypeFrom();
-			swapList[0] += PieceScore::GetPromotePieceScore(ptFrom);
+
+			seeRankingArr[0] += PieceScore::GetPromotePieceScore(ptFrom);
+
 			ptCaptured += PTPromote;
 		}
 	}
@@ -522,7 +536,7 @@ ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 	int slIndex = 1;
 	Color iCurrTurn = THEM; // ループ中にひっくり返るぜ☆（＾ｑ＾）
 	do {
-		swapList[slIndex] = -swapList[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
+		seeRankingArr[slIndex] = -seeRankingArr[slIndex - 1] + PieceScore::GetCapturePieceScore(ptCaptured);
 
 		// 再帰関数のスタート地点だぜ☆！（＾ｑ＾）
 		// todo: 実際に移動した方向を基にattackersを更新すれば、template, inline を使用しなくても良さそう。
@@ -547,7 +561,9 @@ ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 
 		if (ptCaptured == N08_King) {
 			if (opponentAttackers.Exists1Bit()) {
-				swapList[slIndex++] = PieceScore::m_CaptureKingScore;
+
+				seeRankingArr[slIndex++] = PieceScore::m_CaptureKingScore;
+
 			}
 			break;
 		}
@@ -555,17 +571,17 @@ ScoreIndex Position::GetSee1(const Move move, const int asymmThreshold) const {
 
 	if (asymmThreshold) {
 		for (int i = 0; i < slIndex; i += 2) {
-			if (swapList[i] < asymmThreshold) {
-				swapList[i] = -PieceScore::m_CaptureKingScore;
+			if (seeRankingArr[i] < asymmThreshold) {
+				seeRankingArr[i] = -PieceScore::m_CaptureKingScore;
 			}
 		}
 	}
 
 	// nega max 的に駒の取り合いの点数を求める。
 	while (--slIndex) {
-		swapList[slIndex - 1] = std::min(-swapList[slIndex], swapList[slIndex - 1]);
+		seeRankingArr[slIndex - 1] = std::min(-seeRankingArr[slIndex], seeRankingArr[slIndex - 1]);
 	}
-	return swapList[0];
+	return seeRankingArr[0];
 }
 template ScoreIndex Position::GetSee1<Color::Black, Color::White>(const Move move, const int asymmThreshold) const;
 template ScoreIndex Position::GetSee1<Color::White, Color::Black>(const Move move, const int asymmThreshold) const;
@@ -707,8 +723,8 @@ template bool Position::IsPawnDropCheckMate<Color::White, Color::Black>(const Sq
 
 
 inline void Position::XorBBs(const PieceType pt, const Square sq, const Color c) {
-	g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[N00_Occupied], sq);
-	g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[pt], sq);
+	g_setMaskBb.XorBit(&this->GetBbByPiecetype(N00_Occupied), sq);
+	g_setMaskBb.XorBit(&this->GetBbByPiecetype(pt), sq);
 	g_setMaskBb.XorBit(&this->m_BB_ByColor_[c], sq);
 }
 
@@ -889,7 +905,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(N14_Dragon, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTDRAGON_ONBOARD_AS_MOVE,	from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTDRAGON_ONBOARD_AS_MOVE,	from, to);
 						}
 					}
 				} while (toBB.Exists1Bit());
@@ -929,7 +945,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(N06_Rook, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTROOK_ONBOARD_AS_MOVE,from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTROOK_ONBOARD_AS_MOVE,from, to);
 							}
 						}
 					} while (toBB.Exists1Bit());
@@ -963,7 +979,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(N06_Rook, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTROOK_ONBOARD_AS_MOVE,from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTROOK_ONBOARD_AS_MOVE,from, to);
 							}
 						}
 					} while (toOn789BB.Exists1Bit());
@@ -980,7 +996,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(N06_Rook, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTROOK_ONBOARD_AS_MOVE,from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTROOK_ONBOARD_AS_MOVE,from, to);
 						}
 					}
 				}
@@ -1017,7 +1033,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(N13_Horse, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTHORSE_ONBOARD_AS_MOVE,from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTHORSE_ONBOARD_AS_MOVE,from, to);
 						}
 					}
 				} while (toBB.Exists1Bit());
@@ -1053,7 +1069,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(N05_Bishop, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTBISHOP_ONBOARD_AS_MOVE,	from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTBISHOP_ONBOARD_AS_MOVE,	from, to);
 							}
 						}
 					} while (toBB.Exists1Bit());
@@ -1085,7 +1101,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								XorBBs(N05_Bishop, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTBISHOP_ONBOARD_AS_MOVE,	from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTBISHOP_ONBOARD_AS_MOVE,	from, to);
 							}
 						}
 					} while (toOn789BB.Exists1Bit());
@@ -1102,7 +1118,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							XorBBs(N05_Bishop, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTBISHOP_ONBOARD_AS_MOVE,	from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTBISHOP_ONBOARD_AS_MOVE,	from, to);
 						}
 					}
 				}
@@ -1144,7 +1160,7 @@ silver_drop_end:
 						{
 							XorBBs(pt, from, US);
 							g_setMaskBb.XorBit(&m_goldsBB_, from);
-							return UtilMovePos::MakeCaptureMove(ConvMove::FROM_PIECETYPE_ONBOARD10(pt),from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, ConvMove::FROM_PIECETYPE_ONBOARD10(pt),from, to);
 						}
 					}
 				} while (toBB.Exists1Bit());
@@ -1193,7 +1209,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									XorBBs(N04_Silver, from, US);
-									return UtilMovePos::MakeCapturePromoteMove(	g_PTSILVER_ONBOARD_AS_MOVE,	from, to, *this);
+									return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTSILVER_ONBOARD_AS_MOVE,	from, to);
 								}
 							}
 						}
@@ -1212,7 +1228,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									XorBBs(N04_Silver, from, US);
-									return UtilMovePos::MakeCaptureMove(g_PTSILVER_ONBOARD_AS_MOVE,	from, to, *this);
+									return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTSILVER_ONBOARD_AS_MOVE,	from, to);
 								}
 							}
 						}
@@ -1249,7 +1265,7 @@ silver_drop_end:
 									&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 								{
 									this->XorBBs(N04_Silver, from, US);
-									return UtilMovePos::MakeCaptureMove(g_PTSILVER_ONBOARD_AS_MOVE,	from, to, *this);
+									return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTSILVER_ONBOARD_AS_MOVE,	from, to);
 								}
 							}
 						}
@@ -1284,7 +1300,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								this->XorBBs(N04_Silver, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTSILVER_ONBOARD_AS_MOVE,	from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTSILVER_ONBOARD_AS_MOVE,	from, to);
 							}
 						}
 					}
@@ -1300,7 +1316,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								this->XorBBs(N04_Silver, from, US);
-								return UtilMovePos::MakeCaptureMove(g_PTSILVER_ONBOARD_AS_MOVE,	from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTSILVER_ONBOARD_AS_MOVE,	from, to);
 							}
 						}
 					}
@@ -1343,7 +1359,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
 							{
 								this->XorBBs(N03_Knight, from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTKNIGHT_ONBOARD_AS_MOVE,	from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTKNIGHT_ONBOARD_AS_MOVE,	from, to);
 							}
 						}
 					}
@@ -1358,7 +1374,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal<true>(from, to, GetKingSquare(US), pinned))
 						{
 							this->XorBBs(N03_Knight, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTKNIGHT_ONBOARD_AS_MOVE, from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTKNIGHT_ONBOARD_AS_MOVE, from, to);
 						}
 					}
 					this->XorBBs(N03_Knight, from, US);
@@ -1406,7 +1422,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								this->XorBBs(N02_Lance,	from, US);
-								return UtilMovePos::MakeCapturePromoteMove(	g_PTLANCE_ONBOARD_AS_MOVE,from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTLANCE_ONBOARD_AS_MOVE,from, to);
 							}
 						}
 					}
@@ -1423,7 +1439,7 @@ silver_drop_end:
 								&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 							{
 								this->XorBBs(N02_Lance, from, US);
-								return UtilMovePos::MakeCaptureMove(g_PTLANCE_ONBOARD_AS_MOVE,from, to, *this);
+								return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTLANCE_ONBOARD_AS_MOVE,from, to);
 							}
 						}
 					}
@@ -1470,7 +1486,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							this->XorBBs(N01_Pawn, from, US);
-							return UtilMovePos::MakeCapturePromoteMove(	g_PTPAWN_ONBOARD_AS_MOVE, from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(*this,g_PTPAWN_ONBOARD_AS_MOVE, from, to);
 						}
 					}
 					this->XorBBs(N01_Pawn, from, US);
@@ -1497,7 +1513,7 @@ silver_drop_end:
 							&& !IsPinnedIllegal(from, to, GetKingSquare(US), pinned))
 						{
 							this->XorBBs(N01_Pawn, from, US);
-							return UtilMovePos::MakeCaptureMove(g_PTPAWN_ONBOARD_AS_MOVE,from, to, *this);
+							return UtilMovePos::BUILD_CARD_CAPTURE(*this, g_PTPAWN_ONBOARD_AS_MOVE,from, to);
 						}
 					}
 					this->XorBBs(N01_Pawn, from, US);
@@ -2068,7 +2084,7 @@ INCORRECT:
 
 Bitboard Position::GetBbOf10(const PieceType pt) const
 {
-	return this->m_BB_ByPiecetype_[pt];
+	return this->GetBbByPiecetype(pt);
 }
 
 Bitboard Position::GetBbOf10(const Color c) const
@@ -2148,6 +2164,7 @@ Bitboard Position::GetPinnedBB() const
 	}
 }
 
+// 王手を仕掛けている駒の位置か☆？
 Bitboard Position::GetCheckersBB() const
 {
 	return this->m_st_->m_checkersBB;
@@ -2221,9 +2238,9 @@ void Position::SetPiece(const Piece piece, const Square sq)
 
 	this->m_piece_[sq] = piece;
 
-	g_setMaskBb.AddBit(&this->m_BB_ByPiecetype_[pt], sq);
+	g_setMaskBb.AddBit(&this->GetBbByPiecetype(pt), sq);
 	g_setMaskBb.AddBit(&this->m_BB_ByColor_[c], sq);
-	g_setMaskBb.AddBit(&this->m_BB_ByPiecetype_[PieceType::N00_Occupied], sq);
+	g_setMaskBb.AddBit(&this->GetBbByPiecetype(PieceType::N00_Occupied), sq);
 }
 
 void Position::SetHand(const HandPiece hp, const Color c, const int num)

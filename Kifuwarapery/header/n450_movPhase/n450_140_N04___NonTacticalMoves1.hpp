@@ -10,43 +10,41 @@
 class NextmoveEvent;
 
 
-// 現在のムーブでＯＫか☆？
-class N02_PhKillers : public MovePhaseAbstract {
+// キラー・ムーブ[0] でも [1] でもなければ☆
+class N04___NonTacticalMoves1 : public MovePhaseAbstract {
 public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
 
-		nmEvent.SetCurrCard(nmEvent.GetKillerMoves());//m_currMove_ = m_killerMoves_;
+		
+		nmEvent.GoToTopTalon_CurrCard();// 山札の頂点（最後）のカードに、カーソルを合わせます。
+		nmEvent.SetSeekbarTerminated(nmEvent.Get_LastNonCapture());
 
-		// カードは作成せず、２枚目のカードを最後のカードとして覚えておきます。
-		nmEvent.SetTalonLastCard(nmEvent.GetCurrCard() + 2);
-
+		// 現在地と、山の頂上は　同じ位置になっているんじゃないのかなんだぜ☆？（＾ｑ＾）？
+		if (static_cast<Depth>(3 * OnePly) <= nmEvent.GetDepth()) {
+			std::sort(nmEvent.GetCurrCard(), nmEvent.GetSeekbarTerminated(), std::greater<MoveStack>());
+		}
 	}
 
 	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
-		
+
 		Move currCard = nmEvent.GetCurrCard()->m_move;
 
+		//────────────────────
+		// 進める☆
+		//────────────────────
 		nmEvent.GoNextCurCard();
 
 		if (
-			!currCard.IsNone() // 無いわけではない☆
+			// トランスポジション・テーブル・ムーブではなく、
+			currCard != nmEvent.GetTranspositionTableMove()
 			&&
-			currCard != nmEvent.GetTranspositionTableMove() // トランスポジション・テーブル・ムーブでない☆
+			// キラームーブの［１］でも［２］でもないなら☆
+			currCard != nmEvent.GetKillerMove(0).m_move
 			&&
-			(
-				nmEvent.GetPos().GetTurn()==Color::Black
-				?
-				// 先手番が　スード・リーガル
-				nmEvent.GetPos().MoveIsPseudoLegal<Color::Black,Color::White>(currCard, true)
-				:
-				// 後手版が　スード・リーガル
-				nmEvent.GetPos().MoveIsPseudoLegal<Color::White,Color::Black>(currCard, true)
-			)			
-			&&
-			// 移動先は、空きマスだ☆
-			nmEvent.GetPos().GetPiece(currCard.To()) == N00_Empty
-		){
+			currCard != nmEvent.GetKillerMove(1).m_move
+			)
+		{
 
 			//────────────────────────────────────────
 			// 確定
@@ -64,4 +62,4 @@ public:
 };
 
 
-extern N02_PhKillers g_phKillers;
+extern N04___NonTacticalMoves1 g_phNonTacticalMoves1;

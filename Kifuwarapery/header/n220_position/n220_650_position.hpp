@@ -59,7 +59,11 @@ public:
 
 	template<Color US>
 	Bitboard GetBbOf20(const PieceType pt) const {
-		return this->GetBbOf10(pt) & this->GetBbOf10(US);
+		return
+			this->GetBbOf10(pt)	// 駒の種類の利きか☆？
+			&
+			this->GetBbOf10(US)	// 色☆
+			;
 	}
 
 
@@ -335,8 +339,8 @@ private:
 
 	template<Color CLR>
 	inline void XorBBs(const PieceType pt, const Square sq) {
-		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[N00_Occupied], sq);
-		g_setMaskBb.XorBit(&this->m_BB_ByPiecetype_[pt], sq);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(N00_Occupied), sq);
+		g_setMaskBb.XorBit(&this->GetBbByPiecetype(pt), sq);
 		g_setMaskBb.XorBit(&this->m_BB_ByColor_[CLR], sq);
 	}
 	void XorBBs(const PieceType pt, const Square sq, const Color c);
@@ -415,8 +419,13 @@ private:
 	}
 	static Key GetZobHand(const HandPiece hp, const Color c);
 
-	// このポジションをピースタイプ毎にビットボードにしたもの。（byTypeBB は敵、味方の駒を区別しない）
+
+	// この局面で、ピースタイプ毎に、駒の位置☆？　をビットボードにしたもの。（byTypeBB は敵、味方の駒を区別しない）
+	// ゲッターを使って値を変えている☆
 	Bitboard m_BB_ByPiecetype_[g_PIECETYPE_NUM];
+	inline Bitboard GetBbByPiecetype(int piecetype) const { return this->m_BB_ByPiecetype_[piecetype]; };
+	inline void SetBbByPiecetype(int piecetype, Bitboard bb) { this->m_BB_ByPiecetype_[piecetype] = bb; }
+
 
 	// このポジションを白黒毎にビットボードにしたもの。（byColorBB は駒の種類を区別しない）
 	Bitboard m_BB_ByColor_[g_COLOR_NUM];

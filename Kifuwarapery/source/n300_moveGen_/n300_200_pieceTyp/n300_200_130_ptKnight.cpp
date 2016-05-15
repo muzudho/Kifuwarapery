@@ -13,7 +13,7 @@
 #include "../../../header/n220_position/n220_650_position.hpp"
 
 #include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
-#include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
 #include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_040_ptEvent.hpp"
 #include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_045_pieceTypeSeeEvent.hpp"
 #include "../../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_070_ptAbstract.hpp"

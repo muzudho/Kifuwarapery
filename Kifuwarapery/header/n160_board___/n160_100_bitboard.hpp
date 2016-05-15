@@ -134,7 +134,7 @@ public:
 	// Crossover は、MergeP() すると 1 である bit が重なる可能性があるなら true
 	template <bool Crossover = true>
 	int PopCount() const {
-		return (Crossover ? count1s(GetP(0)) + count1s(GetP(1)) : count1s(MergeP()));
+		return (Crossover ? count1s(this->GetP(0)) + count1s(this->GetP(1)) : count1s(this->MergeP()));
 	}
 
 	// bit が 1 つだけ立っているかどうかを判定する。

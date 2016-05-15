@@ -46,7 +46,7 @@ public:
 		}
 		const Square from = move.From();
 		const PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
-		return move | ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom) | UtilMovePos::GET_CAPTURED_PIECE_FROM_SQ(move.To(), pos);
+		return move | ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom) | UtilMovePos::BUILD_CARD_CAPTURED_PIECE_FROM_SQ(pos, move.To());
 	}
 
 

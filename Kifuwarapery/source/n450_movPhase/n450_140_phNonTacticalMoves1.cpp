@@ -1,5 +1,5 @@
-﻿#include "../../header/n450_movPhase/n450_140_N04_phNonTacticalMoves1.hpp"
+﻿#include "../../header/n450_movPhase/n450_140_N04___NonTacticalMoves1.hpp"
 
 
-N04_PhNonTacticalMoves1 g_phNonTacticalMoves1;
+N04___NonTacticalMoves1 g_phNonTacticalMoves1;
 

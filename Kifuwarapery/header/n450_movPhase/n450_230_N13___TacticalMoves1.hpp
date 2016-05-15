@@ -5,33 +5,38 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n220_position/n220_665_utilMove01.hpp"
 #include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
-#include "../n300_moveGen_/n300_200_pieceTyp/n300_200_025_utilMoveStack.hpp"
 #include "../n300_moveGen_/n300_700_moveGen_/n300_700_800_moveGenerator200.hpp"
 #include "../n440_movStack/n440_500_nextmoveEvent.hpp"
+#include "n450_025_utilMoveStack.hpp"
 #include "n450_070_movePhaseAbstract.hpp"
 
 
 class NextmoveEvent;
 
 
-class N13_PhTacticalMoves1 : public MovePhaseAbstract {
+class N13___TacticalMoves1 : public MovePhaseAbstract {
 public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
 
-		nmEvent.SetTalonLastCard(
-			// Ｎ０３（駒を取る手等）のカードを作成し、その最後のカードを覚えておきます。
-			g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro, nmEvent.GetCurrCard(), nmEvent.GetPos())
-		);
+		// 山札の底（最初）のカードに、カーソルを合わせます。
+		nmEvent.BackToHome_CurrCard();
 
-		nmEvent.ScoreCaptures();
+		// Ｎ０３（駒を取る手等）のカードを作成し、その最後のカードを覚えておきます。
+		MoveStack* pNewTalon = g_moveGenerator200.GenerateMoves_2(N03_CapturePlusPro, nmEvent.GetCurrCard(), nmEvent.GetPos());
+		nmEvent.SetSeekbarTerminated(pNewTalon);
+
+		nmEvent.DoScoreing_Captures();
 
 	}
 
 	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
 
-		MoveStack* pBestcard = UtilMoveStack::PickBest(nmEvent.GetCurrCard(), nmEvent.GetTalonLastCard());
+		MoveStack* pBestcard = UtilMoveStack::PickBest_AndSort(nmEvent.GetCurrCard(), nmEvent.GetSeekbarTerminated());
 
+		//────────────────────
+		// 進める☆
+		//────────────────────
 		nmEvent.GoNextCurCard();
 
 		// todo: see が確実に駒打ちじゃないから、内部で駒打ちか判定してるのは少し無駄。
@@ -66,4 +71,4 @@ public:
 };
 
 
-extern N13_PhTacticalMoves1 g_phTacticalMoves1;
+extern N13___TacticalMoves1 g_phTacticalMoves1;

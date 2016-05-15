@@ -138,10 +138,10 @@ MoveAndScoreIndex Book::GetProbe(const Position& position, const std::string& fN
 				const Square from = tmp.From();
 				const Move fromMove = ConvMove::FROM_PIECETYPE_ONBOARD10(ConvPiece::TO_PIECE_TYPE10(position.GetPiece(from)));
 				if (tmp.IsPromotion()) {
-					move = UtilMovePos::MakeCapturePromoteMove(	fromMove, from, to, position);
+					move = UtilMovePos::BUILD_CARD_CAPTURE_PROMOTE(position,fromMove, from, to);
 				}
 				else {
-					move = UtilMovePos::MakeCaptureMove( fromMove, from, to, position);
+					move = UtilMovePos::BUILD_CARD_CAPTURE(position, fromMove, from, to);
 				}
 			}
 			score = entry.m_score;

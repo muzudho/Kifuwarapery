@@ -4,12 +4,15 @@
 #include "../../header/n223_move____/n223_040_nodeType.hpp"
 #include "../../header/n223_move____/n223_200_depth.hpp"
 #include "../../header/n223_move____/n223_500_flashlight.hpp"
+
+#include "../../header/n830_evaluate/n830_700_evaluation09.hpp"	// FIXME:
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"	// FIXME:
 #include "../../header/n885_searcher/n885_310_hitchhikerQsearchAbstract.hpp"
 
 
-// N01_PV か、N02_NonPV でだけ使うことができるぜ☆（＾ｑ＾）
+// N01_PV か、N02_NonPV でだけ使うことができるぜ☆（＾ｑ＾）ルートでは使えない☆
 // スプリット・ポイントかそうでないかは見てないぜ☆
+// 静止探索☆ 再帰するぜ☆
 ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 	Rucksack& rucksack,
 	bool INCHECK,
@@ -120,10 +123,16 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 	Evaluation09 evaluation;
 	evaluation.evaluate(pos, pFlashlight);
 
-	NextmoveEvent mp(pos, ttMove, depth, rucksack.m_history, (pFlashlight - 1)->m_currentMove.To());
+	NextmoveEvent videodeck( // 静止探索用
+		pos,
+		ttMove,
+		depth,
+		rucksack.m_history,
+		(pFlashlight - 1)->m_currentMove.To()
+	);
 	const CheckInfo ci(pos);
 
-	while (!(move = mp.GetNextMove_NonSplitedNode()).IsNone())
+	while (!(move = videodeck.GetNextMove_NonSplitedNode()).IsNone())
 	{
 		assert(pos.IsOK());
 
@@ -188,7 +197,8 @@ ScoreIndex HitchhikerQsearchAbstract::DoQsearch(
 			;
 
 		(pFlashlight + 1)->m_staticEvalRaw.m_p[0][0] = ScoreNotEvaluated;
-		score = // 再帰関数☆（＾ｑ＾）
+		score =
+			// 静止探索☆　自分自身を呼び出している（再帰）ぜ☆（＾ｑ＾）
 			-this->DoQsearch(rucksack, givesCheck, pos, pFlashlight + 1, -beta, -alpha, depth - OnePly);
 		pos.UndoMove(move);
 

@@ -42,7 +42,7 @@ const ScoreIndex PieceScore::m_PromoteRookScore = PieceScore::m_dragon - PieceSc
 
 const ScoreIndex PieceScore::m_ScoreKnownWin = PieceScore::m_king;
 
-
+// 白黒の両方が入っている☆？
 const ScoreIndex PieceScore::m_PieceScore[Piece::N31_PieceNone] = {
 	ScoreZero,
 	PieceScore::m_pawn,

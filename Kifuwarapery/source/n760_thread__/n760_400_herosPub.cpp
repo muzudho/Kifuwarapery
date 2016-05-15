@@ -115,7 +115,7 @@ void HerosPub::StartThinking(
 
 #if defined LEARN
 	// searchMoves を直接使う。
-	GetPos.GetRucksack()->m_rootMoves.push_back(RootMove(position.GetRucksack()->m_ourMoves[0]));
+	position.GetRucksack()->m_rootMoves.push_back(RootMove(position.GetRucksack()->m_ourMoves[0]));
 #else
 	const MoveType MT = N08_Legal;
 	for (MoveList<MT> ml(position); !ml.IsEnd(); ++ml) {
@@ -129,7 +129,7 @@ void HerosPub::StartThinking(
 
 #if defined LEARN
 	// 浅い探索なので、thread 生成、破棄のコストが高い。余分な thread を生成せずに直接探索を呼び出す。
-	GetPos.GetRucksack()->Think(GetPos.GetRucksack());
+	Hitchhiker::Think(*position.GetRucksack());
 #else
 	this->GetFirstCaptain()->m_isThinking = true;
 	this->GetFirstCaptain()->NotifyOne();

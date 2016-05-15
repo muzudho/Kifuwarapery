@@ -36,18 +36,27 @@ public:
 private:
 
 	template<Color US, Color THEM>
-	static inline MoveStack* GENERATE_MOVE_(MoveStack* moveStackList, const Position& pos, bool all = false
+	static inline MoveStack* GENERATE_MOVE_(
+		MoveStack* moveStackList,
+		const Position& pos,
+		bool all = false
 		) {
 
 		assert(pos.IsOK());
 		assert(pos.InCheck());
 
+		// 玉の位置
 		const Square ksq = pos.GetKingSquare(US);
 
+		// 手番側の玉に攻撃を仕掛けている駒の位置☆
 		const Bitboard checkers = pos.GetCheckersBB();
+
 		Bitboard bb = checkers;
 		Bitboard bannedKingToBB = Bitboard::CreateAllZeroBB();
+
+		// 王手を仕掛けてきている駒の数☆
 		int checkersNum = 0;
+
 		Square checkSq;
 
 		// 玉が逃げられない位置の bitboard を生成する。
@@ -70,16 +79,18 @@ private:
 			// todo: FOECE_INLINE と template 省いてNPS比較
 			g_pieceArray.m_pieceAbstractArray[pos.GetPiece(checkSq)]->MakeBanned2KingTo(bannedKingToBB, pos, checkSq, ksq);
 
-		} while (bb.Exists1Bit());
+		} while (bb.Exists1Bit()); // ビットが立っている限り☆
 
-
+		//────────────────────────────────────────────────────────────────────────────────
 		// 玉が移動出来る移動先を格納。
+		//────────────────────────────────────────────────────────────────────────────────
 		bb = bannedKingToBB.NotThisAnd(pos.GetBbOf10(US).NotThisAnd(g_kingAttackBb.GetControllBb(ksq)));
 		while (bb.Exists1Bit()) {
 			const Square to = bb.PopFirstOneFromI9();
 			// 移動先に相手駒の利きがあるか調べずに指し手を生成する。
 			// attackersTo() が重いので、ＭｏｖｅＰｉｃｋｅｒ か search で合法手か調べる。
-			moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(g_PTKING_ONBOARD_AS_MOVE, ksq, to, pos);
+			moveStackList->m_move = g_makePromoteMove.BuildCard_CaptureCategory(
+				pos, g_PTKING_ONBOARD_AS_MOVE, ksq, to);
 			moveStackList++;
 		}
 
@@ -89,23 +100,33 @@ private:
 			return moveStackList;
 		}
 
-		// 王手している駒を玉以外で取る手の生成。
-		// pin されているかどうかは ＭｏｖｅＰｉｃｋｅｒ か search で調べる。
-		const Bitboard target1 = g_betweenBb.GetBetweenBB(checkSq, ksq);
-		const Bitboard target2 = target1 | checkers;
 
+		//────────────────────────────────────────────────────────────────────────────────
+		// 王手している駒を玉以外で取る手の生成。
+		//────────────────────────────────────────────────────────────────────────────────
+		// pin されているかどうかは ＭｏｖｅＰｉｃｋｅｒ か search で調べる。
+
+		// 2点間 a,b を結ぶ線（２点 a,b は含まない）。
+		const Bitboard segmentBits = g_betweenBb.GetBetweenBB(
+			checkSq,	// 手番側の玉に王手を掛けていた駒のうち、最後のものか☆？（＾ｑ＾）
+			ksq			// 手番側の玉の位置☆
+			);//target1
+		// 移動してほしい升。王手を仕掛けている駒の位置＋２点間の線分
+		const Bitboard destinationBb = segmentBits | checkers; //target2
+
+		// 王手回避を指定（意味はない）
 		const PieceMoveEvent pmEvent(MoveType::N06_Evasion, all, pos, ksq);
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<US>(moveStackList, pmEvent, target2);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<US>(moveStackList, pmEvent, target2);
+		moveStackList = PieceMovesGenerator::BuildCards_N01_Pawn<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N02_Lance<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N03_Knight<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N04_Silver<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N05_Bishop<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N06_Rook<US>(moveStackList, pmEvent, destinationBb);
+		moveStackList = PieceMovesGenerator::BuildCards_N16_GoldHorseDragon<US>(moveStackList, pmEvent, destinationBb);
 
-		if (target1.Exists1Bit()) {
-			moveStackList = g_dropMoveGenerator.GenerateDropMoves<US,THEM>(moveStackList, pos, target1);
+		if (segmentBits.Exists1Bit()) {
+			moveStackList = g_dropMoveGenerator.BuildCards_Drop<US,THEM>(moveStackList, pos, segmentBits);
 		}
 
 		return moveStackList;

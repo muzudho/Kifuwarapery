@@ -14,7 +14,7 @@ public:
 
 	void Go(const Position& pos, std::istringstream& ssCmd);
 #if defined LEARN
-	void Go(const Position& GetPos, const Ply GetDepth, const Move GetMove);
+	void Go(const Position& pos, const Ply depth, const Move move);
 #endif
 
 	void SetPosition(Position& pos, std::istringstream& ssCmd);

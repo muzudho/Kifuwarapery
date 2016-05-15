@@ -38,20 +38,20 @@ private:
 
 		Bitboard target = pos.GetEmptyBB();
 
-		moveStackList = g_dropMoveGenerator.GenerateDropMoves<US,THEM>(moveStackList, pos, target);
+		moveStackList = g_dropMoveGenerator.BuildCards_Drop<US,THEM>(moveStackList, pos, target);
 		target |= pos.GetBbOf10(THEM);
 		const Square ksq = pos.GetKingSquare(THEM);
 
 		const PieceMoveEvent pmEvent(MoveType::N07_NonEvasion, false, pos, ksq);
 
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N01_Pawn<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N02_Lance<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N03_Knight<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N04_Silver<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N05_Bishop<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N06_Rook<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N16_GoldHorseDragon<US>(moveStackList, pmEvent, target);
-		moveStackList = PieceMovesGenerator::GeneratePieceMoves_N08_King<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N01_Pawn<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N02_Lance<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N03_Knight<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N04_Silver<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N05_Bishop<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N06_Rook<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N16_GoldHorseDragon<US>(moveStackList, pmEvent, target);
+		moveStackList = PieceMovesGenerator::BuildCards_N08_King<US>(moveStackList, pmEvent, target);
 
 		return moveStackList;
 	}

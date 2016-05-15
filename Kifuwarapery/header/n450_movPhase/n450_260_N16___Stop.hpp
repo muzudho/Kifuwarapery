@@ -10,13 +10,16 @@
 class NextmoveEvent;
 
 
-class N16_PhStop : public MovePhaseAbstract {
+class N16___Stop : public MovePhaseAbstract {
 public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
 
+		// 山札の底（最初）のカードに、カーソルを合わせます。
+		nmEvent.BackToHome_CurrCard();
+
 		// カードは作成せず、次のカードを最後のカードとして覚えておきます。
-		nmEvent.SetTalonLastCard(nmEvent.GetCurrCard() + 1);
+		nmEvent.SetSeekbarTerminated(nmEvent.GetCurrCard() + 1);
 
 	}
 
@@ -32,4 +35,4 @@ public:
 };
 
 
-extern N16_PhStop g_phStop;
+extern N16___Stop g_phStop;

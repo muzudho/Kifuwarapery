@@ -7,10 +7,10 @@
 #include "../n165_movStack/n165_400_move.hpp"
 #include "../n165_movStack/n165_420_convMove.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
-#include "../n223_move____/n223_060_stats.hpp"
 #include "../n223_move____/n223_500_flashlight.hpp"
 #include "../n300_moveGen_/n300_100_movPhase/n300_100_050_movegeneratorPhase.hpp"
 #include "../n300_moveGen_/n300_200_pieceTyp/n300_200_020_moveStack.hpp"
+#include "../n440_movStack/n440_060_stats.hpp"
 
 
 using History = Stats<false>;
@@ -35,12 +35,50 @@ public:
 	Move GetNextMove_SplitedNode();
 	Move GetNextMove_NonSplitedNode();
 
-	inline Move GetTranspositionTableMove() {
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// トランスポジション・テーブル・ムーブ
+	//────────────────────────────────────────────────────────────────────────────────
+	inline Move GetTranspositionTableMove() const {
 		return this->m_ttMove_;
 	}
+	inline void SetTranspositionTableMove(Move value) {
+		this->m_ttMove_ = value;
+	}
+	inline void SetTranspositionTableMove( Move ttm, const Position& pos) {
+		this->m_ttMove_ =
+			// トランスポジション・テーブル・ムーブが設定ありで
+			!ttm.IsNone()
+			&&
+			(
+				pos.GetTurn() == Color::Black
+				?
+				// 先手で
+				pos.MoveIsPseudoLegal<Color::Black, Color::White>(ttm)
+				:
+				// 後手で
+				pos.MoveIsPseudoLegal<Color::White, Color::Black>(ttm)
+				)
+			?
+			// リーガルなら、引数で渡されてくるムーブを、トランスポジション・テーブル・ムーブとします。
+			ttm
+			:
+			// イリーガルなら
+			g_MOVE_NONE;
+	}
+	inline void ClearTranspositionTableMove() {
+		this->SetTranspositionTableMove(g_MOVE_NONE);
+	}
 
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 山札上のカーソル
+	//────────────────────────────────────────────────────────────────────────────────
 	MoveStack* GetCurrCard() const { return this->m_currMove_; }
 	void SetCurrCard(MoveStack* value) { this->m_currMove_ = value; }
+	void BackToHome_CurrCard() { this->SetCurrCard(this->GetTalonFirstCard()); };// legalMoves_[0] は番兵
+	void GoToTopTalon_CurrCard() { this->SetCurrCard(this->GetSeekbarTerminated()); };// 山札の最後へカーソル移動☆
+	void GoToEndTalonCapacity_CurCard(){ this->SetCurrCard(this->GetTalonZeroCard() + Move::m_MAX_LEGAL_MOVES - 1); }// 山札の限界ＭＡＸ頂点（空間の最後）にカーソルを合わせる☆
 	inline void GoNextCurCard() {
 		++this->m_currMove_;
 	};
@@ -49,22 +87,34 @@ public:
 	};
 
 
+	//────────────────────────────────────────────────────────────────────────────────
+	// 山札の一番底（先頭）の１つ前（番兵）のカード
+	//────────────────────────────────────────────────────────────────────────────────
 	// 旧名：ＧｅｔＬｅｇａｌＭｏｖｅｓ
-	// 山札の一番底（先頭）の１つ前（番兵）のカードを取得。
+	// カードを取得。
 	MoveStack* GetTalonZeroCard() { return this->m_legalMoves_; }
 
-	// 山札の一番底（先頭）のカードを取得。
+	//────────────────────────────────────────────────────────────────────────────────
+	// 山札の一番底（先頭）のカード
+	//────────────────────────────────────────────────────────────────────────────────
+	// カードを取得。
 	MoveStack* GetTalonFirstCard() { return &m_legalMoves_[1]; } // [0] は番兵
 
-	MoveStack* GetTalonLastCard() const { return this->m_lastMove_; }
+	//────────────────────────────────────────────────────────────────────────────────
+	// シーク・バーの終着点とするカード
+	//────────────────────────────────────────────────────────────────────────────────
+	// 山札の一番上（最後）だったり、天札の底（最後）だったりするぜ☆（＾ｑ＾）
+	MoveStack* GetSeekbarTerminated() const { return this->m_lastMove_; }
 	// 山札の一番上（最後）のカードを覚えておきます。
-	void SetTalonLastCard(MoveStack* value) { this->m_lastMove_ = value; }
-	void GotoNextTalonLastCard(int offset) { this->m_lastMove_ += offset; }
-	void SetTalonLastCardAndLastNonCaputre(MoveStack* value) {
-		this->m_lastMove_ = value;
-		this->m_lastNonCapture_ = value;
-	}
-	MoveStack* GetLastNonCapture() const { return m_lastNonCapture_; }
+	void SetSeekbarTerminated(MoveStack* value) { this->m_lastMove_ = value; }
+	void IncreaseSeekbarTerminated(int offset) { this->m_lastMove_ += offset; }
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// 駒を取らない手の最後のカード
+	//────────────────────────────────────────────────────────────────────────────────
+	// 駒を取らない手の最後のカードを覚えておきます。
+	MoveStack* Get_LastNonCapture() const { return m_lastNonCapture_; }
+	void SetLastNonCaputre(MoveStack* value) { this->m_lastNonCapture_ = value; }
 
 
 	const Position& GetPos() const { return this->m_pos_; }
@@ -75,46 +125,79 @@ public:
 	void SetCaptureThreshold(int value) { this->m_captureThreshold_ = value; }
 
 
-	MoveStack* GetEndBadCaptures() const { return this->m_pEndBadCaptures_; }
-	void GoToPreviousEndBadCaptures() { this->m_pEndBadCaptures_--; }
-	void SetEndBadCaptures(MoveStack* value) { this->m_pEndBadCaptures_ = value; }
+	//────────────────────────────────────────────────────────────────────────────────
+	// 天札の底（最後）　（山札の許容空間の最後から、前方に戻ってカーソルが進んでいくぜ☆）
+	//────────────────────────────────────────────────────────────────────────────────
+	// 旧名：ＥｎｄＢａｄＣａｐｔｕｒｅｓ
+	//
+	// 貧乏削りの鉛筆みたいだぜ☆（＾ｑ＾）
+	// 点数が悪かった駒の取り合いの手を、まだマシな順に後ろから入れていくぜ☆
+	MoveStack* GetBottom_SkyTalon() const { return this->m_pEndBadCaptures_; }
+	void DownBottom_SkyTalon() { this->m_pEndBadCaptures_--; }
+	void SetBottom_SkyTalon(MoveStack* value) { this->m_pEndBadCaptures_ = value; }//ボトムがエンド☆
 
+	// 天札　を消去します。
+	void Clear_SkyTalon(){ this->SetBottom_SkyTalon(this->GetTalonZeroCard() + Move::m_MAX_LEGAL_MOVES - 1); }
+
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// キラー・ムーブス
+	//────────────────────────────────────────────────────────────────────────────────
 	MoveStack* GetKillerMoves() const { return (MoveStack*)this->m_killerMoves_; }
 	MoveStack GetKillerMove(int index) const { return this->m_killerMoves_[index]; }
+
+
 
 	Square GetRecaptureSquare()const { return this->m_recaptureSquare_; }
 
 	Depth GetDepth() const { return this->m_depth_; }
 
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// フェーズ
+	//────────────────────────────────────────────────────────────────────────────────
 	void SetPhase(GenerateMovePhase value) { this->m_phase_ = value; }
+	void IncreasePhase() { ++this->m_phase_; }
 
 
 public:// もともと本当はプライベート・メソッド☆
 
-	//template <bool IsDrop> void ScoreNonCapturesMinusPro();
 	template <bool IsDrop>
-	void NextmoveEvent::ScoreNonCapturesMinusPro() {
-		for (MoveStack* curr = this->GetCurrCard(); curr != this->GetTalonLastCard(); ++curr) {
+	void NextmoveEvent::DoScoreing_NonCapturesMinusPro() {
+		for (MoveStack* curr = this->GetCurrCard(); curr != this->GetSeekbarTerminated(); ++curr) {
 			const Move move = curr->m_move;
-			curr->m_score =
-				GetHistory().GetValue(IsDrop,
-					ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(GetPos().GetTurn(),
-						(IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())),
-					move.To());
+
+			curr->m_score =	this->GetHistory().GetValue(
+				// ドロップか
+				IsDrop,
+				// 駒
+				ConvPiece::FROM_COLOR_AND_PIECE_TYPE10(
+					GetPos().GetTurn(),
+					(IsDrop ? move.GetPieceTypeDropped() : move.GetPieceTypeFrom())
+				),
+				// 移動先
+				move.To()
+			);
 		}
 	}
 
-	void ScoreCaptures();
+	void DoScoreing_Captures();
 
-	void ScoreEvasions();
+	void DoScoreing_Evasions();
 
 private:
 
 	GenerateMovePhase GetPhase() const { return m_phase_; }
 
+
+	//────────────────────────────────────────────────────────────────────────────────
+	// ヒストリー
+	//────────────────────────────────────────────────────────────────────────────────
+	// 駒を取らない手で見かける☆
 	const History& GetHistory() const { return m_history_; }
 
 
+private:
 	const Position&		m_pos_;
 
 	const History&		m_history_;

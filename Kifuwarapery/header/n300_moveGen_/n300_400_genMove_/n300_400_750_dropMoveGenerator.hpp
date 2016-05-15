@@ -55,7 +55,7 @@ public:
 	// ループの展開はコードが膨れ上がる事によるキャッシュヒット率の低下と、演算回数のバランスを取って決める必要がある。
 	// NPSに影響が出ないならシンプルにした方が良さそう。
 	template<Color US,Color THEM>
-	MoveStack* GenerateDropMoves(
+	MoveStack* BuildCards_Drop(
 		MoveStack* pMovestack,
 		const Position& pos,
 		const Bitboard& target

@@ -25,13 +25,17 @@ struct EvalSum {
 		return *this;
 	}
 #endif
+
 	EvalSum() {}
+
 	s32 GetSum(const Color c) const {
 		const s32 scoreBoard = m_p[0][0] - m_p[1][0] + m_p[2][0];
 		const s32 scoreTurn = m_p[0][1] + m_p[1][1] + m_p[2][1];
 		return (c == Black ? scoreBoard : -scoreBoard) + scoreTurn;
 	}
+
 	EvalSum& operator += (const EvalSum& rhs) {
+
 #if defined USE_AVX2_EVAL
 		mm = _mm256_add_epi32(mm, rhs.mm);
 #elif defined USE_SSE_EVAL
@@ -47,6 +51,7 @@ struct EvalSum {
 #endif
 		return *this;
 	}
+
 	EvalSum& operator -= (const EvalSum& rhs) {
 #if defined USE_AVX2_EVAL
 		mm = _mm256_sub_epi32(mm, rhs.mm);
@@ -63,7 +68,9 @@ struct EvalSum {
 #endif
 		return *this;
 	}
+
 	EvalSum operator + (const EvalSum& rhs) const { return EvalSum(*this) += rhs; }
+
 	EvalSum operator - (const EvalSum& rhs) const { return EvalSum(*this) -= rhs; }
 
 	// ehash 用。
@@ -74,6 +81,7 @@ struct EvalSum {
 		m_key ^= m_data[0] ^ m_data[1] ^ m_data[2];
 #endif
 	}
+
 	void Decode() {
 		// 反転するだけだからエンコードと同じ。
 		this->Encode();
@@ -92,6 +100,7 @@ struct EvalSum {
 		__m128i m[2];
 #endif
 	};
+
 };
 
 

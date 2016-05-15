@@ -13,72 +13,78 @@
 //class Position;
 
 
-class MakePromoteMove {
+// 成る手☆？
+class MoveMaker_ExceptPromote {
 public:
 
 	//(^q^)新型2
 	// MoveType によって指し手生成関数を使い分ける。
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	static inline Move GetSelectedMakeMove_ExceptPromote_mt2(
+	static inline Move BuildCard_mt2(// 成らない☆？
 		MoveType mt,
-		const Move pieceTypeAsMove,
-		const Square from, const Square to, const Position& pos) {
+		const Position& pos,		// （５）
+		const Move pieceTypeAsMove,	// （４）
+		const Square from,			// （２）
+		const Square to				// （１）
+		) {
 
-		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）
-		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
+		Move move = (mt == N01_NonCapture || mt == N04_NonCaptureMinusPro)
+			?
+			// 駒を取らない手☆
 			ConvMove::FROM_PT_SRC_DST20(
 				pieceTypeAsMove,
-				from, to) :
-			UtilMovePos::MakeCaptureMove(
-				pieceTypeAsMove,// これ Move にならないのかだぜ☆？（＾ｑ＾）？
-				from, to, pos)
-			);
+				from,
+				to
+			)
+			:
+			// 駒を取る手☆
+			UtilMovePos::BUILD_CARD_CAPTURE(
+				pos,				// 駒を取るために☆
+				pieceTypeAsMove,
+				from,
+				to
+			)
+		;
 		return move;
 	}
 	//(^q^)新型1
 	// MoveType によって指し手生成関数を使い分ける。
 	// Drop, Check, Evasion, の場合は別で指し手生成を行う。
-	static inline Move GetSelectedMakeMove_ExceptPromote_goldHorseDragon(
+	static inline Move BuildCard_goldHorseDragon(// 成らない☆？
 		MoveType mt,
-		const PieceType pt, // 新型２ならここを Move にできるぜ☆（＾ｑ＾）
-		const Square from, const Square to, const Position& pos) {
+		const Position& pos,		// （５）
+		const PieceType pt,			// （４） // 新型２ならここを Move にできるぜ☆（＾ｑ＾）
+		const Square from,			// （２）
+		const Square to				// （１）
+		) {
 
 		// キャプチャー系か、非キャプチャー系かで処理を分けるぜ☆（＾ｑ＾）
 		Move move = ((mt == N01_NonCapture || mt == N04_NonCaptureMinusPro) ?
 			ConvMove::FROM_PT_SRC_DST20(
 				ConvMove::FROM_PIECETYPE_ONBOARD10(pt),
 			from, to) :
-			UtilMovePos::MakeCaptureMove(
+			UtilMovePos::BUILD_CARD_CAPTURE(
+				pos,
 				ConvMove::FROM_PIECETYPE_ONBOARD10( pt),
-			from, to, pos)
+				from,
+				to
+				)
 		);
 		return move;
 	}
 
 	// 非キャプチャー系と分かっているならこちら☆（＾ｑ＾）
-	static inline Move GetSelectedMakeMove_ExceptPromote_CaptureCategory(
-		const Move pieceTypeAsMove,
-		const Square from,
-		const Square to,
-		const Position& pos
+	static inline Move BuildCard_CaptureCategory(// 成らない☆？
+		const Position& pos,			// （５）
+		const Move pieceTypeAsMove,		// （４）
+		const Square from,				// （２）
+		const Square to					// （１）
 		) {
 		//MoveType mt_forAssert, assert(!(mt_forAssert == N01_NonCapture || mt_forAssert == N04_NonCaptureMinusPro), "");
-		return UtilMovePos::MakeCaptureMove(pieceTypeAsMove, from, to, pos);
-	}
-
-	static inline void APPEND_PROMOTE_FLAG(Move& move)
-	{
-		//, MoveType mt_forAssert, const PieceType pt_forAssert
-		//assert(!(
-		//	// 持ち駒の打ち込みに成りは無い☆
-		//	mt_forAssert == N02_Drop ||
-		//	// 金と玉に成りは無い☆
-		//	pt_forAssert == N07_Gold || pt_forAssert == N08_King
-		//));
-		move |= g_MOVE_PROMOTE_FLAG;
+		return UtilMovePos::BUILD_CARD_CAPTURE(pos, pieceTypeAsMove, from, to);
 	}
 
 };
 
 
-extern MakePromoteMove g_makePromoteMove;
+extern MoveMaker_ExceptPromote g_makePromoteMove;

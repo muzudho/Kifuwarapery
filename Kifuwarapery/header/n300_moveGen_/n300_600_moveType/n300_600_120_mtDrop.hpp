@@ -17,7 +17,7 @@ public:
 		) const override {
 
 		if (pos.GetTurn() == Color::Black) {
-			return g_dropMoveGenerator.GenerateDropMoves<Color::Black,Color::White>(
+			return g_dropMoveGenerator.BuildCards_Drop<Color::Black,Color::White>(
 				moveStackList,
 				pos,
 				pos.GetEmptyBB()//target
@@ -25,7 +25,7 @@ public:
 		}
 		else
 		{
-			return g_dropMoveGenerator.GenerateDropMoves<Color::White, Color::Black>(
+			return g_dropMoveGenerator.BuildCards_Drop<Color::White, Color::Black>(
 				moveStackList,
 				pos,
 				pos.GetEmptyBB()//target

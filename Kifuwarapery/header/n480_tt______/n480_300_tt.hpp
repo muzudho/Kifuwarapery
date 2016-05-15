@@ -8,7 +8,8 @@
 class TranspositionTable {
 public:
 
-	TranspositionTable() : m_size_(0), m_entries_(nullptr), m_generation_(0) {}
+	TranspositionTable() : m_size_(0), m_entries_(nullptr), m_generation_(0) {
+	}
 
 	~TranspositionTable() {
 		delete[] m_entries_;

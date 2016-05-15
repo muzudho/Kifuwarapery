@@ -4,7 +4,8 @@
 #include "../../header/n165_movStack/n165_420_convMove.hpp"
 #include "../../header/n220_position/n220_650_position.hpp"
 
-#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_makePromoteMove.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_030_moveMaker_ExceptPromote.hpp"
+#include "../../header/n300_moveGen_/n300_200_pieceTyp/n300_200_033_moveMaker_Promote.hpp"
 #include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n720_usi_____/n720_260_usiOperation.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
@@ -39,7 +40,11 @@ const StringToPieceTypeCSA g_stringToPieceTypeCSA;
 
 
 // 考え始めるのはここ。
-void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
+void UsiOperation::Go(
+	const Position& pos,
+	std::istringstream& ssCmd
+	) {
+
 	LimitsOfThinking limits;
 	std::vector<Move> moves;
 	std::string token;
@@ -90,7 +95,7 @@ void UsiOperation::Go(const Position& pos, std::istringstream& ssCmd) {
 void UsiOperation::Go(const Position& GetPos, const Ply GetDepth, const Move GetMove) {
 	LimitsOfThinking m_limits;
 	std::vector<Move> moves;
-	m_limits.GetDepth = GetDepth;
+	m_limits.SetDepth( GetDepth);
 	moves.push_back(GetMove);
 	GetPos.GetRucksack()->m_ownerHerosPub.StartThinking(GetPos, m_limits, moves);
 }
@@ -203,18 +208,20 @@ Move UsiOperation::UsiToMoveBody(const Position& pos, const std::string& moveStr
 		}
 		const Square to = ConvSquare::FROM_FILE_RANK10(toFile, toRank);
 		if (moveStr[4] == '\0') {
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			move = g_makePromoteMove.BuildCard_CaptureCategory(
+				pos,
 				ConvMove::FROM_PIECETYPE_ONBOARD10( ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from))), // （＾ｑ＾）
-				from, to, pos);
+				from, to);
 		}
 		else if (moveStr[4] == '+') {
 			if (moveStr[5] != '\0') {
 				return g_MOVE_NONE;
 			}
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			move = g_makePromoteMove.BuildCard_CaptureCategory(
+				pos,
 				ConvMove::FROM_PIECETYPE_ONBOARD10( ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from))),
-				from, to, pos);
-			MakePromoteMove::APPEND_PROMOTE_FLAG(move);
+				from, to);
+			MoveMaker_Promote::APPEND_PROMOTE_FLAG(move);
 		}
 		else {
 			return g_MOVE_NONE;
@@ -273,16 +280,18 @@ Move UsiOperation::CsaToMoveBody(const Position& pos, const std::string& moveStr
 		PieceType ptFrom = ConvPiece::TO_PIECE_TYPE10(pos.GetPiece(from));
 		if (ptFrom == ptTo) {
 			// non promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			move = g_makePromoteMove.BuildCard_CaptureCategory(
+				pos,
 				ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom),
-				from, to, pos);
+				from, to);
 		}
 		else if (ptFrom + PTPromote == ptTo) {
 			// promote
-			move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_CaptureCategory(
+			move = g_makePromoteMove.BuildCard_CaptureCategory(
+				pos,
 				ConvMove::FROM_PIECETYPE_ONBOARD10(ptFrom),
-				from, to, pos);
-			MakePromoteMove::APPEND_PROMOTE_FLAG(move);//, N00_Capture, ptFrom
+				from, to);
+			MoveMaker_Promote::APPEND_PROMOTE_FLAG(move);//, N00_Capture, ptFrom
 		}
 		else {
 			return g_MOVE_NONE;

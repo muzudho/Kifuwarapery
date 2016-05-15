@@ -39,7 +39,7 @@ public:
 		rucksack.ZeroclearBestMovePlyChanges();
 #if defined LEARN
 		// 高速化の為に浅い探索は反復深化しないようにする。学習時は浅い探索をひたすら繰り返す為。
-		GetDepth = std::max<Ply>(0, m_limits.GetDepth - 1);
+		depth = std::max<Ply>(0, rucksack.m_limits.GetDepth() - 1);
 #else
 		depth = 0;
 #endif
@@ -107,8 +107,8 @@ public:
 			// Multi PV loop
 			for (rucksack.m_pvIdx = 0; rucksack.m_pvIdx < rucksack.m_pvSize && !rucksack.m_signals.m_stop; ++rucksack.m_pvIdx) {
 #if defined LEARN
-				m_alpha = rucksack.m_alpha;
-				m_beta = rucksack.m_beta;
+				alpha = rucksack.m_alpha;
+				beta = rucksack.m_beta;
 #else
 				// aspiration search
 				// alpha, beta をある程度絞ることで、探索効率を上げる。

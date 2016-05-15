@@ -20,7 +20,7 @@ public:
 
 	// 角, 飛車の共通処理☆
 	template<const bool isBishop,const Color US>
-	static FORCE_INLINE MoveStack* GenerateBishopOrRookMoves(
+	static FORCE_INLINE MoveStack* BuildCards_BishopOrRook(
 		MoveStack* moveStackList,
 		//const PieceType pt,
 		Move pieceTypeAsMove,
@@ -40,20 +40,20 @@ public:
 				if (fromCanPromote | toCanPromote) {
 
 					// 成りVer☆
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,pieceTypeAsMove,from, to, ptEvent.m_pos);
-					MakePromoteMove::APPEND_PROMOTE_FLAG(moveStackList->m_move);
+					moveStackList->m_move = g_makePromoteMove.BuildCard_mt2(ptEvent.m_mt, ptEvent.m_pos, pieceTypeAsMove,from, to);
+					MoveMaker_Promote::APPEND_PROMOTE_FLAG(moveStackList->m_move);
 					moveStackList++;
 
 					// 次の指し手は不成Ver☆
 					if (ptEvent.m_mt == N07_NonEvasion || ptEvent.m_all)
 					{
-						moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,pieceTypeAsMove,from, to, ptEvent.m_pos);
+						moveStackList->m_move = g_makePromoteMove.BuildCard_mt2(ptEvent.m_mt, ptEvent.m_pos, pieceTypeAsMove,from, to);
 						moveStackList++;
 					}
 				}
 				else // 角、飛車は成れるなら成り、不成は生成しない。
 				{
-					moveStackList->m_move = g_makePromoteMove.GetSelectedMakeMove_ExceptPromote_mt2(ptEvent.m_mt,pieceTypeAsMove,from, to, ptEvent.m_pos);
+					moveStackList->m_move = g_makePromoteMove.BuildCard_mt2(ptEvent.m_mt, ptEvent.m_pos, pieceTypeAsMove,from, to);
 					moveStackList++;
 				}
 			}

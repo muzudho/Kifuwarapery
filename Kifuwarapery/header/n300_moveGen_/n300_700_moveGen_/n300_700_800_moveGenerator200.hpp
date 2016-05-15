@@ -31,7 +31,9 @@ class MoveGenerator200 {
 public:
 
 	inline MoveStack* GenerateMoves_2(
-		MoveType mt, MoveStack* pMoveStackList, const Position& pos
+		MoveType mt,
+		MoveStack* pMoveStackList,
+		const Position& pos
 	) const {
 		return g_moveTypeArray.m_moveTypeArray[mt]->GenerateMove(pMoveStackList, pos);
 	}

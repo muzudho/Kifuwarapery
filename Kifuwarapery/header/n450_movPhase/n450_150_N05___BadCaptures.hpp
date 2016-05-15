@@ -11,16 +11,17 @@ class NextmoveEvent;
 
 
 // 山札の後ろからカードを積んでいき、カーソルは前へ戻す☆
-class N05_PhBadCaptures : public MovePhaseAbstract {
+// 山札の後ろには、 N01_PhTacticalMoves0 でカードを入れていた☆
+class N05___BadCaptures : public MovePhaseAbstract {
 public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
 
-		// 山札の限界ＭＡＸ頂点（空間の最後）にカーソルを合わせる☆？？
-		nmEvent.SetCurrCard(nmEvent.GetTalonZeroCard() + Move::m_MAX_LEGAL_MOVES - 1);
+		// 天札の頂点（最初）を、ファーストにします。
+		nmEvent.GoToEndTalonCapacity_CurCard();
 
-		nmEvent.SetTalonLastCard(nmEvent.GetEndBadCaptures());
-
+		// 天札の底（最後）を、ラストにします。
+		nmEvent.SetSeekbarTerminated(nmEvent.GetBottom_SkyTalon());
 	}
 
 	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
@@ -32,7 +33,9 @@ public:
 		// 現在のムーブで確定☆
 		pickedCard = nmEvent.GetCurrCard()->m_move;
 
+		//────────────────────
 		// カーソルは１つ前へ戻す☆
+		//────────────────────
 		nmEvent.GoPreviousCurCard();
 
 		return true;
@@ -41,4 +44,4 @@ public:
 };
 
 
-extern N05_PhBadCaptures g_phBadCaptures;
+extern N05___BadCaptures g_phBadCaptures;

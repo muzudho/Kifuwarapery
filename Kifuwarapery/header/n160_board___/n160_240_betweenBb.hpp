@@ -2,6 +2,7 @@
 
 #include "n160_100_bitboard.hpp"
 
+// 2点 sq1, sq2 間のビットが立っている表。（sq1, sq2 は含まない）
 class BetweenBb {
 private:
 	Bitboard m_betweenBB_[SquareNum][SquareNum];

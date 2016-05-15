@@ -16,15 +16,21 @@ public:
 
 	void Do02_ExtendTalon(NextmoveEvent& nmEvent) override {
 
+		// 山札の底（最初）のカードに、カーソルを合わせます。
+		nmEvent.BackToHome_CurrCard();
+
 		// これが無いと、MainSearch の後に EvasionSearch が始まったりしてしまう。
-		nmEvent.SetPhase(GenerateMovePhase::N16s_P1__End_Ph_Stop);
+		nmEvent.SetPhase(GenerateMovePhase::N16_xxxxx_P1__Stop);
 
 		// カードは作成せず、次のカードを最後のカードとして覚えておきます。
-		nmEvent.SetTalonLastCard(nmEvent.GetCurrCard() + 1);
+		nmEvent.SetSeekbarTerminated(nmEvent.GetCurrCard() + 1);
 	}
 
 	bool Do03_PickCard_OrNextCard(Move& pickedCard, NextmoveEvent& nmEvent) const override {
 
+		//────────────────────
+		// 進める☆
+		//────────────────────
 		nmEvent.GoNextCurCard();
 
 		//────────────────────────────────────────
