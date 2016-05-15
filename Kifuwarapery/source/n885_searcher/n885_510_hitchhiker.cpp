@@ -24,8 +24,6 @@
 #include "../../header/n640_searcher/n640_500_reductions.hpp"
 #include "../../header/n640_searcher/n640_510_futilityMargins.hpp"
 #include "../../header/n640_searcher/n640_520_futilityMoveCounts.hpp"
-#include "../../header/n680_egOption/n680_240_engineOptionsMap.hpp"
-#include "../../header/n680_egOption/n680_300_engineOptionSetup.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 
 #include "../../header/n800_stpWatch/n800_100_stopwatch.hpp"
@@ -47,6 +45,11 @@
 #include "../../header/n887_nodeType/n887_500_nodetypePrograms.hpp"//FIXME:
 //class IterativeDeepeningLoop;
 //static inline void IterativeDeepeningLoop::Execute(Rucksack& rucksack, Position& pos);
+
+
+#include "../../header/n930_egOption/n930_350_engineOptionsMap.hpp"
+#include "../../header/n930_egOption/n930_500_engineOptionSetup.hpp"
+
 
 using namespace std;
 

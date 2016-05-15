@@ -1,8 +1,9 @@
 ﻿//#include <Windows.h>	// ファイル／ディレクトリ操作用
 //#include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 #include "../../header/n080_common__/n080_200_utilProgram.hpp"
-#include "../../header/n520_evaluate/n520_490_KppCacheIo.hpp"
-#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
+
+#include "../../header/n830_evaluate/n830_110_KppCacheIo.hpp"
+#include "../../header/n830_evaluate/n830_600_kkKkpKppStorage1.hpp"
 #include <Windows.h>	// ファイル／ディレクトリ操作用
 #include <shlwapi.h>	// ファイル／ディレクトリ操作用 shlwapi.lib へのリンクが必要。
 

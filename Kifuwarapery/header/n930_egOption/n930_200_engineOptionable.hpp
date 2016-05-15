@@ -39,5 +39,5 @@ protected:
 	int m_min_;
 	int m_max_;
 	Fn* m_onChange_;
-	Rucksack* m_searcher_;
+	Rucksack* m_rucksack01_;
 };

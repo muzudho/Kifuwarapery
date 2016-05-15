@@ -1,28 +1,28 @@
 ﻿#include <sstream>
-#include "../../header/n680_egOption/n680_230_engineOptionable.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
+#include "../../header/n930_egOption/n930_200_engineOptionable.hpp"
 
 
 
 EngineOptionable::EngineOptionable(const char* v, Fn* f, Rucksack* s) :
-	m_type_("string"), m_min_(0), m_max_(0), m_onChange_(f), m_searcher_(s)
+	m_type_("string"), m_min_(0), m_max_(0), m_onChange_(f), m_rucksack01_(s)
 {
 	m_defaultValue_ = m_currentValue_ = v;
 }
 
 
 EngineOptionable::EngineOptionable(const bool v, Fn* f, Rucksack* s) :
-	m_type_("check"), m_min_(0), m_max_(0), m_onChange_(f), m_searcher_(s)
+	m_type_("check"), m_min_(0), m_max_(0), m_onChange_(f), m_rucksack01_(s)
 {
 	m_defaultValue_ = m_currentValue_ = (v ? "true" : "false");
 }
 
 
 EngineOptionable::EngineOptionable(Fn* f, Rucksack* s) :
-	m_type_("button"), m_min_(0), m_max_(0), m_onChange_(f), m_searcher_(s) {}
+	m_type_("button"), m_min_(0), m_max_(0), m_onChange_(f), m_rucksack01_(s) {}
 
 EngineOptionable::EngineOptionable(const int v, const int min, const int max, Fn* f, Rucksack* s)
-	: m_type_("spin"), m_min_(min), m_max_(max), m_onChange_(f), m_searcher_(s)
+	: m_type_("spin"), m_min_(min), m_max_(max), m_onChange_(f), m_rucksack01_(s)
 {
 	std::ostringstream ss;
 	ss << v;
@@ -45,7 +45,7 @@ EngineOptionable& EngineOptionable::operator = (const std::string& v) {
 	}
 
 	if (m_onChange_ != nullptr) {
-		(*m_onChange_)(m_searcher_, *this);
+		(*m_onChange_)(this->m_rucksack01_, *this);
 	}
 
 	return *this;

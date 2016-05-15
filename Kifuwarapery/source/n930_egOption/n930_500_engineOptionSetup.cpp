@@ -1,17 +1,23 @@
 ﻿#include "../../header/n165_movStack/n165_400_move.hpp"
-#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
-#include "..\..\header\n680_egOption/n680_245_engineOption.hpp"
-#include "..\..\header\n680_egOption\n680_300_engineOptionSetup.hpp"
+
+#include "../../header/n830_evaluate/n830_600_kkKkpKppStorage1.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
+
+#include "..\..\header\n930_egOption/n930_400_engineOption.hpp"
+#include "..\..\header\n930_egOption\n930_500_engineOptionSetup.hpp"
 
 
 // 初期化の値を取ってくるのに使います。
 namespace {
 	void onHashSize(Rucksack* s, const EngineOptionable& opt) { s->m_tt.SetSize(opt); }
 	void onClearHash(Rucksack* s, const EngineOptionable&) { s->m_tt.Clear(); }
-	void onEvalDir(Rucksack*, const EngineOptionable& opt) {
+
+	// 評価値ファイルのディレクトリが変更されたとき☆
+	void G_OnEvalDirChanged(Rucksack*, const EngineOptionable& opt) {
+		// 評価値ファイルを初期化☆
 		std::unique_ptr<KkKkpKppStorage1>(new KkKkpKppStorage1)->Init(opt, true);
 	}
+
 	void onThreads(Rucksack* s, const EngineOptionable&) { s->m_ownerHerosPub.ReadUSIOptions(s); }
 	// 論理的なコア数の取得
 	inline int cpuCoreCount() {
@@ -33,7 +39,12 @@ void EngineOptionSetup::Initialize(EngineOptionsMap* pMap, Rucksack * pRucksack)
 	pMap->Put("Min_Book_Ply"				, EngineOption(SHRT_MAX, 0, SHRT_MAX));
 	pMap->Put("Max_Book_Ply"				, EngineOption(SHRT_MAX, 0, SHRT_MAX));
 	pMap->Put("Min_Book_Score"				, EngineOption(-180, -ScoreInfinite, ScoreInfinite));
-	pMap->Put("Eval_Dir"					, EngineOption("20151105", onEvalDir));
+
+	// エンジン・オプションの第２引数はポインター☆？（＾～＾）？
+	// m_onChange_に代入されているぜ☆（＾▽＾）
+	// チェンジされるたびに呼び出されるということかだぜ☆？（＾▽＾）
+	pMap->Put("Eval_Dir"					, EngineOption("20151105", G_OnEvalDirChanged));
+
 	pMap->Put("Write_Synthesized_Eval"		, EngineOption(false));
 	pMap->Put("USI_Ponder"					, EngineOption(true));
 	pMap->Put("Byoyomi_Margin"				, EngineOption(500, 0, INT_MAX));//元の値：0.5秒☆？（＾ｑ＾）

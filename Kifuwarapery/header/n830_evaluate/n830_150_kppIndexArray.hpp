@@ -2,7 +2,7 @@
 
 #include <algorithm> //std::upper_bound
 #include "../n110_square__/n110_500_convSquare.hpp"
-#include "../n520_evaluate/n520_100_evaluateEnum.hpp"
+#include "../n830_evaluate/n830_100_evaluateEnum.hpp"
 
 
 

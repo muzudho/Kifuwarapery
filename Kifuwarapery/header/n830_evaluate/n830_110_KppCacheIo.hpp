@@ -1,6 +1,10 @@
 ﻿#pragma once
 
-#include "../n520_evaluate/n520_400_KkKkpKppStorageBase.hpp"
+#include <string>
+#include <array>
+#include "../n080_common__/n080_100_common.hpp"
+#include "../n110_square__/n110_100_square.hpp"
+#include "../n830_evaluate/n830_100_evaluateEnum.hpp"
 
 
 class KppCacheIo {

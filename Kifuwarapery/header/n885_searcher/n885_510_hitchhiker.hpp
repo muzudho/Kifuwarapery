@@ -15,7 +15,7 @@
 #include "../n560_timeMng_/n560_500_timeManager.hpp"
 #include "../n640_searcher/n640_128_signalsType.hpp"
 #include "../n640_searcher/n640_450_rootMove.hpp"
-#include "../n680_egOption/n680_240_engineOptionsMap.hpp"
+//#include "../n680_egOption/n680_240_engineOptionsMap.hpp"
 #include "../n640_searcher/n640_440_splitedNode.hpp"
 #include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_stpWatch/n800_100_stopwatch.hpp"

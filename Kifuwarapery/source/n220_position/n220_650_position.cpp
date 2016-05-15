@@ -32,8 +32,8 @@
 #include "../../header/n300_moveGen_/n300_700_moveGen_/n300_700_900_moveList.hpp"
 #include "../../header/n351_bonaDir_/n351_500_bonaDirArray.hpp"
 
-#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
 #include "../../header/n600_book____/n600_100_mt64bit.hpp"
+#include "../../header/n830_evaluate/n830_600_kkKkpKppStorage1.hpp" //FIXME:
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"// FIXME:
 
 

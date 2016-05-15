@@ -7,10 +7,10 @@
 #include <algorithm>	// std::min
 #include "../n110_square__/n110_500_convSquare.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
-#include "../n520_evaluate/n520_400_KkKkpKppStorageBase.hpp"
 #include "../n760_thread__/n760_400_herosPub.hpp"
 #include "../n800_stpWatch/n800_100_stopwatch.hpp"
 
+#include "../n830_evaluate/n830_400_KkKkpKppStorageBase.hpp"
 #include "../n830_evaluate/n830_700_evaluation09.hpp"
 #include "../n850_learn___/n850_100_rawEvaluater.hpp"
 #include "../n850_learn___/n850_200_parse2Data.hpp"

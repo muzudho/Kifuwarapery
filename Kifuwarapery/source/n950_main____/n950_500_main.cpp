@@ -4,7 +4,7 @@
 #include "../../header/n480_tt______/n480_300_tt.hpp"
 #include "../../header/n760_thread__/n760_400_herosPub.hpp"
 #include "../../header/n885_searcher/n885_040_rucksack.hpp"
-#include "..\..\header\n900_main____\n900_400_main01.hpp"
+#include "..\..\header\n950_main____\n950_400_main01.hpp"
 
 
 #if defined FIND_MAGIC

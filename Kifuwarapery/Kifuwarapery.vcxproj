@@ -349,12 +349,6 @@
     <ClInclude Include="header\n480_tt______\n480_280_tTEntry.hpp" />
     <ClInclude Include="header\n480_tt______\n480_285_tTCluster.hpp" />
     <ClInclude Include="header\n480_tt______\n480_300_tt.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_100_evaluateEnum.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_150_kppIndexArray.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_300_KPPBoardIndexStartToPiece.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_400_KkKkpKppStorageBase.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_490_KppCacheIo.hpp" />
-    <ClInclude Include="header\n520_evaluate\n520_500_kkKkpKppStorage1.hpp" />
     <ClInclude Include="header\n560_timeMng_\n560_100_limitsOfThinking.hpp" />
     <ClInclude Include="header\n560_timeMng_\n560_500_timeManager.hpp" />
     <ClInclude Include="header\n600_book____\n600_100_mt64bit.hpp" />
@@ -368,10 +362,6 @@
     <ClInclude Include="header\n640_searcher\n640_500_reductions.hpp" />
     <ClInclude Include="header\n640_searcher\n640_510_futilityMargins.hpp" />
     <ClInclude Include="header\n640_searcher\n640_520_futilityMoveCounts.hpp" />
-    <ClInclude Include="header\n680_egOption\n680_230_engineOptionable.hpp" />
-    <ClInclude Include="header\n680_egOption\n680_240_engineOptionsMap.hpp" />
-    <ClInclude Include="header\n680_egOption\n680_245_engineOption.hpp" />
-    <ClInclude Include="header\n680_egOption\n680_300_engineOptionSetup.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_260_usiOperation.hpp" />
     <ClInclude Include="header\n720_usi_____\n720_300_benchmark.hpp" />
     <ClInclude Include="header\n755_sword___\n755_070_SwordAbstract.hpp" />
@@ -383,6 +373,12 @@
     <ClInclude Include="header\n760_thread__\n760_350_warrior.hpp" />
     <ClInclude Include="header\n760_thread__\n760_400_herosPub.hpp" />
     <ClInclude Include="header\n800_stpWatch\n800_100_stopwatch.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_100_evaluateEnum.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_110_KppCacheIo.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_150_kppIndexArray.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_300_KPPBoardIndexStartToPiece.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_400_KkKkpKppStorageBase.hpp" />
+    <ClInclude Include="header\n830_evaluate\n830_600_kkKkpKppStorage1.hpp" />
     <ClInclude Include="header\n830_evaluate\n830_700_evaluation09.hpp" />
     <ClInclude Include="header\n850_learn___\n850_100_rawEvaluater.hpp" />
     <ClInclude Include="header\n850_learn___\n850_200_parse2Data.hpp" />
@@ -413,9 +409,14 @@
     <ClInclude Include="header\n887_nodeType\n887_140_nodetypeSplitedNodePv.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.hpp" />
     <ClInclude Include="header\n887_nodeType\n887_500_nodetypePrograms.hpp" />
-    <ClInclude Include="header\n900_main____\n900_200_usiItem.hpp" />
-    <ClInclude Include="header\n900_main____\n900_300_usiLoop.hpp" />
-    <ClInclude Include="header\n900_main____\n900_400_main01.hpp" />
+    <ClInclude Include="header\n930_egOption\n930_200_engineOptionable.hpp" />
+    <ClInclude Include="header\n930_egOption\n930_300_caseInsensitiveLess.hpp" />
+    <ClInclude Include="header\n930_egOption\n930_350_engineOptionsMap.hpp" />
+    <ClInclude Include="header\n930_egOption\n930_400_engineOption.hpp" />
+    <ClInclude Include="header\n930_egOption\n930_500_engineOptionSetup.hpp" />
+    <ClInclude Include="header\n950_main____\n950_200_usiItem.hpp" />
+    <ClInclude Include="header\n950_main____\n950_300_usiLoop.hpp" />
+    <ClInclude Include="header\n950_main____\n950_400_main01.hpp" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -578,20 +579,12 @@
     <ClCompile Include="source\n450_movPhase\n450_500_movePhaseArray.cpp" />
     <ClCompile Include="source\n480_tt______\n480_280_tTEntry.cpp" />
     <ClCompile Include="source\n480_tt______\n480_300_tt.cpp" />
-    <ClCompile Include="source\n520_evaluate\n520_100_evaluate.cpp" />
-    <ClCompile Include="source\n520_evaluate\n520_150_kppIndexArray.cpp" />
-    <ClCompile Include="source\n520_evaluate\n520_490_KppCacheIo.cpp" />
-    <ClCompile Include="source\n520_evaluate\n520_700_evaluation09.cpp" />
     <ClCompile Include="source\n560_timeMng_\n560_500_timeManager.cpp" />
     <ClCompile Include="source\n600_book____\n600_100_mt64bit.cpp" />
     <ClCompile Include="source\n600_book____\n600_500_book.cpp" />
     <ClCompile Include="source\n640_searcher\n640_500_reductions.cpp" />
     <ClCompile Include="source\n640_searcher\n640_510_futilityMargins.cpp" />
     <ClCompile Include="source\n640_searcher\n640_520_futilityMoveCounts.cpp" />
-    <ClCompile Include="source\n680_egOption\n680_230_engineOptionable.cpp" />
-    <ClCompile Include="source\n680_egOption\n680_240_engineOptionsMap.cpp" />
-    <ClCompile Include="source\n680_egOption\n680_245_engineOption.cpp" />
-    <ClCompile Include="source\n680_egOption\n680_300_engineOptionSetup.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_260_usiOperation.cpp" />
     <ClCompile Include="source\n720_usi_____\n720_300_benchmark.cpp" />
     <ClCompile Include="source\n755_sword___\n755_070_SwordAbstract.cpp" />
@@ -603,6 +596,10 @@
     <ClCompile Include="source\n760_thread__\n760_350_warrior.cpp" />
     <ClCompile Include="source\n760_thread__\n760_400_herosPub.cpp" />
     <ClCompile Include="source\n800_stpWatch\n800_100_stopwatch.cpp" />
+    <ClCompile Include="source\n830_evaluate\n830_100_evaluate.cpp" />
+    <ClCompile Include="source\n830_evaluate\n830_110_KppCacheIo.cpp" />
+    <ClCompile Include="source\n830_evaluate\n830_150_kppIndexArray.cpp" />
+    <ClCompile Include="source\n830_evaluate\n830_700_evaluation09.cpp" />
     <ClCompile Include="source\n883_nodeType\n883_070_nodetypeAbstract.cpp" />
     <ClCompile Include="source\n885_searcher\n885_040_rucksack.cpp" />
     <ClCompile Include="source\n885_searcher\n885_310_hitchhikerQsearchAbstract.cpp" />
@@ -620,10 +617,14 @@
     <ClCompile Include="source\n887_nodeType\n887_140_nodetypeSplitedNodePv.cpp" />
     <ClCompile Include="source\n887_nodeType\n887_150_nodetypeSplitedNodeNonPv.cpp" />
     <ClCompile Include="source\n887_nodeType\n887_500_nodetypePrograms.cpp" />
-    <ClCompile Include="source\n900_main____\n900_200_usiItem.cpp" />
-    <ClCompile Include="source\n900_main____\n900_300_usiLoop.cpp" />
-    <ClCompile Include="source\n900_main____\n900_400_main.cpp" />
-    <ClCompile Include="source\n900_main____\n900_500_main.cpp" />
+    <ClCompile Include="source\n930_egOption\n930_200_engineOptionable.cpp" />
+    <ClCompile Include="source\n930_egOption\n930_350_engineOptionsMap.cpp" />
+    <ClCompile Include="source\n930_egOption\n930_400_engineOption.cpp" />
+    <ClCompile Include="source\n930_egOption\n930_500_engineOptionSetup.cpp" />
+    <ClCompile Include="source\n950_main____\n950_200_usiItem.cpp" />
+    <ClCompile Include="source\n950_main____\n950_300_usiLoop.cpp" />
+    <ClCompile Include="source\n950_main____\n950_400_main.cpp" />
+    <ClCompile Include="source\n950_main____\n950_500_main.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

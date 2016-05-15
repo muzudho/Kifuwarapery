@@ -1,7 +1,8 @@
 ﻿#include <array>
 #include "../../header/n105_color___/n105_100_color.hpp"
 #include "../../header/n113_piece___/n113_200_handPiece.hpp"
-#include "../../header/n520_evaluate/n520_500_kkKkpKppStorage1.hpp"
+
+#include "../../header/n830_evaluate/n830_600_kkKkpKppStorage1.hpp"
 #include "../../header/n830_evaluate/n830_700_evaluation09.hpp"
 
 KPPBoardIndexStartToPiece g_kppBoardIndexStartToPiece;

@@ -10,8 +10,8 @@
 #include "../n161_sqDistan/n161_500_squareDistance.hpp"
 #include "../n220_position/n220_640_utilAttack.hpp"
 #include "../n220_position/n220_750_charToPieceUSI.hpp"
-#include "../n520_evaluate/n520_150_kppIndexArray.hpp"
-#include "../n520_evaluate/n520_300_KPPBoardIndexStartToPiece.hpp"
+#include "../n830_evaluate/n830_150_kppIndexArray.hpp"
+#include "../n830_evaluate/n830_300_KPPBoardIndexStartToPiece.hpp"
 
 
 
